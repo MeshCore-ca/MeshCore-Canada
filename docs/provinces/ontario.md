@@ -32,3 +32,17 @@ See [Contributing](../contributing.md) for how to add or update entries.
 **Discord:** [https://discord.gg/wSHbeb86r4](https://discord.gg/wSHbeb86r4)
 
 ---
+
+**Name:** Quinte Mesh Network
+
+**Region:** Quinte Region (Belleville, Trenton, Prince Edward County, and surrounding areas)
+
+**Status:** Active
+
+**Frequency:** 910.525 MHz / 62.5 kHz /7 / 5
+
+**Discord:** [https://discord.gg/V5esJEP67X](hhttps://discord.gg/V5esJEP67X)
+
+**Website:** [https://quintemesh.ca](https://quintemesh.ca)
+
+---
