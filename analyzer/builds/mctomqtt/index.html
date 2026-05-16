@@ -8,29 +8,31 @@
       
       
       
-        <link rel="canonical" href="https://meshcore.ca/contributing/">
+        <link rel="canonical" href="https://meshcore.ca/analyzer/builds/mctomqtt/">
       
       
-        <link rel="prev" href="../resources/glossary/">
+        <link rel="prev" href="../../intro/">
       
+      
+        <link rel="next" href="../meshcore-ha/">
       
       
         
       
       
-      <link rel="icon" href="../assets/MeshCore-Canada-Favicon.png">
+      <link rel="icon" href="../../../assets/MeshCore-Canada-Favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
     
     
       
-        <title>Contributing - MeshCore Canada</title>
+        <title>MCtoMQTT Script - MeshCore Canada</title>
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -49,7 +51,7 @@
       
     
     
-    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -72,7 +74,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#how-to-request-changes-to-meshcoreca" class="md-skip">
+        <a href="#mctomqtt-script-usb-serial-host" class="md-skip">
           Skip to content
         </a>
       
@@ -88,9 +90,9 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href=".." title="MeshCore Canada" class="md-header__button md-logo" aria-label="MeshCore Canada" data-md-component="logo">
+    <a href="../../.." title="MeshCore Canada" class="md-header__button md-logo" aria-label="MeshCore Canada" data-md-component="logo">
       
-  <img src="../assets/MeshCore-Canada-Favicon.png" alt="logo">
+  <img src="../../../assets/MeshCore-Canada-Favicon.png" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -107,7 +109,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Contributing
+              MCtoMQTT Script
             
           </span>
         </div>
@@ -197,9 +199,9 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href=".." title="MeshCore Canada" class="md-nav__button md-logo" aria-label="MeshCore Canada" data-md-component="logo">
+    <a href="../../.." title="MeshCore Canada" class="md-nav__button md-logo" aria-label="MeshCore Canada" data-md-component="logo">
       
-  <img src="../assets/MeshCore-Canada-Favicon.png" alt="logo">
+  <img src="../../../assets/MeshCore-Canada-Favicon.png" alt="logo">
 
     </a>
     MeshCore Canada
@@ -226,7 +228,7 @@
   
   
     <li class="md-nav__item">
-      <a href=".." class="md-nav__link">
+      <a href="../../.." class="md-nav__link">
         
   
   
@@ -307,7 +309,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../meshcore/intro/" class="md-nav__link">
+      <a href="../../../meshcore/intro/" class="md-nav__link">
         
   
   
@@ -335,7 +337,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../meshcore/faq/" class="md-nav__link">
+      <a href="../../../meshcore/faq/" class="md-nav__link">
         
   
   
@@ -363,7 +365,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../meshcore/companions/" class="md-nav__link">
+      <a href="../../../meshcore/companions/" class="md-nav__link">
         
   
   
@@ -391,7 +393,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../meshcore/repeaters/" class="md-nav__link">
+      <a href="../../../meshcore/repeaters/" class="md-nav__link">
         
   
   
@@ -419,7 +421,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../meshcore/repeater-builds/" class="md-nav__link">
+      <a href="../../../meshcore/repeater-builds/" class="md-nav__link">
         
   
   
@@ -447,7 +449,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../meshcore/antennas/" class="md-nav__link">
+      <a href="../../../meshcore/antennas/" class="md-nav__link">
         
   
   
@@ -479,8 +481,10 @@
       
   
   
+    
   
   
+  
     
     
     
@@ -491,13 +495,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
         
           
           <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
@@ -518,7 +520,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             
@@ -536,7 +538,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../analyzer/intro/" class="md-nav__link">
+      <a href="../../intro/" class="md-nav__link">
         
   
   
@@ -561,6 +563,8 @@
                 
   
   
+    
+  
   
   
     
@@ -570,13 +574,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-          
-        
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3_2" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" checked>
         
           
           <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
@@ -597,7 +599,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3_2">
             <span class="md-nav__icon md-icon"></span>
             
@@ -612,10 +614,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../analyzer/builds/mctomqtt/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MCtoMQTT Script
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -631,6 +660,125 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-it-does" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What It Does
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prerequisites
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#quick-setup-one-liner" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick Setup (One-Liner)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fresh-install" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fresh Install
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#specifying-your-region" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Specifying Your Region
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-the-script-creates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What the Script Creates
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#companion-devices-bleserialtcp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Companion Devices (BLE/Serial/TCP)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#additional-script-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Additional Script Options
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#verify" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Verify
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -643,7 +791,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../analyzer/builds/meshcore-ha/" class="md-nav__link">
+      <a href="../meshcore-ha/" class="md-nav__link">
         
   
   
@@ -671,7 +819,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../analyzer/builds/mqtt-firmware/" class="md-nav__link">
+      <a href="../mqtt-firmware/" class="md-nav__link">
         
   
   
@@ -699,7 +847,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../analyzer/builds/pymc/" class="md-nav__link">
+      <a href="../pymc/" class="md-nav__link">
         
   
   
@@ -796,7 +944,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../provinces/british-columbia/" class="md-nav__link">
+      <a href="../../../provinces/british-columbia/" class="md-nav__link">
         
   
   
@@ -824,7 +972,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../provinces/alberta/" class="md-nav__link">
+      <a href="../../../provinces/alberta/" class="md-nav__link">
         
   
   
@@ -852,7 +1000,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../provinces/saskatchewan/" class="md-nav__link">
+      <a href="../../../provinces/saskatchewan/" class="md-nav__link">
         
   
   
@@ -880,7 +1028,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../provinces/manitoba/" class="md-nav__link">
+      <a href="../../../provinces/manitoba/" class="md-nav__link">
         
   
   
@@ -908,7 +1056,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../provinces/ontario/" class="md-nav__link">
+      <a href="../../../provinces/ontario/" class="md-nav__link">
         
   
   
@@ -936,7 +1084,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../provinces/quebec/" class="md-nav__link">
+      <a href="../../../provinces/quebec/" class="md-nav__link">
         
   
   
@@ -964,7 +1112,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../provinces/new-brunswick/" class="md-nav__link">
+      <a href="../../../provinces/new-brunswick/" class="md-nav__link">
         
   
   
@@ -992,7 +1140,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../provinces/nova-scotia/" class="md-nav__link">
+      <a href="../../../provinces/nova-scotia/" class="md-nav__link">
         
   
   
@@ -1020,7 +1168,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../provinces/prince-edward-island/" class="md-nav__link">
+      <a href="../../../provinces/prince-edward-island/" class="md-nav__link">
         
   
   
@@ -1048,7 +1196,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../provinces/newfoundland-and-labrador/" class="md-nav__link">
+      <a href="../../../provinces/newfoundland-and-labrador/" class="md-nav__link">
         
   
   
@@ -1076,7 +1224,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../provinces/territories/" class="md-nav__link">
+      <a href="../../../provinces/territories/" class="md-nav__link">
         
   
   
@@ -1165,7 +1313,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../resources/getting-started/" class="md-nav__link">
+      <a href="../../../resources/getting-started/" class="md-nav__link">
         
   
   
@@ -1193,7 +1341,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../resources/links/" class="md-nav__link">
+      <a href="../../../resources/links/" class="md-nav__link">
         
   
   
@@ -1221,7 +1369,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../resources/glossary/" class="md-nav__link">
+      <a href="../../../resources/glossary/" class="md-nav__link">
         
   
   
@@ -1253,37 +1401,10 @@
       
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Contributing
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../../contributing/" class="md-nav__link">
         
   
   
@@ -1299,92 +1420,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#1-go-to-the-issues-page" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        1. Go to the Issues page
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#2-click-new-issue" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        2. Click "New Issue"
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#3-fill-out-the-form" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3. Fill out the form
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#4-submit-the-issue" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        4. Submit the issue
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#5-optional-advanced-contributions" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        5. Optional — Advanced Contributions
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#thank-you" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Thank You
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1416,10 +1451,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1-go-to-the-issues-page" class="md-nav__link">
+  <a href="#what-it-does" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. Go to the Issues page
+        What It Does
       
     </span>
   </a>
@@ -1427,10 +1462,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-click-new-issue" class="md-nav__link">
+  <a href="#prerequisites" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. Click "New Issue"
+        Prerequisites
       
     </span>
   </a>
@@ -1438,10 +1473,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-fill-out-the-form" class="md-nav__link">
+  <a href="#quick-setup-one-liner" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. Fill out the form
+        Quick Setup (One-Liner)
       
     </span>
   </a>
@@ -1449,10 +1484,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#4-submit-the-issue" class="md-nav__link">
+  <a href="#fresh-install" class="md-nav__link">
     <span class="md-ellipsis">
       
-        4. Submit the issue
+        Fresh Install
       
     </span>
   </a>
@@ -1460,10 +1495,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-optional-advanced-contributions" class="md-nav__link">
+  <a href="#specifying-your-region" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5. Optional — Advanced Contributions
+        Specifying Your Region
       
     </span>
   </a>
@@ -1471,10 +1506,43 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#thank-you" class="md-nav__link">
+  <a href="#what-the-script-creates" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Thank You
+        What the Script Creates
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#companion-devices-bleserialtcp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Companion Devices (BLE/Serial/TCP)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#additional-script-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Additional Script Options
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#verify" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Verify
       
     </span>
   </a>
@@ -1501,45 +1569,166 @@
   
 
 
-<h1 id="how-to-request-changes-to-meshcoreca">How to Request Changes to MeshCore.ca<a class="headerlink" href="#how-to-request-changes-to-meshcoreca" title="Permanent link">&para;</a></h1>
-<p>If you want to add a new MeshCore community or update information for your region, the easiest way is to open a <strong>GitHub Issue</strong>.</p>
-<p>You do not need to know Git, GitHub, or how to edit the website. Just follow the steps below.</p>
-<hr />
-<h2 id="1-go-to-the-issues-page">1. Go to the Issues page<a class="headerlink" href="#1-go-to-the-issues-page" title="Permanent link">&para;</a></h2>
-<p>Visit the MeshCore Canada GitHub repository and click <strong>Issues</strong>.</p>
-<p>Link: <a href="https://github.com/MrAlders0n/MeshCore-Canada/issues">https://github.com/MrAlders0n/MeshCore-Canada/issues</a></p>
-<hr />
-<h2 id="2-click-new-issue">2. Click "New Issue"<a class="headerlink" href="#2-click-new-issue" title="Permanent link">&para;</a></h2>
-<p>Choose the template that matches what you want to do:</p>
+<h1 id="mctomqtt-script-usb-serial-host">MCtoMQTT Script (USB Serial Host)<a class="headerlink" href="#mctomqtt-script-usb-serial-host" title="Permanent link">&para;</a></h1>
+<p>Use <code>meshcoretomqtt</code> to bridge a USB-connected MeshCore node (repeater, room server, or any packet-log device) to MQTT brokers. This runs on a Linux or macOS host with the device connected over USB serial.</p>
+<h2 id="what-it-does">What It Does<a class="headerlink" href="#what-it-does" title="Permanent link">&para;</a></h2>
+<p>The MCtoMQTT service reads packets from a MeshCore device over its serial port and publishes them to one or more MQTT brokers. A config drop-in file tells it where to send the data.</p>
+<h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h2>
 <ul>
-<li><strong>Add a New Community</strong></li>
-<li><strong>Update Existing Community</strong></li>
-<li><strong>Fix a Mistake / Small Correction</strong></li>
-<li><strong>General Request</strong></li>
+<li>A MeshCore device with packet logging enabled, connected via USB serial</li>
+<li>Linux or macOS host</li>
+<li><code>curl</code> installed</li>
+<li>Your 3-character IATA region code (e.g. <code>YOW</code> for Ottawa, <code>YYZ</code> for Toronto)</li>
 </ul>
-<hr />
-<h2 id="3-fill-out-the-form">3. Fill out the form<a class="headerlink" href="#3-fill-out-the-form" title="Permanent link">&para;</a></h2>
-<p>Provide as much detail as possible.</p>
-<hr />
-<h2 id="4-submit-the-issue">4. Submit the issue<a class="headerlink" href="#4-submit-the-issue" title="Permanent link">&para;</a></h2>
-<p>A maintainer will:</p>
-<ol>
-<li>Review the request  </li>
-<li>Make the change  </li>
-<li>Close the issue when complete  </li>
-</ol>
-<p>If we need more information, we’ll comment on the ticket.</p>
-<hr />
-<h2 id="5-optional-advanced-contributions">5. Optional — Advanced Contributions<a class="headerlink" href="#5-optional-advanced-contributions" title="Permanent link">&para;</a></h2>
-<p>If you know GitHub and want to edit the markdown files directly:</p>
-<ol>
-<li>Fork the repo  </li>
-<li>Edit the relevant file in <code>docs/provinces/</code>  </li>
-<li>Open a pull request  </li>
-</ol>
-<hr />
-<h2 id="thank-you">Thank You<a class="headerlink" href="#thank-you" title="Permanent link">&para;</a></h2>
-<p>MeshCore.ca is a community-maintained directory, and contributions from all regions help keep the network growing across Canada.</p>
+<h2 id="quick-setup-one-liner">Quick Setup (One-Liner)<a class="headerlink" href="#quick-setup-one-liner" title="Permanent link">&para;</a></h2>
+<p>If <code>meshcoretomqtt</code> is already installed, run:</p>
+<div class="highlight"><pre><span></span><code>bash<span class="w"> </span>&lt;<span class="o">(</span>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://canadaverse.org/scripts/add-canadaverse-meshcore-broker.sh<span class="o">)</span><span class="w"> </span>--device<span class="w"> </span>serial-host
+</code></pre></div>
+<p>This creates a config drop-in at <code>/etc/mctomqtt/config.d/20-meshcore-ca.toml</code> pointing at the MeshCore.ca broker pair, then restarts the service.</p>
+<h2 id="fresh-install">Fresh Install<a class="headerlink" href="#fresh-install" title="Permanent link">&para;</a></h2>
+<p>If <code>meshcoretomqtt</code> is not yet installed, add <code>--install-mctomqtt</code> and the script will run the upstream installer first, then apply the broker config:</p>
+<div class="highlight"><pre><span></span><code>bash<span class="w"> </span>&lt;<span class="o">(</span>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://canadaverse.org/scripts/add-canadaverse-meshcore-broker.sh<span class="o">)</span><span class="w"> </span>--device<span class="w"> </span>serial-host<span class="w"> </span>--install-mctomqtt
+</code></pre></div>
+<p>The upstream installer will walk you through serial port selection.</p>
+<h2 id="specifying-your-region">Specifying Your Region<a class="headerlink" href="#specifying-your-region" title="Permanent link">&para;</a></h2>
+<p>Pass your IATA code via the <code>--iata</code> flag or the <code>MESHCORE_CA_IATA</code> environment variable:</p>
+<div class="highlight"><pre><span></span><code>bash<span class="w"> </span>&lt;<span class="o">(</span>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://canadaverse.org/scripts/add-canadaverse-meshcore-broker.sh<span class="o">)</span><span class="w"> </span>--device<span class="w"> </span>serial-host<span class="w"> </span>--iata<span class="w"> </span>YOW
+</code></pre></div>
+<p>Or:</p>
+<div class="highlight"><pre><span></span><code><span class="nv">MESHCORE_CA_IATA</span><span class="o">=</span>YOW<span class="w"> </span>bash<span class="w"> </span>&lt;<span class="o">(</span>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://canadaverse.org/scripts/add-canadaverse-meshcore-broker.sh<span class="o">)</span><span class="w"> </span>--device<span class="w"> </span>serial-host
+</code></pre></div>
+<p>If omitted, the script will prompt interactively.</p>
+<h2 id="what-the-script-creates">What the Script Creates<a class="headerlink" href="#what-the-script-creates" title="Permanent link">&para;</a></h2>
+<p>The drop-in config at <code>/etc/mctomqtt/config.d/20-meshcore-ca.toml</code> looks like this:</p>
+<div class="highlight"><pre><span></span><code><span class="k">[general]</span>
+<span class="n">iata</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;YOW&quot;</span>
+
+<span class="k">[[broker]]</span>
+<span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;meshcore-ca-1&quot;</span>
+<span class="n">enabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="n">server</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;mqtt1.meshcore.ca&quot;</span>
+<span class="n">port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">443</span>
+<span class="n">transport</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;websockets&quot;</span>
+<span class="n">keepalive</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">60</span>
+<span class="n">qos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
+<span class="n">retain</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+
+<span class="k">[broker.tls]</span>
+<span class="n">enabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="n">verify</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+
+<span class="k">[broker.auth]</span>
+<span class="n">method</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;token&quot;</span>
+<span class="n">audience</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;mqtt1.meshcore.ca&quot;</span>
+
+<span class="k">[[broker]]</span>
+<span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;meshcore-ca-2&quot;</span>
+<span class="n">enabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="n">server</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;mqtt2.meshcore.ca&quot;</span>
+<span class="n">port</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">443</span>
+<span class="n">transport</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;websockets&quot;</span>
+<span class="n">keepalive</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">60</span>
+<span class="n">qos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
+<span class="n">retain</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+
+<span class="k">[broker.tls]</span>
+<span class="n">enabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+<span class="n">verify</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span>
+
+<span class="k">[broker.auth]</span>
+<span class="n">method</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;token&quot;</span>
+<span class="n">audience</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;mqtt2.meshcore.ca&quot;</span>
+</code></pre></div>
+<h2 id="companion-devices-bleserialtcp">Companion Devices (BLE/Serial/TCP)<a class="headerlink" href="#companion-devices-bleserialtcp" title="Permanent link">&para;</a></h2>
+<p>For companion radios (not packet-log serial hosts), use the companion path instead:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Linux / macOS</label><label for="__tabbed_1_2">Windows PowerShell</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>bash<span class="w"> </span>&lt;<span class="o">(</span>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://canadaverse.org/scripts/add-canadaverse-meshcore-broker.sh<span class="o">)</span><span class="w"> </span>--device<span class="w"> </span>companion
+</code></pre></div>
+<p>Add <code>--install-packetcapture</code> for a fresh install. The upstream installer will walk you through BLE, serial, or TCP connection setup.</p>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="n">powershell</span> <span class="n">-NoProfile</span> <span class="n">-ExecutionPolicy</span> <span class="n">Bypass</span> <span class="n">-Command</span> <span class="s2">&quot;iwr https://canadaverse.org/scripts/add-canadaverse-packetcapture-broker.ps1 -UseBasicParsing | iex&quot;</span>
+</code></pre></div>
+<p>Config is stored under <code>%USERPROFILE%\.meshcore-packet-capture\.env.local</code>.</p>
+</div>
+</div>
+</div>
+<table>
+<thead>
+<tr>
+<th>Path</th>
+<th>Manager</th>
+<th>Connection</th>
+<th>Config Location</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Serial Host</td>
+<td>meshcoretomqtt</td>
+<td>USB serial</td>
+<td><code>/etc/mctomqtt/config.d/20-meshcore-ca.toml</code></td>
+</tr>
+<tr>
+<td>Companion</td>
+<td>meshcore-packet-capture</td>
+<td>BLE, serial, or TCP</td>
+<td><code>~/.meshcore-packet-capture/.env.local</code></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="admonition-title">Windows and Serial Hosts</p>
+<p>There is no upstream <code>meshcoretomqtt</code> Windows installer. Keep packet-log serial hosts on Linux or macOS. The Windows PowerShell helper is for companion radios only.</p>
+</div>
+<h2 id="additional-script-options">Additional Script Options<a class="headerlink" href="#additional-script-options" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--iata CODE</code></td>
+<td>3-character region code</td>
+</tr>
+<tr>
+<td><code>--device TYPE</code></td>
+<td><code>serial-host</code> or <code>companion</code></td>
+</tr>
+<tr>
+<td><code>--install-mctomqtt</code></td>
+<td>Install meshcoretomqtt if not present</td>
+</tr>
+<tr>
+<td><code>--install-packetcapture</code></td>
+<td>Install meshcore-packet-capture if not present</td>
+</tr>
+<tr>
+<td><code>--no-restart</code></td>
+<td>Patch config without restarting the service</td>
+</tr>
+<tr>
+<td><code>--config-dir PATH</code></td>
+<td>Override config dir (default: <code>/etc/mctomqtt</code>)</td>
+</tr>
+<tr>
+<td><code>--service NAME</code></td>
+<td>Override systemd service name (default: <code>mctomqtt</code>)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="verify">Verify<a class="headerlink" href="#verify" title="Permanent link">&para;</a></h2>
+<p>After setup, confirm your observer appears on:</p>
+<ul>
+<li><a href="https://mqtt.canadaverse.org/">CoreScope Observers</a></li>
+<li><a href="https://mqtt.canadaverse.org/">CoreScope Packets</a></li>
+<li><a href="https://canadaverse.org/meshcore-map.html">Canadaverse Map</a></li>
+</ul>
 
 
 
@@ -1595,10 +1784,10 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "toc.follow"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.expand", "navigation.top", "toc.follow"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
     
   </body>
