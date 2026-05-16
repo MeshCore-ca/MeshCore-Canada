@@ -1,0 +1,44 @@
+{
+  "version": "20260515",
+  "date": "2026-05-15",
+  "boards": [
+    {
+      "id": "heltec-v3",
+      "label": "Heltec V3"
+    },
+    {
+      "id": "heltec-v4-oled",
+      "label": "Heltec V4 OLED"
+    }
+  ],
+  "roles": [
+    {
+      "id": "repeater",
+      "label": "Repeater"
+    },
+    {
+      "id": "room-server",
+      "label": "Room Server"
+    }
+  ],
+  "types": [
+    {
+      "id": "merged",
+      "label": "First Flash (Merged)"
+    },
+    {
+      "id": "update",
+      "label": "Update"
+    }
+  ],
+  "artifacts": [
+    { "board": "heltec-v3", "role": "repeater", "type": "merged", "file": "meshcore-ca-heltec-v3-repeater-merged-20260515.bin" },
+    { "board": "heltec-v3", "role": "repeater", "type": "update", "file": "meshcore-ca-heltec-v3-repeater-update-20260515.bin" },
+    { "board": "heltec-v3", "role": "room-server", "type": "merged", "file": "meshcore-ca-heltec-v3-room-server-merged-20260515.bin" },
+    { "board": "heltec-v3", "role": "room-server", "type": "update", "file": "meshcore-ca-heltec-v3-room-server-update-20260515.bin" },
+    { "board": "heltec-v4-oled", "role": "repeater", "type": "merged", "file": "meshcore-ca-heltec-v4-oled-repeater-merged-20260515.bin" },
+    { "board": "heltec-v4-oled", "role": "repeater", "type": "update", "file": "meshcore-ca-heltec-v4-oled-repeater-update-20260515.bin" },
+    { "board": "heltec-v4-oled", "role": "room-server", "type": "merged", "file": "meshcore-ca-heltec-v4-oled-room-server-merged-20260515.bin" },
+    { "board": "heltec-v4-oled", "role": "room-server", "type": "update", "file": "meshcore-ca-heltec-v4-oled-room-server-update-20260515.bin" }
+  ]
+}

@@ -3,6 +3,8 @@ name: Deploy MkDocs site
 on:
   push:
     branches: [ main ]  # change to master if your branch is named master
+  release:
+    types: [ published ]  # redeploy site when new firmware is released
 
 permissions:
   contents: write       # needed so the action can push to gh-pages
