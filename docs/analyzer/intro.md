@@ -52,13 +52,13 @@ MeshCore observers capture mesh traffic and publish it to MQTT brokers, feeding 
 
 <div class="grid cards" markdown>
 
--   :material-check-circle:{ .lg .middle } **Verify Your Observer**
+-   :material-check-circle:{ .lg .middle } **Check Your Observer**
 
     ---
 
     Confirm your observer is online and reporting to the MeshCore.ca network.
 
-    [:octicons-arrow-right-24: Verify Observer Status](verify.md)
+    [:octicons-arrow-right-24: Check Your Observer](verify.md)
 
 -   :material-server-network:{ .lg .middle } **Broker Details**
 

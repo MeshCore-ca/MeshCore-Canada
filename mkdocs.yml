@@ -41,7 +41,8 @@ nav:
       - Recommended Antennas: meshcore/antennas.md
   - Analyzer & MQTT:
       - Overview: analyzer/intro.md
-      - Verify Observer Status: analyzer/verify.md
+      - Check Your Observer: analyzer/verify.md
+      - Troubleshooting: analyzer/troubleshooting.md
       - Build Guides:
           - MCtoMQTT Script: analyzer/builds/mctomqtt.md
           - MeshCore-HA: analyzer/builds/meshcore-ha.md
