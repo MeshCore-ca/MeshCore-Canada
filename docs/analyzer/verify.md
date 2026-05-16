@@ -4,9 +4,9 @@ After setting up your observer using any of the four paths ([MQTT Firmware](buil
 
 ## Check Your Observer
 
-- **[CoreScope Observers](https://live.meshcore.ca/)** - See all connected observers and their status
-- **[CoreScope Packets](https://live.meshcore.ca/)** - Watch live packet traffic from observers
-- **[MeshCore Map](https://live.meshcore.ca/meshcore-map.html)** - See observers on the map
+- **[CoreScope Observers](https://live.meshcore.ca/#/observers)** - See all connected observers and their status
+- **[CoreScope Packets](https://live.meshcore.ca/#/packets)** - Watch live packet traffic from observers
+- **[MeshCore Map](https://live.meshcore.ca/#/map)** - See observers on the map
 
 ## What to Look For
 
