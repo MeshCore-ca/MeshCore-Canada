@@ -16,17 +16,22 @@ All boards support both Repeater and Room Server roles.
     | Heltec V3 | Fully tested |
     | Heltec V4 OLED | Fully tested |
 
-=== "Coming Soon (Pending Validation)"
+=== "Available (Build Verified)"
 
     | Board | Notes |
     |-------|-------|
-    | LILYGO T3S3 SX1262 | Built, awaiting hardware |
-    | T-Beam Supreme SX1262 | Built, awaiting hardware |
-    | T-Beam SX1262 | Built, awaiting hardware |
-    | Seeed XIAO ESP32S3 + Wio-SX1262 | Built, awaiting hardware |
-    | RAK3112 | Built, awaiting hardware |
-    | Heltec Wireless Tracker | Built, awaiting hardware |
-    | Heltec Wireless Paper | Built, awaiting hardware |
+    | LILYGO T3S3 SX1262 | Build verified, smoke test recommended |
+    | T-Beam Supreme SX1262 | Build verified, smoke test recommended |
+    | T-Beam SX1262 | Build verified, smoke test recommended |
+    | Seeed XIAO ESP32S3 + Wio-SX1262 | Build verified, smoke test recommended |
+    | RAK3112 | Build verified, smoke test recommended |
+
+=== "Coming Soon (Pending Build)"
+
+    | Board | Notes |
+    |-------|-------|
+    | Heltec Wireless Tracker | Needs dedicated firmware target and validation |
+    | Heltec Wireless Paper | Needs dedicated firmware target and validation |
 
 New boards will appear in the firmware picker automatically as they are validated and released.
 
@@ -55,8 +60,10 @@ Pick your board, role, and flash type to get the right firmware image.
 
 <script>
 (function() {
-  var REPO = "MrAlders0n/MeshCore-Canada";
+  var REPO = "MeshCore-ca/MeshCore-Canada";
   var API  = "https://api.github.com/repos/" + REPO + "/releases/latest";
+  var LOCAL_MANIFEST = "../firmware/manifest.json";
+  var LOCAL_FIRMWARE_BASE = "../firmware/";
 
   var manifest = null;
   var assets   = {};
@@ -113,35 +120,57 @@ Pick your board, role, and flash type to get the right firmware image.
         '⬇ Download Firmware</a>';
   }
 
-  function init(release) {
-    (release.assets || []).forEach(function(asset) {
-      assets[asset.name] = asset.browser_download_url;
+  function initManifest(data, assetMap) {
+    manifest = data;
+    assets = assetMap || {};
+    (manifest.artifacts || []).forEach(function(artifact) {
+      if (!assets[artifact.file]) {
+        assets[artifact.file] = LOCAL_FIRMWARE_BASE + artifact.file;
+      }
     });
 
-    var manifestAsset = release.assets.find(function(a) {
+    populateSelect("fw-board", manifest.boards);
+    populateSelect("fw-role", manifest.roles);
+    populateSelect("fw-type", manifest.types);
+    document.getElementById("fw-loading").style.display = "none";
+    document.getElementById("fw-selects").style.display = "flex";
+    document.getElementById("fw-board").addEventListener("change", update);
+    document.getElementById("fw-role").addEventListener("change", update);
+    document.getElementById("fw-type").addEventListener("change", update);
+    update();
+  }
+
+  function loadLocalManifest() {
+    return fetch(LOCAL_MANIFEST)
+      .then(function(r) {
+        if (!r.ok) throw new Error(r.status);
+        return r.json();
+      })
+      .then(function(data) {
+        initManifest(data, {});
+      });
+  }
+
+  function initRelease(release) {
+    var releaseAssets = {};
+    (release.assets || []).forEach(function(asset) {
+      releaseAssets[asset.name] = asset.browser_download_url;
+    });
+
+    var manifestAsset = (release.assets || []).find(function(a) {
       return a.name === "manifest.json";
     });
     if (!manifestAsset) {
-      document.getElementById("fw-loading").textContent = "No firmware manifest found in latest release.";
-      return;
+      return loadLocalManifest();
     }
 
     fetch(manifestAsset.browser_download_url)
       .then(function(r) { return r.json(); })
       .then(function(data) {
-        manifest = data;
-        populateSelect("fw-board", manifest.boards);
-        populateSelect("fw-role", manifest.roles);
-        populateSelect("fw-type", manifest.types);
-        document.getElementById("fw-loading").style.display = "none";
-        document.getElementById("fw-selects").style.display = "flex";
-        document.getElementById("fw-board").addEventListener("change", update);
-        document.getElementById("fw-role").addEventListener("change", update);
-        document.getElementById("fw-type").addEventListener("change", update);
-        update();
+        initManifest(data, releaseAssets);
       })
       .catch(function() {
-        document.getElementById("fw-loading").textContent = "Failed to load firmware manifest.";
+        return loadLocalManifest();
       });
   }
 
@@ -150,10 +179,12 @@ Pick your board, role, and flash type to get the right firmware image.
       if (!r.ok) throw new Error(r.status);
       return r.json();
     })
-    .then(init)
+    .then(initRelease)
     .catch(function() {
-      document.getElementById("fw-loading").innerHTML =
-        'Could not load firmware list. <a href="https://github.com/' + REPO + '/releases/latest">Download from GitHub Releases</a>.';
+      loadLocalManifest().catch(function() {
+        document.getElementById("fw-loading").innerHTML =
+          'Could not load firmware list. <a href="https://github.com/' + REPO + '/releases/latest">Download from GitHub Releases</a>.';
+      });
     });
 })();
 </script>
