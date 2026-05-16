@@ -24,7 +24,7 @@
 
 set -euo pipefail
 
-REPO="MrAlders0n/MeshCore-Canada"
+REPO="${GITHUB_REPOSITORY:-MeshCore-ca/MeshCore-Canada}"
 BUILD_DIR="${1:?Usage: publish-firmware.sh <build-output-dir>}"
 
 if [ ! -d "$BUILD_DIR" ]; then
