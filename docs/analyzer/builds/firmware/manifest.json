@@ -93,7 +93,7 @@
       "board": "heltec-v3",
       "role": "repeater",
       "type": "merged",
-      "file": "meshcore-ca-heltec-v3-repeater-merged-20260516.bin",
+      "file": "meshcore-ca-heltec-v3-repeater-20260516-merged.bin",
       "sha256": "348c9e04691dbbc7adc5e4e8b1c7537b8c198dc0d3bc2ba6b32e7e305d84fc53",
       "size": 1508464
     },
@@ -101,7 +101,7 @@
       "board": "heltec-v3",
       "role": "repeater",
       "type": "update",
-      "file": "meshcore-ca-heltec-v3-repeater-update-20260516.bin",
+      "file": "meshcore-ca-heltec-v3-repeater-20260516-update.bin",
       "sha256": "64399893dcec491db1bcfe437554a4f33d457d88e04bc88b927045969aa8b1ef",
       "size": 1442928
     },
@@ -109,7 +109,7 @@
       "board": "heltec-v3",
       "role": "room-server",
       "type": "merged",
-      "file": "meshcore-ca-heltec-v3-room-server-merged-20260516.bin",
+      "file": "meshcore-ca-heltec-v3-room-server-20260516-merged.bin",
       "sha256": "599741fdcfe23040d6a888d64aebe74fdee45bdb98e6823622eac9d7a5588b0e",
       "size": 1505008
     },
@@ -117,7 +117,7 @@
       "board": "heltec-v3",
       "role": "room-server",
       "type": "update",
-      "file": "meshcore-ca-heltec-v3-room-server-update-20260516.bin",
+      "file": "meshcore-ca-heltec-v3-room-server-20260516-update.bin",
       "sha256": "bf4c241195a5499a57b760c8c38827abc86fbc0270c60c142a2aee29a7b182ee",
       "size": 1439472
     },
@@ -125,7 +125,7 @@
       "board": "heltec-v4-oled",
       "role": "repeater",
       "type": "merged",
-      "file": "meshcore-ca-heltec-v4-oled-repeater-merged-20260516.bin",
+      "file": "meshcore-ca-heltec-v4-oled-repeater-20260516-merged.bin",
       "sha256": "edaeb1a981289ce66f5f0b7f842cafd94838537f6a100d5339dd6405fca5b576",
       "size": 1618496
     },
@@ -133,7 +133,7 @@
       "board": "heltec-v4-oled",
       "role": "repeater",
       "type": "update",
-      "file": "meshcore-ca-heltec-v4-oled-repeater-update-20260516.bin",
+      "file": "meshcore-ca-heltec-v4-oled-repeater-20260516-update.bin",
       "sha256": "8a0dead2cde21356af6bb992906320053995cf8c043c228360c2b44320640dff",
       "size": 1552960
     },
@@ -141,7 +141,7 @@
       "board": "heltec-v4-oled",
       "role": "room-server",
       "type": "merged",
-      "file": "meshcore-ca-heltec-v4-oled-room-server-merged-20260516.bin",
+      "file": "meshcore-ca-heltec-v4-oled-room-server-20260516-merged.bin",
       "sha256": "ce800881a1ef4266630ea7f1db97d103fca580edbba6a62fc472f8e8e8024639",
       "size": 1577008
     },
@@ -149,7 +149,7 @@
       "board": "heltec-v4-oled",
       "role": "room-server",
       "type": "update",
-      "file": "meshcore-ca-heltec-v4-oled-room-server-update-20260516.bin",
+      "file": "meshcore-ca-heltec-v4-oled-room-server-20260516-update.bin",
       "sha256": "dd0f525bc128b63497c3c5aafdad5366ee4563df64e95136e5d91c1f9f9cfdfa",
       "size": 1511472
     },
@@ -157,7 +157,7 @@
       "board": "lilygo-t3s3-sx1262",
       "role": "repeater",
       "type": "merged",
-      "file": "meshcore-ca-lilygo-t3s3-sx1262-repeater-merged-20260516.bin",
+      "file": "meshcore-ca-lilygo-t3s3-sx1262-repeater-20260516-merged.bin",
       "sha256": "0fc0bcd6d3d6409c239a002c94feaa25fde05a1ea1e30d5ee55ca23033ea20b2",
       "size": 1481760
     },
@@ -165,7 +165,7 @@
       "board": "lilygo-t3s3-sx1262",
       "role": "repeater",
       "type": "update",
-      "file": "meshcore-ca-lilygo-t3s3-sx1262-repeater-update-20260516.bin",
+      "file": "meshcore-ca-lilygo-t3s3-sx1262-repeater-20260516-update.bin",
       "sha256": "ca6acd4475dd52ab43dddedac85c54e3a2064364fff0bc80233b577099775fc2",
       "size": 1416224
     },
@@ -173,7 +173,7 @@
       "board": "lilygo-t3s3-sx1262",
       "role": "room-server",
       "type": "merged",
-      "file": "meshcore-ca-lilygo-t3s3-sx1262-room-server-merged-20260516.bin",
+      "file": "meshcore-ca-lilygo-t3s3-sx1262-room-server-20260516-merged.bin",
       "sha256": "17a99d87084be0820b460de2b96ad6426e8e463daca30ed2758259c0db6ec9a9",
       "size": 1485776
     },
@@ -181,7 +181,7 @@
       "board": "lilygo-t3s3-sx1262",
       "role": "room-server",
       "type": "update",
-      "file": "meshcore-ca-lilygo-t3s3-sx1262-room-server-update-20260516.bin",
+      "file": "meshcore-ca-lilygo-t3s3-sx1262-room-server-20260516-update.bin",
       "sha256": "ff28b651402708dba927a53ba4869facb11fc6173c4ca52636624d21af496062",
       "size": 1420240
     },
@@ -189,7 +189,7 @@
       "board": "lilygo-t-beam-s3-supreme-sx1262",
       "role": "repeater",
       "type": "merged",
-      "file": "meshcore-ca-lilygo-t-beam-s3-supreme-sx1262-repeater-merged-20260516.bin",
+      "file": "meshcore-ca-lilygo-t-beam-s3-supreme-sx1262-repeater-20260516-merged.bin",
       "sha256": "64f6408c109e8793d1806b6f15331fb019148b73be6fd50930deca368e969488",
       "size": 1539776
     },
@@ -197,7 +197,7 @@
       "board": "lilygo-t-beam-s3-supreme-sx1262",
       "role": "repeater",
       "type": "update",
-      "file": "meshcore-ca-lilygo-t-beam-s3-supreme-sx1262-repeater-update-20260516.bin",
+      "file": "meshcore-ca-lilygo-t-beam-s3-supreme-sx1262-repeater-20260516-update.bin",
       "sha256": "2859fc527b84a10b382607ff8891765781700b6c312dce8f5523561ecf53cda2",
       "size": 1474240
     },
@@ -205,7 +205,7 @@
       "board": "lilygo-t-beam-s3-supreme-sx1262",
       "role": "room-server",
       "type": "merged",
-      "file": "meshcore-ca-lilygo-t-beam-s3-supreme-sx1262-room-server-merged-20260516.bin",
+      "file": "meshcore-ca-lilygo-t-beam-s3-supreme-sx1262-room-server-20260516-merged.bin",
       "sha256": "7ca3d6db5670f40b1cb015e8398e8835e4ce9193af2eb3cee675c709c2337227",
       "size": 1527424
     },
@@ -213,7 +213,7 @@
       "board": "lilygo-t-beam-s3-supreme-sx1262",
       "role": "room-server",
       "type": "update",
-      "file": "meshcore-ca-lilygo-t-beam-s3-supreme-sx1262-room-server-update-20260516.bin",
+      "file": "meshcore-ca-lilygo-t-beam-s3-supreme-sx1262-room-server-20260516-update.bin",
       "sha256": "6240ddd12b96aafef96e7998787f8005298bb269eda5f7837f2576963aba4001",
       "size": 1461888
     },
@@ -221,7 +221,7 @@
       "board": "lilygo-tbeam-sx1262",
       "role": "repeater",
       "type": "merged",
-      "file": "meshcore-ca-lilygo-tbeam-sx1262-repeater-merged-20260516.bin",
+      "file": "meshcore-ca-lilygo-tbeam-sx1262-repeater-20260516-merged.bin",
       "sha256": "8304e3448a9c81a9ce6736e11154fe4e1f02db45f28d2d9616b75a210cb21442",
       "size": 1577632
     },
@@ -229,7 +229,7 @@
       "board": "lilygo-tbeam-sx1262",
       "role": "repeater",
       "type": "update",
-      "file": "meshcore-ca-lilygo-tbeam-sx1262-repeater-update-20260516.bin",
+      "file": "meshcore-ca-lilygo-tbeam-sx1262-repeater-20260516-update.bin",
       "sha256": "60411943f8814ea0d3de10e5f32bad5afd11e1337e8282f16c078ad583ff55ce",
       "size": 1512096
     },
@@ -237,7 +237,7 @@
       "board": "lilygo-tbeam-sx1262",
       "role": "room-server",
       "type": "merged",
-      "file": "meshcore-ca-lilygo-tbeam-sx1262-room-server-merged-20260516.bin",
+      "file": "meshcore-ca-lilygo-tbeam-sx1262-room-server-20260516-merged.bin",
       "sha256": "a3c76351149f8c3f3b2c1f2ac338c937b5028a5c923c916ce21a08178abba048",
       "size": 1581648
     },
@@ -245,7 +245,7 @@
       "board": "lilygo-tbeam-sx1262",
       "role": "room-server",
       "type": "update",
-      "file": "meshcore-ca-lilygo-tbeam-sx1262-room-server-update-20260516.bin",
+      "file": "meshcore-ca-lilygo-tbeam-sx1262-room-server-20260516-update.bin",
       "sha256": "ba25c522970642722d25c2b75e3f67e2afb38c42a040474a159832055cbf858f",
       "size": 1516112
     },
@@ -253,7 +253,7 @@
       "board": "rak3112",
       "role": "repeater",
       "type": "merged",
-      "file": "meshcore-ca-rak3112-repeater-merged-20260516.bin",
+      "file": "meshcore-ca-rak3112-repeater-20260516-merged.bin",
       "sha256": "e7efef070cd49d1b991b0dcdd4efe7931c1ba70c53ee539ef1e2da2b67ec806c",
       "size": 1546112
     },
@@ -261,7 +261,7 @@
       "board": "rak3112",
       "role": "repeater",
       "type": "update",
-      "file": "meshcore-ca-rak3112-repeater-update-20260516.bin",
+      "file": "meshcore-ca-rak3112-repeater-20260516-update.bin",
       "sha256": "e146000d18b9963d69d763099b7c3aaa025c7927771573d6bd3c414266030d10",
       "size": 1480576
     },
@@ -269,7 +269,7 @@
       "board": "rak3112",
       "role": "room-server",
       "type": "merged",
-      "file": "meshcore-ca-rak3112-room-server-merged-20260516.bin",
+      "file": "meshcore-ca-rak3112-room-server-20260516-merged.bin",
       "sha256": "0ae65b7058bf08af08b768a0d06199f65518000a8757a9484359ed4d78559517",
       "size": 1542896
     },
@@ -277,7 +277,7 @@
       "board": "rak3112",
       "role": "room-server",
       "type": "update",
-      "file": "meshcore-ca-rak3112-room-server-update-20260516.bin",
+      "file": "meshcore-ca-rak3112-room-server-20260516-update.bin",
       "sha256": "8cc0ab3710b0cb4484a68ed06232212f96c84889e360489e70352912c2bb2e7f",
       "size": 1477360
     },
@@ -285,7 +285,7 @@
       "board": "seeed-xiao-s3-wio-sx1262",
       "role": "repeater",
       "type": "merged",
-      "file": "meshcore-ca-seeed-xiao-s3-wio-sx1262-repeater-merged-20260516.bin",
+      "file": "meshcore-ca-seeed-xiao-s3-wio-sx1262-repeater-20260516-merged.bin",
       "sha256": "1a57c455b34ca02c6c692cf2b114bf84d8207070f162249bcca64b57d9b29016",
       "size": 1458528
     },
@@ -293,7 +293,7 @@
       "board": "seeed-xiao-s3-wio-sx1262",
       "role": "repeater",
       "type": "update",
-      "file": "meshcore-ca-seeed-xiao-s3-wio-sx1262-repeater-update-20260516.bin",
+      "file": "meshcore-ca-seeed-xiao-s3-wio-sx1262-repeater-20260516-update.bin",
       "sha256": "c89185bfb58d1320fede469b99058ac539dd0a8508161f02c8c9b06ba63e2fbb",
       "size": 1392992
     },
@@ -301,7 +301,7 @@
       "board": "seeed-xiao-s3-wio-sx1262",
       "role": "room-server",
       "type": "merged",
-      "file": "meshcore-ca-seeed-xiao-s3-wio-sx1262-room-server-merged-20260516.bin",
+      "file": "meshcore-ca-seeed-xiao-s3-wio-sx1262-room-server-20260516-merged.bin",
       "sha256": "6e88fe7d4649ee6f53666387592594a4de99696cbde9a041c3ade68e75e1635b",
       "size": 1455360
     },
@@ -309,7 +309,7 @@
       "board": "seeed-xiao-s3-wio-sx1262",
       "role": "room-server",
       "type": "update",
-      "file": "meshcore-ca-seeed-xiao-s3-wio-sx1262-room-server-update-20260516.bin",
+      "file": "meshcore-ca-seeed-xiao-s3-wio-sx1262-room-server-20260516-update.bin",
       "sha256": "b08f69d7f67146271e5b31526966453ff4725e48119e896232af4621dd67a0c1",
       "size": 1389824
     }

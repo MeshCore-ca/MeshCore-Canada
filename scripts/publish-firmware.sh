@@ -6,31 +6,35 @@
 #
 # Requirements:
 #   - GITHUB_TOKEN env var (fine-grained PAT with Contents: write permission)
+#   - Python 3
 #   - gh CLI installed (https://cli.github.com), OR curl
-#   - jq installed
 #
 # Usage:
 #   export GITHUB_TOKEN="ghp_..."
 #   ./publish-firmware.sh ./build-output/
 #
 # The build-output directory should contain:
-#   - meshcore-ca-*.bin files (named per the standard)
+#   - meshcore-ca-*.bin files
 #   - manifest.json (describes all artifacts)
 #
 # The script will:
-#   1. Create a GitHub Release tagged firmware-YYYYMMDD
-#   2. Upload all .bin files as release assets
-#   3. Upload manifest.json as a release asset
+#   1. Normalize firmware names so MeshCore Flasher chooses the right offset
+#   2. Create a GitHub Release tagged firmware-YYYYMMDD
+#   3. Upload manifest-referenced .bin files as release assets
+#   4. Upload manifest.json as a release asset
 
 set -euo pipefail
 
 REPO="${GITHUB_REPOSITORY:-MeshCore-ca/MeshCore-Canada}"
 BUILD_DIR="${1:?Usage: publish-firmware.sh <build-output-dir>}"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 if [ ! -d "$BUILD_DIR" ]; then
   echo "Error: $BUILD_DIR is not a directory" >&2
   exit 1
 fi
+
+BUILD_DIR="$(cd "$BUILD_DIR" && pwd)"
 
 MANIFEST="$BUILD_DIR/manifest.json"
 if [ ! -f "$MANIFEST" ]; then
@@ -38,16 +42,52 @@ if [ ! -f "$MANIFEST" ]; then
   exit 1
 fi
 
-VERSION=$(jq -r '.version' "$MANIFEST")
-DATE=$(jq -r '.date' "$MANIFEST")
+echo "Normalizing firmware filenames for MeshCore Flasher..."
+python3 "$SCRIPT_DIR/normalize-firmware-assets.py" --prune-unsafe "$BUILD_DIR"
+
+json_field() {
+  local field="$1"
+  python3 -c 'import json, sys; print(json.load(open(sys.argv[1], encoding="utf-8"))[sys.argv[2]])' "$MANIFEST" "$field"
+}
+
+VERSION=$(json_field version)
+DATE=$(json_field date)
 TAG="firmware-${VERSION}"
 TITLE="Firmware ${VERSION}"
 
-BIN_FILES=("$BUILD_DIR"/meshcore-ca-*.bin)
+mapfile -t BIN_NAMES < <(python3 - "$MANIFEST" <<'PY'
+import json
+import sys
+
+with open(sys.argv[1], encoding="utf-8") as handle:
+    data = json.load(handle)
+
+seen = set()
+for artifact in data.get("artifacts", []):
+    name = artifact["file"]
+    if name in seen:
+        continue
+    seen.add(name)
+    print(name)
+PY
+)
+
+BIN_FILES=()
+for name in "${BIN_NAMES[@]}"; do
+  BIN_FILES+=("$BUILD_DIR/$name")
+done
+
 if [ ${#BIN_FILES[@]} -eq 0 ]; then
-  echo "Error: no meshcore-ca-*.bin files found in $BUILD_DIR" >&2
+  echo "Error: manifest contains no firmware artifacts" >&2
   exit 1
 fi
+
+for bin in "${BIN_FILES[@]}"; do
+  if [ ! -f "$bin" ]; then
+    echo "Error: manifest references missing firmware file $bin" >&2
+    exit 1
+  fi
+done
 
 echo "=== Firmware Release ==="
 echo "Repo:     $REPO"
@@ -62,7 +102,7 @@ echo ""
 if command -v gh &>/dev/null; then
   echo "Using gh CLI..."
 
-  # Create the release (draft first so we can attach all assets)
+  # Create the release and attach all manifest-referenced assets.
   gh release create "$TAG" \
     --repo "$REPO" \
     --title "$TITLE" \
@@ -99,8 +139,8 @@ RELEASE_RESPONSE=$(curl -sfS \
     \"make_latest\": \"true\"
   }")
 
-RELEASE_ID=$(echo "$RELEASE_RESPONSE" | jq -r '.id')
-UPLOAD_URL=$(echo "$RELEASE_RESPONSE" | jq -r '.upload_url' | sed 's/{.*}//')
+RELEASE_ID=$(printf '%s' "$RELEASE_RESPONSE" | python3 -c 'import json, sys; print(json.load(sys.stdin).get("id") or "")')
+UPLOAD_URL=$(printf '%s' "$RELEASE_RESPONSE" | python3 -c 'import json, sys; print((json.load(sys.stdin).get("upload_url") or "").split("{", 1)[0])')
 
 if [ "$RELEASE_ID" = "null" ] || [ -z "$RELEASE_ID" ]; then
   echo "Error: failed to create release" >&2

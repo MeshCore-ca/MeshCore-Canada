@@ -14,12 +14,12 @@ All boards support both Repeater and Room Server roles.
     | Board | Notes |
     |-------|-------|
     | Heltec V3 | Fully tested |
-    | Heltec V4 OLED | Fully tested |
 
 === "Available (Build Verified)"
 
     | Board | Notes |
     |-------|-------|
+    | Heltec V4 OLED | Build verified, smoke test recommended |
     | LILYGO T3S3 SX1262 | Build verified, smoke test recommended |
     | T-Beam Supreme SX1262 | Build verified, smoke test recommended |
     | T-Beam SX1262 | Build verified, smoke test recommended |
@@ -38,6 +38,8 @@ New boards will appear in the firmware picker automatically as they are validate
 ## Firmware Downloads
 
 Pick your board, role, and flash type to get the right firmware image.
+
+Most users should choose **First Flash (Merged)**, download the file, then flash it with the [MeshCore Flasher](https://flasher.meshcore.io/). No `esptool` offsets are needed when using the picker download.
 
 <div id="fw-picker" style="margin: 1.5em 0;">
   <div id="fw-loading" style="padding: 1em; opacity: 0.6;">Loading firmware manifest...</div>
@@ -102,6 +104,11 @@ Pick your board, role, and flash type to get the right firmware image.
     var boardLabel = boardEl.options[boardEl.selectedIndex].text;
     var roleLabel  = roleEl.options[roleEl.selectedIndex].text;
     var typeLabel  = typeEl.options[typeEl.selectedIndex].text;
+    var isMerged   = artifact.type === "merged";
+    var helpText   = isMerged
+      ? "MeshCore Flasher full image. Use for first flash or recovery; writes at 0x00000."
+      : "App-only update image. Use only on devices already running MeshCore; writes at 0x10000.";
+    var linkText   = isMerged ? "Download for MeshCore Flasher" : "Download update image";
 
     result.innerHTML =
       '<div style="margin-bottom: 0.6em;">' +
@@ -113,11 +120,14 @@ Pick your board, role, and flash type to get the right firmware image.
       '</div>' +
       '<div style="font-size: 0.8em; opacity: 0.5; margin-bottom: 0.8em;">Build: ' +
         manifest.version + ' (' + manifest.date + ')</div>' +
+      '<div style="font-size: 0.9em; margin-bottom: 0.8em;">' +
+        helpText +
+      '</div>' +
       '<a href="' + href + '" download ' +
         'style="display: inline-block; padding: 0.6em 1.5em; border-radius: 6px; ' +
         'background: var(--md-accent-fg-color); color: var(--md-accent-bg-color); ' +
         'font-weight: 600; text-decoration: none;">' +
-        '⬇ Download Firmware</a>';
+        linkText + '</a>';
   }
 
   function initManifest(data, assetMap) {
@@ -199,11 +209,19 @@ Pick your board, role, and flash type to get the right firmware image.
 
 ## Flashing
 
-1. Pick your board, role, and flash type from the picker above and download the firmware
-2. Flash using the [MeshCore Flasher](https://flasher.meshcore.io/) or your preferred ESP flashing tool
+1. Pick your board and role from the picker above
+2. Choose **First Flash (Merged)** unless you already know you need an app-only update image
+3. Download the firmware and flash it with the [MeshCore Flasher](https://flasher.meshcore.io/)
 
 !!! tip "First time flashing?"
-    Use the **Merged** flash type which includes the bootloader. The **Update** type is for devices already running MeshCore firmware.
+    Use **First Flash (Merged)**. The published merged filenames end in `-merged.bin`, which lets MeshCore Flasher detect the full image and write it at the correct offset.
+
+| Flash type | Use case | Technical offset |
+|------------|----------|------------------|
+| First Flash (Merged) | New board, erased board, recovery from a bad flash | `0x00000` |
+| Update | Device already running MeshCore with a valid bootloader and partition table | `0x10000` |
+
+Technical users can still flash with their preferred ESP tool. Laymen should use the MeshCore Flasher and the **First Flash (Merged)** picker option.
 
 ## CLI Setup
 
