@@ -7,4 +7,14 @@ See [Contributing](../contributing.md) for how to add or update entries.
 
 ## Communities
 
-WIP
+**Name:** Southern New Brunswick  
+
+**Region:** Fredericton, Saint John, Moncton  
+
+**Status:** Forming  
+
+**Frequency:** 910.525 MHz / 62.5 kHz / 7 / 5  
+
+**Website:** [MESHCORE Saint John, N.B.](https://www.facebook.com/groups/613466831163684)
+
+---
