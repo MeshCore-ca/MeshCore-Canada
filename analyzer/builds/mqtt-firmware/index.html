@@ -1620,10 +1620,6 @@
 <td>Heltec V3</td>
 <td>Fully tested</td>
 </tr>
-<tr>
-<td>Heltec V4 OLED</td>
-<td>Fully tested</td>
-</tr>
 </tbody>
 </table>
 </div>
@@ -1636,6 +1632,10 @@
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>Heltec V4 OLED</td>
+<td>Build verified, smoke test recommended</td>
+</tr>
 <tr>
 <td>LILYGO T3S3 SX1262</td>
 <td>Build verified, smoke test recommended</td>
@@ -1684,6 +1684,7 @@
 <p>New boards will appear in the firmware picker automatically as they are validated and released.</p>
 <h2 id="firmware-downloads">Firmware Downloads<a class="headerlink" href="#firmware-downloads" title="Permanent link">&para;</a></h2>
 <p>Pick your board, role, and flash type to get the right firmware image.</p>
+<p>Most users should choose <strong>First Flash (Merged)</strong>, download the file, then flash it with the <a href="https://flasher.meshcore.io/">MeshCore Flasher</a>. No <code>esptool</code> offsets are needed when using the picker download.</p>
 <div id="fw-picker" style="margin: 1.5em 0;">
   <div id="fw-loading" style="padding: 1em; opacity: 0.6;">Loading firmware manifest...</div>
   <div id="fw-selects" style="display: none; flex-wrap: wrap; gap: 1em; margin-bottom: 1em;">
@@ -1747,6 +1748,11 @@
     var boardLabel = boardEl.options[boardEl.selectedIndex].text;
     var roleLabel  = roleEl.options[roleEl.selectedIndex].text;
     var typeLabel  = typeEl.options[typeEl.selectedIndex].text;
+    var isMerged   = artifact.type === "merged";
+    var helpText   = isMerged
+      ? "MeshCore Flasher full image. Use for first flash or recovery; writes at 0x00000."
+      : "App-only update image. Use only on devices already running MeshCore; writes at 0x10000.";
+    var linkText   = isMerged ? "Download for MeshCore Flasher" : "Download update image";
 
     result.innerHTML =
       '<div style="margin-bottom: 0.6em;">' +
@@ -1758,11 +1764,14 @@
       '</div>' +
       '<div style="font-size: 0.8em; opacity: 0.5; margin-bottom: 0.8em;">Build: ' +
         manifest.version + ' (' + manifest.date + ')</div>' +
+      '<div style="font-size: 0.9em; margin-bottom: 0.8em;">' +
+        helpText +
+      '</div>' +
       '<a href="' + href + '" download ' +
         'style="display: inline-block; padding: 0.6em 1.5em; border-radius: 6px; ' +
         'background: var(--md-accent-fg-color); color: var(--md-accent-bg-color); ' +
         'font-weight: 600; text-decoration: none;">' +
-        '⬇ Download Firmware</a>';
+        linkText + '</a>';
   }
 
   function initManifest(data, assetMap) {
@@ -1859,13 +1868,36 @@
 </table>
 <h2 id="flashing">Flashing<a class="headerlink" href="#flashing" title="Permanent link">&para;</a></h2>
 <ol>
-<li>Pick your board, role, and flash type from the picker above and download the firmware</li>
-<li>Flash using the <a href="https://flasher.meshcore.io/">MeshCore Flasher</a> or your preferred ESP flashing tool</li>
+<li>Pick your board and role from the picker above</li>
+<li>Choose <strong>First Flash (Merged)</strong> unless you already know you need an app-only update image</li>
+<li>Download the firmware and flash it with the <a href="https://flasher.meshcore.io/">MeshCore Flasher</a></li>
 </ol>
 <div class="admonition tip">
 <p class="admonition-title">First time flashing?</p>
-<p>Use the <strong>Merged</strong> flash type which includes the bootloader. The <strong>Update</strong> type is for devices already running MeshCore firmware.</p>
+<p>Use <strong>First Flash (Merged)</strong>. The published merged filenames end in <code>-merged.bin</code>, which lets MeshCore Flasher detect the full image and write it at the correct offset.</p>
 </div>
+<table>
+<thead>
+<tr>
+<th>Flash type</th>
+<th>Use case</th>
+<th>Technical offset</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>First Flash (Merged)</td>
+<td>New board, erased board, recovery from a bad flash</td>
+<td><code>0x00000</code></td>
+</tr>
+<tr>
+<td>Update</td>
+<td>Device already running MeshCore with a valid bootloader and partition table</td>
+<td><code>0x10000</code></td>
+</tr>
+</tbody>
+</table>
+<p>Technical users can still flash with their preferred ESP tool. Laymen should use the MeshCore Flasher and the <strong>First Flash (Merged)</strong> picker option.</p>
 <h2 id="cli-setup">CLI Setup<a class="headerlink" href="#cli-setup" title="Permanent link">&para;</a></h2>
 <p>After flashing, connect to the device's admin CLI (serial or web) to set your WiFi, region code, and node name. Replace <code>YOW</code> with your IATA code and fill in your network credentials:</p>
 <div class="highlight"><pre><span></span><code>set name YOW-Repeater-01
