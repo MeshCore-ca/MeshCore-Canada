@@ -3,9 +3,11 @@
 MeshCore observers capture mesh traffic and publish it to MQTT brokers, feeding telemetry dashboards, maps, and packet inspectors. Pick one of the four observer paths below to start reporting to the MeshCore.ca network.
 
 !!! tip "Observer setup checklist"
-    Every observer path needs the same basics: a real 3-letter IATA airport code, the MeshCore.ca broker pair, JWT token authentication, TLS on port `443`, and packet publishing enabled. If the setup screen has two broker entries, use the same IATA code on both entries.
+    Every observer path needs the same basics: a MeshCore radio already on the MeshCore Canada network settings, a real 3-letter IATA airport code, the MeshCore.ca broker pair, JWT token authentication, TLS on port `443`, and packet publishing enabled. If the setup screen has two broker entries, use the same IATA code on both entries.
 
-    For Home Assistant, packet publishing means **Payload Mode** = `packet` or the older **Packets (Lets Mesh)** option enabled. For firmware, run the full CLI command block in the firmware guide so `mqtt.packets`, `bridge.enabled`, `mqtt.rx`, and `mqtt.tx` are set.
+    MeshCore Canada network settings are **USA/Canada (Recommended)**, or raw radio values `910.525 MHz / 62.5 kHz / SF7 / CR5`, with 3-byte path hashes. On MeshCore CLI devices, set that with `set radio 910.525,62.5,7,5` and `set path.hash.mode 2`.
+
+    For Home Assistant, packet publishing means **Payload Mode** = `packet` or the older **Packets (Lets Mesh)** option enabled. For firmware, run the full CLI command block in the firmware guide so radio, path hash, `mqtt.packets`, `bridge.enabled`, `mqtt.rx`, and `mqtt.tx` are set.
 
 ## Choose Your Observer Path
 

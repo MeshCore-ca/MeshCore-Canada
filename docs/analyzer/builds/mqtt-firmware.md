@@ -206,6 +206,8 @@ Most users should choose **First Flash (Merged)**, download the file, then flash
 | Board | A supported LoRa board (see list above) |
 | WiFi | 2.4 GHz network credentials |
 | IATA Code | Your real 3-letter IATA airport code (e.g. `YOW` for Ottawa) |
+| Radio preset | USA/Canada recommended settings: `910.525 MHz / 62.5 kHz / SF7 / CR5` |
+| Path hash mode | 3-byte path hashes: `set path.hash.mode 2` |
 
 ## Flashing
 
@@ -229,6 +231,8 @@ After flashing, connect to the device's admin CLI (serial or web) to set your Wi
 
 ```text
 set name YOW-Repeater-01
+set radio 910.525,62.5,7,5
+set path.hash.mode 2
 set mqtt.iata YOW
 set wifi.ssid YourWiFiNetwork
 set wifi.pwd YourWiFiPassword
@@ -246,6 +250,9 @@ reboot
 
 !!! note "Room Servers"
     For room server roles, change the name to match (e.g. `YOW-Room-Server-01`).
+
+!!! tip "MeshCore Canada network settings"
+    `set radio 910.525,62.5,7,5` matches the **USA/Canada (Recommended)** preset used by MeshCore Canada communities. `set path.hash.mode 2` selects 3-byte path hashes, which is the recommended setting for repeater-backed MeshCore Canada networks. Run these during onboarding even if the firmware image was just flashed, so the device is known-good before it is placed in service.
 
 ## Packet Repeating
 

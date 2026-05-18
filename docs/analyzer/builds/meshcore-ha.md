@@ -9,11 +9,14 @@ Add the MeshCore.ca broker pair to your Home Assistant MeshCore integration. Thi
 | Home Assistant | With the MeshCore integration installed |
 | MeshCore Node | Connected to HA via USB, BLE, or TCP |
 | IATA Code | The same real 3-letter IATA airport code used by your observer (e.g. `YOW` for Ottawa) |
+| Mesh Settings | Connected node uses `USA/Canada (Recommended)` and 3-byte path hashes |
 
 ## Setup
 
 !!! tip "Known-good setup"
     A Home Assistant observer needs three things to line up: both brokers connected, **Payload Mode** set to `packet` (or **Packets (Lets Mesh)** enabled on older screens), and the same real IATA code on both broker entries.
+
+    The connected MeshCore node must also be on the MeshCore Canada network settings: **USA/Canada (Recommended)**, or raw radio values `910.525 MHz / 62.5 kHz / SF7 / CR5`, with 3-byte path hashes.
 
 ### 1. Open Broker Settings
 

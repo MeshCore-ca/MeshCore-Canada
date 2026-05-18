@@ -8,6 +8,7 @@ Add the MeshCore.ca broker pair to an existing pyMC repeater installation. PyMC 
 |-------------|---------|
 | PyMC | A working pyMC repeater installation |
 | IATA Code | Your real 3-letter IATA airport code (e.g. `YOW` for Ottawa) |
+| Mesh Settings | Repeater radio uses `USA/Canada (Recommended)` and 3-byte path hashes |
 
 ## Configuration
 
@@ -21,6 +22,8 @@ mqtt:
 ```
 
 Use the real 3-letter airport code nearest to you. The public broker rejects placeholders and made-up region names such as `XXX` or `HOME`. Do not use `CAN` as shorthand for Canada; it is a real airport code for Guangzhou and will tag your observer to the wrong region.
+
+Also confirm the underlying repeater is on the MeshCore Canada network settings: **USA/Canada (Recommended)**, or raw radio values `910.525 MHz / 62.5 kHz / SF7 / CR5`, with 3-byte path hashes.
 
 ### 2. Add the Broker Block
 
