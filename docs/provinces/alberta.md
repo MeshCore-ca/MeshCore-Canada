@@ -51,6 +51,20 @@ See [Contributing](../contributing.md) for how to add or update entries.
 
 ---
 
+**Name:** YYC (Calgary) Meshcore Discord Group
+
+**Region:** Calgary, Alberta, Canada
+
+**Status:** Active
+
+**Frequency:** USA/Canada (Recommended) (910.525 MHz / 62.5 kHz / 7 / 5)
+
+**Discord:** [https://discord.gg/CznDhsRWnJ](https://discord.gg/CznDhsRWnJ)
+
+**Website:** [https://meshmonitoring.com/](https://meshmonitoring.com/)
+
+---
+
 # See also
 
 **Telegram:** Alberta topic in [MeshCore Canada](https://t.me/MeshCoreCAN)

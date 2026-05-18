@@ -7,4 +7,14 @@ See [Contributing](../contributing.md) for how to add or update entries.
 
 ## Communities
 
-WIP
+**Name:** Lunenburg County Mesh
+
+**Region:** Lunenburg County, Nova Scotia
+
+**Status:** Active
+
+**Frequency:** 910.525 MHz / 62.5 kHz / 7 / 5
+
+**Website:** [http://www.lunenburgcountymesh.ca](http://www.lunenburgcountymesh.ca)
+
+---
