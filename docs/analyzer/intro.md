@@ -51,6 +51,16 @@ MeshCore observers capture mesh traffic and publish it to MQTT brokers, feeding 
 
     [:octicons-arrow-right-24: MeshCore-HA Guide](builds/meshcore-ha.md)
 
+-   :octicons-terminal-24:{ .lg .middle } **RemoteTerm**
+
+    ---
+
+    Use RemoteTerm's Community MQTT fanout to make a companion radio report raw packets to MeshCore.ca.
+
+    Best for: RemoteTerm users already managing a radio over serial, TCP, or BLE.
+
+    [:octicons-arrow-right-24: RemoteTerm Setup](#remoteterm-for-meshcore)
+
 </div>
 
 ---
@@ -74,6 +84,38 @@ MeshCore observers capture mesh traffic and publish it to MQTT brokers, feeding 
     `mqtt1.meshcore.ca` :octicons-arrow-switch-24: `mqtt2.meshcore.ca` (port 443, WSS)
 
 </div>
+
+---
+
+## RemoteTerm For MeshCore
+
+[RemoteTerm for MeshCore](https://github.com/jkingsman/Remote-Terminal-for-MeshCore) can act as an observer by forwarding raw RF packets through its **Community MQTT/meshcoretomqtt** integration. This does not publish decrypted messages.
+
+Install and start RemoteTerm using the upstream instructions, connect your MeshCore radio over serial, TCP, or BLE, then open the RemoteTerm web UI.
+
+In RemoteTerm, open **Settings** -> **MQTT & Automation**, add **Community MQTT/meshcoretomqtt**, and use these values:
+
+| Field | Value |
+|-------|-------|
+| Name | `MeshCore.ca 1` or any descriptive name |
+| Broker Host | `mqtt1.meshcore.ca` |
+| Broker Port | `443` |
+| Transport | `WebSockets` |
+| Authentication | `Token` |
+| WebSocket Path | `/` |
+| Token Audience | `mqtt1.meshcore.ca` or leave blank to default to the broker host |
+| Owner Email | Optional |
+| Use TLS | Enabled |
+| Verify TLS certificates | Enabled |
+| Region Code (IATA) | Your nearest real 3-letter IATA airport code |
+| Packet Topic Template | `meshcore/{IATA}/{PUBLIC_KEY}/packets` |
+
+Click **Save as Enabled**. To publish to the redundant broker as well, add a second Community MQTT integration with the same settings, but set **Broker Host** and **Token Audience** to `mqtt2.meshcore.ca`.
+
+![RemoteTerm Community MQTT settings for MeshCore.ca](../assets/mcterm.png)
+
+!!! note "Windows MQTT fanout"
+    If you run RemoteTerm on Windows and enable MQTT fanout, start Uvicorn with `--loop none` as described in the RemoteTerm README so the MQTT client can connect reliably.
 
 ---
 
