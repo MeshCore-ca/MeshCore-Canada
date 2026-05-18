@@ -31,15 +31,40 @@ function Prompt-YesNo {
     }
 }
 
+$KnownIataCodes = @(
+    "YYZ","YTZ","YOW","YHM","YKF","YXU","YOO","YKZ","YAM","YQT","YSB","YTS","YQG","YYB","YGK","YPQ","YTR","YHD","YPL","YND",
+    "YUL","YMX","YQB","YBG","YVO","YHU","YRJ","YGL","YSC","YTQ","YUY","YZV","YGP","YRQ",
+    "YVR","YYJ","YXX","YLW","YXS","YPR","YXT","YQQ","YCD","YYD","YDQ","YXJ","YYF","YCG","YKA","YXC","YBC",
+    "YYC","YEG","YMM","YQU","YQL","YXH",
+    "YQR","YXE","YPA",
+    "YWG","YBR","YTH","YDN","YPG",
+    "YFC","YSJ","YQM","ZBF",
+    "YHZ","YQY","YQI",
+    "YYG",
+    "YYT","YQX","YDF","YYR","YWK",
+    "YXY","YZF","YFB","YEV","YHY"
+)
+
 function Resolve-Iata {
     param([string]$Value)
+    $prompted = [string]::IsNullOrWhiteSpace($Value)
     $candidate = $Value.Trim().ToUpperInvariant()
     if ([string]::IsNullOrWhiteSpace($candidate)) {
-        $candidate = Read-Host "Enter 3-character region/IATA code"
+        $candidate = Read-Host "Enter 3-letter IATA airport code"
         $candidate = $candidate.Trim().ToUpperInvariant()
     }
-    if ($candidate -notmatch '^[A-Z0-9]{3}$') {
-        throw "IATA/region code must be exactly 3 letters or numbers."
+    if ($candidate -eq "XXX") {
+        throw "XXX is a placeholder. Use the real 3-letter IATA airport code nearest to you."
+    }
+    if ($candidate -notmatch '^[A-Z]{3}$') {
+        throw "IATA code must be exactly 3 letters."
+    }
+    if ($KnownIataCodes -notcontains $candidate) {
+        Write-Warning "$candidate is not in the MeshCore.ca Canadian quick list. Continue only if it is a real IATA airport code."
+        Write-Warning "Do not use CAN as shorthand for Canada; CAN is an airport code in Guangzhou."
+        if ($prompted -and -not (Prompt-YesNo "Use $candidate anyway?" $false)) {
+            return (Resolve-Iata "")
+        }
     }
     return $candidate
 }

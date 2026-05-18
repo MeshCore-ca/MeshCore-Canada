@@ -163,7 +163,7 @@
     
     
       <div class="md-header__source">
-        <a href="https://github.com/MrAlders0n/MeshCore-Canada" title="Go to repository" class="md-source" data-md-component="source">
+        <a href="https://github.com/MeshCore-ca/MeshCore-Canada" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
@@ -208,7 +208,7 @@
   </label>
   
     <div class="md-nav__source">
-      <a href="https://github.com/MrAlders0n/MeshCore-Canada" title="Go to repository" class="md-source" data-md-component="source">
+      <a href="https://github.com/MeshCore-ca/MeshCore-Canada" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
@@ -815,6 +815,17 @@
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#common-ha-symptoms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common HA Symptoms
+      
+    </span>
+  </a>
   
 </li>
       
@@ -1546,6 +1557,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#common-ha-symptoms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Common HA Symptoms
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#quick-reference" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1608,11 +1630,15 @@
 </tr>
 <tr>
 <td>IATA Code</td>
-<td>Your 3-character region code (e.g. <code>YOW</code> for Ottawa)</td>
+<td>The same real 3-letter IATA airport code used by your observer (e.g. <code>YOW</code> for Ottawa)</td>
 </tr>
 </tbody>
 </table>
 <h2 id="setup">Setup<a class="headerlink" href="#setup" title="Permanent link">&para;</a></h2>
+<div class="admonition tip">
+<p class="admonition-title">Known-good setup</p>
+<p>A Home Assistant observer needs three things to line up: both brokers connected, <strong>Payload Mode</strong> set to <code>packet</code> (or <strong>Packets (Lets Mesh)</strong> enabled on older screens), and the same real IATA code on both broker entries.</p>
+</div>
 <h3 id="1-open-broker-settings">1. Open Broker Settings<a class="headerlink" href="#1-open-broker-settings" title="Permanent link">&para;</a></h3>
 <p>Navigate to:</p>
 <p><strong>Settings</strong> &gt; <strong>Devices &amp; Services</strong> &gt; <strong>MeshCore</strong> &gt; <strong>Configure</strong> &gt; <strong>Manage MQTT Brokers</strong></p>
@@ -1708,12 +1734,45 @@
 </tbody>
 </table>
 <p>All other fields remain the same as the primary broker.</p>
+<div class="admonition warning">
+<p class="admonition-title">Packet mode is required</p>
+<p>If your Home Assistant version shows a checkbox or option named <strong>Packets (Lets Mesh)</strong>, enable it. In newer versions this is the <strong>Payload Mode</strong> setting and it must be <code>packet</code>. If this is missed, the broker can appear connected while no packet data shows up.</p>
+</div>
 <h3 id="4-set-your-region">4. Set Your Region<a class="headerlink" href="#4-set-your-region" title="Permanent link">&para;</a></h3>
-<p>Make sure your IATA region code is set in the integration. The <code>{IATA}</code> placeholder in the topic templates will be replaced with your code (e.g. <code>YOW</code>).</p>
+<p>Make sure your IATA code is set in the integration. The <code>{IATA}</code> placeholder in the topic templates will be replaced with your code (e.g. <code>YOW</code>).</p>
+<p>The Home Assistant integration must use the same IATA code as the observer that is publishing packets. If Home Assistant is set to <code>YOW</code> but the observer publishes under <code>YKF</code>, Home Assistant will subscribe to the wrong topics and look empty.</p>
+<p>Current MeshCore-HA versions use a free-text <strong>Broker IATA Code</strong> field, so you can type a real code such as <code>YTR</code> even if it is missing from a quick list. If your Home Assistant screen only offers a picker and does not let you enter the code manually, update the MeshCore integration before using a neighboring airport code as a workaround.</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>You can find your nearest IATA code on the <a href="../../intro/">Analyzer Overview</a> page.</p>
+<p>You can find common Canadian IATA codes on the <a href="../../intro/">Analyzer Overview</a> page. If your nearest real airport code is missing from that quick list, you can still use it.</p>
 </div>
+<h2 id="common-ha-symptoms">Common HA Symptoms<a class="headerlink" href="#common-ha-symptoms" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Most likely fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Brokers show connected but no packets appear</td>
+<td>Enable <strong>Packets (Lets Mesh)</strong> or set <strong>Payload Mode</strong> to <code>packet</code></td>
+</tr>
+<tr>
+<td><code>YTR</code> or another code is not selectable</td>
+<td>Update MeshCore-HA, then type the code in <strong>Broker IATA Code</strong></td>
+</tr>
+<tr>
+<td>One broker works and the backup does not</td>
+<td>Check the second broker's <strong>Token Audience</strong> is <code>mqtt2.meshcore.ca</code></td>
+</tr>
+<tr>
+<td>Packets appear under the wrong city</td>
+<td>Set both broker IATA fields to the nearest real airport code</td>
+</tr>
+</tbody>
+</table>
 <h2 id="quick-reference">Quick Reference<a class="headerlink" href="#quick-reference" title="Permanent link">&para;</a></h2>
 <table>
 <thead>

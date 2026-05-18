@@ -163,7 +163,7 @@
     
     
       <div class="md-header__source">
-        <a href="https://github.com/MrAlders0n/MeshCore-Canada" title="Go to repository" class="md-source" data-md-component="source">
+        <a href="https://github.com/MeshCore-ca/MeshCore-Canada" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
@@ -208,7 +208,7 @@
   </label>
   
     <div class="md-nav__source">
-      <a href="https://github.com/MrAlders0n/MeshCore-Canada" title="Go to repository" class="md-source" data-md-component="source">
+      <a href="https://github.com/MeshCore-ca/MeshCore-Canada" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
@@ -1601,7 +1601,7 @@
 <p>Flash observer firmware directly onto a supported board. The device connects to WiFi and publishes mesh traffic to MQTT brokers without a host computer.</p>
 <div class="admonition info">
 <p class="admonition-title">Pre-configured firmware</p>
-<p>These firmware images are pre-compiled by <strong>n30nex</strong> and come pre-configured with the MeshCore.ca broker pair (<code>mqtt1.meshcore.ca</code> and <code>mqtt2.meshcore.ca</code>) in slots 1 and 2. After flashing, you only need to set your WiFi credentials, IATA region code, and node name.</p>
+<p>These firmware images are pre-compiled by <strong>n30nex</strong> and come pre-configured with the MeshCore.ca broker pair (<code>mqtt1.meshcore.ca</code> and <code>mqtt2.meshcore.ca</code>) in slots 1 and 2. After flashing, run the CLI setup block below to set WiFi, IATA, node name, and packet publishing.</p>
 </div>
 <h2 id="supported-boards">Supported Boards<a class="headerlink" href="#supported-boards" title="Permanent link">&para;</a></h2>
 <p>All boards support both Repeater and Room Server roles.</p>
@@ -1862,7 +1862,7 @@
 </tr>
 <tr>
 <td>IATA Code</td>
-<td>Your 3-character region code (e.g. <code>YOW</code> for Ottawa)</td>
+<td>Your real 3-letter IATA airport code (e.g. <code>YOW</code> for Ottawa)</td>
 </tr>
 </tbody>
 </table>
@@ -1899,7 +1899,7 @@
 </table>
 <p>Technical users can still flash with their preferred ESP tool. Laymen should use the MeshCore Flasher and the <strong>First Flash (Merged)</strong> picker option.</p>
 <h2 id="cli-setup">CLI Setup<a class="headerlink" href="#cli-setup" title="Permanent link">&para;</a></h2>
-<p>After flashing, connect to the device's admin CLI (serial or web) to set your WiFi, region code, and node name. Replace <code>YOW</code> with your IATA code and fill in your network credentials:</p>
+<p>After flashing, connect to the device's admin CLI (serial or web) to set your WiFi, IATA code, and node name. Replace <code>YOW</code> with the real 3-letter airport code nearest to you and fill in your network credentials:</p>
 <div class="highlight"><pre><span></span><code>set name YOW-Repeater-01
 set mqtt.iata YOW
 set wifi.ssid YourWiFiNetwork
@@ -1912,6 +1912,10 @@ set mqtt.rx on
 set mqtt.tx advert
 reboot
 </code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">Use a real IATA code</p>
+<p>The firmware will let you type any value, but the public MeshCore.ca broker only accepts valid 3-letter IATA airport codes. If the code is not on the quick list, it can still work as long as it is a real airport code. Placeholder or made-up values such as <code>XXX</code> or <code>HOME</code> will not publish. Do not use <code>CAN</code> as shorthand for Canada; it is a real airport code for Guangzhou and will tag your observer to the wrong region.</p>
+</div>
 <div class="admonition note">
 <p class="admonition-title">Room Servers</p>
 <p>For room server roles, change the name to match (e.g. <code>YOW-Room-Server-01</code>).</p>

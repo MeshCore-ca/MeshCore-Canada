@@ -163,7 +163,7 @@
     
     
       <div class="md-header__source">
-        <a href="https://github.com/MrAlders0n/MeshCore-Canada" title="Go to repository" class="md-source" data-md-component="source">
+        <a href="https://github.com/MeshCore-ca/MeshCore-Canada" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
@@ -208,7 +208,7 @@
   </label>
   
     <div class="md-nav__source">
-      <a href="https://github.com/MrAlders0n/MeshCore-Canada" title="Go to repository" class="md-source" data-md-component="source">
+      <a href="https://github.com/MeshCore-ca/MeshCore-Canada" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
     
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
@@ -657,6 +657,17 @@
     <span class="md-ellipsis">
       
         MCtoMQTT / Companion (USB Host)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#iata-code-problems" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        IATA Code Problems
       
     </span>
   </a>
@@ -1455,6 +1466,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#iata-code-problems" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        IATA Code Problems
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#pymc" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1529,7 +1551,19 @@
 </tr>
 <tr>
 <td><code>get mqtt.iata</code></td>
-<td>Should return your 3-character IATA code</td>
+<td>Should return your real 3-letter IATA airport code</td>
+</tr>
+<tr>
+<td><code>get mqtt.packets</code></td>
+<td>Should be <code>on</code> for packet publishing</td>
+</tr>
+<tr>
+<td><code>get bridge.enabled</code></td>
+<td>Should be <code>on</code> for bridge publishing</td>
+</tr>
+<tr>
+<td><code>get mqtt.rx</code> / <code>get mqtt.tx</code></td>
+<td>Should match the firmware guide setup</td>
 </tr>
 <tr>
 <td><code>get mqtt1.preset</code></td>
@@ -1577,12 +1611,70 @@ cat<span class="w"> </span>/etc/mctomqtt/config.d/20-meshcore-ca.toml
 cat<span class="w"> </span>~/.meshcore-packet-capture/.env.local
 </code></pre></div>
 <p>Confirm the broker hosts are <code>mqtt1.meshcore.ca</code> and <code>mqtt2.meshcore.ca</code>.</p>
+<p>Also confirm the observer path is publishing packet payloads, not only status. For companion capture, <code>PACKETCAPTURE_MQTT1_TOPIC_PACKETS</code> and <code>PACKETCAPTURE_MQTT2_TOPIC_PACKETS</code> should use <code>meshcore/{IATA}/{PUBLIC_KEY}/packets</code>.</p>
+<h2 id="iata-code-problems">IATA Code Problems<a class="headerlink" href="#iata-code-problems" title="Permanent link">&para;</a></h2>
+<p>Use a real 3-letter IATA airport code such as <code>YOW</code>, <code>YKF</code>, or <code>YYZ</code>. The firmware may accept any text, but the public broker rejects placeholders and made-up region names such as <code>XXX</code> or <code>HOME</code>. Do not use <code>CAN</code> as shorthand for Canada; it is a real airport code for Guangzhou and will tag your observer to the wrong region.</p>
+<p>If your code is not on the quick list, that does not automatically mean it is unsupported. It can still work if it is a real IATA airport code. Make sure every component uses the same code:</p>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Where to check</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MQTT firmware</td>
+<td><code>get mqtt.iata</code></td>
+</tr>
+<tr>
+<td>MCtoMQTT</td>
+<td><code>/etc/mctomqtt/config.d/20-meshcore-ca.toml</code></td>
+</tr>
+<tr>
+<td>Companion capture</td>
+<td><code>PACKETCAPTURE_IATA</code> in <code>~/.meshcore-packet-capture/.env.local</code></td>
+</tr>
+<tr>
+<td>Home Assistant</td>
+<td>MeshCore integration region/IATA field</td>
+</tr>
+</tbody>
+</table>
 <h2 id="pymc">PyMC<a class="headerlink" href="#pymc" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>systemctl<span class="w"> </span>status<span class="w"> </span>pymc-repeater
 </code></pre></div>
 <p>Check that your <code>mqtt.iata_code</code> is set and the broker block is present in <code>/etc/pymc_repeater/config.yaml</code>.</p>
 <h2 id="home-assistant">Home Assistant<a class="headerlink" href="#home-assistant" title="Permanent link">&para;</a></h2>
 <p>Go to <strong>Settings</strong> &gt; <strong>Devices &amp; Services</strong> &gt; <strong>MeshCore</strong> &gt; <strong>Configure</strong> &gt; <strong>Manage MQTT Brokers</strong> and confirm both brokers show as connected. Make sure your IATA code is set in the integration.</p>
+<p>If the brokers connect but packets never appear, check the packet payload setting. Some Home Assistant MeshCore versions label this as <strong>Packets (Lets Mesh)</strong>; newer versions expose it as <strong>Payload Mode</strong>. It must be enabled/set to <code>packet</code> for MeshCore.ca packet visibility.</p>
+<p>If a code such as <code>YTR</code> is missing from a picker, update the MeshCore Home Assistant integration and type the code into <strong>Broker IATA Code</strong>. Using a nearby code such as <code>YGK</code> can make data visible, but it tags the observer to the wrong region.</p>
+<table>
+<thead>
+<tr>
+<th>HA symptom</th>
+<th>Check</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Broker connected, no packets</td>
+<td><strong>Packets (Lets Mesh)</strong> enabled or <strong>Payload Mode</strong> = <code>packet</code></td>
+</tr>
+<tr>
+<td>Cannot enter a real IATA code</td>
+<td>Update MeshCore-HA; current versions use free text</td>
+</tr>
+<tr>
+<td>Backup broker fails</td>
+<td><code>Token Audience</code> must match the broker host (<code>mqtt2.meshcore.ca</code>)</td>
+</tr>
+<tr>
+<td>Observer appears under the wrong city</td>
+<td>Both broker entries use the same nearest real IATA code</td>
+</tr>
+</tbody>
+</table>
 <h2 id="still-not-working">Still Not Working?<a class="headerlink" href="#still-not-working" title="Permanent link">&para;</a></h2>
 <p>If everything looks correct but your observer still doesn't appear, double check that your device has internet access and can reach <code>mqtt1.meshcore.ca</code> on port 443. Firewalls or network restrictions on outbound WebSocket connections are the most common blocker.</p>
 
