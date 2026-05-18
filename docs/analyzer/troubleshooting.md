@@ -10,7 +10,10 @@ Run these in the device's admin CLI:
 |---------|---------------|
 | `get wifi.status` | Should show connected to your 2.4 GHz network |
 | `get mqtt.status` | Should show an active broker connection |
-| `get mqtt.iata` | Should return your 3-character IATA code |
+| `get mqtt.iata` | Should return your real 3-letter IATA airport code |
+| `get mqtt.packets` | Should be `on` for packet publishing |
+| `get bridge.enabled` | Should be `on` for bridge publishing |
+| `get mqtt.rx` / `get mqtt.tx` | Should match the firmware guide setup |
 | `get mqtt1.preset` | Should show `custom` (not `none`) |
 | `get mqtt2.preset` | Should show `custom` (not `none`) |
 | `get name` | Should return the node name you set |
@@ -56,6 +59,21 @@ cat ~/.meshcore-packet-capture/.env.local
 
 Confirm the broker hosts are `mqtt1.meshcore.ca` and `mqtt2.meshcore.ca`.
 
+Also confirm the observer path is publishing packet payloads, not only status. For companion capture, `PACKETCAPTURE_MQTT1_TOPIC_PACKETS` and `PACKETCAPTURE_MQTT2_TOPIC_PACKETS` should use `meshcore/{IATA}/{PUBLIC_KEY}/packets`.
+
+## IATA Code Problems
+
+Use a real 3-letter IATA airport code such as `YOW`, `YKF`, or `YYZ`. The firmware may accept any text, but the public broker rejects placeholders and made-up region names such as `XXX` or `HOME`. Do not use `CAN` as shorthand for Canada; it is a real airport code for Guangzhou and will tag your observer to the wrong region.
+
+If your code is not on the quick list, that does not automatically mean it is unsupported. It can still work if it is a real IATA airport code. Make sure every component uses the same code:
+
+| Component | Where to check |
+|-----------|----------------|
+| MQTT firmware | `get mqtt.iata` |
+| MCtoMQTT | `/etc/mctomqtt/config.d/20-meshcore-ca.toml` |
+| Companion capture | `PACKETCAPTURE_IATA` in `~/.meshcore-packet-capture/.env.local` |
+| Home Assistant | MeshCore integration region/IATA field |
+
 ## PyMC
 
 ```bash
@@ -67,6 +85,17 @@ Check that your `mqtt.iata_code` is set and the broker block is present in `/etc
 ## Home Assistant
 
 Go to **Settings** > **Devices & Services** > **MeshCore** > **Configure** > **Manage MQTT Brokers** and confirm both brokers show as connected. Make sure your IATA code is set in the integration.
+
+If the brokers connect but packets never appear, check the packet payload setting. Some Home Assistant MeshCore versions label this as **Packets (Lets Mesh)**; newer versions expose it as **Payload Mode**. It must be enabled/set to `packet` for MeshCore.ca packet visibility.
+
+If a code such as `YTR` is missing from a picker, update the MeshCore Home Assistant integration and type the code into **Broker IATA Code**. Using a nearby code such as `YGK` can make data visible, but it tags the observer to the wrong region.
+
+| HA symptom | Check |
+|------------|-------|
+| Broker connected, no packets | **Packets (Lets Mesh)** enabled or **Payload Mode** = `packet` |
+| Cannot enter a real IATA code | Update MeshCore-HA; current versions use free text |
+| Backup broker fails | `Token Audience` must match the broker host (`mqtt2.meshcore.ca`) |
+| Observer appears under the wrong city | Both broker entries use the same nearest real IATA code |
 
 ## Still Not Working?
 

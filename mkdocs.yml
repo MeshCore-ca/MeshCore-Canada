@@ -1,7 +1,7 @@
 site_name: MeshCore Canada
 site_url: https://meshcore.ca
 repo_name: MeshCore Canada
-repo_url: https://github.com/MrAlders0n/MeshCore-Canada  # update this
+repo_url: https://github.com/MeshCore-ca/MeshCore-Canada
 
 theme:
   name: material

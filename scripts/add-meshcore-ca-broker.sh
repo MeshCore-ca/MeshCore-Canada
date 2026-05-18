@@ -34,7 +34,8 @@ Usage:
   bash <(curl -fsSL https://live.meshcore.ca/scripts/add-meshcore-ca-broker.sh) --iata YOW --device serial-host
 
 Options:
-  --iata CODE             Region/IATA code.
+  --iata CODE             Real 3-letter IATA airport code.
+  --list-iata             Show common Canadian IATA choices and exit.
   --device TYPE           serial-host | companion
   --mode auto|mctomqtt|env
   --install-mctomqtt      Install Cisien/meshcoretomqtt first if /etc/mctomqtt is missing.
@@ -106,26 +107,195 @@ upper_iata() {
   printf '%s' "$1" | tr '[:lower:]' '[:upper:]'
 }
 
+IATA_CHOICES="$(cat <<'EOF'
+Ontario|YYZ|Toronto (Pearson)
+Ontario|YTZ|Toronto (Billy Bishop)
+Ontario|YOW|Ottawa
+Ontario|YHM|Hamilton
+Ontario|YKF|Kitchener / Waterloo
+Ontario|YXU|London
+Ontario|YOO|Oshawa
+Ontario|YKZ|Buttonville / Markham
+Ontario|YAM|Sault Ste. Marie
+Ontario|YQT|Thunder Bay
+Ontario|YSB|Sudbury
+Ontario|YTS|Timmins
+Ontario|YQG|Windsor
+Ontario|YYB|North Bay
+Ontario|YGK|Kingston
+Ontario|YPQ|Peterborough
+Ontario|YTR|Trenton / Quinte West
+Ontario|YHD|Dryden
+Ontario|YPL|Pickle Lake
+Ontario|YND|Gatineau (Ottawa area)
+Quebec|YUL|Montreal (Trudeau)
+Quebec|YMX|Montreal (Mirabel)
+Quebec|YQB|Quebec City
+Quebec|YBG|Bagotville / Saguenay
+Quebec|YVO|Val-d'Or
+Quebec|YHU|Montreal (St-Hubert)
+Quebec|YRJ|Roberval
+Quebec|YGL|La Grande Riviere
+Quebec|YSC|Sherbrooke
+Quebec|YTQ|Tasiujaq
+Quebec|YUY|Rouyn-Noranda
+Quebec|YZV|Sept-Iles
+Quebec|YGP|Gaspe
+Quebec|YRQ|Trois-Rivieres
+British Columbia|YVR|Vancouver
+British Columbia|YYJ|Victoria
+British Columbia|YXX|Abbotsford / Fraser Valley
+British Columbia|YLW|Kelowna
+British Columbia|YXS|Prince George
+British Columbia|YPR|Prince Rupert
+British Columbia|YXT|Terrace
+British Columbia|YQQ|Comox / Courtenay
+British Columbia|YCD|Nanaimo
+British Columbia|YYD|Smithers
+British Columbia|YDQ|Dawson Creek
+British Columbia|YXJ|Fort St. John
+British Columbia|YYF|Penticton
+British Columbia|YCG|Castlegar
+British Columbia|YKA|Kamloops
+British Columbia|YXC|Cranbrook
+British Columbia|YBC|Baie-Comeau
+Alberta|YYC|Calgary
+Alberta|YEG|Edmonton
+Alberta|YMM|Fort McMurray
+Alberta|YQU|Grande Prairie
+Alberta|YQL|Lethbridge
+Alberta|YXH|Medicine Hat
+Saskatchewan|YQR|Regina
+Saskatchewan|YXE|Saskatoon
+Saskatchewan|YPA|Prince Albert
+Manitoba|YWG|Winnipeg
+Manitoba|YBR|Brandon
+Manitoba|YTH|Thompson
+Manitoba|YDN|Dauphin
+Manitoba|YPG|Portage la Prairie
+New Brunswick|YFC|Fredericton
+New Brunswick|YSJ|Saint John
+New Brunswick|YQM|Moncton
+New Brunswick|ZBF|Bathurst
+Nova Scotia|YHZ|Halifax
+Nova Scotia|YQY|Sydney
+Nova Scotia|YQI|Yarmouth
+Prince Edward Island|YYG|Charlottetown
+Newfoundland and Labrador|YYT|St. John's
+Newfoundland and Labrador|YQX|Gander
+Newfoundland and Labrador|YDF|Deer Lake
+Newfoundland and Labrador|YYR|Goose Bay
+Newfoundland and Labrador|YWK|Wabush
+Territories|YXY|Whitehorse (Yukon)
+Territories|YZF|Yellowknife (NWT)
+Territories|YFB|Iqaluit (Nunavut)
+Territories|YEV|Inuvik (NWT)
+Territories|YHY|Hay River (NWT)
+EOF
+)"
+
+print_iata_choices() {
+  local last="" n=0
+  printf '%s\n' "$IATA_CHOICES" | while IFS='|' read -r province code label; do
+    [ -n "$province" ] || continue
+    if [ "$province" != "$last" ]; then
+      printf '\n%s\n' "$province"
+      last="$province"
+    fi
+    n=$((n + 1))
+    printf '  %2d) %s  %s\n' "$n" "$code" "$label"
+  done
+}
+
+iata_by_number() {
+  printf '%s\n' "$IATA_CHOICES" | awk -F'|' -v wanted="$1" '
+    NF == 3 {
+      n++
+      if (n == wanted) {
+        print $2
+        found = 1
+        exit
+      }
+    }
+    END { if (!found) exit 1 }
+  '
+}
+
+known_iata_label() {
+  printf '%s\n' "$IATA_CHOICES" | awk -F'|' -v code="$1" '
+    toupper($2) == code {
+      print $3
+      found = 1
+      exit
+    }
+    END { if (!found) exit 1 }
+  '
+}
+
+prompt_iata() {
+  local choice selected
+  say "Choose the real IATA airport code nearest to the observer."
+  say "Type a number from the quick list, or type any real 3-letter IATA code."
+  say "Do not use CAN as shorthand for Canada; CAN is an airport code in Guangzhou."
+  print_iata_choices
+  while :; do
+    printf '\nIATA code or list number: '
+    read -r choice
+    choice="$(printf '%s' "$choice" | tr '[:lower:]' '[:upper:]' | tr -d '[:space:]')"
+    [ -n "$choice" ] || continue
+    if printf '%s' "$choice" | grep -Eq '^[0-9]+$'; then
+      selected="$(iata_by_number "$choice" || true)"
+      if [ -n "$selected" ]; then
+        IATA="$selected"
+        return 0
+      fi
+      echo "No IATA quick-list item number: $choice" >&2
+      continue
+    fi
+    IATA="$choice"
+    return 0
+  done
+}
+
 require_iata() {
-  if [ -z "$IATA" ] && [ -t 0 ]; then
-    printf 'Enter 3-character region/IATA code: '
-    read -r IATA
-  fi
-  if [ -z "$IATA" ]; then
-    cat >&2 <<EOF
-Missing region/IATA code.
+  local label
+  while :; do
+    if [ -z "$IATA" ] && [ -t 0 ]; then
+      prompt_iata
+    fi
+    if [ -z "$IATA" ]; then
+      cat >&2 <<EOF
+Missing IATA airport code.
 
 Run with:
   MESHCORE_CA_IATA=YOW bash <(curl -fsSL https://live.meshcore.ca/scripts/add-meshcore-ca-broker.sh)
 EOF
-    exit 1
-  fi
-  IATA="$(upper_iata "$IATA")"
-  if ! printf '%s' "$IATA" | grep -Eq '^[A-Z0-9]{3}$'; then
-    echo "IATA/region code must be exactly 3 letters or numbers, got: $IATA" >&2
-    exit 1
-  fi
-  say "Region selected: $IATA"
+      exit 1
+    fi
+    IATA="$(upper_iata "$IATA" | tr -d '[:space:]')"
+    if [ "$IATA" = "XXX" ]; then
+      echo "XXX is a placeholder. Use the real 3-letter IATA airport code nearest to you." >&2
+      exit 1
+    fi
+    if ! printf '%s' "$IATA" | grep -Eq '^[A-Z]{3}$'; then
+      echo "IATA code must be exactly 3 letters, got: $IATA" >&2
+      exit 1
+    fi
+    if label="$(known_iata_label "$IATA" 2>/dev/null)"; then
+      say "Region selected: $IATA ($label)"
+      return 0
+    fi
+    say "$IATA is not in the MeshCore.ca quick list."
+    say "Continue only if $IATA is a real IATA airport code. Do not use CAN for Canada."
+    if [ -t 0 ]; then
+      if prompt_yes_no "Use $IATA anyway?" "n"; then
+        return 0
+      fi
+      IATA=""
+      continue
+    fi
+    return 0
+  done
 }
 
 as_root() {
@@ -406,6 +576,7 @@ while [ "$#" -gt 0 ]; do
     --install-packetcapture) INSTALL_PACKETCAPTURE=1; shift ;;
     --no-restart) RESTART_SERVICE=0; shift ;;
     --restart) RESTART_SERVICE=1; shift ;;
+    --list-iata|--iata-list) print_iata_choices; exit 0 ;;
     --config-dir) MCTOMQTT_CONFIG_DIR="${2:?Missing value for --config-dir}"; shift 2 ;;
     --dropin) MCTOMQTT_DROPIN="${2:?Missing value for --dropin}"; shift 2 ;;
     --service) MCTOMQTT_SERVICE="${2:?Missing value for --service}"; shift 2 ;;

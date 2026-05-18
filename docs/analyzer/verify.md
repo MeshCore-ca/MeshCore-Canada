@@ -39,3 +39,16 @@ After setting up your observer using any of the four paths ([MQTT Firmware](buil
 </div>
 
 Your observer should appear within a few minutes of coming online.
+
+## First Checks
+
+If it does not appear, start with the checks that match the symptom:
+
+| Symptom | First check |
+|---------|-------------|
+| No observer entry | MQTT is connected and the IATA code is a real airport code |
+| Observer appears, but no packets | Packet publishing is enabled: firmware `mqtt.packets`, HA **Payload Mode** = `packet`, or pyMC `format: letsmesh` |
+| Backup broker does not connect | The token audience matches the broker host (`mqtt2.meshcore.ca` for broker 2) |
+| Observer appears under the wrong city | Every broker/integration entry uses the nearest real IATA code; do not use `CAN` for Canada |
+
+For path-specific commands and Home Assistant settings, use [Troubleshooting](troubleshooting.md).

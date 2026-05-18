@@ -10,7 +10,7 @@ You do not need to know Git, GitHub, or how to edit the website. Just follow the
 
 Visit the MeshCore Canada GitHub repository and click **Issues**.
 
-Link: <https://github.com/MrAlders0n/MeshCore-Canada/issues>
+Link: <https://github.com/MeshCore-ca/MeshCore-Canada/issues>
 
 ---
 

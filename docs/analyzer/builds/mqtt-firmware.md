@@ -3,7 +3,7 @@
 Flash observer firmware directly onto a supported board. The device connects to WiFi and publishes mesh traffic to MQTT brokers without a host computer.
 
 !!! info "Pre-configured firmware"
-    These firmware images are pre-compiled by **n30nex** and come pre-configured with the MeshCore.ca broker pair (`mqtt1.meshcore.ca` and `mqtt2.meshcore.ca`) in slots 1 and 2. After flashing, you only need to set your WiFi credentials, IATA region code, and node name.
+    These firmware images are pre-compiled by **n30nex** and come pre-configured with the MeshCore.ca broker pair (`mqtt1.meshcore.ca` and `mqtt2.meshcore.ca`) in slots 1 and 2. After flashing, run the CLI setup block below to set WiFi, IATA, node name, and packet publishing.
 
 ## Supported Boards
 
@@ -205,7 +205,7 @@ Most users should choose **First Flash (Merged)**, download the file, then flash
 |-------------|---------|
 | Board | A supported LoRa board (see list above) |
 | WiFi | 2.4 GHz network credentials |
-| IATA Code | Your 3-character region code (e.g. `YOW` for Ottawa) |
+| IATA Code | Your real 3-letter IATA airport code (e.g. `YOW` for Ottawa) |
 
 ## Flashing
 
@@ -225,7 +225,7 @@ Technical users can still flash with their preferred ESP tool. Laymen should use
 
 ## CLI Setup
 
-After flashing, connect to the device's admin CLI (serial or web) to set your WiFi, region code, and node name. Replace `YOW` with your IATA code and fill in your network credentials:
+After flashing, connect to the device's admin CLI (serial or web) to set your WiFi, IATA code, and node name. Replace `YOW` with the real 3-letter airport code nearest to you and fill in your network credentials:
 
 ```text
 set name YOW-Repeater-01
@@ -240,6 +240,9 @@ set mqtt.rx on
 set mqtt.tx advert
 reboot
 ```
+
+!!! warning "Use a real IATA code"
+    The firmware will let you type any value, but the public MeshCore.ca broker only accepts valid 3-letter IATA airport codes. If the code is not on the quick list, it can still work as long as it is a real airport code. Placeholder or made-up values such as `XXX` or `HOME` will not publish. Do not use `CAN` as shorthand for Canada; it is a real airport code for Guangzhou and will tag your observer to the wrong region.
 
 !!! note "Room Servers"
     For room server roles, change the name to match (e.g. `YOW-Room-Server-01`).

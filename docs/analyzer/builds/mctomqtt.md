@@ -12,7 +12,7 @@ Bridge a USB-connected MeshCore node to MQTT brokers using `meshcoretomqtt`. Thi
 | Device | MeshCore node with packet logging enabled, connected via USB serial |
 | Host | Linux or macOS |
 | Tools | `curl` installed |
-| IATA Code | Your 3-character region code (e.g. `YOW` for Ottawa) |
+| IATA Code | Your real 3-letter IATA airport code (e.g. `YOW` for Ottawa) |
 
 ## Quick Setup
 
@@ -37,7 +37,7 @@ bash <(curl -fsSL https://meshcore.ca/analyzer/scripts/add-meshcore-ca-broker.sh
 
 ## Specifying Your Region
 
-Pass your IATA code via the `--iata` flag or the `MESHCORE_CA_IATA` environment variable:
+Pass your IATA code via the `--iata` flag or the `MESHCORE_CA_IATA` environment variable. Use the real 3-letter airport code nearest to you:
 
 === "Flag"
 
@@ -52,6 +52,9 @@ Pass your IATA code via the `--iata` flag or the `MESHCORE_CA_IATA` environment 
     ```
 
 If omitted, the script will prompt interactively.
+
+!!! warning "Use a real IATA code"
+    The helper shows a Canadian quick list when it prompts. If your nearest real airport code is not shown, you can still type it, but continue only if it is a real IATA airport code. Do not use `CAN` as shorthand for Canada; it is a real airport code for Guangzhou and will tag your observer to the wrong region.
 
 ## What the Script Creates
 
@@ -134,7 +137,8 @@ For companion radios (not packet-log serial hosts), use the companion path inste
 
 | Flag | Description |
 |------|-------------|
-| `--iata CODE` | 3-character region code |
+| `--iata CODE` | Real 3-letter IATA airport code |
+| `--list-iata` | Show the Canadian quick-list choices |
 | `--device TYPE` | `serial-host` or `companion` |
 | `--install-mctomqtt` | Install meshcoretomqtt if not present |
 | `--install-packetcapture` | Install meshcore-packet-capture if not present |
