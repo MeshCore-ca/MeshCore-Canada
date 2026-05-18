@@ -27,7 +27,7 @@ See [Contributing](../contributing.md) for how to add or update entries.
 
 **Status:** Active
 
-**Frequency:** 910.525 MHz / 62.5 kHz / 7 / 5
+**Frequency:** 910.525 MHz / 62.5 kHz /7 / 5
 
 **Discord:** [https://discord.gg/wSHbeb86r4](https://discord.gg/wSHbeb86r4)
 
@@ -39,7 +39,7 @@ See [Contributing](../contributing.md) for how to add or update entries.
 
 **Status:** Active
 
-**Frequency:** 910.525 MHz / 62.5 kHz / 7 / 5
+**Frequency:** 910.525 MHz / 62.5 kHz /7 / 5
 
 **Discord:** [https://discord.gg/V5esJEP67X](hhttps://discord.gg/V5esJEP67X)
 
