@@ -1,20 +1,18 @@
 # MeshCore Communities in New Brunswick
 
-This page lists MeshCore communities in New Brunswick.  
+This page lists MeshCore communities in New Brunswick.
 
-If you know of a community that is missing or needs an update, please open a pull request.  
-See [Contributing](../contributing.md) for how to add or update entries.
+If you know of a community that is missing or needs an update, open an update request through [Contributing](../contributing.md).
 
 ## Communities
 
-**Name:** Southern New Brunswick  
+### Southern New Brunswick
 
-**Region:** Fredericton, Saint John, Moncton  
-
-**Status:** Forming  
-
-**Frequency:** 910.525 MHz / 62.5 kHz / 7 / 5  
-
-**Website:** [MESHCORE Saint John, N.B.](https://www.facebook.com/groups/613466831163684)
-
----
+| Field | Value |
+|-------|-------|
+| Region | Fredericton, Saint John, Moncton, and nearby areas |
+| Status | Forming |
+| Radio preset | `USA/Canada (Recommended)` |
+| Raw radio values | `910.525 MHz / 62.5 kHz / SF7 / CR5` |
+| Path hash mode | `3-byte` |
+| Facebook | [MESHCORE Saint John, N.B.](https://www.facebook.com/groups/613466831163684) |

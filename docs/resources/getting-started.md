@@ -33,6 +33,8 @@ Choose a role:
 - **Room server**: a fixed node that hosts rooms and can also observe mesh traffic.
 - **Observer**: a device or host service that forwards packets to the MeshCore.ca MQTT analyzer.
 
+Start with [Recommended Companions](../meshcore/companions.md) if you want a personal device, or [Recommended Repeaters](../meshcore/repeaters.md) if you are building a fixed node.
+
 ## Step 3: Flash the Firmware
 
 Flash firmware for the role you need, then apply the MeshCore Canada network settings before judging whether the device works.
@@ -53,13 +55,32 @@ set path.hash.mode 2
 
 After changing radio parameters, reboot the device.
 
-## Step 4: Find or Start a Community
+## Step 4: Configure Your Role
+
+| Role | Next setup step |
+|------|-----------------|
+| Companion | Pair it with your app, send an advert, and ask a nearby user to confirm they can see you |
+| Repeater | Pick a clear node name, test from the ground, then install it where it has good antenna visibility |
+| Room server | Configure rooms, verify it still uses the local mesh settings, and document who maintains it |
+| Observer | Follow [Analyzer & MQTT](../analyzer/intro.md) and verify it appears in CoreScope |
+
+## Step 5: Find or Start a Community
 
 Browse the [Mesh Directory](../provinces/index.md) and check your province or nearby region. If a local community documents a different preset, follow the local community setting for that mesh.
 
-## Step 5: Get on the Air
+If your region is missing, use [Contributing](../contributing.md) to request a new listing with the community name, region, status, contacts, and radio settings.
+
+## Step 6: Get on the Air
 
 Send an advert after configuration so nearby nodes learn your identity and route. If you do not see other users, re-check the radio preset first, then confirm the path hash mode is set to 3-byte.
+
+## First Success Checklist
+
+- Your device shows the **USA/Canada (Recommended)** preset, or the raw values match `910.525 MHz / 62.5 kHz / SF7 / CR5`.
+- Path hash mode is **3-byte**.
+- The device was rebooted after radio changes.
+- A nearby community member or second known-good device can see your advert.
+- If this is an observer, [CoreScope](https://live.meshcore.ca/#/observers) shows the expected node name and IATA region.
 
 ## Need Help?
 

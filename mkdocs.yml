@@ -43,6 +43,9 @@ nav:
       - Overview: analyzer/intro.md
       - Check Your Observer: analyzer/verify.md
       - Troubleshooting: analyzer/troubleshooting.md
+      - Broker Reference: analyzer/broker-reference.md
+      - IATA Region Codes: analyzer/iata-codes.md
+      - RemoteTerm: analyzer/remoteterm.md
       - Build Guides:
           - MCtoMQTT Script: analyzer/builds/mctomqtt.md
           - MeshCore-HA: analyzer/builds/meshcore-ha.md

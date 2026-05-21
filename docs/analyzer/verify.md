@@ -1,6 +1,6 @@
 # Check Your Observer
 
-After setting up your observer using any of the four paths ([MQTT Firmware](builds/mqtt-firmware.md), [MCtoMQTT](builds/mctomqtt.md), [PyMC](builds/pymc.md), or [Home Assistant](builds/meshcore-ha.md)), use the links below to confirm it's online and reporting.
+After setting up your observer using any supported path ([MQTT Firmware](builds/mqtt-firmware.md), [MCtoMQTT](builds/mctomqtt.md), [PyMC](builds/pymc.md), [Home Assistant](builds/meshcore-ha.md), or [RemoteTerm](remoteterm.md)), use the links below to confirm it's online and reporting.
 
 <div class="grid cards" markdown>
 
@@ -39,6 +39,16 @@ After setting up your observer using any of the four paths ([MQTT Firmware](buil
 </div>
 
 Your observer should appear within a few minutes of coming online.
+
+## Healthy Observer Checklist
+
+| Check | Expected result |
+|-------|-----------------|
+| Observer name | Clear node name such as `YOW-Repeater-01` |
+| Region | Nearest real IATA code, not `CAN`, `XXX`, or `HOME` |
+| Broker coverage | Primary and backup broker configured where the path supports both |
+| Packet activity | Recent packet timestamps on CoreScope after nearby mesh activity |
+| Radio settings | `USA/Canada (Recommended)` and 3-byte path hashes unless your local page differs |
 
 ## First Checks
 

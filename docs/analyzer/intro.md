@@ -1,13 +1,11 @@
 # Analyzer & MQTT Packet Broker
 
-MeshCore observers capture mesh traffic and publish it to MQTT brokers, feeding telemetry dashboards, maps, and packet inspectors. Pick one of the four observer paths below to start reporting to the MeshCore.ca network.
+MeshCore observers capture mesh traffic and publish packet telemetry to MQTT brokers, feeding CoreScope dashboards, maps, and packet inspectors. Pick the observer path that matches your hardware and host setup.
 
 !!! tip "Observer setup checklist"
     Every observer path needs the same basics: a MeshCore radio already on the MeshCore Canada network settings, a real 3-letter IATA airport code, the MeshCore.ca broker pair, JWT token authentication, TLS on port `443`, and packet publishing enabled. If the setup screen has two broker entries, use the same IATA code on both entries.
 
     MeshCore Canada network settings are **USA/Canada (Recommended)**, or raw radio values `910.525 MHz / 62.5 kHz / SF7 / CR5`, with 3-byte path hashes. Fresh 2026-05-21 and newer MeshCore.ca direct MQTT firmware already includes that radio preset and the broker pair; still set `set path.hash.mode 2`, IATA, WiFi, and packet publishing during onboarding. On older images, retained preferences, or generic CLI devices, also run `set radio 910.525,62.5,7,5`.
-
-    For Home Assistant, packet publishing means **Payload Mode** = `packet` or the older **Packets (Lets Mesh)** option enabled. For firmware, run the CLI command block in the firmware guide so path hash, `mqtt.packets`, `bridge.enabled`, `mqtt.rx`, and `mqtt.tx` are set.
 
 ## Choose Your Observer Path
 
@@ -17,19 +15,19 @@ MeshCore observers capture mesh traffic and publish it to MQTT brokers, feeding 
 
     ---
 
-    Flash observer firmware directly onto a board. Connects to WiFi and reports to MQTT with no host computer needed.
+    Flash observer firmware directly onto a WiFi-capable LoRa board. No host computer required after setup.
 
-    Best for: Heltec V3, V4, and other standalone ESP32 devices.
+    Best for: Heltec V3, Heltec V4 OLED, and other published direct MQTT targets.
 
     [:octicons-arrow-right-24: MQTT Firmware Guide](builds/mqtt-firmware.md)
 
--   :material-usb:{ .lg .middle } **MCtoMQTT (USB Host)**
+-   :material-usb:{ .lg .middle } **MCtoMQTT**
 
     ---
 
-    Bridge a USB-connected MeshCore node to MQTT via a Linux or macOS host. Also supports companion radios over BLE, serial, or TCP.
+    Bridge a USB-connected MeshCore node to MQTT via a Linux or macOS host.
 
-    Best for: Repeaters and room servers with a host machine.
+    Best for: fixed repeaters and room servers with a nearby host machine.
 
     [:octicons-arrow-right-24: MCtoMQTT Guide](builds/mctomqtt.md)
 
@@ -37,7 +35,7 @@ MeshCore observers capture mesh traffic and publish it to MQTT brokers, feeding 
 
     ---
 
-    Add the MeshCore.ca broker pair to an existing pyMC repeater installation via YAML config.
+    Add the MeshCore.ca broker pair to an existing pyMC repeater installation.
 
     Best for: Python-based repeater setups.
 
@@ -47,7 +45,7 @@ MeshCore observers capture mesh traffic and publish it to MQTT brokers, feeding 
 
     ---
 
-    Add MeshCore.ca brokers to the HA MeshCore integration for mesh telemetry on your dashboards.
+    Add MeshCore.ca brokers to the Home Assistant MeshCore integration.
 
     Best for: Home Assistant users with a connected MeshCore node.
 
@@ -57,15 +55,15 @@ MeshCore observers capture mesh traffic and publish it to MQTT brokers, feeding 
 
     ---
 
-    Use RemoteTerm's Community MQTT fanout to make a companion radio report raw packets to MeshCore.ca.
+    Use RemoteTerm's Community MQTT fanout to report packets from a managed radio.
 
-    Best for: RemoteTerm users already managing a radio over serial, TCP, or BLE.
+    Best for: RemoteTerm users already connected over serial, TCP, or BLE.
 
-    [:octicons-arrow-right-24: RemoteTerm Setup](#remoteterm-for-meshcore)
+    [:octicons-arrow-right-24: RemoteTerm Setup](remoteterm.md)
 
 </div>
 
----
+## Shared References
 
 <div class="grid cards" markdown>
 
@@ -73,198 +71,46 @@ MeshCore observers capture mesh traffic and publish it to MQTT brokers, feeding 
 
     ---
 
-    Confirm your observer is online and reporting to the MeshCore.ca network.
+    Confirm your observer is online and reporting to CoreScope.
 
     [:octicons-arrow-right-24: Check Your Observer](verify.md)
 
--   :material-server-network:{ .lg .middle } **Broker Details**
+-   :material-wrench:{ .lg .middle } **Troubleshooting**
 
     ---
 
-    All paths use the same redundant pair. JWT auth, TLS, no password needed.
+    Path-specific diagnostics for firmware, host bridges, PyMC, Home Assistant, and RemoteTerm.
 
-    `mqtt1.meshcore.ca` :octicons-arrow-switch-24: `mqtt2.meshcore.ca` (port 443, WSS)
+    [:octicons-arrow-right-24: Troubleshooting](troubleshooting.md)
+
+-   :material-server-network:{ .lg .middle } **Broker Reference**
+
+    ---
+
+    Broker hosts, ports, TLS, JWT audience, and topic conventions.
+
+    [:octicons-arrow-right-24: Broker Details](broker-reference.md)
+
+-   :material-airplane:{ .lg .middle } **IATA Codes**
+
+    ---
+
+    Canadian quick-list codes and guidance for choosing a real region code.
+
+    [:octicons-arrow-right-24: IATA Region Codes](iata-codes.md)
 
 </div>
 
----
+## Fast Path
 
-## RemoteTerm For MeshCore
+If you are unsure which path to choose:
 
-[RemoteTerm for MeshCore](https://github.com/jkingsman/Remote-Terminal-for-MeshCore) can act as an observer by forwarding raw RF packets through its **Community MQTT/meshcoretomqtt** integration. This does not publish decrypted messages.
+| Situation | Start here |
+|-----------|------------|
+| You have a WiFi-capable LoRa board and want a standalone observer | [MQTT Firmware](builds/mqtt-firmware.md) |
+| You have a repeater connected to a Linux/macOS host over USB | [MCtoMQTT](builds/mctomqtt.md) |
+| You already run pyMC | [PyMC](builds/pymc.md) |
+| You already use Home Assistant for MeshCore | [MeshCore-HA](builds/meshcore-ha.md) |
+| You already manage the radio with RemoteTerm | [RemoteTerm](remoteterm.md) |
 
-Install and start RemoteTerm using the upstream instructions, connect your MeshCore radio over serial, TCP, or BLE, then open the RemoteTerm web UI.
-
-In RemoteTerm, open **Settings** -> **MQTT & Automation**, add **Community MQTT/meshcoretomqtt**, and use these values:
-
-| Field | Value |
-|-------|-------|
-| Name | `MeshCore.ca 1` or any descriptive name |
-| Broker Host | `mqtt1.meshcore.ca` |
-| Broker Port | `443` |
-| Transport | `WebSockets` |
-| Authentication | `Token` |
-| WebSocket Path | `/` |
-| Token Audience | `mqtt1.meshcore.ca` or leave blank to default to the broker host |
-| Owner Email | Optional |
-| Use TLS | Enabled |
-| Verify TLS certificates | Enabled |
-| Region Code (IATA) | Your nearest real 3-letter IATA airport code |
-| Packet Topic Template | `meshcore/{IATA}/{PUBLIC_KEY}/packets` |
-
-Click **Save as Enabled**. To publish to the redundant broker as well, add a second Community MQTT integration with the same settings, but set **Broker Host** and **Token Audience** to `mqtt2.meshcore.ca`.
-
-![RemoteTerm Community MQTT settings for MeshCore.ca](../assets/mcterm.png)
-
-!!! note "Windows MQTT fanout"
-    If you run RemoteTerm on Windows and enable MQTT fanout, start Uvicorn with `--loop none` as described in the RemoteTerm README so the MQTT client can connect reliably.
-
----
-
-## IATA Region Codes
-
-Each observer identifies its region with a real 3-letter IATA airport code. Use the airport code nearest to your location.
-
-The firmware and helper scripts are not limited to the list below. If your nearest real IATA code is missing here, you can still use it and the public broker will accept it as long as it is a valid airport code. The live site will add observed regions to the picker automatically, but codes missing from the friendly-name list may appear as the bare code until we add a label.
-
-Do not use placeholders or made-up region names such as `XXX` or `HOME`. Do not use `CAN` as shorthand for Canada; it is a real airport code for Guangzhou and will tag your observer to the wrong region.
-
-The following Canadian codes are listed for quick selection today. Host-side helper scripts show this same list interactively when you omit `--iata`.
-
-??? note "Ontario"
-
-    | Code | Region |
-    |------|--------|
-    | YYZ | Toronto (Pearson) |
-    | YTZ | Toronto (Billy Bishop) |
-    | YOW | Ottawa |
-    | YHM | Hamilton |
-    | YKF | Kitchener / Waterloo |
-    | YXU | London |
-    | YOO | Oshawa |
-    | YKZ | Buttonville / Markham |
-    | YAM | Sault Ste. Marie |
-    | YQT | Thunder Bay |
-    | YSB | Sudbury |
-    | YTS | Timmins |
-    | YQG | Windsor |
-    | YYB | North Bay |
-    | YGK | Kingston |
-    | YPQ | Peterborough |
-    | YTR | Trenton / Quinte West |
-    | YHD | Dryden |
-    | YPL | Pickle Lake |
-    | YND | Gatineau (Ottawa area) |
-
-??? note "Quebec"
-
-    | Code | Region |
-    |------|--------|
-    | YUL | Montreal (Trudeau) |
-    | YMX | Montreal (Mirabel) |
-    | YQB | Quebec City |
-    | YBG | Bagotville / Saguenay |
-    | YVO | Val-d'Or |
-    | YHU | Montreal (St-Hubert) |
-    | YRJ | Roberval |
-    | YGL | La Grande Riviere |
-    | YSC | Sherbrooke |
-    | YTQ | Tasiujaq |
-    | YUY | Rouyn-Noranda |
-    | YZV | Sept-Iles |
-    | YGP | Gaspe |
-    | YRQ | Trois-Rivieres |
-
-??? note "British Columbia"
-
-    | Code | Region |
-    |------|--------|
-    | YVR | Vancouver |
-    | YYJ | Victoria |
-    | YXX | Abbotsford / Fraser Valley |
-    | YLW | Kelowna |
-    | YXS | Prince George |
-    | YPR | Prince Rupert |
-    | YXT | Terrace |
-    | YQQ | Comox / Courtenay |
-    | YCD | Nanaimo |
-    | YYD | Smithers |
-    | YDQ | Dawson Creek |
-    | YXJ | Fort St. John |
-    | YYF | Penticton |
-    | YCG | Castlegar |
-    | YKA | Kamloops |
-    | YXC | Cranbrook |
-    | YBC | Baie-Comeau |
-
-??? note "Alberta"
-
-    | Code | Region |
-    |------|--------|
-    | YYC | Calgary |
-    | YEG | Edmonton |
-    | YMM | Fort McMurray |
-    | YQU | Grande Prairie |
-    | YQL | Lethbridge |
-    | YXH | Medicine Hat |
-
-??? note "Saskatchewan"
-
-    | Code | Region |
-    |------|--------|
-    | YQR | Regina |
-    | YXE | Saskatoon |
-    | YPA | Prince Albert |
-
-??? note "Manitoba"
-
-    | Code | Region |
-    |------|--------|
-    | YWG | Winnipeg |
-    | YBR | Brandon |
-    | YTH | Thompson |
-    | YDN | Dauphin |
-    | YPG | Portage la Prairie |
-
-??? note "New Brunswick"
-
-    | Code | Region |
-    |------|--------|
-    | YFC | Fredericton |
-    | YSJ | Saint John |
-    | YQM | Moncton |
-    | ZBF | Bathurst |
-
-??? note "Nova Scotia"
-
-    | Code | Region |
-    |------|--------|
-    | YHZ | Halifax |
-    | YQY | Sydney |
-    | YQI | Yarmouth |
-
-??? note "Prince Edward Island"
-
-    | Code | Region |
-    |------|--------|
-    | YYG | Charlottetown |
-
-??? note "Newfoundland and Labrador"
-
-    | Code | Region |
-    |------|--------|
-    | YYT | St. John's |
-    | YQX | Gander |
-    | YDF | Deer Lake |
-    | YYR | Goose Bay |
-    | YWK | Wabush |
-
-??? note "Territories (YT / NT / NU)"
-
-    | Code | Region |
-    |------|--------|
-    | YXY | Whitehorse (Yukon) |
-    | YZF | Yellowknife (NWT) |
-    | YFB | Iqaluit (Nunavut) |
-    | YEV | Inuvik (NWT) |
-    | YHY | Hay River (NWT) |
+After setup, use [Check Your Observer](verify.md). If it does not appear within a few minutes, use [Troubleshooting](troubleshooting.md).

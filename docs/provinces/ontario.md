@@ -1,48 +1,42 @@
 # MeshCore Communities in Ontario
 
 This page lists MeshCore communities in Ontario.
-  
-If you know of a community that is missing or needs an update, please open a pull request.  
-See [Contributing](../contributing.md) for how to add or update entries.
+
+If you know of a community that is missing or needs an update, open an update request through [Contributing](../contributing.md).
 
 ## Communities
 
-**Name:** Greater Ottawa Mesh Enthusiasts  
+### Greater Ottawa Mesh Enthusiasts
 
-**Region:** Eastern Ontario & Western Quebec  
+| Field | Value |
+|-------|-------|
+| Region | Eastern Ontario and Western Quebec |
+| Status | Active |
+| Radio preset | `USA/Canada (Recommended)` |
+| Raw radio values | `910.525 MHz / 62.5 kHz / SF7 / CR5` |
+| Path hash mode | `3-byte` |
+| Discord | <https://discord.gg/WSyNd8SfNr> |
+| Website | <https://ottawamesh.ca/> |
 
-**Status:** Active  
+### GTA+-Lora-Meshes
 
-**Frequency:** 910.525 MHz / 62.5 kHz / 7 / 5  
+| Field | Value |
+|-------|-------|
+| Region | Southern Ontario |
+| Status | Active |
+| Radio preset | `USA/Canada (Recommended)` |
+| Raw radio values | `910.525 MHz / 62.5 kHz / SF7 / CR5` |
+| Path hash mode | `3-byte` |
+| Discord | <https://discord.gg/wSHbeb86r4> |
 
-**Discord:** [https://discord.gg/WSyNd8SfNr](https://discord.gg/WSyNd8SfNr)  
+### Quinte Mesh Network
 
-**Website:** [https://ottawamesh.ca](https://ottawamesh.ca/)
-
----
-
-**Name:** GTA+-Lora-Meshes
-
-**Region:** Southern Ontario
-
-**Status:** Active
-
-**Frequency:** 910.525 MHz / 62.5 kHz / 7 / 5
-
-**Discord:** [https://discord.gg/wSHbeb86r4](https://discord.gg/wSHbeb86r4)
-
----
-
-**Name:** Quinte Mesh Network
-
-**Region:** Quinte Region (Belleville, Trenton, Prince Edward County, and surrounding areas)
-
-**Status:** Active
-
-**Frequency:** 910.525 MHz / 62.5 kHz / 7 / 5
-
-**Discord:** [https://discord.gg/V5esJEP67X](hhttps://discord.gg/V5esJEP67X)
-
-**Website:** [https://quintemesh.ca](https://quintemesh.ca)
-
----
+| Field | Value |
+|-------|-------|
+| Region | Quinte Region, including Belleville, Trenton, Prince Edward County, and nearby areas |
+| Status | Active |
+| Radio preset | `USA/Canada (Recommended)` |
+| Raw radio values | `910.525 MHz / 62.5 kHz / SF7 / CR5` |
+| Path hash mode | `3-byte` |
+| Discord | <https://discord.gg/V5esJEP67X> |
+| Website | <https://quintemesh.ca/> |

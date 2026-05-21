@@ -1,10 +1,17 @@
-# MeshCore Communities in Territories
+# MeshCore Communities in the Territories
 
-This page lists MeshCore communities in Territories.  
+This page is ready for Yukon, Northwest Territories, and Nunavut MeshCore community listings.
 
-If you know of a community that is missing or needs an update, please open a pull request.  
-See [Contributing](../contributing.md) for how to add or update entries.
+## Current Status
 
-## Communities
+No territories community listing has been submitted yet.
 
-WIP
+If you operate or know of a MeshCore group in Yukon, Northwest Territories, or Nunavut, open an update request through [Contributing](../contributing.md) with the community name, region, status, contact link, and radio settings.
+
+## Default Settings
+
+| Setting | Value |
+|---------|-------|
+| Radio preset | `USA/Canada (Recommended)` |
+| Raw radio values | `910.525 MHz / 62.5 kHz / SF7 / CR5` |
+| Path hash mode | `3-byte` |

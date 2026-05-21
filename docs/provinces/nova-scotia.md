@@ -1,20 +1,18 @@
 # MeshCore Communities in Nova Scotia
 
-This page lists MeshCore communities in Nova Scotia.  
+This page lists MeshCore communities in Nova Scotia.
 
-If you know of a community that is missing or needs an update, please open a pull request.  
-See [Contributing](../contributing.md) for how to add or update entries.
+If you know of a community that is missing or needs an update, open an update request through [Contributing](../contributing.md).
 
 ## Communities
 
-**Name:** Lunenburg County Mesh
+### Lunenburg County Mesh
 
-**Region:** Lunenburg County, Nova Scotia
-
-**Status:** Active
-
-**Frequency:** 910.525 MHz / 62.5 kHz / 7 / 5
-
-**Website:** [http://www.lunenburgcountymesh.ca](http://www.lunenburgcountymesh.ca)
-
----
+| Field | Value |
+|-------|-------|
+| Region | Lunenburg County |
+| Status | Active |
+| Radio preset | `USA/Canada (Recommended)` |
+| Raw radio values | `910.525 MHz / 62.5 kHz / SF7 / CR5` |
+| Path hash mode | `3-byte` |
+| Website | <http://www.lunenburgcountymesh.ca> |

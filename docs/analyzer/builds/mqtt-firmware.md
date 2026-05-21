@@ -41,7 +41,7 @@ Pick your board, role, and flash type to get the right firmware image.
 Most users should choose **First Flash (Merged)**, download the file, then flash it with the [MeshCore Flasher](https://flasher.meshcore.io/). No `esptool` offsets are needed when using the picker download.
 
 <div id="fw-picker" style="margin: 1.5em 0;">
-  <div id="fw-loading" style="padding: 1em; opacity: 0.6;">Loading firmware manifest...</div>
+  <div id="fw-loading" style="padding: 1em; opacity: 0.75;">Loading firmware manifest... If this does not change, use the static download table below or download from GitHub Releases.</div>
   <div id="fw-selects" style="display: none; flex-wrap: wrap; gap: 1em; margin-bottom: 1em;">
     <div style="flex: 1; min-width: 160px;">
       <label for="fw-board" style="display: block; font-weight: 600; margin-bottom: 0.3em; font-size: 0.85em; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.7;">Board</label>
@@ -198,6 +198,25 @@ Most users should choose **First Flash (Merged)**, download the file, then flash
 })();
 </script>
 
+### Static Download Index
+
+If the firmware picker does not load, use this static table. **First Flash (Merged)** is the right choice for a new board, erased board, or recovery flash. Use **Update** only on a device already running MeshCore.
+
+| Board | Role | First Flash (Merged) | Update |
+|-------|------|----------------------|--------|
+| Heltec V3 | Repeater | [Download](firmware/meshcore-ca-heltec-v3-repeater-20260521-merged.bin) | [Download](firmware/meshcore-ca-heltec-v3-repeater-20260521-update.bin) |
+| Heltec V3 | Room Server | [Download](firmware/meshcore-ca-heltec-v3-room-server-20260521-merged.bin) | [Download](firmware/meshcore-ca-heltec-v3-room-server-20260521-update.bin) |
+| Heltec V4 OLED | Repeater | [Download](firmware/meshcore-ca-heltec-v4-oled-repeater-20260521-merged.bin) | [Download](firmware/meshcore-ca-heltec-v4-oled-repeater-20260521-update.bin) |
+| Heltec V4 OLED | Room Server | [Download](firmware/meshcore-ca-heltec-v4-oled-room-server-20260521-merged.bin) | [Download](firmware/meshcore-ca-heltec-v4-oled-room-server-20260521-update.bin) |
+| LILYGO T3S3 SX1262 | Repeater | [Download](firmware/meshcore-ca-lilygo-t3s3-sx1262-repeater-20260521-merged.bin) | [Download](firmware/meshcore-ca-lilygo-t3s3-sx1262-repeater-20260521-update.bin) |
+| LILYGO T3S3 SX1262 | Room Server | [Download](firmware/meshcore-ca-lilygo-t3s3-sx1262-room-server-20260521-merged.bin) | [Download](firmware/meshcore-ca-lilygo-t3s3-sx1262-room-server-20260521-update.bin) |
+| LILYGO T-Beam S3 Supreme SX1262 | Repeater | [Download](firmware/meshcore-ca-lilygo-t-beam-s3-supreme-sx1262-repeater-20260521-merged.bin) | [Download](firmware/meshcore-ca-lilygo-t-beam-s3-supreme-sx1262-repeater-20260521-update.bin) |
+| LILYGO T-Beam S3 Supreme SX1262 | Room Server | [Download](firmware/meshcore-ca-lilygo-t-beam-s3-supreme-sx1262-room-server-20260521-merged.bin) | [Download](firmware/meshcore-ca-lilygo-t-beam-s3-supreme-sx1262-room-server-20260521-update.bin) |
+| LILYGO T-Beam SX1262 | Repeater | [Download](firmware/meshcore-ca-lilygo-tbeam-sx1262-repeater-20260521-merged.bin) | [Download](firmware/meshcore-ca-lilygo-tbeam-sx1262-repeater-20260521-update.bin) |
+| LILYGO T-Beam SX1262 | Room Server | [Download](firmware/meshcore-ca-lilygo-tbeam-sx1262-room-server-20260521-merged.bin) | [Download](firmware/meshcore-ca-lilygo-tbeam-sx1262-room-server-20260521-update.bin) |
+| Seeed XIAO ESP32S3 + Wio-SX1262 | Repeater | [Download](firmware/meshcore-ca-seeed-xiao-s3-wio-sx1262-repeater-20260521-merged.bin) | [Download](firmware/meshcore-ca-seeed-xiao-s3-wio-sx1262-repeater-20260521-update.bin) |
+| Seeed XIAO ESP32S3 + Wio-SX1262 | Room Server | [Download](firmware/meshcore-ca-seeed-xiao-s3-wio-sx1262-room-server-20260521-merged.bin) | [Download](firmware/meshcore-ca-seeed-xiao-s3-wio-sx1262-room-server-20260521-update.bin) |
+
 ## Prerequisites
 
 | Requirement | Details |
@@ -222,7 +241,7 @@ Most users should choose **First Flash (Merged)**, download the file, then flash
 | First Flash (Merged) | New board, erased board, recovery from a bad flash | `0x00000` |
 | Update | Device already running MeshCore with a valid bootloader and partition table | `0x10000` |
 
-Technical users can still flash with their preferred ESP tool. Laymen should use the MeshCore Flasher and the **First Flash (Merged)** picker option.
+Technical users can still flash with their preferred ESP tool. Most users should use the MeshCore Flasher and the **First Flash (Merged)** picker option.
 
 ## CLI Setup
 

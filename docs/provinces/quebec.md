@@ -1,52 +1,51 @@
 # MeshCore Communities in Quebec
 
-This page lists MeshCore communities in Quebec.  
+This page lists MeshCore communities in Quebec.
 
-If you know of a community that is missing or needs an update, please open a pull request.  
-See [Contributing](../contributing.md) for how to add or update entries.
+If you know of a community that is missing or needs an update, open an update request through [Contributing](../contributing.md).
 
 ## Communities
 
-**Name:** Mesh Quebec
+### Mesh Quebec
 
-**Region:** Québec
+| Field | Value |
+|-------|-------|
+| Region | Quebec |
+| Status | Active |
+| Radio preset | `USA/Canada (Recommended)` |
+| Raw radio values | `910.525 MHz / 62.5 kHz / SF7 / CR5` |
+| Path hash mode | `3-byte` |
+| Website | <https://qcmesh.net> |
 
-**Website:** [https://qcmesh.net ](hhttps://qcmesh.net) (currently redirects to the Telegram group)
+### Montreal Mesh
 
----
+| Field | Value |
+|-------|-------|
+| Region | Greater Montreal |
+| Status | Active |
+| Radio preset | `USA/Canada (Recommended)` |
+| Raw radio values | `910.525 MHz / 62.5 kHz / SF7 / CR5` |
+| Path hash mode | `3-byte` |
+| Website | <https://www.montrealmesh.ca> |
 
-**Name:** Montreal Mesh
+### Reseau Mesh de la Capitale YQB
 
-**Region:** Greater Montreal
+| Field | Value |
+|-------|-------|
+| Region | Quebec City |
+| Status | Active |
+| Radio preset | `USA/Canada (Recommended)` |
+| Raw radio values | `910.525 MHz / 62.5 kHz / SF7 / CR5` |
+| Path hash mode | `3-byte` |
+| Discord | <https://discord.com/channels/1497584274520412223> |
 
-**Status:** Active
+### Reseau Libre
 
-**Frequency:** 910.525 MHz / 62.5 kHz / 7 / 5
-
-**Discord:** [https://www.montrealmesh.ca](hhttps://www.montrealmesh.ca)
-
----
-
-**Name:** Réseau Mesh de la Capitale YQB
-
-**Region:** Québec
-
-**Status:** Active
-
-**Frequency:** 910.525 MHz / 62.5 kHz / 7 / 5
-
-**Discord:** [https://discord.com/channels/1497584274520412223](https://discord.com/channels/1497584274520412223)
-
----
-
-**Name:** Réseau Libre
-
-**Region:** Montreal
-
-**Status:** Active
-
-**Frequency:** 910.525 MHz / 62.5 kHz / 7 / 5
-
-**Discord:** [https://lora.reseaulibre.ca/](https://lora.reseaulibre.ca/)
-
----
+| Field | Value |
+|-------|-------|
+| Region | Montreal |
+| Status | Active |
+| Radio preset | `USA/Canada (Recommended)` |
+| Raw radio values | `910.525 MHz / 62.5 kHz / SF7 / CR5` |
+| Path hash mode | `3-byte` |
+| Website | <https://lora.reseaulibre.ca/> |

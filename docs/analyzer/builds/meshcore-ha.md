@@ -67,7 +67,7 @@ The Home Assistant integration must use the same IATA code as the observer that 
 Current MeshCore-HA versions use a free-text **Broker IATA Code** field, so you can type a real code such as `YTR` even if it is missing from a quick list. If your Home Assistant screen only offers a picker and does not let you enter the code manually, update the MeshCore integration before using a neighboring airport code as a workaround.
 
 !!! tip
-    You can find common Canadian IATA codes on the [Analyzer Overview](../intro.md) page. If your nearest real airport code is missing from that quick list, you can still use it.
+    You can find common Canadian IATA codes on the [IATA Region Codes](../iata-codes.md) page. If your nearest real airport code is missing from that quick list, you can still use it.
 
 ## Common HA Symptoms
 

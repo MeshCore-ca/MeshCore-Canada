@@ -73,6 +73,7 @@ If your code is not on the quick list, that does not automatically mean it is un
 | MCtoMQTT | `/etc/mctomqtt/config.d/20-meshcore-ca.toml` |
 | Companion capture | `PACKETCAPTURE_IATA` in `~/.meshcore-packet-capture/.env.local` |
 | Home Assistant | MeshCore integration region/IATA field |
+| RemoteTerm | Community MQTT region/IATA field |
 
 ## PyMC
 
@@ -96,6 +97,22 @@ If a code such as `YTR` is missing from a picker, update the MeshCore Home Assis
 | Cannot enter a real IATA code | Update MeshCore-HA; current versions use free text |
 | Backup broker fails | `Token Audience` must match the broker host (`mqtt2.meshcore.ca`) |
 | Observer appears under the wrong city | Both broker entries use the same nearest real IATA code |
+
+## RemoteTerm
+
+Open **Settings** -> **MQTT & Automation** and confirm each Community MQTT entry:
+
+| Field | Expected value |
+|-------|----------------|
+| Broker Host | `mqtt1.meshcore.ca` or `mqtt2.meshcore.ca` |
+| Broker Port | `443` |
+| Transport | `WebSockets` |
+| Authentication | `Token` |
+| TLS | Enabled and verified |
+| Region Code | Your nearest real IATA code |
+| Packet Topic Template | `meshcore/{IATA}/{PUBLIC_KEY}/packets` |
+
+If the primary entry works and the backup does not, check the second entry's token audience. It must be `mqtt2.meshcore.ca`.
 
 ## Still Not Working?
 
