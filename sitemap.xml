@@ -2,118 +2,122 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://meshcore.ca/</loc>
-         <lastmod>2026-05-20</lastmod>
+         <lastmod>2026-05-21</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/contributing/</loc>
-         <lastmod>2026-05-20</lastmod>
+         <lastmod>2026-05-21</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/analyzer/intro/</loc>
-         <lastmod>2026-05-20</lastmod>
+         <lastmod>2026-05-21</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/analyzer/troubleshooting/</loc>
-         <lastmod>2026-05-20</lastmod>
+         <lastmod>2026-05-21</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/analyzer/verify/</loc>
-         <lastmod>2026-05-20</lastmod>
+         <lastmod>2026-05-21</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/analyzer/builds/mctomqtt/</loc>
-         <lastmod>2026-05-20</lastmod>
+         <lastmod>2026-05-21</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/analyzer/builds/meshcore-ha/</loc>
-         <lastmod>2026-05-20</lastmod>
+         <lastmod>2026-05-21</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/analyzer/builds/mqtt-firmware/</loc>
-         <lastmod>2026-05-20</lastmod>
+         <lastmod>2026-05-21</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/analyzer/builds/pymc/</loc>
-         <lastmod>2026-05-20</lastmod>
+         <lastmod>2026-05-21</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/meshcore/antennas/</loc>
-         <lastmod>2026-05-20</lastmod>
+         <lastmod>2026-05-21</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/meshcore/companions/</loc>
-         <lastmod>2026-05-20</lastmod>
+         <lastmod>2026-05-21</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/meshcore/faq/</loc>
-         <lastmod>2026-05-20</lastmod>
+         <lastmod>2026-05-21</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/meshcore/intro/</loc>
-         <lastmod>2026-05-20</lastmod>
+         <lastmod>2026-05-21</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/meshcore/repeater-builds/</loc>
-         <lastmod>2026-05-20</lastmod>
+         <lastmod>2026-05-21</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/meshcore/repeaters/</loc>
-         <lastmod>2026-05-20</lastmod>
+         <lastmod>2026-05-21</lastmod>
+    </url>
+    <url>
+         <loc>https://meshcore.ca/provinces/</loc>
+         <lastmod>2026-05-21</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/provinces/alberta/</loc>
-         <lastmod>2026-05-20</lastmod>
+         <lastmod>2026-05-21</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/provinces/british-columbia/</loc>
-         <lastmod>2026-05-20</lastmod>
+         <lastmod>2026-05-21</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/provinces/manitoba/</loc>
-         <lastmod>2026-05-20</lastmod>
+         <lastmod>2026-05-21</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/provinces/new-brunswick/</loc>
-         <lastmod>2026-05-20</lastmod>
+         <lastmod>2026-05-21</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/provinces/newfoundland-and-labrador/</loc>
-         <lastmod>2026-05-20</lastmod>
+         <lastmod>2026-05-21</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/provinces/nova-scotia/</loc>
-         <lastmod>2026-05-20</lastmod>
+         <lastmod>2026-05-21</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/provinces/ontario/</loc>
-         <lastmod>2026-05-20</lastmod>
+         <lastmod>2026-05-21</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/provinces/prince-edward-island/</loc>
-         <lastmod>2026-05-20</lastmod>
+         <lastmod>2026-05-21</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/provinces/quebec/</loc>
-         <lastmod>2026-05-20</lastmod>
+         <lastmod>2026-05-21</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/provinces/saskatchewan/</loc>
-         <lastmod>2026-05-20</lastmod>
+         <lastmod>2026-05-21</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/provinces/territories/</loc>
-         <lastmod>2026-05-20</lastmod>
+         <lastmod>2026-05-21</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/resources/getting-started/</loc>
-         <lastmod>2026-05-20</lastmod>
+         <lastmod>2026-05-21</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/resources/glossary/</loc>
-         <lastmod>2026-05-20</lastmod>
+         <lastmod>2026-05-21</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/resources/links/</loc>
-         <lastmod>2026-05-20</lastmod>
+         <lastmod>2026-05-21</lastmod>
     </url>
 </urlset>

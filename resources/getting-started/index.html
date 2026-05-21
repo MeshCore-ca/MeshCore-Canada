@@ -829,6 +829,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../provinces/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../provinces/british-columbia/" class="md-nav__link">
         
   
@@ -1554,28 +1582,70 @@
 <h1 id="getting-started-with-meshcore-in-canada">Getting Started with MeshCore in Canada<a class="headerlink" href="#getting-started-with-meshcore-in-canada" title="Permanent link">&para;</a></h1>
 <div class="admonition info">
 <p class="admonition-title">This page is a work in progress</p>
-<p>Content coming soon. Want to help? See <a href="../../contributing/">Contributing</a>.</p>
+<p>More hardware-specific walkthroughs are still being added. These network settings are the current MeshCore Canada baseline.</p>
 </div>
 <h2 id="welcome-to-meshcore">Welcome to MeshCore!<a class="headerlink" href="#welcome-to-meshcore" title="Permanent link">&para;</a></h2>
-<!-- TODO: Friendly intro for complete beginners -->
-
+<p>MeshCore Canada communities generally use the same radio preset and path settings so companions, repeaters, room servers, and observers can hear each other reliably.</p>
 <h2 id="step-1-understand-the-basics">Step 1: Understand the Basics<a class="headerlink" href="#step-1-understand-the-basics" title="Permanent link">&para;</a></h2>
-<!-- TODO: What is mesh networking, what is LoRa, what is MeshCore, link to Intro page -->
-
+<p>MeshCore devices must match the local mesh's radio settings before they can join the network. For MeshCore Canada, start with these defaults unless your local community page lists a different setting.</p>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>MeshCore Canada value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Radio preset</td>
+<td><code>USA/Canada (Recommended)</code></td>
+</tr>
+<tr>
+<td>Raw radio values</td>
+<td><code>910.525 MHz / 62.5 kHz / SF7 / CR5</code></td>
+</tr>
+<tr>
+<td>Path hash / advert path mode</td>
+<td><code>3-byte</code></td>
+</tr>
+<tr>
+<td>CLI path setting</td>
+<td><code>set path.hash.mode 2</code></td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="admonition-title">Preset must match</p>
+<p>A device on another regional preset may appear to be configured correctly but will not hear the MeshCore Canada network. Pick <strong>USA/Canada (Recommended)</strong> in apps or config tools. If the tool only exposes raw radio fields, use <code>910.525 MHz</code>, <code>62.5 kHz</code>, <code>SF7</code>, and <code>CR5</code>.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Why 3-byte path hashes?</p>
+<p>MeshCore Canada recommends 3-byte path hashes for better behavior on larger repeater-backed networks. Companion devices often need this changed manually. Repeaters and room servers flashed with 2026-05-21 or newer MeshCore.ca direct MQTT firmware already default to the USA/Canada radio preset, but path hash mode should still be set during onboarding.</p>
+</div>
 <h2 id="step-2-get-your-hardware">Step 2: Get Your Hardware<a class="headerlink" href="#step-2-get-your-hardware" title="Permanent link">&para;</a></h2>
-<!-- TODO: Minimum hardware needed, where to buy in Canada, budget options -->
-
+<p>Choose a role:</p>
+<ul>
+<li><strong>Companion</strong>: the handheld or mobile device you use to send and receive messages.</li>
+<li><strong>Repeater</strong>: a fixed node that extends mesh coverage.</li>
+<li><strong>Room server</strong>: a fixed node that hosts rooms and can also observe mesh traffic.</li>
+<li><strong>Observer</strong>: a device or host service that forwards packets to the MeshCore.ca MQTT analyzer.</li>
+</ul>
 <h2 id="step-3-flash-the-firmware">Step 3: Flash the Firmware<a class="headerlink" href="#step-3-flash-the-firmware" title="Permanent link">&para;</a></h2>
-<!-- TODO: Link to companion firmware flashing guide -->
-
+<p>Flash firmware for the role you need, then apply the MeshCore Canada network settings before judging whether the device works.</p>
+<p>For repeaters and room servers using 2026-05-21 or newer MeshCore.ca direct MQTT firmware, include this first-run CLI setting:</p>
+<div class="highlight"><pre><span></span><code>set path.hash.mode 2
+</code></pre></div>
+<p>If you are updating an older image, reusing a device with retained preferences, or configuring generic firmware through the CLI, also run <code>set radio 910.525,62.5,7,5</code>.</p>
+<p>For companion devices, set the radio preset to <strong>USA/Canada (Recommended)</strong> and set path hash mode to <strong>3-byte</strong> in the companion app or config tool. If you are configuring a companion through a CLI that supports MeshCore settings, use:</p>
+<div class="highlight"><pre><span></span><code>set path.hash.mode 2
+</code></pre></div>
+<p>After changing radio parameters, reboot the device.</p>
 <h2 id="step-4-find-or-start-a-community">Step 4: Find or Start a Community<a class="headerlink" href="#step-4-find-or-start-a-community" title="Permanent link">&para;</a></h2>
-<!-- TODO: Link to Mesh Directory, how to connect to an existing mesh, how to start your own -->
-
+<p>Browse the <a href="../../provinces/">Mesh Directory</a> and check your province or nearby region. If a local community documents a different preset, follow the local community setting for that mesh.</p>
 <h2 id="step-5-get-on-the-air">Step 5: Get on the Air<a class="headerlink" href="#step-5-get-on-the-air" title="Permanent link">&para;</a></h2>
-<!-- TODO: First message, joining a room, best practices for new users -->
-
+<p>Send an advert after configuration so nearby nodes learn your identity and route. If you do not see other users, re-check the radio preset first, then confirm the path hash mode is set to 3-byte.</p>
 <h2 id="need-help">Need Help?<a class="headerlink" href="#need-help" title="Permanent link">&para;</a></h2>
-<!-- TODO: Discord link, GitHub discussions, community resources -->
+<p>Open an issue or update request through <a href="../../contributing/">Contributing</a>, or ask in your local MeshCore Canada community channel.</p>
 
 
 

@@ -5,7 +5,7 @@ cat >&2 <<'EOF'
 The MeshCore.ca broker pair can be added to recent custom Wi-Fi observer
 firmware through the MeshCore admin CLI.
 
-For current MeshCore.ca observer firmware, run:
+For current MeshCore.ca observer firmware that needs broker defaults reapplied, run:
 
   set mqtt1.preset none
   set mqtt2.preset none

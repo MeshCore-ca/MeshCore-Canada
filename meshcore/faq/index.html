@@ -911,6 +911,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../provinces/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../provinces/british-columbia/" class="md-nav__link">
         
   
@@ -1473,7 +1501,35 @@
 
 <details class="question">
 <summary>What frequencies does MeshCore use in Canada?</summary>
-<!-- TODO: ISM band info, ISED regulations -->
+<p>MeshCore Canada communities should start with the <strong>USA/Canada (Recommended)</strong> preset.</p>
+<p>If your app or config tool shows raw radio values instead of a named preset, use:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Frequency</td>
+<td><code>910.525 MHz</code></td>
+</tr>
+<tr>
+<td>Bandwidth</td>
+<td><code>62.5 kHz</code></td>
+</tr>
+<tr>
+<td>Spreading Factor</td>
+<td><code>SF7</code></td>
+</tr>
+<tr>
+<td>Coding Rate</td>
+<td><code>5</code></td>
+</tr>
+</tbody>
+</table>
+<p>Always check your local province or community page in case a nearby mesh publishes a different setting.</p>
 </details>
 <details class="question">
 <summary>Do I need a ham radio license?</summary>
@@ -1499,11 +1555,18 @@
 
 <details class="question">
 <summary>How do I join an existing mesh network?</summary>
-<!-- TODO: Steps to connect -->
+<p>Set your radio preset to <strong>USA/Canada (Recommended)</strong>, then set path hash mode to <strong>3-byte</strong>. Companions, repeaters, room servers, and observers all need compatible radio settings before they can hear each other.</p>
+<p>On devices with MeshCore CLI access, the 3-byte setting is:</p>
+<div class="highlight"><pre><span></span><code>set path.hash.mode 2
+</code></pre></div>
 </details>
 <details class="question">
 <summary>How do I set up a new mesh in my area?</summary>
-<!-- TODO: Getting started with a new community -->
+<p>Use the MeshCore Canada baseline unless you have a local reason to publish a different setting:</p>
+<div class="highlight"><pre><span></span><code>set radio 910.525,62.5,7,5
+set path.hash.mode 2
+</code></pre></div>
+<p>Publish the chosen settings clearly on your community page so new users know which preset to pick.</p>
 </details>
 
 

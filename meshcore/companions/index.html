@@ -431,6 +431,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#meshcore-canada-settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MeshCore Canada Settings
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#recommended-devices" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -903,6 +914,34 @@
 
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../provinces/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
             
               
                 
@@ -1422,6 +1461,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#meshcore-canada-settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MeshCore Canada Settings
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#recommended-devices" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1469,8 +1519,39 @@
 <p>Content coming soon. Want to help? See <a href="../../contributing/">Contributing</a>.</p>
 </div>
 <h2 id="what-is-a-companion-device">What is a Companion Device?<a class="headerlink" href="#what-is-a-companion-device" title="Permanent link">&para;</a></h2>
-<!-- TODO: Explain companion role in MeshCore (the device you carry/use to send and receive messages) -->
-
+<p>A companion is the device you carry or keep nearby to send and receive MeshCore messages. It still needs the same network settings as the repeaters around it.</p>
+<h2 id="meshcore-canada-settings">MeshCore Canada Settings<a class="headerlink" href="#meshcore-canada-settings" title="Permanent link">&para;</a></h2>
+<p>Use these settings before testing range or message delivery:</p>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Radio preset</td>
+<td><code>USA/Canada (Recommended)</code></td>
+</tr>
+<tr>
+<td>Raw radio values</td>
+<td><code>910.525 MHz / 62.5 kHz / SF7 / CR5</code></td>
+</tr>
+<tr>
+<td>Path hash mode</td>
+<td><code>3-byte</code></td>
+</tr>
+</tbody>
+</table>
+<p>If your companion app exposes a <strong>Path hash mode</strong>, <strong>Path hash size</strong>, or <strong>Advert path</strong> option, set it to <strong>3-byte</strong>. This is the recommended MeshCore Canada setting for companion radios on repeater-backed networks.</p>
+<p>If your companion is configured through a MeshCore CLI that supports the setting, use:</p>
+<div class="highlight"><pre><span></span><code>set path.hash.mode 2
+</code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">Common onboarding miss</p>
+<p>A companion can be flashed successfully and still be off-network if it is left on another regional preset or a 1-byte path setting. Set <strong>USA/Canada (Recommended)</strong> first, then set the path mode to <strong>3-byte</strong>.</p>
+</div>
 <h2 id="recommended-devices">Recommended Devices<a class="headerlink" href="#recommended-devices" title="Permanent link">&para;</a></h2>
 <!-- TODO: Table of recommended companion devices with specs, price range, pros/cons -->
 

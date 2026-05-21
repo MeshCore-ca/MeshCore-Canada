@@ -14,7 +14,7 @@
         <link rel="prev" href="../mqtt-firmware/">
       
       
-        <link rel="next" href="../../../provinces/british-columbia/">
+        <link rel="next" href="../../../provinces/">
       
       
         
@@ -974,6 +974,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../provinces/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../../provinces/british-columbia/" class="md-nav__link">
         
   
@@ -1606,6 +1634,10 @@
 <td>IATA Code</td>
 <td>Your real 3-letter IATA airport code (e.g. <code>YOW</code> for Ottawa)</td>
 </tr>
+<tr>
+<td>Mesh Settings</td>
+<td>Repeater radio uses <code>USA/Canada (Recommended)</code> and 3-byte path hashes</td>
+</tr>
 </tbody>
 </table>
 <h2 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h2>
@@ -1615,6 +1647,7 @@
 <span class="w">  </span><span class="nt">iata_code</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">YOW</span>
 </code></pre></div>
 <p>Use the real 3-letter airport code nearest to you. The public broker rejects placeholders and made-up region names such as <code>XXX</code> or <code>HOME</code>. Do not use <code>CAN</code> as shorthand for Canada; it is a real airport code for Guangzhou and will tag your observer to the wrong region.</p>
+<p>Also confirm the underlying repeater is on the MeshCore Canada network settings: <strong>USA/Canada (Recommended)</strong>, or raw radio values <code>910.525 MHz / 62.5 kHz / SF7 / CR5</code>, with 3-byte path hashes.</p>
 <h3 id="2-add-the-broker-block">2. Add the Broker Block<a class="headerlink" href="#2-add-the-broker-block" title="Permanent link">&para;</a></h3>
 <p>Paste the following under <code>mqtt.brokers</code> in your config file:</p>
 <div class="highlight"><pre><span></span><code><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MeshCore-CA</span>

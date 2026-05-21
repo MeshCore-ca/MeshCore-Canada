@@ -985,6 +985,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../../provinces/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../../provinces/british-columbia/" class="md-nav__link">
         
   
@@ -1640,6 +1668,10 @@
 <td>IATA Code</td>
 <td>Your real 3-letter IATA airport code (e.g. <code>YOW</code> for Ottawa)</td>
 </tr>
+<tr>
+<td>Mesh Settings</td>
+<td>Connected radio uses <code>USA/Canada (Recommended)</code> and 3-byte path hashes</td>
+</tr>
 </tbody>
 </table>
 <h2 id="quick-setup">Quick Setup<a class="headerlink" href="#quick-setup" title="Permanent link">&para;</a></h2>
@@ -1673,6 +1705,10 @@
 <div class="admonition warning">
 <p class="admonition-title">Use a real IATA code</p>
 <p>The helper shows a Canadian quick list when it prompts. If your nearest real airport code is not shown, you can still type it, but continue only if it is a real IATA airport code. Do not use <code>CAN</code> as shorthand for Canada; it is a real airport code for Guangzhou and will tag your observer to the wrong region.</p>
+</div>
+<div class="admonition tip">
+<p class="admonition-title">Check the radio first</p>
+<p>MCtoMQTT can publish packets from a connected radio, but it cannot fix a radio that is listening on the wrong mesh settings. Before troubleshooting MQTT, confirm the MeshCore node is on <strong>USA/Canada (Recommended)</strong> or <code>910.525 MHz / 62.5 kHz / SF7 / CR5</code>, and that companion-style radios use 3-byte path hashes.</p>
 </div>
 <h2 id="what-the-script-creates">What the Script Creates<a class="headerlink" href="#what-the-script-creates" title="Permanent link">&para;</a></h2>
 <p>The drop-in config at <code>/etc/mctomqtt/config.d/20-meshcore-ca.toml</code>:</p>
@@ -1720,6 +1756,7 @@
 </details>
 <h2 id="companion-devices-ble-serial-tcp">Companion Devices (BLE / Serial / TCP)<a class="headerlink" href="#companion-devices-ble-serial-tcp" title="Permanent link">&para;</a></h2>
 <p>For companion radios (not packet-log serial hosts), use the companion path instead:</p>
+<p>Before running the companion helper, set the companion to <strong>USA/Canada (Recommended)</strong> and set path hash mode to <strong>3-byte</strong> in the companion app or config tool.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Linux / macOS</label><label for="__tabbed_2_2">Windows PowerShell</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">

@@ -459,6 +459,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#required-network-settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Required Network Settings
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#recommended-devices" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -914,6 +925,34 @@
 
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../provinces/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
             
               
                 
@@ -1433,6 +1472,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#required-network-settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Required Network Settings
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#recommended-devices" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1491,8 +1541,38 @@
 <p>Content coming soon. Want to help? See <a href="../../contributing/">Contributing</a>.</p>
 </div>
 <h2 id="what-is-a-repeater">What is a Repeater?<a class="headerlink" href="#what-is-a-repeater" title="Permanent link">&para;</a></h2>
-<!-- TODO: Explain repeater role in MeshCore, how they extend mesh coverage -->
-
+<p>A repeater extends local mesh coverage by hearing packets and forwarding them for other nodes. It must use the same radio preset and path hash settings as the surrounding MeshCore Canada network.</p>
+<h2 id="required-network-settings">Required Network Settings<a class="headerlink" href="#required-network-settings" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Radio preset</td>
+<td><code>USA/Canada (Recommended)</code></td>
+</tr>
+<tr>
+<td>Raw radio values</td>
+<td><code>910.525 MHz / 62.5 kHz / SF7 / CR5</code></td>
+</tr>
+<tr>
+<td>Path hash mode</td>
+<td><code>3-byte</code></td>
+</tr>
+</tbody>
+</table>
+<p>For repeaters flashed with 2026-05-21 or newer MeshCore.ca direct MQTT firmware:</p>
+<div class="highlight"><pre><span></span><code>set path.hash.mode 2
+reboot
+</code></pre></div>
+<div class="admonition warning">
+<p class="admonition-title">Check before installation</p>
+<p>A repeater installed with the wrong regional preset or path hash mode can look healthy locally but still fail to participate in the MeshCore Canada network. Fresh 2026-05-21 and newer MeshCore.ca direct MQTT firmware already defaults to the USA/Canada radio preset, but older images, retained preferences, and generic firmware should be verified with <code>set radio 910.525,62.5,7,5</code> before mounting the device somewhere hard to reach.</p>
+</div>
 <h2 id="recommended-devices">Recommended Devices<a class="headerlink" href="#recommended-devices" title="Permanent link">&para;</a></h2>
 <!-- TODO: Table of recommended repeater hardware -->
 

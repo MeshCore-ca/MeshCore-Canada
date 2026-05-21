@@ -922,6 +922,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../provinces/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../provinces/british-columbia/" class="md-nav__link">
         
   
@@ -1492,8 +1520,37 @@
 </div>
 <h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
 <p>Step-by-step guides for building and deploying MeshCore repeaters.</p>
-<!-- TODO: Add build guides for common repeater configurations -->
-
+<p>Before placing a repeater, configure it for the MeshCore Canada network:</p>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Radio preset</td>
+<td><code>USA/Canada (Recommended)</code></td>
+</tr>
+<tr>
+<td>Raw radio values</td>
+<td><code>910.525 MHz / 62.5 kHz / SF7 / CR5</code></td>
+</tr>
+<tr>
+<td>Path hash mode</td>
+<td><code>3-byte</code></td>
+</tr>
+</tbody>
+</table>
+<p>For repeaters or room servers flashed with 2026-05-21 or newer MeshCore.ca direct MQTT firmware, run:</p>
+<div class="highlight"><pre><span></span><code>set path.hash.mode 2
+reboot
+</code></pre></div>
+<div class="admonition note">
+<p class="admonition-title">Fresh MeshCore.ca firmware flashes</p>
+<p>The 2026-05-21 and newer MeshCore.ca direct MQTT firmware images already default to the USA/Canada radio preset. If you are updating an older image, reusing a device with retained preferences, or configuring generic firmware, also run <code>set radio 910.525,62.5,7,5</code> before installing the repeater on a roof, mast, or remote site.</p>
+</div>
 <h2 id="indoor-repeater">Indoor Repeater<a class="headerlink" href="#indoor-repeater" title="Permanent link">&para;</a></h2>
 <!-- TODO: Parts list, assembly, firmware flash, configuration -->
 

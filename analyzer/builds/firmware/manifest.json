@@ -1,9 +1,9 @@
 {
   "name": "MeshCore.ca direct MQTT observer firmware",
-  "version": "20260516",
-  "date": "2026-05-16",
-  "source_version": "v1.15-meshcoreCA-0516",
-  "source_bundle": "meshcore-ca-analyzer-update-v1.15-meshcoreCA-0516-expanded-devices",
+  "version": "20260521",
+  "date": "2026-05-21",
+  "source_version": "v1.15-meshcoreCA-0521",
+  "source_bundle": "meshcore-ca-analyzer-update-v1.15-meshcoreCA-0521-f1b4b75-usca-radio",
   "brokers": [
     {
       "id": "meshcore-ca-1",
@@ -35,37 +35,31 @@
       "id": "heltec-v4-oled",
       "label": "Heltec V4 OLED",
       "status": "published",
-      "validation": "Build-verified; hardware smoke test recommended before fleet rollout."
+      "validation": "Build-verified, smoke test recommended before fleet rollout."
     },
     {
       "id": "lilygo-t3s3-sx1262",
       "label": "LILYGO T3S3 SX1262",
       "status": "published",
-      "validation": "Build-verified; hardware smoke test recommended before fleet rollout."
+      "validation": "Build-verified, smoke test recommended before fleet rollout."
     },
     {
       "id": "lilygo-t-beam-s3-supreme-sx1262",
       "label": "LILYGO T-Beam S3 Supreme SX1262",
       "status": "published",
-      "validation": "Build-verified with PSRAM target profile; hardware smoke test recommended before fleet rollout."
+      "validation": "Build-verified with PSRAM target profile, smoke test recommended before fleet rollout."
     },
     {
       "id": "lilygo-tbeam-sx1262",
       "label": "LILYGO T-Beam SX1262",
       "status": "published",
-      "validation": "Build-verified; hardware smoke test recommended before fleet rollout."
-    },
-    {
-      "id": "rak3112",
-      "label": "RAK3112 SX1262",
-      "status": "published",
-      "validation": "Build-verified; hardware smoke test recommended because the PlatformIO board profile reports no PSRAM."
+      "validation": "Build-verified, smoke test recommended before fleet rollout."
     },
     {
       "id": "seeed-xiao-s3-wio-sx1262",
       "label": "Seeed XIAO ESP32S3 + Wio-SX1262",
       "status": "published",
-      "validation": "Build-verified; hardware smoke test recommended before fleet rollout."
+      "validation": "Build-verified, smoke test recommended before fleet rollout."
     }
   ],
   "roles": [
@@ -93,233 +87,202 @@
       "board": "heltec-v3",
       "role": "repeater",
       "type": "merged",
-      "file": "meshcore-ca-heltec-v3-repeater-20260516-merged.bin",
-      "sha256": "348c9e04691dbbc7adc5e4e8b1c7537b8c198dc0d3bc2ba6b32e7e305d84fc53",
-      "size": 1508464
+      "file": "meshcore-ca-heltec-v3-repeater-20260521-merged.bin",
+      "sha256": "a1b2ae4b4d1a60dddb96e14285fe2912c37084ab8d515414b10bffa7d2fe5ce0",
+      "size": 1554080
     },
     {
       "board": "heltec-v3",
       "role": "repeater",
       "type": "update",
-      "file": "meshcore-ca-heltec-v3-repeater-20260516-update.bin",
-      "sha256": "64399893dcec491db1bcfe437554a4f33d457d88e04bc88b927045969aa8b1ef",
-      "size": 1442928
+      "file": "meshcore-ca-heltec-v3-repeater-20260521-update.bin",
+      "sha256": "2f0b6778006f4b4c0368b0ed80bdedb8c1f89ff3b3324f3c6d3a7879c27d46ad",
+      "size": 1488544
     },
     {
       "board": "heltec-v3",
       "role": "room-server",
       "type": "merged",
-      "file": "meshcore-ca-heltec-v3-room-server-20260516-merged.bin",
-      "sha256": "599741fdcfe23040d6a888d64aebe74fdee45bdb98e6823622eac9d7a5588b0e",
-      "size": 1505008
+      "file": "meshcore-ca-heltec-v3-room-server-20260521-merged.bin",
+      "sha256": "bacad6eb7565b59111ae4117f33ef29453c1200c4fecc2bc1b2250194e025cf5",
+      "size": 1510016
     },
     {
       "board": "heltec-v3",
       "role": "room-server",
       "type": "update",
-      "file": "meshcore-ca-heltec-v3-room-server-20260516-update.bin",
-      "sha256": "bf4c241195a5499a57b760c8c38827abc86fbc0270c60c142a2aee29a7b182ee",
-      "size": 1439472
+      "file": "meshcore-ca-heltec-v3-room-server-20260521-update.bin",
+      "sha256": "e3966658ba36596b10eb95f1b071e65d731fb0af0c0792e91dbe0894772aeb00",
+      "size": 1444480
     },
     {
       "board": "heltec-v4-oled",
       "role": "repeater",
       "type": "merged",
-      "file": "meshcore-ca-heltec-v4-oled-repeater-20260516-merged.bin",
-      "sha256": "edaeb1a981289ce66f5f0b7f842cafd94838537f6a100d5339dd6405fca5b576",
-      "size": 1618496
+      "file": "meshcore-ca-heltec-v4-oled-repeater-20260521-merged.bin",
+      "sha256": "b5f1e03999e4f21096e92892a613c497b5c76266c25eb3cb8fecef4b9c4379c4",
+      "size": 1625456
     },
     {
       "board": "heltec-v4-oled",
       "role": "repeater",
       "type": "update",
-      "file": "meshcore-ca-heltec-v4-oled-repeater-20260516-update.bin",
-      "sha256": "8a0dead2cde21356af6bb992906320053995cf8c043c228360c2b44320640dff",
-      "size": 1552960
+      "file": "meshcore-ca-heltec-v4-oled-repeater-20260521-update.bin",
+      "sha256": "9678f2f975c0b76410d9fbeda65e03487c3a21928718ef64f3d98914363a0adf",
+      "size": 1559920
     },
     {
       "board": "heltec-v4-oled",
       "role": "room-server",
       "type": "merged",
-      "file": "meshcore-ca-heltec-v4-oled-room-server-20260516-merged.bin",
-      "sha256": "ce800881a1ef4266630ea7f1db97d103fca580edbba6a62fc472f8e8e8024639",
-      "size": 1577008
+      "file": "meshcore-ca-heltec-v4-oled-room-server-20260521-merged.bin",
+      "sha256": "4489e87ed14300ab9dd769f0a0a76fde461b6e347824382b2048e33c69369c5f",
+      "size": 1581888
     },
     {
       "board": "heltec-v4-oled",
       "role": "room-server",
       "type": "update",
-      "file": "meshcore-ca-heltec-v4-oled-room-server-20260516-update.bin",
-      "sha256": "dd0f525bc128b63497c3c5aafdad5366ee4563df64e95136e5d91c1f9f9cfdfa",
-      "size": 1511472
+      "file": "meshcore-ca-heltec-v4-oled-room-server-20260521-update.bin",
+      "sha256": "6a2a83204211ed84c8360e87126cd32026ea7d4c5804abf73ee7213845fc4d03",
+      "size": 1516352
     },
     {
       "board": "lilygo-t3s3-sx1262",
       "role": "repeater",
       "type": "merged",
-      "file": "meshcore-ca-lilygo-t3s3-sx1262-repeater-20260516-merged.bin",
-      "sha256": "0fc0bcd6d3d6409c239a002c94feaa25fde05a1ea1e30d5ee55ca23033ea20b2",
-      "size": 1481760
+      "file": "meshcore-ca-lilygo-t3s3-sx1262-repeater-20260521-merged.bin",
+      "sha256": "73be053cc24ef9817c0379c7b5d1c5e7ecc50401a5d6cb42122d158255d225ff",
+      "size": 1488448
     },
     {
       "board": "lilygo-t3s3-sx1262",
       "role": "repeater",
       "type": "update",
-      "file": "meshcore-ca-lilygo-t3s3-sx1262-repeater-20260516-update.bin",
-      "sha256": "ca6acd4475dd52ab43dddedac85c54e3a2064364fff0bc80233b577099775fc2",
-      "size": 1416224
+      "file": "meshcore-ca-lilygo-t3s3-sx1262-repeater-20260521-update.bin",
+      "sha256": "a79c2dd7f4a3fc0616bdcc619f8324008ea9e4044d6de73e4022419a4c5e0ead",
+      "size": 1422912
     },
     {
       "board": "lilygo-t3s3-sx1262",
       "role": "room-server",
       "type": "merged",
-      "file": "meshcore-ca-lilygo-t3s3-sx1262-room-server-20260516-merged.bin",
-      "sha256": "17a99d87084be0820b460de2b96ad6426e8e463daca30ed2758259c0db6ec9a9",
-      "size": 1485776
+      "file": "meshcore-ca-lilygo-t3s3-sx1262-room-server-20260521-merged.bin",
+      "sha256": "bbcb92427e0f4325449e1f7629e16a02409126bd95e8d1265af92bbe2d1eb155",
+      "size": 1490720
     },
     {
       "board": "lilygo-t3s3-sx1262",
       "role": "room-server",
       "type": "update",
-      "file": "meshcore-ca-lilygo-t3s3-sx1262-room-server-20260516-update.bin",
-      "sha256": "ff28b651402708dba927a53ba4869facb11fc6173c4ca52636624d21af496062",
-      "size": 1420240
+      "file": "meshcore-ca-lilygo-t3s3-sx1262-room-server-20260521-update.bin",
+      "sha256": "937b18f276b977dce52045e12d57268c01157a06bee1ee12b8ab98603f394ae3",
+      "size": 1425184
     },
     {
       "board": "lilygo-t-beam-s3-supreme-sx1262",
       "role": "repeater",
       "type": "merged",
-      "file": "meshcore-ca-lilygo-t-beam-s3-supreme-sx1262-repeater-20260516-merged.bin",
-      "sha256": "64f6408c109e8793d1806b6f15331fb019148b73be6fd50930deca368e969488",
-      "size": 1539776
+      "file": "meshcore-ca-lilygo-t-beam-s3-supreme-sx1262-repeater-20260521-merged.bin",
+      "sha256": "66fc6aaa04aa61bd48d11a44227fd2cbe04b53389a2623588146ae07fd15103d",
+      "size": 1538288
     },
     {
       "board": "lilygo-t-beam-s3-supreme-sx1262",
       "role": "repeater",
       "type": "update",
-      "file": "meshcore-ca-lilygo-t-beam-s3-supreme-sx1262-repeater-20260516-update.bin",
-      "sha256": "2859fc527b84a10b382607ff8891765781700b6c312dce8f5523561ecf53cda2",
-      "size": 1474240
+      "file": "meshcore-ca-lilygo-t-beam-s3-supreme-sx1262-repeater-20260521-update.bin",
+      "sha256": "aa90c7f49ab8256171f2c23ce25533e4752bd57aee582773b5925fbc116d3049",
+      "size": 1472752
     },
     {
       "board": "lilygo-t-beam-s3-supreme-sx1262",
       "role": "room-server",
       "type": "merged",
-      "file": "meshcore-ca-lilygo-t-beam-s3-supreme-sx1262-room-server-20260516-merged.bin",
-      "sha256": "7ca3d6db5670f40b1cb015e8398e8835e4ce9193af2eb3cee675c709c2337227",
-      "size": 1527424
+      "file": "meshcore-ca-lilygo-t-beam-s3-supreme-sx1262-room-server-20260521-merged.bin",
+      "sha256": "ad950038d961c2f214561c4ea80cee51d8818e81c974d53841c1080488729315",
+      "size": 1532528
     },
     {
       "board": "lilygo-t-beam-s3-supreme-sx1262",
       "role": "room-server",
       "type": "update",
-      "file": "meshcore-ca-lilygo-t-beam-s3-supreme-sx1262-room-server-20260516-update.bin",
-      "sha256": "6240ddd12b96aafef96e7998787f8005298bb269eda5f7837f2576963aba4001",
-      "size": 1461888
+      "file": "meshcore-ca-lilygo-t-beam-s3-supreme-sx1262-room-server-20260521-update.bin",
+      "sha256": "395df69c430b68617bda2f87b975508fef825343935ae03e494faa4482dbef58",
+      "size": 1466992
     },
     {
       "board": "lilygo-tbeam-sx1262",
       "role": "repeater",
       "type": "merged",
-      "file": "meshcore-ca-lilygo-tbeam-sx1262-repeater-20260516-merged.bin",
-      "sha256": "8304e3448a9c81a9ce6736e11154fe4e1f02db45f28d2d9616b75a210cb21442",
-      "size": 1577632
+      "file": "meshcore-ca-lilygo-tbeam-sx1262-repeater-20260521-merged.bin",
+      "sha256": "b781ad12ace51e25dc1c729898ff2a46bc26a07a5cb1f788243aa0a5371de099",
+      "size": 1584448
     },
     {
       "board": "lilygo-tbeam-sx1262",
       "role": "repeater",
       "type": "update",
-      "file": "meshcore-ca-lilygo-tbeam-sx1262-repeater-20260516-update.bin",
-      "sha256": "60411943f8814ea0d3de10e5f32bad5afd11e1337e8282f16c078ad583ff55ce",
-      "size": 1512096
+      "file": "meshcore-ca-lilygo-tbeam-sx1262-repeater-20260521-update.bin",
+      "sha256": "19d6606b8b3847aebff68b81423304aecb184cbeb630d44f1bc16191f83e4ca2",
+      "size": 1518912
     },
     {
       "board": "lilygo-tbeam-sx1262",
       "role": "room-server",
       "type": "merged",
-      "file": "meshcore-ca-lilygo-tbeam-sx1262-room-server-20260516-merged.bin",
-      "sha256": "a3c76351149f8c3f3b2c1f2ac338c937b5028a5c923c916ce21a08178abba048",
-      "size": 1581648
+      "file": "meshcore-ca-lilygo-tbeam-sx1262-room-server-20260521-merged.bin",
+      "sha256": "82aef70594e7be89b4c5b5df45fc2c9ea5442114b4631b14aa614079a010697d",
+      "size": 1586464
     },
     {
       "board": "lilygo-tbeam-sx1262",
       "role": "room-server",
       "type": "update",
-      "file": "meshcore-ca-lilygo-tbeam-sx1262-room-server-20260516-update.bin",
-      "sha256": "ba25c522970642722d25c2b75e3f67e2afb38c42a040474a159832055cbf858f",
-      "size": 1516112
-    },
-    {
-      "board": "rak3112",
-      "role": "repeater",
-      "type": "merged",
-      "file": "meshcore-ca-rak3112-repeater-20260516-merged.bin",
-      "sha256": "e7efef070cd49d1b991b0dcdd4efe7931c1ba70c53ee539ef1e2da2b67ec806c",
-      "size": 1546112
-    },
-    {
-      "board": "rak3112",
-      "role": "repeater",
-      "type": "update",
-      "file": "meshcore-ca-rak3112-repeater-20260516-update.bin",
-      "sha256": "e146000d18b9963d69d763099b7c3aaa025c7927771573d6bd3c414266030d10",
-      "size": 1480576
-    },
-    {
-      "board": "rak3112",
-      "role": "room-server",
-      "type": "merged",
-      "file": "meshcore-ca-rak3112-room-server-20260516-merged.bin",
-      "sha256": "0ae65b7058bf08af08b768a0d06199f65518000a8757a9484359ed4d78559517",
-      "size": 1542896
-    },
-    {
-      "board": "rak3112",
-      "role": "room-server",
-      "type": "update",
-      "file": "meshcore-ca-rak3112-room-server-20260516-update.bin",
-      "sha256": "8cc0ab3710b0cb4484a68ed06232212f96c84889e360489e70352912c2bb2e7f",
-      "size": 1477360
+      "file": "meshcore-ca-lilygo-tbeam-sx1262-room-server-20260521-update.bin",
+      "sha256": "e14f2a7e64260c9be67b22fa7bf5c58601926071e652d52693128e698b0f0fba",
+      "size": 1520928
     },
     {
       "board": "seeed-xiao-s3-wio-sx1262",
       "role": "repeater",
       "type": "merged",
-      "file": "meshcore-ca-seeed-xiao-s3-wio-sx1262-repeater-20260516-merged.bin",
-      "sha256": "1a57c455b34ca02c6c692cf2b114bf84d8207070f162249bcca64b57d9b29016",
-      "size": 1458528
+      "file": "meshcore-ca-seeed-xiao-s3-wio-sx1262-repeater-20260521-merged.bin",
+      "sha256": "27c677b264ade88716acb812bf3b195c4bd0023ef329b88d907c52d8f431628b",
+      "size": 1466144
     },
     {
       "board": "seeed-xiao-s3-wio-sx1262",
       "role": "repeater",
       "type": "update",
-      "file": "meshcore-ca-seeed-xiao-s3-wio-sx1262-repeater-20260516-update.bin",
-      "sha256": "c89185bfb58d1320fede469b99058ac539dd0a8508161f02c8c9b06ba63e2fbb",
-      "size": 1392992
+      "file": "meshcore-ca-seeed-xiao-s3-wio-sx1262-repeater-20260521-update.bin",
+      "sha256": "8316b9081706e3fe5c2462d210d117dc28481890cbddf6ce8abc44f018ed33da",
+      "size": 1400608
     },
     {
       "board": "seeed-xiao-s3-wio-sx1262",
       "role": "room-server",
       "type": "merged",
-      "file": "meshcore-ca-seeed-xiao-s3-wio-sx1262-room-server-20260516-merged.bin",
-      "sha256": "6e88fe7d4649ee6f53666387592594a4de99696cbde9a041c3ade68e75e1635b",
-      "size": 1455360
+      "file": "meshcore-ca-seeed-xiao-s3-wio-sx1262-room-server-20260521-merged.bin",
+      "sha256": "35709edcc552fedee2ae3c70f45982a21b6fe10d5072a9d04bbda055ba20567a",
+      "size": 1460368
     },
     {
       "board": "seeed-xiao-s3-wio-sx1262",
       "role": "room-server",
       "type": "update",
-      "file": "meshcore-ca-seeed-xiao-s3-wio-sx1262-room-server-20260516-update.bin",
-      "sha256": "b08f69d7f67146271e5b31526966453ff4725e48119e896232af4621dd67a0c1",
-      "size": 1389824
+      "file": "meshcore-ca-seeed-xiao-s3-wio-sx1262-room-server-20260521-update.bin",
+      "sha256": "3e7be6be0b731a34d392791390bcf40733f225921d89644747c76be4d3044358",
+      "size": 1394832
     }
   ],
   "notes": [
     "Direct observer firmware for supported Wi-Fi MeshCore boards with LoRa radios.",
-    "Use merged images for first flash or partition changes.",
-    "Use update images only where the flasher expects an application image.",
+    "Fresh 2026-05-21 and newer images default to USA/Canada radio settings: 910.525 MHz / 62.5 kHz / SF7 / CR5.",
     "Broker slot 1 defaults to mqtt1.meshcore.ca:443/mqtt.",
     "Broker slot 2 defaults to mqtt2.meshcore.ca:443/mqtt.",
+    "Use merged images for first flash or recovery.",
+    "Use update images only on devices already running MeshCore.",
     "Heltec V3 is field-tested locally; expanded board targets are build-verified and should be smoke-tested over serial before broad rollout."
   ]
 }
