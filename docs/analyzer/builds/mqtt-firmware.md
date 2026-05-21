@@ -222,11 +222,35 @@ Most users should choose **First Flash (Merged)**, download the file, then flash
 | First Flash (Merged) | New board, erased board, recovery from a bad flash | `0x00000` |
 | Update | Device already running MeshCore with a valid bootloader and partition table | `0x10000` |
 
-Technical users can still flash with their preferred ESP tool. Laymen should use the MeshCore Flasher and the **First Flash (Merged)** picker option.
+Technical users can still flash with their preferred ESP tool. Most users should use the MeshCore Flasher and the **First Flash (Merged)** picker option.
 
 ## CLI Setup
 
-After flashing, connect to the device's admin CLI (serial or web) to set your WiFi, IATA code, and node name. Replace `YOW` with the real 3-letter airport code nearest to you and fill in your network credentials:
+After flashing, connect to the device's admin CLI (serial or web) to set your WiFi, IATA code, and node name.
+
+### Guided Heltec V3 / V4 Setup
+
+For Heltec V3 and Heltec V4 OLED boards running the MeshCore.ca direct MQTT firmware, the guided setup script prompts for your board, role, IATA code, WiFi network, WiFi password, node name, broker restore choice, and repeat/observe-only mode. It also applies the MeshCore Canada radio values, 3-byte path hash mode, and required MQTT packet publishing settings:
+
+```bash
+bash <(curl -fsSL https://meshcore.ca/analyzer/scripts/setup-mqtt-firmware.sh)
+```
+
+The script can send the commands over USB serial on Linux or macOS, or print a copy/paste command block for the web/admin CLI. If you already know the serial port, pass it directly:
+
+```bash
+bash <(curl -fsSL https://meshcore.ca/analyzer/scripts/setup-mqtt-firmware.sh) --port /dev/ttyUSB0
+```
+
+To generate commands without touching a serial port:
+
+```bash
+bash <(curl -fsSL https://meshcore.ca/analyzer/scripts/setup-mqtt-firmware.sh) --print-only
+```
+
+### Manual CLI Setup
+
+If you prefer to configure the device manually, replace `YOW` with the real 3-letter airport code nearest to you and fill in your network credentials:
 
 ```text
 set name YOW-Repeater-01
