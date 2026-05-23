@@ -1,0 +1,46 @@
+.home-discord-link {
+  display: flex;
+  justify-content: center;
+  margin: 0 0 1rem;
+}
+
+.home-discord-link p {
+  margin: 0;
+}
+
+.home-discord-link .discord-logo-link {
+  align-items: center;
+  border: 1px solid rgba(88, 101, 242, 0.45);
+  border-color: color-mix(in srgb, #5865f2 45%, transparent);
+  border-radius: 0.4rem;
+  color: #5865f2;
+  display: inline-flex;
+  height: 3rem;
+  justify-content: center;
+  transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
+  width: 3rem;
+}
+
+.home-discord-link .discord-logo-link:hover,
+.home-discord-link .discord-logo-link:focus-visible {
+  background-color: #5865f2;
+  border-color: #5865f2;
+  color: #fff;
+}
+
+.home-discord-link .discord-logo-link:focus-visible {
+  outline: 2px solid var(--md-accent-fg-color);
+  outline-offset: 3px;
+}
+
+.home-discord-link .twemoji {
+  display: inline-flex;
+  height: 1.75rem;
+  width: 1.75rem;
+}
+
+.home-discord-link .twemoji svg {
+  fill: currentColor;
+  height: 100%;
+  width: 100%;
+}
