@@ -14,7 +14,7 @@
         <link rel="prev" href="../verify/">
       
       
-        <link rel="next" href="../builds/mctomqtt/">
+        <link rel="next" href="../broker-reference/">
       
       
         
@@ -697,6 +697,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#remoteterm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RemoteTerm
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#still-not-working" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -722,6 +733,90 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="../broker-reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Broker Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../iata-codes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IATA Region Codes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../remoteterm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RemoteTerm
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
     
     
     
@@ -731,10 +826,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_7" >
         
           
-          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_3_7" id="__nav_3_7_label" tabindex="0">
             
   
   
@@ -752,8 +847,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3_4">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_7">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1527,6 +1622,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#remoteterm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RemoteTerm
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#still-not-working" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1667,6 +1773,10 @@ cat<span class="w"> </span>~/.meshcore-packet-capture/.env.local
 <td>Home Assistant</td>
 <td>MeshCore integration region/IATA field</td>
 </tr>
+<tr>
+<td>RemoteTerm</td>
+<td>Community MQTT region/IATA field</td>
+</tr>
 </tbody>
 </table>
 <h2 id="pymc">PyMC<a class="headerlink" href="#pymc" title="Permanent link">&para;</a></h2>
@@ -1703,6 +1813,47 @@ cat<span class="w"> </span>~/.meshcore-packet-capture/.env.local
 </tr>
 </tbody>
 </table>
+<h2 id="remoteterm">RemoteTerm<a class="headerlink" href="#remoteterm" title="Permanent link">&para;</a></h2>
+<p>Open <strong>Settings</strong> -&gt; <strong>MQTT &amp; Automation</strong> and confirm each Community MQTT entry:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Expected value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Broker Host</td>
+<td><code>mqtt1.meshcore.ca</code> or <code>mqtt2.meshcore.ca</code></td>
+</tr>
+<tr>
+<td>Broker Port</td>
+<td><code>443</code></td>
+</tr>
+<tr>
+<td>Transport</td>
+<td><code>WebSockets</code></td>
+</tr>
+<tr>
+<td>Authentication</td>
+<td><code>Token</code></td>
+</tr>
+<tr>
+<td>TLS</td>
+<td>Enabled and verified</td>
+</tr>
+<tr>
+<td>Region Code</td>
+<td>Your nearest real IATA code</td>
+</tr>
+<tr>
+<td>Packet Topic Template</td>
+<td><code>meshcore/{IATA}/{PUBLIC_KEY}/packets</code></td>
+</tr>
+</tbody>
+</table>
+<p>If the primary entry works and the backup does not, check the second entry's token audience. It must be <code>mqtt2.meshcore.ca</code>.</p>
 <h2 id="still-not-working">Still Not Working?<a class="headerlink" href="#still-not-working" title="Permanent link">&para;</a></h2>
 <p>If everything looks correct but your observer still doesn't appear, double check that your device has internet access and can reach <code>mqtt1.meshcore.ca</code> on port 443. Firewalls or network restrictions on outbound WebSocket connections are the most common blocker.</p>
 

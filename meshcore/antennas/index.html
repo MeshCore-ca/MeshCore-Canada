@@ -515,17 +515,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#recommended-antennas_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Recommended Antennas
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#companion-antennas" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -548,10 +537,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#diy-antenna-builds" class="md-nav__link">
+  <a href="#installation-tips" class="md-nav__link">
     <span class="md-ellipsis">
       
-        DIY Antenna Builds
+        Installation Tips
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#diy-antennas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DIY Antennas
       
     </span>
   </a>
@@ -711,6 +711,90 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="../../analyzer/broker-reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Broker Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../analyzer/iata-codes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IATA Region Codes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../analyzer/remoteterm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RemoteTerm
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
     
     
     
@@ -720,10 +804,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_7" >
         
           
-          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_3_7" id="__nav_3_7_label" tabindex="0">
             
   
   
@@ -741,8 +825,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3_4">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_7">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1472,17 +1556,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#recommended-antennas_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Recommended Antennas
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#companion-antennas" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1505,10 +1578,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#diy-antenna-builds" class="md-nav__link">
+  <a href="#installation-tips" class="md-nav__link">
     <span class="md-ellipsis">
       
-        DIY Antenna Builds
+        Installation Tips
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#diy-antennas" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        DIY Antennas
       
     </span>
   </a>
@@ -1536,46 +1620,108 @@
 
 
 <h1 id="recommended-antennas">Recommended Antennas<a class="headerlink" href="#recommended-antennas" title="Permanent link">&para;</a></h1>
-<div class="admonition info">
-<p class="admonition-title">This page is a work in progress</p>
-<p>Content coming soon. Want to help? See <a href="../../contributing/">Contributing</a>.</p>
-</div>
+<p>Antenna choice and placement usually affect MeshCore range more than the exact board model. Start with a known-good 915 MHz antenna, mount it cleanly, and test before chasing firmware changes.</p>
 <h2 id="antenna-basics">Antenna Basics<a class="headerlink" href="#antenna-basics" title="Permanent link">&para;</a></h2>
-<!-- TODO: Quick primer on antenna types, gain, and why antenna choice matters for LoRa -->
-
-<h2 id="recommended-antennas_1">Recommended Antennas<a class="headerlink" href="#recommended-antennas_1" title="Permanent link">&para;</a></h2>
-<!-- TODO: Table of recommended antennas for different use cases -->
-
 <table>
 <thead>
 <tr>
-<th>Antenna</th>
-<th>Type</th>
-<th>Gain</th>
-<th>Frequency</th>
-<th>Best For</th>
+<th>Concept</th>
+<th>Practical meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Frequency match</td>
+<td>Use antennas intended for the Canadian/US 902-928 MHz band</td>
+</tr>
+<tr>
+<td>Gain</td>
+<td>Higher gain can help in the right direction, but may reduce coverage above and below the antenna</td>
+</tr>
+<tr>
+<td>Placement</td>
+<td>Height and line of sight often matter more than advertised gain</td>
+</tr>
+<tr>
+<td>Feedline loss</td>
+<td>Long or poor coax can waste the antenna improvement</td>
+</tr>
+<tr>
+<td>Connector quality</td>
+<td>Loose adapters and mismatched connectors cause hard-to-debug range issues</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition warning">
+<p class="admonition-title">Check local rules</p>
+<p>You are responsible for legal operation, including power, antenna gain, and duty cycle limits that apply to your station and location.</p>
+</div>
+<h2 id="companion-antennas">Companion Antennas<a class="headerlink" href="#companion-antennas" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Use case</th>
+<th>Good fit</th>
 <th>Notes</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><!-- TODO --></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
+<td>Pocket node</td>
+<td>Short 915 MHz whip</td>
+<td>Convenient, but range is limited indoors</td>
+</tr>
+<tr>
+<td>Portable testing</td>
+<td>Longer flexible whip</td>
+<td>Better than tiny stock antennas for field checks</td>
+</tr>
+<tr>
+<td>Desk or window</td>
+<td>Small magnetic/base antenna</td>
+<td>Move it away from USB hubs, laptops, and metal blinds</td>
 </tr>
 </tbody>
 </table>
-<h2 id="companion-antennas">Companion Antennas<a class="headerlink" href="#companion-antennas" title="Permanent link">&para;</a></h2>
-<!-- TODO: Portable/handheld antenna recommendations -->
-
+<p>If a companion seems deaf, test with a second known-good antenna before reflashing.</p>
 <h2 id="repeater-base-antennas">Repeater / Base Antennas<a class="headerlink" href="#repeater-base-antennas" title="Permanent link">&para;</a></h2>
-<!-- TODO: Fixed-mount antenna recommendations, collinear, yagi, etc. -->
-
-<h2 id="diy-antenna-builds">DIY Antenna Builds<a class="headerlink" href="#diy-antenna-builds" title="Permanent link">&para;</a></h2>
-<!-- TODO: Links or guides for building your own antennas -->
+<table>
+<thead>
+<tr>
+<th>Use case</th>
+<th>Good fit</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Local neighborhood</td>
+<td>Outdoor vertical</td>
+<td>Simple, broad coverage pattern</td>
+</tr>
+<tr>
+<td>Valley or corridor</td>
+<td>Directional antenna</td>
+<td>Useful when coverage is needed mostly one way</td>
+</tr>
+<tr>
+<td>Rooftop reference node</td>
+<td>Outdoor vertical plus short feedline</td>
+<td>Keep cable loss low and weatherproof connectors</td>
+</tr>
+</tbody>
+</table>
+<p>Outdoor repeaters should be tested at ground level first, then tested again after final mounting. Record the antenna and cable used in the deployment notes.</p>
+<h2 id="installation-tips">Installation Tips<a class="headerlink" href="#installation-tips" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Keep the antenna clear of metal siding, gutters, and solar panel frames.</li>
+<li>Do not rely on a connector adapter stack outdoors.</li>
+<li>Weatherproof outdoor coax connections.</li>
+<li>Avoid sharp coax bends and strain at the board connector.</li>
+<li>Re-check range after heavy rain, snow, or enclosure changes.</li>
+</ul>
+<h2 id="diy-antennas">DIY Antennas<a class="headerlink" href="#diy-antennas" title="Permanent link">&para;</a></h2>
+<p>DIY antennas can work well, but they should be measured or compared against a known-good antenna. A visually neat antenna can still be off-frequency. For shared community repeaters, prefer tested commercial antennas unless someone can validate the build.</p>
 
 
 

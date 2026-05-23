@@ -607,6 +607,90 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="../../analyzer/broker-reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Broker Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../analyzer/iata-codes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IATA Region Codes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../analyzer/remoteterm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RemoteTerm
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
     
     
     
@@ -616,10 +700,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_7" >
         
           
-          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_3_7" id="__nav_3_7_label" tabindex="0">
             
   
   
@@ -637,8 +721,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3_4">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_7">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1382,33 +1466,49 @@
 
 <h1 id="glossary">Glossary<a class="headerlink" href="#glossary" title="Permanent link">&para;</a></h1>
 <p>A quick reference for common terms used across the MeshCore community.</p>
-<div class="admonition info">
-<p class="admonition-title">This page is a work in progress</p>
-<p>Content coming soon. Want to help? See <a href="../../contributing/">Contributing</a>.</p>
-</div>
-<!-- TODO: Fill in definitions, add more terms as needed -->
-
 <dl>
+<dt><strong>Advert</strong></dt>
+<dd>A MeshCore announcement packet that helps nearby nodes learn about a device and route.</dd>
+<dt><strong>Bandwidth</strong></dt>
+<dd>A LoRa radio setting. MeshCore Canada baseline raw settings use <code>62.5 kHz</code>.</dd>
+<dt><strong>Broker</strong></dt>
+<dd>An MQTT server. MeshCore.ca uses <code>mqtt1.meshcore.ca</code> and <code>mqtt2.meshcore.ca</code> for redundant observer publishing.</dd>
+<dt><strong>Coding Rate (CR)</strong></dt>
+<dd>A LoRa error-correction setting. MeshCore Canada baseline raw settings use <code>CR5</code>.</dd>
 <dt><strong>Companion</strong></dt>
-<dd><!-- TODO: A portable MeshCore device used to send and receive messages --></dd>
+<dd>A portable MeshCore device used with a phone, tablet, desktop app, web app, or serial client to send and receive messages.</dd>
+<dt><strong>CoreScope</strong></dt>
+<dd>The MeshCore.ca live tools for checking observers, packet flow, and map data.</dd>
+<dt><strong>IATA Code</strong></dt>
+<dd>A real 3-letter airport code used by MeshCore.ca observers to tag their region, such as <code>YOW</code>, <code>YYZ</code>, or <code>YVR</code>.</dd>
 <dt><strong>ISM Band</strong></dt>
-<dd><!-- TODO: Industrial, Scientific, and Medical radio band, license-free frequencies --></dd>
+<dd>Industrial, Scientific, and Medical radio spectrum used by many low-power devices. You are responsible for legal operation in your location.</dd>
+<dt><strong>JWT</strong></dt>
+<dd>JSON Web Token. MeshCore.ca MQTT paths use token authentication instead of a static username/password.</dd>
 <dt><strong>LoRa</strong></dt>
-<dd><!-- TODO: Long Range, the radio modulation technology MeshCore uses --></dd>
+<dd>Long Range radio modulation used by MeshCore devices.</dd>
 <dt><strong>Mesh Network</strong></dt>
-<dd><!-- TODO: A network where devices relay messages for each other --></dd>
+<dd>A network where devices can relay traffic for each other instead of depending on one central access point.</dd>
 <dt><strong>MQTT</strong></dt>
-<dd><!-- TODO: Message Queuing Telemetry Transport, a lightweight messaging protocol --></dd>
+<dd>A lightweight publish/subscribe messaging protocol used by MeshCore.ca observers to publish packet telemetry.</dd>
 <dt><strong>Node</strong></dt>
-<dd><!-- TODO: Any device on the mesh network --></dd>
+<dd>Any MeshCore device on the network.</dd>
+<dt><strong>Observer</strong></dt>
+<dd>A MeshCore radio or host service that publishes mesh packet telemetry to MQTT for live tools.</dd>
+<dt><strong>Path Hash Mode</strong></dt>
+<dd>The MeshCore setting that controls advert path identifier size. MeshCore Canada recommends <strong>3-byte</strong>, which is <code>set path.hash.mode 2</code> in the CLI.</dd>
+<dt><strong>Preset</strong></dt>
+<dd>A named group of radio settings. MeshCore Canada generally uses <code>USA/Canada (Recommended)</code>.</dd>
 <dt><strong>Repeater</strong></dt>
-<dd><!-- TODO: A fixed device that relays messages to extend mesh coverage --></dd>
+<dd>A fixed device that relays packets to extend mesh coverage.</dd>
 <dt><strong>Room Server</strong></dt>
-<dd><!-- TODO: A MeshCore node that hosts group chat rooms --></dd>
+<dd>A MeshCore node that hosts group chat rooms. It may also repeat or observe traffic depending on its configuration.</dd>
 <dt><strong>SNR</strong></dt>
-<dd><!-- TODO: Signal-to-Noise Ratio, a measure of signal quality --></dd>
+<dd>Signal-to-noise ratio, a measure of received signal quality.</dd>
 <dt><strong>Spreading Factor (SF)</strong></dt>
-<dd><!-- TODO: LoRa parameter that affects range vs speed tradeoff --></dd>
+<dd>A LoRa setting that affects range, airtime, and data rate. MeshCore Canada baseline raw settings use <code>SF7</code>.</dd>
+<dt><strong>WebSockets</strong></dt>
+<dd>A transport used by the MeshCore.ca MQTT brokers on port <code>443</code>, which is often easier to pass through normal internet connections.</dd>
 </dl>
 
 

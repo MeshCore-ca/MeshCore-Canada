@@ -607,6 +607,90 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="../../analyzer/broker-reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Broker Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../analyzer/iata-codes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IATA Region Codes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../analyzer/remoteterm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RemoteTerm
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
     
     
     
@@ -616,10 +700,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_7" >
         
           
-          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_3_7" id="__nav_3_7_label" tabindex="0">
             
   
   
@@ -637,8 +721,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3_4">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_7">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -1325,10 +1409,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#step-4-find-or-start-a-community" class="md-nav__link">
+  <a href="#step-4-configure-your-role" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 4: Find or Start a Community
+        Step 4: Configure Your Role
       
     </span>
   </a>
@@ -1336,10 +1420,32 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#step-5-get-on-the-air" class="md-nav__link">
+  <a href="#step-5-find-or-start-a-community" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 5: Get on the Air
+        Step 5: Find or Start a Community
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-6-get-on-the-air" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 6: Get on the Air
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#first-success-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        First Success Checklist
       
     </span>
   </a>
@@ -1527,10 +1633,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#step-4-find-or-start-a-community" class="md-nav__link">
+  <a href="#step-4-configure-your-role" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 4: Find or Start a Community
+        Step 4: Configure Your Role
       
     </span>
   </a>
@@ -1538,10 +1644,32 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#step-5-get-on-the-air" class="md-nav__link">
+  <a href="#step-5-find-or-start-a-community" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 5: Get on the Air
+        Step 5: Find or Start a Community
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-6-get-on-the-air" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 6: Get on the Air
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#first-success-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        First Success Checklist
       
     </span>
   </a>
@@ -1630,6 +1758,7 @@
 <li><strong>Room server</strong>: a fixed node that hosts rooms and can also observe mesh traffic.</li>
 <li><strong>Observer</strong>: a device or host service that forwards packets to the MeshCore.ca MQTT analyzer.</li>
 </ul>
+<p>Start with <a href="../../meshcore/companions/">Recommended Companions</a> if you want a personal device, or <a href="../../meshcore/repeaters/">Recommended Repeaters</a> if you are building a fixed node.</p>
 <h2 id="step-3-flash-the-firmware">Step 3: Flash the Firmware<a class="headerlink" href="#step-3-flash-the-firmware" title="Permanent link">&para;</a></h2>
 <p>Flash firmware for the role you need, then apply the MeshCore Canada network settings before judging whether the device works.</p>
 <p>For repeaters and room servers using 2026-05-21 or newer MeshCore.ca direct MQTT firmware, include this first-run CLI setting:</p>
@@ -1640,10 +1769,46 @@
 <div class="highlight"><pre><span></span><code>set path.hash.mode 2
 </code></pre></div>
 <p>After changing radio parameters, reboot the device.</p>
-<h2 id="step-4-find-or-start-a-community">Step 4: Find or Start a Community<a class="headerlink" href="#step-4-find-or-start-a-community" title="Permanent link">&para;</a></h2>
+<h2 id="step-4-configure-your-role">Step 4: Configure Your Role<a class="headerlink" href="#step-4-configure-your-role" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>Next setup step</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Companion</td>
+<td>Pair it with your app, send an advert, and ask a nearby user to confirm they can see you</td>
+</tr>
+<tr>
+<td>Repeater</td>
+<td>Pick a clear node name, test from the ground, then install it where it has good antenna visibility</td>
+</tr>
+<tr>
+<td>Room server</td>
+<td>Configure rooms, verify it still uses the local mesh settings, and document who maintains it</td>
+</tr>
+<tr>
+<td>Observer</td>
+<td>Follow <a href="../../analyzer/intro/">Analyzer &amp; MQTT</a> and verify it appears in CoreScope</td>
+</tr>
+</tbody>
+</table>
+<h2 id="step-5-find-or-start-a-community">Step 5: Find or Start a Community<a class="headerlink" href="#step-5-find-or-start-a-community" title="Permanent link">&para;</a></h2>
 <p>Browse the <a href="../../provinces/">Mesh Directory</a> and check your province or nearby region. If a local community documents a different preset, follow the local community setting for that mesh.</p>
-<h2 id="step-5-get-on-the-air">Step 5: Get on the Air<a class="headerlink" href="#step-5-get-on-the-air" title="Permanent link">&para;</a></h2>
+<p>If your region is missing, use <a href="../../contributing/">Contributing</a> to request a new listing with the community name, region, status, contacts, and radio settings.</p>
+<h2 id="step-6-get-on-the-air">Step 6: Get on the Air<a class="headerlink" href="#step-6-get-on-the-air" title="Permanent link">&para;</a></h2>
 <p>Send an advert after configuration so nearby nodes learn your identity and route. If you do not see other users, re-check the radio preset first, then confirm the path hash mode is set to 3-byte.</p>
+<h2 id="first-success-checklist">First Success Checklist<a class="headerlink" href="#first-success-checklist" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Your device shows the <strong>USA/Canada (Recommended)</strong> preset, or the raw values match <code>910.525 MHz / 62.5 kHz / SF7 / CR5</code>.</li>
+<li>Path hash mode is <strong>3-byte</strong>.</li>
+<li>The device was rebooted after radio changes.</li>
+<li>A nearby community member or second known-good device can see your advert.</li>
+<li>If this is an observer, <a href="https://live.meshcore.ca/#/observers">CoreScope</a> shows the expected node name and IATA region.</li>
+</ul>
 <h2 id="need-help">Need Help?<a class="headerlink" href="#need-help" title="Permanent link">&para;</a></h2>
 <p>Open an issue or update request through <a href="../../contributing/">Contributing</a>, or ask in your local MeshCore Canada community channel.</p>
 

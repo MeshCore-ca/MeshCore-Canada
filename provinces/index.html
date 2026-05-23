@@ -607,6 +607,90 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="../analyzer/broker-reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Broker Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../analyzer/iata-codes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IATA Region Codes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../analyzer/remoteterm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RemoteTerm
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
     
     
     
@@ -616,10 +700,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_7" >
         
           
-          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_3_7" id="__nav_3_7_label" tabindex="0">
             
   
   
@@ -637,8 +721,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3_4">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_7">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -891,10 +975,32 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#national-baseline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        National Baseline
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#provinces-and-territories" class="md-nav__link">
     <span class="md-ellipsis">
       
         Provinces and Territories
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#community-entry-format" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Community Entry Format
       
     </span>
   </a>
@@ -1428,10 +1534,32 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#national-baseline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        National Baseline
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#provinces-and-territories" class="md-nav__link">
     <span class="md-ellipsis">
       
         Provinces and Territories
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#community-entry-format" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Community Entry Format
       
     </span>
   </a>
@@ -1475,20 +1603,125 @@
 <p class="admonition-title">Start local</p>
 <p>MeshCore Canada generally uses the USA/Canada radio preset and 3-byte path hashes, but local pages are the source of truth when a community documents a different preset or operating practice.</p>
 </div>
+<h2 id="national-baseline">National Baseline<a class="headerlink" href="#national-baseline" title="Permanent link">&para;</a></h2>
+<p>Use these defaults unless a local community page publishes a different setting:</p>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Radio preset</td>
+<td><code>USA/Canada (Recommended)</code></td>
+</tr>
+<tr>
+<td>Raw radio values</td>
+<td><code>910.525 MHz / 62.5 kHz / SF7 / CR5</code></td>
+</tr>
+<tr>
+<td>Path hash mode</td>
+<td><code>3-byte</code></td>
+</tr>
+<tr>
+<td>CLI path setting</td>
+<td><code>set path.hash.mode 2</code></td>
+</tr>
+</tbody>
+</table>
 <h2 id="provinces-and-territories">Provinces and Territories<a class="headerlink" href="#provinces-and-territories" title="Permanent link">&para;</a></h2>
-<ul>
-<li><a href="british-columbia/">British Columbia</a></li>
-<li><a href="alberta/">Alberta</a></li>
-<li><a href="saskatchewan/">Saskatchewan</a></li>
-<li><a href="manitoba/">Manitoba</a></li>
-<li><a href="ontario/">Ontario</a></li>
-<li><a href="quebec/">Quebec</a></li>
-<li><a href="new-brunswick/">New Brunswick</a></li>
-<li><a href="nova-scotia/">Nova Scotia</a></li>
-<li><a href="prince-edward-island/">Prince Edward Island</a></li>
-<li><a href="newfoundland-and-labrador/">Newfoundland and Labrador</a></li>
-<li><a href="territories/">Territories (YT / NT / NU)</a></li>
-</ul>
+<table>
+<thead>
+<tr>
+<th>Region</th>
+<th>Directory status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="british-columbia/">British Columbia</a></td>
+<td>Active listing</td>
+</tr>
+<tr>
+<td><a href="alberta/">Alberta</a></td>
+<td>Active listings</td>
+</tr>
+<tr>
+<td><a href="saskatchewan/">Saskatchewan</a></td>
+<td>Needs community listing</td>
+</tr>
+<tr>
+<td><a href="manitoba/">Manitoba</a></td>
+<td>Needs community listing</td>
+</tr>
+<tr>
+<td><a href="ontario/">Ontario</a></td>
+<td>Active listings</td>
+</tr>
+<tr>
+<td><a href="quebec/">Quebec</a></td>
+<td>Active listings</td>
+</tr>
+<tr>
+<td><a href="new-brunswick/">New Brunswick</a></td>
+<td>Forming listing</td>
+</tr>
+<tr>
+<td><a href="nova-scotia/">Nova Scotia</a></td>
+<td>Active listing</td>
+</tr>
+<tr>
+<td><a href="prince-edward-island/">Prince Edward Island</a></td>
+<td>Needs community listing</td>
+</tr>
+<tr>
+<td><a href="newfoundland-and-labrador/">Newfoundland and Labrador</a></td>
+<td>Needs community listing</td>
+</tr>
+<tr>
+<td><a href="territories/">Territories (YT / NT / NU)</a></td>
+<td>Needs community listing</td>
+</tr>
+</tbody>
+</table>
+<h2 id="community-entry-format">Community Entry Format<a class="headerlink" href="#community-entry-format" title="Permanent link">&para;</a></h2>
+<p>Community pages should use the same basic fields so newcomers can scan quickly:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>What to include</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Name</td>
+<td>Community or mesh name</td>
+</tr>
+<tr>
+<td>Region</td>
+<td>City, area, province, or coverage region</td>
+</tr>
+<tr>
+<td>Status</td>
+<td>Active, forming, testing, or needs update</td>
+</tr>
+<tr>
+<td>Radio settings</td>
+<td>Preset plus raw values when known</td>
+</tr>
+<tr>
+<td>Path hash mode</td>
+<td>Usually 3-byte for MeshCore Canada</td>
+</tr>
+<tr>
+<td>Contact</td>
+<td>Discord, Telegram, website, issue link, or maintainer</td>
+</tr>
+</tbody>
+</table>
 <h2 id="missing-or-outdated-local-information">Missing or outdated local information?<a class="headerlink" href="#missing-or-outdated-local-information" title="Permanent link">&para;</a></h2>
 <p>Open an update request through <a href="../contributing/">Contributing</a> so the directory can stay current as Canadian MeshCore communities grow.</p>
 
