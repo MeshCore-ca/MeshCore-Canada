@@ -37,7 +37,7 @@ If you know of a community that is missing or needs an update, open an update re
 | Radio preset | `USA/Canada (Recommended)` |
 | Raw radio values | `910.525 MHz / 62.5 kHz / SF7 / CR5` |
 | Path hash mode | `3-byte` |
-| Discord | <https://discord.com/channels/1497584274520412223> |
+| Discord | <https://discord.gg/UhGjTF2MfA> |
 
 ### Réseau Libre
 
