@@ -4,6 +4,8 @@ Each observer identifies its region with a real 3-letter IATA airport code. Use 
 
 The firmware and helper scripts are not limited to the list below. If your nearest real IATA code is missing here, you can still use it and the public broker will accept it as long as it is a valid airport code. The live site will add observed regions to the picker automatically, but codes missing from the friendly-name list may appear as the bare code until we add a label.
 
+The live region picker is traffic-driven. If a valid code such as `YTR` is absent from the picker, that usually means no current observer is publishing packet or status traffic under that code; it does not mean the broker rejects the code.
+
 Do not use placeholders or made-up region names such as `XXX` or `HOME`. Do not use `CAN` as shorthand for Canada; it is a real airport code for Guangzhou and will tag your observer to the wrong region.
 
 Host-side helper scripts show this same quick list interactively when you omit `--iata`.

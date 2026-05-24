@@ -91,10 +91,13 @@ If the brokers connect but packets never appear, check the packet payload settin
 
 If a code such as `YTR` is missing from a picker, update the MeshCore Home Assistant integration and type the code into **Broker IATA Code**. Using a nearby code such as `YGK` can make data visible, but it tags the observer to the wrong region.
 
+If the code is missing from the CoreScope/live region picker, keep using the real IATA code anyway. The picker reflects currently observed traffic; it does not define which valid codes the broker accepts.
+
 | HA symptom | Check |
 |------------|-------|
 | Broker connected, no packets | **Packets (Lets Mesh)** enabled or **Payload Mode** = `packet` |
 | Cannot enter a real IATA code | Update MeshCore-HA; current versions use free text |
+| Real code missing from live picker | Wait for current observer traffic under that code; do not switch to a neighboring region |
 | Backup broker fails | `Token Audience` must match the broker host (`mqtt2.meshcore.ca`) |
 | Observer appears under the wrong city | Both broker entries use the same nearest real IATA code |
 

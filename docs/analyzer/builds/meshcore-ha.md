@@ -69,12 +69,15 @@ Current MeshCore-HA versions use a free-text **Broker IATA Code** field, so you 
 !!! tip
     You can find common Canadian IATA codes on the [IATA Region Codes](../iata-codes.md) page. If your nearest real airport code is missing from that quick list, you can still use it.
 
+    The CoreScope/live region picker is based on currently observed traffic. A valid code can be missing from that picker until an observer publishes under it.
+
 ## Common HA Symptoms
 
 | Symptom | Most likely fix |
 |---------|-----------------|
 | Brokers show connected but no packets appear | Enable **Packets (Lets Mesh)** or set **Payload Mode** to `packet` |
 | `YTR` or another code is not selectable | Update MeshCore-HA, then type the code in **Broker IATA Code** |
+| Code is valid but absent from the live region picker | Keep the real code; the picker appears after current traffic is observed |
 | One broker works and the backup does not | Check the second broker's **Token Audience** is `mqtt2.meshcore.ca` |
 | Packets appear under the wrong city | Set both broker IATA fields to the nearest real airport code |
 
