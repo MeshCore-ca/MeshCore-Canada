@@ -1,0 +1,192 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 597 540" width="597" height="540">
+	<style>
+		tspan { white-space:pre } 
+		.t0 { font-size: 15px;fill: #2c2c2a;font-family: "sans" } 
+		.s1 { fill: #faeeda;stroke: #854f0b;stroke-width: .5 } 
+		.t2 { font-size: 14px;fill: #633806;font-family: "sans" } 
+		.t3 { font-size: 12px;fill: #854f0b;font-family: "sans" } 
+		.s4 { fill: #eeedfe;stroke: #534ab7;stroke-width: .5;stroke-dasharray: 6,3 } 
+		.t5 { font-size: 14px;fill: #3c3489;font-family: "sans" } 
+		.s6 { fill: #cecbf6;stroke: #534ab7;stroke-width: .5 } 
+		.t7 { font-size: 12px;fill: #3c3489;font-family: "sans" } 
+		.s8 { fill: #eaf3de;stroke: #3b6d11;stroke-width: .5 } 
+		.t9 { font-size: 14px;fill: #27500a;font-family: "sans" } 
+		.t10 { font-size: 12px;fill: #3b6d11;font-family: "sans" } 
+		.s11 { fill: #e6f1fb;stroke: #185fa5;stroke-width: .5 } 
+		.t12 { font-size: 14px;fill: #0c447c;font-family: "sans" } 
+		.s13 { fill: #e1f5ee;stroke: #0f6e56;stroke-width: .5 } 
+		.t14 { font-size: 14px;fill: #085041;font-family: "sans" } 
+		.t15 { font-size: 12px;fill: #0f6e56;font-family: "sans" } 
+		.s16 { fill: #faece7;stroke: #993c1d;stroke-width: .5 } 
+		.t17 { font-size: 14px;fill: #712b13;font-family: "sans" } 
+		.t18 { font-size: 12px;fill: #993c1d;font-family: "sans" } 
+		.s19 { fill: #f1efe8;stroke: #5f5e5a;stroke-width: .5 } 
+		.t20 { font-size: 14px;fill: #444441;font-family: "sans" } 
+		.s21 { fill: #000000;stroke: #d85a30;stroke-width: 1.5 } 
+		.s22 { fill: #000000;stroke: #1d9e75;stroke-width: 1.5 } 
+		.s23 { fill: none;stroke: #d85a30;stroke-width: 1.5 } 
+		.t24 { font-size: 11px;fill: #d85a30;font-family: "sans" } 
+		.s25 { fill: none;stroke: #1d9e75;stroke-width: 1.5 } 
+		.t26 { font-size: 11px;fill: #1d9e75;font-family: "sans" } 
+		.s27 { opacity: .6;fill: none;stroke: #d85a30;stroke-dasharray: 4,3 } 
+		.s28 { opacity: .6;fill: none;stroke: #1d9e75;stroke-dasharray: 4,3 } 
+		.s29 { fill: none;stroke: #5f5e5a;stroke-width: 1.5 } 
+		.t30 { font-size: 12px;fill: #5f5e5a;font-family: "sans" } 
+		.s31 { fill: none;stroke: #7f77dd;stroke-width: 1.5;stroke-dasharray: 5,3 } 
+		.t32 { font-size: 12px;fill: #7f77dd;font-family: "sans" } 
+		.t33 { font-size: 11px;fill: #7f77dd;font-family: "sans" } 
+		.s34 { fill: #000000;stroke: #5f5e5a;stroke-width: 1.5 } 
+		.t35 { font-size: 11px;fill: #5f5e5a;font-family: "sans" } 
+		.s36 { opacity: .6;fill: #000000;stroke: #d85a30;stroke-dasharray: 4,3 } 
+		.s37 { fill: #000000;stroke: #7f77dd;stroke-width: 1.5;stroke-dasharray: 5,3 } 
+	</style>
+	<text id="Wiring diagram (with optional INA3221)" transform="translate(295,26)">
+		<tspan x="-148.9" y="0" class="t0">Wiring diagram (with optional INA3221)
+</tspan>
+	</text>
+	<path fill-rule="evenodd" class="s1" d="m13 76h104c4.42 0 8 3.58 8 8v34c0 4.42-3.58 8-8 8h-104c-4.42 0-8-3.58-8-8v-34c0-4.42 3.58-8 8-8z"/>
+	<text id="Solar panel" transform="translate(65,95)">
+		<tspan x="-39.5" y="0" class="t2">Solar panel
+</tspan>
+	</text>
+	<text id="10W, 18V" transform="translate(65,113)">
+		<tspan x="-29.1" y="0" class="t3">10W, 18V
+</tspan>
+	</text>
+	<path fill-rule="evenodd" class="s4" d="m177 44h236c6.63 0 12 5.37 12 12v86c0 6.63-5.37 12-12 12h-236c-6.63 0-12-5.37-12-12v-86c0-6.63 5.37-12 12-12z"/>
+	<text id="INA3221 (optional)" transform="translate(295,66)">
+		<tspan x="-66" y="0" class="t5">INA3221 (optional)
+</tspan>
+	</text>
+	<path fill-rule="evenodd" class="s6" d="m183 80h100c3.31 0 6 2.69 6 6v28c0 3.31-2.69 6-6 6h-100c-3.31 0-6-2.69-6-6v-28c0-3.31 2.69-6 6-6z"/>
+	<text id="CH3: Solar +" transform="translate(233,100)">
+		<tspan x="-38.7" y="0" class="t7">CH3: Solar +
+</tspan>
+	</text>
+	<path fill-rule="evenodd" class="s6" d="m307 80h100c3.31 0 6 2.69 6 6v28c0 3.31-2.69 6-6 6h-100c-3.31 0-6-2.69-6-6v-28c0-3.31 2.69-6 6-6z"/>
+	<text id="CH1: Battery +" transform="translate(357,100)">
+		<tspan x="-45.6" y="0" class="t7">CH1: Battery +
+</tspan>
+	</text>
+	<path fill-rule="evenodd" class="s8" d="m483 76h104c4.42 0 8 3.58 8 8v34c0 4.42-3.58 8-8 8h-104c-4.42 0-8-3.58-8-8v-34c0-4.42 3.58-8 8-8z"/>
+	<text id="Battery" transform="translate(535,95)">
+		<tspan x="-25.9" y="0" class="t9">Battery
+</tspan>
+	</text>
+	<text id="3P1S + PCM" transform="translate(535,113)">
+		<tspan x="-36.9" y="0" class="t10">3P1S + PCM
+</tspan>
+	</text>
+	<path fill-rule="evenodd" class="s11" d="m203 228h184c4.42 0 8 3.58 8 8v54c0 4.42-3.58 8-8 8h-184c-4.42 0-8-3.58-8-8v-54c0-4.42 3.58-8 8-8z"/>
+	<text id="Waveshare Solar" transform="translate(295,252)">
+		<tspan x="-58.7" y="0" class="t12">Waveshare Solar
+</tspan>
+	</text>
+	<text id="Power Manager" transform="translate(295,270)">
+		<tspan x="-54.1" y="0" class="t12">Power Manager
+</tspan>
+	</text>
+	<path fill-rule="evenodd" class="s13" d="m163 370h144c4.42 0 8 3.58 8 8v38c0 4.42-3.58 8-8 8h-144c-4.42 0-8-3.58-8-8v-38c0-4.42 3.58-8 8-8z"/>
+	<text id="IKOKA Stick" transform="translate(235,390)">
+		<tspan x="-40.3" y="0" class="t14">IKOKA Stick
+</tspan>
+	</text>
+	<text id="E22P LoRa + XIAO" transform="translate(235,408)">
+		<tspan x="-55" y="0" class="t15">E22P LoRa + XIAO
+</tspan>
+	</text>
+	<path fill-rule="evenodd" class="s16" d="m393 370h114c4.42 0 8 3.58 8 8v38c0 4.42-3.58 8-8 8h-114c-4.42 0-8-3.58-8-8v-38c0-4.42 3.58-8 8-8z"/>
+	<text id="Bandpass filter" transform="translate(450,390)">
+		<tspan x="-52.5" y="0" class="t17">Bandpass filter
+</tspan>
+	</text>
+	<text id="910.525 MHz" transform="translate(450,408)">
+		<tspan x="-39.6" y="0" class="t18">910.525 MHz
+</tspan>
+	</text>
+	<path fill-rule="evenodd" class="s19" d="m393 474h114c4.42 0 8 3.58 8 8v24c0 4.42-3.58 8-8 8h-114c-4.42 0-8-3.58-8-8v-24c0-4.42 3.58-8 8-8z"/>
+	<text id="Antenna" transform="translate(450,494)">
+		<tspan x="-29.4" y="0" class="t20">Antenna
+</tspan>
+	</text>
+	<path fill-rule="evenodd" class="s21" d="m125 100h50"/>
+	<path fill-rule="evenodd" class="s22" d="m475 100h-60"/>
+	<path class="s23" d="m233 120v46h18v60"/>
+	<text id="Solar +" transform="translate(235,200)">
+		<tspan x="0" y="0" class="t24">Solar +
+</tspan>
+	</text>
+	<path class="s25" d="m357 120v46h-18v60"/>
+	<text id="Batt +" transform="translate(347,200)">
+		<tspan x="0" y="0" class="t26">Batt +
+</tspan>
+	</text>
+	<path class="s27" d="m65 126v56h146v44"/>
+	<text id="Solar -" transform="translate(135,176)" style="opacity: .8">
+		<tspan x="0" y="0" class="t24">Solar -
+</tspan>
+	</text>
+	<path class="s28" d="m535 126v56h-156v44"/>
+	<text id="Batt -" transform="translate(421,176)" style="opacity: .8">
+		<tspan x="0" y="0" class="t26">Batt -
+</tspan>
+	</text>
+	<path class="s29" d="m295 298v32h-60v38"/>
+	<text id="USB" transform="translate(273,344)">
+		<tspan x="-24.6" y="0" class="t30">USB
+</tspan>
+	</text>
+	<path class="s31" d="m155 397h-12v-257h20"/>
+	<text id="I2C" transform="translate(137,240)">
+		<tspan x="-19.6" y="0" class="t32">I2C
+</tspan>
+	</text>
+	<text id="VCC, GND" transform="translate(137,256)">
+		<tspan x="-55.1" y="0" class="t33">VCC, GND
+</tspan>
+	</text>
+	<text id="SDA, SCL" transform="translate(137,270)">
+		<tspan x="-50.6" y="0" class="t33">SDA, SCL
+</tspan>
+	</text>
+	<path fill-rule="evenodd" class="s34" d="m315 397h68"/>
+	<text id="SMA" transform="translate(349,389)">
+		<tspan x="0" y="0" class="t30">SMA
+</tspan>
+	</text>
+	<path fill-rule="evenodd" class="s34" d="m450 424v48"/>
+	<text id="N-Type" transform="translate(466,452)">
+		<tspan x="0" y="0" class="t30">N-Type
+</tspan>
+	</text>
+	<path fill-rule="evenodd" class="s21" d="m5 490h22"/>
+	<text id="Positive (through INA)" transform="translate(33,494)">
+		<tspan x="0" y="0" class="t35">Positive (through INA)
+</tspan>
+	</text>
+	<path fill-rule="evenodd" class="s36" d="m5 506h22"/>
+	<text id="Negative (direct to Waveshare)" transform="translate(33,510)">
+		<tspan x="0" y="0" class="t35">Negative (direct to Waveshare)
+</tspan>
+	</text>
+	<path fill-rule="evenodd" class="s37" d="m5 522h22"/>
+	<text id="I2C data bus" transform="translate(33,526)">
+		<tspan x="0" y="0" class="t35">I2C data bus
+</tspan>
+	</text>
+	<path fill-rule="evenodd" class="s34" d="m255 490h22"/>
+	<text id="RF / USB" transform="translate(283,494)">
+		<tspan x="0" y="0" class="t35">RF / USB
+</tspan>
+	</text>
+	<path fill-rule="evenodd" class="s1" d="m258 504h6c1.66 0 3 1.34 3 3v6c0 1.66-1.34 3-3 3h-6c-1.66 0-3-1.34-3-3v-6c0-1.66 1.34-3 3-3z"/>
+	<text id="Solar path" transform="translate(273,514)">
+		<tspan x="0" y="0" class="t24">Solar path
+</tspan>
+	</text>
+	<path fill-rule="evenodd" class="s8" d="m258 520h6c1.66 0 3 1.34 3 3v6c0 1.66-1.34 3-3 3h-6c-1.66 0-3-1.34-3-3v-6c0-1.66 1.34-3 3-3z"/>
+	<text id="Battery path" transform="translate(273,530)">
+		<tspan x="0" y="0" class="t26">Battery path
+</tspan>
+	</text>
+</svg>

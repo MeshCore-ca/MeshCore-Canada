@@ -49,27 +49,83 @@
          <lastmod>2026-05-24</lastmod>
     </url>
     <url>
-         <loc>https://meshcore.ca/meshcore/antennas/</loc>
+         <loc>https://meshcore.ca/hardware/overview/</loc>
          <lastmod>2026-05-24</lastmod>
     </url>
     <url>
-         <loc>https://meshcore.ca/meshcore/companions/</loc>
+         <loc>https://meshcore.ca/hardware/recommended-antenna/</loc>
          <lastmod>2026-05-24</lastmod>
     </url>
     <url>
-         <loc>https://meshcore.ca/meshcore/faq/</loc>
+         <loc>https://meshcore.ca/hardware/recommended-companions/</loc>
          <lastmod>2026-05-24</lastmod>
     </url>
     <url>
-         <loc>https://meshcore.ca/meshcore/intro/</loc>
+         <loc>https://meshcore.ca/hardware/recommended-repeaters/</loc>
          <lastmod>2026-05-24</lastmod>
     </url>
     <url>
-         <loc>https://meshcore.ca/meshcore/repeater-builds/</loc>
+         <loc>https://meshcore.ca/hardware/repeater-mounting-options/</loc>
          <lastmod>2026-05-24</lastmod>
     </url>
     <url>
-         <loc>https://meshcore.ca/meshcore/repeaters/</loc>
+         <loc>https://meshcore.ca/hardware/repeater-solar-1w-diy-build/</loc>
+         <lastmod>2026-05-24</lastmod>
+    </url>
+    <url>
+         <loc>https://meshcore.ca/hardware/repeater-solar-300mw-diy-build/</loc>
+         <lastmod>2026-05-24</lastmod>
+    </url>
+    <url>
+         <loc>https://meshcore.ca/hardware/repeater-solar-batteries/</loc>
+         <lastmod>2026-05-24</lastmod>
+    </url>
+    <url>
+         <loc>https://meshcore.ca/hardware/wire-connector-types/</loc>
+         <lastmod>2026-05-24</lastmod>
+    </url>
+    <url>
+         <loc>https://meshcore.ca/meshcore/firmware-heltec-v3-wifi/</loc>
+         <lastmod>2026-05-24</lastmod>
+    </url>
+    <url>
+         <loc>https://meshcore.ca/meshcore/firmware-rak-custom-display/</loc>
+         <lastmod>2026-05-24</lastmod>
+    </url>
+    <url>
+         <loc>https://meshcore.ca/meshcore/flash-companion/</loc>
+         <lastmod>2026-05-24</lastmod>
+    </url>
+    <url>
+         <loc>https://meshcore.ca/meshcore/flash-repeater/</loc>
+         <lastmod>2026-05-24</lastmod>
+    </url>
+    <url>
+         <loc>https://meshcore.ca/meshcore/flash-room-server/</loc>
+         <lastmod>2026-05-24</lastmod>
+    </url>
+    <url>
+         <loc>https://meshcore.ca/meshcore/general-faq/</loc>
+         <lastmod>2026-05-24</lastmod>
+    </url>
+    <url>
+         <loc>https://meshcore.ca/meshcore/general-howto/</loc>
+         <lastmod>2026-05-24</lastmod>
+    </url>
+    <url>
+         <loc>https://meshcore.ca/meshcore/general-meshcore-roles/</loc>
+         <lastmod>2026-05-24</lastmod>
+    </url>
+    <url>
+         <loc>https://meshcore.ca/meshcore/general-overview/</loc>
+         <lastmod>2026-05-24</lastmod>
+    </url>
+    <url>
+         <loc>https://meshcore.ca/meshcore/generate-repeater-id/</loc>
+         <lastmod>2026-05-24</lastmod>
+    </url>
+    <url>
+         <loc>https://meshcore.ca/meshcore/update-repeater-ota/</loc>
          <lastmod>2026-05-24</lastmod>
     </url>
     <url>
