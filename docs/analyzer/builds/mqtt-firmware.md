@@ -5,6 +5,12 @@ Flash observer firmware directly onto a supported board. The device connects to 
 !!! info "Pre-configured firmware"
     The 2026-05-21 and newer images are pre-compiled by **n30nex** and come pre-configured with the MeshCore.ca broker pair (`mqtt1.meshcore.ca` and `mqtt2.meshcore.ca`) in slots 1 and 2, plus the USA/Canada radio defaults (`910.525 MHz / 62.5 kHz / SF7 / CR5`). After flashing, run the CLI setup block below to set WiFi, IATA, node name, path hash mode, and packet publishing.
 
+!!! note "Firmware attribution"
+    These images are community builds based on the open source [MeshCore firmware](https://github.com/meshcore-dev/MeshCore), released under the MIT License with copyright held by Scott Powell / Ripple Radios.
+    The direct MQTT observer support is built from Adam Gessaman's [`mqtt-bridge-implementation-flex`](https://github.com/agessaman/MeshCore/tree/mqtt-bridge-implementation-flex) branch.
+    The 2026-05-21 MeshCore.ca images were compiled and packaged by **n30nex** with MeshCore.ca broker defaults.
+    MeshCore.ca is an independent community site and is not affiliated with, endorsed by, or officially connected to MeshCore or MeshOS.
+
 ## Supported Boards
 
 All boards support both Repeater and Room Server roles.
