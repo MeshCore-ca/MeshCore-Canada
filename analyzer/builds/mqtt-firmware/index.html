@@ -1807,6 +1807,13 @@
 <p class="admonition-title">Pre-configured firmware</p>
 <p>The 2026-05-21 and newer images are pre-compiled by <strong>n30nex</strong> and come pre-configured with the MeshCore.ca broker pair (<code>mqtt1.meshcore.ca</code> and <code>mqtt2.meshcore.ca</code>) in slots 1 and 2, plus the USA/Canada radio defaults (<code>910.525 MHz / 62.5 kHz / SF7 / CR5</code>). After flashing, run the CLI setup block below to set WiFi, IATA, node name, path hash mode, and packet publishing.</p>
 </div>
+<div class="admonition note">
+<p class="admonition-title">Firmware attribution</p>
+<p>These images are community builds based on the open source <a href="https://github.com/meshcore-dev/MeshCore">MeshCore firmware</a>, released under the MIT License with copyright held by Scott Powell / Ripple Radios.
+The direct MQTT observer support is built from Adam Gessaman's <a href="https://github.com/agessaman/MeshCore/tree/mqtt-bridge-implementation-flex"><code>mqtt-bridge-implementation-flex</code></a> branch.
+The 2026-05-21 MeshCore.ca images were compiled and packaged by <strong>n30nex</strong> with MeshCore.ca broker defaults.
+MeshCore.ca is an independent community site and is not affiliated with, endorsed by, or officially connected to MeshCore or MeshOS.</p>
+</div>
 <h2 id="supported-boards">Supported Boards<a class="headerlink" href="#supported-boards" title="Permanent link">&para;</a></h2>
 <p>All boards support both Repeater and Room Server roles.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Available (Hardware Verified)</label><label for="__tabbed_1_2">Available (Build Verified)</label><label for="__tabbed_1_3">Coming Soon (Pending Build)</label></div>
