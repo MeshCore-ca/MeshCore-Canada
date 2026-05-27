@@ -2,101 +2,103 @@
 <!doctype html>
 <html lang="en" class="no-js">
   <head>
-    
+
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
-      
-      
-      
+
+
+
         <link rel="canonical" href="https://meshcore.ca/analyzer/builds/mqtt-firmware/">
-      
-      
+
+
         <link rel="prev" href="../meshcore-ha/">
-      
-      
+
+
         <link rel="next" href="../pymc/">
-      
-      
-        
-      
-      
+
+
+
+
+
       <link rel="icon" href="../../../assets/MeshCore-Canada-Favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
-    
-    
-      
+
+
+
         <title>MQTT Firmware - MeshCore Canada</title>
-      
-    
-    
+
+
+
       <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
-      
-        
+
+
         <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
-      
-      
 
 
-    
-    
-      
-    
-    
-      
-        
-        
+
+
+
+
+
+
+
+
+
+
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
         <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
-      
-    
-    
-    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
-    
-      
 
-    
-    
+
+
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+
+
+
+
+
   </head>
-  
-  
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
     <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="blue">
-  
-    
+
+
     <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
-      
-        
-        <a href="#mqtt-firmware-direct-observer" class="md-skip">
+
+
+        <a href="#mqtt-firmware-standalone-observer" class="md-skip">
           Skip to content
         </a>
-      
+
     </div>
     <div data-md-component="announce">
-      
-    </div>
-    
-    
-      
 
-  
+    </div>
+
+
+
+
+
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
     <a href="../../.." title="MeshCore Canada" class="md-header__button md-logo" aria-label="MeshCore Canada" data-md-component="logo">
-      
+
   <img src="../../../assets/MeshCore-Canada-Favicon.png" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
-      
+
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
     </label>
     <div class="md-header__title" data-md-component="header-title">
@@ -108,23 +110,23 @@
         </div>
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
-            
+
               MQTT Firmware
-            
+
           </span>
         </div>
       </div>
     </div>
-    
-      
-    
-    
-    
-    
-      
-      
+
+
+
+
+
+
+
+
         <label class="md-header__button md-icon" for="__search">
-          
+
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
         </label>
         <div class="md-search" data-md-component="search" role="dialog">
@@ -133,19 +135,19 @@
     <form class="md-search__form" name="search">
       <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
       <label class="md-search__icon md-icon" for="__search">
-        
+
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
-        
+
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
       </label>
       <nav class="md-search__options" aria-label="Search">
-        
+
         <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
-          
+
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
         </button>
       </nav>
-      
+
     </form>
     <div class="md-search__output">
       <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
@@ -159,13 +161,13 @@
     </div>
   </div>
 </div>
-      
-    
-    
+
+
+
       <div class="md-header__source">
-        <a href="https://github.com/MrAlders0n/MeshCore-Canada" title="Go to repository" class="md-source" data-md-component="source">
+        <a href="https://github.com/MeshCore-ca/MeshCore-Canada" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
-    
+
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
   </div>
   <div class="md-source__repository">
@@ -173,44 +175,44 @@
   </div>
 </a>
       </div>
-    
+
   </nav>
-  
+
 </header>
-    
+
     <div class="md-container" data-md-component="container">
-      
-      
-        
-          
-        
-      
+
+
+
+
+
+
       <main class="md-main" data-md-component="main">
         <div class="md-main__inner md-grid">
-          
-            
-              
+
+
+
               <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
-                    
+
 
 
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
     <a href="../../.." title="MeshCore Canada" class="md-nav__button md-logo" aria-label="MeshCore Canada" data-md-component="logo">
-      
+
   <img src="../../../assets/MeshCore-Canada-Favicon.png" alt="logo">
 
     </a>
     MeshCore Canada
   </label>
-  
+
     <div class="md-nav__source">
-      <a href="https://github.com/MrAlders0n/MeshCore-Canada" title="Go to repository" class="md-source" data-md-component="source">
+      <a href="https://github.com/MeshCore-ca/MeshCore-Canada" title="Go to repository" class="md-source" data-md-component="source">
   <div class="md-source__icon md-icon">
-    
+
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
   </div>
   <div class="md-source__repository">
@@ -218,1622 +220,2365 @@
   </div>
 </a>
     </div>
-  
+
   <ul class="md-nav__list" data-md-scrollfix>
-    
-      
-      
-  
-  
-  
-  
+
+
+
+
+
+
+
     <li class="md-nav__item">
       <a href="../../.." class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Welcome
-  
 
-    
+
+
+  <span class="md-ellipsis">
+
+
+    Welcome
+
+
+
   </span>
-  
-  
+
+
 
       </a>
     </li>
-  
 
-    
-      
-      
-  
-  
-  
-  
-    
-    
-    
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
-        
-          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+
+
+
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+
+
           <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    MeshCore
-  
 
-    
+
+
+  <span class="md-ellipsis">
+
+
+    Analyzer & MQTT
+
+
+
   </span>
-  
-  
+
+
 
             <span class="md-nav__icon md-icon"></span>
           </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
-            
-  
-    MeshCore
-  
+
+
+    Analyzer & MQTT
+
 
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../meshcore/intro/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Introduction
-  
 
-    
-  </span>
-  
-  
 
-      </a>
-    </li>
-  
 
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../meshcore/faq/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    FAQ
-  
 
-    
-  </span>
-  
-  
 
-      </a>
-    </li>
-  
 
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../meshcore/companions/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Recommended Companions
-  
 
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../meshcore/repeaters/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Recommended Repeaters
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../meshcore/repeater-builds/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Repeater Build Guides
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../meshcore/antennas/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Recommended Antennas
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-    
-  
-  
-  
-    
-    
-    
-    
-    
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
-        
-          
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Analyzer & MQTT
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_3">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Analyzer & MQTT
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
     <li class="md-nav__item">
       <a href="../../intro/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Overview
-  
 
-    
+
+
+  <span class="md-ellipsis">
+
+
+    Overview
+
+
+
   </span>
-  
-  
+
+
 
       </a>
     </li>
-  
 
-              
-            
-              
-                
-  
-  
-  
-  
+
+
+
+
+
+
+
+
+
     <li class="md-nav__item">
       <a href="../../verify/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Verify Observer Status
-  
 
-    
+
+
+  <span class="md-ellipsis">
+
+
+    Check Your Observer
+
+
+
   </span>
-  
-  
+
+
 
       </a>
     </li>
-  
 
-              
-            
-              
-                
-  
-  
-    
-  
-  
-  
-    
-    
-    
-    
-    
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" checked>
-        
-          
-          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
-            
-  
-  
+
+
+
+
+
+
+
+
+
+    <li class="md-nav__item">
+      <a href="../../troubleshooting/" class="md-nav__link">
+
+
+
   <span class="md-ellipsis">
-    
-  
-    Build Guides
-  
 
-    
+
+    Troubleshooting
+
+
+
   </span>
-  
-  
+
+
+
+      </a>
+    </li>
+
+
+
+
+
+
+
+
+
+
+    <li class="md-nav__item">
+      <a href="../../broker-reference/" class="md-nav__link">
+
+
+
+  <span class="md-ellipsis">
+
+
+    Broker Reference
+
+
+
+  </span>
+
+
+
+      </a>
+    </li>
+
+
+
+
+
+
+
+
+
+
+    <li class="md-nav__item">
+      <a href="../../iata-codes/" class="md-nav__link">
+
+
+
+  <span class="md-ellipsis">
+
+
+    IATA Region Codes
+
+
+
+  </span>
+
+
+
+      </a>
+    </li>
+
+
+
+
+
+
+
+
+
+
+    <li class="md-nav__item">
+      <a href="../../remoteterm/" class="md-nav__link">
+
+
+
+  <span class="md-ellipsis">
+
+
+    RemoteTerm
+
+
+
+  </span>
+
+
+
+      </a>
+    </li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+
+
+
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_7" checked>
+
+
+          <label class="md-nav__link" for="__nav_2_7" id="__nav_2_7_label" tabindex="0">
+
+
+
+  <span class="md-ellipsis">
+
+
+    Build Guides
+
+
+
+  </span>
+
+
 
             <span class="md-nav__icon md-icon"></span>
           </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_3_3">
+
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_7_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_7">
             <span class="md-nav__icon md-icon"></span>
-            
-  
+
+
     Build Guides
-  
+
 
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
+
+
+
+
+
+
+
     <li class="md-nav__item">
       <a href="../mctomqtt/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    MCtoMQTT Script
-  
 
-    
+
+
+  <span class="md-ellipsis">
+
+
+    MCtoMQTT Script
+
+
+
   </span>
-  
-  
+
+
 
       </a>
     </li>
-  
 
-              
-            
-              
-                
-  
-  
-  
-  
+
+
+
+
+
+
+
+
+
     <li class="md-nav__item">
       <a href="../meshcore-ha/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    MeshCore-HA
-  
 
-    
+
+
+  <span class="md-ellipsis">
+
+
+    MeshCore-HA
+
+
+
   </span>
-  
-  
+
+
 
       </a>
     </li>
-  
 
-              
-            
-              
-                
-  
-  
-    
-  
-  
-  
+
+
+
+
+
+
+
+
+
+
+
     <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    MQTT Firmware
-  
 
-    
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+
+
+
+
+
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+
+
+
+  <span class="md-ellipsis">
+
+
+    MQTT Firmware
+
+
+
   </span>
-  
-  
+
+
 
           <span class="md-nav__icon md-icon"></span>
         </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    MQTT Firmware
-  
 
-    
+      <a href="./" class="md-nav__link md-nav__link--active">
+
+
+
+  <span class="md-ellipsis">
+
+
+    MQTT Firmware
+
+
+
   </span>
-  
-  
+
+
 
       </a>
-      
-        
+
+
 
 <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
+
+
+
+
+
+
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
       Table of contents
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
+
         <li class="md-nav__item">
-  <a href="#supported-boards" class="md-nav__link">
+  <a href="#flash-the-observer" class="md-nav__link">
     <span class="md-ellipsis">
-      
-        Supported Boards
-      
+
+        Flash The Observer
+
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Supported Boards">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#currently-available-hardware-verified" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Currently Available (Hardware Verified)
-      
-    </span>
-  </a>
-  
+
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#coming-soon-built-pending-hardware-validation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Coming Soon (Built, Pending Hardware Validation)
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
+
         <li class="md-nav__item">
-  <a href="#firmware-downloads" class="md-nav__link">
+  <a href="#required-meshcore-canada-settings" class="md-nav__link">
     <span class="md-ellipsis">
-      
-        Firmware Downloads
-      
+
+        Required MeshCore Canada Settings
+
     </span>
   </a>
-  
+
 </li>
-      
+
         <li class="md-nav__item">
-  <a href="#prerequisites" class="md-nav__link">
+  <a href="#command-builder" class="md-nav__link">
     <span class="md-ellipsis">
-      
-        Prerequisites
-      
+
+        Command Builder
+
     </span>
   </a>
-  
+
 </li>
-      
+
         <li class="md-nav__item">
-  <a href="#flashing" class="md-nav__link">
+  <a href="#manual-cli-reference" class="md-nav__link">
     <span class="md-ellipsis">
-      
-        Flashing
-      
+
+        Manual CLI Reference
+
     </span>
   </a>
-  
+
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#cli-setup" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        CLI Setup
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#packet-repeating" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Packet Repeating
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#broker-slots" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Broker Slots
-      
-    </span>
-  </a>
-  
-</li>
-      
+
         <li class="md-nav__item">
   <a href="#verify" class="md-nav__link">
     <span class="md-ellipsis">
-      
+
         Verify
-      
+
     </span>
   </a>
-  
+
 </li>
-      
+
         <li class="md-nav__item">
   <a href="#useful-links" class="md-nav__link">
     <span class="md-ellipsis">
-      
+
         Useful Links
-      
+
     </span>
   </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
-    </li>
-  
 
-              
-            
-              
-                
-  
-  
-  
-  
+</li>
+
+    </ul>
+
+</nav>
+
+    </li>
+
+
+
+
+
+
+
+
+
+
     <li class="md-nav__item">
       <a href="../pymc/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    PyMC
-  
 
-    
+
+
+  <span class="md-ellipsis">
+
+
+    PyMC
+
+
+
   </span>
-  
-  
+
+
 
       </a>
     </li>
-  
 
-              
-            
+
+
+
           </ul>
         </nav>
-      
-    </li>
-  
 
-              
-            
+    </li>
+
+
+
+
           </ul>
         </nav>
-      
-    </li>
-  
 
-    
-      
-      
-  
-  
-  
-  
-    
-    
-    
-    
-    
+    </li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
-        
-          
-          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Mesh Directory
-  
 
-    
+
+
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+
+
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+
+
+
+  <span class="md-ellipsis">
+
+
+    Hardware
+
+
+
   </span>
-  
-  
+
+
 
             <span class="md-nav__icon md-icon"></span>
           </label>
-        
+
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+
+
+    Hardware
+
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+
+
+
+
+
+
+
+    <li class="md-nav__item">
+      <a href="../../../hardware/overview/" class="md-nav__link">
+
+
+
+  <span class="md-ellipsis">
+
+
+    Overview
+
+
+
+  </span>
+
+
+
+      </a>
+    </li>
+
+
+
+
+
+
+
+
+
+
+    <li class="md-nav__item">
+      <a href="../../../hardware/recommended-antenna/" class="md-nav__link">
+
+
+
+  <span class="md-ellipsis">
+
+
+    Antenna
+
+
+
+  </span>
+
+
+
+      </a>
+    </li>
+
+
+
+
+
+
+
+
+
+
+    <li class="md-nav__item">
+      <a href="../../../hardware/recommended-companions/" class="md-nav__link">
+
+
+
+  <span class="md-ellipsis">
+
+
+    Companion Nodes
+
+
+
+  </span>
+
+
+
+      </a>
+    </li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <li class="md-nav__item md-nav__item--nested">
+
+
+
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" >
+
+
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+
+
+
+  <span class="md-ellipsis">
+
+
+    Repeater Nodes
+
+
+
+  </span>
+
+
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+
+
+    Repeater Nodes
+
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+
+
+
+
+
+
+
+    <li class="md-nav__item">
+      <a href="../../../hardware/recommended-repeaters/" class="md-nav__link">
+
+
+
+  <span class="md-ellipsis">
+
+
+    Repeater Nodes
+
+
+
+  </span>
+
+
+
+      </a>
+    </li>
+
+
+
+
+
+
+
+
+
+
+    <li class="md-nav__item">
+      <a href="../../../hardware/repeater-mounting-options/" class="md-nav__link">
+
+
+
+  <span class="md-ellipsis">
+
+
+    Repeater Mounting Options
+
+
+
+  </span>
+
+
+
+      </a>
+    </li>
+
+
+
+
+
+
+
+
+
+
+    <li class="md-nav__item">
+      <a href="../../../hardware/repeater-solar-batteries/" class="md-nav__link">
+
+
+
+  <span class="md-ellipsis">
+
+
+    Repeater Solar Batteries
+
+
+
+  </span>
+
+
+
+      </a>
+    </li>
+
+
+
+
+
+
+
+
+
+
+    <li class="md-nav__item">
+      <a href="../../../hardware/repeater-solar-300mw-diy-build/" class="md-nav__link">
+
+
+
+  <span class="md-ellipsis">
+
+
+    300mW Solar Repeater Build Guide
+
+
+
+  </span>
+
+
+
+      </a>
+    </li>
+
+
+
+
+
+
+
+
+
+
+    <li class="md-nav__item">
+      <a href="../../../hardware/repeater-solar-1w-diy-build/" class="md-nav__link">
+
+
+
+  <span class="md-ellipsis">
+
+
+    1W Solar Repeater Build Guide
+
+
+
+  </span>
+
+
+
+      </a>
+    </li>
+
+
+
+
+          </ul>
+        </nav>
+
+    </li>
+
+
+
+
+
+
+
+
+
+
+    <li class="md-nav__item">
+      <a href="../../../hardware/wire-connector-types/" class="md-nav__link">
+
+
+
+  <span class="md-ellipsis">
+
+
+    Wire Connector Types
+
+
+
+  </span>
+
+
+
+      </a>
+    </li>
+
+
+
+
+          </ul>
+        </nav>
+
+    </li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <li class="md-nav__item md-nav__item--nested">
+
+
+
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+
+
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+
+
+
+  <span class="md-ellipsis">
+
+
+    MeshCore
+
+
+
+  </span>
+
+
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_4">
             <span class="md-nav__icon md-icon"></span>
-            
-  
-    Mesh Directory
-  
+
+
+    MeshCore
+
 
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../provinces/british-columbia/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    British Columbia
-  
 
-    
-  </span>
-  
-  
 
-      </a>
-    </li>
-  
 
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../provinces/alberta/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Alberta
-  
 
-    
-  </span>
-  
-  
 
-      </a>
-    </li>
-  
 
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../provinces/saskatchewan/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Saskatchewan
-  
 
-    
-  </span>
-  
-  
 
-      </a>
-    </li>
-  
 
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../provinces/manitoba/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Manitoba
-  
 
-    
-  </span>
-  
-  
 
-      </a>
-    </li>
-  
 
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../provinces/ontario/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Ontario
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../provinces/quebec/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Quebec
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../provinces/new-brunswick/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    New Brunswick
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../provinces/nova-scotia/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Nova Scotia
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../provinces/prince-edward-island/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Prince Edward Island
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../provinces/newfoundland-and-labrador/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Newfoundland and Labrador
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../provinces/territories/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Territories (YT / NT / NU)
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    
-    
-    
-    
-    
     <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
-        
-          
-          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Resources
-  
 
-    
+
+
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_1" >
+
+
+          <label class="md-nav__link" for="__nav_4_1" id="__nav_4_1_label" tabindex="0">
+
+
+
+  <span class="md-ellipsis">
+
+
+    General
+
+
+
   </span>
-  
-  
+
+
 
             <span class="md-nav__icon md-icon"></span>
           </label>
-        
+
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_1">
+            <span class="md-nav__icon md-icon"></span>
+
+
+    General
+
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+
+
+
+
+
+
+
+    <li class="md-nav__item">
+      <a href="../../../meshcore/general-overview/" class="md-nav__link">
+
+
+
+  <span class="md-ellipsis">
+
+
+    Overview
+
+
+
+  </span>
+
+
+
+      </a>
+    </li>
+
+
+
+
+
+
+
+
+
+
+    <li class="md-nav__item">
+      <a href="../../../meshcore/general-faq/" class="md-nav__link">
+
+
+
+  <span class="md-ellipsis">
+
+
+    MeshCore FAQ
+
+
+
+  </span>
+
+
+
+      </a>
+    </li>
+
+
+
+
+
+
+
+
+
+
+    <li class="md-nav__item">
+      <a href="../../../meshcore/general-howto/" class="md-nav__link">
+
+
+
+  <span class="md-ellipsis">
+
+
+    MeshCore How-To
+
+
+
+  </span>
+
+
+
+      </a>
+    </li>
+
+
+
+
+
+
+
+
+
+
+    <li class="md-nav__item">
+      <a href="../../../meshcore/general-meshcore-roles/" class="md-nav__link">
+
+
+
+  <span class="md-ellipsis">
+
+
+    MeshCore Roles
+
+
+
+  </span>
+
+
+
+      </a>
+    </li>
+
+
+
+
+          </ul>
+        </nav>
+
+    </li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <li class="md-nav__item md-nav__item--nested">
+
+
+
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" >
+
+
+          <label class="md-nav__link" for="__nav_4_2" id="__nav_4_2_label" tabindex="0">
+
+
+
+  <span class="md-ellipsis">
+
+
+    Configuration
+
+
+
+  </span>
+
+
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+
+
+    Configuration
+
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+
+
+
+
+
+
+
+    <li class="md-nav__item">
+      <a href="../../../meshcore/flash-companion/" class="md-nav__link">
+
+
+
+  <span class="md-ellipsis">
+
+
+    Flashing a Companion
+
+
+
+  </span>
+
+
+
+      </a>
+    </li>
+
+
+
+
+
+
+
+
+
+
+    <li class="md-nav__item">
+      <a href="../../../meshcore/flash-repeater/" class="md-nav__link">
+
+
+
+  <span class="md-ellipsis">
+
+
+    Flashing a Repeater
+
+
+
+  </span>
+
+
+
+      </a>
+    </li>
+
+
+
+
+
+
+
+
+
+
+    <li class="md-nav__item">
+      <a href="../../../meshcore/update-repeater-ota/" class="md-nav__link">
+
+
+
+  <span class="md-ellipsis">
+
+
+    Updating a Repeater (OTA)
+
+
+
+  </span>
+
+
+
+      </a>
+    </li>
+
+
+
+
+
+
+
+
+
+
+    <li class="md-nav__item">
+      <a href="../../../meshcore/generate-repeater-id/" class="md-nav__link">
+
+
+
+  <span class="md-ellipsis">
+
+
+    Generating a Repeater ID
+
+
+
+  </span>
+
+
+
+      </a>
+    </li>
+
+
+
+
+
+
+
+
+
+
+    <li class="md-nav__item">
+      <a href="../../../meshcore/flash-room-server/" class="md-nav__link">
+
+
+
+  <span class="md-ellipsis">
+
+
+    Flashing a Room Server
+
+
+
+  </span>
+
+
+
+      </a>
+    </li>
+
+
+
+
+
+
+
+
+
+
+    <li class="md-nav__item">
+      <a href="../../../meshcore/firmware-rak-custom-display/" class="md-nav__link">
+
+
+
+  <span class="md-ellipsis">
+
+
+    RAK4631 Custom Display Firmware
+
+
+
+  </span>
+
+
+
+      </a>
+    </li>
+
+
+
+
+
+
+
+
+
+
+    <li class="md-nav__item">
+      <a href="../../../meshcore/firmware-heltec-v3-wifi/" class="md-nav__link">
+
+
+
+  <span class="md-ellipsis">
+
+
+    Heltec V3 Wi-Fi Firmware
+
+
+
+  </span>
+
+
+
+      </a>
+    </li>
+
+
+
+
+          </ul>
+        </nav>
+
+    </li>
+
+
+
+
+          </ul>
+        </nav>
+
+    </li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <li class="md-nav__item md-nav__item--nested">
+
+
+
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+
+
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+
+
+
+  <span class="md-ellipsis">
+
+
+    Mesh Directory
+
+
+
+  </span>
+
+
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
-            
-  
-    Resources
-  
+
+
+    Mesh Directory
+
 
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../resources/getting-started/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Getting Started
-  
 
-    
+
+
+
+
+
+
+    <li class="md-nav__item">
+      <a href="../../../provinces/" class="md-nav__link">
+
+
+
+  <span class="md-ellipsis">
+
+
+    Overview
+
+
+
   </span>
-  
-  
+
+
 
       </a>
     </li>
-  
 
-              
-            
-              
-                
-  
-  
-  
-  
+
+
+
+
+
+
+
+
+
     <li class="md-nav__item">
-      <a href="../../../resources/links/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Useful Links
-  
+      <a href="../../../provinces/british-columbia/" class="md-nav__link">
 
-    
+
+
+  <span class="md-ellipsis">
+
+
+    British Columbia
+
+
+
   </span>
-  
-  
+
+
 
       </a>
     </li>
-  
 
-              
-            
-              
-                
-  
-  
-  
-  
+
+
+
+
+
+
+
+
+
     <li class="md-nav__item">
-      <a href="../../../resources/glossary/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Glossary
-  
+      <a href="../../../provinces/alberta/" class="md-nav__link">
 
-    
+
+
+  <span class="md-ellipsis">
+
+
+    Alberta
+
+
+
   </span>
-  
-  
+
+
 
       </a>
     </li>
-  
 
-              
-            
+
+
+
+
+
+
+
+
+
+    <li class="md-nav__item">
+      <a href="../../../provinces/saskatchewan/" class="md-nav__link">
+
+
+
+  <span class="md-ellipsis">
+
+
+    Saskatchewan
+
+
+
+  </span>
+
+
+
+      </a>
+    </li>
+
+
+
+
+
+
+
+
+
+
+    <li class="md-nav__item">
+      <a href="../../../provinces/manitoba/" class="md-nav__link">
+
+
+
+  <span class="md-ellipsis">
+
+
+    Manitoba
+
+
+
+  </span>
+
+
+
+      </a>
+    </li>
+
+
+
+
+
+
+
+
+
+
+    <li class="md-nav__item">
+      <a href="../../../provinces/ontario/" class="md-nav__link">
+
+
+
+  <span class="md-ellipsis">
+
+
+    Ontario
+
+
+
+  </span>
+
+
+
+      </a>
+    </li>
+
+
+
+
+
+
+
+
+
+
+    <li class="md-nav__item">
+      <a href="../../../provinces/quebec/" class="md-nav__link">
+
+
+
+  <span class="md-ellipsis">
+
+
+    Quebec
+
+
+
+  </span>
+
+
+
+      </a>
+    </li>
+
+
+
+
+
+
+
+
+
+
+    <li class="md-nav__item">
+      <a href="../../../provinces/new-brunswick/" class="md-nav__link">
+
+
+
+  <span class="md-ellipsis">
+
+
+    New Brunswick
+
+
+
+  </span>
+
+
+
+      </a>
+    </li>
+
+
+
+
+
+
+
+
+
+
+    <li class="md-nav__item">
+      <a href="../../../provinces/nova-scotia/" class="md-nav__link">
+
+
+
+  <span class="md-ellipsis">
+
+
+    Nova Scotia
+
+
+
+  </span>
+
+
+
+      </a>
+    </li>
+
+
+
+
+
+
+
+
+
+
+    <li class="md-nav__item">
+      <a href="../../../provinces/prince-edward-island/" class="md-nav__link">
+
+
+
+  <span class="md-ellipsis">
+
+
+    Prince Edward Island
+
+
+
+  </span>
+
+
+
+      </a>
+    </li>
+
+
+
+
+
+
+
+
+
+
+    <li class="md-nav__item">
+      <a href="../../../provinces/newfoundland-and-labrador/" class="md-nav__link">
+
+
+
+  <span class="md-ellipsis">
+
+
+    Newfoundland and Labrador
+
+
+
+  </span>
+
+
+
+      </a>
+    </li>
+
+
+
+
+
+
+
+
+
+
+    <li class="md-nav__item">
+      <a href="../../../provinces/territories/" class="md-nav__link">
+
+
+
+  <span class="md-ellipsis">
+
+
+    Territories (YT / NT / NU)
+
+
+
+  </span>
+
+
+
+      </a>
+    </li>
+
+
+
+
           </ul>
         </nav>
-      
+
     </li>
-  
 
-    
-      
-      
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../../contributing/" class="md-nav__link">
-        
-  
-  
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <li class="md-nav__item md-nav__item--nested">
+
+
+
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+
+
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+
+
+
   <span class="md-ellipsis">
-    
-  
-    Contributing
-  
 
-    
+
+    Resources
+
+
+
   </span>
-  
-  
+
+
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+
+
+    Resources
+
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+
+
+
+
+
+
+
+    <li class="md-nav__item">
+      <a href="../../../resources/getting-started/" class="md-nav__link">
+
+
+
+  <span class="md-ellipsis">
+
+
+    Getting Started
+
+
+
+  </span>
+
+
 
       </a>
     </li>
-  
 
-    
+
+
+
+
+
+
+
+
+
+    <li class="md-nav__item">
+      <a href="../../../resources/links/" class="md-nav__link">
+
+
+
+  <span class="md-ellipsis">
+
+
+    Useful Links
+
+
+
+  </span>
+
+
+
+      </a>
+    </li>
+
+
+
+
+
+
+
+
+
+
+    <li class="md-nav__item">
+      <a href="../../../resources/glossary/" class="md-nav__link">
+
+
+
+  <span class="md-ellipsis">
+
+
+    Glossary
+
+
+
+  </span>
+
+
+
+      </a>
+    </li>
+
+
+
+
+          </ul>
+        </nav>
+
+    </li>
+
+
+
+
+
+
+
+
+
+    <li class="md-nav__item">
+      <a href="../../../contributing/" class="md-nav__link">
+
+
+
+  <span class="md-ellipsis">
+
+
+    Contributing
+
+
+
+  </span>
+
+
+
+      </a>
+    </li>
+
+
+
   </ul>
 </nav>
                   </div>
                 </div>
               </div>
-            
-            
-              
+
+
+
               <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
-                    
+
 
 <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
+
+
+
+
+
+
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
       Table of contents
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
+
         <li class="md-nav__item">
-  <a href="#supported-boards" class="md-nav__link">
+  <a href="#flash-the-observer" class="md-nav__link">
     <span class="md-ellipsis">
-      
-        Supported Boards
-      
+
+        Flash The Observer
+
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="Supported Boards">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#currently-available-hardware-verified" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Currently Available (Hardware Verified)
-      
-    </span>
-  </a>
-  
+
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#coming-soon-built-pending-hardware-validation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Coming Soon (Built, Pending Hardware Validation)
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
+
         <li class="md-nav__item">
-  <a href="#firmware-downloads" class="md-nav__link">
+  <a href="#required-meshcore-canada-settings" class="md-nav__link">
     <span class="md-ellipsis">
-      
-        Firmware Downloads
-      
+
+        Required MeshCore Canada Settings
+
     </span>
   </a>
-  
+
 </li>
-      
+
         <li class="md-nav__item">
-  <a href="#prerequisites" class="md-nav__link">
+  <a href="#command-builder" class="md-nav__link">
     <span class="md-ellipsis">
-      
-        Prerequisites
-      
+
+        Command Builder
+
     </span>
   </a>
-  
+
 </li>
-      
+
         <li class="md-nav__item">
-  <a href="#flashing" class="md-nav__link">
+  <a href="#manual-cli-reference" class="md-nav__link">
     <span class="md-ellipsis">
-      
-        Flashing
-      
+
+        Manual CLI Reference
+
     </span>
   </a>
-  
+
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#cli-setup" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        CLI Setup
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#packet-repeating" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Packet Repeating
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#broker-slots" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Broker Slots
-      
-    </span>
-  </a>
-  
-</li>
-      
+
         <li class="md-nav__item">
   <a href="#verify" class="md-nav__link">
     <span class="md-ellipsis">
-      
+
         Verify
-      
+
     </span>
   </a>
-  
+
 </li>
-      
+
         <li class="md-nav__item">
   <a href="#useful-links" class="md-nav__link">
     <span class="md-ellipsis">
-      
+
         Useful Links
-      
+
     </span>
   </a>
-  
+
 </li>
-      
+
     </ul>
-  
+
 </nav>
                   </div>
                 </div>
               </div>
-            
-          
-          
+
+
+
             <div class="md-content" data-md-component="content">
-              
+
               <article class="md-content__inner md-typeset">
-                
-                  
 
 
-  
-  
 
 
-<h1 id="mqtt-firmware-direct-observer">MQTT Firmware (Direct Observer)<a class="headerlink" href="#mqtt-firmware-direct-observer" title="Permanent link">&para;</a></h1>
-<p>Flash observer firmware directly onto a supported board. The device connects to WiFi and publishes mesh traffic to MQTT brokers without a host computer.</p>
-<p>These firmware images are pre-compiled by <strong>n30nex</strong> and come pre-configured with the MeshCore.ca broker pair (<code>mqtt1.meshcore.ca</code> and <code>mqtt2.meshcore.ca</code>) in slots 1 and 2. After flashing, you only need to set your WiFi credentials, IATA region code, and node name.</p>
-<h2 id="supported-boards">Supported Boards<a class="headerlink" href="#supported-boards" title="Permanent link">&para;</a></h2>
-<p>All boards support both Repeater and Room Server roles.</p>
-<h3 id="currently-available-hardware-verified">Currently Available (Hardware Verified)<a class="headerlink" href="#currently-available-hardware-verified" title="Permanent link">&para;</a></h3>
-<ul>
-<li>Heltec V3</li>
-<li>Heltec V4 OLED</li>
-</ul>
-<h3 id="coming-soon-built-pending-hardware-validation">Coming Soon (Built, Pending Hardware Validation)<a class="headerlink" href="#coming-soon-built-pending-hardware-validation" title="Permanent link">&para;</a></h3>
-<ul>
-<li>LILYGO T3S3 SX1262</li>
-<li>T-Beam Supreme SX1262</li>
-<li>T-Beam SX1262</li>
-<li>Seeed XIAO ESP32S3 + Wio-SX1262</li>
-<li>RAK3112</li>
-<li>Heltec Wireless Tracker</li>
-<li>Heltec Wireless Paper</li>
-</ul>
-<p>New boards will appear in the firmware picker automatically as they are validated and released.</p>
-<h2 id="firmware-downloads">Firmware Downloads<a class="headerlink" href="#firmware-downloads" title="Permanent link">&para;</a></h2>
-<p>Pick your board, role, and flash type to get the right firmware image.</p>
-<div id="fw-picker" style="margin: 1.5em 0;">
-  <div id="fw-loading" style="padding: 1em; opacity: 0.6;">Loading firmware manifest...</div>
-  <div id="fw-selects" style="display: none; flex-wrap: wrap; gap: 1em; margin-bottom: 1em;">
-    <div style="flex: 1; min-width: 160px;">
-      <label for="fw-board" style="display: block; font-weight: 600; margin-bottom: 0.3em; font-size: 0.85em; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.7;">Board</label>
-      <select id="fw-board" style="width: 100%; padding: 0.5em; border-radius: 6px; border: 1px solid var(--md-default-fg-color--lightest); background: var(--md-code-bg-color); color: var(--md-default-fg-color); font-size: 0.95em;"></select>
-    </div>
-    <div style="flex: 1; min-width: 160px;">
-      <label for="fw-role" style="display: block; font-weight: 600; margin-bottom: 0.3em; font-size: 0.85em; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.7;">Role</label>
-      <select id="fw-role" style="width: 100%; padding: 0.5em; border-radius: 6px; border: 1px solid var(--md-default-fg-color--lightest); background: var(--md-code-bg-color); color: var(--md-default-fg-color); font-size: 0.95em;"></select>
-    </div>
-    <div style="flex: 1; min-width: 160px;">
-      <label for="fw-type" style="display: block; font-weight: 600; margin-bottom: 0.3em; font-size: 0.85em; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.7;">Flash Type</label>
-      <select id="fw-type" style="width: 100%; padding: 0.5em; border-radius: 6px; border: 1px solid var(--md-default-fg-color--lightest); background: var(--md-code-bg-color); color: var(--md-default-fg-color); font-size: 0.95em;"></select>
-    </div>
+
+
+
+
+<h1 id="mqtt-firmware-standalone-observer">MQTT Firmware (Standalone Observer)<a class="headerlink" href="#mqtt-firmware-standalone-observer" title="Permanent link">&para;</a></h1>
+<p>Flash standalone MQTT observer firmware with the <a href="https://observer.gessaman.com/">MeshCore observer flasher</a>. MeshCore Canada no longer hosts separate observer firmware binaries on this page.</p>
+<div class="admonition success">
+<p class="admonition-title">MeshCore Canada presets verified</p>
+<p>The observer firmware currently offered by <code>observer.gessaman.com</code> is built from Adam Gessaman's <code>mqtt-bridge-implementation-flex</code> branch at commit <code>c0c845f5</code>. That branch includes the built-in presets <code>meshcore-ca-1</code> and <code>meshcore-ca-2</code>, pointing to <code>mqtt1.meshcore.ca</code> and <code>mqtt2.meshcore.ca</code>.</p>
+</div>
+<h2 id="flash-the-observer">Flash The Observer<a class="headerlink" href="#flash-the-observer" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Open <a href="https://observer.gessaman.com/">observer.gessaman.com</a>.</li>
+<li>Pick your board under <strong>MQTT Observer Firmware</strong>.</li>
+<li>Choose <strong>Repeater</strong> or <strong>Room Server</strong>.</li>
+<li>For a new board or a board you are repurposing, enable <strong>Erase device</strong> and flash the merged image.</li>
+<li>When flashing finishes, use <strong>Configure via USB</strong> for the repeater or room server setup screen, or use <strong>Console</strong> for CLI setup.</li>
+</ol>
+<div class="admonition warning">
+<p class="admonition-title">First flash can erase settings</p>
+<p>First flashing observer firmware, especially on boards with a changed partition layout, can wipe stored settings and identity data. Back up an existing device private key before repurposing it.</p>
+</div>
+<h2 id="required-meshcore-canada-settings">Required MeshCore Canada Settings<a class="headerlink" href="#required-meshcore-canada-settings" title="Permanent link">&para;</a></h2>
+<p>Use the repeater or room server setup screen where possible. If a setting is not exposed in the setup screen, use the console on the flasher page and paste the CLI commands below.</p>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Radio preset</td>
+<td><strong>USA/Canada (Recommended)</strong></td>
+</tr>
+<tr>
+<td>Raw radio values</td>
+<td><code>910.525 MHz / 62.5 kHz / SF7 / CR5</code></td>
+</tr>
+<tr>
+<td>CLI radio command</td>
+<td><code>set radio 910.525,62.5,7,5</code></td>
+</tr>
+<tr>
+<td>Path hash mode</td>
+<td>3-byte advert path hashes: <code>set path.hash.mode 2</code></td>
+</tr>
+<tr>
+<td>MQTT slot 1</td>
+<td><code>meshcore-ca-1</code></td>
+</tr>
+<tr>
+<td>MQTT slot 2</td>
+<td><code>meshcore-ca-2</code></td>
+</tr>
+<tr>
+<td>IATA</td>
+<td>A real 3-letter IATA airport code near the observer</td>
+</tr>
+<tr>
+<td>WiFi</td>
+<td>2.4 GHz network credentials</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="admonition-title">IATA codes</p>
+<p>Use a real airport code such as <code>YOW</code>, <code>YYZ</code>, <code>YUL</code>, <code>YVR</code>, or <code>YYC</code>. Do not use placeholders such as <code>XXX</code> or <code>HOME</code>. Do not use <code>CAN</code> as shorthand for Canada; it is an airport code for Guangzhou. See the <a href="../../iata-codes/">IATA region code list</a> for Canadian quick choices.</p>
+</div>
+<h2 id="command-builder">Command Builder<a class="headerlink" href="#command-builder" title="Permanent link">&para;</a></h2>
+<p>Use this builder to create a CLI block for the flasher <strong>Console</strong>. It runs only in your browser.</p>
+<div class="mc-command-builder" id="observer-command-builder">
+  <div class="mc-command-grid">
+    <label>
+      <span>IATA</span>
+      <input id="observer-iata" list="observer-iata-list" maxlength="3" value="YOW" autocomplete="off">
+      <datalist id="observer-iata-list">
+        <option value="YOW">Ottawa</option>
+        <option value="YYZ">Toronto Pearson</option>
+        <option value="YTZ">Toronto Billy Bishop</option>
+        <option value="YUL">Montreal Trudeau</option>
+        <option value="YQB">Quebec City</option>
+        <option value="YVR">Vancouver</option>
+        <option value="YYJ">Victoria</option>
+        <option value="YYC">Calgary</option>
+        <option value="YEG">Edmonton</option>
+        <option value="YXE">Saskatoon</option>
+        <option value="YQR">Regina</option>
+        <option value="YWG">Winnipeg</option>
+        <option value="YHZ">Halifax</option>
+        <option value="YYT">St. John's</option>
+        <option value="YXY">Whitehorse</option>
+        <option value="YZF">Yellowknife</option>
+        <option value="YFB">Iqaluit</option>
+      </datalist>
+    </label>
+    <label>
+      <span>Role</span>
+      <select id="observer-role">
+        <option value="Repeater">Repeater</option>
+        <option value="Room-Server">Room Server</option>
+      </select>
+    </label>
+    <label>
+      <span>Node number</span>
+      <input id="observer-number" value="01" autocomplete="off">
+    </label>
+    <label>
+      <span>WiFi SSID</span>
+      <input id="observer-ssid" value="YourWiFiNetwork" autocomplete="off">
+    </label>
+    <label>
+      <span>WiFi password</span>
+      <input id="observer-password" value="YourWiFiPassword" autocomplete="off">
+    </label>
+    <label>
+      <span>Repeating</span>
+      <select id="observer-repeat">
+        <option value="on">Repeat mesh packets</option>
+        <option value="off">Observe only</option>
+      </select>
+    </label>
   </div>
-  <div id="fw-result" style="padding: 1em 1.2em; border-radius: 8px; border: 2px solid var(--md-accent-fg-color); background: var(--md-code-bg-color);"></div>
+  <div class="mc-command-actions">
+    <button type="button" id="observer-copy-commands">Copy commands</button>
+    <span id="observer-copy-status" aria-live="polite"></span>
+  </div>
+  <pre><code id="observer-command-output"></code></pre>
 </div>
 
+<style>
+  .mc-command-builder {
+    border: 1px solid var(--md-default-fg-color--lightest);
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 1rem 0 1.5rem;
+    background: var(--md-code-bg-color);
+  }
+  .mc-command-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.75rem;
+  }
+  .mc-command-builder label {
+    display: grid;
+    gap: 0.35rem;
+    margin: 0;
+  }
+  .mc-command-builder label span {
+    font-size: 0.78rem;
+    font-weight: 600;
+  }
+  .mc-command-builder input,
+  .mc-command-builder select {
+    min-height: 2.25rem;
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid var(--md-default-fg-color--lightest);
+    border-radius: 6px;
+    padding: 0.4rem 0.5rem;
+    background: var(--md-default-bg-color);
+    color: var(--md-default-fg-color);
+    font: inherit;
+  }
+  .mc-command-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0.9rem 0 0.75rem;
+  }
+  .mc-command-actions button {
+    border: 1px solid var(--md-accent-fg-color);
+    border-radius: 6px;
+    padding: 0.45rem 0.7rem;
+    background: transparent;
+    color: var(--md-accent-fg-color);
+    font: inherit;
+    cursor: pointer;
+  }
+  .mc-command-actions span {
+    min-height: 1.2rem;
+    font-size: 0.8rem;
+    opacity: 0.8;
+  }
+  .mc-command-builder pre {
+    margin-bottom: 0;
+  }
+</style>
+
 <script>
-(function() {
-  var REPO = "MrAlders0n/MeshCore-Canada";
-  var API  = "https://api.github.com/repos/" + REPO + "/releases/latest";
+(function () {
+  var root = document.getElementById("observer-command-builder");
+  if (!root) return;
 
-  var manifest = null;
-  var assets   = {};
+  var fields = {
+    iata: document.getElementById("observer-iata"),
+    role: document.getElementById("observer-role"),
+    number: document.getElementById("observer-number"),
+    ssid: document.getElementById("observer-ssid"),
+    password: document.getElementById("observer-password"),
+    repeat: document.getElementById("observer-repeat")
+  };
+  var output = document.getElementById("observer-command-output");
+  var status = document.getElementById("observer-copy-status");
 
-  function populateSelect(id, items) {
-    var el = document.getElementById(id);
-    el.innerHTML = items.map(function(item) {
-      return '<option value="' + item.id + '">' + item.label + '</option>';
-    }).join("");
+  function value(el, fallback) {
+    var text = (el.value || "").trim();
+    return text || fallback;
   }
 
-  function findArtifact() {
-    if (!manifest) return null;
-    var board = document.getElementById("fw-board").value;
-    var role  = document.getElementById("fw-role").value;
-    var type  = document.getElementById("fw-type").value;
-    return manifest.artifacts.find(function(a) {
-      return a.board === board && a.role === role && a.type === type;
-    });
+  function iataValue() {
+    return value(fields.iata, "YOW").toUpperCase().replace(/[^A-Z]/g, "").slice(0, 3) || "YOW";
   }
 
-  function update() {
-    var artifact = findArtifact();
-    var result   = document.getElementById("fw-result");
-
-    if (!artifact) {
-      result.innerHTML = '<span style="opacity: 0.5;">No firmware available for this combination.</span>';
-      return;
-    }
-
-    var file = artifact.file;
-    var href = assets[file] || "#";
-    var boardEl = document.getElementById("fw-board");
-    var roleEl  = document.getElementById("fw-role");
-    var typeEl  = document.getElementById("fw-type");
-    var boardLabel = boardEl.options[boardEl.selectedIndex].text;
-    var roleLabel  = roleEl.options[roleEl.selectedIndex].text;
-    var typeLabel  = typeEl.options[typeEl.selectedIndex].text;
-
-    result.innerHTML =
-      '<div style="margin-bottom: 0.6em;">' +
-        '<strong>' + boardLabel + '</strong> &middot; ' +
-        roleLabel + ' &middot; ' + typeLabel +
-      '</div>' +
-      '<div style="font-family: var(--md-code-font-family); font-size: 0.85em; opacity: 0.7; margin-bottom: 0.4em;">' +
-        file +
-      '</div>' +
-      '<div style="font-size: 0.8em; opacity: 0.5; margin-bottom: 0.8em;">Build: ' +
-        manifest.version + ' (' + manifest.date + ')</div>' +
-      '<a href="' + href + '" download ' +
-        'style="display: inline-block; padding: 0.6em 1.5em; border-radius: 6px; ' +
-        'background: var(--md-accent-fg-color); color: var(--md-accent-bg-color); ' +
-        'font-weight: 600; text-decoration: none;">' +
-        '⬇ Download Firmware</a>';
+  function render() {
+    var iata = iataValue();
+    var role = value(fields.role, "Repeater");
+    var number = value(fields.number, "01");
+    var nodeName = iata + "-" + role + "-" + number;
+    var commands = [
+      "set name " + nodeName,
+      "set radio 910.525,62.5,7,5",
+      "set path.hash.mode 2",
+      "set mqtt.iata " + iata,
+      "set wifi.ssid " + value(fields.ssid, "YourWiFiNetwork"),
+      "set wifi.pwd " + value(fields.password, "YourWiFiPassword"),
+      "set wifi.powersave none",
+      "set mqtt1.preset meshcore-ca-1",
+      "set mqtt2.preset meshcore-ca-2",
+      "set mqtt3.preset none",
+      "set mqtt4.preset none",
+      "set mqtt5.preset none",
+      "set mqtt6.preset none",
+      "set mqtt.status on",
+      "set mqtt.packets on",
+      "set mqtt.raw off",
+      "set mqtt.rx on",
+      "set mqtt.tx advert",
+      "set bridge.enabled on",
+      "set repeat " + value(fields.repeat, "on"),
+      "advert",
+      "reboot"
+    ];
+    output.textContent = commands.join("\n");
   }
 
-  function init(release) {
-    (release.assets || []).forEach(function(asset) {
-      assets[asset.name] = asset.browser_download_url;
+  root.addEventListener("input", render);
+  document.getElementById("observer-copy-commands").addEventListener("click", function () {
+    navigator.clipboard.writeText(output.textContent).then(function () {
+      status.textContent = "Copied";
+      setTimeout(function () { status.textContent = ""; }, 1600);
+    }, function () {
+      status.textContent = "Select the block and copy manually";
     });
-
-    var manifestAsset = release.assets.find(function(a) {
-      return a.name === "manifest.json";
-    });
-    if (!manifestAsset) {
-      document.getElementById("fw-loading").textContent = "No firmware manifest found in latest release.";
-      return;
-    }
-
-    fetch(manifestAsset.browser_download_url)
-      .then(function(r) { return r.json(); })
-      .then(function(data) {
-        manifest = data;
-        populateSelect("fw-board", manifest.boards);
-        populateSelect("fw-role", manifest.roles);
-        populateSelect("fw-type", manifest.types);
-        document.getElementById("fw-loading").style.display = "none";
-        document.getElementById("fw-selects").style.display = "flex";
-        document.getElementById("fw-board").addEventListener("change", update);
-        document.getElementById("fw-role").addEventListener("change", update);
-        document.getElementById("fw-type").addEventListener("change", update);
-        update();
-      })
-      .catch(function() {
-        document.getElementById("fw-loading").textContent = "Failed to load firmware manifest.";
-      });
-  }
-
-  fetch(API)
-    .then(function(r) {
-      if (!r.ok) throw new Error(r.status);
-      return r.json();
-    })
-    .then(init)
-    .catch(function() {
-      document.getElementById("fw-loading").innerHTML =
-        'Could not load firmware list. <a href="https://github.com/' + REPO + '/releases/latest">Download from GitHub Releases</a>.';
-    });
+  });
+  render();
 })();
 </script>
 
-<h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h2>
-<ul>
-<li>A supported LoRa board (see list above)</li>
-<li>2.4 GHz WiFi network credentials</li>
-<li>Your 3-character IATA region code (e.g. <code>YOW</code> for Ottawa, <code>YYZ</code> for Toronto)</li>
-</ul>
-<h2 id="flashing">Flashing<a class="headerlink" href="#flashing" title="Permanent link">&para;</a></h2>
-<ol>
-<li>Pick your board, role, and flash type from the picker above and download the firmware</li>
-<li>Flash using the <a href="https://flasher.meshcore.io/">MeshCore Flasher</a> or your preferred ESP flashing tool</li>
-</ol>
-<h2 id="cli-setup">CLI Setup<a class="headerlink" href="#cli-setup" title="Permanent link">&para;</a></h2>
-<p>After flashing, connect to the device's admin CLI (serial or web) to set your WiFi, region code, and node name. Replace <code>YOW</code> with your IATA code and fill in your network credentials:</p>
+<h2 id="manual-cli-reference">Manual CLI Reference<a class="headerlink" href="#manual-cli-reference" title="Permanent link">&para;</a></h2>
+<p>If you prefer to type commands manually, replace <code>YOW</code>, <code>YourWiFiNetwork</code>, and <code>YourWiFiPassword</code> with your own values:</p>
 <div class="highlight"><pre><span></span><code>set name YOW-Repeater-01
+set radio 910.525,62.5,7,5
+set path.hash.mode 2
 set mqtt.iata YOW
 set wifi.ssid YourWiFiNetwork
 set wifi.pwd YourWiFiPassword
 set wifi.powersave none
-set mqtt.status on
-set mqtt.packets on
-set bridge.enabled on
-set mqtt.rx on
-set mqtt.tx advert
-reboot
-</code></pre></div>
-<div class="admonition note">
-<p class="admonition-title">Room Servers</p>
-<p>For room server roles, change the name to match (e.g. <code>YOW-Room-Server-01</code>).</p>
-</div>
-<h2 id="packet-repeating">Packet Repeating<a class="headerlink" href="#packet-repeating" title="Permanent link">&para;</a></h2>
-<p>By default, the device will repeat packets for other nodes on the mesh in addition to observing. If that's what you want, no changes needed.</p>
-<p>If you already have a repeater nearby (e.g. one on your roof) and this device should only observe without repeating traffic, disable it:</p>
-<div class="highlight"><pre><span></span><code>set repeat off
-</code></pre></div>
-<h2 id="broker-slots">Broker Slots<a class="headerlink" href="#broker-slots" title="Permanent link">&para;</a></h2>
-<p>These firmware images ship pre-configured with <code>mqtt1.meshcore.ca</code> and <code>mqtt2.meshcore.ca</code> in slots 1 and 2. No action needed unless your slots were cleared or overwritten.</p>
-<details class="note">
-<summary>Restore broker slots manually</summary>
-<div class="highlight"><pre><span></span><code>set mqtt1.preset none
-set mqtt2.preset none
+set mqtt1.preset meshcore-ca-1
+set mqtt2.preset meshcore-ca-2
 set mqtt3.preset none
 set mqtt4.preset none
 set mqtt5.preset none
 set mqtt6.preset none
-set mqtt1.preset custom
-set mqtt1.server wss://mqtt1.meshcore.ca:443/mqtt
-set mqtt1.port 443
-set mqtt1.audience mqtt1.meshcore.ca
-set mqtt2.preset custom
-set mqtt2.server wss://mqtt2.meshcore.ca:443/mqtt
-set mqtt2.port 443
-set mqtt2.audience mqtt2.meshcore.ca
+set mqtt.status on
+set mqtt.packets on
+set mqtt.raw off
+set mqtt.rx on
+set mqtt.tx advert
+set bridge.enabled on
+set repeat on
+advert
+reboot
 </code></pre></div>
-</details>
+<p>For an observe-only node that should not repeat mesh traffic, use:</p>
+<div class="highlight"><pre><span></span><code>set repeat off
+</code></pre></div>
 <h2 id="verify">Verify<a class="headerlink" href="#verify" title="Permanent link">&para;</a></h2>
-<p>Once your device is online, head to <a href="../../verify/">Verify Observer Status</a> to confirm it's reporting correctly.</p>
+<p>After the device reboots, reopen the flasher <strong>Console</strong> and run:</p>
+<div class="highlight"><pre><span></span><code>get wifi.status
+get mqtt.iata
+get mqtt1.preset
+get mqtt2.preset
+get mqtt.status
+get path.hash.mode
+</code></pre></div>
+<p>Expected broker presets:</p>
+<div class="highlight"><pre><span></span><code>get mqtt1.preset
+&gt; meshcore-ca-1
+get mqtt2.preset
+&gt; meshcore-ca-2
+</code></pre></div>
+<p>Once WiFi and MQTT are connected, use <a href="../../verify/">Check Your Observer</a> to confirm packets are reaching MeshCore Canada.</p>
 <h2 id="useful-links">Useful Links<a class="headerlink" href="#useful-links" title="Permanent link">&para;</a></h2>
+<div class="grid cards">
 <ul>
-<li><a href="https://flasher.meshcore.io/">MeshCore Flasher</a></li>
-<li><a href="https://config.meshcore.dev/">MeshCore Config Tool</a></li>
-<li><a href="https://meshcore.dev/docs/cli">MeshCore CLI Docs</a></li>
+<li>
+<p><span class="twemoji lg middle"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg></span> <strong>Observer Flasher</strong></p>
+<hr />
+<p>Flash MQTT observer firmware and open the serial console.</p>
+<p><a href="https://observer.gessaman.com/"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"/></svg></span> observer.gessaman.com</a></p>
+</li>
+<li>
+<p><span class="twemoji lg middle"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.56 3.91c.59.59.59 1.54 0 2.12l-3.89 3.89 2.12 9.19-1.41 1.42-3.88-7.43L9.6 17l.36 2.47-1.07 1.06-1.76-3.18-3.19-1.77L5 14.5l2.5.37L11.37 11 3.94 7.09l1.42-1.41 9.19 2.12 3.89-3.89c.56-.58 1.56-.58 2.12 0"/></svg></span> <strong>IATA Region Codes</strong></p>
+<hr />
+<p>Pick the real 3-letter airport code nearest to the observer.</p>
+<p><a href="../../iata-codes/"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"/></svg></span> IATA codes</a></p>
+</li>
+<li>
+<p><span class="twemoji lg middle"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2m-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8z"/></svg></span> <strong>Check Your Observer</strong></p>
+<hr />
+<p>Confirm that the observer is online and reporting.</p>
+<p><a href="../../verify/"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"/></svg></span> verify status</a></p>
+</li>
 </ul>
+</div>
 
 
 
@@ -1846,54 +2591,54 @@ set mqtt2.audience mqtt2.meshcore.ca
 
 
 
-                
+
               </article>
             </div>
-          
-          
+
+
 <script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
         </div>
-        
+
           <button type="button" class="md-top md-icon" data-md-component="top" hidden>
-  
+
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
   Back to top
 </button>
-        
+
       </main>
-      
+
         <footer class="md-footer">
-  
+
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
       <div class="md-copyright">
-  
-  
+
+
     Made with
     <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
       Material for MkDocs
     </a>
-  
+
 </div>
-      
+
     </div>
   </div>
 </footer>
-      
+
     </div>
     <div class="md-dialog" data-md-component="dialog">
       <div class="md-dialog__inner md-typeset"></div>
     </div>
-    
-    
-    
-      
-      
+
+
+
+
+
       <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.top", "toc.follow"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
-    
-    
+
+
       <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
-      
-    
+
+
   </body>
 </html>
