@@ -40,7 +40,7 @@
 ??? question "What devices are compatible with MeshCore?"
     Use devices listed by the MeshCore Flasher or by a MeshCore Canada build guide for the role you need. Compatibility varies by radio chip, flash size, board wiring, display, battery hardware, and WiFi support.
 
-    The MeshCore.ca direct MQTT firmware path currently targets WiFi-capable LoRa boards published in the [MQTT Firmware](../analyzer/builds/mqtt-firmware.md) guide.
+    Standalone MQTT observer firmware targets WiFi-capable LoRa boards published by the [observer flasher setup guide](../analyzer/builds/mqtt-firmware.md).
 
 ??? question "Can I use my Meshtastic device with MeshCore?"
     Sometimes, but it must be flashed with MeshCore firmware and supported by the MeshCore build you choose. A device running Meshtastic firmware will not join a MeshCore mesh.

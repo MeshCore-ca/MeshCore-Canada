@@ -1,381 +1,316 @@
-# MQTT Firmware (Direct Observer)
+# MQTT Firmware (Standalone Observer)
 
-Flash observer firmware directly onto a supported board. The device connects to WiFi and publishes mesh traffic to MQTT brokers without a host computer.
+Flash standalone MQTT observer firmware with the [MeshCore observer flasher](https://observer.gessaman.com/). MeshCore Canada no longer hosts separate observer firmware binaries on this page.
 
-!!! info "Pre-configured firmware"
-    The 2026-05-21 and newer images are pre-compiled by **n30nex** and come pre-configured with the MeshCore.ca broker pair (`mqtt1.meshcore.ca` and `mqtt2.meshcore.ca`) in slots 1 and 2, plus the USA/Canada radio defaults (`910.525 MHz / 62.5 kHz / SF7 / CR5`). After flashing, run the CLI setup block below to set WiFi, IATA, node name, path hash mode, and packet publishing.
+!!! success "MeshCore Canada presets verified"
+    The observer firmware currently offered by `observer.gessaman.com` is built from Adam Gessaman's `mqtt-bridge-implementation-flex` branch at commit `c0c845f5`. That branch includes the built-in presets `meshcore-ca-1` and `meshcore-ca-2`, pointing to `mqtt1.meshcore.ca` and `mqtt2.meshcore.ca`.
 
-!!! note "Firmware attribution"
-    These images are community builds based on the open source [MeshCore firmware](https://github.com/meshcore-dev/MeshCore), released under the MIT License with copyright held by Scott Powell / Ripple Radios.
-    The direct MQTT observer support is built from Adam Gessaman's [`mqtt-bridge-implementation-flex`](https://github.com/agessaman/MeshCore/tree/mqtt-bridge-implementation-flex) branch.
-    The 2026-05-21 MeshCore.ca images were compiled and packaged by **n30nex** with MeshCore.ca broker defaults.
-    MeshCore.ca is an independent community site and is not affiliated with, endorsed by, or officially connected to MeshCore or MeshOS.
+## Flash The Observer
 
-## Supported Boards
+1. Open [observer.gessaman.com](https://observer.gessaman.com/).
+2. Pick your board under **MQTT Observer Firmware**.
+3. Choose **Repeater** or **Room Server**.
+4. For a new board or a board you are repurposing, enable **Erase device** and flash the merged image.
+5. When flashing finishes, use **Configure via USB** for the repeater or room server setup screen, or use **Console** for CLI setup.
 
-All boards support both Repeater and Room Server roles.
+!!! warning "First flash can erase settings"
+    First flashing observer firmware, especially on boards with a changed partition layout, can wipe stored settings and identity data. Back up an existing device private key before repurposing it.
 
-=== "Available (Hardware Verified)"
+## Required MeshCore Canada Settings
 
-    | Board | Notes |
-    |-------|-------|
-    | Heltec V3 | Fully tested |
+Use the repeater or room server setup screen where possible. If a setting is not exposed in the setup screen, use the console on the flasher page and paste the CLI commands below.
 
-=== "Available (Build Verified)"
+| Setting | Value |
+|---------|-------|
+| Radio preset | **USA/Canada (Recommended)** |
+| Raw radio values | `910.525 MHz / 62.5 kHz / SF7 / CR5` |
+| CLI radio command | `set radio 910.525,62.5,7,5` |
+| Path hash mode | 3-byte advert path hashes: `set path.hash.mode 2` |
+| MQTT slot 1 | `meshcore-ca-1` |
+| MQTT slot 2 | `meshcore-ca-2` |
+| IATA | A real 3-letter IATA airport code near the observer |
+| WiFi | 2.4 GHz network credentials |
 
-    | Board | Notes |
-    |-------|-------|
-    | Heltec V4 OLED | Build verified, smoke test recommended |
-    | LILYGO T3S3 SX1262 | Build verified, smoke test recommended |
-    | T-Beam Supreme SX1262 | Build verified, smoke test recommended |
-    | T-Beam SX1262 | Build verified, smoke test recommended |
-    | Seeed XIAO ESP32S3 + Wio-SX1262 | Build verified, smoke test recommended |
+!!! note "IATA codes"
+    Use a real airport code such as `YOW`, `YYZ`, `YUL`, `YVR`, or `YYC`. Do not use placeholders such as `XXX` or `HOME`. Do not use `CAN` as shorthand for Canada; it is an airport code for Guangzhou. See the [IATA region code list](../iata-codes.md) for Canadian quick choices.
 
-=== "Coming Soon (Pending Build)"
+## Command Builder
 
-    | Board | Notes |
-    |-------|-------|
-    | Heltec Wireless Tracker | Needs dedicated firmware target and validation |
-    | Heltec Wireless Paper | Needs dedicated firmware target and validation |
+Use this builder to create a CLI block for the flasher **Console**. It runs only in your browser.
 
-New boards will appear in the firmware picker automatically as they are validated and released.
-
-## Firmware Downloads
-
-Pick your board, role, and flash type to get the right firmware image.
-
-Most users should choose **First Flash (Merged)**, download the file, then flash it with the [MeshCore Flasher](https://flasher.meshcore.io/). No `esptool` offsets are needed when using the picker download.
-
-<div id="fw-picker" style="margin: 1.5em 0;">
-  <div id="fw-loading" style="padding: 1em; opacity: 0.75;">Loading firmware manifest... If this does not change, use the static download table below or download from GitHub Releases.</div>
-  <div id="fw-selects" style="display: none; flex-wrap: wrap; gap: 1em; margin-bottom: 1em;">
-    <div style="flex: 1; min-width: 160px;">
-      <label for="fw-board" style="display: block; font-weight: 600; margin-bottom: 0.3em; font-size: 0.85em; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.7;">Board</label>
-      <select id="fw-board" style="width: 100%; padding: 0.5em; border-radius: 6px; border: 1px solid var(--md-default-fg-color--lightest); background: var(--md-code-bg-color); color: var(--md-default-fg-color); font-size: 0.95em;"></select>
-    </div>
-    <div style="flex: 1; min-width: 160px;">
-      <label for="fw-role" style="display: block; font-weight: 600; margin-bottom: 0.3em; font-size: 0.85em; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.7;">Role</label>
-      <select id="fw-role" style="width: 100%; padding: 0.5em; border-radius: 6px; border: 1px solid var(--md-default-fg-color--lightest); background: var(--md-code-bg-color); color: var(--md-default-fg-color); font-size: 0.95em;"></select>
-    </div>
-    <div style="flex: 1; min-width: 160px;">
-      <label for="fw-type" style="display: block; font-weight: 600; margin-bottom: 0.3em; font-size: 0.85em; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.7;">Flash Type</label>
-      <select id="fw-type" style="width: 100%; padding: 0.5em; border-radius: 6px; border: 1px solid var(--md-default-fg-color--lightest); background: var(--md-code-bg-color); color: var(--md-default-fg-color); font-size: 0.95em;"></select>
-    </div>
+<div class="mc-command-builder" id="observer-command-builder">
+  <div class="mc-command-grid">
+    <label>
+      <span>IATA</span>
+      <input id="observer-iata" list="observer-iata-list" maxlength="3" value="YOW" autocomplete="off">
+      <datalist id="observer-iata-list">
+        <option value="YOW">Ottawa</option>
+        <option value="YYZ">Toronto Pearson</option>
+        <option value="YTZ">Toronto Billy Bishop</option>
+        <option value="YUL">Montreal Trudeau</option>
+        <option value="YQB">Quebec City</option>
+        <option value="YVR">Vancouver</option>
+        <option value="YYJ">Victoria</option>
+        <option value="YYC">Calgary</option>
+        <option value="YEG">Edmonton</option>
+        <option value="YXE">Saskatoon</option>
+        <option value="YQR">Regina</option>
+        <option value="YWG">Winnipeg</option>
+        <option value="YHZ">Halifax</option>
+        <option value="YYT">St. John's</option>
+        <option value="YXY">Whitehorse</option>
+        <option value="YZF">Yellowknife</option>
+        <option value="YFB">Iqaluit</option>
+      </datalist>
+    </label>
+    <label>
+      <span>Role</span>
+      <select id="observer-role">
+        <option value="Repeater">Repeater</option>
+        <option value="Room-Server">Room Server</option>
+      </select>
+    </label>
+    <label>
+      <span>Node number</span>
+      <input id="observer-number" value="01" autocomplete="off">
+    </label>
+    <label>
+      <span>WiFi SSID</span>
+      <input id="observer-ssid" value="YourWiFiNetwork" autocomplete="off">
+    </label>
+    <label>
+      <span>WiFi password</span>
+      <input id="observer-password" value="YourWiFiPassword" autocomplete="off">
+    </label>
+    <label>
+      <span>Repeating</span>
+      <select id="observer-repeat">
+        <option value="on">Repeat mesh packets</option>
+        <option value="off">Observe only</option>
+      </select>
+    </label>
   </div>
-  <div id="fw-result" style="padding: 1em 1.2em; border-radius: 8px; border: 2px solid var(--md-accent-fg-color); background: var(--md-code-bg-color);"></div>
+  <div class="mc-command-actions">
+    <button type="button" id="observer-copy-commands">Copy commands</button>
+    <span id="observer-copy-status" aria-live="polite"></span>
+  </div>
+  <pre><code id="observer-command-output"></code></pre>
 </div>
 
+<style>
+  .mc-command-builder {
+    border: 1px solid var(--md-default-fg-color--lightest);
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 1rem 0 1.5rem;
+    background: var(--md-code-bg-color);
+  }
+  .mc-command-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.75rem;
+  }
+  .mc-command-builder label {
+    display: grid;
+    gap: 0.35rem;
+    margin: 0;
+  }
+  .mc-command-builder label span {
+    font-size: 0.78rem;
+    font-weight: 600;
+  }
+  .mc-command-builder input,
+  .mc-command-builder select {
+    min-height: 2.25rem;
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid var(--md-default-fg-color--lightest);
+    border-radius: 6px;
+    padding: 0.4rem 0.5rem;
+    background: var(--md-default-bg-color);
+    color: var(--md-default-fg-color);
+    font: inherit;
+  }
+  .mc-command-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0.9rem 0 0.75rem;
+  }
+  .mc-command-actions button {
+    border: 1px solid var(--md-accent-fg-color);
+    border-radius: 6px;
+    padding: 0.45rem 0.7rem;
+    background: transparent;
+    color: var(--md-accent-fg-color);
+    font: inherit;
+    cursor: pointer;
+  }
+  .mc-command-actions span {
+    min-height: 1.2rem;
+    font-size: 0.8rem;
+    opacity: 0.8;
+  }
+  .mc-command-builder pre {
+    margin-bottom: 0;
+  }
+</style>
+
 <script>
-(function() {
-  var REPO = "MeshCore-ca/MeshCore-Canada";
-  var API  = "https://api.github.com/repos/" + REPO + "/releases/latest";
-  var LOCAL_MANIFEST = "../firmware/manifest.json";
-  var LOCAL_FIRMWARE_BASE = "../firmware/";
+(function () {
+  var root = document.getElementById("observer-command-builder");
+  if (!root) return;
 
-  var manifest = null;
-  var assets   = {};
+  var fields = {
+    iata: document.getElementById("observer-iata"),
+    role: document.getElementById("observer-role"),
+    number: document.getElementById("observer-number"),
+    ssid: document.getElementById("observer-ssid"),
+    password: document.getElementById("observer-password"),
+    repeat: document.getElementById("observer-repeat")
+  };
+  var output = document.getElementById("observer-command-output");
+  var status = document.getElementById("observer-copy-status");
 
-  function populateSelect(id, items) {
-    var el = document.getElementById(id);
-    el.innerHTML = items.map(function(item) {
-      return '<option value="' + item.id + '">' + item.label + '</option>';
-    }).join("");
+  function value(el, fallback) {
+    var text = (el.value || "").trim();
+    return text || fallback;
   }
 
-  function findArtifact() {
-    if (!manifest) return null;
-    var board = document.getElementById("fw-board").value;
-    var role  = document.getElementById("fw-role").value;
-    var type  = document.getElementById("fw-type").value;
-    return manifest.artifacts.find(function(a) {
-      return a.board === board && a.role === role && a.type === type;
+  function iataValue() {
+    return value(fields.iata, "YOW").toUpperCase().replace(/[^A-Z]/g, "").slice(0, 3) || "YOW";
+  }
+
+  function render() {
+    var iata = iataValue();
+    var role = value(fields.role, "Repeater");
+    var number = value(fields.number, "01");
+    var nodeName = iata + "-" + role + "-" + number;
+    var commands = [
+      "set name " + nodeName,
+      "set radio 910.525,62.5,7,5",
+      "set path.hash.mode 2",
+      "set mqtt.iata " + iata,
+      "set wifi.ssid " + value(fields.ssid, "YourWiFiNetwork"),
+      "set wifi.pwd " + value(fields.password, "YourWiFiPassword"),
+      "set wifi.powersave none",
+      "set mqtt1.preset meshcore-ca-1",
+      "set mqtt2.preset meshcore-ca-2",
+      "set mqtt3.preset none",
+      "set mqtt4.preset none",
+      "set mqtt5.preset none",
+      "set mqtt6.preset none",
+      "set mqtt.status on",
+      "set mqtt.packets on",
+      "set mqtt.raw off",
+      "set mqtt.rx on",
+      "set mqtt.tx advert",
+      "set bridge.enabled on",
+      "set repeat " + value(fields.repeat, "on"),
+      "advert",
+      "reboot"
+    ];
+    output.textContent = commands.join("\n");
+  }
+
+  root.addEventListener("input", render);
+  document.getElementById("observer-copy-commands").addEventListener("click", function () {
+    navigator.clipboard.writeText(output.textContent).then(function () {
+      status.textContent = "Copied";
+      setTimeout(function () { status.textContent = ""; }, 1600);
+    }, function () {
+      status.textContent = "Select the block and copy manually";
     });
-  }
-
-  function update() {
-    var artifact = findArtifact();
-    var result   = document.getElementById("fw-result");
-
-    if (!artifact) {
-      result.innerHTML = '<span style="opacity: 0.5;">No firmware available for this combination.</span>';
-      return;
-    }
-
-    var file = artifact.file;
-    var href = assets[file] || "#";
-    var boardEl = document.getElementById("fw-board");
-    var roleEl  = document.getElementById("fw-role");
-    var typeEl  = document.getElementById("fw-type");
-    var boardLabel = boardEl.options[boardEl.selectedIndex].text;
-    var roleLabel  = roleEl.options[roleEl.selectedIndex].text;
-    var typeLabel  = typeEl.options[typeEl.selectedIndex].text;
-    var isMerged   = artifact.type === "merged";
-    var helpText   = isMerged
-      ? "MeshCore Flasher full image. Use for first flash or recovery; writes at 0x00000."
-      : "App-only update image. Use only on devices already running MeshCore; writes at 0x10000.";
-    var linkText   = isMerged ? "Download for MeshCore Flasher" : "Download update image";
-
-    result.innerHTML =
-      '<div style="margin-bottom: 0.6em;">' +
-        '<strong>' + boardLabel + '</strong> &middot; ' +
-        roleLabel + ' &middot; ' + typeLabel +
-      '</div>' +
-      '<div style="font-family: var(--md-code-font-family); font-size: 0.85em; opacity: 0.7; margin-bottom: 0.4em;">' +
-        file +
-      '</div>' +
-      '<div style="font-size: 0.8em; opacity: 0.5; margin-bottom: 0.8em;">Build: ' +
-        manifest.version + ' (' + manifest.date + ')</div>' +
-      '<div style="font-size: 0.9em; margin-bottom: 0.8em;">' +
-        helpText +
-      '</div>' +
-      '<a href="' + href + '" download ' +
-        'style="display: inline-block; padding: 0.6em 1.5em; border-radius: 6px; ' +
-        'background: var(--md-accent-fg-color); color: var(--md-accent-bg-color); ' +
-        'font-weight: 600; text-decoration: none;">' +
-        linkText + '</a>';
-  }
-
-  function initManifest(data, assetMap) {
-    manifest = data;
-    assets = assetMap || {};
-    (manifest.artifacts || []).forEach(function(artifact) {
-      if (!assets[artifact.file]) {
-        assets[artifact.file] = LOCAL_FIRMWARE_BASE + artifact.file;
-      }
-    });
-
-    populateSelect("fw-board", manifest.boards);
-    populateSelect("fw-role", manifest.roles);
-    populateSelect("fw-type", manifest.types);
-    document.getElementById("fw-loading").style.display = "none";
-    document.getElementById("fw-selects").style.display = "flex";
-    document.getElementById("fw-board").addEventListener("change", update);
-    document.getElementById("fw-role").addEventListener("change", update);
-    document.getElementById("fw-type").addEventListener("change", update);
-    update();
-  }
-
-  function loadLocalManifest() {
-    return fetch(LOCAL_MANIFEST)
-      .then(function(r) {
-        if (!r.ok) throw new Error(r.status);
-        return r.json();
-      })
-      .then(function(data) {
-        initManifest(data, {});
-      });
-  }
-
-  function initRelease(release) {
-    var releaseAssets = {};
-    (release.assets || []).forEach(function(asset) {
-      releaseAssets[asset.name] = asset.browser_download_url;
-    });
-
-    var manifestAsset = (release.assets || []).find(function(a) {
-      return a.name === "manifest.json";
-    });
-    if (!manifestAsset) {
-      return loadLocalManifest();
-    }
-
-    fetch(manifestAsset.browser_download_url)
-      .then(function(r) { return r.json(); })
-      .then(function(data) {
-        initManifest(data, releaseAssets);
-      })
-      .catch(function() {
-        return loadLocalManifest();
-      });
-  }
-
-  fetch(API)
-    .then(function(r) {
-      if (!r.ok) throw new Error(r.status);
-      return r.json();
-    })
-    .then(initRelease)
-    .catch(function() {
-      loadLocalManifest().catch(function() {
-        document.getElementById("fw-loading").innerHTML =
-          'Could not load firmware list. <a href="https://github.com/' + REPO + '/releases/latest">Download from GitHub Releases</a>.';
-      });
-    });
+  });
+  render();
 })();
 </script>
 
-### Static Download Index
+## Manual CLI Reference
 
-If the firmware picker does not load, use this static table. **First Flash (Merged)** is the right choice for a new board, erased board, or recovery flash. Use **Update** only on a device already running MeshCore.
-
-| Board | Role | First Flash (Merged) | Update |
-|-------|------|----------------------|--------|
-| Heltec V3 | Repeater | [Download](firmware/meshcore-ca-heltec-v3-repeater-20260521-merged.bin) | [Download](firmware/meshcore-ca-heltec-v3-repeater-20260521-update.bin) |
-| Heltec V3 | Room Server | [Download](firmware/meshcore-ca-heltec-v3-room-server-20260521-merged.bin) | [Download](firmware/meshcore-ca-heltec-v3-room-server-20260521-update.bin) |
-| Heltec V4 OLED | Repeater | [Download](firmware/meshcore-ca-heltec-v4-oled-repeater-20260521-merged.bin) | [Download](firmware/meshcore-ca-heltec-v4-oled-repeater-20260521-update.bin) |
-| Heltec V4 OLED | Room Server | [Download](firmware/meshcore-ca-heltec-v4-oled-room-server-20260521-merged.bin) | [Download](firmware/meshcore-ca-heltec-v4-oled-room-server-20260521-update.bin) |
-| LILYGO T3S3 SX1262 | Repeater | [Download](firmware/meshcore-ca-lilygo-t3s3-sx1262-repeater-20260521-merged.bin) | [Download](firmware/meshcore-ca-lilygo-t3s3-sx1262-repeater-20260521-update.bin) |
-| LILYGO T3S3 SX1262 | Room Server | [Download](firmware/meshcore-ca-lilygo-t3s3-sx1262-room-server-20260521-merged.bin) | [Download](firmware/meshcore-ca-lilygo-t3s3-sx1262-room-server-20260521-update.bin) |
-| LILYGO T-Beam S3 Supreme SX1262 | Repeater | [Download](firmware/meshcore-ca-lilygo-t-beam-s3-supreme-sx1262-repeater-20260521-merged.bin) | [Download](firmware/meshcore-ca-lilygo-t-beam-s3-supreme-sx1262-repeater-20260521-update.bin) |
-| LILYGO T-Beam S3 Supreme SX1262 | Room Server | [Download](firmware/meshcore-ca-lilygo-t-beam-s3-supreme-sx1262-room-server-20260521-merged.bin) | [Download](firmware/meshcore-ca-lilygo-t-beam-s3-supreme-sx1262-room-server-20260521-update.bin) |
-| LILYGO T-Beam SX1262 | Repeater | [Download](firmware/meshcore-ca-lilygo-tbeam-sx1262-repeater-20260521-merged.bin) | [Download](firmware/meshcore-ca-lilygo-tbeam-sx1262-repeater-20260521-update.bin) |
-| LILYGO T-Beam SX1262 | Room Server | [Download](firmware/meshcore-ca-lilygo-tbeam-sx1262-room-server-20260521-merged.bin) | [Download](firmware/meshcore-ca-lilygo-tbeam-sx1262-room-server-20260521-update.bin) |
-| Seeed XIAO ESP32S3 + Wio-SX1262 | Repeater | [Download](firmware/meshcore-ca-seeed-xiao-s3-wio-sx1262-repeater-20260521-merged.bin) | [Download](firmware/meshcore-ca-seeed-xiao-s3-wio-sx1262-repeater-20260521-update.bin) |
-| Seeed XIAO ESP32S3 + Wio-SX1262 | Room Server | [Download](firmware/meshcore-ca-seeed-xiao-s3-wio-sx1262-room-server-20260521-merged.bin) | [Download](firmware/meshcore-ca-seeed-xiao-s3-wio-sx1262-room-server-20260521-update.bin) |
-
-## Prerequisites
-
-| Requirement | Details |
-|-------------|---------|
-| Board | A supported LoRa board (see list above) |
-| WiFi | 2.4 GHz network credentials |
-| IATA Code | Your real 3-letter IATA airport code (e.g. `YOW` for Ottawa) |
-| Radio preset | Built into 2026-05-21+ firmware: USA/Canada recommended settings, `910.525 MHz / 62.5 kHz / SF7 / CR5` |
-| Path hash mode | 3-byte path hashes: `set path.hash.mode 2` |
-
-## Flashing
-
-1. Pick your board and role from the picker above
-2. Choose **First Flash (Merged)** unless you already know you need an app-only update image
-3. Download the firmware and flash it with the [MeshCore Flasher](https://flasher.meshcore.io/)
-
-!!! tip "First time flashing?"
-    Use **First Flash (Merged)**. The published merged filenames end in `-merged.bin`, which lets MeshCore Flasher detect the full image and write it at the correct offset.
-
-| Flash type | Use case | Technical offset |
-|------------|----------|------------------|
-| First Flash (Merged) | New board, erased board, recovery from a bad flash | `0x00000` |
-| Update | Device already running MeshCore with a valid bootloader and partition table | `0x10000` |
-
-Technical users can still flash with their preferred ESP tool. Most users should use the MeshCore Flasher and the **First Flash (Merged)** picker option.
-
-## CLI Setup
-
-After flashing, connect to the device's admin CLI (serial or web) to set your WiFi, IATA code, and node name.
-
-### Guided Heltec V3 / V4 Setup
-
-For Heltec V3 and Heltec V4 OLED boards running the MeshCore.ca direct MQTT firmware, the guided setup script prompts for your board, role, IATA code, WiFi network, WiFi password, node name, broker restore choice, and repeat/observe-only mode. It also applies the MeshCore Canada radio values, 3-byte path hash mode, and required MQTT packet publishing settings:
-
-```bash
-bash <(curl -fsSL https://meshcore.ca/analyzer/scripts/setup-mqtt-firmware.sh)
-```
-
-The script can send the commands over USB serial on Linux or macOS, or print a copy/paste command block for the web/admin CLI. If you already know the serial port, pass it directly:
-
-```bash
-bash <(curl -fsSL https://meshcore.ca/analyzer/scripts/setup-mqtt-firmware.sh) --port /dev/ttyUSB0
-```
-
-On Windows, use the PowerShell helper:
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -Command "iex (iwr -UseBasicParsing https://meshcore.ca/analyzer/scripts/setup-mqtt-firmware.ps1).Content"
-```
-
-If you already know the COM port, pass it directly:
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -Command "& ([scriptblock]::Create((iwr -UseBasicParsing https://meshcore.ca/analyzer/scripts/setup-mqtt-firmware.ps1).Content)) -Port COM3"
-```
-
-To generate commands without touching a serial port:
-
-```bash
-bash <(curl -fsSL https://meshcore.ca/analyzer/scripts/setup-mqtt-firmware.sh) --print-only
-```
-
-Windows print-only mode:
-
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -Command "& ([scriptblock]::Create((iwr -UseBasicParsing https://meshcore.ca/analyzer/scripts/setup-mqtt-firmware.ps1).Content)) -PrintOnly"
-```
-
-### Manual CLI Setup
-
-If you prefer to configure the device manually, replace `YOW` with the real 3-letter airport code nearest to you and fill in your network credentials:
+If you prefer to type commands manually, replace `YOW`, `YourWiFiNetwork`, and `YourWiFiPassword` with your own values:
 
 ```text
 set name YOW-Repeater-01
+set radio 910.525,62.5,7,5
 set path.hash.mode 2
 set mqtt.iata YOW
 set wifi.ssid YourWiFiNetwork
 set wifi.pwd YourWiFiPassword
 set wifi.powersave none
+set mqtt1.preset meshcore-ca-1
+set mqtt2.preset meshcore-ca-2
+set mqtt3.preset none
+set mqtt4.preset none
+set mqtt5.preset none
+set mqtt6.preset none
 set mqtt.status on
 set mqtt.packets on
-set bridge.enabled on
+set mqtt.raw off
 set mqtt.rx on
 set mqtt.tx advert
+set bridge.enabled on
+set repeat on
+advert
 reboot
 ```
 
-!!! warning "Use a real IATA code"
-    The firmware will let you type any value, but the public MeshCore.ca broker only accepts valid 3-letter IATA airport codes. If the code is not on the quick list, it can still work as long as it is a real airport code. Placeholder or made-up values such as `XXX` or `HOME` will not publish. Do not use `CAN` as shorthand for Canada; it is a real airport code for Guangzhou and will tag your observer to the wrong region.
-
-!!! note "Room Servers"
-    For room server roles, change the name to match (e.g. `YOW-Room-Server-01`).
-
-!!! tip "MeshCore Canada network settings"
-    Fresh 2026-05-21 and newer direct MQTT firmware images already default to the **USA/Canada (Recommended)** radio preset used by MeshCore Canada communities. `set path.hash.mode 2` is still required during onboarding because it selects 3-byte path hashes for repeater-backed MeshCore Canada networks. If you are updating an older image, reusing a device with retained preferences, or verifying a device before remote installation, run `set radio 910.525,62.5,7,5` as well.
-
-## Packet Repeating
-
-By default, the device will repeat packets for other nodes on the mesh in addition to observing. If that's what you want, no changes needed.
-
-If you already have a repeater nearby (e.g. one on your roof) and this device should only observe without repeating traffic, disable it:
+For an observe-only node that should not repeat mesh traffic, use:
 
 ```text
 set repeat off
 ```
 
-## Broker Slots
-
-These firmware images ship pre-configured with `mqtt1.meshcore.ca` and `mqtt2.meshcore.ca` in slots 1 and 2. No action needed unless your slots were cleared or overwritten.
-
-??? note "Restore broker slots manually"
-
-    If your broker slots were cleared or overwritten, restore them with:
-
-    ```text
-    set mqtt1.preset none
-    set mqtt2.preset none
-    set mqtt3.preset none
-    set mqtt4.preset none
-    set mqtt5.preset none
-    set mqtt6.preset none
-    set mqtt1.preset custom
-    set mqtt1.server wss://mqtt1.meshcore.ca:443
-    set mqtt1.port 443
-    set mqtt1.audience mqtt1.meshcore.ca
-    set mqtt2.preset custom
-    set mqtt2.server wss://mqtt2.meshcore.ca:443
-    set mqtt2.port 443
-    set mqtt2.audience mqtt2.meshcore.ca
-    ```
-
 ## Verify
 
-Once your device is online, head to [Check Your Observer](../verify.md) to confirm it's reporting correctly.
+After the device reboots, reopen the flasher **Console** and run:
+
+```text
+get wifi.status
+get mqtt.iata
+get mqtt1.preset
+get mqtt2.preset
+get mqtt.status
+get path.hash.mode
+```
+
+Expected broker presets:
+
+```text
+get mqtt1.preset
+> meshcore-ca-1
+get mqtt2.preset
+> meshcore-ca-2
+```
+
+Once WiFi and MQTT are connected, use [Check Your Observer](../verify.md) to confirm packets are reaching MeshCore Canada.
 
 ## Useful Links
 
 <div class="grid cards" markdown>
 
--   :material-flash:{ .lg .middle } **MeshCore Flasher**
+-   :material-flash:{ .lg .middle } **Observer Flasher**
 
     ---
 
-    Web-based flashing tool for MeshCore firmware.
+    Flash MQTT observer firmware and open the serial console.
 
-    [:octicons-arrow-right-24: flasher.meshcore.io](https://flasher.meshcore.io/)
+    [:octicons-arrow-right-24: observer.gessaman.com](https://observer.gessaman.com/)
 
--   :material-cog:{ .lg .middle } **MeshCore Config Tool**
+-   :material-airplane:{ .lg .middle } **IATA Region Codes**
 
     ---
 
-    Configure your device settings via the web.
+    Pick the real 3-letter airport code nearest to the observer.
 
-    [:octicons-arrow-right-24: config.meshcore.dev](https://config.meshcore.dev/)
+    [:octicons-arrow-right-24: IATA codes](../iata-codes.md)
+
+-   :material-check-circle:{ .lg .middle } **Check Your Observer**
+
+    ---
+
+    Confirm that the observer is online and reporting.
+
+    [:octicons-arrow-right-24: verify status](../verify.md)
 
 </div>

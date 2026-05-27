@@ -5,7 +5,7 @@ MeshCore observers capture mesh traffic and publish packet telemetry to MQTT bro
 !!! tip "Observer setup checklist"
     Every observer path needs the same basics: a MeshCore radio already on the MeshCore Canada network settings, a real 3-letter IATA airport code, the MeshCore.ca broker pair, JWT token authentication, TLS on port `443`, and packet publishing enabled. If the setup screen has two broker entries, use the same IATA code on both entries.
 
-    MeshCore Canada network settings are **USA/Canada (Recommended)**, or raw radio values `910.525 MHz / 62.5 kHz / SF7 / CR5`, with 3-byte path hashes. Fresh 2026-05-21 and newer MeshCore.ca direct MQTT firmware already includes that radio preset and the broker pair; still set `set path.hash.mode 2`, IATA, WiFi, and packet publishing during onboarding. On older images, retained preferences, or generic CLI devices, also run `set radio 910.525,62.5,7,5`.
+    MeshCore Canada network settings are **USA/Canada (Recommended)**, or raw radio values `910.525 MHz / 62.5 kHz / SF7 / CR5`, with 3-byte path hashes. Standalone observer firmware from the observer flasher includes selectable MeshCore Canada broker presets; set `meshcore-ca-1` and `meshcore-ca-2`, then set `set path.hash.mode 2`, IATA, WiFi, and packet publishing during onboarding. On retained preferences or generic CLI devices, also run `set radio 910.525,62.5,7,5`.
 
 ## Choose Your Observer Path
 

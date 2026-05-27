@@ -14,8 +14,8 @@ Run these in the device's admin CLI:
 | `get mqtt.packets` | Should be `on` for packet publishing |
 | `get bridge.enabled` | Should be `on` for bridge publishing |
 | `get mqtt.rx` / `get mqtt.tx` | Should match the firmware guide setup |
-| `get mqtt1.preset` | Should show `custom` (not `none`) |
-| `get mqtt2.preset` | Should show `custom` (not `none`) |
+| `get mqtt1.preset` | Should show `meshcore-ca-1` |
+| `get mqtt2.preset` | Should show `meshcore-ca-2` |
 | `get name` | Should return the node name you set |
 
 ??? note "Full verify command block"
