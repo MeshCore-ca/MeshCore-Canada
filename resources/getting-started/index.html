@@ -2361,7 +2361,7 @@
 </div>
 <div class="admonition note">
 <p class="admonition-title">Why 3-byte path hashes?</p>
-<p>MeshCore Canada recommends 3-byte path hashes for better behavior on larger repeater-backed networks. Companion devices often need this changed manually. Repeaters and room servers flashed with 2026-05-21 or newer MeshCore.ca direct MQTT firmware already default to the USA/Canada radio preset, but path hash mode should still be set during onboarding.</p>
+<p>MeshCore Canada recommends 3-byte path hashes for better behavior on larger repeater-backed networks. Companion devices often need this changed manually. Repeaters, room servers, and standalone observers should have path hash mode set during onboarding.</p>
 </div>
 <h2 id="step-2-get-your-hardware">Step 2: Get Your Hardware<a class="headerlink" href="#step-2-get-your-hardware" title="Permanent link">&para;</a></h2>
 <p>Choose a role:</p>
@@ -2374,10 +2374,10 @@
 <p>Start with <a href="../../hardware/recommended-companions/">Recommended Companions</a> if you want a personal device, or <a href="../../hardware/recommended-repeaters/">Recommended Repeaters</a> if you are building a fixed node.</p>
 <h2 id="step-3-flash-the-firmware">Step 3: Flash the Firmware<a class="headerlink" href="#step-3-flash-the-firmware" title="Permanent link">&para;</a></h2>
 <p>Flash firmware for the role you need, then apply the MeshCore Canada network settings before judging whether the device works.</p>
-<p>For repeaters and room servers using 2026-05-21 or newer MeshCore.ca direct MQTT firmware, include this first-run CLI setting:</p>
+<p>For repeaters, room servers, and standalone observers, include this first-run CLI setting:</p>
 <div class="highlight"><pre><span></span><code>set path.hash.mode 2
 </code></pre></div>
-<p>If you are updating an older image, reusing a device with retained preferences, or configuring generic firmware through the CLI, also run <code>set radio 910.525,62.5,7,5</code>.</p>
+<p>If you are reusing a device with retained preferences or configuring firmware through the CLI, also run <code>set radio 910.525,62.5,7,5</code>.</p>
 <p>For companion devices, set the radio preset to <strong>USA/Canada (Recommended)</strong> and set path hash mode to <strong>3-byte</strong> in the companion app or config tool. If you are configuring a companion through a CLI that supports MeshCore settings, use:</p>
 <div class="highlight"><pre><span></span><code>set path.hash.mode 2
 </code></pre></div>

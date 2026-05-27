@@ -2193,7 +2193,7 @@
 <div class="admonition tip">
 <p class="admonition-title">Observer setup checklist</p>
 <p>Every observer path needs the same basics: a MeshCore radio already on the MeshCore Canada network settings, a real 3-letter IATA airport code, the MeshCore.ca broker pair, JWT token authentication, TLS on port <code>443</code>, and packet publishing enabled. If the setup screen has two broker entries, use the same IATA code on both entries.</p>
-<p>MeshCore Canada network settings are <strong>USA/Canada (Recommended)</strong>, or raw radio values <code>910.525 MHz / 62.5 kHz / SF7 / CR5</code>, with 3-byte path hashes. Fresh 2026-05-21 and newer MeshCore.ca direct MQTT firmware already includes that radio preset and the broker pair; still set <code>set path.hash.mode 2</code>, IATA, WiFi, and packet publishing during onboarding. On older images, retained preferences, or generic CLI devices, also run <code>set radio 910.525,62.5,7,5</code>.</p>
+<p>MeshCore Canada network settings are <strong>USA/Canada (Recommended)</strong>, or raw radio values <code>910.525 MHz / 62.5 kHz / SF7 / CR5</code>, with 3-byte path hashes. Standalone observer firmware from the observer flasher includes selectable MeshCore Canada broker presets; set <code>meshcore-ca-1</code> and <code>meshcore-ca-2</code>, then set <code>set path.hash.mode 2</code>, IATA, WiFi, and packet publishing during onboarding. On retained preferences or generic CLI devices, also run <code>set radio 910.525,62.5,7,5</code>.</p>
 </div>
 <h2 id="choose-your-observer-path">Choose Your Observer Path<a class="headerlink" href="#choose-your-observer-path" title="Permanent link">&para;</a></h2>
 <div class="grid cards">
