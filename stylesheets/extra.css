@@ -1,45 +1,78 @@
-.home-discord-link {
+/* ── Home title + social links (inline) ── */
+
+.home-title {
   display: flex;
-  justify-content: center;
-  margin: 0 0 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
 }
 
-.home-discord-link p {
+.home-title .home-heading {
   margin: 0;
 }
 
-.home-discord-link .discord-logo-link {
+.home-social-links {
+  display: flex;
   align-items: center;
-  border: 1px solid rgba(88, 101, 242, 0.45);
-  border-color: color-mix(in srgb, #5865f2 45%, transparent);
-  border-radius: 0.4rem;
-  color: #5865f2;
-  display: inline-flex;
-  height: 3rem;
-  justify-content: center;
-  transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
-  width: 3rem;
+  gap: 0.5rem;
 }
 
-.home-discord-link .discord-logo-link:hover,
-.home-discord-link .discord-logo-link:focus-visible {
+.home-social-links p {
+  margin: 0;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.home-social-links .social-link {
+  align-items: center;
+  border: 1px solid color-mix(in srgb, currentColor 25%, transparent);
+  border-radius: 0.4rem;
+  display: inline-flex;
+  height: 2.4rem;
+  justify-content: center;
+  transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease;
+  width: 2.4rem;
+}
+
+/* Discord colours */
+.home-social-links .discord-link {
+  color: #5865f2;
+  border-color: color-mix(in srgb, #5865f2 45%, transparent);
+}
+
+.home-social-links .discord-link:hover,
+.home-social-links .discord-link:focus-visible {
   background-color: #5865f2;
   border-color: #5865f2;
   color: #fff;
 }
 
-.home-discord-link .discord-logo-link:focus-visible {
+/* Forum colours */
+.home-social-links .forum-link {
+  color: #43a047;
+  border-color: color-mix(in srgb, #43a047 45%, transparent);
+}
+
+.home-social-links .forum-link:hover,
+.home-social-links .forum-link:focus-visible {
+  background-color: #43a047;
+  border-color: #43a047;
+  color: #fff;
+}
+
+.home-social-links .social-link:focus-visible {
   outline: 2px solid var(--md-accent-fg-color);
   outline-offset: 3px;
 }
 
-.home-discord-link .twemoji {
+.home-social-links .twemoji {
   display: inline-flex;
-  height: 1.75rem;
-  width: 1.75rem;
+  height: 1.4rem;
+  width: 1.4rem;
 }
 
-.home-discord-link .twemoji svg {
+.home-social-links .twemoji svg {
   fill: currentColor;
   height: 100%;
   width: 100%;
