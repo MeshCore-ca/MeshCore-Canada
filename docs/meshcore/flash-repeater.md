@@ -51,42 +51,34 @@ If flashing fails after erasing, refresh the page, click **Enter DFU Mode** agai
 
 ## Configuring a MeshCore Repeater
 
-**Note**: We are beginning to transition from 1-byte to 3-byte path sizes, and eventually will not need to worry about overlapping repeater id's. In the meantime, follow the steps in this section.
-
-1. Using a Chromium-based browser that supports the [required serial connection](https://developer.mozilla.org/en-US/docs/Web/API/Web_Serial_API#browser_compatibility) (e.g., Google Chrome or Microsoft Edge), open the **MeshCore Web Flasher**:
+1. Using a Browser that supports the [required serial connection](https://developer.mozilla.org/en-US/docs/Web/API/Web_Serial_API#browser_compatibility) (e.g., Google Chrome or Microsoft Edge), open the **MeshCore Web Flasher**:
    <https://meshcore.io/flasher>
 
 2. Click the **Repeater Setup** button in the top right.
 
-3. Connect to your repeater and note the **Repeater ID** shown in the tool.
-   - The Repeater ID is derived from the keypair (it corresponds to the **first byte / first two hex characters** of the repeater’s key).
-   - Because there are only **256 possible IDs**, overlaps become more likely as the network grows, especially when keys are generated automatically during flashing.
+3. Check the **Show Advanced Settings** checkbox so all fields below are visible.
 
-4. Check the **[Ottawa Repeater ID List](../hardware/recommended-repeaters.md)** to confirm your repeater ID is **not already in use**.
-   - If it’s unique, continue with the next step.
-   - If it’s already in use, follow the **[Generating a Repeater ID](generate-repeater-id.md)** instructions to assign a new one, then return here to continue.
+4. Set a Location either entering Lattitude/Longitude or using the map icon.
 
-5. Check the **Show Advanced Settings** checkbox so all fields below are visible.
+5. Set a descriptive repeater **name** (e.g., `Callsign_R1`, `Downtown_R1`).
 
-6. Set a descriptive repeater **name** (e.g., `Callsign_R1`, `Downtown_R1`).
+6. Set an **admin password** (required for MeshCore Remote Administration).
 
-7. Set an **admin password** (required for MeshCore Remote Administration).
-
-8. Apply the Ottawa defaults:
+7. Apply the USA/Canada (Recommended) Preset:
    **910.525 MHz / BW 62.5 kHz / SF7 / CR5**
 
-9. Set the advert intervals:
-   1. **Advert Interval:** `60`
-   2. **Flood Advert Interval:** `24`
+8. Set the advert intervals:
+   1. **Advert Interval (minutes):** `60`
+   2. **Flood Advert Interval (hours):** `24`
    3. **Flood Max:** `64`
 
-10. Set **Path Hash Mode** to **3-byte (2)**.
+9. Set **Path Hash Mode** to **3-byte (2)**.
 
-11. *(Optional)* Set your own info (e.g., owner name or contact).
+10. *(Optional)* Set your own info (e.g., owner name or contact).
 
-12. Click **Save Settings**, then reboot the repeater.
+11. Click **Save Settings**, then reboot the repeater.
 
-13. Reconnect with the configuration tool and click **Send Advert**.
+12. Reconnect with the configuration tool and click **Send Advert**.
 
 If everything is working, nearby companion nodes should receive the advert.
 
@@ -100,7 +92,7 @@ The repeater will still route messages without a clock, but **its adverts will b
 
 ## Changing Repeater Private Key After Initial Setup (not always needed)
 
-You may need to change your repeater's private key after you have set it up to avoid ID conflicts. If this happens, you can do it again via USB as per the [Configuring a MeshCore Repeater](#configuring-a-meshcore-repeater) section of this page, following the **[Generating a Repeater ID](generate-repeater-id.md)** instructions to pick a new ID and key.
+If your region is still using 1-byte mode, you may need to change your repeater's private key after you have set it up to avoid ID conflicts. If this happens, you can do it again via USB as per the [Configuring a MeshCore Repeater](#configuring-a-meshcore-repeater) section of this page, following the **[Generating a Repeater ID](generate-repeater-id.md)** instructions to pick a new ID and key.
 
 *Optional*: If your repeater is on MeshCore Firmware v1.12.0 and up, you can set the private key remotely by logging in to the repeater console with a companion node that has admin access to your repeater. The steps are the same for USB and remote connections. If configuring remotely, make sure you have good signal to your repeater.
 
