@@ -56,7 +56,7 @@ If flashing fails after erasing, refresh the page, click **Enter DFU Mode** agai
 
 2. Click the **Repeater Setup** button in the top right.
 
-3. Check the **Show Advanced Settings** checkbox so all fields below are visible.
+3. Connect to your repeater and check the **Show Advanced Settings** checkbox near the end so all fields below are visible.
 
 4. Set a Location either entering Lattitude/Longitude or using the map icon.
 
