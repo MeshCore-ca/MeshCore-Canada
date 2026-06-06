@@ -2143,13 +2143,12 @@
   <h1>Generating a Repeater ID</h1>
 
 <h2 id="generating-a-repeater-id">Generating a Repeater ID<a class="headerlink" href="#generating-a-repeater-id" title="Permanent link">&para;</a></h2>
-<p>In Ottawa, we generate Repeater IDs manually to avoid accidentally reusing an ID that’s already in service. Follow the steps below to pick an available ID and program the matching private key onto your repeater.</p>
+<p>Regions that are using 1-byte path sizes usually generate Repeater IDs manually to avoid accidentally reusing an ID that’s already in service. Follow the steps below to pick another ID and program the matching private key onto your repeater.</p>
 <div class="admonition note">
-<p class="admonition-title">Why this is an issue</p>
-<p>We are beginning to transition from 1-byte to 3-byte path sizes, and eventually will not need to worry about overlapping repeater id's. In the meantime, follow the steps in this section.</p>
+<p class="admonition-title">Where this applies</p>
+<p>Regions that have transitioned to multi-byte path sizes, will not need to worry about overlapping repeater id's.These instructions are left here for those cases where users want to generate a new repeater ID.</p>
 </div>
 <ol>
-<li>Go to the <strong><a href="../../hardware/recommended-repeaters/">Ottawa Repeater ID List</a></strong> and choose an unused ID.</li>
 <li>Open the <strong><a href="https://gessaman.com/mc-keygen/">MeshCore Key Generator</a></strong>.</li>
 <li>Type the unused ID(2-6 charectors) into the input field and click <strong>Generate Key</strong>.</li>
 <li>Copy the <strong>Private Key</strong> value.</li>

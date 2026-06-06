@@ -2289,31 +2289,19 @@ Without this fix, a failed OTA update can brick the repeater and require physica
 If flashing fails after erasing, refresh the page, click <strong>Enter DFU Mode</strong> again, then click <strong>Flash</strong>.</p>
 <hr />
 <h2 id="configuring-a-meshcore-repeater">Configuring a MeshCore Repeater<a class="headerlink" href="#configuring-a-meshcore-repeater" title="Permanent link">&para;</a></h2>
-<p><strong>Note</strong>: We are beginning to transition from 1-byte to 3-byte path sizes, and eventually will not need to worry about overlapping repeater id's. In the meantime, follow the steps in this section.</p>
 <ol>
 <li>
-<p>Using a Chromium-based browser that supports the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Serial_API#browser_compatibility">required serial connection</a> (e.g., Google Chrome or Microsoft Edge), open the <strong>MeshCore Web Flasher</strong>:
+<p>Using a Browser that supports the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Serial_API#browser_compatibility">required serial connection</a> (e.g., Google Chrome or Microsoft Edge), open the <strong>MeshCore Web Flasher</strong>:
    <a href="https://meshcore.io/flasher">https://meshcore.io/flasher</a></p>
 </li>
 <li>
 <p>Click the <strong>Repeater Setup</strong> button in the top right.</p>
 </li>
 <li>
-<p>Connect to your repeater and note the <strong>Repeater ID</strong> shown in the tool.</p>
-</li>
-<li>The Repeater ID is derived from the keypair (it corresponds to the <strong>first byte / first two hex characters</strong> of the repeater’s key).</li>
-<li>
-<p>Because there are only <strong>256 possible IDs</strong>, overlaps become more likely as the network grows, especially when keys are generated automatically during flashing.</p>
+<p>Connect to your repeater and check the <strong>Show Advanced Settings</strong> checkbox near the end so all fields below are visible.</p>
 </li>
 <li>
-<p>Check the <strong><a href="../../hardware/recommended-repeaters/">Ottawa Repeater ID List</a></strong> to confirm your repeater ID is <strong>not already in use</strong>.</p>
-</li>
-<li>If it’s unique, continue with the next step.</li>
-<li>
-<p>If it’s already in use, follow the <strong><a href="../generate-repeater-id/">Generating a Repeater ID</a></strong> instructions to assign a new one, then return here to continue.</p>
-</li>
-<li>
-<p>Check the <strong>Show Advanced Settings</strong> checkbox so all fields below are visible.</p>
+<p>Set a Location either entering Lattitude/Longitude or using the map icon.</p>
 </li>
 <li>
 <p>Set a descriptive repeater <strong>name</strong> (e.g., <code>Callsign_R1</code>, <code>Downtown_R1</code>).</p>
@@ -2322,14 +2310,14 @@ If flashing fails after erasing, refresh the page, click <strong>Enter DFU Mode<
 <p>Set an <strong>admin password</strong> (required for MeshCore Remote Administration).</p>
 </li>
 <li>
-<p>Apply the Ottawa defaults:
+<p>Apply the USA/Canada (Recommended) Preset:
    <strong>910.525 MHz / BW 62.5 kHz / SF7 / CR5</strong></p>
 </li>
 <li>
 <p>Set the advert intervals:</p>
 </li>
-<li><strong>Advert Interval:</strong> <code>60</code></li>
-<li><strong>Flood Advert Interval:</strong> <code>24</code></li>
+<li><strong>Advert Interval (minutes):</strong> <code>60</code></li>
+<li><strong>Flood Advert Interval (hours):</strong> <code>24</code></li>
 <li>
 <p><strong>Flood Max:</strong> <code>64</code></p>
 </li>
@@ -2353,7 +2341,7 @@ After every reboot, you must <strong>resync the repeater’s clock</strong>.<br 
 The repeater will still route messages without a clock, but <strong>its adverts will be ignored</strong> by companions that have already heard an advert from it until the time is set.</p>
 <hr />
 <h2 id="changing-repeater-private-key-after-initial-setup-not-always-needed">Changing Repeater Private Key After Initial Setup (not always needed)<a class="headerlink" href="#changing-repeater-private-key-after-initial-setup-not-always-needed" title="Permanent link">&para;</a></h2>
-<p>You may need to change your repeater's private key after you have set it up to avoid ID conflicts. If this happens, you can do it again via USB as per the <a href="#configuring-a-meshcore-repeater">Configuring a MeshCore Repeater</a> section of this page, following the <strong><a href="../generate-repeater-id/">Generating a Repeater ID</a></strong> instructions to pick a new ID and key.</p>
+<p>If your region is still using 1-byte mode, you may need to change your repeater's private key after you have set it up to avoid ID conflicts. If this happens, you can do it again via USB as per the <a href="#configuring-a-meshcore-repeater">Configuring a MeshCore Repeater</a> section of this page, following the <strong><a href="../generate-repeater-id/">Generating a Repeater ID</a></strong> instructions to pick a new ID and key.</p>
 <p><em>Optional</em>: If your repeater is on MeshCore Firmware v1.12.0 and up, you can set the private key remotely by logging in to the repeater console with a companion node that has admin access to your repeater. The steps are the same for USB and remote connections. If configuring remotely, make sure you have good signal to your repeater.</p>
 <hr />
 
