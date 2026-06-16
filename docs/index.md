@@ -77,7 +77,7 @@ Whether you're brand new to mesh networking or looking to deploy repeaters acros
 
 We are a group of Canadian meshes across the country from British Columbia, Alberta, Ontario, and Quebec (hopefully more soon) that are working together to bring services and standards across Canada for all MeshCore users. We host MQTT servers and a packet analyzer at this site for all Canadians to use.
 
-The servers and services are currently managed by **MrAlders0n**, **Ded**, and **n30nex**.
+The servers and services are currently managed by [**Mr. Alderson**](https://github.com/MrAlders0n), [**Ded**](https://github.com/446564), [**n30nex**](https://github.com/n30nex), and [**Kranic**](https://forum.meshcore.ca/u/djkranic).
 
 The documentation on this site is open to all to contribute to and is backed by markdown files in GitHub at [MeshCore-ca/MeshCore-Canada](https://github.com/MeshCore-ca/MeshCore-Canada).
 

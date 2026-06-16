@@ -7,6 +7,7 @@ This page collects common MeshCore, MeshCore Canada, and supporting radio resour
 | Resource | Link |
 |----------|------|
 | MeshCore Canada site | <https://meshcore.ca/> |
+| MeshCore Canada forum | <https://forum.meshcore.ca/> |
 | Live CoreScope tools | <https://live.meshcore.ca/> |
 | MeshCore Canada GitHub | <https://github.com/MeshCore-ca/MeshCore-Canada> |
 | Add or update a community | [Contributing](../contributing.md) |
@@ -29,6 +30,7 @@ This page collects common MeshCore, MeshCore Canada, and supporting radio resour
 | Resource | Link |
 |----------|------|
 | Observer setup overview | [Analyzer & MQTT](../analyzer/intro.md) |
+| MQTT data collection and access | [Data Collection & Access](../analyzer/data-collection-access.md) |
 | Direct MQTT firmware | [MQTT Firmware](../analyzer/builds/mqtt-firmware.md) |
 | MCtoMQTT host bridge | [MCtoMQTT](../analyzer/builds/mctomqtt.md) |
 | Home Assistant integration setup | [MeshCore-HA](../analyzer/builds/meshcore-ha.md) |

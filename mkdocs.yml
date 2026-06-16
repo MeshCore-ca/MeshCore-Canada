@@ -37,6 +37,7 @@ nav:
   - Welcome: index.md
   - Analyzer & MQTT:
       - Overview: analyzer/intro.md
+      - Data Collection & Access: analyzer/data-collection-access.md
       - Check Your Observer: analyzer/verify.md
       - Troubleshooting: analyzer/troubleshooting.md
       - Broker Reference: analyzer/broker-reference.md
@@ -91,4 +92,5 @@ nav:
       - Getting Started: resources/getting-started.md
       - Useful Links: resources/links.md
       - Glossary: resources/glossary.md
+  - Forum: https://forum.meshcore.ca/
   - Contributing: contributing.md
