@@ -1,7 +1,5 @@
 # MQTT Data Collection & Access
 
-This page explains where MeshCore Canada MQTT data goes, who can access the broker feeds, and who administers the infrastructure.
-
 !!! warning "Treat Public channel traffic as public"
     MeshCore Canada observers operate on the default MeshCore Canada network settings and Public channel. The default MeshCore encryption system and Public channel are for shared public mesh traffic, not private distribution to a closed group. Traffic sent on the Public channel should be treated as public. Do not transmit names, locations, notes, or other personal information over radio or MQTT unless you are comfortable with that information being stored and shown publicly.
 
