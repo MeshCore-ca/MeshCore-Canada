@@ -1,7 +1,7 @@
 # MQTT Data Collection & Access
 
-!!! warning "Treat MeshCore RF traffic as public data"
-    MeshCore traffic is intended for shared mesh use, and different networks may use different presets or frequencies (including non-default settings). Any node transmitting MeshCore packets over matching settings can be heard by observers on that mesh, not just one published default profile. Traffic forwarded over MQTT through this path should be treated as potentially public. Do not transmit names, locations, notes, or other personal information unless you are comfortable with that information being stored and viewable publicly. Assume that even with encryption on a private channel / setting can potentially be collected and decrypted by anyone with the means and know-how to do so.
+!!! warning "Treat MeshCore RF traffic as public data" !!!
+    MeshCore traffic is intended for shared mesh use, and different networks may use different presets or frequencies (including non-default settings). All channels that use a shared public key (and private keys) should be considered inherantly insecure. Any node transmitting MeshCore packets over matching settings can be heard by observers on that mesh, not just one published default profile. Traffic forwarded over MQTT through this path should be treated as potentially public. Do not transmit names, locations, notes, or other personal information unless you are comfortable with that information being stored and viewable publicly. Assume that even with encryption on a private channel / setting can potentially be collected and decrypted by anyone with the means and know-how to do so.
 
 ## What We Collect
 
@@ -13,7 +13,7 @@ Observers listen for all MeshCore traffic they can hear on the channels and pres
 
 For companion/client paths that expose controls, users can opt in or opt out of telemetry and location data uploading as part of their observer setup.
 
-It is each user's responsibility to choose how much personal information to share from their radios over MQTT. If telemetry, location, or identifying profile information is enabled on a client, that data may be published, stored, and displayed by public viewer sites.
+It is each user's responsibility to choose how much personal information to share from their radios over MQTT. If telemetry, location, or identifying profile information is enabled on a client, that data may be published, stored, and displayed by public viewer sites. Double check your settings.
 
 ## Where Data Goes
 
