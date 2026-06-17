@@ -44,3 +44,5 @@ The MeshCore Canada infrastructure administrators control the MQTT brokers and r
 | Kranic | [forum.meshcore.ca/u/djkranic](https://forum.meshcore.ca/u/djkranic) |
 
 Questions about privacy, MQTT access, or the MeshCore Canada project should be directed to these administrators.
+
+General discussion and support is also available on the forum at [https://forum.meshcore.ca/](https://forum.meshcore.ca/).
