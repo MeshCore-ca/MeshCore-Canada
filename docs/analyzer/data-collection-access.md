@@ -16,13 +16,22 @@ Observers listen for all MeshCore traffic they can hear on the channels and pres
 | Radio traffic | Nodes transmit MeshCore packets on the frequencies and settings configured for their local mesh and presets. |
 | Observer capture | MeshCore Canada observers and other authorized observers listen to all traffic they can hear on their configured channels. |
 | MQTT publish | Observer paths publish packet data to MeshCore Canada MQTT infrastructure. |
-| Storage and display | Data is stored on MeshCore Canada infrastructure and may be displayed by Beacon and other public websites operated by MeshCore Canada operators. |
+| Storage and display | Data is stored on MeshCore Canada infrastructure and may be displayed by Beacon, CoreScope, and other public websites operated by MeshCore Canada or approved third-party operators. |
 
 ## MQTT Subscription Access
 
-Direct MQTT subscription access is not handed out to everyone. It is limited to local mesh administrators and people approved by MeshCore Canada administration.
+Direct MQTT subscription access is not handed out to everyone. It is limited to local mesh administrators, approved tools, and people approved by MeshCore Canada administration.
 
-Even when direct broker subscription access is limited, the data can still be viewable by everyone through Beacon and other public websites that consume the MQTT feed using the MQTT subscription role.
+Even when direct broker subscription access is limited, the data can still be viewable by everyone through Beacon, CoreScope, and other public websites that consume the MQTT feed using approved MQTT read accounts.
+
+## MQTT Read Access Inventory
+
+Keep this list updated whenever a tool, service, or public website receives a new MQTT read account.
+
+| Tool or service | Operator | Purpose |
+|-----------------|----------|---------|
+| Beacon | MeshCore Canada operators | Public viewer for MeshCore packet data. |
+| CoreScope (`live.meshcore.ca`) | MeshCore Canada operators | Public observer, packet, and map tools. |
 
 ## Infrastructure Administrators
 
