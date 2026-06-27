@@ -24,9 +24,7 @@ Direct MQTT subscription access is not handed out to everyone. It is limited to 
 
 Even when direct broker subscription access is limited, the data can still be viewable by everyone through Beacon, CoreScope, and other public websites that consume the MQTT feed using approved MQTT read accounts.
 
-## MQTT Read Access Inventory
-
-Keep this list updated whenever a tool, service, or public website receives a new MQTT read account.
+## MQTT Read Access
 
 | Tool or service | Operator | Purpose |
 |-----------------|----------|---------|
