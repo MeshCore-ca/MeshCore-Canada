@@ -1,7 +1,7 @@
 # MQTT Data Collection & Access
 
-
-MeshCore traffic is intended for shared mesh use, and different networks may use different presets or frequencies (including non-default settings). All channels that use a shared public key (and private keys) should be considered inherently insecure. Any node transmitting MeshCore packets over matching settings can be heard by observers on that mesh, not just one published default profile. Traffic forwarded over MQTT through this path should be treated as potentially public. Do not transmit names, locations, notes, or other personal information unless you are comfortable with that information being stored and viewable publicly. Assume that even with encryption on a private channel / setting can potentially be collected and decrypted by anyone with the means and know-how to do so.
+!!! warning "Treat MeshCore RF traffic as public data"
+    MeshCore traffic is intended for shared mesh use, and different networks may use different presets or frequencies (including non-default settings). All channels that use a shared public key (and private keys) should be considered inherently insecure. Any node transmitting MeshCore packets over matching settings can be heard by observers on that mesh, not just one published default profile. Traffic forwarded over MQTT through this path should be treated as potentially public. Do not transmit names, locations, notes, or other personal information unless you are comfortable with that information being stored and viewable publicly. Assume that even with encryption on a private channel / setting can potentially be collected and decrypted by anyone with the means and know-how to do so.
 
 ## What We Collect
 
