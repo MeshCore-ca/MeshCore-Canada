@@ -8,13 +8,13 @@
       
       
       
-        <link rel="canonical" href="https://meshcore.ca/analyzer/broker-reference/">
+        <link rel="canonical" href="https://meshcore.ca/analyzer/data-collection-access/">
       
       
-        <link rel="prev" href="../troubleshooting/">
+        <link rel="prev" href="../intro/">
       
       
-        <link rel="next" href="../iata-codes/">
+        <link rel="next" href="../verify/">
       
       
         
@@ -25,7 +25,7 @@
     
     
       
-        <title>Broker Reference - MeshCore Canada</title>
+        <title>Data Collection & Access - MeshCore Canada</title>
       
     
     
@@ -76,7 +76,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#broker-reference" class="md-skip">
+        <a href="#mqtt-data-collection-access" class="md-skip">
           Skip to content
         </a>
       
@@ -111,7 +111,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Broker Reference
+              Data Collection & Access
             
           </span>
         </div>
@@ -331,10 +331,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../data-collection-access/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data Collection & Access
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -350,6 +377,81 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-we-collect" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What We Collect
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#where-data-goes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where Data Goes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mqtt-subscription-access" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MQTT Subscription Access
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mqtt-read-access" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MQTT Read Access
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#infrastructure-administrators" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Infrastructure Administrators
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -415,37 +517,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Broker Reference
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../broker-reference/" class="md-nav__link">
         
   
   
@@ -461,59 +536,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#topic-pattern" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Topic Pattern
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#payload-mode" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Payload Mode
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#common-broker-mistakes" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Common Broker Mistakes
-      
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -2191,10 +2213,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#topic-pattern" class="md-nav__link">
+  <a href="#what-we-collect" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Topic Pattern
+        What We Collect
       
     </span>
   </a>
@@ -2202,10 +2224,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#payload-mode" class="md-nav__link">
+  <a href="#where-data-goes" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Payload Mode
+        Where Data Goes
       
     </span>
   </a>
@@ -2213,10 +2235,32 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#common-broker-mistakes" class="md-nav__link">
+  <a href="#mqtt-subscription-access" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Common Broker Mistakes
+        MQTT Subscription Access
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mqtt-read-access" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MQTT Read Access
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#infrastructure-administrators" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Infrastructure Administrators
       
     </span>
   </a>
@@ -2243,111 +2287,94 @@
   
 
 
-<h1 id="broker-reference">Broker Reference<a class="headerlink" href="#broker-reference" title="Permanent link">&para;</a></h1>
-<p>All MeshCore.ca observer paths publish to the same redundant broker pair.</p>
+<h1 id="mqtt-data-collection-access">MQTT Data Collection &amp; Access<a class="headerlink" href="#mqtt-data-collection-access" title="Permanent link">&para;</a></h1>
+<p>!!! warning "Treat MeshCore RF traffic as public data" !!!
+    MeshCore traffic is intended for shared mesh use, and different networks may use different presets or frequencies (including non-default settings). All channels that use a shared public key (and private keys) should be considered inherently insecure. Any node transmitting MeshCore packets over matching settings can be heard by observers on that mesh, not just one published default profile. Traffic forwarded over MQTT through this path should be treated as potentially public. Do not transmit names, locations, notes, or other personal information unless you are comfortable with that information being stored and viewable publicly. Assume that even with encryption on a private channel / setting can potentially be collected and decrypted by anyone with the means and know-how to do so.</p>
+<h2 id="what-we-collect">What We Collect<a class="headerlink" href="#what-we-collect" title="Permanent link">&para;</a></h2>
+<p>MeshCore Canada MQTT receives packet data from observer nodes that capture MeshCore packets and forward telemetry from matched channels.</p>
+<p>Observers listen for all MeshCore traffic they can hear on the channels and presets they are configured for. If a packet is heard by an observer and that observer has packet publishing enabled, that traffic can be sent to the MeshCore Canada MQTT brokers.</p>
+<h2 id="where-data-goes">Where Data Goes<a class="headerlink" href="#where-data-goes" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Broker</th>
-<th>Host</th>
-<th>Port</th>
-<th>Transport</th>
-<th>TLS</th>
-<th>Token audience</th>
+<th>Step</th>
+<th>What happens</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Primary</td>
-<td><code>mqtt1.meshcore.ca</code></td>
-<td><code>443</code></td>
-<td>WebSockets</td>
-<td>Enabled + verified</td>
-<td><code>mqtt1.meshcore.ca</code></td>
+<td>Radio traffic</td>
+<td>Nodes transmit MeshCore packets on the frequencies and settings configured for their local mesh and presets.</td>
 </tr>
 <tr>
-<td>Backup</td>
-<td><code>mqtt2.meshcore.ca</code></td>
-<td><code>443</code></td>
-<td>WebSockets</td>
-<td>Enabled + verified</td>
-<td><code>mqtt2.meshcore.ca</code></td>
+<td>Observer capture</td>
+<td>MeshCore Canada observers and other authorized observers listen to all traffic they can hear on their configured channels.</td>
+</tr>
+<tr>
+<td>MQTT publish</td>
+<td>Observer paths publish packet data to MeshCore Canada MQTT infrastructure.</td>
+</tr>
+<tr>
+<td>Storage and display</td>
+<td>Data is stored on MeshCore Canada infrastructure and may be displayed by Beacon, CoreScope, and other public websites operated by MeshCore Canada or approved third-party operators.</td>
 </tr>
 </tbody>
 </table>
-<p>Use JWT token authentication where the setup tool exposes it. Do not set a static MQTT password unless a path-specific guide tells you to.</p>
-<h2 id="topic-pattern">Topic Pattern<a class="headerlink" href="#topic-pattern" title="Permanent link">&para;</a></h2>
-<p>Most observer paths publish packet telemetry under this pattern:</p>
-<div class="highlight"><pre><span></span><code>meshcore/{IATA}/{PUBLIC_KEY}/packets
-</code></pre></div>
-<p>Status topics generally use:</p>
-<div class="highlight"><pre><span></span><code>meshcore/{IATA}/{PUBLIC_KEY}/status
-</code></pre></div>
-<p><code>{IATA}</code> must be a real 3-letter airport code nearest to the observer. <code>{PUBLIC_KEY}</code> is supplied by the MeshCore node or integration.</p>
-<h2 id="payload-mode">Payload Mode<a class="headerlink" href="#payload-mode" title="Permanent link">&para;</a></h2>
-<p>MeshCore.ca packet visibility needs packet payload publishing, not only status publishing.</p>
+<h2 id="mqtt-subscription-access">MQTT Subscription Access<a class="headerlink" href="#mqtt-subscription-access" title="Permanent link">&para;</a></h2>
+<p>Direct MQTT subscription access is not handed out to everyone. It is limited to local mesh administrators, approved tools, and people approved by MeshCore Canada administration.</p>
+<p>Even when direct broker subscription access is limited, the data can still be viewable by everyone through Beacon, CoreScope, and other public websites that consume the MQTT feed using approved MQTT read accounts.</p>
+<h2 id="mqtt-read-access">MQTT Read Access<a class="headerlink" href="#mqtt-read-access" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>Path</th>
-<th>Required packet setting</th>
+<th>Tool or service</th>
+<th>Operator</th>
+<th>Purpose</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>MQTT firmware</td>
-<td><code>set mqtt.packets on</code>, <code>set bridge.enabled on</code>, <code>set mqtt.rx on</code>, <code>set mqtt.tx advert</code></td>
+<td>Beacon</td>
+<td>MeshCore Canada operators</td>
+<td>Public viewer for MeshCore packet data.</td>
 </tr>
 <tr>
-<td>MCtoMQTT</td>
-<td>Broker config created by the MeshCore.ca helper</td>
-</tr>
-<tr>
-<td>Companion capture</td>
-<td><code>PACKETCAPTURE_MQTT*_TOPIC_PACKETS</code> configured</td>
-</tr>
-<tr>
-<td>PyMC</td>
-<td><code>format: letsmesh</code></td>
-</tr>
-<tr>
-<td>Home Assistant</td>
-<td><strong>Payload Mode</strong> = <code>packet</code>, or older <strong>Packets (Lets Mesh)</strong> enabled</td>
-</tr>
-<tr>
-<td>RemoteTerm</td>
-<td>Community MQTT packet topic template enabled</td>
+<td>CoreScope (<code>live.meshcore.ca</code>)</td>
+<td>MeshCore Canada operators</td>
+<td>Public observer, packet, and map tools.</td>
 </tr>
 </tbody>
 </table>
-<h2 id="common-broker-mistakes">Common Broker Mistakes<a class="headerlink" href="#common-broker-mistakes" title="Permanent link">&para;</a></h2>
+<h2 id="infrastructure-administrators">Infrastructure Administrators<a class="headerlink" href="#infrastructure-administrators" title="Permanent link">&para;</a></h2>
+<p>The MeshCore Canada infrastructure administrators control the MQTT brokers and related infrastructure.</p>
 <table>
 <thead>
 <tr>
-<th>Symptom</th>
-<th>Likely cause</th>
+<th>Administrator</th>
+<th>Profile</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Primary connects, backup fails</td>
-<td>Backup token audience still set to <code>mqtt1.meshcore.ca</code></td>
+<td>Mr. Alderson</td>
+<td><a href="https://github.com/MrAlders0n">github.com/MrAlders0n</a></td>
 </tr>
 <tr>
-<td>Observer appears under the wrong city</td>
-<td>IATA field is wrong or inconsistent between broker entries</td>
+<td>Ded</td>
+<td><a href="https://github.com/446564">github.com/446564</a></td>
 </tr>
 <tr>
-<td>Broker connects but no packets appear</td>
-<td>Status is publishing, but packet payload mode is not enabled</td>
+<td>n30nex</td>
+<td><a href="https://github.com/n30nex">github.com/n30nex</a></td>
 </tr>
 <tr>
-<td>Nothing appears</td>
-<td>Radio is off the local mesh, IATA code is invalid, or outbound WSS is blocked</td>
+<td>Kranic</td>
+<td><a href="https://forum.meshcore.ca/u/djkranic">forum.meshcore.ca/u/djkranic</a></td>
 </tr>
 </tbody>
 </table>
-<p>For path-specific commands, use <a href="../troubleshooting/">Troubleshooting</a>.</p>
+<p>Questions about privacy, MQTT access, or the MeshCore Canada project should be directed to these administrators.</p>
+<p>General discussion and support is also available on the forum at <a href="https://forum.meshcore.ca/">https://forum.meshcore.ca/</a>.</p>
 
 
 

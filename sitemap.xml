@@ -2,190 +2,194 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://meshcore.ca/</loc>
-         <lastmod>2026-06-06</lastmod>
+         <lastmod>2026-07-01</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/contributing/</loc>
-         <lastmod>2026-06-06</lastmod>
+         <lastmod>2026-07-01</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/analyzer/broker-reference/</loc>
-         <lastmod>2026-06-06</lastmod>
+         <lastmod>2026-07-01</lastmod>
+    </url>
+    <url>
+         <loc>https://meshcore.ca/analyzer/data-collection-access/</loc>
+         <lastmod>2026-07-01</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/analyzer/iata-codes/</loc>
-         <lastmod>2026-06-06</lastmod>
+         <lastmod>2026-07-01</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/analyzer/intro/</loc>
-         <lastmod>2026-06-06</lastmod>
+         <lastmod>2026-07-01</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/analyzer/remoteterm/</loc>
-         <lastmod>2026-06-06</lastmod>
+         <lastmod>2026-07-01</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/analyzer/troubleshooting/</loc>
-         <lastmod>2026-06-06</lastmod>
+         <lastmod>2026-07-01</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/analyzer/verify/</loc>
-         <lastmod>2026-06-06</lastmod>
+         <lastmod>2026-07-01</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/analyzer/builds/mctomqtt/</loc>
-         <lastmod>2026-06-06</lastmod>
+         <lastmod>2026-07-01</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/analyzer/builds/meshcore-ha/</loc>
-         <lastmod>2026-06-06</lastmod>
+         <lastmod>2026-07-01</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/analyzer/builds/mqtt-firmware/</loc>
-         <lastmod>2026-06-06</lastmod>
+         <lastmod>2026-07-01</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/analyzer/builds/pymc/</loc>
-         <lastmod>2026-06-06</lastmod>
+         <lastmod>2026-07-01</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/hardware/overview/</loc>
-         <lastmod>2026-06-06</lastmod>
+         <lastmod>2026-07-01</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/hardware/recommended-antenna/</loc>
-         <lastmod>2026-06-06</lastmod>
+         <lastmod>2026-07-01</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/hardware/recommended-companions/</loc>
-         <lastmod>2026-06-06</lastmod>
+         <lastmod>2026-07-01</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/hardware/recommended-repeaters/</loc>
-         <lastmod>2026-06-06</lastmod>
+         <lastmod>2026-07-01</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/hardware/repeater-mounting-options/</loc>
-         <lastmod>2026-06-06</lastmod>
+         <lastmod>2026-07-01</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/hardware/repeater-solar-1w-diy-build/</loc>
-         <lastmod>2026-06-06</lastmod>
+         <lastmod>2026-07-01</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/hardware/repeater-solar-300mw-diy-build/</loc>
-         <lastmod>2026-06-06</lastmod>
+         <lastmod>2026-07-01</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/hardware/repeater-solar-batteries/</loc>
-         <lastmod>2026-06-06</lastmod>
+         <lastmod>2026-07-01</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/hardware/wire-connector-types/</loc>
-         <lastmod>2026-06-06</lastmod>
+         <lastmod>2026-07-01</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/meshcore/firmware-heltec-v3-wifi/</loc>
-         <lastmod>2026-06-06</lastmod>
+         <lastmod>2026-07-01</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/meshcore/firmware-rak-custom-display/</loc>
-         <lastmod>2026-06-06</lastmod>
+         <lastmod>2026-07-01</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/meshcore/flash-companion/</loc>
-         <lastmod>2026-06-06</lastmod>
+         <lastmod>2026-07-01</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/meshcore/flash-repeater/</loc>
-         <lastmod>2026-06-06</lastmod>
+         <lastmod>2026-07-01</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/meshcore/flash-room-server/</loc>
-         <lastmod>2026-06-06</lastmod>
+         <lastmod>2026-07-01</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/meshcore/general-faq/</loc>
-         <lastmod>2026-06-06</lastmod>
+         <lastmod>2026-07-01</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/meshcore/general-howto/</loc>
-         <lastmod>2026-06-06</lastmod>
+         <lastmod>2026-07-01</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/meshcore/general-meshcore-roles/</loc>
-         <lastmod>2026-06-06</lastmod>
+         <lastmod>2026-07-01</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/meshcore/general-overview/</loc>
-         <lastmod>2026-06-06</lastmod>
+         <lastmod>2026-07-01</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/meshcore/generate-repeater-id/</loc>
-         <lastmod>2026-06-06</lastmod>
+         <lastmod>2026-07-01</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/meshcore/update-repeater-ota/</loc>
-         <lastmod>2026-06-06</lastmod>
+         <lastmod>2026-07-01</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/provinces/</loc>
-         <lastmod>2026-06-06</lastmod>
+         <lastmod>2026-07-01</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/provinces/alberta/</loc>
-         <lastmod>2026-06-06</lastmod>
+         <lastmod>2026-07-01</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/provinces/british-columbia/</loc>
-         <lastmod>2026-06-06</lastmod>
+         <lastmod>2026-07-01</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/provinces/manitoba/</loc>
-         <lastmod>2026-06-06</lastmod>
+         <lastmod>2026-07-01</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/provinces/new-brunswick/</loc>
-         <lastmod>2026-06-06</lastmod>
+         <lastmod>2026-07-01</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/provinces/newfoundland-and-labrador/</loc>
-         <lastmod>2026-06-06</lastmod>
+         <lastmod>2026-07-01</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/provinces/nova-scotia/</loc>
-         <lastmod>2026-06-06</lastmod>
+         <lastmod>2026-07-01</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/provinces/ontario/</loc>
-         <lastmod>2026-06-06</lastmod>
+         <lastmod>2026-07-01</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/provinces/prince-edward-island/</loc>
-         <lastmod>2026-06-06</lastmod>
+         <lastmod>2026-07-01</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/provinces/quebec/</loc>
-         <lastmod>2026-06-06</lastmod>
+         <lastmod>2026-07-01</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/provinces/saskatchewan/</loc>
-         <lastmod>2026-06-06</lastmod>
+         <lastmod>2026-07-01</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/provinces/territories/</loc>
-         <lastmod>2026-06-06</lastmod>
+         <lastmod>2026-07-01</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/resources/getting-started/</loc>
-         <lastmod>2026-06-06</lastmod>
+         <lastmod>2026-07-01</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/resources/glossary/</loc>
-         <lastmod>2026-06-06</lastmod>
+         <lastmod>2026-07-01</lastmod>
     </url>
     <url>
          <loc>https://meshcore.ca/resources/links/</loc>
-         <lastmod>2026-06-06</lastmod>
+         <lastmod>2026-07-01</lastmod>
     </url>
 </urlset>
