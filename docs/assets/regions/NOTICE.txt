@@ -1,0 +1,35 @@
+MeshCore Canada region data notice
+==================================
+
+canada-regions.json
+-------------------
+
+This file implements the Canada MeshCore Region Strategy v1.1.1. It also
+credits Adam Gessaman's Pacific Northwest MeshCore region tools as an
+inspiration:
+
+https://gessaman.com/meshcore/regions/
+
+Strategy discussion and feedback:
+
+https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54
+
+meshmapper-canada-regions.json
+------------------------------
+
+This file is a snapshot of Canadian regions published by MeshMapper:
+
+https://meshmapper.net/
+
+The snapshot metadata identifies its boundary sources as OpenStreetMap
+contributors under the Open Database Licence (ODbL) 1.0, with geoBoundaries
+fallback data under Creative Commons Attribution 4.0 (CC BY 4.0):
+
+https://www.openstreetmap.org/copyright
+https://opendatacommons.org/licenses/odbl/1-0/
+https://www.geoboundaries.org/
+https://creativecommons.org/licenses/by/4.0/
+
+Third-party boundary data remains subject to its source licences and
+attribution requirements. It is not relicensed under this repository's MIT
+licence.

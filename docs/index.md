@@ -53,6 +53,14 @@ Whether you're brand new to mesh networking or looking to deploy repeaters acros
 
     [:octicons-arrow-right-24: Overview](analyzer/intro.md)
 
+-   :material-map-search:{ .lg .middle } **Canadian Regions**
+
+    ---
+
+    Find the right region for a repeater, follow the setup guide, or explore the map.
+
+    [:octicons-arrow-right-24: Open Regions](regions/index.md)
+
 -   :material-map-marker-radius:{ .lg .middle } **Mesh Directory**
 
     ---

@@ -1,0 +1,6613 @@
+{
+  "version": "2026-07-13-strategy-v1.1.1",
+  "strategy": {
+    "title": "Canada MeshCore Region Strategy",
+    "version": "1.1.1",
+    "date": "2026-06-23",
+    "status": "draft",
+    "hierarchyNodes": 218,
+    "selectableRegions": 192
+  },
+  "source": {
+    "primary": "Canada MeshCore Region Strategy v1.1.1",
+    "forum": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+    "notes": [
+      "The strategy defines canonical tags and parent relationships, not map geometry.",
+      "MeshMapper polygons remain the preferred boundary source where a strategy crosswalk exists.",
+      "Other map areas are approximate and should be reviewed by local operators."
+    ]
+  },
+  "meta": {
+    "name": "MeshCore Canada Regions",
+    "coverage": "Canada",
+    "rootTag": "can",
+    "defaultFirmware": "1.16",
+    "outOfAreaKm": 650,
+    "map": {
+      "center": [
+        56.1304,
+        -106.3468
+      ],
+      "bounds": [
+        [
+          41.5,
+          -141.5
+        ],
+        [
+          83.5,
+          -52
+        ]
+      ]
+    },
+    "baselineCommands": [
+      "set radio 910.525,62.5,7,5",
+      "set path.hash.mode 2"
+    ],
+    "attribution": {
+      "label": "Inspired by Adam Gessaman's PNW MeshCore region tools",
+      "url": "https://gessaman.com/meshcore/regions/"
+    }
+  },
+  "hierarchy": {
+    "can": {
+      "label": "Canada",
+      "parent": null,
+      "basis": "national"
+    },
+    "bc": {
+      "label": "British Columbia",
+      "parent": "can",
+      "basis": "jurisdiction",
+      "sharedParents": [
+        "can",
+        "pnw"
+      ]
+    },
+    "ab": {
+      "label": "Alberta",
+      "parent": "can",
+      "basis": "jurisdiction"
+    },
+    "sk": {
+      "label": "Saskatchewan",
+      "parent": "can",
+      "basis": "jurisdiction"
+    },
+    "mb": {
+      "label": "Manitoba",
+      "parent": "can",
+      "basis": "jurisdiction"
+    },
+    "on": {
+      "label": "Ontario",
+      "parent": "can",
+      "basis": "jurisdiction"
+    },
+    "qc": {
+      "label": "Québec",
+      "parent": "can",
+      "basis": "jurisdiction"
+    },
+    "nb": {
+      "label": "New Brunswick",
+      "parent": "can",
+      "basis": "jurisdiction"
+    },
+    "ns": {
+      "label": "Nova Scotia",
+      "parent": "can",
+      "basis": "jurisdiction"
+    },
+    "pe": {
+      "label": "Prince Edward Island",
+      "parent": "can",
+      "basis": "jurisdiction"
+    },
+    "nl": {
+      "label": "Newfoundland and Labrador",
+      "parent": "can",
+      "basis": "jurisdiction"
+    },
+    "yt": {
+      "label": "Yukon",
+      "parent": "can",
+      "basis": "jurisdiction"
+    },
+    "nt": {
+      "label": "Northwest Territories",
+      "parent": "can",
+      "basis": "jurisdiction"
+    },
+    "nu": {
+      "label": "Nunavut",
+      "parent": "can",
+      "basis": "jurisdiction"
+    },
+    "mvrd": {
+      "label": "Metro Vancouver",
+      "parent": "bc",
+      "basis": "established"
+    },
+    "crd": {
+      "label": "Capital / Victoria",
+      "parent": "bc",
+      "basis": "established"
+    },
+    "fvrd": {
+      "label": "Fraser Valley",
+      "parent": "bc",
+      "basis": "established"
+    },
+    "cvrd": {
+      "label": "Cowichan Valley",
+      "parent": "bc",
+      "basis": "established"
+    },
+    "cxrd": {
+      "label": "Comox Valley",
+      "parent": "bc",
+      "basis": "established"
+    },
+    "rdn": {
+      "label": "Nanaimo",
+      "parent": "bc",
+      "basis": "established"
+    },
+    "acrd": {
+      "label": "Alberni-Clayoquot",
+      "parent": "bc",
+      "basis": "established"
+    },
+    "srd": {
+      "label": "Strathcona",
+      "parent": "bc",
+      "basis": "established"
+    },
+    "rdmw": {
+      "label": "Mount Waddington",
+      "parent": "bc",
+      "basis": "established"
+    },
+    "scrd": {
+      "label": "Sunshine Coast",
+      "parent": "bc",
+      "basis": "established"
+    },
+    "qrd": {
+      "label": "qathet",
+      "parent": "bc",
+      "basis": "established"
+    },
+    "slrd": {
+      "label": "Squamish-Lillooet",
+      "parent": "bc",
+      "basis": "established"
+    },
+    "tnrd": {
+      "label": "Thompson-Nicola",
+      "parent": "bc",
+      "basis": "established"
+    },
+    "rdos": {
+      "label": "Okanagan-Similkameen",
+      "parent": "bc",
+      "basis": "established"
+    },
+    "rdco": {
+      "label": "Central Okanagan",
+      "parent": "bc",
+      "basis": "established"
+    },
+    "rdno": {
+      "label": "North Okanagan",
+      "parent": "bc",
+      "basis": "established"
+    },
+    "csrd": {
+      "label": "Columbia-Shuswap",
+      "parent": "bc",
+      "basis": "established"
+    },
+    "rdek": {
+      "label": "East Kootenay",
+      "parent": "bc",
+      "basis": "established"
+    },
+    "rdck": {
+      "label": "Central Kootenay",
+      "parent": "bc",
+      "basis": "established"
+    },
+    "rdkb": {
+      "label": "Kootenay Boundary",
+      "parent": "bc",
+      "basis": "established"
+    },
+    "cbrd": {
+      "label": "Cariboo",
+      "parent": "bc",
+      "basis": "established"
+    },
+    "rdffg": {
+      "label": "Fraser-Fort George / Prince George",
+      "parent": "bc",
+      "basis": "established"
+    },
+    "rdbn": {
+      "label": "Bulkley-Nechako",
+      "parent": "bc",
+      "basis": "established"
+    },
+    "rdks": {
+      "label": "Kitimat-Stikine / Terrace",
+      "parent": "bc",
+      "basis": "established"
+    },
+    "ncrd": {
+      "label": "North Coast / Prince Rupert",
+      "parent": "bc",
+      "basis": "established"
+    },
+    "ccrd": {
+      "label": "Central Coast",
+      "parent": "bc",
+      "basis": "established"
+    },
+    "prrd": {
+      "label": "Peace River",
+      "parent": "bc",
+      "basis": "established"
+    },
+    "nrrm": {
+      "label": "Northern Rockies / Fort Nelson",
+      "parent": "bc",
+      "basis": "established"
+    },
+    "stk": {
+      "label": "Stikine Region",
+      "parent": "bc",
+      "basis": "established"
+    },
+    "mh": {
+      "label": "Medicine Hat & southeast",
+      "parent": "ab",
+      "basis": "proposed"
+    },
+    "leth": {
+      "label": "Lethbridge & deep south",
+      "parent": "ab",
+      "basis": "proposed"
+    },
+    "cal": {
+      "label": "Calgary region",
+      "parent": "ab",
+      "basis": "proposed"
+    },
+    "rocky": {
+      "label": "Mountain corridor (Canmore–Banff–Jasper)",
+      "parent": "ab",
+      "basis": "proposed"
+    },
+    "drum": {
+      "label": "Drumheller / Badlands",
+      "parent": "ab",
+      "basis": "proposed"
+    },
+    "rd": {
+      "label": "Red Deer / Central Alberta",
+      "parent": "ab",
+      "basis": "proposed"
+    },
+    "cam": {
+      "label": "Camrose–Wainwright / east central",
+      "parent": "ab",
+      "basis": "proposed"
+    },
+    "edm": {
+      "label": "Edmonton metro",
+      "parent": "ab",
+      "basis": "proposed"
+    },
+    "coldlk": {
+      "label": "Lakeland / Cold Lake–St. Paul",
+      "parent": "ab",
+      "basis": "proposed"
+    },
+    "ftmac": {
+      "label": "Wood Buffalo / Fort McMurray",
+      "parent": "ab",
+      "basis": "proposed"
+    },
+    "wcrt": {
+      "label": "Yellowhead / Whitecourt–Edson–Hinton",
+      "parent": "ab",
+      "basis": "proposed"
+    },
+    "peace": {
+      "label": "Peace Country / Grande Prairie",
+      "parent": "ab",
+      "basis": "proposed"
+    },
+    "hlvl": {
+      "label": "High Level / far northwest",
+      "parent": "ab",
+      "basis": "proposed"
+    },
+    "lloyd": {
+      "label": "Lloydminster",
+      "parent": "ab",
+      "basis": "proposed",
+      "sharedParents": [
+        "ab",
+        "sk"
+      ]
+    },
+    "estvn": {
+      "label": "Estevan / southeast",
+      "parent": "sk",
+      "basis": "proposed"
+    },
+    "wybrn": {
+      "label": "Weyburn",
+      "parent": "sk",
+      "basis": "proposed"
+    },
+    "regina": {
+      "label": "Regina region",
+      "parent": "sk",
+      "basis": "proposed"
+    },
+    "mj": {
+      "label": "Moose Jaw",
+      "parent": "sk",
+      "basis": "proposed"
+    },
+    "swift": {
+      "label": "Swift Current / southwest",
+      "parent": "sk",
+      "basis": "proposed"
+    },
+    "yktn": {
+      "label": "Yorkton–Melville",
+      "parent": "sk",
+      "basis": "proposed"
+    },
+    "stoon": {
+      "label": "Saskatoon region",
+      "parent": "sk",
+      "basis": "proposed"
+    },
+    "btlfd": {
+      "label": "The Battlefords",
+      "parent": "sk",
+      "basis": "proposed"
+    },
+    "pa": {
+      "label": "Prince Albert region",
+      "parent": "sk",
+      "basis": "proposed"
+    },
+    "melft": {
+      "label": "Melfort–Nipawin",
+      "parent": "sk",
+      "basis": "proposed"
+    },
+    "ronge": {
+      "label": "La Ronge / northern Saskatchewan",
+      "parent": "sk",
+      "basis": "proposed"
+    },
+    "wpg": {
+      "label": "Winnipeg",
+      "parent": "mb",
+      "basis": "proposed"
+    },
+    "eman": {
+      "label": "Eastman (Steinbach–Lac du Bonnet)",
+      "parent": "mb",
+      "basis": "proposed"
+    },
+    "pemb": {
+      "label": "Pembina Valley (Morden–Winkler)",
+      "parent": "mb",
+      "basis": "proposed"
+    },
+    "ptge": {
+      "label": "Central Plains (Portage la Prairie)",
+      "parent": "mb",
+      "basis": "proposed"
+    },
+    "wman": {
+      "label": "Westman (Brandon)",
+      "parent": "mb",
+      "basis": "proposed"
+    },
+    "pkld": {
+      "label": "Parkland (Dauphin)",
+      "parent": "mb",
+      "basis": "proposed"
+    },
+    "ilake": {
+      "label": "Interlake",
+      "parent": "mb",
+      "basis": "proposed"
+    },
+    "pas": {
+      "label": "The Pas–Flin Flon",
+      "parent": "mb",
+      "basis": "proposed"
+    },
+    "thom": {
+      "label": "Thompson",
+      "parent": "mb",
+      "basis": "proposed"
+    },
+    "chur": {
+      "label": "Churchill",
+      "parent": "mb",
+      "basis": "proposed"
+    },
+    "on-gtha": {
+      "label": "Greater Toronto & Hamilton Area",
+      "parent": "on",
+      "basis": "proposed-group"
+    },
+    "gta": {
+      "label": "Greater Toronto Area",
+      "parent": "on-gtha",
+      "basis": "proposed-group"
+    },
+    "tor": {
+      "label": "Toronto",
+      "parent": "gta",
+      "basis": "established"
+    },
+    "dur": {
+      "label": "Durham",
+      "parent": "gta",
+      "basis": "established"
+    },
+    "htn": {
+      "label": "Halton",
+      "parent": "gta",
+      "basis": "established"
+    },
+    "pel": {
+      "label": "Peel",
+      "parent": "gta",
+      "basis": "established"
+    },
+    "yrk": {
+      "label": "York",
+      "parent": "gta",
+      "basis": "established"
+    },
+    "on-ham": {
+      "label": "Hamilton cluster",
+      "parent": "on-gtha",
+      "basis": "proposed-group"
+    },
+    "ham": {
+      "label": "Hamilton",
+      "parent": "on-ham",
+      "basis": "established"
+    },
+    "bra": {
+      "label": "Brant / Brantford",
+      "parent": "on-ham",
+      "basis": "established"
+    },
+    "hald": {
+      "label": "Haldimand",
+      "parent": "on-ham",
+      "basis": "established"
+    },
+    "norf": {
+      "label": "Norfolk",
+      "parent": "on-ham",
+      "basis": "established"
+    },
+    "nia": {
+      "label": "Niagara",
+      "parent": "on-gtha",
+      "basis": "established"
+    },
+    "on-ktw": {
+      "label": "Kitchener-Waterloo",
+      "parent": "on",
+      "basis": "proposed-group"
+    },
+    "duf": {
+      "label": "Dufferin",
+      "parent": "on-ktw",
+      "basis": "established"
+    },
+    "wat": {
+      "label": "Waterloo",
+      "parent": "on-ktw",
+      "basis": "established"
+    },
+    "wel": {
+      "label": "Wellington / Guelph",
+      "parent": "on-ktw",
+      "basis": "established"
+    },
+    "per": {
+      "label": "Perth",
+      "parent": "on-ktw",
+      "basis": "established"
+    },
+    "on-se": {
+      "label": "Southeast Ontario",
+      "parent": "on",
+      "basis": "proposed-group"
+    },
+    "nth": {
+      "label": "Northumberland",
+      "parent": "on-se",
+      "basis": "established"
+    },
+    "ptb": {
+      "label": "Peterborough",
+      "parent": "on-se",
+      "basis": "established"
+    },
+    "frt": {
+      "label": "Frontenac / Kingston",
+      "parent": "on-se",
+      "basis": "established"
+    },
+    "has": {
+      "label": "Hastings / Belleville",
+      "parent": "on-se",
+      "basis": "established"
+    },
+    "lnx": {
+      "label": "Lennox & Addington",
+      "parent": "on-se",
+      "basis": "established"
+    },
+    "pec": {
+      "label": "Prince Edward County",
+      "parent": "on-se",
+      "basis": "established"
+    },
+    "on-alg": {
+      "label": "Algonquin area",
+      "parent": "on",
+      "basis": "proposed-group"
+    },
+    "ott": {
+      "label": "Ottawa",
+      "parent": "on-alg",
+      "basis": "established"
+    },
+    "lan": {
+      "label": "Lanark",
+      "parent": "on-alg",
+      "basis": "established"
+    },
+    "ldg": {
+      "label": "Leeds & Grenville",
+      "parent": "on-alg",
+      "basis": "established"
+    },
+    "psr": {
+      "label": "Prescott & Russell",
+      "parent": "on-alg",
+      "basis": "established"
+    },
+    "ren": {
+      "label": "Renfrew",
+      "parent": "on-alg",
+      "basis": "established"
+    },
+    "sdg": {
+      "label": "Stormont, Dundas & Glengarry",
+      "parent": "on-alg",
+      "basis": "established"
+    },
+    "on-lsim": {
+      "label": "Lake Simcoe",
+      "parent": "on",
+      "basis": "proposed-group"
+    },
+    "hlb": {
+      "label": "Haliburton",
+      "parent": "on-lsim",
+      "basis": "established"
+    },
+    "mus": {
+      "label": "Muskoka",
+      "parent": "on-lsim",
+      "basis": "established"
+    },
+    "sim": {
+      "label": "Simcoe / Barrie",
+      "parent": "on-lsim",
+      "basis": "established"
+    },
+    "kaw": {
+      "label": "Kawartha Lakes",
+      "parent": "on-lsim",
+      "basis": "established"
+    },
+    "on-shur": {
+      "label": "South Lake Huron",
+      "parent": "on",
+      "basis": "proposed-group"
+    },
+    "bru": {
+      "label": "Bruce",
+      "parent": "on-shur",
+      "basis": "established"
+    },
+    "gry": {
+      "label": "Grey",
+      "parent": "on-shur",
+      "basis": "established"
+    },
+    "hur": {
+      "label": "Huron",
+      "parent": "on-shur",
+      "basis": "established"
+    },
+    "on-sw": {
+      "label": "Southwest Ontario",
+      "parent": "on",
+      "basis": "proposed-group"
+    },
+    "elg": {
+      "label": "Elgin",
+      "parent": "on-sw",
+      "basis": "established"
+    },
+    "esx": {
+      "label": "Essex / Windsor",
+      "parent": "on-sw",
+      "basis": "established"
+    },
+    "chk": {
+      "label": "Chatham-Kent",
+      "parent": "on-sw",
+      "basis": "established"
+    },
+    "lmb": {
+      "label": "Lambton / Sarnia",
+      "parent": "on-sw",
+      "basis": "established"
+    },
+    "msx": {
+      "label": "Middlesex / London",
+      "parent": "on-sw",
+      "basis": "established"
+    },
+    "oxf": {
+      "label": "Oxford",
+      "parent": "on-sw",
+      "basis": "established"
+    },
+    "on-ne": {
+      "label": "Northeast Ontario",
+      "parent": "on",
+      "basis": "proposed-group"
+    },
+    "aga": {
+      "label": "Algoma / Sault Ste. Marie",
+      "parent": "on-ne",
+      "basis": "established"
+    },
+    "coc": {
+      "label": "Cochrane / Timmins",
+      "parent": "on-ne",
+      "basis": "established"
+    },
+    "mnt": {
+      "label": "Manitoulin",
+      "parent": "on-ne",
+      "basis": "established"
+    },
+    "nip": {
+      "label": "Nipissing / North Bay",
+      "parent": "on-ne",
+      "basis": "established"
+    },
+    "psd": {
+      "label": "Parry Sound",
+      "parent": "on-ne",
+      "basis": "established"
+    },
+    "gsu": {
+      "label": "Greater Sudbury",
+      "parent": "on-ne",
+      "basis": "established"
+    },
+    "sud": {
+      "label": "Sudbury District",
+      "parent": "on-ne",
+      "basis": "established"
+    },
+    "tim": {
+      "label": "Timiskaming",
+      "parent": "on-ne",
+      "basis": "established"
+    },
+    "on-nw": {
+      "label": "Northwest Ontario",
+      "parent": "on",
+      "basis": "proposed-group"
+    },
+    "ken": {
+      "label": "Kenora",
+      "parent": "on-nw",
+      "basis": "established"
+    },
+    "rrv": {
+      "label": "Rainy River",
+      "parent": "on-nw",
+      "basis": "established"
+    },
+    "tby": {
+      "label": "Thunder Bay",
+      "parent": "on-nw",
+      "basis": "established"
+    },
+    "ncr": {
+      "label": "National Capital Region",
+      "parent": "on",
+      "basis": "shared-scope",
+      "sharedParents": [
+        "on",
+        "qc"
+      ]
+    },
+    "bsl": {
+      "label": "Bas-Saint-Laurent",
+      "parent": "qc",
+      "basis": "established"
+    },
+    "saglac": {
+      "label": "Saguenay–Lac-Saint-Jean",
+      "parent": "qc",
+      "basis": "established"
+    },
+    "capnat": {
+      "label": "Capitale-Nationale",
+      "parent": "qc",
+      "basis": "established"
+    },
+    "maur": {
+      "label": "Mauricie",
+      "parent": "qc",
+      "basis": "established"
+    },
+    "estrie": {
+      "label": "Estrie",
+      "parent": "qc",
+      "basis": "established"
+    },
+    "mtl": {
+      "label": "Montréal",
+      "parent": "qc",
+      "basis": "established"
+    },
+    "gatout": {
+      "label": "Outaouais / Gatineau",
+      "parent": "qc",
+      "basis": "established"
+    },
+    "abt": {
+      "label": "Abitibi-Témiscamingue",
+      "parent": "qc",
+      "basis": "established"
+    },
+    "cnord": {
+      "label": "Côte-Nord",
+      "parent": "qc",
+      "basis": "established"
+    },
+    "nqc": {
+      "label": "Nord-du-Québec",
+      "parent": "qc",
+      "basis": "established"
+    },
+    "gasp": {
+      "label": "Gaspésie–Îles-de-la-Madeleine",
+      "parent": "qc",
+      "basis": "established"
+    },
+    "chapp": {
+      "label": "Chaudière-Appalaches",
+      "parent": "qc",
+      "basis": "established"
+    },
+    "laval": {
+      "label": "Laval",
+      "parent": "qc",
+      "basis": "established"
+    },
+    "lanau": {
+      "label": "Lanaudière",
+      "parent": "qc",
+      "basis": "established"
+    },
+    "laur": {
+      "label": "Laurentides",
+      "parent": "qc",
+      "basis": "established"
+    },
+    "mtrg": {
+      "label": "Montérégie",
+      "parent": "qc",
+      "basis": "established"
+    },
+    "cqc": {
+      "label": "Centre-du-Québec",
+      "parent": "qc",
+      "basis": "established"
+    },
+    "alb": {
+      "label": "Albert",
+      "parent": "nb",
+      "basis": "established"
+    },
+    "carl": {
+      "label": "Carleton",
+      "parent": "nb",
+      "basis": "established"
+    },
+    "charl": {
+      "label": "Charlotte / St. Stephen",
+      "parent": "nb",
+      "basis": "established"
+    },
+    "glouc": {
+      "label": "Gloucester",
+      "parent": "nb",
+      "basis": "established"
+    },
+    "kent": {
+      "label": "Kent",
+      "parent": "nb",
+      "basis": "established"
+    },
+    "kings-nb": {
+      "label": "Kings",
+      "parent": "nb",
+      "basis": "established"
+    },
+    "mada": {
+      "label": "Madawaska",
+      "parent": "nb",
+      "basis": "established"
+    },
+    "nthld": {
+      "label": "Northumberland / Miramichi",
+      "parent": "nb",
+      "basis": "established"
+    },
+    "qns-nb": {
+      "label": "Queens",
+      "parent": "nb",
+      "basis": "established"
+    },
+    "resti": {
+      "label": "Restigouche",
+      "parent": "nb",
+      "basis": "established"
+    },
+    "sj": {
+      "label": "Saint John",
+      "parent": "nb",
+      "basis": "established"
+    },
+    "sunb": {
+      "label": "Sunbury",
+      "parent": "nb",
+      "basis": "established"
+    },
+    "vic-nb": {
+      "label": "Victoria",
+      "parent": "nb",
+      "basis": "established"
+    },
+    "westm": {
+      "label": "Westmorland / Moncton",
+      "parent": "nb",
+      "basis": "established"
+    },
+    "york": {
+      "label": "York / Fredericton",
+      "parent": "nb",
+      "basis": "established"
+    },
+    "anna": {
+      "label": "Annapolis",
+      "parent": "ns",
+      "basis": "established"
+    },
+    "anti": {
+      "label": "Antigonish",
+      "parent": "ns",
+      "basis": "established"
+    },
+    "cb": {
+      "label": "Cape Breton / Sydney",
+      "parent": "ns",
+      "basis": "established"
+    },
+    "col": {
+      "label": "Colchester / Truro",
+      "parent": "ns",
+      "basis": "established"
+    },
+    "cumb": {
+      "label": "Cumberland",
+      "parent": "ns",
+      "basis": "established"
+    },
+    "dig": {
+      "label": "Digby",
+      "parent": "ns",
+      "basis": "established"
+    },
+    "guys": {
+      "label": "Guysborough",
+      "parent": "ns",
+      "basis": "established"
+    },
+    "hfx": {
+      "label": "Halifax",
+      "parent": "ns",
+      "basis": "established"
+    },
+    "hants": {
+      "label": "Hants",
+      "parent": "ns",
+      "basis": "established"
+    },
+    "inv": {
+      "label": "Inverness",
+      "parent": "ns",
+      "basis": "established"
+    },
+    "kings-ns": {
+      "label": "Kings",
+      "parent": "ns",
+      "basis": "established"
+    },
+    "lun": {
+      "label": "Lunenburg",
+      "parent": "ns",
+      "basis": "established"
+    },
+    "pict": {
+      "label": "Pictou",
+      "parent": "ns",
+      "basis": "established"
+    },
+    "qns-ns": {
+      "label": "Queens",
+      "parent": "ns",
+      "basis": "established"
+    },
+    "rich": {
+      "label": "Richmond",
+      "parent": "ns",
+      "basis": "established"
+    },
+    "shel": {
+      "label": "Shelburne",
+      "parent": "ns",
+      "basis": "established"
+    },
+    "vic-ns": {
+      "label": "Victoria",
+      "parent": "ns",
+      "basis": "established"
+    },
+    "yar": {
+      "label": "Yarmouth",
+      "parent": "ns",
+      "basis": "established"
+    },
+    "pri": {
+      "label": "Prince / Summerside",
+      "parent": "pe",
+      "basis": "established"
+    },
+    "qns-pe": {
+      "label": "Queens / Charlottetown",
+      "parent": "pe",
+      "basis": "established"
+    },
+    "kings-pe": {
+      "label": "Kings",
+      "parent": "pe",
+      "basis": "established"
+    },
+    "avalon": {
+      "label": "Avalon Peninsula / St. John's",
+      "parent": "nl",
+      "basis": "proposed"
+    },
+    "burin": {
+      "label": "Burin Peninsula",
+      "parent": "nl",
+      "basis": "proposed"
+    },
+    "bonav": {
+      "label": "Bonavista–Trinity–Clarenville",
+      "parent": "nl",
+      "basis": "proposed"
+    },
+    "cent": {
+      "label": "Central NL (Gander–Grand Falls-Windsor)",
+      "parent": "nl",
+      "basis": "proposed"
+    },
+    "scoast": {
+      "label": "South Coast",
+      "parent": "nl",
+      "basis": "proposed"
+    },
+    "steph": {
+      "label": "Bay St. George / Stephenville",
+      "parent": "nl",
+      "basis": "proposed"
+    },
+    "humber": {
+      "label": "Humber / Corner Brook",
+      "parent": "nl",
+      "basis": "proposed"
+    },
+    "npen": {
+      "label": "Great Northern Peninsula",
+      "parent": "nl",
+      "basis": "proposed"
+    },
+    "labw": {
+      "label": "Labrador West",
+      "parent": "nl",
+      "basis": "proposed"
+    },
+    "hvgb": {
+      "label": "Lake Melville / Happy Valley-Goose Bay",
+      "parent": "nl",
+      "basis": "proposed"
+    },
+    "nain": {
+      "label": "Nunatsiavut coast",
+      "parent": "nl",
+      "basis": "proposed"
+    },
+    "whse": {
+      "label": "Whitehorse & Southern Lakes",
+      "parent": "yt",
+      "basis": "proposed"
+    },
+    "kluane": {
+      "label": "Kluane / Haines Junction",
+      "parent": "yt",
+      "basis": "proposed"
+    },
+    "dawson": {
+      "label": "Klondike / Dawson City",
+      "parent": "yt",
+      "basis": "proposed"
+    },
+    "mayo": {
+      "label": "Silver Trail",
+      "parent": "yt",
+      "basis": "proposed"
+    },
+    "watson": {
+      "label": "Watson Lake / southeast",
+      "parent": "yt",
+      "basis": "proposed"
+    },
+    "oldcrow": {
+      "label": "North Yukon",
+      "parent": "yt",
+      "basis": "proposed"
+    },
+    "nsl": {
+      "label": "North Slave / Yellowknife",
+      "parent": "nt",
+      "basis": "established"
+    },
+    "ssl": {
+      "label": "South Slave",
+      "parent": "nt",
+      "basis": "established"
+    },
+    "dehcho": {
+      "label": "Dehcho",
+      "parent": "nt",
+      "basis": "established"
+    },
+    "sahtu": {
+      "label": "Sahtu",
+      "parent": "nt",
+      "basis": "established"
+    },
+    "inuvik": {
+      "label": "Inuvik / Beaufort Delta",
+      "parent": "nt",
+      "basis": "established"
+    },
+    "qik": {
+      "label": "Qikiqtaaluk / Iqaluit",
+      "parent": "nu",
+      "basis": "established"
+    },
+    "kiv": {
+      "label": "Kivalliq / Rankin Inlet",
+      "parent": "nu",
+      "basis": "established"
+    },
+    "kitik": {
+      "label": "Kitikmeot / Cambridge Bay",
+      "parent": "nu",
+      "basis": "established"
+    }
+  },
+  "status": {
+    "can": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "national"
+    },
+    "bc": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "jurisdiction"
+    },
+    "ab": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "jurisdiction"
+    },
+    "sk": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "jurisdiction"
+    },
+    "mb": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "jurisdiction"
+    },
+    "on": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "jurisdiction"
+    },
+    "qc": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "jurisdiction"
+    },
+    "nb": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "jurisdiction"
+    },
+    "ns": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "jurisdiction"
+    },
+    "pe": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "jurisdiction"
+    },
+    "nl": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "jurisdiction"
+    },
+    "yt": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "jurisdiction"
+    },
+    "nt": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "jurisdiction"
+    },
+    "nu": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "jurisdiction"
+    },
+    "mvrd": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "crd": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "fvrd": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "cvrd": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "cxrd": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "rdn": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "acrd": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "srd": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "rdmw": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "scrd": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "qrd": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "slrd": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "tnrd": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "rdos": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "rdco": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "rdno": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "csrd": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "rdek": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "rdck": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "rdkb": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "cbrd": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "rdffg": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "rdbn": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "rdks": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "ncrd": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "ccrd": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "prrd": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "nrrm": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "stk": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "mh": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed"
+    },
+    "leth": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed"
+    },
+    "cal": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed"
+    },
+    "rocky": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed"
+    },
+    "drum": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed"
+    },
+    "rd": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed"
+    },
+    "cam": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed"
+    },
+    "edm": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed"
+    },
+    "coldlk": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed"
+    },
+    "ftmac": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed"
+    },
+    "wcrt": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed"
+    },
+    "peace": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed"
+    },
+    "hlvl": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed"
+    },
+    "lloyd": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed"
+    },
+    "estvn": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed"
+    },
+    "wybrn": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed"
+    },
+    "regina": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed"
+    },
+    "mj": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed"
+    },
+    "swift": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed"
+    },
+    "yktn": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed"
+    },
+    "stoon": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed"
+    },
+    "btlfd": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed"
+    },
+    "pa": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed"
+    },
+    "melft": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed"
+    },
+    "ronge": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed"
+    },
+    "wpg": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed"
+    },
+    "eman": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed"
+    },
+    "pemb": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed"
+    },
+    "ptge": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed"
+    },
+    "wman": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed"
+    },
+    "pkld": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed"
+    },
+    "ilake": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed"
+    },
+    "pas": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed"
+    },
+    "thom": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed"
+    },
+    "chur": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed"
+    },
+    "on-gtha": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed-group"
+    },
+    "gta": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed-group"
+    },
+    "tor": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "dur": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "htn": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "pel": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "yrk": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "on-ham": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed-group"
+    },
+    "ham": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "bra": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "hald": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "norf": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "nia": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "on-ktw": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed-group"
+    },
+    "duf": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "wat": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "wel": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "per": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "on-se": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed-group"
+    },
+    "nth": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "ptb": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "frt": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "has": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "lnx": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "pec": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "on-alg": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed-group"
+    },
+    "ott": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "lan": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "ldg": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "psr": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "ren": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "sdg": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "on-lsim": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed-group"
+    },
+    "hlb": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "mus": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "sim": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "kaw": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "on-shur": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed-group"
+    },
+    "bru": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "gry": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "hur": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "on-sw": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed-group"
+    },
+    "elg": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "esx": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "chk": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "lmb": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "msx": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "oxf": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "on-ne": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed-group"
+    },
+    "aga": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "coc": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "mnt": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "nip": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "psd": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "gsu": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "sud": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "tim": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "on-nw": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed-group"
+    },
+    "ken": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "rrv": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "tby": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "ncr": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "shared-scope"
+    },
+    "bsl": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "saglac": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "capnat": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "maur": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "estrie": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "mtl": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "gatout": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "abt": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "cnord": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "nqc": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "gasp": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "chapp": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "laval": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "lanau": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "laur": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "mtrg": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "cqc": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "alb": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "carl": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "charl": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "glouc": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "kent": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "kings-nb": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "mada": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "nthld": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "qns-nb": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "resti": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "sj": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "sunb": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "vic-nb": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "westm": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "york": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "anna": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "anti": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "cb": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "col": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "cumb": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "dig": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "guys": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "hfx": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "hants": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "inv": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "kings-ns": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "lun": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "pict": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "qns-ns": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "rich": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "shel": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "vic-ns": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "yar": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "pri": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "qns-pe": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "kings-pe": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "avalon": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed"
+    },
+    "burin": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed"
+    },
+    "bonav": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed"
+    },
+    "cent": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed"
+    },
+    "scoast": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed"
+    },
+    "steph": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed"
+    },
+    "humber": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed"
+    },
+    "npen": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed"
+    },
+    "labw": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed"
+    },
+    "hvgb": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed"
+    },
+    "nain": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed"
+    },
+    "whse": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed"
+    },
+    "kluane": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed"
+    },
+    "dawson": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed"
+    },
+    "mayo": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed"
+    },
+    "watson": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed"
+    },
+    "oldcrow": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "basis": "proposed"
+    },
+    "nsl": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "ssl": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "dehcho": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "sahtu": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "inuvik": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "qik": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "kiv": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    },
+    "kitik": {
+      "state": "proposal",
+      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
+      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "official geography; map approximate",
+      "basis": "established"
+    }
+  },
+  "seeds": [
+    {
+      "tag": "mvrd",
+      "lat": 49.28173,
+      "lon": -123.11928,
+      "r": 139.7,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "MeshMapper centre"
+    },
+    {
+      "tag": "crd",
+      "lat": 48.43719,
+      "lon": -123.361624,
+      "r": 113.3,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "MeshMapper centre"
+    },
+    {
+      "tag": "fvrd",
+      "lat": 49.023309,
+      "lon": -122.368297,
+      "r": 100,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "MeshMapper centre"
+    },
+    {
+      "tag": "cvrd",
+      "lat": 48.8359655,
+      "lon": -124.1502799,
+      "r": 57,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Cowichan Valley Regional District, British Columbia, Canada"
+    },
+    {
+      "tag": "cxrd",
+      "lat": 49.671948,
+      "lon": -125.016697,
+      "r": 44,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "MeshMapper centre"
+    },
+    {
+      "tag": "rdn",
+      "lat": 49.164167,
+      "lon": -123.936389,
+      "r": 80.6,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "MeshMapper centre"
+    },
+    {
+      "tag": "acrd",
+      "lat": 49.1977734,
+      "lon": -125.4363938,
+      "r": 79,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Alberni-Clayoquot Regional District, British Columbia, Canada"
+    },
+    {
+      "tag": "srd",
+      "lat": 49.99008,
+      "lon": -125.26207,
+      "r": 62.4,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "MeshMapper centre"
+    },
+    {
+      "tag": "rdmw",
+      "lat": 50.5901579,
+      "lon": -127.0872202,
+      "r": 30,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Port McNeill, 1603, McNeill Road, Port McNeill, Regional District of Mount Waddington, British Columbia, V0N 2R0, Canada"
+    },
+    {
+      "tag": "scrd",
+      "lat": 49.7650789,
+      "lon": -123.7644501,
+      "r": 59,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Sunshine Coast Regional District, British Columbia, Canada"
+    },
+    {
+      "tag": "qrd",
+      "lat": 50.1526491,
+      "lon": -124.3939674,
+      "r": 83,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "qathet Regional District, British Columbia, Canada"
+    },
+    {
+      "tag": "slrd",
+      "lat": 49.697058,
+      "lon": -123.152517,
+      "r": 82.2,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "MeshMapper centre"
+    },
+    {
+      "tag": "tnrd",
+      "lat": 50.686535,
+      "lon": -120.349611,
+      "r": 72.6,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "MeshMapper centre"
+    },
+    {
+      "tag": "rdos",
+      "lat": 49.4631,
+      "lon": -119.6022,
+      "r": 32,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "legacy place centre"
+    },
+    {
+      "tag": "rdco",
+      "lat": 49.9561,
+      "lon": -119.3778,
+      "r": 42,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "legacy place centre"
+    },
+    {
+      "tag": "rdno",
+      "lat": 50.264812,
+      "lon": -119.278038,
+      "r": 30,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Vernon West End, 31 Avenue, City Centre, Vernon, Regional District of North Okanagan, British Columbia, V1T 2E0, Canada"
+    },
+    {
+      "tag": "csrd",
+      "lat": 51.4783394,
+      "lon": -117.9295767,
+      "r": 119,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Columbia-Shuswap Regional District, British Columbia, Canada"
+    },
+    {
+      "tag": "rdek",
+      "lat": 49.6108,
+      "lon": -115.7819,
+      "r": 42,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "legacy place centre"
+    },
+    {
+      "tag": "rdck",
+      "lat": 49.2964,
+      "lon": -117.6324,
+      "r": 32,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "legacy place centre"
+    },
+    {
+      "tag": "rdkb",
+      "lat": 49.1014421,
+      "lon": -117.7046297,
+      "r": 30,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Canada Post, Second Avenue, East Trail, Trail, Regional District of Kootenay Boundary, British Columbia, V1R 1S3, Canada"
+    },
+    {
+      "tag": "cbrd",
+      "lat": 52.3550873,
+      "lon": -122.9927906,
+      "r": 221,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Cariboo Regional District, British Columbia, Canada"
+    },
+    {
+      "tag": "rdffg",
+      "lat": 53.8894,
+      "lon": -122.6789,
+      "r": 55,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "legacy place centre"
+    },
+    {
+      "tag": "rdbn",
+      "lat": 54.8247,
+      "lon": -127.1828,
+      "r": 55,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "legacy place centre"
+    },
+    {
+      "tag": "rdks",
+      "lat": 54.4685,
+      "lon": -128.5762,
+      "r": 55,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "legacy place centre"
+    },
+    {
+      "tag": "ncrd",
+      "lat": 54.2861,
+      "lon": -130.4447,
+      "r": 55,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "legacy place centre"
+    },
+    {
+      "tag": "ccrd",
+      "lat": 52.122961,
+      "lon": -127.1218822,
+      "r": 121,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Central Coast Regional District, British Columbia, Canada"
+    },
+    {
+      "tag": "prrd",
+      "lat": 55.7423,
+      "lon": -120.183,
+      "r": 55,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "legacy place centre"
+    },
+    {
+      "tag": "nrrm",
+      "lat": 59.124587,
+      "lon": -122.8709621,
+      "r": 223,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Northern Rockies Regional Municipality, British Columbia, Canada"
+    },
+    {
+      "tag": "stk",
+      "lat": 59.5251689,
+      "lon": -130.2085609,
+      "r": 411,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Stikine Region, British Columbia, Canada"
+    },
+    {
+      "tag": "mh",
+      "lat": 50.0189,
+      "lon": -110.7208,
+      "r": 45,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "legacy place centre"
+    },
+    {
+      "tag": "leth",
+      "lat": 49.684963,
+      "lon": -112.834123,
+      "r": 238.4,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "MeshMapper centre"
+    },
+    {
+      "tag": "cal",
+      "lat": 51.016738,
+      "lon": -114.001493,
+      "r": 281,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "MeshMapper centre"
+    },
+    {
+      "tag": "rocky",
+      "lat": 51.175076,
+      "lon": -115.5720773,
+      "r": 30,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Banff, Alberta, Canada"
+    },
+    {
+      "tag": "drum",
+      "lat": 51.401597,
+      "lon": -112.6185167,
+      "r": 30,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Drumheller, Alberta, Canada"
+    },
+    {
+      "tag": "rd",
+      "lat": 52.278035,
+      "lon": -113.813442,
+      "r": 300.8,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "MeshMapper centre"
+    },
+    {
+      "tag": "cam",
+      "lat": 53.013131,
+      "lon": -112.840576,
+      "r": 30,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Camrose, Alberta, Canada"
+    },
+    {
+      "tag": "edm",
+      "lat": 53.551268,
+      "lon": -113.491265,
+      "r": 430,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "MeshMapper centre"
+    },
+    {
+      "tag": "coldlk",
+      "lat": 54.46046,
+      "lon": -110.192871,
+      "r": 30,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "City of Cold Lake, Alberta, Canada"
+    },
+    {
+      "tag": "ftmac",
+      "lat": 56.6533,
+      "lon": -111.2219,
+      "r": 65,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "legacy place centre"
+    },
+    {
+      "tag": "wcrt",
+      "lat": 54.1424574,
+      "lon": -115.6846504,
+      "r": 30,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Whitecourt, Alberta, Canada"
+    },
+    {
+      "tag": "peace",
+      "lat": 55.1797,
+      "lon": -118.885,
+      "r": 55,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "legacy place centre"
+    },
+    {
+      "tag": "hlvl",
+      "lat": 58.5115361,
+      "lon": -117.1438756,
+      "r": 30,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Town of High Level, Alberta, Canada"
+    },
+    {
+      "tag": "lloyd",
+      "lat": 53.279995,
+      "lon": -110.00885,
+      "r": 30,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "City of Lloydminster, Alberta, Canada"
+    },
+    {
+      "tag": "estvn",
+      "lat": 49.1428076,
+      "lon": -102.991075,
+      "r": 30,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Estevan, Saskatchewan, Canada"
+    },
+    {
+      "tag": "wybrn",
+      "lat": 49.6651238,
+      "lon": -103.854034,
+      "r": 30,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Weyburn, Saskatchewan, Canada"
+    },
+    {
+      "tag": "regina",
+      "lat": 50.4319,
+      "lon": -104.6658,
+      "r": 55,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "legacy place centre"
+    },
+    {
+      "tag": "mj",
+      "lat": 50.3967209,
+      "lon": -105.535666,
+      "r": 30,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Moose Jaw, Saskatchewan, Canada"
+    },
+    {
+      "tag": "swift",
+      "lat": 50.2849138,
+      "lon": -107.7984496,
+      "r": 30,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Swift Current, Saskatchewan, Canada"
+    },
+    {
+      "tag": "yktn",
+      "lat": 51.212045,
+      "lon": -102.461243,
+      "r": 30,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Yorkton, Saskatchewan, Canada"
+    },
+    {
+      "tag": "stoon",
+      "lat": 52.1708,
+      "lon": -106.6997,
+      "r": 55,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "legacy place centre"
+    },
+    {
+      "tag": "btlfd",
+      "lat": 52.776186,
+      "lon": -108.300476,
+      "r": 30,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "North Battleford, Saskatchewan, Canada"
+    },
+    {
+      "tag": "pa",
+      "lat": 53.204373,
+      "lon": -105.761435,
+      "r": 45.8,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "MeshMapper centre"
+    },
+    {
+      "tag": "melft",
+      "lat": 52.8613707,
+      "lon": -104.6135544,
+      "r": 30,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Melfort, Saskatchewan, Canada"
+    },
+    {
+      "tag": "ronge",
+      "lat": 55.1005283,
+      "lon": -105.2900485,
+      "r": 30,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "La Ronge, Saskatchewan, S0J 1L0, Canada"
+    },
+    {
+      "tag": "wpg",
+      "lat": 49.896517,
+      "lon": -97.130584,
+      "r": 248.2,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "MeshMapper centre"
+    },
+    {
+      "tag": "eman",
+      "lat": 49.5254414,
+      "lon": -96.6854275,
+      "r": 30,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Steinbach, Manitoba, Canada"
+    },
+    {
+      "tag": "pemb",
+      "lat": 49.1927055,
+      "lon": -98.1014567,
+      "r": 30,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Morden, Manitoba, Canada"
+    },
+    {
+      "tag": "ptge",
+      "lat": 49.9031,
+      "lon": -98.2739,
+      "r": 35,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "legacy place centre"
+    },
+    {
+      "tag": "wman",
+      "lat": 49.91,
+      "lon": -99.9519,
+      "r": 45,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "legacy place centre"
+    },
+    {
+      "tag": "pkld",
+      "lat": 51.1008,
+      "lon": -100.0525,
+      "r": 45,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "legacy place centre"
+    },
+    {
+      "tag": "ilake",
+      "lat": 50.6323125,
+      "lon": -96.9881076,
+      "r": 30,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Gimli, Manitoba, R0C 1B0, Canada"
+    },
+    {
+      "tag": "pas",
+      "lat": 53.8224172,
+      "lon": -101.2405153,
+      "r": 30,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "The Pas, Manitoba, Canada"
+    },
+    {
+      "tag": "thom",
+      "lat": 55.8011,
+      "lon": -97.8642,
+      "r": 55,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "legacy place centre"
+    },
+    {
+      "tag": "chur",
+      "lat": 58.769268,
+      "lon": -94.1729517,
+      "r": 30,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Churchill, Manitoba, R0B 0E0, Canada"
+    },
+    {
+      "tag": "tor",
+      "lat": 43.6532,
+      "lon": -79.3832,
+      "r": 16,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "dur",
+      "lat": 43.8971,
+      "lon": -78.8658,
+      "r": 24,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "htn",
+      "lat": 43.5318,
+      "lon": -79.8745,
+      "r": 22,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "pel",
+      "lat": 43.7315,
+      "lon": -79.7624,
+      "r": 22,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "yrk",
+      "lat": 44.043,
+      "lon": -79.4802,
+      "r": 24,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "ham",
+      "lat": 43.2557,
+      "lon": -79.8711,
+      "r": 22,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "bra",
+      "lat": 43.1394,
+      "lon": -80.2644,
+      "r": 22,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "hald",
+      "lat": 42.945542,
+      "lon": -79.8362031,
+      "r": 30,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Haldimand County, Southwestern Ontario, Ontario, Canada"
+    },
+    {
+      "tag": "norf",
+      "lat": 42.7971532,
+      "lon": -80.4538365,
+      "r": 30,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Norfolk County, Southwestern Ontario, Ontario, Canada"
+    },
+    {
+      "tag": "nia",
+      "lat": 43.0896,
+      "lon": -79.0849,
+      "r": 30,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "duf",
+      "lat": 43.9196,
+      "lon": -80.0943,
+      "r": 24,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "wat",
+      "lat": 43.4643,
+      "lon": -80.5204,
+      "r": 22,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "wel",
+      "lat": 43.5448,
+      "lon": -80.2482,
+      "r": 22,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "per",
+      "lat": 43.37,
+      "lon": -80.9822,
+      "r": 24,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "nth",
+      "lat": 44.0061,
+      "lon": -77.887,
+      "r": 28,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "ptb",
+      "lat": 44.3091,
+      "lon": -78.3197,
+      "r": 28,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "frt",
+      "lat": 44.2312,
+      "lon": -76.486,
+      "r": 24,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "has",
+      "lat": 44.1628,
+      "lon": -77.3832,
+      "r": 28,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "lnx",
+      "lat": 44.2477,
+      "lon": -76.95,
+      "r": 24,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "pec",
+      "lat": 44.0007,
+      "lon": -77.25,
+      "r": 22,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "ott",
+      "lat": 45.4215,
+      "lon": -75.6972,
+      "r": 24,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "lan",
+      "lat": 44.8997,
+      "lon": -76.25,
+      "r": 30,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "ldg",
+      "lat": 44.5895,
+      "lon": -75.6843,
+      "r": 32,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "psr",
+      "lat": 45.55,
+      "lon": -74.9,
+      "r": 30,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "ren",
+      "lat": 45.4765,
+      "lon": -76.6839,
+      "r": 38,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "sdg",
+      "lat": 45.0184,
+      "lon": -74.7287,
+      "r": 34,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "hlb",
+      "lat": 45.045,
+      "lon": -78.5095,
+      "r": 34,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "mus",
+      "lat": 45.0334,
+      "lon": -79.2996,
+      "r": 38,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "sim",
+      "lat": 44.3894,
+      "lon": -79.6903,
+      "r": 34,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "kaw",
+      "lat": 44.3501,
+      "lon": -78.7329,
+      "r": 34,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "bru",
+      "lat": 44.4407,
+      "lon": -81.514,
+      "r": 36,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "gry",
+      "lat": 44.5617,
+      "lon": -80.943,
+      "r": 34,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "hur",
+      "lat": 43.7417,
+      "lon": -81.7077,
+      "r": 32,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "elg",
+      "lat": 42.7778,
+      "lon": -81.182,
+      "r": 28,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "esx",
+      "lat": 42.3149,
+      "lon": -83.0364,
+      "r": 28,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "chk",
+      "lat": 42.4048,
+      "lon": -82.191,
+      "r": 30,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "lmb",
+      "lat": 42.9745,
+      "lon": -82.4066,
+      "r": 30,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "msx",
+      "lat": 42.9849,
+      "lon": -81.2453,
+      "r": 28,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "oxf",
+      "lat": 43.13,
+      "lon": -80.746,
+      "r": 24,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "aga",
+      "lat": 46.5219,
+      "lon": -84.3461,
+      "r": 58,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "coc",
+      "lat": 49.0667,
+      "lon": -81.0167,
+      "r": 70,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "mnt",
+      "lat": 45.7501,
+      "lon": -82.2,
+      "r": 42,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "nip",
+      "lat": 46.3091,
+      "lon": -79.4608,
+      "r": 44,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "psd",
+      "lat": 45.347,
+      "lon": -80.0353,
+      "r": 44,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "gsu",
+      "lat": 46.4917,
+      "lon": -81.0105,
+      "r": 34,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "sud",
+      "lat": 46.3731,
+      "lon": -80.074,
+      "r": 45,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "tim",
+      "lat": 47.5094,
+      "lon": -79.6811,
+      "r": 50,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "ken",
+      "lat": 49.767,
+      "lon": -94.4894,
+      "r": 70,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "rrv",
+      "lat": 48.6098,
+      "lon": -93.4016,
+      "r": 65,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "tby",
+      "lat": 48.3809,
+      "lon": -89.2477,
+      "r": 60,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "bsl",
+      "lat": 48.452,
+      "lon": -68.523,
+      "r": 50,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "saglac",
+      "lat": 48.428,
+      "lon": -71.068,
+      "r": 55,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "capnat",
+      "lat": 46.8139,
+      "lon": -71.208,
+      "r": 55,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "maur",
+      "lat": 46.3508,
+      "lon": -72.5491,
+      "r": 42,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "estrie",
+      "lat": 45.4,
+      "lon": -71.9,
+      "r": 45,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "mtl",
+      "lat": 45.5017,
+      "lon": -73.5673,
+      "r": 60,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "gatout",
+      "lat": 45.48,
+      "lon": -75.65,
+      "r": 42,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "abt",
+      "lat": 48.2399,
+      "lon": -79.0186,
+      "r": 60,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "cnord",
+      "lat": 50.2133,
+      "lon": -66.375,
+      "r": 80,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "nqc",
+      "lat": 53.75,
+      "lon": -73,
+      "r": 150,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "gasp",
+      "lat": 48.8291,
+      "lon": -64.481,
+      "r": 65,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "chapp",
+      "lat": 46.76,
+      "lon": -70.98,
+      "r": 45,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "laval",
+      "lat": 45.6066,
+      "lon": -73.7124,
+      "r": 18,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "lanau",
+      "lat": 46.0167,
+      "lon": -73.45,
+      "r": 42,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "laur",
+      "lat": 45.9,
+      "lon": -74.1,
+      "r": 48,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "mtrg",
+      "lat": 45.45,
+      "lon": -73.25,
+      "r": 45,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "cqc",
+      "lat": 46.05,
+      "lon": -71.95,
+      "r": 40,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "existing strategy centre"
+    },
+    {
+      "tag": "alb",
+      "lat": 45.7825181,
+      "lon": -64.8798468,
+      "r": 32,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Albert County, New Brunswick / Nouveau-Brunswick, Canada"
+    },
+    {
+      "tag": "carl",
+      "lat": 46.3940835,
+      "lon": -67.491134,
+      "r": 47,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Carleton County, New Brunswick / Nouveau-Brunswick, Canada"
+    },
+    {
+      "tag": "charl",
+      "lat": 45.2274508,
+      "lon": -66.9308031,
+      "r": 57,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Charlotte County, New Brunswick / Nouveau-Brunswick, Canada"
+    },
+    {
+      "tag": "glouc",
+      "lat": 47.6297,
+      "lon": -65.7389,
+      "r": 35,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "legacy place centre"
+    },
+    {
+      "tag": "kent",
+      "lat": 46.5425184,
+      "lon": -65.1995245,
+      "r": 52,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Comté de Kent, New Brunswick / Nouveau-Brunswick, Canada"
+    },
+    {
+      "tag": "kings-nb",
+      "lat": 45.593078,
+      "lon": -65.7634472,
+      "r": 52,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Kings County, New Brunswick / Nouveau-Brunswick, Canada"
+    },
+    {
+      "tag": "mada",
+      "lat": 47.4756407,
+      "lon": -68.0837916,
+      "r": 52,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Comté de Madawaska, New Brunswick / Nouveau-Brunswick, Canada"
+    },
+    {
+      "tag": "nthld",
+      "lat": 46.9461759,
+      "lon": -66.0795313,
+      "r": 86,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Northumberland County, New Brunswick / Nouveau-Brunswick, Canada"
+    },
+    {
+      "tag": "qns-nb",
+      "lat": 45.8838758,
+      "lon": -65.9861428,
+      "r": 57,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Queens County, New Brunswick / Nouveau-Brunswick, Canada"
+    },
+    {
+      "tag": "resti",
+      "lat": 47.6936844,
+      "lon": -67.013416,
+      "r": 93,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Comté de Restigouche, New Brunswick / Nouveau-Brunswick, Canada"
+    },
+    {
+      "tag": "sj",
+      "lat": 45.3161,
+      "lon": -65.8903,
+      "r": 35,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "legacy place centre"
+    },
+    {
+      "tag": "sunb",
+      "lat": 45.9288639,
+      "lon": -66.3920235,
+      "r": 50,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Sunbury County, New Brunswick / Nouveau-Brunswick, Canada"
+    },
+    {
+      "tag": "vic-nb",
+      "lat": 47.0515128,
+      "lon": -67.3295001,
+      "r": 54,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Victoria County, New Brunswick / Nouveau-Brunswick, Canada"
+    },
+    {
+      "tag": "westm",
+      "lat": 46.1122,
+      "lon": -64.6786,
+      "r": 38,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "legacy place centre"
+    },
+    {
+      "tag": "york",
+      "lat": 45.8689,
+      "lon": -66.5372,
+      "r": 35,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "legacy place centre"
+    },
+    {
+      "tag": "anna",
+      "lat": 44.7064932,
+      "lon": -65.2498142,
+      "r": 42,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Annapolis County, Nova Scotia, Canada"
+    },
+    {
+      "tag": "anti",
+      "lat": 45.6361783,
+      "lon": -61.8341329,
+      "r": 31,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Antigonish County, Nova Scotia, Canada"
+    },
+    {
+      "tag": "cb",
+      "lat": 46.1614,
+      "lon": -60.0478,
+      "r": 35,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "legacy place centre"
+    },
+    {
+      "tag": "col",
+      "lat": 45.4377329,
+      "lon": -63.3488873,
+      "r": 55,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Colchester County, Nova Scotia, Canada"
+    },
+    {
+      "tag": "cumb",
+      "lat": 45.6834902,
+      "lon": -64.1938061,
+      "r": 70,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Cumberland County, Nova Scotia, Canada"
+    },
+    {
+      "tag": "dig",
+      "lat": 44.3582675,
+      "lon": -65.9107137,
+      "r": 42,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Digby County, Nova Scotia, Canada"
+    },
+    {
+      "tag": "guys",
+      "lat": 45.262856,
+      "lon": -61.7405592,
+      "r": 70,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Guysborough County, Nova Scotia, Canada"
+    },
+    {
+      "tag": "hfx",
+      "lat": 44.8808,
+      "lon": -63.5086,
+      "r": 45,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "legacy place centre"
+    },
+    {
+      "tag": "hants",
+      "lat": 45.0381118,
+      "lon": -63.8786323,
+      "r": 41,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Hants County, Nova Scotia, Canada"
+    },
+    {
+      "tag": "inv",
+      "lat": 46.1681871,
+      "lon": -61.2197425,
+      "r": 80,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Inverness County, Nova Scotia, Canada"
+    },
+    {
+      "tag": "kings-ns",
+      "lat": 45.0605346,
+      "lon": -64.5945765,
+      "r": 37,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Kings County, Nova Scotia, Canada"
+    },
+    {
+      "tag": "lun",
+      "lat": 44.5070278,
+      "lon": -64.4344556,
+      "r": 43,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Lunenburg County, Nova Scotia, Canada"
+    },
+    {
+      "tag": "pict",
+      "lat": 45.5855373,
+      "lon": -62.7283219,
+      "r": 41,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Pictou County, Nova Scotia, Canada"
+    },
+    {
+      "tag": "qns-ns",
+      "lat": 44.1627641,
+      "lon": -64.9498882,
+      "r": 42,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Queens County, Nova Scotia, Canada"
+    },
+    {
+      "tag": "rich",
+      "lat": 45.6508566,
+      "lon": -60.8533687,
+      "r": 46,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Richmond County, Nova Scotia, Canada"
+    },
+    {
+      "tag": "shel",
+      "lat": 43.7101248,
+      "lon": -65.3683422,
+      "r": 47,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Shelburne County, Nova Scotia, Canada"
+    },
+    {
+      "tag": "vic-ns",
+      "lat": 46.4906147,
+      "lon": -60.5588394,
+      "r": 74,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Victoria County, Nova Scotia, Canada"
+    },
+    {
+      "tag": "yar",
+      "lat": 43.8269,
+      "lon": -66.0881,
+      "r": 35,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "legacy place centre"
+    },
+    {
+      "tag": "pri",
+      "lat": 46.5855648,
+      "lon": -63.9578476,
+      "r": 49,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Prince County, Prince Edward Island, Canada"
+    },
+    {
+      "tag": "qns-pe",
+      "lat": 46.29,
+      "lon": -63.1211,
+      "r": 35,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "legacy place centre"
+    },
+    {
+      "tag": "kings-pe",
+      "lat": 46.2764491,
+      "lon": -62.5671574,
+      "r": 35,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Kings County, Prince Edward Island, Canada"
+    },
+    {
+      "tag": "avalon",
+      "lat": 47.6186,
+      "lon": -52.7519,
+      "r": 42,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "legacy place centre"
+    },
+    {
+      "tag": "burin",
+      "lat": 47.0367243,
+      "lon": -55.1666274,
+      "r": 30,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Burin, Newfoundland, Newfoundland and Labrador, Canada"
+    },
+    {
+      "tag": "bonav",
+      "lat": 48.1679902,
+      "lon": -53.9646413,
+      "r": 30,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Clarenville, Newfoundland, Newfoundland and Labrador, Canada"
+    },
+    {
+      "tag": "cent",
+      "lat": 48.9369,
+      "lon": -54.5681,
+      "r": 40,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "legacy place centre"
+    },
+    {
+      "tag": "scoast",
+      "lat": 47.5776635,
+      "lon": -59.1424188,
+      "r": 30,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Channel-Port aux Basques, Newfoundland, Newfoundland and Labrador, A0M 1C0, Canada"
+    },
+    {
+      "tag": "steph",
+      "lat": 48.5452022,
+      "lon": -58.5871146,
+      "r": 30,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Stephenville, Newfoundland, Newfoundland and Labrador, Canada"
+    },
+    {
+      "tag": "humber",
+      "lat": 49.2108,
+      "lon": -57.3914,
+      "r": 40,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "legacy place centre"
+    },
+    {
+      "tag": "npen",
+      "lat": 51.3653968,
+      "lon": -55.5919335,
+      "r": 30,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "St. Anthony, Newfoundland, Newfoundland and Labrador, Canada"
+    },
+    {
+      "tag": "labw",
+      "lat": 52.9219,
+      "lon": -66.8644,
+      "r": 45,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "legacy place centre"
+    },
+    {
+      "tag": "hvgb",
+      "lat": 53.3192,
+      "lon": -60.4258,
+      "r": 45,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "legacy place centre"
+    },
+    {
+      "tag": "nain",
+      "lat": 56.5414634,
+      "lon": -61.6965963,
+      "r": 30,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Nain (Nunajnguk), Labrador, Newfoundland and Labrador, Canada"
+    },
+    {
+      "tag": "whse",
+      "lat": 60.7096,
+      "lon": -135.0672,
+      "r": 70,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "legacy place centre"
+    },
+    {
+      "tag": "kluane",
+      "lat": 60.7527212,
+      "lon": -137.5100384,
+      "r": 30,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Haines Junction, Yukon, Y0B 1L0, Canada"
+    },
+    {
+      "tag": "dawson",
+      "lat": 64.0606605,
+      "lon": -139.431695,
+      "r": 30,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Dawson City, Yukon, Y0B 1G0, Canada"
+    },
+    {
+      "tag": "mayo",
+      "lat": 63.5926909,
+      "lon": -135.8961421,
+      "r": 30,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Mayo, Yukon, Canada"
+    },
+    {
+      "tag": "watson",
+      "lat": 60.0624306,
+      "lon": -128.7068037,
+      "r": 30,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Watson Lake, Yukon, Y0A 1C0, Canada"
+    },
+    {
+      "tag": "oldcrow",
+      "lat": 67.571002,
+      "lon": -139.825745,
+      "r": 30,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Old Crow, Yukon, Y0B 1N0, Canada"
+    },
+    {
+      "tag": "nsl",
+      "lat": 62.4628,
+      "lon": -114.4403,
+      "r": 70,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "legacy place centre"
+    },
+    {
+      "tag": "ssl",
+      "lat": 60.8397,
+      "lon": -115.7828,
+      "r": 55,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "legacy place centre"
+    },
+    {
+      "tag": "dehcho",
+      "lat": 61.8631427,
+      "lon": -121.354276,
+      "r": 30,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Villiage of Fort Simpson, Dehcho Region, Northwest Territories, X0E 0N0, Canada"
+    },
+    {
+      "tag": "sahtu",
+      "lat": 65.282401,
+      "lon": -126.832725,
+      "r": 30,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Norman Wells, Sahtu Region, Northwest Territories, X0E 0V0, Canada"
+    },
+    {
+      "tag": "inuvik",
+      "lat": 68.3042,
+      "lon": -133.4828,
+      "r": 70,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "legacy place centre"
+    },
+    {
+      "tag": "qik",
+      "lat": 63.7564,
+      "lon": -68.5561,
+      "r": 70,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "legacy place centre"
+    },
+    {
+      "tag": "kiv",
+      "lat": 62.8030269,
+      "lon": -92.0868012,
+      "r": 30,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "ᑲᖏᕿᓂᖅ Rankin Inlet, ᑭᕙᓪᓕᖅ Kivalliq Region, ᓄᓇᕗᑦ Nunavut, X0C 0G0, Canada"
+    },
+    {
+      "tag": "kitik",
+      "lat": 69.1178442,
+      "lon": -105.0603881,
+      "r": 30,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "approximate",
+      "seedMethod": "OpenStreetMap place centre",
+      "seedLabel": "Iqaluktuuttiaq (Cambridge Bay), ᕿᑎᕐᒥᐅᑦ Kitikmeot Region, ᓄᓇᕗᑦ Nunavut, X0B 0C0, Canada"
+    }
+  ],
+  "metroGroups": [
+    {
+      "label": "British Columbia",
+      "tags": [
+        "mvrd",
+        "crd",
+        "fvrd",
+        "cvrd",
+        "cxrd",
+        "rdn",
+        "acrd",
+        "srd",
+        "rdmw",
+        "scrd",
+        "qrd",
+        "slrd",
+        "tnrd",
+        "rdos",
+        "rdco",
+        "rdno",
+        "csrd",
+        "rdek",
+        "rdck",
+        "rdkb",
+        "cbrd",
+        "rdffg",
+        "rdbn",
+        "rdks",
+        "ncrd",
+        "ccrd",
+        "prrd",
+        "nrrm",
+        "stk"
+      ]
+    },
+    {
+      "label": "Alberta",
+      "tags": [
+        "mh",
+        "leth",
+        "cal",
+        "rocky",
+        "drum",
+        "rd",
+        "cam",
+        "edm",
+        "coldlk",
+        "ftmac",
+        "wcrt",
+        "peace",
+        "hlvl",
+        "lloyd"
+      ]
+    },
+    {
+      "label": "Saskatchewan",
+      "tags": [
+        "estvn",
+        "wybrn",
+        "regina",
+        "mj",
+        "swift",
+        "yktn",
+        "stoon",
+        "btlfd",
+        "pa",
+        "melft",
+        "ronge"
+      ]
+    },
+    {
+      "label": "Manitoba",
+      "tags": [
+        "wpg",
+        "eman",
+        "pemb",
+        "ptge",
+        "wman",
+        "pkld",
+        "ilake",
+        "pas",
+        "thom",
+        "chur"
+      ]
+    },
+    {
+      "label": "Ontario",
+      "tags": [
+        "tor",
+        "dur",
+        "htn",
+        "pel",
+        "yrk",
+        "ham",
+        "bra",
+        "hald",
+        "norf",
+        "nia",
+        "duf",
+        "wat",
+        "wel",
+        "per",
+        "nth",
+        "ptb",
+        "frt",
+        "has",
+        "lnx",
+        "pec",
+        "ott",
+        "lan",
+        "ldg",
+        "psr",
+        "ren",
+        "sdg",
+        "hlb",
+        "mus",
+        "sim",
+        "kaw",
+        "bru",
+        "gry",
+        "hur",
+        "elg",
+        "esx",
+        "chk",
+        "lmb",
+        "msx",
+        "oxf",
+        "aga",
+        "coc",
+        "mnt",
+        "nip",
+        "psd",
+        "gsu",
+        "sud",
+        "tim",
+        "ken",
+        "rrv",
+        "tby"
+      ]
+    },
+    {
+      "label": "Québec",
+      "tags": [
+        "bsl",
+        "saglac",
+        "capnat",
+        "maur",
+        "estrie",
+        "mtl",
+        "gatout",
+        "abt",
+        "cnord",
+        "nqc",
+        "gasp",
+        "chapp",
+        "laval",
+        "lanau",
+        "laur",
+        "mtrg",
+        "cqc"
+      ]
+    },
+    {
+      "label": "New Brunswick",
+      "tags": [
+        "alb",
+        "carl",
+        "charl",
+        "glouc",
+        "kent",
+        "kings-nb",
+        "mada",
+        "nthld",
+        "qns-nb",
+        "resti",
+        "sj",
+        "sunb",
+        "vic-nb",
+        "westm",
+        "york"
+      ]
+    },
+    {
+      "label": "Nova Scotia",
+      "tags": [
+        "anna",
+        "anti",
+        "cb",
+        "col",
+        "cumb",
+        "dig",
+        "guys",
+        "hfx",
+        "hants",
+        "inv",
+        "kings-ns",
+        "lun",
+        "pict",
+        "qns-ns",
+        "rich",
+        "shel",
+        "vic-ns",
+        "yar"
+      ]
+    },
+    {
+      "label": "Prince Edward Island",
+      "tags": [
+        "pri",
+        "qns-pe",
+        "kings-pe"
+      ]
+    },
+    {
+      "label": "Newfoundland and Labrador",
+      "tags": [
+        "avalon",
+        "burin",
+        "bonav",
+        "cent",
+        "scoast",
+        "steph",
+        "humber",
+        "npen",
+        "labw",
+        "hvgb",
+        "nain"
+      ]
+    },
+    {
+      "label": "Yukon",
+      "tags": [
+        "whse",
+        "kluane",
+        "dawson",
+        "mayo",
+        "watson",
+        "oldcrow"
+      ]
+    },
+    {
+      "label": "Northwest Territories",
+      "tags": [
+        "nsl",
+        "ssl",
+        "dehcho",
+        "sahtu",
+        "inuvik"
+      ]
+    },
+    {
+      "label": "Nunavut",
+      "tags": [
+        "qik",
+        "kiv",
+        "kitik"
+      ]
+    }
+  ],
+  "aliases": {
+    "can": [
+      "can",
+      "Canada"
+    ],
+    "bc": [
+      "bc",
+      "British Columbia"
+    ],
+    "ab": [
+      "ab",
+      "Alberta"
+    ],
+    "sk": [
+      "sk",
+      "Saskatchewan"
+    ],
+    "mb": [
+      "mb",
+      "Manitoba"
+    ],
+    "on": [
+      "on",
+      "Ontario"
+    ],
+    "qc": [
+      "qc",
+      "Québec"
+    ],
+    "nb": [
+      "nb",
+      "New Brunswick"
+    ],
+    "ns": [
+      "ns",
+      "Nova Scotia"
+    ],
+    "pe": [
+      "pe",
+      "Prince Edward Island"
+    ],
+    "nl": [
+      "nl",
+      "Newfoundland and Labrador"
+    ],
+    "yt": [
+      "yt",
+      "Yukon"
+    ],
+    "nt": [
+      "nt",
+      "Northwest Territories"
+    ],
+    "nu": [
+      "nu",
+      "Nunavut"
+    ],
+    "mvrd": [
+      "mvrd",
+      "Metro Vancouver",
+      "yvr",
+      "YVR",
+      "Vancouver",
+      "Lower Mainland",
+      "Southwest BC",
+      "swbc"
+    ],
+    "crd": [
+      "crd",
+      "Capital / Victoria",
+      "yyj",
+      "YYJ",
+      "Victoria",
+      "South Vancouver Island",
+      "southisland"
+    ],
+    "fvrd": [
+      "fvrd",
+      "Fraser Valley",
+      "yxx",
+      "YXX",
+      "Abbotsford / Fraser Valley",
+      "Abbotsford"
+    ],
+    "cvrd": [
+      "cvrd",
+      "Cowichan Valley"
+    ],
+    "cxrd": [
+      "cxrd",
+      "Comox Valley",
+      "yqq",
+      "YQQ",
+      "Comox / Courtenay",
+      "Courtenay"
+    ],
+    "rdn": [
+      "rdn",
+      "Nanaimo",
+      "ycd",
+      "YCD"
+    ],
+    "acrd": [
+      "acrd",
+      "Alberni-Clayoquot"
+    ],
+    "srd": [
+      "srd",
+      "Strathcona",
+      "ybl",
+      "YBL",
+      "Campbell River"
+    ],
+    "rdmw": [
+      "rdmw",
+      "Mount Waddington"
+    ],
+    "scrd": [
+      "scrd",
+      "Sunshine Coast"
+    ],
+    "qrd": [
+      "qrd",
+      "qathet"
+    ],
+    "slrd": [
+      "slrd",
+      "Squamish-Lillooet",
+      "yse",
+      "YSE",
+      "yws",
+      "YWS",
+      "Squamish",
+      "Whistler"
+    ],
+    "tnrd": [
+      "tnrd",
+      "Thompson-Nicola",
+      "yka",
+      "YKA",
+      "Kamloops"
+    ],
+    "rdos": [
+      "rdos",
+      "Okanagan-Similkameen",
+      "yyf",
+      "YYF",
+      "Penticton"
+    ],
+    "rdco": [
+      "rdco",
+      "Central Okanagan",
+      "ylw",
+      "YLW",
+      "Kelowna"
+    ],
+    "rdno": [
+      "rdno",
+      "North Okanagan"
+    ],
+    "csrd": [
+      "csrd",
+      "Columbia-Shuswap"
+    ],
+    "rdek": [
+      "rdek",
+      "East Kootenay",
+      "yxc",
+      "YXC",
+      "Cranbrook"
+    ],
+    "rdck": [
+      "rdck",
+      "Central Kootenay",
+      "ycg",
+      "YCG",
+      "Castlegar"
+    ],
+    "rdkb": [
+      "rdkb",
+      "Kootenay Boundary"
+    ],
+    "cbrd": [
+      "cbrd",
+      "Cariboo"
+    ],
+    "rdffg": [
+      "rdffg",
+      "Fraser-Fort George / Prince George",
+      "yxs",
+      "YXS",
+      "Prince George"
+    ],
+    "rdbn": [
+      "rdbn",
+      "Bulkley-Nechako",
+      "yyd",
+      "YYD",
+      "Smithers"
+    ],
+    "rdks": [
+      "rdks",
+      "Kitimat-Stikine / Terrace",
+      "yxt",
+      "YXT",
+      "Terrace"
+    ],
+    "ncrd": [
+      "ncrd",
+      "North Coast / Prince Rupert",
+      "ypr",
+      "YPR",
+      "Prince Rupert"
+    ],
+    "ccrd": [
+      "ccrd",
+      "Central Coast"
+    ],
+    "prrd": [
+      "prrd",
+      "Peace River",
+      "ydq",
+      "YDQ",
+      "Dawson Creek",
+      "yxj",
+      "YXJ",
+      "Fort St. John"
+    ],
+    "nrrm": [
+      "nrrm",
+      "Northern Rockies / Fort Nelson"
+    ],
+    "stk": [
+      "stk",
+      "Stikine Region"
+    ],
+    "mh": [
+      "mh",
+      "Medicine Hat & southeast",
+      "yxh",
+      "YXH",
+      "Medicine Hat"
+    ],
+    "leth": [
+      "leth",
+      "Lethbridge & deep south",
+      "yql",
+      "YQL",
+      "Lethbridge"
+    ],
+    "cal": [
+      "cal",
+      "Calgary region",
+      "yyc",
+      "YYC",
+      "Calgary"
+    ],
+    "rocky": [
+      "rocky",
+      "Mountain corridor (Canmore–Banff–Jasper)"
+    ],
+    "drum": [
+      "drum",
+      "Drumheller / Badlands"
+    ],
+    "rd": [
+      "rd",
+      "Red Deer / Central Alberta",
+      "yqf",
+      "YQF",
+      "Red Deer"
+    ],
+    "cam": [
+      "cam",
+      "Camrose–Wainwright / east central"
+    ],
+    "edm": [
+      "edm",
+      "Edmonton metro",
+      "yeg",
+      "YEG",
+      "Edmonton"
+    ],
+    "coldlk": [
+      "coldlk",
+      "Lakeland / Cold Lake–St. Paul"
+    ],
+    "ftmac": [
+      "ftmac",
+      "Wood Buffalo / Fort McMurray",
+      "ymm",
+      "YMM",
+      "Fort McMurray"
+    ],
+    "wcrt": [
+      "wcrt",
+      "Yellowhead / Whitecourt–Edson–Hinton"
+    ],
+    "peace": [
+      "peace",
+      "Peace Country / Grande Prairie",
+      "yqu",
+      "YQU",
+      "Grande Prairie"
+    ],
+    "hlvl": [
+      "hlvl",
+      "High Level / far northwest"
+    ],
+    "lloyd": [
+      "lloyd",
+      "Lloydminster",
+      "Lloydminster AB",
+      "Lloydminster SK"
+    ],
+    "estvn": [
+      "estvn",
+      "Estevan / southeast"
+    ],
+    "wybrn": [
+      "wybrn",
+      "Weyburn"
+    ],
+    "regina": [
+      "regina",
+      "Regina region",
+      "yqr",
+      "YQR",
+      "Regina"
+    ],
+    "mj": [
+      "mj",
+      "Moose Jaw"
+    ],
+    "swift": [
+      "swift",
+      "Swift Current / southwest"
+    ],
+    "yktn": [
+      "yktn",
+      "Yorkton–Melville"
+    ],
+    "stoon": [
+      "stoon",
+      "Saskatoon region",
+      "yxe",
+      "YXE",
+      "Saskatoon"
+    ],
+    "btlfd": [
+      "btlfd",
+      "The Battlefords"
+    ],
+    "pa": [
+      "pa",
+      "Prince Albert region",
+      "ypa",
+      "YPA",
+      "Prince Albert"
+    ],
+    "melft": [
+      "melft",
+      "Melfort–Nipawin"
+    ],
+    "ronge": [
+      "ronge",
+      "La Ronge / northern Saskatchewan"
+    ],
+    "wpg": [
+      "wpg",
+      "Winnipeg",
+      "ywg",
+      "YWG"
+    ],
+    "eman": [
+      "eman",
+      "Eastman (Steinbach–Lac du Bonnet)"
+    ],
+    "pemb": [
+      "pemb",
+      "Pembina Valley (Morden–Winkler)"
+    ],
+    "ptge": [
+      "ptge",
+      "Central Plains (Portage la Prairie)",
+      "ypg",
+      "YPG",
+      "Portage la Prairie"
+    ],
+    "wman": [
+      "wman",
+      "Westman (Brandon)",
+      "ybr",
+      "YBR",
+      "Brandon"
+    ],
+    "pkld": [
+      "pkld",
+      "Parkland (Dauphin)",
+      "ydn",
+      "YDN",
+      "Dauphin"
+    ],
+    "ilake": [
+      "ilake",
+      "Interlake"
+    ],
+    "pas": [
+      "pas",
+      "The Pas–Flin Flon"
+    ],
+    "thom": [
+      "thom",
+      "Thompson",
+      "yth",
+      "YTH"
+    ],
+    "chur": [
+      "chur",
+      "Churchill"
+    ],
+    "on-gtha": [
+      "on-gtha",
+      "Greater Toronto & Hamilton Area"
+    ],
+    "gta": [
+      "gta",
+      "Greater Toronto Area"
+    ],
+    "tor": [
+      "tor",
+      "Toronto",
+      "yyz",
+      "YYZ",
+      "Toronto / Pearson",
+      "ytz",
+      "YTZ",
+      "Toronto / Billy Bishop"
+    ],
+    "dur": [
+      "dur",
+      "Durham",
+      "yoo",
+      "YOO",
+      "Oshawa"
+    ],
+    "htn": [
+      "htn",
+      "Halton"
+    ],
+    "pel": [
+      "pel",
+      "Peel"
+    ],
+    "yrk": [
+      "yrk",
+      "York",
+      "ykz",
+      "YKZ",
+      "Buttonville / Markham"
+    ],
+    "on-ham": [
+      "on-ham",
+      "Hamilton cluster"
+    ],
+    "ham": [
+      "ham",
+      "Hamilton",
+      "yhm",
+      "YHM"
+    ],
+    "bra": [
+      "bra",
+      "Brant / Brantford"
+    ],
+    "hald": [
+      "hald",
+      "Haldimand",
+      "Haldimand-Norfolk",
+      "HDN",
+      "hdn"
+    ],
+    "norf": [
+      "norf",
+      "Norfolk",
+      "Norfolk County"
+    ],
+    "nia": [
+      "nia",
+      "Niagara"
+    ],
+    "on-ktw": [
+      "on-ktw",
+      "Kitchener-Waterloo"
+    ],
+    "duf": [
+      "duf",
+      "Dufferin"
+    ],
+    "wat": [
+      "wat",
+      "Waterloo",
+      "ykf",
+      "YKF",
+      "Kitchener / Waterloo"
+    ],
+    "wel": [
+      "wel",
+      "Wellington / Guelph"
+    ],
+    "per": [
+      "per",
+      "Perth"
+    ],
+    "on-se": [
+      "on-se",
+      "Southeast Ontario"
+    ],
+    "nth": [
+      "nth",
+      "Northumberland",
+      "xph",
+      "XPH",
+      "Port Hope"
+    ],
+    "ptb": [
+      "ptb",
+      "Peterborough",
+      "ypq",
+      "YPQ"
+    ],
+    "frt": [
+      "frt",
+      "Frontenac / Kingston",
+      "ygk",
+      "YGK",
+      "Kingston"
+    ],
+    "has": [
+      "has",
+      "Hastings / Belleville",
+      "ytr",
+      "YTR",
+      "Trenton / Quinte West",
+      "Quinte West"
+    ],
+    "lnx": [
+      "lnx",
+      "Lennox & Addington"
+    ],
+    "pec": [
+      "pec",
+      "Prince Edward County"
+    ],
+    "on-alg": [
+      "on-alg",
+      "Algonquin area"
+    ],
+    "ott": [
+      "ott",
+      "Ottawa",
+      "yow",
+      "YOW",
+      "NCR",
+      "Ottawa NCR"
+    ],
+    "lan": [
+      "lan",
+      "Lanark"
+    ],
+    "ldg": [
+      "ldg",
+      "Leeds & Grenville"
+    ],
+    "psr": [
+      "psr",
+      "Prescott & Russell"
+    ],
+    "ren": [
+      "ren",
+      "Renfrew",
+      "yta",
+      "YTA",
+      "Pembroke"
+    ],
+    "sdg": [
+      "sdg",
+      "Stormont, Dundas & Glengarry"
+    ],
+    "on-lsim": [
+      "on-lsim",
+      "Lake Simcoe"
+    ],
+    "hlb": [
+      "hlb",
+      "Haliburton"
+    ],
+    "mus": [
+      "mus",
+      "Muskoka",
+      "yqa",
+      "YQA"
+    ],
+    "sim": [
+      "sim",
+      "Simcoe / Barrie",
+      "ylk",
+      "YLK",
+      "Barrie"
+    ],
+    "kaw": [
+      "kaw",
+      "Kawartha Lakes"
+    ],
+    "on-shur": [
+      "on-shur",
+      "South Lake Huron"
+    ],
+    "bru": [
+      "bru",
+      "Bruce"
+    ],
+    "gry": [
+      "gry",
+      "Grey"
+    ],
+    "hur": [
+      "hur",
+      "Huron"
+    ],
+    "on-sw": [
+      "on-sw",
+      "Southwest Ontario"
+    ],
+    "elg": [
+      "elg",
+      "Elgin"
+    ],
+    "esx": [
+      "esx",
+      "Essex / Windsor",
+      "yqg",
+      "YQG",
+      "Windsor"
+    ],
+    "chk": [
+      "chk",
+      "Chatham-Kent",
+      "xcm",
+      "XCM"
+    ],
+    "lmb": [
+      "lmb",
+      "Lambton / Sarnia"
+    ],
+    "msx": [
+      "msx",
+      "Middlesex / London",
+      "yxu",
+      "YXU",
+      "London"
+    ],
+    "oxf": [
+      "oxf",
+      "Oxford"
+    ],
+    "on-ne": [
+      "on-ne",
+      "Northeast Ontario"
+    ],
+    "aga": [
+      "aga",
+      "Algoma / Sault Ste. Marie",
+      "yam",
+      "YAM",
+      "Sault Ste. Marie"
+    ],
+    "coc": [
+      "coc",
+      "Cochrane / Timmins",
+      "yts",
+      "YTS",
+      "Timmins"
+    ],
+    "mnt": [
+      "mnt",
+      "Manitoulin"
+    ],
+    "nip": [
+      "nip",
+      "Nipissing / North Bay",
+      "yyb",
+      "YYB",
+      "North Bay"
+    ],
+    "psd": [
+      "psd",
+      "Parry Sound"
+    ],
+    "gsu": [
+      "gsu",
+      "Greater Sudbury",
+      "ysb",
+      "YSB",
+      "Sudbury"
+    ],
+    "sud": [
+      "sud",
+      "Sudbury District"
+    ],
+    "tim": [
+      "tim",
+      "Timiskaming"
+    ],
+    "on-nw": [
+      "on-nw",
+      "Northwest Ontario"
+    ],
+    "ken": [
+      "ken",
+      "Kenora",
+      "yhd",
+      "YHD",
+      "Dryden",
+      "ypl",
+      "YPL",
+      "Pickle Lake"
+    ],
+    "rrv": [
+      "rrv",
+      "Rainy River"
+    ],
+    "tby": [
+      "tby",
+      "Thunder Bay",
+      "yqt",
+      "YQT"
+    ],
+    "ncr": [
+      "ncr",
+      "National Capital Region"
+    ],
+    "bsl": [
+      "bsl",
+      "Bas-Saint-Laurent"
+    ],
+    "saglac": [
+      "saglac",
+      "Saguenay–Lac-Saint-Jean",
+      "ytf",
+      "YTF",
+      "ybg",
+      "YBG",
+      "Bagotville / Saguenay",
+      "yrj",
+      "YRJ",
+      "Roberval",
+      "Saguenay Lac-st-jean"
+    ],
+    "capnat": [
+      "capnat",
+      "Capitale-Nationale",
+      "yml",
+      "YML",
+      "yqb",
+      "YQB",
+      "Quebec City",
+      "La Malbaie"
+    ],
+    "maur": [
+      "maur",
+      "Mauricie",
+      "yrq",
+      "YRQ",
+      "Trois-Rivieres"
+    ],
+    "estrie": [
+      "estrie",
+      "Estrie",
+      "ysc",
+      "YSC",
+      "Sherbrooke"
+    ],
+    "mtl": [
+      "mtl",
+      "Montréal",
+      "yul",
+      "YUL",
+      "Montreal / Trudeau",
+      "ymx",
+      "YMX",
+      "Montreal / Mirabel",
+      "Montreal"
+    ],
+    "gatout": [
+      "gatout",
+      "Outaouais / Gatineau",
+      "ynd",
+      "YND",
+      "Gatineau / Ottawa area",
+      "Gatineau",
+      "Outaouais"
+    ],
+    "abt": [
+      "abt",
+      "Abitibi-Témiscamingue",
+      "yvo",
+      "YVO",
+      "Val-d'Or",
+      "yuy",
+      "YUY",
+      "Rouyn-Noranda"
+    ],
+    "cnord": [
+      "cnord",
+      "Côte-Nord",
+      "yzv",
+      "YZV",
+      "Sept-Iles",
+      "ybc",
+      "YBC",
+      "Baie-Comeau"
+    ],
+    "nqc": [
+      "nqc",
+      "Nord-du-Québec",
+      "ygl",
+      "YGL",
+      "La Grande Riviere",
+      "ytq",
+      "YTQ",
+      "Tasiujaq"
+    ],
+    "gasp": [
+      "gasp",
+      "Gaspésie–Îles-de-la-Madeleine",
+      "ygp",
+      "YGP",
+      "Gaspe"
+    ],
+    "chapp": [
+      "chapp",
+      "Chaudière-Appalaches"
+    ],
+    "laval": [
+      "laval",
+      "Laval"
+    ],
+    "lanau": [
+      "lanau",
+      "Lanaudière"
+    ],
+    "laur": [
+      "laur",
+      "Laurentides"
+    ],
+    "mtrg": [
+      "mtrg",
+      "Montérégie",
+      "yhu",
+      "YHU",
+      "Montreal / St-Hubert"
+    ],
+    "cqc": [
+      "cqc",
+      "Centre-du-Québec"
+    ],
+    "alb": [
+      "alb",
+      "Albert"
+    ],
+    "carl": [
+      "carl",
+      "Carleton"
+    ],
+    "charl": [
+      "charl",
+      "Charlotte / St. Stephen"
+    ],
+    "glouc": [
+      "glouc",
+      "Gloucester",
+      "zbf",
+      "ZBF",
+      "Bathurst"
+    ],
+    "kent": [
+      "kent",
+      "Kent"
+    ],
+    "kings-nb": [
+      "kings-nb",
+      "Kings"
+    ],
+    "mada": [
+      "mada",
+      "Madawaska"
+    ],
+    "nthld": [
+      "nthld",
+      "Northumberland / Miramichi"
+    ],
+    "qns-nb": [
+      "qns-nb",
+      "Queens"
+    ],
+    "resti": [
+      "resti",
+      "Restigouche"
+    ],
+    "sj": [
+      "sj",
+      "Saint John",
+      "ysj",
+      "YSJ"
+    ],
+    "sunb": [
+      "sunb",
+      "Sunbury"
+    ],
+    "vic-nb": [
+      "vic-nb",
+      "Victoria"
+    ],
+    "westm": [
+      "westm",
+      "Westmorland / Moncton",
+      "yqm",
+      "YQM",
+      "Moncton"
+    ],
+    "york": [
+      "york",
+      "York / Fredericton",
+      "yfc",
+      "YFC",
+      "Fredericton"
+    ],
+    "anna": [
+      "anna",
+      "Annapolis"
+    ],
+    "anti": [
+      "anti",
+      "Antigonish"
+    ],
+    "cb": [
+      "cb",
+      "Cape Breton / Sydney",
+      "yqy",
+      "YQY",
+      "Sydney"
+    ],
+    "col": [
+      "col",
+      "Colchester / Truro"
+    ],
+    "cumb": [
+      "cumb",
+      "Cumberland"
+    ],
+    "dig": [
+      "dig",
+      "Digby"
+    ],
+    "guys": [
+      "guys",
+      "Guysborough"
+    ],
+    "hfx": [
+      "hfx",
+      "Halifax",
+      "yhz",
+      "YHZ"
+    ],
+    "hants": [
+      "hants",
+      "Hants"
+    ],
+    "inv": [
+      "inv",
+      "Inverness"
+    ],
+    "kings-ns": [
+      "kings-ns",
+      "Kings"
+    ],
+    "lun": [
+      "lun",
+      "Lunenburg"
+    ],
+    "pict": [
+      "pict",
+      "Pictou"
+    ],
+    "qns-ns": [
+      "qns-ns",
+      "Queens"
+    ],
+    "rich": [
+      "rich",
+      "Richmond"
+    ],
+    "shel": [
+      "shel",
+      "Shelburne"
+    ],
+    "vic-ns": [
+      "vic-ns",
+      "Victoria"
+    ],
+    "yar": [
+      "yar",
+      "Yarmouth",
+      "yqi",
+      "YQI"
+    ],
+    "pri": [
+      "pri",
+      "Prince / Summerside"
+    ],
+    "qns-pe": [
+      "qns-pe",
+      "Queens / Charlottetown",
+      "yyg",
+      "YYG",
+      "Charlottetown"
+    ],
+    "kings-pe": [
+      "kings-pe",
+      "Kings"
+    ],
+    "avalon": [
+      "avalon",
+      "Avalon Peninsula / St. John's",
+      "yyt",
+      "YYT",
+      "St. John's"
+    ],
+    "burin": [
+      "burin",
+      "Burin Peninsula"
+    ],
+    "bonav": [
+      "bonav",
+      "Bonavista–Trinity–Clarenville"
+    ],
+    "cent": [
+      "cent",
+      "Central NL (Gander–Grand Falls-Windsor)",
+      "yqx",
+      "YQX",
+      "Gander"
+    ],
+    "scoast": [
+      "scoast",
+      "South Coast"
+    ],
+    "steph": [
+      "steph",
+      "Bay St. George / Stephenville"
+    ],
+    "humber": [
+      "humber",
+      "Humber / Corner Brook",
+      "ydf",
+      "YDF",
+      "Deer Lake"
+    ],
+    "npen": [
+      "npen",
+      "Great Northern Peninsula"
+    ],
+    "labw": [
+      "labw",
+      "Labrador West",
+      "ywk",
+      "YWK",
+      "Wabush"
+    ],
+    "hvgb": [
+      "hvgb",
+      "Lake Melville / Happy Valley-Goose Bay",
+      "yyr",
+      "YYR",
+      "Goose Bay"
+    ],
+    "nain": [
+      "nain",
+      "Nunatsiavut coast"
+    ],
+    "whse": [
+      "whse",
+      "Whitehorse & Southern Lakes",
+      "yxy",
+      "YXY",
+      "Whitehorse"
+    ],
+    "kluane": [
+      "kluane",
+      "Kluane / Haines Junction"
+    ],
+    "dawson": [
+      "dawson",
+      "Klondike / Dawson City"
+    ],
+    "mayo": [
+      "mayo",
+      "Silver Trail"
+    ],
+    "watson": [
+      "watson",
+      "Watson Lake / southeast"
+    ],
+    "oldcrow": [
+      "oldcrow",
+      "North Yukon"
+    ],
+    "nsl": [
+      "nsl",
+      "North Slave / Yellowknife",
+      "yzf",
+      "YZF",
+      "Yellowknife"
+    ],
+    "ssl": [
+      "ssl",
+      "South Slave",
+      "yhy",
+      "YHY",
+      "Hay River"
+    ],
+    "dehcho": [
+      "dehcho",
+      "Dehcho"
+    ],
+    "sahtu": [
+      "sahtu",
+      "Sahtu"
+    ],
+    "inuvik": [
+      "inuvik",
+      "Inuvik / Beaufort Delta",
+      "yev",
+      "YEV",
+      "Inuvik"
+    ],
+    "qik": [
+      "qik",
+      "Qikiqtaaluk / Iqaluit",
+      "yfb",
+      "YFB",
+      "Iqaluit"
+    ],
+    "kiv": [
+      "kiv",
+      "Kivalliq / Rankin Inlet"
+    ],
+    "kitik": [
+      "kitik",
+      "Kitikmeot / Cambridge Bay"
+    ]
+  },
+  "meshMapperTagMap": {
+    "xcm": "chk",
+    "xph": "nth",
+    "ybl": "srd",
+    "ycd": "rdn",
+    "yeg": "edm",
+    "ygk": "frt",
+    "yka": "tnrd",
+    "ykf": "wat",
+    "ylk": "sim",
+    "yml": "capnat",
+    "yow": "ott",
+    "ypa": "pa",
+    "yqa": "mus",
+    "yqb": "capnat",
+    "yqf": "rd",
+    "yql": "leth",
+    "yqq": "cxrd",
+    "yse": "slrd",
+    "yta": "ren",
+    "ytf": "saglac",
+    "ytr": "has",
+    "yul": "mtl",
+    "yvr": "mvrd",
+    "ywg": "wpg",
+    "yws": "slrd",
+    "yxx": "fvrd",
+    "yyc": "cal",
+    "yyj": "crd",
+    "yyz": "tor"
+  },
+  "profiles": {
+    "ott": {
+      "additionalTags": [
+        {
+          "tag": "ncr",
+          "parent": "on"
+        }
+      ]
+    },
+    "gatout": {
+      "additionalTags": [
+        {
+          "tag": "ncr",
+          "parent": "qc"
+        }
+      ]
+    },
+    "lloyd": {
+      "additionalTags": [
+        {
+          "tag": "sk",
+          "parent": "can"
+        }
+      ]
+    }
+  },
+  "retiredCanonicalTags": {
+    "swbc": "Removed in strategy v1.1",
+    "vanisle": "Removed in strategy v1.1",
+    "southisland": "Removed in strategy v1.1",
+    "salishmesh": "Removed in strategy v1.1",
+    "gtha-on": "Replaced by on-gtha",
+    "ktw-on": "Replaced by on-ktw",
+    "se-on": "Replaced by on-se",
+    "alg-on": "Replaced by on-alg",
+    "lsim-on": "Replaced by on-lsim",
+    "shur-on": "Replaced by on-shur",
+    "sw-on": "Replaced by on-sw",
+    "ne-on": "Replaced by on-ne",
+    "nw-on": "Replaced by on-nw",
+    "hdn": "Replaced by separate hald and norf leaves"
+  }
+}
