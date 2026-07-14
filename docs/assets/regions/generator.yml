@@ -1,0 +1,52 @@
+standard: MCC-REG-1
+algorithm: exclusive-national-da-partition
+algorithm_version: 2
+projection: EPSG:3347
+ownership_atom: Statistics Canada 2021 digital Dissemination Area
+display_atom: Statistics Canada 2021 cartographic Dissemination Area
+dissolve_method: unary_union
+source_claim:
+  representative_point_inside: true
+  minimum_overlap_ratio: 0.5
+  conflict_order:
+    - largest_overlap_ratio
+    - canonical_leaf_tag
+    - source_tag
+  ownership: macro_envelope
+  subdivision:
+    candidates:
+      - mapped_meshmapper_target
+      - contained_seed_with_same_home_economic_region
+      - ordinary_same_er_nearest_when_only_target_remains
+    distance: projected_seed_distance
+    tie_breaker: immutable_registry_id
+fill:
+  hard_boundary: province_or_territory
+  guardrail: economic_region
+  distance: projected_representative_point
+  tie_breaker: immutable_registry_id
+seed_anchor:
+  rule: containing_da_owned_by_seed
+  applied_during_assignment: true
+display:
+  simplifier: mapshaper
+  mapshaper_version: 0.6.113
+  method: weighted_visvalingam
+  retain: 2%
+  keep_shapes: true
+  snap_fix_geometry: true
+  clean: true
+  coordinate_precision: 0.000001
+resolver:
+  source: Statistics Canada 2021 digital Dissemination Areas
+  retain: 20%
+  keep_shapes: true
+  snap_fix_geometry: true
+  clean: true
+  coordinate_precision: 0.000001
+toolchain:
+  python: 3.13.6
+  geopandas: 1.0.1
+  shapely: 2.0.6
+  pyproj: 3.7.0
+  scipy: 1.17.1

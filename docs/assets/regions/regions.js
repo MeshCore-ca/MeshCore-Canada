@@ -5,49 +5,90 @@
     ? document.currentScript.src
     : new URL("/assets/regions/regions.js", window.location.origin).href;
   var assetBase = new URL(".", scriptUrl);
-  var dataPromise = null;
+  var catalogPromise = null;
+  var displayPartitionPromise = null;
+  var resolverPartitionPromise = null;
   var leafletPromise = null;
   var lucidePromise = null;
   var activeMaps = [];
   var LUCIDE_SRC = "https://unpkg.com/lucide@0.547.0/dist/umd/lucide.js";
 
-  function loadData() {
-    if (!dataPromise) {
-      dataPromise = Promise.all([
-        fetch(new URL("canada-regions.json", assetBase)),
-        fetch(new URL("meshmapper-canada-regions.json", assetBase))
-      ]).then(function (responses) {
-        if (!responses[0].ok) throw new Error("Unable to load MeshCore Canada region data");
-        if (!responses[1].ok) throw new Error("Unable to load MeshMapper Canada boundaries");
-        return Promise.all([responses[0].json(), responses[1].json()]);
-      }).then(function (loaded) {
-        return applyMeshMapperRegions(loaded[0], loaded[1]);
-      }).catch(function (error) {
-        dataPromise = null;
+  function fetchJsonAsset(filename, errorMessage) {
+    return fetch(new URL(filename, assetBase)).then(function (response) {
+      if (!response.ok) throw new Error(errorMessage);
+      return response.json();
+    });
+  }
+
+  function loadCatalog() {
+    if (!catalogPromise) {
+      catalogPromise = fetchJsonAsset("canada-regions.json", "Unable to load MeshCore Canada region data")
+        .then(prepareCatalog)
+        .catch(function (error) {
+          catalogPromise = null;
+          throw error;
+        });
+    }
+    return catalogPromise;
+  }
+
+  function loadDisplayPartition() {
+    if (!displayPartitionPromise) {
+      displayPartitionPromise = fetchJsonAsset(
+        "canada-region-partition.geojson",
+        "Unable to load the Canadian map layer"
+      ).catch(function (error) {
+        displayPartitionPromise = null;
         throw error;
       });
     }
-    return dataPromise;
+    return displayPartitionPromise;
   }
 
-  function applyMeshMapperRegions(data, collection) {
-    if (!collection || !Array.isArray(collection.features) || collection.features.length !== 29) {
-      throw new Error("MeshMapper Canada boundary data is invalid");
+  function loadResolverPartition() {
+    if (!resolverPartitionPromise) {
+      resolverPartitionPromise = fetchJsonAsset(
+        "canada-region-partition-digital.geojson",
+        "Unable to load the Canadian location layer"
+      ).catch(function (error) {
+        resolverPartitionPromise = null;
+        throw error;
+      });
     }
+    return resolverPartitionPromise;
+  }
+
+  function loadData(mode) {
+    if (mode === "map") {
+      return Promise.all([loadCatalog(), loadDisplayPartition()]).then(function (loaded) {
+        return applyGeneratedPartition(loaded[0], loaded[1], null);
+      });
+    }
+    if (mode === "config") {
+      return Promise.all([loadCatalog(), loadResolverPartition()]).then(function (loaded) {
+        return applyGeneratedPartition(loaded[0], null, loaded[1]);
+      });
+    }
+    return loadCatalog();
+  }
+
+  function prepareCatalog(data) {
+    if (data.__mccPrepared) return data;
     var suppliedAliases = data.aliases || {};
     var previousAliases = data.regionAliases || {};
-    var tagMap = data.meshMapperTagMap || {};
     var strategySeeds = (data.seeds || []).map(function (seed) {
       return Object.assign({}, seed, {
         tag: slug(seed.tag),
-        sourceTier: "strategy",
-        boundaryType: "seed-radius"
+        sourceTier: "generated",
+        boundaryType: "generated-partition"
       });
     });
-    var strategyTagSet = {};
-    strategySeeds.forEach(function (seed) { strategyTagSet[seed.tag] = true; });
-    var previousMetroGroups = (data.metroGroups || []).map(function (group) {
-      return { label: group.label, tags: group.tags.slice() };
+    var seedTags = {};
+    strategySeeds.forEach(function (seed) {
+      if (!seed.tag || seedTags[seed.tag] || !data.hierarchy[seed.tag]) {
+        throw new Error("The Canadian region catalog contains an invalid or duplicate local region");
+      }
+      seedTags[seed.tag] = true;
     });
     data.regionAliases = {};
     Object.keys(data.hierarchy || {}).forEach(function (tag) {
@@ -56,107 +97,78 @@
         .concat(previousAliases[tag] || [])
         .filter(Boolean));
     });
-    data.meshMapperSources = {};
+    var partitionTags = Object.keys(seedTags).sort();
+    data.strategySeeds = strategySeeds;
+    data.strategyFallbackSeeds = [];
+    data.communityExtraSeeds = [];
+    data.seeds = strategySeeds;
+    data.consolidatedRegionTags = partitionTags;
+    data.regionCounts = {
+      total: partitionTags.length,
+      generated: partitionTags.length,
+      strategy: strategySeeds.length
+    };
+    data.metroGroups = (data.metroGroups || []).map(function (group) {
+      return { label: group.label, tags: group.tags.filter(function (tag) { return Boolean(seedTags[tag]); }) };
+    });
+    Object.defineProperty(data, "__mccPrepared", { value: true });
+    return data;
+  }
 
-    function mappedTagFor(rawTag, rawCode) {
-      var mapped = tagMap[rawTag] || tagMap[rawCode];
-      if (mapped && typeof mapped === "object") mapped = mapped.tag || mapped.canonicalTag;
-      var canonicalTag = slug(mapped || rawTag);
-      if (!data.hierarchy[canonicalTag] || !strategyTagSet[canonicalTag]) {
-        throw new Error("MeshMapper region " + (rawCode || rawTag || "unknown") + " has no strategy mapping");
+  function applyGeneratedPartition(data, collection, resolverCollection) {
+    data = prepareCatalog(data);
+    var expected = {};
+    (data.consolidatedRegionTags || []).forEach(function (tag) { expected[tag] = true; });
+
+    if (collection) {
+      if (!Array.isArray(collection.features) || !collection.features.length) {
+        throw new Error("Canadian map layer is invalid");
       }
-      return canonicalTag;
+      var displaySeen = {};
+      var normalizedFeatures = collection.features.map(function (feature) {
+        var tag = slug(feature.properties && feature.properties.tag);
+        if (!tag || displaySeen[tag] || !expected[tag]) {
+          throw new Error("Canadian map layer contains an invalid or duplicate region: " + (tag || "unknown"));
+        }
+        displaySeen[tag] = true;
+        return Object.assign({}, feature, {
+          properties: Object.assign({}, feature.properties, {
+            tag: tag,
+            canonicalTag: tag,
+            sourceTier: "generated",
+            boundaryType: "generated-partition"
+          })
+        });
+      });
+      if (Object.keys(displaySeen).length !== Object.keys(expected).length) {
+        throw new Error("Canadian map layer does not match the region catalog");
+      }
+      data.partitionRegions = Object.assign({}, collection, { features: normalizedFeatures });
+      data.partitionByTag = {};
+      normalizedFeatures.forEach(function (feature) { data.partitionByTag[feature.properties.tag] = feature; });
     }
 
-    var meshMapperReview = data.meshMapperReview || {};
-    var normalizedFeatures = collection.features.map(function (feature) {
-      var props = feature.properties || {};
-      var rawTag = slug(props.tag || props.code);
-      var rawCode = slug(props.code || props.tag);
-      var tag = mappedTagFor(rawTag, rawCode);
-      var review = meshMapperReview[rawTag] || meshMapperReview[rawCode] || {};
-      var center = props.center || [0, 0];
-      data.regionAliases[tag] = unique((data.regionAliases[tag] || []).concat([
-        tag,
-        rawTag,
-        rawCode,
-        props.code,
-        props.name
-      ].filter(Boolean)));
-      data.meshMapperSources[tag] = (data.meshMapperSources[tag] || []).concat([{
-        rawTag: rawTag,
-        rawCode: rawCode,
-        sourceTag: props.tag || props.code || "",
-        sourceCode: props.code || props.tag || "",
-        name: props.name || "",
-        source: "MeshMapper Canada boundary snapshot " + collection.version,
-        sourceUrl: props.sourceUrl || (collection.source && collection.source.url) || ""
-      }]);
-      var normalizedFeature = Object.assign({}, feature, {
-        properties: Object.assign({}, props, {
-          tag: tag,
-          canonicalTag: tag,
-          rawTag: rawTag,
-          rawCode: rawCode,
-          sourceTag: props.tag || props.code || "",
-          sourceCode: props.code || props.tag || "",
-          reviewState: review.state || "active",
-          reviewReason: review.reason || ""
-        })
-      });
-      normalizedFeature.meshMapperSeed = {
-        tag: tag,
-        lat: Number(center[1]),
-        lon: Number(center[0]),
-        r: Number(props.radiusKm) || 0,
-        resolve: true,
-        meshMapperFeature: normalizedFeature,
-        sourceTier: "meshmapper",
-        boundaryType: "source-polygon"
-      };
-      return normalizedFeature;
-    });
-    var meshMapperSeeds = normalizedFeatures.filter(function (feature) {
-      return feature.properties.reviewState !== "quarantined";
-    }).map(function (feature) {
-      return feature.meshMapperSeed;
-    });
-    normalizedFeatures.forEach(function (feature) {
-      delete feature.meshMapperSeed;
-    });
-    data.meshMapperRegions = Object.assign({}, collection, { features: normalizedFeatures });
-    data.meshMapperTags = unique(meshMapperSeeds.map(function (seed) { return seed.tag; }));
-    data.meshMapperSeeds = meshMapperSeeds;
-    data.strategySeeds = strategySeeds;
-    data.strategyFallbackSeeds = strategySeeds.filter(function (seed) { return seed.resolve !== false; });
-    // Retained as an internal compatibility alias for the existing map renderer.
-    data.communityExtraSeeds = data.strategyFallbackSeeds;
-    data.seeds = strategySeeds;
-    data.consolidatedRegionTags = unique(strategySeeds.map(function (seed) { return seed.tag; }));
-    data.regionCounts = {
-      total: data.consolidatedRegionTags.length,
-      meshMapper: normalizedFeatures.length,
-      strategy: data.consolidatedRegionTags.length
-    };
-
-    var groupForProvince = {
-      bc: "British Columbia", ab: "Alberta", sk: "Prairies", mb: "Prairies",
-      on: "Ontario", qc: "Quebec", nb: "Atlantic Canada", ns: "Atlantic Canada",
-      pe: "Atlantic Canada", nl: "Atlantic Canada", yt: "Territories", nt: "Territories", nu: "Territories"
-    };
-    meshMapperSeeds.forEach(function (seed) {
-      var alreadyGrouped = previousMetroGroups.some(function (group) { return group.tags.indexOf(seed.tag) !== -1; });
-      if (alreadyGrouped) return;
-      var parent = parentFor(data, seed.tag);
-      var label = groupForProvince[parent] || labelFor(data, parent || data.meta.rootTag);
-      var group = previousMetroGroups.find(function (entry) { return entry.label === label; });
-      if (!group) {
-        group = { label: label, tags: [] };
-        previousMetroGroups.push(group);
+    if (resolverCollection) {
+      if (!Array.isArray(resolverCollection.features) || !resolverCollection.features.length) {
+        throw new Error("Canadian location layer is invalid");
       }
-      group.tags.push(seed.tag);
-    });
-    data.metroGroups = previousMetroGroups;
+      data.resolverByTag = {};
+      var normalizedResolverFeatures = resolverCollection.features.map(function (feature) {
+        var tag = slug(feature.properties && feature.properties.tag);
+        if (!tag || !expected[tag] || data.resolverByTag[tag]) {
+          throw new Error("Canadian location layer contains an invalid or duplicate region: " + (tag || "unknown"));
+        }
+        var normalized = Object.assign({}, feature, {
+          properties: Object.assign({}, feature.properties, { tag: tag, canonicalTag: tag })
+        });
+        data.resolverByTag[tag] = normalized;
+        return normalized;
+      });
+      if (Object.keys(data.resolverByTag).length !== Object.keys(expected).length) {
+        throw new Error("Canadian location layer does not match the region catalog");
+      }
+      data.resolverRegions = Object.assign({}, resolverCollection, { features: normalizedResolverFeatures });
+    }
     return data;
   }
 
@@ -247,15 +259,6 @@
 
   function statusFor(data, tag) {
     if (data.status && data.status[tag]) return data.status[tag];
-    var overlay = data.routingOverlays && data.routingOverlays[tag];
-    if (overlay) {
-      return {
-        state: overlay.active ? "active" : "proposal",
-        reviewer: "MeshCore Canada routing-overlay registry",
-        source: "MCC-REG-1 overlay registry",
-        basis: "routing-overlay"
-      };
-    }
     return {
       state: "draft",
       reviewer: "Unreviewed",
@@ -279,16 +282,39 @@
 
   function labelFor(data, tag) {
     if (data.hierarchy[tag]) return data.hierarchy[tag].label;
-    if (data.routingOverlays && data.routingOverlays[tag]) return data.routingOverlays[tag].label;
     return tag;
   }
 
   function scopeExists(data, tag) {
-    return Boolean(data.hierarchy[tag] || data.routingOverlays && data.routingOverlays[tag]);
+    return Boolean(data.hierarchy[tag]);
   }
 
   function parentFor(data, tag) {
     return data.hierarchy[tag] ? data.hierarchy[tag].parent : null;
+  }
+
+  function childrenFor(data, tag) {
+    return Object.keys(data.hierarchy || {}).filter(function (candidate) {
+      return parentFor(data, candidate) === tag;
+    }).sort(function (a, b) {
+      return labelFor(data, a).localeCompare(labelFor(data, b));
+    });
+  }
+
+  function leafDescendants(data, tag) {
+    var children = childrenFor(data, tag);
+    if (!children.length) return seedForTag(data, tag) ? [tag] : [];
+    return unique([].concat.apply([], children.map(function (child) {
+      return leafDescendants(data, child);
+    })));
+  }
+
+  function featuresForNode(data, tag) {
+    var leaves = leafDescendants(data, tag);
+    return {
+      type: "FeatureCollection",
+      features: leaves.map(function (leaf) { return data.partitionByTag[leaf]; }).filter(Boolean)
+    };
   }
 
   function ancestryFor(data, tag) {
@@ -442,57 +468,28 @@
   }
 
   function boundaryFeatureAt(data, lat, lon, forcedTag, jurisdictionTag) {
-    var features = data.meshMapperRegions && data.meshMapperRegions.features || [];
+    var features = data.resolverRegions && data.resolverRegions.features ||
+      data.partitionRegions && data.partitionRegions.features || [];
     features = features.filter(function (feature) {
-      if (feature.properties && feature.properties.reviewState === "quarantined") return false;
       return !jurisdictionTag || provinceTagFor(data, feature.properties.tag) === jurisdictionTag;
     });
-    function distanceFromCenter(feature) {
-      var center = feature.properties && feature.properties.center || [0, 0];
-      return haversineKm(lat, lon, Number(center[1]), Number(center[0]));
-    }
-    function nearest(featuresAtPoint) {
+    function deterministic(featuresAtPoint) {
       return featuresAtPoint.sort(function (a, b) {
-        return distanceFromCenter(a) - distanceFromCenter(b);
+        var aId = String(a.properties.registryId || a.properties.tag);
+        var bId = String(b.properties.registryId || b.properties.tag);
+        return aId.localeCompare(bId);
       })[0] || null;
     }
     if (forcedTag) {
-      var forced = nearest(features.filter(function (feature) {
+      var forced = deterministic(features.filter(function (feature) {
         return String(feature.properties.tag).toLowerCase() === String(forcedTag).toLowerCase() &&
           featureContainsPoint(feature, lat, lon);
       }));
       if (forced) return forced;
-      // A region chosen from the strategy layer or carried in the URL is
-      // authoritative. Do not let an overlapping MeshMapper polygon replace it.
-      return null;
     }
-    return nearest(features.filter(function (feature) {
+    return deterministic(features.filter(function (feature) {
       return featureContainsPoint(feature, lat, lon);
     }));
-  }
-
-  function strategyFallbackAt(data, lat, lon, forcedTag, jurisdictionTag) {
-    var seeds = (data.strategyFallbackSeeds || data.communityExtraSeeds || []).filter(function (seed) {
-      return !jurisdictionTag || provinceTagFor(data, seed.tag) === jurisdictionTag;
-    });
-    function rankedEntry(seed) {
-      var km = haversineKm(lat, lon, seed.lat, seed.lon);
-      return { seed: seed, km: km, score: km - (seed.r || 0), ancestry: ancestryFor(data, seed.tag) };
-    }
-    function withinCoverage(entry) {
-      var radius = Number(entry.seed.r) || 0;
-      var limit = Math.max(35, Math.min(205, radius * 1.35));
-      return entry.km <= limit;
-    }
-    if (forcedTag) {
-      var forcedSeed = seeds.find(function (seed) { return seed.tag === String(forcedTag).toLowerCase(); });
-      if (forcedSeed) {
-        var forcedEntry = rankedEntry(forcedSeed);
-        if (withinCoverage(forcedEntry)) return forcedEntry;
-      }
-    }
-    var ranked = seeds.map(rankedEntry).sort(function (a, b) { return a.score - b.score; });
-    return ranked[0] && withinCoverage(ranked[0]) ? ranked[0] : null;
   }
 
   function resolveLocation(data, lat, lon, forcedTag, jurisdictionTag) {
@@ -502,7 +499,6 @@
     var primary = boundaryTag
       ? ranked.find(function (entry) { return entry.seed.tag === boundaryTag; }) || null
       : null;
-    if (!primary) primary = strategyFallbackAt(data, lat, lon, forcedTag, jurisdictionTag);
     if (primary) {
       ranked = [primary].concat(ranked.filter(function (entry) { return entry.seed.tag !== primary.seed.tag; }));
     }
@@ -516,10 +512,11 @@
       top5: ranked.slice(0, 5),
       nearestKm: ranked[0] ? ranked[0].km : Infinity,
       boundary: boundary,
+      displayBoundary: boundaryTag && data.partitionByTag ? data.partitionByTag[boundaryTag] : null,
       insideBoundary: Boolean(boundary),
       hasMatch: Boolean(primary),
-      sourceTier: boundary ? "meshmapper" : primary ? "strategy" : null,
-      coverageKm: primary ? Math.max(35, Math.min(205, (Number(primary.seed.r) || 0) * 1.35)) : 0
+      sourceTier: boundary ? "generated" : null,
+      coverageKm: 0
     };
   }
 
@@ -533,30 +530,10 @@
     var parentOverrides = {};
     var notes = [];
 
-    if (resolution.sourceTier === "strategy") {
-      notes.push("Approximate area.");
-    }
-
     carryTags.forEach(function (tag) {
       tags = tags.concat(ancestryFor(data, tag));
     });
     tags = unique(tags);
-
-    carryTags.forEach(function (tag) {
-      var profile = data.profiles && data.profiles[tag];
-      var additions = profile && profile.additionalTags || [];
-      additions.forEach(function (entry) {
-        var additionalTag = slug(typeof entry === "string" ? entry : entry && entry.tag);
-        var additionalParent = slug(entry && typeof entry === "object" && entry.parent || "");
-        if (!additionalTag || !scopeExists(data, additionalTag)) return;
-        if (!data.hierarchy[additionalTag] && !additionalParent) {
-          notes.push("Overlay " + additionalTag + " needs an explicit parent for this repeater.");
-          return;
-        }
-        if (tags.indexOf(additionalTag) === -1) tags.push(additionalTag);
-        if (additionalParent) parentOverrides[additionalTag] = additionalParent;
-      });
-    });
 
     var reviewTags = tags.filter(function (tag) {
       var state = statusFor(data, tag).state;
@@ -630,7 +607,6 @@
           lines.push(parent ? "region put " + tag + " " + parent : "region put " + tag);
         });
       }
-      lines.push("region save");
       return lines;
     }
 
@@ -639,7 +615,6 @@
       lines.push(parent ? "region put " + tag + " " + parent : "region put " + tag);
       if (firmware === "1.14") lines.push("region allowf " + tag);
     });
-    lines.push("region save");
     return lines;
   }
 
@@ -1390,23 +1365,37 @@
       target.innerHTML = "";
       return;
     }
+    var primaryTag = state.resolution.primary.seed.tag;
+    var provinceTag = provinceTagFor(data, primaryTag);
+    var provinceGroup = data.metroGroups.find(function (group) {
+      return group.tags.indexOf(primaryTag) !== -1;
+    });
+    var allTags = provinceGroup
+      ? provinceGroup.tags.filter(function (tag) { return provinceTagFor(data, tag) === provinceTag; })
+      : data.seeds.filter(function (seed) { return provinceTagFor(data, seed.tag) === provinceTag; }).map(function (seed) { return seed.tag; });
+    var nearbyTags = unique(state.resolution.top5.map(function (entry) { return entry.seed.tag; }))
+      .filter(function (tag) { return allTags.indexOf(tag) !== -1; });
     var preselect = {};
     if (!state.selectedMetros.length) {
-      state.resolution.top5.slice(0, 2).forEach(function (entry) {
-        preselect[entry.seed.tag] = true;
+      nearbyTags.slice(0, 2).forEach(function (tag) {
+        preselect[tag] = true;
       });
       state.selectedMetros = Object.keys(preselect);
     }
+    var visibleTags = state.showAllMetros
+      ? allTags
+      : unique(nearbyTags.concat(state.selectedMetros));
+    var hiddenCount = Math.max(0, allTags.length - visibleTags.length);
 
     target.innerHTML = '<p class="mcc-hint">High-site repeaters can carry multiple local areas. Select every area this site is intended to serve.</p>' +
-      data.metroGroups.map(function (group) {
-        return '<div class="mcc-chip-group"><strong>' + esc(group.label) + '</strong><div class="mcc-chip-list">' +
-          group.tags.map(function (tag) {
+      '<div class="mcc-chip-group"><strong>' + esc(provinceGroup ? provinceGroup.label : labelFor(data, provinceTag)) + '</strong><div class="mcc-chip-list">' +
+          visibleTags.map(function (tag) {
             var checked = state.selectedMetros.indexOf(tag) !== -1 ? " checked" : "";
             return '<label class="mcc-chip"><input type="checkbox" value="' + esc(tag) + '"' + checked + '> <code>' + esc(tag) + "</code> " + esc(labelFor(data, tag)) + "</label>";
           }).join("") +
-          "</div></div>";
-      }).join("");
+          "</div>" +
+          (hiddenCount ? '<button type="button" class="mcc-button mcc-button-secondary mcc-show-more-regions" data-action="show-all-regions">Add another region (' + hiddenCount + ' more)</button>' : '') +
+          "</div>";
 
     target.querySelectorAll("input[type='checkbox']").forEach(function (input) {
       input.addEventListener("change", function () {
@@ -1416,6 +1405,13 @@
         onChange();
       });
     });
+    var showAll = target.querySelector("[data-action='show-all-regions']");
+    if (showAll) {
+      showAll.addEventListener("click", function () {
+        state.showAllMetros = true;
+        renderMetroChips(data, target, state, onChange);
+      });
+    }
   }
 
   function renderResult(data, target, state) {
@@ -1447,7 +1443,7 @@
     }
     var firmware = state.firmware || data.meta.defaultFirmware || "1.16";
     var commands = buildCommands(data, rec.tags, firmware, state.includeBaseline, rec.parentOverrides);
-    var technicalCommands = commands.concat(["region"]);
+    var technicalCommands = commands.concat(["region", "region save", "region"]);
     var titleTag = state.resolution.primary.seed.tag;
     var statusNotes = rec.notes.map(function (note) {
       var warning = note.indexOf("Check locally") === 0 || note.indexOf("Do not use") === 0 ||
@@ -1458,6 +1454,7 @@
     var guided = state.finishPath === "guided";
     var verificationCommands = ["region"];
     if (state.includeBaseline) verificationCommands.push("get radio");
+    var expectedPath = rec.tags.map(function (tag) { return labelFor(data, tag); }).join(" › ");
     var resultBody = guided
       ? '<div class="mcc-guide-panel">' +
         '<ol class="mcc-guide-steps">' +
@@ -1468,7 +1465,7 @@
         '<li>In desktop Chrome or Edge, open the <a href="https://meshcore.io/flasher" target="_blank" rel="noopener">MeshCore Flasher</a>. For Gessaman\'s MQTT Observer firmware, use the <a href="https://observer.gessaman.com/" target="_blank" rel="noopener">MeshCore Observer Flasher</a> instead.</li>' +
         '<li>Choose <strong>Console</strong>, then approve the repeater\'s serial or COM port when the browser asks.</li></ol></section>' +
         '<section class="mcc-connect-method"><div class="mcc-connect-method-head">' + icon("radio-tower") + '<div><h5>Remote over LoRa</h5><small>Through a companion radio</small></div></div>' +
-        '<ol><li>On Android or iPhone/iPad, connect the <a href="https://meshcore.io/" target="_blank" rel="noopener">official MeshCore app</a> to your companion radio.</li>' +
+        '<ol><li>On a phone or computer, connect the <a href="https://meshcore.io/" target="_blank" rel="noopener">official MeshCore app</a> to your companion radio.</li>' +
         '<li>Open <strong>Contacts</strong>, select the repeater, then choose <strong>Remote Management</strong> from its menu.</li>' +
         '<li>Enter the repeater admin password, tap <strong>Log In</strong>, then open <strong>Command Line</strong>.</li></ol>' +
         '<p class="mcc-connect-note">If the repeater is missing, open Tools → Discover Nearby Nodes. If a wait timer appears, let it finish before logging in.</p></section>' +
@@ -1478,10 +1475,15 @@
         '<li><div><h4>Apply the settings</h4><p>Copy and run each line in order. Wait for the device reply before continuing.</p>' +
         '<div class="mcc-guide-command-list">' + commands.map(function (line) {
           return '<button type="button" class="mcc-command-line" data-cmd="' + esc(line) + '"><span>' + esc(line) + '</span><em>' + icon("copy") + 'Copy</em></button>';
-        }).join("") + '</div><p class="mcc-guide-stop">If a reply starts with Err, stop. Check the region reply before sending region save. Existing regions are not removed automatically.</p></div></li>' +
-        '<li><div><h4>Check the result</h4><p>' + (state.includeBaseline
-          ? 'Restart the device so the radio settings take effect. Reconnect, then run:'
-          : 'Run this to confirm the saved regions:') + '</p>' +
+        }).join("") + '</div><p class="mcc-guide-stop">If a reply starts with Err, stop. Existing regions are not removed automatically.</p></div></li>' +
+        '<li><div><h4>Check, save, and verify</h4><p>Run <code>region</code>. Confirm that it follows this path:</p>' +
+        '<p class="mcc-region-path"><strong>' + esc(expectedPath) + '</strong></p>' +
+        '<div class="mcc-guide-command-list"><button type="button" class="mcc-command-line" data-cmd="region"><span>region</span><em>' + icon("copy") + 'Copy</em></button></div>' +
+        '<p>If the path is correct, save it:</p>' +
+        '<div class="mcc-guide-command-list"><button type="button" class="mcc-command-line" data-cmd="region save"><span>region save</span><em>' + icon("copy") + 'Copy</em></button></div>' +
+        '<p>' + (state.includeBaseline
+          ? 'Restart the device, reconnect, then run these final checks:'
+          : 'Run this once more to confirm the saved region:') + '</p>' +
         '<div class="mcc-guide-command-list">' + verificationCommands.map(function (line) {
           return '<button type="button" class="mcc-command-line" data-cmd="' + esc(line) + '"><span>' + esc(line) + '</span><em>' + icon("copy") + 'Copy</em></button>';
         }).join("") + '</div></div></li>' +
@@ -1497,28 +1499,34 @@
         '</code></pre>' +
         '</div>';
 
+    var sourceBadge = '<span class="mcc-source-tier mcc-source-tier-' + esc(state.resolution.sourceTier || "unknown") + '">' +
+      (state.resolution.sourceTier === "generated" ? "Canada-wide region boundary" : "Boundary unavailable") + '</span>';
+    var ancestryMarkup = '<div class="mcc-ancestry" aria-label="Region tags">' +
+      rec.tags.map(function (tag) {
+        var stateName = statusFor(data, tag).state || "draft";
+        return '<span class="mcc-tag-pill' + (stateName === "draft" ? " is-draft" : "") + '"><code>' + esc(tag) + "</code></span>";
+      }).join("") +
+      "</div>";
+    var metaMarkup = '<dl class="mcc-result-meta">' +
+      '<div><dt>Firmware</dt><dd>' + esc(firmwareLabel) + '</dd></div>' +
+      '<div><dt>Region budget</dt><dd>' + esc(rec.budget.tagCount) + ' / 32 tags · ' +
+      esc(rec.budget.responseBytes) + ' / 172 bytes</dd></div>' +
+      '</dl>';
+    var technicalDetails = guided
+      ? '<details class="mcc-advanced-options mcc-result-advanced"><summary>Advanced details</summary>' + sourceBadge + ancestryMarkup + metaMarkup + '</details>'
+      : sourceBadge + ancestryMarkup + metaMarkup;
+
     target.innerHTML =
       '<div class="mcc-result-console">' +
       '<div class="mcc-result-head">' +
       '<div>' +
       '<h3 class="mcc-result-title"><code>' + esc(titleTag.toUpperCase()) + "</code> — " + esc(labelFor(data, titleTag)) + "</h3>" +
       '<div class="mcc-result-sub">' + esc(state.name || labelFor(data, titleTag)) + "</div>" +
-      '<span class="mcc-source-tier mcc-source-tier-' + esc(state.resolution.sourceTier || "unknown") + '">' +
-      (state.resolution.sourceTier === "meshmapper" ? "MeshMapper source polygon" : "Approximate area") + '</span>' +
+      '<div class="mcc-region-path"><strong>Your region:</strong> ' + esc(expectedPath) + '</div>' +
       '</div>' +
       (!guided ? '<button type="button" class="mcc-button mcc-copy-all">' + icon("copy") + 'Copy commands</button>' : '') +
       '</div>' +
-      '<div class="mcc-ancestry" aria-label="Region ancestry">' +
-      rec.tags.map(function (tag) {
-        var stateName = statusFor(data, tag).state || "draft";
-        return '<span class="mcc-tag-pill' + (stateName === "draft" ? " is-draft" : "") + '"><code>' + esc(tag) + "</code></span>";
-      }).join("") +
-      "</div>" +
-      '<dl class="mcc-result-meta">' +
-      '<div><dt>Firmware</dt><dd>' + esc(firmwareLabel) + '</dd></div>' +
-      '<div><dt>Region budget</dt><dd>' + esc(rec.budget.tagCount) + ' / 32 tags · ' +
-      esc(rec.budget.responseBytes) + ' / 172 bytes</dd></div>' +
-      '</dl>' +
+      technicalDetails +
       resultBody +
       (statusNotes ? '<div class="mcc-notes">' + statusNotes + "</div>" : "") +
       "</div>";
@@ -1560,7 +1568,8 @@
     if (!rec) return null;
     if (rec.budget.tagCount > 32 || rec.budget.responseBytes > 172) return null;
     var firmware = state.firmware || data.meta.defaultFirmware || "1.16";
-    return buildCommands(data, rec.tags, firmware, state.includeBaseline, rec.parentOverrides);
+    return buildCommands(data, rec.tags, firmware, state.includeBaseline, rec.parentOverrides)
+      .concat(["region", "region save", "region"]);
   }
 
   function renderRegionDetail(data, section, target, state, tag) {
@@ -1697,6 +1706,7 @@
     renderCandidateList(data, els.candidates, state, function (tag) {
       state.forcedTag = tag;
       state.selectedMetros = [];
+      state.showAllMetros = false;
       refreshTool(data, els, state, afterRefresh);
     });
     renderMetroChips(data, els.metro, state, function () {
@@ -1719,15 +1729,17 @@
       '<section class="mcc-card mcc-wizard-step" data-wizard-step="1">' +
       '<p class="mcc-step-label">Step 1 of 4</p>' +
       '<h2>Choose a location</h2>' +
-      '<label class="mcc-label" for="mcc-location-input">City or postal code</label>' +
+      '<label class="mcc-label" for="mcc-location-input">City, airport code, or postal code</label>' +
       '<div class="mcc-input-row">' +
       '<input class="mcc-input" id="mcc-location-input" type="text" autocomplete="off" spellcheck="false" placeholder="Ottawa, YOW, K1A 0B1">' +
       '<button class="mcc-button" type="button" data-action="locate">' + icon("search") + 'Find</button>' +
       '</div>' +
       '<div data-role="status"></div>' +
-      '<details class="mcc-alternate-regions" data-role="alternate-regions" hidden>' +
-      '<summary>Choose another nearby region</summary>' +
-      '<div class="mcc-candidates" data-role="candidates"></div>' +
+      '<div class="mcc-selected-region" data-role="selected-region" hidden></div>' +
+      '<details class="mcc-alternate-regions" data-role="region-browser" hidden>' +
+      '<summary>Choose a different region</summary>' +
+      '<div class="mcc-region-breadcrumbs" data-role="config-region-breadcrumbs"></div>' +
+      '<div class="mcc-region-children" data-role="config-region-children"></div>' +
       '</details>' +
       '<div class="mcc-wizard-actions">' +
       '<a class="mcc-button mcc-button-secondary" data-action="view-map" href="' + esc(regionPageHref("map")) + '" hidden>' + icon("map") + 'View on map</a>' +
@@ -1788,8 +1800,10 @@
       firmware: data.meta.defaultFirmware || "1.16",
       includeBaseline: true,
       selectedMetros: [],
+      showAllMetros: false,
       canGenerate: false,
       resolution: null,
+      browseTag: data.meta.rootTag || "can",
       finishPath: "guided",
       wizardStep: 1,
       maxStep: 1
@@ -1798,8 +1812,12 @@
       input: el.querySelector("#mcc-location-input"),
       locate: el.querySelector("[data-action='locate']"),
       status: el.querySelector("[data-role='status']"),
-      alternateRegions: el.querySelector("[data-role='alternate-regions']"),
-      candidates: el.querySelector("[data-role='candidates']"),
+      selectedRegion: el.querySelector("[data-role='selected-region']"),
+      regionBrowser: el.querySelector("[data-role='region-browser']"),
+      breadcrumbs: el.querySelector("[data-role='config-region-breadcrumbs']"),
+      children: el.querySelector("[data-role='config-region-children']"),
+      candidatesSection: null,
+      candidates: null,
       metro: el.querySelector("[data-role='metro']"),
       result: el.querySelector("[data-role='result']"),
       finishPaths: Array.prototype.slice.call(el.querySelectorAll("[data-finish-path]")),
@@ -1816,7 +1834,6 @@
         link.hidden = !state.canGenerate;
         if (state.canGenerate) link.href = mapHrefForState(state);
       });
-      if (els.alternateRegions) els.alternateRegions.hidden = true;
     }
 
     function showStep(step) {
@@ -1868,6 +1885,53 @@
       showStep(state.wizardStep + 1);
     }
 
+    function renderConfigRegionBrowser(tag) {
+      if (!data.hierarchy[tag]) tag = data.meta.rootTag || "can";
+      state.browseTag = tag;
+      var selectedTag = state.resolution && state.resolution.primary
+        ? state.resolution.primary.seed.tag
+        : null;
+      if (els.selectedRegion) {
+        els.selectedRegion.hidden = !selectedTag;
+        els.selectedRegion.innerHTML = selectedTag
+          ? '<strong>Your region</strong><span>' + esc(ancestryFor(data, selectedTag).map(function (item) {
+            return labelFor(data, item);
+          }).join(" › ")) + '</span>'
+          : "";
+      }
+      if (els.regionBrowser) els.regionBrowser.hidden = !selectedTag;
+      if (!els.breadcrumbs || !els.children) return;
+
+      var path = ancestryFor(data, tag);
+      els.breadcrumbs.innerHTML = path.map(function (item, index) {
+        var current = index === path.length - 1;
+        return '<button type="button" class="mcc-region-crumb' + (current ? ' is-current' : '') + '" data-config-region-node="' + esc(item) + '"' + (current ? ' aria-current="page"' : '') + '>' + esc(labelFor(data, item)) + '</button>';
+      }).join('<span aria-hidden="true">›</span>');
+
+      var children = childrenFor(data, tag);
+      els.children.innerHTML = children.length
+        ? children.map(function (child) {
+          var nested = childrenFor(data, child).length > 0;
+          var leafCount = leafDescendants(data, child).length;
+          return '<button type="button" class="mcc-region-child" data-config-region-node="' + esc(child) + '">' +
+            '<span><strong>' + esc(labelFor(data, child)) + '</strong><small>' +
+            (nested ? leafCount + ' subregions' : child.toUpperCase() + ' · region') +
+            '</small></span><span aria-hidden="true">' + (nested ? '›' : '✓') + '</span></button>';
+        }).join("")
+        : '<p class="mcc-help">This is the region used for your settings.</p>';
+    }
+
+    function chooseConfigRegionNode(tag) {
+      var children = childrenFor(data, tag);
+      renderConfigRegionBrowser(tag);
+      if (!children.length) {
+        var seed = seedForTag(data, tag);
+        if (seed) {
+          useGeo({ lat: seed.lat, lon: seed.lon, name: labelFor(data, tag), countryCode: "ca", tag: tag });
+        }
+      }
+    }
+
     function useGeo(geo) {
       state.lat = geo.lat;
       state.lon = geo.lon;
@@ -1877,8 +1941,12 @@
         ? provinceTagFor(data, state.forcedTag)
         : jurisdictionTagFromGeo(geo);
       state.selectedMetros = [];
+      state.showAllMetros = false;
       if (!isCanada(geo)) {
         state.canGenerate = false;
+        state.resolution = null;
+        if (els.selectedRegion) els.selectedRegion.hidden = true;
+        if (els.regionBrowser) els.regionBrowser.hidden = true;
         setStatus(els.status, "This location is outside Canada.", "warning");
         refreshTool(data, els, state);
         return;
@@ -1886,14 +1954,14 @@
       state.resolution = resolveLocation(data, state.lat, state.lon, state.forcedTag, state.jurisdictionTag);
       if (!state.resolution.hasMatch) {
         state.canGenerate = false;
+        if (els.selectedRegion) els.selectedRegion.hidden = true;
+        if (els.regionBrowser) els.regionBrowser.hidden = true;
         setStatus(els.status, "No region found here. Try a nearby city.", "warning");
       } else {
         state.canGenerate = true;
         state.maxStep = Math.max(state.maxStep, 2);
-        setStatus(els.status, state.resolution.sourceTier === "meshmapper"
-          ? "Region found."
-          : "Strategy region found. Boundary is approximate.",
-        state.resolution.sourceTier === "meshmapper" ? "info" : "warning");
+        setStatus(els.status, "Region found. Confirm it below, then continue.", "info");
+        renderConfigRegionBrowser(state.resolution.primary.seed.tag);
       }
       refreshTool(data, els, state, updateMapLinks);
       updateMapLinks();
@@ -1925,6 +1993,18 @@
     els.input.addEventListener("keydown", function (event) {
       if (event.key === "Enter") locate();
     });
+    if (els.breadcrumbs) {
+      els.breadcrumbs.addEventListener("click", function (event) {
+        var button = event.target.closest("[data-config-region-node]");
+        if (button) chooseConfigRegionNode(button.getAttribute("data-config-region-node"));
+      });
+    }
+    if (els.children) {
+      els.children.addEventListener("click", function (event) {
+        var button = event.target.closest("[data-config-region-node]");
+        if (button) chooseConfigRegionNode(button.getAttribute("data-config-region-node"));
+      });
+    }
     el.querySelectorAll("[data-next-step]").forEach(function (button) {
       button.addEventListener("click", advanceStep);
     });
@@ -1951,6 +2031,7 @@
       input.addEventListener("change", function () {
         state.type = input.value;
         state.selectedMetros = [];
+        state.showAllMetros = false;
         refreshTool(data, els, state);
       });
     });
@@ -2005,9 +2086,14 @@
       '<aside class="mcc-map-panel">' +
       '<div class="mcc-panel-header">' +
       '<h2>Find a region</h2>' +
-      '<p>MeshMapper anchors are shown where available. Other areas are approximate until the complete national boundary release.</p>' +
+      '<p>Every part of Canada belongs to one local region.</p>' +
       '<a class="mcc-button mcc-button-secondary" href="' + esc(regionPageHref("config")) + '">' + icon("list-checks") + 'Setup</a>' +
       '</div>' +
+      '<section class="mcc-card mcc-card-compact">' +
+      '<h2>Browse regions</h2>' +
+      '<div class="mcc-region-breadcrumbs" data-role="region-breadcrumbs"></div>' +
+      '<div class="mcc-region-children" data-role="region-children"></div>' +
+      '</section>' +
       '<section class="mcc-card mcc-card-compact">' +
       '<h2>Choose a location</h2>' +
       '<label class="mcc-label" for="mcc-map-location-input">City, airport code, or postal code</label>' +
@@ -2050,14 +2136,18 @@
       firmware: data.meta.defaultFirmware || "1.16",
       includeBaseline: true,
       selectedMetros: [],
+      showAllMetros: false,
       canGenerate: false,
       resolution: null,
-      detailTag: null
+      detailTag: null,
+      browseTag: data.meta.rootTag || "can"
     };
     var els = {
       input: el.querySelector("[data-role='map-input']"),
       locate: el.querySelector("[data-action='map-locate']"),
       status: el.querySelector("[data-role='map-status']"),
+      breadcrumbs: el.querySelector("[data-role='region-breadcrumbs']"),
+      children: el.querySelector("[data-role='region-children']"),
       candidatesSection: null,
       candidates: null,
       metro: el.querySelector("[data-role='map-metro']"),
@@ -2084,121 +2174,103 @@
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       }).addTo(map);
 
-      var communityLayer = L.layerGroup();
-      var communityCoverageLayers = [];
-      var communityMarkerLayers = [];
-      data.communityExtraSeeds.forEach(function (seed) {
-        var radius = Math.max(35, Math.min(205, (Number(seed.r) || 0) * 1.35));
-        var coverage = L.circle([seed.lat, seed.lon], {
-          radius: radius * 1000,
-          color: "#8f98b7",
-          opacity: 0.55,
-          weight: 1,
-          dashArray: "4 5",
-          fillColor: colorForTag(seed.tag),
-          fillOpacity: 0.035
-        });
-        coverage.bindTooltip('<strong>' + esc(seed.tag.toUpperCase()) + '</strong> - ' + esc(labelFor(data, seed.tag)) + '<br><small>Strategy area · approximate</small>');
-        coverage.on("click", function (event) {
-          if (event.originalEvent) L.DomEvent.stopPropagation(event.originalEvent);
-          verifyAndUseGeo(event.latlng.lat, event.latlng.lng, labelFor(data, seed.tag), false, seed.tag);
-        });
-        coverage.addTo(communityLayer);
-        communityCoverageLayers.push(coverage);
-        var communityMarker = L.circleMarker([seed.lat, seed.lon], {
-          radius: 3,
-          color: "#d6dbef",
-          weight: 1,
-          fillColor: colorForTag(seed.tag),
-          fillOpacity: 0.9
-        }).bindTooltip('<strong>' + esc(seed.tag.toUpperCase()) + '</strong> - ' + esc(labelFor(data, seed.tag)));
-        communityMarker.on("click", function (event) {
-          if (event.originalEvent) L.DomEvent.stopPropagation(event.originalEvent);
-          useGeo({ lat: seed.lat, lon: seed.lon, name: labelFor(data, seed.tag), countryCode: "ca" }, false, seed.tag);
-        });
-        communityMarker.addTo(communityLayer);
-        communityMarkerLayers.push(communityMarker);
-      });
-
-      var fillLayer = L.geoJSON(data.meshMapperRegions, {
+      var partitionLayer = L.geoJSON(data.partitionRegions, {
         style: function (feature) {
-          var quarantined = feature.properties.reviewState === "quarantined";
           return {
-            color: "transparent",
-            weight: 0,
+            color: "#aeb8ff",
+            opacity: 0.8,
+            weight: 1,
             fillColor: colorForTag(feature.properties.tag),
-            fillOpacity: quarantined ? 0.04 : 0.2
+            fillOpacity: 0.2
           };
         },
         onEachFeature: function (feature, layer) {
-          var reviewNote = feature.properties.reviewState === "quarantined"
-            ? '<br><small>Source polygon quarantined — using the approximate strategy area</small>'
-            : '';
-          layer.bindTooltip('<strong>' + esc(feature.properties.code) + '</strong> - ' + esc(feature.properties.name) + reviewNote);
+          layer.bindTooltip('<strong>' + esc(feature.properties.tag.toUpperCase()) + '</strong> - ' + esc(feature.properties.label));
           layer.on("click", function (event) {
             if (event.originalEvent) L.DomEvent.stopPropagation(event.originalEvent);
             useGeo({
               lat: event.latlng.lat,
               lon: event.latlng.lng,
-              name: feature.properties.name,
+              name: feature.properties.label,
               countryCode: "ca"
             }, false, feature.properties.tag);
           });
         }
-      });
-      var borderLayer = L.geoJSON(data.meshMapperRegions, {
+      }).addTo(map);
+      var browseLayer = L.geoJSON(null, {
         interactive: false,
-        style: function (feature) {
-          var quarantined = feature.properties.reviewState === "quarantined";
-          return {
-            color: quarantined ? "#f4b860" : "#aeb8ff",
-            opacity: quarantined ? 0.75 : 0.9,
-            weight: 1.5,
-            dashArray: quarantined ? "5 5" : null,
-            fill: false
-          };
-        }
-      });
-      var unifiedRegionLayer = L.layerGroup([communityLayer, fillLayer, borderLayer]).addTo(map);
+        style: { color: "#ffd166", opacity: 1, weight: 3, fillColor: "#ffd166", fillOpacity: 0.12 }
+      }).addTo(map);
       var selectedLayer = L.geoJSON(null, {
         interactive: false,
         style: { color: "#ffffff", opacity: 1, weight: 4, fillColor: "#4287ff", fillOpacity: 0.38 }
       }).addTo(map);
-      var selectedCommunityLayer = L.layerGroup().addTo(map);
-
-      function syncCommunityZoom() {
-        var nationalView = map.getZoom() < 5;
-        communityCoverageLayers.forEach(function (layer) {
-          layer.setStyle({ opacity: nationalView ? 0.18 : 0.55, fillOpacity: nationalView ? 0.01 : 0.035 });
-        });
-        communityMarkerLayers.forEach(function (layer) {
-          layer.setStyle({ opacity: nationalView ? 0 : 1, fillOpacity: nationalView ? 0 : 0.9 });
-        });
-      }
-      map.on("zoomend", syncCommunityZoom);
-      syncCommunityZoom();
 
       function updateBoundaryHighlight() {
         selectedLayer.clearLayers();
-        selectedCommunityLayer.clearLayers();
-        if (state.resolution && state.resolution.boundary) {
-          selectedLayer.addData(state.resolution.boundary);
+        if (state.resolution && state.resolution.displayBoundary) {
+          selectedLayer.addData(state.resolution.displayBoundary);
           selectedLayer.bringToFront();
-        } else if (state.resolution && state.resolution.primary) {
-          var seed = state.resolution.primary.seed;
-          L.circle([seed.lat, seed.lon], {
-            radius: state.resolution.coverageKm * 1000,
-            color: "#ffffff",
-            opacity: 1,
-            weight: 3,
-            dashArray: "7 5",
-            fillColor: "#4287ff",
-            fillOpacity: 0.24,
-            interactive: false
-          }).addTo(selectedCommunityLayer);
         }
       }
       afterMapRefresh = updateBoundaryHighlight;
+
+      function renderRegionBrowser(tag, fitSelection) {
+        if (!data.hierarchy[tag]) tag = data.meta.rootTag || "can";
+        state.browseTag = tag;
+        var path = ancestryFor(data, tag);
+        els.breadcrumbs.innerHTML = path.map(function (item, index) {
+          var current = index === path.length - 1;
+          return '<button type="button" class="mcc-region-crumb' + (current ? ' is-current' : '') + '" data-region-node="' + esc(item) + '"' + (current ? ' aria-current="page"' : '') + '>' + esc(labelFor(data, item)) + '</button>';
+        }).join('<span aria-hidden="true">›</span>');
+
+        var children = childrenFor(data, tag);
+        if (children.length) {
+          els.children.innerHTML = children.map(function (child) {
+            var nested = childrenFor(data, child).length > 0;
+            var leafCount = leafDescendants(data, child).length;
+            return '<button type="button" class="mcc-region-child" data-region-node="' + esc(child) + '">' +
+              '<span><strong>' + esc(labelFor(data, child)) + '</strong><small>' +
+              (nested ? leafCount + ' subregions' : child.toUpperCase() + ' · region') +
+              '</small></span><span aria-hidden="true">' + (nested ? '›' : '✓') + '</span></button>';
+          }).join("");
+        } else {
+          els.children.innerHTML = '<p class="mcc-help">This is the region used for location lookup and commands.</p>';
+        }
+
+        browseLayer.clearLayers();
+        if (tag !== (data.meta.rootTag || "can")) {
+          browseLayer.addData(featuresForNode(data, tag));
+          browseLayer.bringToFront();
+          selectedLayer.bringToFront();
+          if (fitSelection && browseLayer.getBounds().isValid()) {
+            map.fitBounds(browseLayer.getBounds(), { padding: [28, 28], maxZoom: children.length ? 6 : 8 });
+          }
+        } else if (fitSelection) {
+          fitCanada();
+        }
+      }
+
+      function chooseRegionNode(tag) {
+        var children = childrenFor(data, tag);
+        renderRegionBrowser(tag, true);
+        if (!children.length) {
+          var seed = data.seeds.find(function (entry) { return entry.tag === tag; });
+          if (seed) {
+            useGeo({ lat: seed.lat, lon: seed.lon, name: labelFor(data, tag), countryCode: "ca" }, false, tag);
+          }
+        }
+      }
+
+      els.breadcrumbs.addEventListener("click", function (event) {
+        var button = event.target.closest("[data-region-node]");
+        if (button) chooseRegionNode(button.getAttribute("data-region-node"));
+      });
+      els.children.addEventListener("click", function (event) {
+        var button = event.target.closest("[data-region-node]");
+        if (button) chooseRegionNode(button.getAttribute("data-region-node"));
+      });
+      renderRegionBrowser(state.browseTag, false);
 
       var marker = null;
       function place(lat, lon) {
@@ -2215,6 +2287,7 @@
           ? provinceTagFor(data, state.forcedTag)
           : jurisdictionTagFromGeo(geo);
         state.selectedMetros = [];
+        state.showAllMetros = false;
         place(state.lat, state.lon);
         if (!isCanada(geo)) {
           state.forcedTag = null;
@@ -2227,28 +2300,17 @@
           state.canGenerate = state.resolution.hasMatch;
           state.detailTag = state.canGenerate ? state.resolution.primary.seed.tag : null;
           if (state.canGenerate) {
-            setStatus(els.status, state.resolution.sourceTier === "meshmapper"
-              ? state.detailTag.toUpperCase() + " — " + labelFor(data, state.detailTag)
-              : state.detailTag.toUpperCase() + " — " + labelFor(data, state.detailTag) + " (approximate)",
-            state.resolution.sourceTier === "meshmapper" ? "info" : "warning");
+            setStatus(els.status, state.detailTag.toUpperCase() + " — " + labelFor(data, state.detailTag), "info");
+            renderRegionBrowser(state.detailTag, false);
           } else {
             setStatus(els.status, "No region here.", "warning");
           }
         }
         refreshTool(data, els, state, updateBoundaryHighlight);
         if (recenter) {
-          if (state.resolution && state.resolution.boundary) {
-            var selectedBounds = L.geoJSON(state.resolution.boundary).getBounds();
+          if (state.resolution && state.resolution.displayBoundary) {
+            var selectedBounds = L.geoJSON(state.resolution.displayBoundary).getBounds();
             if (selectedBounds.isValid()) map.fitBounds(selectedBounds, { padding: [28, 28], maxZoom: 9 });
-          } else if (state.resolution && state.resolution.primary) {
-            var fallbackSeed = state.resolution.primary.seed;
-            var latDelta = state.resolution.coverageKm / 111;
-            var lonDelta = latDelta / Math.max(0.25, Math.cos(fallbackSeed.lat * Math.PI / 180));
-            var fallbackBounds = L.latLngBounds(
-              [fallbackSeed.lat - latDelta, fallbackSeed.lon - lonDelta],
-              [fallbackSeed.lat + latDelta, fallbackSeed.lon + lonDelta]
-            );
-            if (fallbackBounds.isValid()) map.fitBounds(fallbackBounds, { padding: [28, 28], maxZoom: 9 });
           } else {
             map.setView([state.lat, state.lon], Math.max(map.getZoom(), 8));
           }
@@ -2262,23 +2324,31 @@
         state.forcedTag = null;
         state.jurisdictionTag = null;
         state.selectedMetros = [];
+        state.showAllMetros = false;
         state.canGenerate = false;
         state.resolution = null;
         state.detailTag = null;
         place(state.lat, state.lon);
-        setStatus(els.status, "We couldn't confirm that this point is in Canada. No settings were generated. Search for a nearby Canadian city and try again.", "error");
+        setStatus(els.status, "That point is outside the mapped Canadian regions. Choose land in Canada or search for a nearby city.", "warning");
         refreshTool(data, els, state, updateBoundaryHighlight);
         if (recenter) map.setView([state.lat, state.lon], Math.max(map.getZoom(), 8));
       }
 
       function verifyAndUseGeo(lat, lon, name, recenter, forcedTag) {
-        setStatus(els.status, "Checking location...", "info");
-        return reverseGeocode(lat, lon).then(function (geo) {
-          if (name) geo.name = name;
-          useGeo(geo, recenter, forcedTag);
-        }).catch(function () {
+        var boundary = boundaryFeatureAt(data, Number(lat), Number(lon), forcedTag, null);
+        if (!boundary) {
           rejectUnverifiedPoint(lat, lon, name, recenter);
-        });
+          return Promise.resolve();
+        }
+        var tag = String(boundary.properties.tag).toLowerCase();
+        useGeo({
+          lat: Number(lat),
+          lon: Number(lon),
+          name: name || labelFor(data, tag),
+          countryCode: "ca",
+          tag: tag
+        }, recenter, tag);
+        return Promise.resolve();
       }
 
       function locate() {
@@ -2333,6 +2403,7 @@
       input.addEventListener("change", function () {
         state.type = input.value;
         state.selectedMetros = [];
+        state.showAllMetros = false;
         refreshTool(data, els, state, afterMapRefresh);
       });
     });
@@ -2349,11 +2420,11 @@
   }
 
   function regionRows(data) {
-    return (data.consolidatedRegionTags || data.meshMapperTags || Object.keys(data.hierarchy)).map(function (tag) {
+    return (data.consolidatedRegionTags || Object.keys(data.hierarchy)).map(function (tag) {
       var item = data.hierarchy[tag];
       var st = statusFor(data, tag);
       var seed = seedForTag(data, tag);
-      var hasMeshMapperBoundary = data.meshMapperTags.indexOf(tag) !== -1;
+      var hasGeneratedBoundary = Boolean(seed);
       return {
         tag: tag,
         label: item.label,
@@ -2365,8 +2436,8 @@
         source: st.source || "",
         reviewer: st.reviewer || "",
         seed: seedText(seed),
-        sourceTier: hasMeshMapperBoundary ? "meshmapper" : "strategy",
-        boundaryType: hasMeshMapperBoundary ? "source-polygon" : "seed-radius",
+        sourceTier: hasGeneratedBoundary ? "generated" : "grouping",
+        boundaryType: hasGeneratedBoundary ? "generated-partition" : "derived-parent",
         basis: st.basis || item.basis || "proposed"
       };
     });
@@ -2410,7 +2481,7 @@
         return "<tr>" +
           '<td><code>' + esc(row.tag) + "</code> " + esc(row.label) + "</td>" +
           "<td>" + esc(row.province ? labelFor(data, row.province) : "Canada") + "</td>" +
-          "<td>" + (row.boundaryType === "source-polygon" ? "MeshMapper" : "Approx.") + "</td>" +
+          "<td>Canada-wide</td>" +
           "<td>" + (row.basis === "established" ? "Established" : "Proposed") + "</td>" +
           "</tr>";
       }).join("");
@@ -2434,7 +2505,7 @@
       '</section>' +
       '<section class="mcc-stat-grid" aria-label="Region status summary">' +
       '<div class="mcc-stat"><span>Regions</span><strong>' + data.regionCounts.total + '</strong></div>' +
-      '<div class="mcc-stat"><span>MeshMapper polygons</span><strong>' + data.regionCounts.meshMapper + '</strong></div>' +
+      '<div class="mcc-stat"><span>Local regions</span><strong>' + data.regionCounts.generated + '</strong></div>' +
       '<div class="mcc-stat"><span>Provinces &amp; territories</span><strong>' + provinceOptions(data).length + '</strong></div>' +
       '</section>' +
       '<section class="mcc-card mcc-dashboard-table">' +
@@ -2454,21 +2525,26 @@
     });
     var nodes = Array.prototype.slice.call(document.querySelectorAll("[data-mcc-regions]"));
     if (!nodes.length) return;
-    loadData().then(function (data) {
-      nodes.forEach(function (node) {
+    nodes.forEach(function (node) {
+      if (!node.isConnected || node.dataset.mccReady === "1" || node.dataset.mccLoading === "1") return;
+      var mode = node.getAttribute("data-mcc-regions");
+      node.dataset.mccLoading = "1";
+      node.innerHTML = '<div class="mcc-status mcc-status-info" role="status">Loading Canadian regions…</div>';
+      loadData(mode).then(function (data) {
         if (!node.isConnected) return;
-        if (node.dataset.mccReady === "1") return;
+        delete node.dataset.mccLoading;
         node.dataset.mccReady = "1";
-        var mode = node.getAttribute("data-mcc-regions");
         if (mode === "config") initConfig(node, data);
         if (mode === "map") initMap(node, data);
         if (mode === "dashboard") renderDashboard(node, data);
         if (mode === "table") renderRegionTable(node, data);
-      });
-    }).catch(function (err) {
-      nodes.forEach(function (node) {
+      }).catch(function (err) {
         if (!node.isConnected) return;
-        node.innerHTML = '<div class="mcc-status mcc-status-error">' + esc(err.message) + "</div>";
+        delete node.dataset.mccLoading;
+        delete node.dataset.mccReady;
+        node.innerHTML = '<div class="mcc-status mcc-status-error" role="alert"><p>' + esc(err.message) + '</p><button type="button" class="mcc-button mcc-button-secondary" data-action="retry-regions">Try again</button></div>';
+        var retry = node.querySelector("[data-action='retry-regions']");
+        if (retry) retry.addEventListener("click", initRegions, { once: true });
       });
     });
   }

@@ -1,0 +1,50 @@
+{
+  "standard": "MCC-REG-1",
+  "censusVintage": 2021,
+  "sources": [
+    {
+      "id": "statcan-da-digital-2021",
+      "role": "Complete 57,936-cell ownership domain",
+      "url": "https://www12.statcan.gc.ca/census-recensement/2021/geo/sip-pis/boundary-limites/files-fichiers/lda_000a21a_e.zip",
+      "file": "lda_000a21a_e.zip",
+      "bytes": 97683595,
+      "lastModified": "2021-10-21T23:39:05Z",
+      "sha256": "37d50d3334189a69f85198bbb3b497974af0ec5014dc95a7ca7b2b7ed13208c5",
+      "licence": "Statistics Canada Open Licence"
+    },
+    {
+      "id": "statcan-da-cartographic-2021",
+      "role": "Clean public shoreline for 57,932 land-present DAs",
+      "url": "https://www12.statcan.gc.ca/census-recensement/2021/geo/sip-pis/boundary-limites/files-fichiers/lda_000b21a_e.zip",
+      "file": "lda_000b21a_e.zip",
+      "bytes": 197042003,
+      "lastModified": "2022-01-05T15:42:09Z",
+      "sha256": "cb8e00a1165d8f309a62884860112944ea5acc177bb926d966b4a51fbd0c9ecb",
+      "licence": "Statistics Canada Open Licence"
+    },
+    {
+      "id": "statcan-economic-regions-digital-2021",
+      "role": "76 automatic-assignment guardrails",
+      "url": "https://www12.statcan.gc.ca/census-recensement/2021/geo/sip-pis/boundary-limites/files-fichiers/ler_000a21a_e.zip",
+      "file": "ler_000a21a_e.zip",
+      "bytes": 7021635,
+      "lastModified": "2021-10-21T23:39:08Z",
+      "sha256": "d72e8839a7b3c4c77d67d9dcf568623fbbc8b1dadf74c74018306b2fca4a75",
+      "licence": "Statistics Canada Open Licence"
+    },
+    {
+      "id": "meshmapper-canada-2026-07-12",
+      "role": "Primary community boundary and identity evidence",
+      "url": "https://meshmapper.net/",
+      "file": "meshmapper-canada-regions.json",
+      "sha256": "88a77c3b68809f95f1ee9de69f87da4f92ab2c6f966859e3eae3b93feab28d94",
+      "licence": "Source attribution retained in NOTICE.txt"
+    },
+    {
+      "id": "canada-meshcore-region-strategy-v1.1.1",
+      "role": "User and community parent-child preferences, names, tags, and seeds",
+      "file": "CanadaMeshCoreRegionStrategyv1.1.1.pdf",
+      "sha256": "9f32d71d2656cfa3abfda4736c3ddb64d1b6e7c5d4e88a7d55b63424f9353a3b"
+    }
+  ]
+}

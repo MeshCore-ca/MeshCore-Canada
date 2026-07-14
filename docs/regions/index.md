@@ -11,4 +11,4 @@ Find the right region for a repeater, follow the setup guide, explore the map, o
 
 <noscript>This tool needs JavaScript. You can still review the [region strategy discussion](https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54).</noscript>
 
-<small>Draft v1.1.1. [MeshMapper](https://meshmapper.net/) source polygons are shown where available; other areas are approximate. Read the [region definition and authority standard](standard.md). [Data sources and licences](../assets/regions/NOTICE.txt). [Share feedback](https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54/46).</small>
+<small>Every Canadian location belongs to one region. Choose a province or larger region to see its subregions. [MeshMapper](https://meshmapper.net/) and community feedback helped shape the boundaries. Read the [region standard](standard.md), see the [data sources](../assets/regions/NOTICE.txt), or [share feedback](https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54/46).</small>

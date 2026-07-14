@@ -21,10 +21,15 @@ jobs:
           python-version: "3.x"
 
       - name: Install documentation dependencies
-        run: pip install mkdocs-material mkdocs-macros-plugin pyyaml mkdocs-glightbox pymdown-extensions
+        run: pip install mkdocs-material mkdocs-macros-plugin pyyaml mkdocs-glightbox pymdown-extensions shapely==2.0.6
 
-      - name: Validate prototype catalog and onboarding
+      - name: Validate exclusive national partition
         run: node scripts/validate-regions.js
+
+      - name: Verify generated geometry
+        run: |
+          python scripts/verify-region-geometry.py
+          python scripts/verify-region-geometry.py --partition docs/assets/regions/canada-region-partition-digital.geojson
 
       - name: Build documentation
         run: mkdocs build --strict

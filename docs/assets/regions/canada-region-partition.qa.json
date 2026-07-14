@@ -1,0 +1,3113 @@
+{
+  "artifactHashes": {
+    "digitalPartitionSha256": "78b8326034b02e695ef8a57a0f0cf9039ea3c6f2996c3662460badec9dd8e28a",
+    "membershipSha256": "b90b262daefd0f0ebc574184a772d77cf759bd3a64837c94fa9885ee3c99d2e0",
+    "partitionSha256": "51be08633bd0f445f82bae2dddb75708cfe01dab8b5e938940a4e4e9a5520399"
+  },
+  "assignmentCounts": {
+    "meshmapper-partition:xcm": 885,
+    "meshmapper-partition:xph": 438,
+    "meshmapper-partition:ybl": 75,
+    "meshmapper-partition:ycd": 322,
+    "meshmapper-partition:yeg": 2811,
+    "meshmapper-partition:ygk": 417,
+    "meshmapper-partition:yka": 176,
+    "meshmapper-partition:ykf": 1566,
+    "meshmapper-partition:ylk": 1027,
+    "meshmapper-partition:yml": 243,
+    "meshmapper-partition:yow": 1962,
+    "meshmapper-partition:ypa": 82,
+    "meshmapper-partition:yqa": 258,
+    "meshmapper-partition:yqb": 2832,
+    "meshmapper-partition:yqf": 104,
+    "meshmapper-partition:yql": 477,
+    "meshmapper-partition:yqq": 115,
+    "meshmapper-partition:yse": 33,
+    "meshmapper-partition:yta": 128,
+    "meshmapper-partition:ytf": 521,
+    "meshmapper-partition:ytr": 338,
+    "meshmapper-partition:yul": 8406,
+    "meshmapper-partition:yvr": 4171,
+    "meshmapper-partition:ywg": 1685,
+    "meshmapper-partition:yws": 36,
+    "meshmapper-partition:yyc": 2161,
+    "meshmapper-partition:yyj": 736,
+    "meshmapper-partition:yyz": 10300,
+    "nearest-seed-within-er": 15438,
+    "seed-anchor": 193
+  },
+  "digitalCoverage": {
+    "absoluteAreaDifferenceSquareMetres": 0.017578,
+    "partitionAreaSquareMetres": 13832644466413.22,
+    "sourceAtomAreaSquareMetres": 13832644466413.203,
+    "sourceAtomCount": 57936,
+    "sourceUnionPreserved": true
+  },
+  "digitalGeometry": {
+    "emptyLeafGeometries": 0,
+    "invalidLeafGeometries": 0,
+    "positiveAreaOverlapPairs": 0,
+    "positiveAreaOverlapSquareMetres": 0.0
+  },
+  "displayCoverage": {
+    "absoluteAreaDifferenceSquareMetres": 0.003906,
+    "partitionAreaSquareMetres": 9547211951411.566,
+    "sourceAtomAreaSquareMetres": 9547211951411.57,
+    "sourceAtomCount": 57932,
+    "sourceUnionPreserved": true
+  },
+  "displaySimplification": {
+    "clean": true,
+    "coordinatePrecision": 1e-06,
+    "jointTopology": true,
+    "keepShapes": true,
+    "method": "weighted-visvalingam",
+    "retainedVertices": "2%",
+    "tool": "mapshaper",
+    "version": "0.6.113"
+  },
+  "fallbackEconomicRegions": [],
+  "generator": "scripts/generate-region-partition.py",
+  "inputHashes": {
+    "cartographicDaShapefileSha256": "4010832d9b8777a1078a5e78302aa470bcf6b72f8e615c6938a46e4d416c7aa3",
+    "catalogCanonicalSha256": "77dd03d5ffade075d34997f5daad0f17662fe5b3856f1bc9e6ad7c397be1fa12",
+    "digitalDaShapefileSha256": "33ad62d3acdfa3f5894330c83373560ec2d01b60c3e324f22d001cf902304c66",
+    "economicRegionShapefileSha256": "786a98e5159148b98fdb824bb6ce3e237e8b745ca81b15062e12813796f927c5",
+    "generatorConfigSha256": "a6cb8647a6d0ea106c5edf111148c398938355613bb79261ede7c2b4a9f3921d",
+    "meshMapperCanonicalSha256": "60a0df1478d2a005ff2a518340297869e48fd5140fcfbe55ba51def0ebb190a9",
+    "sourceLockSha256": "3691f38a51c824aff52c9f9c9895d5cbd35c50246cee2a993007bae5e96c4528"
+  },
+  "invariants": {
+    "crossJurisdictionAssignments": 0,
+    "displayGeometryVerified": true,
+    "displaySeedsResolvedExactlyOnce": 193,
+    "emptyLeafGeometries": 0,
+    "everyDigitalDaAssignedExactlyOnce": true,
+    "everyLeafOwnsAtLeastOneDa": true,
+    "invalidLeafGeometries": 0,
+    "meshMapperMacroEnvelopesSubdivided": true,
+    "positiveAreaOverlapPairs": 0,
+    "positiveAreaOverlapSquareMetres": 0.0,
+    "seedAnchorsResolvedExactlyOnce": 193
+  },
+  "leafStats": {
+    "abt": {
+      "allowedErCodes": [
+        "2465"
+      ],
+      "areaSquareKilometres": 65190.355,
+      "cartographicDaCount": 300,
+      "componentCount": 1,
+      "digitalDaCount": 300,
+      "jurisdiction": "qc",
+      "parent": "qc",
+      "registryId": "ca-qc-abt",
+      "seedClearanceKilometres": 37.177
+    },
+    "acrd": {
+      "allowedErCodes": [
+        "5910"
+      ],
+      "areaSquareKilometres": 9253.678,
+      "cartographicDaCount": 45,
+      "componentCount": 2,
+      "digitalDaCount": 45,
+      "jurisdiction": "bc",
+      "parent": "bc",
+      "registryId": "ca-bc-acrd",
+      "seedClearanceKilometres": 31.482
+    },
+    "aga": {
+      "allowedErCodes": [
+        "3590"
+      ],
+      "areaSquareKilometres": 37780.869,
+      "cartographicDaCount": 218,
+      "componentCount": 5,
+      "digitalDaCount": 218,
+      "jurisdiction": "on",
+      "parent": "on-ne",
+      "registryId": "ca-on-aga",
+      "seedClearanceKilometres": 1.588
+    },
+    "alb": {
+      "allowedErCodes": [
+        "1320"
+      ],
+      "areaSquareKilometres": 2537.518,
+      "cartographicDaCount": 21,
+      "componentCount": 1,
+      "digitalDaCount": 21,
+      "jurisdiction": "nb",
+      "parent": "nb",
+      "registryId": "ca-nb-alb",
+      "seedClearanceKilometres": 19.081
+    },
+    "anna": {
+      "allowedErCodes": [
+        "1230"
+      ],
+      "areaSquareKilometres": 3755.247,
+      "cartographicDaCount": 40,
+      "componentCount": 1,
+      "digitalDaCount": 40,
+      "jurisdiction": "ns",
+      "parent": "ns",
+      "registryId": "ca-ns-anna",
+      "seedClearanceKilometres": 26.924
+    },
+    "anti": {
+      "allowedErCodes": [
+        "1220"
+      ],
+      "areaSquareKilometres": 3793.04,
+      "cartographicDaCount": 47,
+      "componentCount": 1,
+      "digitalDaCount": 47,
+      "jurisdiction": "ns",
+      "parent": "ns",
+      "registryId": "ca-ns-anti",
+      "seedClearanceKilometres": 14.486
+    },
+    "avalon": {
+      "allowedErCodes": [
+        "1010"
+      ],
+      "areaSquareKilometres": 15717.336,
+      "cartographicDaCount": 490,
+      "componentCount": 1,
+      "digitalDaCount": 490,
+      "jurisdiction": "nl",
+      "parent": "nl",
+      "registryId": "ca-nl-avalon",
+      "seedClearanceKilometres": 8.314
+    },
+    "bonav": {
+      "allowedErCodes": [
+        "1040"
+      ],
+      "areaSquareKilometres": 10596.065,
+      "cartographicDaCount": 60,
+      "componentCount": 1,
+      "digitalDaCount": 60,
+      "jurisdiction": "nl",
+      "parent": "nl",
+      "registryId": "ca-nl-bonav",
+      "seedClearanceKilometres": 14.839
+    },
+    "bra": {
+      "allowedErCodes": [
+        "3550"
+      ],
+      "areaSquareKilometres": 1368.247,
+      "cartographicDaCount": 254,
+      "componentCount": 1,
+      "digitalDaCount": 254,
+      "jurisdiction": "on",
+      "parent": "on-ham",
+      "registryId": "ca-on-bra",
+      "seedClearanceKilometres": 9.722
+    },
+    "bru": {
+      "allowedErCodes": [
+        "3580"
+      ],
+      "areaSquareKilometres": 2909.457,
+      "cartographicDaCount": 90,
+      "componentCount": 2,
+      "digitalDaCount": 90,
+      "jurisdiction": "on",
+      "parent": "on-shur",
+      "registryId": "ca-on-bru",
+      "seedClearanceKilometres": 7.663
+    },
+    "bsl": {
+      "allowedErCodes": [
+        "2415"
+      ],
+      "areaSquareKilometres": 26534.489,
+      "cartographicDaCount": 371,
+      "componentCount": 1,
+      "digitalDaCount": 371,
+      "jurisdiction": "qc",
+      "parent": "qc",
+      "registryId": "ca-qc-bsl",
+      "seedClearanceKilometres": 22.759
+    },
+    "btlfd": {
+      "allowedErCodes": [
+        "4750"
+      ],
+      "areaSquareKilometres": 18534.037,
+      "cartographicDaCount": 122,
+      "componentCount": 2,
+      "digitalDaCount": 122,
+      "jurisdiction": "sk",
+      "parent": "sk",
+      "registryId": "ca-sk-btlfd",
+      "seedClearanceKilometres": 2.357
+    },
+    "burin": {
+      "allowedErCodes": [
+        "1020"
+      ],
+      "areaSquareKilometres": 33557.437,
+      "cartographicDaCount": 81,
+      "componentCount": 1,
+      "digitalDaCount": 81,
+      "jurisdiction": "nl",
+      "parent": "nl",
+      "registryId": "ca-nl-burin",
+      "seedClearanceKilometres": 26.472
+    },
+    "cal": {
+      "allowedErCodes": [
+        "4810",
+        "4820",
+        "4830",
+        "4840"
+      ],
+      "areaSquareKilometres": 18095.245,
+      "cartographicDaCount": 2058,
+      "componentCount": 2,
+      "digitalDaCount": 2058,
+      "jurisdiction": "ab",
+      "parent": "ab",
+      "registryId": "ca-ab-cal",
+      "seedClearanceKilometres": 43.065
+    },
+    "cam": {
+      "allowedErCodes": [
+        "4820"
+      ],
+      "areaSquareKilometres": 29673.634,
+      "cartographicDaCount": 161,
+      "componentCount": 2,
+      "digitalDaCount": 161,
+      "jurisdiction": "ab",
+      "parent": "ab",
+      "registryId": "ca-ab-cam",
+      "seedClearanceKilometres": 15.53
+    },
+    "capnat": {
+      "allowedErCodes": [
+        "2415",
+        "2420",
+        "2425",
+        "2430",
+        "2433",
+        "2435",
+        "2450",
+        "2470",
+        "2475",
+        "2480"
+      ],
+      "areaSquareKilometres": 30598.502,
+      "cartographicDaCount": 1565,
+      "componentCount": 3,
+      "digitalDaCount": 1565,
+      "jurisdiction": "qc",
+      "parent": "qc",
+      "registryId": "ca-qc-capnat",
+      "seedClearanceKilometres": 5.441
+    },
+    "carl": {
+      "allowedErCodes": [
+        "1350"
+      ],
+      "areaSquareKilometres": 3781.496,
+      "cartographicDaCount": 56,
+      "componentCount": 1,
+      "digitalDaCount": 56,
+      "jurisdiction": "nb",
+      "parent": "nb",
+      "registryId": "ca-nb-carl",
+      "seedClearanceKilometres": 21.705
+    },
+    "cb": {
+      "allowedErCodes": [
+        "1210"
+      ],
+      "areaSquareKilometres": 3180.967,
+      "cartographicDaCount": 190,
+      "componentCount": 1,
+      "digitalDaCount": 190,
+      "jurisdiction": "ns",
+      "parent": "ns",
+      "registryId": "ca-ns-cb",
+      "seedClearanceKilometres": 10.466
+    },
+    "cbrd": {
+      "allowedErCodes": [
+        "5950"
+      ],
+      "areaSquareKilometres": 72346.846,
+      "cartographicDaCount": 180,
+      "componentCount": 1,
+      "digitalDaCount": 180,
+      "jurisdiction": "bc",
+      "parent": "bc",
+      "registryId": "ca-bc-cbrd",
+      "seedClearanceKilometres": 67.765
+    },
+    "ccrd": {
+      "allowedErCodes": [
+        "5910"
+      ],
+      "areaSquareKilometres": 35436.249,
+      "cartographicDaCount": 9,
+      "componentCount": 1,
+      "digitalDaCount": 9,
+      "jurisdiction": "bc",
+      "parent": "bc",
+      "registryId": "ca-bc-ccrd",
+      "seedClearanceKilometres": 67.36
+    },
+    "cent": {
+      "allowedErCodes": [
+        "1040"
+      ],
+      "areaSquareKilometres": 46372.074,
+      "cartographicDaCount": 192,
+      "componentCount": 3,
+      "digitalDaCount": 192,
+      "jurisdiction": "nl",
+      "parent": "nl",
+      "registryId": "ca-nl-cent",
+      "seedClearanceKilometres": 36.638
+    },
+    "chapp": {
+      "allowedErCodes": [
+        "2425"
+      ],
+      "areaSquareKilometres": 13933.082,
+      "cartographicDaCount": 436,
+      "componentCount": 1,
+      "digitalDaCount": 436,
+      "jurisdiction": "qc",
+      "parent": "qc",
+      "registryId": "ca-qc-chapp",
+      "seedClearanceKilometres": 8.075
+    },
+    "charl": {
+      "allowedErCodes": [
+        "1330"
+      ],
+      "areaSquareKilometres": 5118.545,
+      "cartographicDaCount": 56,
+      "componentCount": 1,
+      "digitalDaCount": 56,
+      "jurisdiction": "nb",
+      "parent": "nb",
+      "registryId": "ca-nb-charl",
+      "seedClearanceKilometres": 19.127
+    },
+    "chk": {
+      "allowedErCodes": [
+        "3570"
+      ],
+      "areaSquareKilometres": 4670.473,
+      "cartographicDaCount": 297,
+      "componentCount": 1,
+      "digitalDaCount": 297,
+      "jurisdiction": "on",
+      "parent": "on-sw",
+      "registryId": "ca-on-chk",
+      "seedClearanceKilometres": 21.551
+    },
+    "chur": {
+      "allowedErCodes": [
+        "4680"
+      ],
+      "areaSquareKilometres": 2248.557,
+      "cartographicDaCount": 5,
+      "componentCount": 4,
+      "digitalDaCount": 5,
+      "jurisdiction": "mb",
+      "parent": "mb",
+      "registryId": "ca-mb-chur",
+      "seedClearanceKilometres": 0.44
+    },
+    "cnord": {
+      "allowedErCodes": [
+        "2480"
+      ],
+      "areaSquareKilometres": 311941.966,
+      "cartographicDaCount": 193,
+      "componentCount": 3,
+      "digitalDaCount": 193,
+      "jurisdiction": "qc",
+      "parent": "qc",
+      "registryId": "ca-qc-cnord",
+      "seedClearanceKilometres": 59.247
+    },
+    "coc": {
+      "allowedErCodes": [
+        "3590"
+      ],
+      "areaSquareKilometres": 174069.624,
+      "cartographicDaCount": 162,
+      "componentCount": 2,
+      "digitalDaCount": 162,
+      "jurisdiction": "on",
+      "parent": "on-ne",
+      "registryId": "ca-on-coc",
+      "seedClearanceKilometres": 92.381
+    },
+    "col": {
+      "allowedErCodes": [
+        "1220"
+      ],
+      "areaSquareKilometres": 4888.44,
+      "cartographicDaCount": 98,
+      "componentCount": 1,
+      "digitalDaCount": 98,
+      "jurisdiction": "ns",
+      "parent": "ns",
+      "registryId": "ca-ns-col",
+      "seedClearanceKilometres": 17.145
+    },
+    "coldlk": {
+      "allowedErCodes": [
+        "4880"
+      ],
+      "areaSquareKilometres": 24194.663,
+      "cartographicDaCount": 116,
+      "componentCount": 1,
+      "digitalDaCount": 116,
+      "jurisdiction": "ab",
+      "parent": "ab",
+      "registryId": "ca-ab-coldlk",
+      "seedClearanceKilometres": 11.923
+    },
+    "cqc": {
+      "allowedErCodes": [
+        "2433"
+      ],
+      "areaSquareKilometres": 7437.369,
+      "cartographicDaCount": 459,
+      "componentCount": 1,
+      "digitalDaCount": 459,
+      "jurisdiction": "qc",
+      "parent": "qc",
+      "registryId": "ca-qc-cqc",
+      "seedClearanceKilometres": 22.721
+    },
+    "crd": {
+      "allowedErCodes": [
+        "5910"
+      ],
+      "areaSquareKilometres": 3330.518,
+      "cartographicDaCount": 630,
+      "componentCount": 2,
+      "digitalDaCount": 630,
+      "jurisdiction": "bc",
+      "parent": "bc",
+      "registryId": "ca-bc-crd",
+      "seedClearanceKilometres": 14.62
+    },
+    "csrd": {
+      "allowedErCodes": [
+        "5930"
+      ],
+      "areaSquareKilometres": 39797.665,
+      "cartographicDaCount": 35,
+      "componentCount": 1,
+      "digitalDaCount": 35,
+      "jurisdiction": "bc",
+      "parent": "bc",
+      "registryId": "ca-bc-csrd",
+      "seedClearanceKilometres": 63.054
+    },
+    "cumb": {
+      "allowedErCodes": [
+        "1220"
+      ],
+      "areaSquareKilometres": 6061.779,
+      "cartographicDaCount": 62,
+      "componentCount": 1,
+      "digitalDaCount": 62,
+      "jurisdiction": "ns",
+      "parent": "ns",
+      "registryId": "ca-ns-cumb",
+      "seedClearanceKilometres": 17.924
+    },
+    "cvrd": {
+      "allowedErCodes": [
+        "5910"
+      ],
+      "areaSquareKilometres": 5318.463,
+      "cartographicDaCount": 111,
+      "componentCount": 3,
+      "digitalDaCount": 111,
+      "jurisdiction": "bc",
+      "parent": "bc",
+      "registryId": "ca-bc-cvrd",
+      "seedClearanceKilometres": 16.603
+    },
+    "cxrd": {
+      "allowedErCodes": [
+        "5910"
+      ],
+      "areaSquareKilometres": 3413.732,
+      "cartographicDaCount": 121,
+      "componentCount": 2,
+      "digitalDaCount": 121,
+      "jurisdiction": "bc",
+      "parent": "bc",
+      "registryId": "ca-bc-cxrd",
+      "seedClearanceKilometres": 12.894
+    },
+    "dawson": {
+      "allowedErCodes": [
+        "6010"
+      ],
+      "areaSquareKilometres": 207920.755,
+      "cartographicDaCount": 5,
+      "componentCount": 1,
+      "digitalDaCount": 5,
+      "jurisdiction": "yt",
+      "parent": "yt",
+      "registryId": "ca-yt-dawson",
+      "seedClearanceKilometres": 74.388
+    },
+    "dehcho": {
+      "allowedErCodes": [
+        "6110"
+      ],
+      "areaSquareKilometres": 195542.314,
+      "cartographicDaCount": 9,
+      "componentCount": 1,
+      "digitalDaCount": 9,
+      "jurisdiction": "nt",
+      "parent": "nt",
+      "registryId": "ca-nt-dehcho",
+      "seedClearanceKilometres": 124.232
+    },
+    "dig": {
+      "allowedErCodes": [
+        "1240"
+      ],
+      "areaSquareKilometres": 3740.365,
+      "cartographicDaCount": 37,
+      "componentCount": 1,
+      "digitalDaCount": 37,
+      "jurisdiction": "ns",
+      "parent": "ns",
+      "registryId": "ca-ns-dig",
+      "seedClearanceKilometres": 24.597
+    },
+    "drum": {
+      "allowedErCodes": [
+        "4820"
+      ],
+      "areaSquareKilometres": 17246.0,
+      "cartographicDaCount": 56,
+      "componentCount": 5,
+      "digitalDaCount": 56,
+      "jurisdiction": "ab",
+      "parent": "ab",
+      "registryId": "ca-ab-drum",
+      "seedClearanceKilometres": 4.039
+    },
+    "duf": {
+      "allowedErCodes": [
+        "3540"
+      ],
+      "areaSquareKilometres": 2745.741,
+      "cartographicDaCount": 183,
+      "componentCount": 1,
+      "digitalDaCount": 183,
+      "jurisdiction": "on",
+      "parent": "on-ktw",
+      "registryId": "ca-on-duf",
+      "seedClearanceKilometres": 0.659
+    },
+    "dur": {
+      "allowedErCodes": [
+        "3530"
+      ],
+      "areaSquareKilometres": 2017.157,
+      "cartographicDaCount": 970,
+      "componentCount": 1,
+      "digitalDaCount": 970,
+      "jurisdiction": "on",
+      "parent": "gta",
+      "registryId": "ca-on-dur",
+      "seedClearanceKilometres": 5.23
+    },
+    "edm": {
+      "allowedErCodes": [
+        "4820",
+        "4840",
+        "4850",
+        "4860",
+        "4870",
+        "4880"
+      ],
+      "areaSquareKilometres": 49088.887,
+      "cartographicDaCount": 2102,
+      "componentCount": 3,
+      "digitalDaCount": 2102,
+      "jurisdiction": "ab",
+      "parent": "ab",
+      "registryId": "ca-ab-edm",
+      "seedClearanceKilometres": 35.437
+    },
+    "elg": {
+      "allowedErCodes": [
+        "3560"
+      ],
+      "areaSquareKilometres": 3820.585,
+      "cartographicDaCount": 174,
+      "componentCount": 1,
+      "digitalDaCount": 174,
+      "jurisdiction": "on",
+      "parent": "on-sw",
+      "registryId": "ca-on-elg",
+      "seedClearanceKilometres": 12.906
+    },
+    "eman": {
+      "allowedErCodes": [
+        "4610"
+      ],
+      "areaSquareKilometres": 17301.13,
+      "cartographicDaCount": 119,
+      "componentCount": 1,
+      "digitalDaCount": 119,
+      "jurisdiction": "mb",
+      "parent": "mb",
+      "registryId": "ca-mb-eman",
+      "seedClearanceKilometres": 22.336
+    },
+    "estrie": {
+      "allowedErCodes": [
+        "2430"
+      ],
+      "areaSquareKilometres": 10834.442,
+      "cartographicDaCount": 541,
+      "componentCount": 1,
+      "digitalDaCount": 541,
+      "jurisdiction": "qc",
+      "parent": "qc",
+      "registryId": "ca-qc-estrie",
+      "seedClearanceKilometres": 38.081
+    },
+    "estvn": {
+      "allowedErCodes": [
+        "4710"
+      ],
+      "areaSquareKilometres": 15350.981,
+      "cartographicDaCount": 83,
+      "componentCount": 3,
+      "digitalDaCount": 83,
+      "jurisdiction": "sk",
+      "parent": "sk",
+      "registryId": "ca-sk-estvn",
+      "seedClearanceKilometres": 15.936
+    },
+    "esx": {
+      "allowedErCodes": [
+        "3570"
+      ],
+      "areaSquareKilometres": 3433.183,
+      "cartographicDaCount": 651,
+      "componentCount": 1,
+      "digitalDaCount": 651,
+      "jurisdiction": "on",
+      "parent": "on-sw",
+      "registryId": "ca-on-esx",
+      "seedClearanceKilometres": 1.088
+    },
+    "frt": {
+      "allowedErCodes": [
+        "3510",
+        "3515"
+      ],
+      "areaSquareKilometres": 3565.368,
+      "cartographicDaCount": 267,
+      "componentCount": 1,
+      "digitalDaCount": 267,
+      "jurisdiction": "on",
+      "parent": "on-se",
+      "registryId": "ca-on-frt",
+      "seedClearanceKilometres": 14.409
+    },
+    "ftmac": {
+      "allowedErCodes": [
+        "4880"
+      ],
+      "areaSquareKilometres": 103912.789,
+      "cartographicDaCount": 151,
+      "componentCount": 1,
+      "digitalDaCount": 151,
+      "jurisdiction": "ab",
+      "parent": "ab",
+      "registryId": "ca-ab-ftmac",
+      "seedClearanceKilometres": 73.247
+    },
+    "fvrd": {
+      "allowedErCodes": [
+        "5920"
+      ],
+      "areaSquareKilometres": 10370.914,
+      "cartographicDaCount": 1080,
+      "componentCount": 9,
+      "digitalDaCount": 1080,
+      "jurisdiction": "bc",
+      "parent": "bc",
+      "registryId": "ca-bc-fvrd",
+      "seedClearanceKilometres": 2.33
+    },
+    "gasp": {
+      "allowedErCodes": [
+        "2410"
+      ],
+      "areaSquareKilometres": 24334.978,
+      "cartographicDaCount": 189,
+      "componentCount": 2,
+      "digitalDaCount": 189,
+      "jurisdiction": "qc",
+      "parent": "qc",
+      "registryId": "ca-qc-gasp",
+      "seedClearanceKilometres": 25.257
+    },
+    "gatout": {
+      "allowedErCodes": [
+        "2460"
+      ],
+      "areaSquareKilometres": 34786.44,
+      "cartographicDaCount": 606,
+      "componentCount": 1,
+      "digitalDaCount": 606,
+      "jurisdiction": "qc",
+      "parent": "qc",
+      "registryId": "ca-qc-gatout",
+      "seedClearanceKilometres": 1.678
+    },
+    "glouc": {
+      "allowedErCodes": [
+        "1310"
+      ],
+      "areaSquareKilometres": 9198.073,
+      "cartographicDaCount": 201,
+      "componentCount": 1,
+      "digitalDaCount": 201,
+      "jurisdiction": "nb",
+      "parent": "nb",
+      "registryId": "ca-nb-glouc",
+      "seedClearanceKilometres": 9.372
+    },
+    "gry": {
+      "allowedErCodes": [
+        "3580"
+      ],
+      "areaSquareKilometres": 10007.85,
+      "cartographicDaCount": 176,
+      "componentCount": 1,
+      "digitalDaCount": 176,
+      "jurisdiction": "on",
+      "parent": "on-shur",
+      "registryId": "ca-on-gry",
+      "seedClearanceKilometres": 17.154
+    },
+    "gsu": {
+      "allowedErCodes": [
+        "3590"
+      ],
+      "areaSquareKilometres": 28589.301,
+      "cartographicDaCount": 289,
+      "componentCount": 2,
+      "digitalDaCount": 289,
+      "jurisdiction": "on",
+      "parent": "on-ne",
+      "registryId": "ca-on-gsu",
+      "seedClearanceKilometres": 33.919
+    },
+    "guys": {
+      "allowedErCodes": [
+        "1220"
+      ],
+      "areaSquareKilometres": 5227.621,
+      "cartographicDaCount": 13,
+      "componentCount": 1,
+      "digitalDaCount": 13,
+      "jurisdiction": "ns",
+      "parent": "ns",
+      "registryId": "ca-ns-guys",
+      "seedClearanceKilometres": 21.61
+    },
+    "hald": {
+      "allowedErCodes": [
+        "3550"
+      ],
+      "areaSquareKilometres": 2258.435,
+      "cartographicDaCount": 106,
+      "componentCount": 1,
+      "digitalDaCount": 106,
+      "jurisdiction": "on",
+      "parent": "on-ham",
+      "registryId": "ca-on-hald",
+      "seedClearanceKilometres": 16.118
+    },
+    "ham": {
+      "allowedErCodes": [
+        "3550"
+      ],
+      "areaSquareKilometres": 1568.627,
+      "cartographicDaCount": 1225,
+      "componentCount": 1,
+      "digitalDaCount": 1225,
+      "jurisdiction": "on",
+      "parent": "on-ham",
+      "registryId": "ca-on-ham",
+      "seedClearanceKilometres": 8.063
+    },
+    "hants": {
+      "allowedErCodes": [
+        "1230"
+      ],
+      "areaSquareKilometres": 3431.919,
+      "cartographicDaCount": 69,
+      "componentCount": 2,
+      "digitalDaCount": 69,
+      "jurisdiction": "ns",
+      "parent": "ns",
+      "registryId": "ca-ns-hants",
+      "seedClearanceKilometres": 18.987
+    },
+    "has": {
+      "allowedErCodes": [
+        "3515",
+        "3520"
+      ],
+      "areaSquareKilometres": 4934.588,
+      "cartographicDaCount": 224,
+      "componentCount": 1,
+      "digitalDaCount": 224,
+      "jurisdiction": "on",
+      "parent": "on-se",
+      "registryId": "ca-on-has",
+      "seedClearanceKilometres": 11.735
+    },
+    "hfx": {
+      "allowedErCodes": [
+        "1250"
+      ],
+      "areaSquareKilometres": 7888.622,
+      "cartographicDaCount": 610,
+      "componentCount": 2,
+      "digitalDaCount": 610,
+      "jurisdiction": "ns",
+      "parent": "ns",
+      "registryId": "ca-ns-hfx",
+      "seedClearanceKilometres": 6.076
+    },
+    "hlb": {
+      "allowedErCodes": [
+        "3520"
+      ],
+      "areaSquareKilometres": 5454.954,
+      "cartographicDaCount": 28,
+      "componentCount": 1,
+      "digitalDaCount": 28,
+      "jurisdiction": "on",
+      "parent": "on-lsim",
+      "registryId": "ca-on-hlb",
+      "seedClearanceKilometres": 23.201
+    },
+    "hlvl": {
+      "allowedErCodes": [
+        "4870"
+      ],
+      "areaSquareKilometres": 118038.834,
+      "cartographicDaCount": 60,
+      "componentCount": 1,
+      "digitalDaCount": 60,
+      "jurisdiction": "ab",
+      "parent": "ab",
+      "registryId": "ca-ab-hlvl",
+      "seedClearanceKilometres": 136.255
+    },
+    "htn": {
+      "allowedErCodes": [
+        "3530"
+      ],
+      "areaSquareKilometres": 931.671,
+      "cartographicDaCount": 1016,
+      "componentCount": 1,
+      "digitalDaCount": 1016,
+      "jurisdiction": "on",
+      "parent": "gta",
+      "registryId": "ca-on-htn",
+      "seedClearanceKilometres": 6.512
+    },
+    "humber": {
+      "allowedErCodes": [
+        "1030"
+      ],
+      "areaSquareKilometres": 17737.318,
+      "cartographicDaCount": 94,
+      "componentCount": 3,
+      "digitalDaCount": 94,
+      "jurisdiction": "nl",
+      "parent": "nl",
+      "registryId": "ca-nl-humber",
+      "seedClearanceKilometres": 29.673
+    },
+    "hur": {
+      "allowedErCodes": [
+        "3580"
+      ],
+      "areaSquareKilometres": 3490.988,
+      "cartographicDaCount": 108,
+      "componentCount": 1,
+      "digitalDaCount": 108,
+      "jurisdiction": "on",
+      "parent": "on-shur",
+      "registryId": "ca-on-hur",
+      "seedClearanceKilometres": 2.249
+    },
+    "hvgb": {
+      "allowedErCodes": [
+        "1030"
+      ],
+      "areaSquareKilometres": 114246.145,
+      "cartographicDaCount": 24,
+      "componentCount": 2,
+      "digitalDaCount": 24,
+      "jurisdiction": "nl",
+      "parent": "nl",
+      "registryId": "ca-nl-hvgb",
+      "seedClearanceKilometres": 57.03
+    },
+    "ilake": {
+      "allowedErCodes": [
+        "4660"
+      ],
+      "areaSquareKilometres": 16880.51,
+      "cartographicDaCount": 78,
+      "componentCount": 1,
+      "digitalDaCount": 78,
+      "jurisdiction": "mb",
+      "parent": "mb",
+      "registryId": "ca-mb-ilake",
+      "seedClearanceKilometres": 0.308
+    },
+    "inuvik": {
+      "allowedErCodes": [
+        "6110"
+      ],
+      "areaSquareKilometres": 1585431.327,
+      "cartographicDaCount": 17,
+      "componentCount": 1,
+      "digitalDaCount": 17,
+      "jurisdiction": "nt",
+      "parent": "nt",
+      "registryId": "ca-nt-inuvik",
+      "seedClearanceKilometres": 119.611
+    },
+    "inv": {
+      "allowedErCodes": [
+        "1210"
+      ],
+      "areaSquareKilometres": 3293.934,
+      "cartographicDaCount": 29,
+      "componentCount": 1,
+      "digitalDaCount": 29,
+      "jurisdiction": "ns",
+      "parent": "ns",
+      "registryId": "ca-ns-inv",
+      "seedClearanceKilometres": 11.421
+    },
+    "kaw": {
+      "allowedErCodes": [
+        "3520"
+      ],
+      "areaSquareKilometres": 3558.495,
+      "cartographicDaCount": 109,
+      "componentCount": 1,
+      "digitalDaCount": 109,
+      "jurisdiction": "on",
+      "parent": "on-lsim",
+      "registryId": "ca-on-kaw",
+      "seedClearanceKilometres": 14.244
+    },
+    "ken": {
+      "allowedErCodes": [
+        "3595"
+      ],
+      "areaSquareKilometres": 47616.5,
+      "cartographicDaCount": 172,
+      "componentCount": 36,
+      "digitalDaCount": 172,
+      "jurisdiction": "on",
+      "parent": "on-nw",
+      "registryId": "ca-on-ken",
+      "seedClearanceKilometres": 8.59
+    },
+    "kent": {
+      "allowedErCodes": [
+        "1320"
+      ],
+      "areaSquareKilometres": 4407.763,
+      "cartographicDaCount": 49,
+      "componentCount": 1,
+      "digitalDaCount": 49,
+      "jurisdiction": "nb",
+      "parent": "nb",
+      "registryId": "ca-nb-kent",
+      "seedClearanceKilometres": 25.471
+    },
+    "kings-nb": {
+      "allowedErCodes": [
+        "1330"
+      ],
+      "areaSquareKilometres": 3666.564,
+      "cartographicDaCount": 59,
+      "componentCount": 1,
+      "digitalDaCount": 59,
+      "jurisdiction": "nb",
+      "parent": "nb",
+      "registryId": "ca-nb-kings-nb",
+      "seedClearanceKilometres": 12.138
+    },
+    "kings-ns": {
+      "allowedErCodes": [
+        "1230"
+      ],
+      "areaSquareKilometres": 3219.342,
+      "cartographicDaCount": 121,
+      "componentCount": 1,
+      "digitalDaCount": 121,
+      "jurisdiction": "ns",
+      "parent": "ns",
+      "registryId": "ca-ns-kings-ns",
+      "seedClearanceKilometres": 19.775
+    },
+    "kings-pe": {
+      "allowedErCodes": [
+        "1110"
+      ],
+      "areaSquareKilometres": 3108.503,
+      "cartographicDaCount": 46,
+      "componentCount": 1,
+      "digitalDaCount": 46,
+      "jurisdiction": "pe",
+      "parent": "pe",
+      "registryId": "ca-pe-kings-pe",
+      "seedClearanceKilometres": 18.417
+    },
+    "kitik": {
+      "allowedErCodes": [
+        "6210"
+      ],
+      "areaSquareKilometres": 3882637.182,
+      "cartographicDaCount": 18,
+      "componentCount": 1,
+      "digitalDaCount": 18,
+      "jurisdiction": "nu",
+      "parent": "nu",
+      "registryId": "ca-nu-kitik",
+      "seedClearanceKilometres": 205.829
+    },
+    "kiv": {
+      "allowedErCodes": [
+        "6210"
+      ],
+      "areaSquareKilometres": 856389.415,
+      "cartographicDaCount": 13,
+      "componentCount": 1,
+      "digitalDaCount": 13,
+      "jurisdiction": "nu",
+      "parent": "nu",
+      "registryId": "ca-nu-kiv",
+      "seedClearanceKilometres": 334.725
+    },
+    "kluane": {
+      "allowedErCodes": [
+        "6010"
+      ],
+      "areaSquareKilometres": 165.24,
+      "cartographicDaCount": 10,
+      "componentCount": 7,
+      "digitalDaCount": 10,
+      "jurisdiction": "yt",
+      "parent": "yt",
+      "registryId": "ca-yt-kluane",
+      "seedClearanceKilometres": 0.599
+    },
+    "labw": {
+      "allowedErCodes": [
+        "1030"
+      ],
+      "areaSquareKilometres": 81141.733,
+      "cartographicDaCount": 20,
+      "componentCount": 1,
+      "digitalDaCount": 20,
+      "jurisdiction": "nl",
+      "parent": "nl",
+      "registryId": "ca-nl-labw",
+      "seedClearanceKilometres": 13.794
+    },
+    "lan": {
+      "allowedErCodes": [
+        "3510"
+      ],
+      "areaSquareKilometres": 3891.995,
+      "cartographicDaCount": 149,
+      "componentCount": 1,
+      "digitalDaCount": 149,
+      "jurisdiction": "on",
+      "parent": "on-alg",
+      "registryId": "ca-on-lan",
+      "seedClearanceKilometres": 1.114
+    },
+    "lanau": {
+      "allowedErCodes": [
+        "2450"
+      ],
+      "areaSquareKilometres": 13550.986,
+      "cartographicDaCount": 505,
+      "componentCount": 1,
+      "digitalDaCount": 505,
+      "jurisdiction": "qc",
+      "parent": "qc",
+      "registryId": "ca-qc-lanau",
+      "seedClearanceKilometres": 20.081
+    },
+    "laur": {
+      "allowedErCodes": [
+        "2455"
+      ],
+      "areaSquareKilometres": 22637.47,
+      "cartographicDaCount": 525,
+      "componentCount": 2,
+      "digitalDaCount": 525,
+      "jurisdiction": "qc",
+      "parent": "qc",
+      "registryId": "ca-qc-laur",
+      "seedClearanceKilometres": 12.333
+    },
+    "laval": {
+      "allowedErCodes": [
+        "2445"
+      ],
+      "areaSquareKilometres": 273.539,
+      "cartographicDaCount": 637,
+      "componentCount": 1,
+      "digitalDaCount": 637,
+      "jurisdiction": "qc",
+      "parent": "qc",
+      "registryId": "ca-qc-laval",
+      "seedClearanceKilometres": 4.826
+    },
+    "ldg": {
+      "allowedErCodes": [
+        "3510"
+      ],
+      "areaSquareKilometres": 2316.421,
+      "cartographicDaCount": 106,
+      "componentCount": 1,
+      "digitalDaCount": 106,
+      "jurisdiction": "on",
+      "parent": "on-alg",
+      "registryId": "ca-on-ldg",
+      "seedClearanceKilometres": 1.06
+    },
+    "leth": {
+      "allowedErCodes": [
+        "4810",
+        "4820",
+        "4840"
+      ],
+      "areaSquareKilometres": 35461.761,
+      "cartographicDaCount": 344,
+      "componentCount": 1,
+      "digitalDaCount": 344,
+      "jurisdiction": "ab",
+      "parent": "ab",
+      "registryId": "ca-ab-leth",
+      "seedClearanceKilometres": 71.197
+    },
+    "lloyd-ab": {
+      "allowedErCodes": [
+        "4820"
+      ],
+      "areaSquareKilometres": 16335.134,
+      "cartographicDaCount": 103,
+      "componentCount": 3,
+      "digitalDaCount": 103,
+      "jurisdiction": "ab",
+      "parent": "ab",
+      "registryId": "ca-ab-lloyd-ab",
+      "seedClearanceKilometres": 2.267
+    },
+    "lloyd-sk": {
+      "allowedErCodes": [
+        "4750"
+      ],
+      "areaSquareKilometres": 16671.931,
+      "cartographicDaCount": 103,
+      "componentCount": 3,
+      "digitalDaCount": 103,
+      "jurisdiction": "sk",
+      "parent": "sk",
+      "registryId": "ca-sk-lloyd-sk",
+      "seedClearanceKilometres": 2.335
+    },
+    "lmb": {
+      "allowedErCodes": [
+        "3570"
+      ],
+      "areaSquareKilometres": 3050.686,
+      "cartographicDaCount": 239,
+      "componentCount": 2,
+      "digitalDaCount": 239,
+      "jurisdiction": "on",
+      "parent": "on-sw",
+      "registryId": "ca-on-lmb",
+      "seedClearanceKilometres": 0.606
+    },
+    "lnx": {
+      "allowedErCodes": [
+        "3515"
+      ],
+      "areaSquareKilometres": 4843.522,
+      "cartographicDaCount": 85,
+      "componentCount": 1,
+      "digitalDaCount": 85,
+      "jurisdiction": "on",
+      "parent": "on-se",
+      "registryId": "ca-on-lnx",
+      "seedClearanceKilometres": 10.891
+    },
+    "lun": {
+      "allowedErCodes": [
+        "1240"
+      ],
+      "areaSquareKilometres": 3864.634,
+      "cartographicDaCount": 100,
+      "componentCount": 1,
+      "digitalDaCount": 100,
+      "jurisdiction": "ns",
+      "parent": "ns",
+      "registryId": "ca-ns-lun",
+      "seedClearanceKilometres": 23.617
+    },
+    "mada": {
+      "allowedErCodes": [
+        "1350"
+      ],
+      "areaSquareKilometres": 3341.798,
+      "cartographicDaCount": 71,
+      "componentCount": 1,
+      "digitalDaCount": 71,
+      "jurisdiction": "nb",
+      "parent": "nb",
+      "registryId": "ca-nb-mada",
+      "seedClearanceKilometres": 17.532
+    },
+    "maur": {
+      "allowedErCodes": [
+        "2470"
+      ],
+      "areaSquareKilometres": 36781.851,
+      "cartographicDaCount": 468,
+      "componentCount": 1,
+      "digitalDaCount": 468,
+      "jurisdiction": "qc",
+      "parent": "qc",
+      "registryId": "ca-qc-maur",
+      "seedClearanceKilometres": 2.652
+    },
+    "mayo": {
+      "allowedErCodes": [
+        "6010"
+      ],
+      "areaSquareKilometres": 69119.111,
+      "cartographicDaCount": 6,
+      "componentCount": 2,
+      "digitalDaCount": 6,
+      "jurisdiction": "yt",
+      "parent": "yt",
+      "registryId": "ca-yt-mayo",
+      "seedClearanceKilometres": 28.465
+    },
+    "melft": {
+      "allowedErCodes": [
+        "4750"
+      ],
+      "areaSquareKilometres": 39513.469,
+      "cartographicDaCount": 134,
+      "componentCount": 2,
+      "digitalDaCount": 134,
+      "jurisdiction": "sk",
+      "parent": "sk",
+      "registryId": "ca-sk-melft",
+      "seedClearanceKilometres": 40.731
+    },
+    "mh": {
+      "allowedErCodes": [
+        "4810"
+      ],
+      "areaSquareKilometres": 23246.409,
+      "cartographicDaCount": 160,
+      "componentCount": 2,
+      "digitalDaCount": 160,
+      "jurisdiction": "ab",
+      "parent": "ab",
+      "registryId": "ca-ab-mh",
+      "seedClearanceKilometres": 51.114
+    },
+    "mj": {
+      "allowedErCodes": [
+        "4720"
+      ],
+      "areaSquareKilometres": 21464.512,
+      "cartographicDaCount": 124,
+      "componentCount": 3,
+      "digitalDaCount": 124,
+      "jurisdiction": "sk",
+      "parent": "sk",
+      "registryId": "ca-sk-mj",
+      "seedClearanceKilometres": 16.281
+    },
+    "mnt": {
+      "allowedErCodes": [
+        "3590"
+      ],
+      "areaSquareKilometres": 24392.593,
+      "cartographicDaCount": 78,
+      "componentCount": 1,
+      "digitalDaCount": 78,
+      "jurisdiction": "on",
+      "parent": "on-ne",
+      "registryId": "ca-on-mnt",
+      "seedClearanceKilometres": 27.904
+    },
+    "msx": {
+      "allowedErCodes": [
+        "3560"
+      ],
+      "areaSquareKilometres": 2405.366,
+      "cartographicDaCount": 663,
+      "componentCount": 1,
+      "digitalDaCount": 663,
+      "jurisdiction": "on",
+      "parent": "on-sw",
+      "registryId": "ca-on-msx",
+      "seedClearanceKilometres": 8.453
+    },
+    "mtl": {
+      "allowedErCodes": [
+        "2430",
+        "2433",
+        "2435",
+        "2440",
+        "2445",
+        "2450",
+        "2455",
+        "2460",
+        "2470"
+      ],
+      "areaSquareKilometres": 5295.489,
+      "cartographicDaCount": 5181,
+      "componentCount": 1,
+      "digitalDaCount": 5181,
+      "jurisdiction": "qc",
+      "parent": "qc",
+      "registryId": "ca-qc-mtl",
+      "seedClearanceKilometres": 10.597
+    },
+    "mtrg": {
+      "allowedErCodes": [
+        "2435"
+      ],
+      "areaSquareKilometres": 8133.907,
+      "cartographicDaCount": 1183,
+      "componentCount": 16,
+      "digitalDaCount": 1184,
+      "jurisdiction": "qc",
+      "parent": "qc",
+      "registryId": "ca-qc-mtrg",
+      "seedClearanceKilometres": 12.306
+    },
+    "mus": {
+      "allowedErCodes": [
+        "3515",
+        "3520",
+        "3590"
+      ],
+      "areaSquareKilometres": 15987.51,
+      "cartographicDaCount": 121,
+      "componentCount": 1,
+      "digitalDaCount": 121,
+      "jurisdiction": "on",
+      "parent": "on-lsim",
+      "registryId": "ca-on-mus",
+      "seedClearanceKilometres": 17.271
+    },
+    "mvrd": {
+      "allowedErCodes": [
+        "5910",
+        "5920"
+      ],
+      "areaSquareKilometres": 5795.566,
+      "cartographicDaCount": 3071,
+      "componentCount": 6,
+      "digitalDaCount": 3071,
+      "jurisdiction": "bc",
+      "parent": "bc",
+      "registryId": "ca-bc-mvrd",
+      "seedClearanceKilometres": 22.271
+    },
+    "nain": {
+      "allowedErCodes": [
+        "1030"
+      ],
+      "areaSquareKilometres": 86439.727,
+      "cartographicDaCount": 7,
+      "componentCount": 2,
+      "digitalDaCount": 7,
+      "jurisdiction": "nl",
+      "parent": "nl",
+      "registryId": "ca-nl-nain",
+      "seedClearanceKilometres": 64.385
+    },
+    "ncrd": {
+      "allowedErCodes": [
+        "5960"
+      ],
+      "areaSquareKilometres": 83745.103,
+      "cartographicDaCount": 55,
+      "componentCount": 5,
+      "digitalDaCount": 55,
+      "jurisdiction": "bc",
+      "parent": "bc",
+      "registryId": "ca-bc-ncrd",
+      "seedClearanceKilometres": 44.279
+    },
+    "nia": {
+      "allowedErCodes": [
+        "3550"
+      ],
+      "areaSquareKilometres": 1992.024,
+      "cartographicDaCount": 675,
+      "componentCount": 1,
+      "digitalDaCount": 675,
+      "jurisdiction": "on",
+      "parent": "on-gtha",
+      "registryId": "ca-on-nia",
+      "seedClearanceKilometres": 0.608
+    },
+    "nip": {
+      "allowedErCodes": [
+        "3590"
+      ],
+      "areaSquareKilometres": 5470.745,
+      "cartographicDaCount": 117,
+      "componentCount": 1,
+      "digitalDaCount": 117,
+      "jurisdiction": "on",
+      "parent": "on-ne",
+      "registryId": "ca-on-nip",
+      "seedClearanceKilometres": 3.972
+    },
+    "norf": {
+      "allowedErCodes": [
+        "3550"
+      ],
+      "areaSquareKilometres": 2507.616,
+      "cartographicDaCount": 113,
+      "componentCount": 1,
+      "digitalDaCount": 113,
+      "jurisdiction": "on",
+      "parent": "on-ham",
+      "registryId": "ca-on-norf",
+      "seedClearanceKilometres": 10.836
+    },
+    "npen": {
+      "allowedErCodes": [
+        "1030"
+      ],
+      "areaSquareKilometres": 70723.048,
+      "cartographicDaCount": 45,
+      "componentCount": 1,
+      "digitalDaCount": 45,
+      "jurisdiction": "nl",
+      "parent": "nl",
+      "registryId": "ca-nl-npen",
+      "seedClearanceKilometres": 15.998
+    },
+    "nqc": {
+      "allowedErCodes": [
+        "2490"
+      ],
+      "areaSquareKilometres": 831054.916,
+      "cartographicDaCount": 113,
+      "componentCount": 1,
+      "digitalDaCount": 113,
+      "jurisdiction": "qc",
+      "parent": "qc",
+      "registryId": "ca-qc-nqc",
+      "seedClearanceKilometres": 194.725
+    },
+    "nrrm": {
+      "allowedErCodes": [
+        "5980"
+      ],
+      "areaSquareKilometres": 138003.996,
+      "cartographicDaCount": 19,
+      "componentCount": 1,
+      "digitalDaCount": 19,
+      "jurisdiction": "bc",
+      "parent": "bc",
+      "registryId": "ca-bc-nrrm",
+      "seedClearanceKilometres": 94.856
+    },
+    "nsl": {
+      "allowedErCodes": [
+        "6110"
+      ],
+      "areaSquareKilometres": 449684.635,
+      "cartographicDaCount": 48,
+      "componentCount": 1,
+      "digitalDaCount": 48,
+      "jurisdiction": "nt",
+      "parent": "nt",
+      "registryId": "ca-nt-nsl",
+      "seedClearanceKilometres": 82.584
+    },
+    "nth": {
+      "allowedErCodes": [
+        "3520"
+      ],
+      "areaSquareKilometres": 1520.773,
+      "cartographicDaCount": 130,
+      "componentCount": 1,
+      "digitalDaCount": 130,
+      "jurisdiction": "on",
+      "parent": "on-se",
+      "registryId": "ca-on-nth",
+      "seedClearanceKilometres": 4.971
+    },
+    "nthld": {
+      "allowedErCodes": [
+        "1310"
+      ],
+      "areaSquareKilometres": 12485.04,
+      "cartographicDaCount": 99,
+      "componentCount": 1,
+      "digitalDaCount": 99,
+      "jurisdiction": "nb",
+      "parent": "nb",
+      "registryId": "ca-nb-nthld",
+      "seedClearanceKilometres": 37.901
+    },
+    "oldcrow": {
+      "allowedErCodes": [
+        "6010"
+      ],
+      "areaSquareKilometres": 18275.937,
+      "cartographicDaCount": 2,
+      "componentCount": 2,
+      "digitalDaCount": 2,
+      "jurisdiction": "yt",
+      "parent": "yt",
+      "registryId": "ca-yt-oldcrow",
+      "seedClearanceKilometres": 2.093
+    },
+    "ott": {
+      "allowedErCodes": [
+        "3510",
+        "3515"
+      ],
+      "areaSquareKilometres": 3578.524,
+      "cartographicDaCount": 1448,
+      "componentCount": 1,
+      "digitalDaCount": 1448,
+      "jurisdiction": "on",
+      "parent": "on-alg",
+      "registryId": "ca-on-ott",
+      "seedClearanceKilometres": 0.694
+    },
+    "oxf": {
+      "allowedErCodes": [
+        "3560"
+      ],
+      "areaSquareKilometres": 2537.561,
+      "cartographicDaCount": 191,
+      "componentCount": 1,
+      "digitalDaCount": 191,
+      "jurisdiction": "on",
+      "parent": "on-sw",
+      "registryId": "ca-on-oxf",
+      "seedClearanceKilometres": 11.729
+    },
+    "pa": {
+      "allowedErCodes": [
+        "4750"
+      ],
+      "areaSquareKilometres": 25193.289,
+      "cartographicDaCount": 208,
+      "componentCount": 4,
+      "digitalDaCount": 208,
+      "jurisdiction": "sk",
+      "parent": "sk",
+      "registryId": "ca-sk-pa",
+      "seedClearanceKilometres": 35.256
+    },
+    "pas": {
+      "allowedErCodes": [
+        "4680"
+      ],
+      "areaSquareKilometres": 143829.763,
+      "cartographicDaCount": 99,
+      "componentCount": 1,
+      "digitalDaCount": 99,
+      "jurisdiction": "mb",
+      "parent": "mb",
+      "registryId": "ca-mb-pas",
+      "seedClearanceKilometres": 34.374
+    },
+    "peace": {
+      "allowedErCodes": [
+        "4870"
+      ],
+      "areaSquareKilometres": 82890.411,
+      "cartographicDaCount": 240,
+      "componentCount": 1,
+      "digitalDaCount": 240,
+      "jurisdiction": "ab",
+      "parent": "ab",
+      "registryId": "ca-ab-peace",
+      "seedClearanceKilometres": 69.659
+    },
+    "pec": {
+      "allowedErCodes": [
+        "3515"
+      ],
+      "areaSquareKilometres": 1276.485,
+      "cartographicDaCount": 29,
+      "componentCount": 1,
+      "digitalDaCount": 29,
+      "jurisdiction": "on",
+      "parent": "on-se",
+      "registryId": "ca-on-pec",
+      "seedClearanceKilometres": 9.27
+    },
+    "pel": {
+      "allowedErCodes": [
+        "3530"
+      ],
+      "areaSquareKilometres": 1442.439,
+      "cartographicDaCount": 1381,
+      "componentCount": 2,
+      "digitalDaCount": 1381,
+      "jurisdiction": "on",
+      "parent": "gta",
+      "registryId": "ca-on-pel",
+      "seedClearanceKilometres": 7.285
+    },
+    "pemb": {
+      "allowedErCodes": [
+        "4620"
+      ],
+      "areaSquareKilometres": 9579.287,
+      "cartographicDaCount": 98,
+      "componentCount": 1,
+      "digitalDaCount": 98,
+      "jurisdiction": "mb",
+      "parent": "mb",
+      "registryId": "ca-mb-pemb",
+      "seedClearanceKilometres": 21.383
+    },
+    "per": {
+      "allowedErCodes": [
+        "3580"
+      ],
+      "areaSquareKilometres": 2882.033,
+      "cartographicDaCount": 139,
+      "componentCount": 1,
+      "digitalDaCount": 139,
+      "jurisdiction": "on",
+      "parent": "on-ktw",
+      "registryId": "ca-on-per",
+      "seedClearanceKilometres": 9.845
+    },
+    "pict": {
+      "allowedErCodes": [
+        "1220"
+      ],
+      "areaSquareKilometres": 3528.309,
+      "cartographicDaCount": 95,
+      "componentCount": 1,
+      "digitalDaCount": 95,
+      "jurisdiction": "ns",
+      "parent": "ns",
+      "registryId": "ca-ns-pict",
+      "seedClearanceKilometres": 15.764
+    },
+    "pkld": {
+      "allowedErCodes": [
+        "4670"
+      ],
+      "areaSquareKilometres": 29056.8,
+      "cartographicDaCount": 95,
+      "componentCount": 1,
+      "digitalDaCount": 95,
+      "jurisdiction": "mb",
+      "parent": "mb",
+      "registryId": "ca-mb-pkld",
+      "seedClearanceKilometres": 42.245
+    },
+    "pri": {
+      "allowedErCodes": [
+        "1110"
+      ],
+      "areaSquareKilometres": 2951.631,
+      "cartographicDaCount": 109,
+      "componentCount": 1,
+      "digitalDaCount": 109,
+      "jurisdiction": "pe",
+      "parent": "pe",
+      "registryId": "ca-pe-pri",
+      "seedClearanceKilometres": 11.48
+    },
+    "prrd": {
+      "allowedErCodes": [
+        "5980"
+      ],
+      "areaSquareKilometres": 58385.424,
+      "cartographicDaCount": 120,
+      "componentCount": 2,
+      "digitalDaCount": 120,
+      "jurisdiction": "bc",
+      "parent": "bc",
+      "registryId": "ca-bc-prrd",
+      "seedClearanceKilometres": 11.257
+    },
+    "psd": {
+      "allowedErCodes": [
+        "3590"
+      ],
+      "areaSquareKilometres": 17180.223,
+      "cartographicDaCount": 91,
+      "componentCount": 2,
+      "digitalDaCount": 91,
+      "jurisdiction": "on",
+      "parent": "on-ne",
+      "registryId": "ca-on-psd",
+      "seedClearanceKilometres": 26.255
+    },
+    "psr": {
+      "allowedErCodes": [
+        "3510"
+      ],
+      "areaSquareKilometres": 2516.158,
+      "cartographicDaCount": 121,
+      "componentCount": 1,
+      "digitalDaCount": 121,
+      "jurisdiction": "on",
+      "parent": "on-alg",
+      "registryId": "ca-on-psr",
+      "seedClearanceKilometres": 9.761
+    },
+    "ptb": {
+      "allowedErCodes": [
+        "3520"
+      ],
+      "areaSquareKilometres": 4134.292,
+      "cartographicDaCount": 249,
+      "componentCount": 1,
+      "digitalDaCount": 249,
+      "jurisdiction": "on",
+      "parent": "on-se",
+      "registryId": "ca-on-ptb",
+      "seedClearanceKilometres": 16.143
+    },
+    "ptge": {
+      "allowedErCodes": [
+        "4640"
+      ],
+      "areaSquareKilometres": 9182.656,
+      "cartographicDaCount": 85,
+      "componentCount": 1,
+      "digitalDaCount": 85,
+      "jurisdiction": "mb",
+      "parent": "mb",
+      "registryId": "ca-mb-ptge",
+      "seedClearanceKilometres": 26.077
+    },
+    "qik": {
+      "allowedErCodes": [
+        "6210"
+      ],
+      "areaSquareKilometres": 789.929,
+      "cartographicDaCount": 19,
+      "componentCount": 13,
+      "digitalDaCount": 19,
+      "jurisdiction": "nu",
+      "parent": "nu",
+      "registryId": "ca-nu-qik",
+      "seedClearanceKilometres": 2.692
+    },
+    "qns-nb": {
+      "allowedErCodes": [
+        "1340"
+      ],
+      "areaSquareKilometres": 3541.41,
+      "cartographicDaCount": 23,
+      "componentCount": 1,
+      "digitalDaCount": 23,
+      "jurisdiction": "nb",
+      "parent": "nb",
+      "registryId": "ca-nb-qns-nb",
+      "seedClearanceKilometres": 13.738
+    },
+    "qns-ns": {
+      "allowedErCodes": [
+        "1240"
+      ],
+      "areaSquareKilometres": 3542.486,
+      "cartographicDaCount": 30,
+      "componentCount": 1,
+      "digitalDaCount": 30,
+      "jurisdiction": "ns",
+      "parent": "ns",
+      "registryId": "ca-ns-qns-ns",
+      "seedClearanceKilometres": 22.543
+    },
+    "qns-pe": {
+      "allowedErCodes": [
+        "1110"
+      ],
+      "areaSquareKilometres": 2887.917,
+      "cartographicDaCount": 164,
+      "componentCount": 3,
+      "digitalDaCount": 164,
+      "jurisdiction": "pe",
+      "parent": "pe",
+      "registryId": "ca-pe-qns-pe",
+      "seedClearanceKilometres": 14.338
+    },
+    "qrd": {
+      "allowedErCodes": [
+        "5910"
+      ],
+      "areaSquareKilometres": 15864.278,
+      "cartographicDaCount": 36,
+      "componentCount": 1,
+      "digitalDaCount": 36,
+      "jurisdiction": "bc",
+      "parent": "bc",
+      "registryId": "ca-bc-qrd",
+      "seedClearanceKilometres": 17.368
+    },
+    "rd": {
+      "allowedErCodes": [
+        "4820",
+        "4830",
+        "4840",
+        "4850"
+      ],
+      "areaSquareKilometres": 19703.354,
+      "cartographicDaCount": 403,
+      "componentCount": 2,
+      "digitalDaCount": 403,
+      "jurisdiction": "ab",
+      "parent": "ab",
+      "registryId": "ca-ab-rd",
+      "seedClearanceKilometres": 41.606
+    },
+    "rdbn": {
+      "allowedErCodes": [
+        "5970"
+      ],
+      "areaSquareKilometres": 75456.148,
+      "cartographicDaCount": 134,
+      "componentCount": 1,
+      "digitalDaCount": 134,
+      "jurisdiction": "bc",
+      "parent": "bc",
+      "registryId": "ca-bc-rdbn",
+      "seedClearanceKilometres": 19.173
+    },
+    "rdck": {
+      "allowedErCodes": [
+        "5940"
+      ],
+      "areaSquareKilometres": 18448.834,
+      "cartographicDaCount": 93,
+      "componentCount": 2,
+      "digitalDaCount": 93,
+      "jurisdiction": "bc",
+      "parent": "bc",
+      "registryId": "ca-bc-rdck",
+      "seedClearanceKilometres": 6.189
+    },
+    "rdco": {
+      "allowedErCodes": [
+        "5930"
+      ],
+      "areaSquareKilometres": 3099.102,
+      "cartographicDaCount": 272,
+      "componentCount": 1,
+      "digitalDaCount": 272,
+      "jurisdiction": "bc",
+      "parent": "bc",
+      "registryId": "ca-bc-rdco",
+      "seedClearanceKilometres": 15.083
+    },
+    "rdek": {
+      "allowedErCodes": [
+        "5940"
+      ],
+      "areaSquareKilometres": 33933.347,
+      "cartographicDaCount": 146,
+      "componentCount": 1,
+      "digitalDaCount": 146,
+      "jurisdiction": "bc",
+      "parent": "bc",
+      "registryId": "ca-bc-rdek",
+      "seedClearanceKilometres": 57.369
+    },
+    "rdffg": {
+      "allowedErCodes": [
+        "5950"
+      ],
+      "areaSquareKilometres": 59102.187,
+      "cartographicDaCount": 182,
+      "componentCount": 3,
+      "digitalDaCount": 182,
+      "jurisdiction": "bc",
+      "parent": "bc",
+      "registryId": "ca-bc-rdffg",
+      "seedClearanceKilometres": 48.287
+    },
+    "rdkb": {
+      "allowedErCodes": [
+        "5940"
+      ],
+      "areaSquareKilometres": 6397.538,
+      "cartographicDaCount": 53,
+      "componentCount": 1,
+      "digitalDaCount": 53,
+      "jurisdiction": "bc",
+      "parent": "bc",
+      "registryId": "ca-bc-rdkb",
+      "seedClearanceKilometres": 8.475
+    },
+    "rdks": {
+      "allowedErCodes": [
+        "5960"
+      ],
+      "areaSquareKilometres": 80154.345,
+      "cartographicDaCount": 95,
+      "componentCount": 3,
+      "digitalDaCount": 95,
+      "jurisdiction": "bc",
+      "parent": "bc",
+      "registryId": "ca-bc-rdks",
+      "seedClearanceKilometres": 50.743
+    },
+    "rdmw": {
+      "allowedErCodes": [
+        "5910"
+      ],
+      "areaSquareKilometres": 38952.876,
+      "cartographicDaCount": 51,
+      "componentCount": 1,
+      "digitalDaCount": 51,
+      "jurisdiction": "bc",
+      "parent": "bc",
+      "registryId": "ca-bc-rdmw",
+      "seedClearanceKilometres": 55.037
+    },
+    "rdn": {
+      "allowedErCodes": [
+        "5910"
+      ],
+      "areaSquareKilometres": 4191.123,
+      "cartographicDaCount": 320,
+      "componentCount": 1,
+      "digitalDaCount": 320,
+      "jurisdiction": "bc",
+      "parent": "bc",
+      "registryId": "ca-bc-rdn",
+      "seedClearanceKilometres": 18.379
+    },
+    "rdno": {
+      "allowedErCodes": [
+        "5930"
+      ],
+      "areaSquareKilometres": 10253.236,
+      "cartographicDaCount": 213,
+      "componentCount": 1,
+      "digitalDaCount": 213,
+      "jurisdiction": "bc",
+      "parent": "bc",
+      "registryId": "ca-bc-rdno",
+      "seedClearanceKilometres": 12.586
+    },
+    "rdos": {
+      "allowedErCodes": [
+        "5930"
+      ],
+      "areaSquareKilometres": 10565.876,
+      "cartographicDaCount": 172,
+      "componentCount": 2,
+      "digitalDaCount": 172,
+      "jurisdiction": "bc",
+      "parent": "bc",
+      "registryId": "ca-bc-rdos",
+      "seedClearanceKilometres": 21.553
+    },
+    "regina": {
+      "allowedErCodes": [
+        "4710"
+      ],
+      "areaSquareKilometres": 17361.41,
+      "cartographicDaCount": 514,
+      "componentCount": 4,
+      "digitalDaCount": 514,
+      "jurisdiction": "sk",
+      "parent": "sk",
+      "registryId": "ca-sk-regina",
+      "seedClearanceKilometres": 42.439
+    },
+    "ren": {
+      "allowedErCodes": [
+        "3515"
+      ],
+      "areaSquareKilometres": 11549.706,
+      "cartographicDaCount": 174,
+      "componentCount": 1,
+      "digitalDaCount": 174,
+      "jurisdiction": "on",
+      "parent": "on-alg",
+      "registryId": "ca-on-ren",
+      "seedClearanceKilometres": 8.667
+    },
+    "resti": {
+      "allowedErCodes": [
+        "1310"
+      ],
+      "areaSquareKilometres": 7375.286,
+      "cartographicDaCount": 66,
+      "componentCount": 1,
+      "digitalDaCount": 66,
+      "jurisdiction": "nb",
+      "parent": "nb",
+      "registryId": "ca-nb-resti",
+      "seedClearanceKilometres": 22.409
+    },
+    "rich": {
+      "allowedErCodes": [
+        "1210"
+      ],
+      "areaSquareKilometres": 4084.207,
+      "cartographicDaCount": 40,
+      "componentCount": 1,
+      "digitalDaCount": 40,
+      "jurisdiction": "ns",
+      "parent": "ns",
+      "registryId": "ca-ns-rich",
+      "seedClearanceKilometres": 16.176
+    },
+    "rocky": {
+      "allowedErCodes": [
+        "4840"
+      ],
+      "areaSquareKilometres": 44680.02,
+      "cartographicDaCount": 90,
+      "componentCount": 1,
+      "digitalDaCount": 90,
+      "jurisdiction": "ab",
+      "parent": "ab",
+      "registryId": "ca-ab-rocky",
+      "seedClearanceKilometres": 9.067
+    },
+    "ronge": {
+      "allowedErCodes": [
+        "4760"
+      ],
+      "areaSquareKilometres": 306643.244,
+      "cartographicDaCount": 161,
+      "componentCount": 1,
+      "digitalDaCount": 161,
+      "jurisdiction": "sk",
+      "parent": "sk",
+      "registryId": "ca-sk-ronge",
+      "seedClearanceKilometres": 95.958
+    },
+    "rrv": {
+      "allowedErCodes": [
+        "3595"
+      ],
+      "areaSquareKilometres": 26786.166,
+      "cartographicDaCount": 62,
+      "componentCount": 5,
+      "digitalDaCount": 62,
+      "jurisdiction": "on",
+      "parent": "on-nw",
+      "registryId": "ca-on-rrv",
+      "seedClearanceKilometres": 0.136
+    },
+    "saglac": {
+      "allowedErCodes": [
+        "2475"
+      ],
+      "areaSquareKilometres": 105679.408,
+      "cartographicDaCount": 533,
+      "componentCount": 1,
+      "digitalDaCount": 533,
+      "jurisdiction": "qc",
+      "parent": "qc",
+      "registryId": "ca-qc-saglac",
+      "seedClearanceKilometres": 47.715
+    },
+    "sahtu": {
+      "allowedErCodes": [
+        "6110"
+      ],
+      "areaSquareKilometres": 252032.696,
+      "cartographicDaCount": 6,
+      "componentCount": 1,
+      "digitalDaCount": 6,
+      "jurisdiction": "nt",
+      "parent": "nt",
+      "registryId": "ca-nt-sahtu",
+      "seedClearanceKilometres": 185.686
+    },
+    "scoast": {
+      "allowedErCodes": [
+        "1020"
+      ],
+      "areaSquareKilometres": 8819.148,
+      "cartographicDaCount": 21,
+      "componentCount": 1,
+      "digitalDaCount": 21,
+      "jurisdiction": "nl",
+      "parent": "nl",
+      "registryId": "ca-nl-scoast",
+      "seedClearanceKilometres": 7.864
+    },
+    "scrd": {
+      "allowedErCodes": [
+        "5920"
+      ],
+      "areaSquareKilometres": 8123.902,
+      "cartographicDaCount": 66,
+      "componentCount": 2,
+      "digitalDaCount": 66,
+      "jurisdiction": "bc",
+      "parent": "bc",
+      "registryId": "ca-bc-scrd",
+      "seedClearanceKilometres": 16.089
+    },
+    "sdg": {
+      "allowedErCodes": [
+        "3510"
+      ],
+      "areaSquareKilometres": 2695.88,
+      "cartographicDaCount": 226,
+      "componentCount": 1,
+      "digitalDaCount": 229,
+      "jurisdiction": "on",
+      "parent": "on-alg",
+      "registryId": "ca-on-sdg",
+      "seedClearanceKilometres": 2.314
+    },
+    "shel": {
+      "allowedErCodes": [
+        "1240"
+      ],
+      "areaSquareKilometres": 3992.132,
+      "cartographicDaCount": 28,
+      "componentCount": 1,
+      "digitalDaCount": 28,
+      "jurisdiction": "ns",
+      "parent": "ns",
+      "registryId": "ca-ns-shel",
+      "seedClearanceKilometres": 21.383
+    },
+    "sim": {
+      "allowedErCodes": [
+        "3540",
+        "3580"
+      ],
+      "areaSquareKilometres": 6881.132,
+      "cartographicDaCount": 777,
+      "componentCount": 2,
+      "digitalDaCount": 777,
+      "jurisdiction": "on",
+      "parent": "on-lsim",
+      "registryId": "ca-on-sim",
+      "seedClearanceKilometres": 14.69
+    },
+    "sj": {
+      "allowedErCodes": [
+        "1330"
+      ],
+      "areaSquareKilometres": 2124.529,
+      "cartographicDaCount": 215,
+      "componentCount": 1,
+      "digitalDaCount": 215,
+      "jurisdiction": "nb",
+      "parent": "nb",
+      "registryId": "ca-nb-sj",
+      "seedClearanceKilometres": 12.03
+    },
+    "slrd": {
+      "allowedErCodes": [
+        "5920"
+      ],
+      "areaSquareKilometres": 15294.672,
+      "cartographicDaCount": 106,
+      "componentCount": 2,
+      "digitalDaCount": 106,
+      "jurisdiction": "bc",
+      "parent": "bc",
+      "registryId": "ca-bc-slrd",
+      "seedClearanceKilometres": 10.311
+    },
+    "srd": {
+      "allowedErCodes": [
+        "5910"
+      ],
+      "areaSquareKilometres": 5005.51,
+      "cartographicDaCount": 102,
+      "componentCount": 8,
+      "digitalDaCount": 102,
+      "jurisdiction": "bc",
+      "parent": "bc",
+      "registryId": "ca-bc-srd",
+      "seedClearanceKilometres": 2.595
+    },
+    "ssl": {
+      "allowedErCodes": [
+        "6110"
+      ],
+      "areaSquareKilometres": 1627.969,
+      "cartographicDaCount": 18,
+      "componentCount": 6,
+      "digitalDaCount": 18,
+      "jurisdiction": "nt",
+      "parent": "nt",
+      "registryId": "ca-nt-ssl",
+      "seedClearanceKilometres": 3.131
+    },
+    "steph": {
+      "allowedErCodes": [
+        "1030"
+      ],
+      "areaSquareKilometres": 11065.575,
+      "cartographicDaCount": 48,
+      "componentCount": 2,
+      "digitalDaCount": 48,
+      "jurisdiction": "nl",
+      "parent": "nl",
+      "registryId": "ca-nl-steph",
+      "seedClearanceKilometres": 32.453
+    },
+    "stk": {
+      "allowedErCodes": [
+        "5970"
+      ],
+      "areaSquareKilometres": 115568.606,
+      "cartographicDaCount": 10,
+      "componentCount": 1,
+      "digitalDaCount": 10,
+      "jurisdiction": "bc",
+      "parent": "bc",
+      "registryId": "ca-bc-stk",
+      "seedClearanceKilometres": 51.438
+    },
+    "stoon": {
+      "allowedErCodes": [
+        "4730"
+      ],
+      "areaSquareKilometres": 48973.587,
+      "cartographicDaCount": 619,
+      "componentCount": 1,
+      "digitalDaCount": 619,
+      "jurisdiction": "sk",
+      "parent": "sk",
+      "registryId": "ca-sk-stoon",
+      "seedClearanceKilometres": 18.086
+    },
+    "sud": {
+      "allowedErCodes": [
+        "3590"
+      ],
+      "areaSquareKilometres": 3870.133,
+      "cartographicDaCount": 33,
+      "componentCount": 2,
+      "digitalDaCount": 33,
+      "jurisdiction": "on",
+      "parent": "on-ne",
+      "registryId": "ca-on-sud",
+      "seedClearanceKilometres": 8.638
+    },
+    "sunb": {
+      "allowedErCodes": [
+        "1340"
+      ],
+      "areaSquareKilometres": 3504.976,
+      "cartographicDaCount": 16,
+      "componentCount": 2,
+      "digitalDaCount": 16,
+      "jurisdiction": "nb",
+      "parent": "nb",
+      "registryId": "ca-nb-sunb",
+      "seedClearanceKilometres": 2.082
+    },
+    "swift": {
+      "allowedErCodes": [
+        "4720"
+      ],
+      "areaSquareKilometres": 61440.869,
+      "cartographicDaCount": 152,
+      "componentCount": 2,
+      "digitalDaCount": 152,
+      "jurisdiction": "sk",
+      "parent": "sk",
+      "registryId": "ca-sk-swift",
+      "seedClearanceKilometres": 68.704
+    },
+    "tby": {
+      "allowedErCodes": [
+        "3595"
+      ],
+      "areaSquareKilometres": 522434.9,
+      "cartographicDaCount": 328,
+      "componentCount": 1,
+      "digitalDaCount": 328,
+      "jurisdiction": "on",
+      "parent": "on-nw",
+      "registryId": "ca-on-tby",
+      "seedClearanceKilometres": 35.095
+    },
+    "thom": {
+      "allowedErCodes": [
+        "4680"
+      ],
+      "areaSquareKilometres": 361850.679,
+      "cartographicDaCount": 113,
+      "componentCount": 3,
+      "digitalDaCount": 113,
+      "jurisdiction": "mb",
+      "parent": "mb",
+      "registryId": "ca-mb-thom",
+      "seedClearanceKilometres": 73.513
+    },
+    "tim": {
+      "allowedErCodes": [
+        "3590"
+      ],
+      "areaSquareKilometres": 13663.565,
+      "cartographicDaCount": 75,
+      "componentCount": 4,
+      "digitalDaCount": 75,
+      "jurisdiction": "on",
+      "parent": "on-ne",
+      "registryId": "ca-on-tim",
+      "seedClearanceKilometres": 9.485
+    },
+    "tnrd": {
+      "allowedErCodes": [
+        "5930"
+      ],
+      "areaSquareKilometres": 31953.194,
+      "cartographicDaCount": 321,
+      "componentCount": 2,
+      "digitalDaCount": 321,
+      "jurisdiction": "bc",
+      "parent": "bc",
+      "registryId": "ca-bc-tnrd",
+      "seedClearanceKilometres": 31.781
+    },
+    "tor": {
+      "allowedErCodes": [
+        "3530",
+        "3540",
+        "3550"
+      ],
+      "areaSquareKilometres": 844.704,
+      "cartographicDaCount": 4073,
+      "componentCount": 2,
+      "digitalDaCount": 4073,
+      "jurisdiction": "on",
+      "parent": "gta",
+      "registryId": "ca-on-tor",
+      "seedClearanceKilometres": 3.43
+    },
+    "vic-nb": {
+      "allowedErCodes": [
+        "1350"
+      ],
+      "areaSquareKilometres": 5518.433,
+      "cartographicDaCount": 46,
+      "componentCount": 1,
+      "digitalDaCount": 46,
+      "jurisdiction": "nb",
+      "parent": "nb",
+      "registryId": "ca-nb-vic-nb",
+      "seedClearanceKilometres": 33.279
+    },
+    "vic-ns": {
+      "allowedErCodes": [
+        "1210"
+      ],
+      "areaSquareKilometres": 4849.397,
+      "cartographicDaCount": 15,
+      "componentCount": 1,
+      "digitalDaCount": 15,
+      "jurisdiction": "ns",
+      "parent": "ns",
+      "registryId": "ca-ns-vic-ns",
+      "seedClearanceKilometres": 18.337
+    },
+    "wat": {
+      "allowedErCodes": [
+        "3540",
+        "3550",
+        "3560",
+        "3580"
+      ],
+      "areaSquareKilometres": 2339.137,
+      "cartographicDaCount": 702,
+      "componentCount": 1,
+      "digitalDaCount": 702,
+      "jurisdiction": "on",
+      "parent": "on-ktw",
+      "registryId": "ca-on-wat",
+      "seedClearanceKilometres": 9.35
+    },
+    "watson": {
+      "allowedErCodes": [
+        "6010"
+      ],
+      "areaSquareKilometres": 152474.602,
+      "cartographicDaCount": 6,
+      "componentCount": 1,
+      "digitalDaCount": 6,
+      "jurisdiction": "yt",
+      "parent": "yt",
+      "registryId": "ca-yt-watson",
+      "seedClearanceKilometres": 6.757
+    },
+    "wcrt": {
+      "allowedErCodes": [
+        "4870"
+      ],
+      "areaSquareKilometres": 57361.553,
+      "cartographicDaCount": 159,
+      "componentCount": 2,
+      "digitalDaCount": 159,
+      "jurisdiction": "ab",
+      "parent": "ab",
+      "registryId": "ca-ab-wcrt",
+      "seedClearanceKilometres": 21.575
+    },
+    "wel": {
+      "allowedErCodes": [
+        "3540"
+      ],
+      "areaSquareKilometres": 1331.289,
+      "cartographicDaCount": 389,
+      "componentCount": 1,
+      "digitalDaCount": 389,
+      "jurisdiction": "on",
+      "parent": "on-ktw",
+      "registryId": "ca-on-wel",
+      "seedClearanceKilometres": 7.507
+    },
+    "westm": {
+      "allowedErCodes": [
+        "1320"
+      ],
+      "areaSquareKilometres": 4910.489,
+      "cartographicDaCount": 281,
+      "componentCount": 1,
+      "digitalDaCount": 281,
+      "jurisdiction": "nb",
+      "parent": "nb",
+      "registryId": "ca-nb-westm",
+      "seedClearanceKilometres": 15.192
+    },
+    "whse": {
+      "allowedErCodes": [
+        "6010"
+      ],
+      "areaSquareKilometres": 8709.182,
+      "cartographicDaCount": 45,
+      "componentCount": 8,
+      "digitalDaCount": 45,
+      "jurisdiction": "yt",
+      "parent": "yt",
+      "registryId": "ca-yt-whse",
+      "seedClearanceKilometres": 27.787
+    },
+    "wman": {
+      "allowedErCodes": [
+        "4630"
+      ],
+      "areaSquareKilometres": 27728.33,
+      "cartographicDaCount": 221,
+      "componentCount": 1,
+      "digitalDaCount": 221,
+      "jurisdiction": "mb",
+      "parent": "mb",
+      "registryId": "ca-mb-wman",
+      "seedClearanceKilometres": 53.086
+    },
+    "wpg": {
+      "allowedErCodes": [
+        "4610",
+        "4620",
+        "4640",
+        "4650",
+        "4660"
+      ],
+      "areaSquareKilometres": 10304.986,
+      "cartographicDaCount": 1310,
+      "componentCount": 1,
+      "digitalDaCount": 1310,
+      "jurisdiction": "mb",
+      "parent": "mb",
+      "registryId": "ca-mb-wpg",
+      "seedClearanceKilometres": 20.48
+    },
+    "wybrn": {
+      "allowedErCodes": [
+        "4710"
+      ],
+      "areaSquareKilometres": 17697.488,
+      "cartographicDaCount": 74,
+      "componentCount": 2,
+      "digitalDaCount": 74,
+      "jurisdiction": "sk",
+      "parent": "sk",
+      "registryId": "ca-sk-wybrn",
+      "seedClearanceKilometres": 42.869
+    },
+    "yar": {
+      "allowedErCodes": [
+        "1240"
+      ],
+      "areaSquareKilometres": 3866.97,
+      "cartographicDaCount": 46,
+      "componentCount": 1,
+      "digitalDaCount": 46,
+      "jurisdiction": "ns",
+      "parent": "ns",
+      "registryId": "ca-ns-yar",
+      "seedClearanceKilometres": 9.658
+    },
+    "yktn": {
+      "allowedErCodes": [
+        "4740"
+      ],
+      "areaSquareKilometres": 43200.365,
+      "cartographicDaCount": 331,
+      "componentCount": 1,
+      "digitalDaCount": 331,
+      "jurisdiction": "sk",
+      "parent": "sk",
+      "registryId": "ca-sk-yktn",
+      "seedClearanceKilometres": 57.01
+    },
+    "york": {
+      "allowedErCodes": [
+        "1340"
+      ],
+      "areaSquareKilometres": 8545.961,
+      "cartographicDaCount": 211,
+      "componentCount": 1,
+      "digitalDaCount": 211,
+      "jurisdiction": "nb",
+      "parent": "nb",
+      "registryId": "ca-nb-york",
+      "seedClearanceKilometres": 1.902
+    },
+    "yrk": {
+      "allowedErCodes": [
+        "3530"
+      ],
+      "areaSquareKilometres": 2598.837,
+      "cartographicDaCount": 782,
+      "componentCount": 1,
+      "digitalDaCount": 782,
+      "jurisdiction": "on",
+      "parent": "gta",
+      "registryId": "ca-on-yrk",
+      "seedClearanceKilometres": 7.299
+    }
+  },
+  "model": "exclusive-national-da-partition",
+  "resolverSimplification": {
+    "clean": true,
+    "coordinatePrecision": 1e-06,
+    "jointTopology": true,
+    "keepShapes": true,
+    "method": "weighted-visvalingam",
+    "retainedVertices": "20%",
+    "tool": "mapshaper",
+    "version": "0.6.113"
+  },
+  "sourceClaims": {
+    "acceptedSourcePolygons": 28,
+    "quarantinedSourcePolygons": 1,
+    "sourceClaimCells": 42376,
+    "sourceConflictCellsResolved": 485,
+    "sources": {
+      "xcm": {
+        "containedLeafSeeds": [
+          "chk",
+          "esx"
+        ],
+        "dominantLeafShare": 0.678692,
+        "mappedTarget": "chk",
+        "subdivisionDaCounts": {
+          "chk": 285,
+          "esx": 602
+        },
+        "winningClaimDaCount": 887
+      },
+      "xph": {
+        "containedLeafSeeds": [
+          "kaw",
+          "nth",
+          "ptb"
+        ],
+        "dominantLeafShare": 0.53288,
+        "mappedTarget": "nth",
+        "subdivisionDaCounts": {
+          "kaw": 109,
+          "nth": 97,
+          "ptb": 235
+        },
+        "winningClaimDaCount": 441
+      },
+      "ybl": {
+        "containedLeafSeeds": [
+          "srd"
+        ],
+        "dominantLeafShare": 1.0,
+        "mappedTarget": "srd",
+        "subdivisionDaCounts": {
+          "srd": 76
+        },
+        "winningClaimDaCount": 76
+      },
+      "ycd": {
+        "containedLeafSeeds": [
+          "cvrd",
+          "rdn"
+        ],
+        "dominantLeafShare": 0.987654,
+        "mappedTarget": "rdn",
+        "subdivisionDaCounts": {
+          "cvrd": 4,
+          "rdn": 320
+        },
+        "winningClaimDaCount": 324
+      },
+      "yeg": {
+        "containedLeafSeeds": [
+          "cam",
+          "edm",
+          "lloyd-ab",
+          "rd",
+          "wcrt"
+        ],
+        "dominantLeafShare": 0.746449,
+        "mappedTarget": "edm",
+        "subdivisionDaCounts": {
+          "cam": 150,
+          "coldlk": 34,
+          "edm": 2102,
+          "lloyd-ab": 103,
+          "rd": 331,
+          "rocky": 42,
+          "wcrt": 54
+        },
+        "winningClaimDaCount": 2816
+      },
+      "ygk": {
+        "containedLeafSeeds": [
+          "frt",
+          "ldg"
+        ],
+        "dominantLeafShare": 0.637232,
+        "mappedTarget": "frt",
+        "subdivisionDaCounts": {
+          "frt": 267,
+          "ldg": 106,
+          "lnx": 43,
+          "ren": 3
+        },
+        "winningClaimDaCount": 419
+      },
+      "yka": {
+        "containedLeafSeeds": [
+          "tnrd"
+        ],
+        "dominantLeafShare": 0.99435,
+        "mappedTarget": "tnrd",
+        "subdivisionDaCounts": {
+          "rdno": 1,
+          "tnrd": 176
+        },
+        "winningClaimDaCount": 177
+      },
+      "ykf": {
+        "containedLeafSeeds": [
+          "bra",
+          "oxf",
+          "per",
+          "wat",
+          "wel"
+        ],
+        "dominantLeafShare": 0.437301,
+        "mappedTarget": "wat",
+        "subdivisionDaCounts": {
+          "bra": 247,
+          "oxf": 171,
+          "per": 82,
+          "wat": 687,
+          "wel": 384
+        },
+        "winningClaimDaCount": 1571
+      },
+      "ylk": {
+        "containedLeafSeeds": [
+          "duf",
+          "gry",
+          "sim"
+        ],
+        "dominantLeafShare": 0.687379,
+        "mappedTarget": "sim",
+        "subdivisionDaCounts": {
+          "duf": 165,
+          "gry": 157,
+          "sim": 708
+        },
+        "winningClaimDaCount": 1030
+      },
+      "yml": {
+        "containedLeafSeeds": [],
+        "dominantLeafShare": 0.436214,
+        "mappedTarget": "capnat",
+        "subdivisionDaCounts": {
+          "bsl": 106,
+          "capnat": 104,
+          "chapp": 26,
+          "saglac": 7
+        },
+        "winningClaimDaCount": 243
+      },
+      "yow": {
+        "containedLeafSeeds": [
+          "lan",
+          "ott",
+          "psr",
+          "sdg"
+        ],
+        "dominantLeafShare": 0.736521,
+        "mappedTarget": "ott",
+        "subdivisionDaCounts": {
+          "lan": 149,
+          "ott": 1448,
+          "psr": 121,
+          "ren": 22,
+          "sdg": 226
+        },
+        "winningClaimDaCount": 1966
+      },
+      "ypa": {
+        "containedLeafSeeds": [
+          "pa"
+        ],
+        "dominantLeafShare": 1.0,
+        "mappedTarget": "pa",
+        "subdivisionDaCounts": {
+          "pa": 83
+        },
+        "winningClaimDaCount": 83
+      },
+      "yqa": {
+        "containedLeafSeeds": [
+          "hlb",
+          "mus",
+          "psd"
+        ],
+        "dominantLeafShare": 0.463602,
+        "mappedTarget": "mus",
+        "subdivisionDaCounts": {
+          "has": 3,
+          "hlb": 26,
+          "mus": 121,
+          "psd": 91,
+          "ren": 20
+        },
+        "winningClaimDaCount": 261
+      },
+      "yqb": {
+        "containedLeafSeeds": [
+          "capnat",
+          "chapp",
+          "cqc",
+          "maur"
+        ],
+        "dominantLeafShare": 0.515162,
+        "mappedTarget": "capnat",
+        "subdivisionDaCounts": {
+          "capnat": 1461,
+          "chapp": 410,
+          "cqc": 434,
+          "estrie": 58,
+          "lanau": 5,
+          "maur": 466,
+          "mtrg": 1,
+          "saglac": 1
+        },
+        "winningClaimDaCount": 2836
+      },
+      "yqf": {
+        "containedLeafSeeds": [
+          "cam",
+          "rd"
+        ],
+        "dominantLeafShare": 0.692308,
+        "mappedTarget": "rd",
+        "subdivisionDaCounts": {
+          "cal": 21,
+          "cam": 11,
+          "rd": 72
+        },
+        "winningClaimDaCount": 104
+      },
+      "yql": {
+        "containedLeafSeeds": [
+          "leth",
+          "mh"
+        ],
+        "dominantLeafShare": 0.7119,
+        "mappedTarget": "leth",
+        "subdivisionDaCounts": {
+          "drum": 8,
+          "leth": 341,
+          "mh": 130
+        },
+        "winningClaimDaCount": 479
+      },
+      "yqq": {
+        "containedLeafSeeds": [
+          "cxrd"
+        ],
+        "dominantLeafShare": 0.965517,
+        "mappedTarget": "cxrd",
+        "subdivisionDaCounts": {
+          "cxrd": 112,
+          "srd": 4
+        },
+        "winningClaimDaCount": 116
+      },
+      "yse": {
+        "containedLeafSeeds": [
+          "slrd"
+        ],
+        "dominantLeafShare": 1.0,
+        "mappedTarget": "slrd",
+        "subdivisionDaCounts": {
+          "slrd": 34
+        },
+        "winningClaimDaCount": 34
+      },
+      "yta": {
+        "containedLeafSeeds": [
+          "ren"
+        ],
+        "dominantLeafShare": 1.0,
+        "mappedTarget": "ren",
+        "subdivisionDaCounts": {
+          "ren": 129
+        },
+        "winningClaimDaCount": 129
+      },
+      "ytf": {
+        "containedLeafSeeds": [
+          "saglac"
+        ],
+        "dominantLeafShare": 1.0,
+        "mappedTarget": "saglac",
+        "subdivisionDaCounts": {
+          "saglac": 522
+        },
+        "winningClaimDaCount": 522
+      },
+      "ytr": {
+        "containedLeafSeeds": [
+          "has",
+          "lnx",
+          "pec"
+        ],
+        "dominantLeafShare": 0.648094,
+        "mappedTarget": "has",
+        "subdivisionDaCounts": {
+          "has": 221,
+          "hlb": 2,
+          "lnx": 42,
+          "nth": 33,
+          "pec": 29,
+          "ptb": 14
+        },
+        "winningClaimDaCount": 341
+      },
+      "yul": {
+        "containedLeafSeeds": [
+          "estrie",
+          "lanau",
+          "laur",
+          "laval",
+          "mtl",
+          "mtrg"
+        ],
+        "dominantLeafShare": 0.615906,
+        "mappedTarget": "mtl",
+        "subdivisionDaCounts": {
+          "cqc": 25,
+          "estrie": 482,
+          "gatout": 1,
+          "lanau": 493,
+          "laur": 432,
+          "laval": 637,
+          "maur": 2,
+          "mtl": 5181,
+          "mtrg": 1159
+        },
+        "winningClaimDaCount": 8412
+      },
+      "yvr": {
+        "containedLeafSeeds": [
+          "fvrd",
+          "mvrd",
+          "scrd"
+        ],
+        "dominantLeafShare": 0.735745,
+        "mappedTarget": "mvrd",
+        "subdivisionDaCounts": {
+          "cxrd": 2,
+          "fvrd": 1036,
+          "mvrd": 3071,
+          "scrd": 65
+        },
+        "winningClaimDaCount": 4174
+      },
+      "ywg": {
+        "containedLeafSeeds": [
+          "eman",
+          "ilake",
+          "pemb",
+          "ptge",
+          "wpg"
+        ],
+        "dominantLeafShare": 0.775148,
+        "mappedTarget": "wpg",
+        "subdivisionDaCounts": {
+          "eman": 119,
+          "ilake": 78,
+          "pemb": 98,
+          "ptge": 85,
+          "wpg": 1310
+        },
+        "winningClaimDaCount": 1690
+      },
+      "yws": {
+        "containedLeafSeeds": [],
+        "dominantLeafShare": 0.972222,
+        "mappedTarget": "slrd",
+        "subdivisionDaCounts": {
+          "scrd": 1,
+          "slrd": 35
+        },
+        "winningClaimDaCount": 36
+      },
+      "yyc": {
+        "containedLeafSeeds": [
+          "cal",
+          "drum",
+          "rocky"
+        ],
+        "dominantLeafShare": 0.941312,
+        "mappedTarget": "cal",
+        "subdivisionDaCounts": {
+          "cal": 2037,
+          "drum": 47,
+          "leth": 2,
+          "mh": 30,
+          "rocky": 48
+        },
+        "winningClaimDaCount": 2164
+      },
+      "yyj": {
+        "containedLeafSeeds": [
+          "crd",
+          "cvrd"
+        ],
+        "dominantLeafShare": 0.854817,
+        "mappedTarget": "crd",
+        "subdivisionDaCounts": {
+          "crd": 630,
+          "cvrd": 107
+        },
+        "winningClaimDaCount": 737
+      },
+      "yyz": {
+        "containedLeafSeeds": [
+          "dur",
+          "hald",
+          "ham",
+          "htn",
+          "nia",
+          "pel",
+          "tor",
+          "yrk"
+        ],
+        "dominantLeafShare": 0.39513,
+        "mappedTarget": "tor",
+        "subdivisionDaCounts": {
+          "duf": 17,
+          "dur": 970,
+          "hald": 99,
+          "ham": 1225,
+          "htn": 1016,
+          "nia": 671,
+          "pel": 1381,
+          "sim": 69,
+          "tor": 4073,
+          "wel": 5,
+          "yrk": 782
+        },
+        "winningClaimDaCount": 10308
+      }
+    }
+  },
+  "sourceCounts": {
+    "cartographicDisseminationAreas": 57932,
+    "digitalDisseminationAreas": 57936,
+    "economicRegions": 76,
+    "leafRegions": 193,
+    "waterOnlyDigitalDAs": [
+      "2021S051224690104",
+      "2021S051235010377",
+      "2021S051235010386",
+      "2021S051235010392"
+    ]
+  },
+  "standard": "MCC-REG-1"
+}

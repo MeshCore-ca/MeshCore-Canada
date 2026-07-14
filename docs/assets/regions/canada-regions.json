@@ -6,15 +6,16 @@
     "date": "2026-06-23",
     "status": "draft",
     "hierarchyNodes": 218,
-    "selectableRegions": 192
+    "sourceSelectableRegions": 192,
+    "generatedLeafRegions": 193
   },
   "source": {
     "primary": "Canada MeshCore Region Strategy v1.1.1",
     "forum": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
     "notes": [
       "The strategy defines canonical tags and parent relationships, not map geometry.",
-      "MeshMapper polygons remain the preferred boundary source where a strategy crosswalk exists.",
-      "Other map areas are approximate and should be reviewed by local operators."
+      "MeshMapper polygons are the preferred assignment evidence where a strategy crosswalk exists; raw source polygons are never published as regions.",
+      "Every remaining Statistics Canada dissemination area is assigned once by the deterministic national generator."
     ]
   },
   "authority": {
@@ -24,7 +25,11 @@
     "geographicModel": "exclusive-national-partition",
     "topologyAtom": "Statistics Canada 2021 Dissemination Area",
     "guardrail": "Statistics Canada SGC 2021 Economic Region",
-    "currentBoundaryStatus": "review-only"
+    "currentBoundaryStatus": "generated-candidate",
+    "partitionArtifact": "canada-region-partition.geojson",
+    "resolverArtifact": "canada-region-partition-digital.geojson",
+    "membershipArtifact": "canada-region-membership.csv",
+    "partitionRule": "one digital DA to exactly one geographic leaf"
   },
   "meta": {
     "name": "MeshCore Canada Regions",
@@ -66,11 +71,7 @@
     "bc": {
       "label": "British Columbia",
       "parent": "can",
-      "basis": "jurisdiction",
-      "sharedParents": [
-        "can",
-        "pnw"
-      ]
+      "basis": "jurisdiction"
     },
     "ab": {
       "label": "Alberta",
@@ -342,14 +343,15 @@
       "parent": "ab",
       "basis": "proposed"
     },
-    "lloyd": {
-      "label": "Lloydminster",
+    "lloyd-ab": {
+      "label": "Lloydminster, Alberta",
       "parent": "ab",
-      "basis": "proposed",
-      "sharedParents": [
-        "ab",
-        "sk"
-      ]
+      "basis": "jurisdiction-split"
+    },
+    "lloyd-sk": {
+      "label": "Lloydminster, Saskatchewan",
+      "parent": "sk",
+      "basis": "jurisdiction-split"
     },
     "estvn": {
       "label": "Estevan / southeast",
@@ -760,15 +762,6 @@
       "label": "Thunder Bay",
       "parent": "on-nw",
       "basis": "established"
-    },
-    "ncr": {
-      "label": "National Capital Region",
-      "parent": "on",
-      "basis": "shared-scope",
-      "sharedParents": [
-        "on",
-        "qc"
-      ]
     },
     "bsl": {
       "label": "Bas-Saint-Laurent",
@@ -1666,14 +1659,23 @@
       "boundaryType": "approximate",
       "basis": "proposed"
     },
-    "lloyd": {
+    "lloyd-ab": {
       "state": "proposal",
-      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
-      "source": "Canada MeshCore Region Strategy v1.1.1",
+      "reviewer": "MCC-REG-1 non-overlap migration",
+      "source": "Canada MeshCore Region Strategy v1.1.1 and jurisdiction boundary",
       "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
       "sourceTier": "strategy",
-      "boundaryType": "approximate",
-      "basis": "proposed"
+      "boundaryType": "generated DA partition",
+      "basis": "jurisdiction-split"
+    },
+    "lloyd-sk": {
+      "state": "proposal",
+      "reviewer": "MCC-REG-1 non-overlap migration",
+      "source": "Canada MeshCore Region Strategy v1.1.1 and jurisdiction boundary",
+      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
+      "sourceTier": "strategy",
+      "boundaryType": "generated DA partition",
+      "basis": "jurisdiction-split"
     },
     "estvn": {
       "state": "proposal",
@@ -2412,15 +2414,6 @@
       "sourceTier": "strategy",
       "boundaryType": "official geography; map approximate",
       "basis": "established"
-    },
-    "ncr": {
-      "state": "proposal",
-      "reviewer": "Canada MeshCore Region Strategy draft v1.1.1",
-      "source": "Canada MeshCore Region Strategy v1.1.1",
-      "sourceUrl": "https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54",
-      "sourceTier": "strategy",
-      "boundaryType": "approximate",
-      "basis": "shared-scope"
     },
     "bsl": {
       "state": "proposal",
@@ -3243,13 +3236,14 @@
     },
     {
       "tag": "slrd",
-      "lat": 49.697058,
-      "lon": -123.152517,
+      "lat": 49.694255,
+      "lon": -123.161963,
       "r": 82.2,
       "resolve": true,
       "sourceTier": "strategy",
-      "boundaryType": "approximate",
-      "seedMethod": "MeshMapper centre"
+      "boundaryType": "generator seed",
+      "seedMethod": "MeshMapper centre moved to nearest owned cartographic DA representative point",
+      "sourceCenter": [49.697058, -123.152517]
     },
     {
       "tag": "tnrd",
@@ -3565,15 +3559,26 @@
       "seedLabel": "Town of High Level, Alberta, Canada"
     },
     {
-      "tag": "lloyd",
+      "tag": "lloyd-ab",
       "lat": 53.279995,
-      "lon": -110.00885,
+      "lon": -110.04,
       "r": 30,
       "resolve": true,
       "sourceTier": "strategy",
-      "boundaryType": "approximate",
-      "seedMethod": "OpenStreetMap place centre",
-      "seedLabel": "City of Lloydminster, Alberta, Canada"
+      "boundaryType": "generator seed",
+      "seedMethod": "strategy centre adjusted inside Alberta",
+      "seedLabel": "Lloydminster, Alberta"
+    },
+    {
+      "tag": "lloyd-sk",
+      "lat": 53.279995,
+      "lon": -109.97,
+      "r": 30,
+      "resolve": true,
+      "sourceTier": "strategy",
+      "boundaryType": "generator seed",
+      "seedMethod": "strategy centre adjusted inside Saskatchewan",
+      "seedLabel": "Lloydminster, Saskatchewan"
     },
     {
       "tag": "estvn",
@@ -3892,13 +3897,14 @@
     },
     {
       "tag": "nia",
-      "lat": 43.0896,
-      "lon": -79.0849,
+      "lat": 43.088632,
+      "lon": -79.078502,
       "r": 30,
       "resolve": true,
       "sourceTier": "strategy",
-      "boundaryType": "approximate",
-      "seedMethod": "existing strategy centre"
+      "boundaryType": "generator seed",
+      "seedMethod": "strategy centre moved to its owned cartographic DA representative point",
+      "sourceCenter": [43.0896, -79.0849]
     },
     {
       "tag": "duf",
@@ -4102,13 +4108,14 @@
     },
     {
       "tag": "bru",
-      "lat": 44.4407,
-      "lon": -81.514,
+      "lat": 44.413438,
+      "lon": -81.437948,
       "r": 36,
       "resolve": true,
       "sourceTier": "strategy",
-      "boundaryType": "approximate",
-      "seedMethod": "existing strategy centre"
+      "boundaryType": "generator seed",
+      "seedMethod": "strategy centre moved to nearest owned cartographic DA representative point",
+      "sourceCenter": [44.4407, -81.514]
     },
     {
       "tag": "gry",
@@ -4402,13 +4409,14 @@
     },
     {
       "tag": "gasp",
-      "lat": 48.8291,
-      "lon": -64.481,
+      "lat": 48.820016,
+      "lon": -64.509868,
       "r": 65,
       "resolve": true,
       "sourceTier": "strategy",
-      "boundaryType": "approximate",
-      "seedMethod": "existing strategy centre"
+      "boundaryType": "generator seed",
+      "seedMethod": "strategy centre moved to nearest owned cartographic DA representative point",
+      "sourceCenter": [48.8291, -64.481]
     },
     {
       "tag": "chapp",
@@ -5175,12 +5183,13 @@
         "wcrt",
         "peace",
         "hlvl",
-        "lloyd"
+        "lloyd-ab"
       ]
     },
     {
       "label": "Saskatchewan",
       "tags": [
+        "lloyd-sk",
         "estvn",
         "wybrn",
         "regina",
@@ -5692,11 +5701,17 @@
       "hlvl",
       "High Level / far northwest"
     ],
-    "lloyd": [
-      "lloyd",
+    "lloyd-ab": [
+      "lloyd-ab",
       "Lloydminster",
       "Lloydminster AB",
-      "Lloydminster SK"
+      "Lloydminster Alberta"
+    ],
+    "lloyd-sk": [
+      "lloyd-sk",
+      "Lloydminster",
+      "Lloydminster SK",
+      "Lloydminster Saskatchewan"
     ],
     "estvn": [
       "estvn",
@@ -6120,10 +6135,6 @@
       "Thunder Bay",
       "yqt",
       "YQT"
-    ],
-    "ncr": [
-      "ncr",
-      "National Capital Region"
     ],
     "bsl": [
       "bsl",
@@ -6583,72 +6594,24 @@
       "reason": "The 2026-07-12 source polygon is an extreme area outlier and must be refreshed or approved before use as a boundary anchor."
     }
   },
-  "routingOverlays": {
+  "searchGroups": {
     "ncr": {
       "label": "National Capital Region",
-      "jurisdictions": [
-        "on",
-        "qc"
+      "members": [
+        "ott",
+        "gatout"
       ],
-      "state": "migration-marker",
-      "active": false,
-      "migrationState": "legacy-dual-role",
-      "legacyHierarchyTag": "ncr"
+      "geographic": false,
+      "emitInCommands": false
     },
     "lloyd": {
-      "label": "Lloydminster shared scope",
-      "jurisdictions": [
-        "ab",
-        "sk"
+      "label": "Lloydminster",
+      "members": [
+        "lloyd-ab",
+        "lloyd-sk"
       ],
-      "state": "migration-marker",
-      "active": false,
-      "migrationState": "legacy-dual-role",
-      "legacyHierarchyTag": "lloyd"
-    },
-    "pnw": {
-      "label": "Pacific Northwest",
-      "jurisdictions": [
-        "bc"
-      ],
-      "state": "external-coordination",
-      "active": false,
-      "migrationState": "overlay-only"
-    },
-    "lo": {
-      "label": "Lake Ontario",
-      "jurisdictions": [
-        "on"
-      ],
-      "state": "discussion",
-      "active": false,
-      "migrationState": "overlay-only"
-    }
-  },
-  "profiles": {
-    "ott": {
-      "additionalTags": [
-        {
-          "tag": "ncr",
-          "parent": "on"
-        }
-      ]
-    },
-    "gatout": {
-      "additionalTags": [
-        {
-          "tag": "ncr",
-          "parent": "qc"
-        }
-      ]
-    },
-    "lloyd": {
-      "additionalTags": [
-        {
-          "tag": "sk",
-          "parent": "can"
-        }
-      ]
+      "geographic": false,
+      "emitInCommands": false
     }
   },
   "retiredCanonicalTags": {
@@ -6665,6 +6628,8 @@
     "sw-on": "Replaced by on-sw",
     "ne-on": "Replaced by on-ne",
     "nw-on": "Replaced by on-nw",
-    "hdn": "Replaced by separate hald and norf leaves"
+    "hdn": "Replaced by separate hald and norf leaves",
+    "ncr": "Replaced by adjacent Ottawa and Outaouais leaves; retained only as a non-geographic search group",
+    "lloyd": "Replaced by lloyd-ab and lloyd-sk at the Alberta-Saskatchewan boundary"
   }
 }

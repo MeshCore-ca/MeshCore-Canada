@@ -16,18 +16,15 @@ This standard defines one Canada-wide region system: how every location is assig
 | Adoption | Becomes normative when approved and merged by MeshCore Canada |
 
 !!! important "What is authoritative today?"
-    This page is the proposed authority policy. The current map is still a review tool: it contains 29 MeshMapper source polygons mapped to 27 candidate tags and approximate areas for the other candidates. No raw source polygon or approximate circle is an authoritative boundary. A geographic release becomes authoritative only when its complete Dissemination Area membership file passes every release check in this standard.
+    This page and the generated national partition are proposed for review. The candidate assigns every digital DA exactly once and the public map renders only dissolved leaf regions. No raw source polygon or approximate circle is a boundary. The partition becomes operationally authoritative only after community review and every release check in this standard passes.
 
 ## The decision
 
-MeshCore Canada will maintain two related layers:
-
-1. **One geographic partition.** Every part of Canada belongs to exactly one geographic leaf in the path `can → province or territory → region → optional subregion`. Sibling areas never overlap and there are no gaps.
-2. **A separate routing-overlay registry.** Shared operating scopes such as `ncr`, `lloyd`, `pnw`, a future Lake Ontario scope, or event scopes may overlap the geographic partition. They do not own base geography.
+MeshCore Canada maintains **one geographic partition**. Every part of Canada belongs to exactly one geographic leaf in the path `can → province or territory → region → optional subregion`. Leaf interiors never overlap and their union covers the complete national DA extent.
 
 The published MeshCore Canada registry is the single source of truth. A boundary is not stored as a hand-drawn polygon. It is stored as a list of official Statistics Canada geographic cells, then regenerated from those cells.
 
-This distinction matters because MeshCore routes on exact region names. A parent-child tree organizes configuration and responsibility; it does not make a repeater automatically carry a parent or child scope. A repeater must explicitly carry every scope it is meant to forward.
+Only leaves own land. Provinces, territories, and larger region records are grouping nodes derived from their children. Raw MeshMapper polygons, strategy circles, shared routing scopes, and event areas are never published as regions and are never added to generated commands.
 
 ## Canonical model
 
@@ -40,7 +37,7 @@ This distinction matters because MeshCore routes on exact region names. A parent
 | Region | Stable operating area | Exhaustive within its jurisdiction |
 | Subregion | Optional split of a region | Exhaustive within its parent; never overlaps a sibling |
 
-A region with no children is a geographic leaf. When it is split, all of its cells move to subregions and the former leaf remains their parent. A location has one and only one leaf.
+A region with no children is a geographic leaf. When it is split, all of its cells move to subregions and the former leaf becomes a grouping node. It has no independent fill, resolver ownership, or additional command scope. A location resolves to one and only one leaf.
 
 Every record has separate fields for:
 
@@ -54,32 +51,39 @@ Every record has separate fields for:
 
 Names, tags, and geometry may change through review. The immutable ID does not.
 
-### Routing overlays
+### Cross-boundary names
 
-An overlay is an exact on-air scope with an approved purpose and coverage rule, but it is not a second geographic parent. Examples include:
+A familiar name may refer to more than one adjacent leaf, but it does not create another region:
 
-- `ncr` for the National Capital Region across Ontario and Québec;
-- `lloyd` for coordinated operation around Lloydminster across Alberta and Saskatchewan;
-- `pnw` where Canadian operators intentionally coordinate with the Pacific Northwest mesh;
-- a future `lo` scope if Lake Ontario operators on both sides approve it.
+- National Capital Region is a search grouping for Ottawa and Outaouais;
+- Lloydminster is split into `lloyd-ab` and `lloyd-sk` at the provincial boundary;
+- Pacific Northwest, Lake Ontario, and event names may be documented as coordination terms only.
 
-The geographic resolver returns one base path and may recommend zero or more overlays. Cross-jurisdiction overlays require approval from every affected jurisdiction. International overlays also require coordination with the neighbouring network.
+Search groupings have no polygon, parent relationship, resolver result, or generated command. A search for one shows its member leaves and asks the user to choose the correct side.
 
-One canonical tag cannot be active in both registries. During migration, `ncr` and `lloyd` may have an inactive `legacy-dual-role` overlay marker beside their existing hierarchy record. The marker documents the intended move; it is not a second active scope. Activating the overlay requires removing geographic-cell ownership from the legacy record and assigning those cells to ordinary jurisdiction leaves in the same release.
+### Selecting a larger region
+
+Selecting a province, territory, or larger region reveals its immediate child regions. Selecting a child with further children drills down again. The smallest displayed choices are the active leaves used for location lookup and commands.
+
+A parent outline is calculated as the union of its children for highlighting and map navigation. It is never stored or rendered as a competing filled region. This keeps the hierarchy useful without assigning the same place twice.
+
+The initial parent-child tree, labels, and seed locations consolidate the submitted strategy document, forum discussion, Discord feedback, screenshots, and earlier region drafts. Those community sources decide **which** subregions exist and how people identify them. MeshMapper remains the main boundary preference where it has a Canadian region. The generator decides the exact shared edge by assigning whole DAs; it does not invent extra names or stack user-drawn shapes.
+
+Future feedback enters the same pipeline as a proposed parent change, seed change, name change, or explicit DA reassignment. The before/after DA list is reviewable, so a local preference can improve a boundary without creating a gap or overlap elsewhere.
 
 ## Nationwide coverage frame
 
-The topology atom is the **2021 Statistics Canada Dissemination Area (DA)**. The 57,936 DAs together cover all of Canada. They are small, relatively stable, respect census-subdivision and census-tract boundaries, and usually follow visible features such as roads and water.
+The topology atom is the **2021 Statistics Canada Dissemination Area (DA)**. The digital product contains all 57,936 DAs and is the complete ownership domain. The cartographic product contains 57,932 DAs because four water-only DAs are omitted; it is used only for the cleaner public shoreline. Both products use the same membership wherever a cartographic DA exists.
 
 The generator uses the 76 official **2021 Economic Regions (ERs)** as broad guardrails. ERs keep an urban seed from absorbing a large, unrelated rural area merely because it is the closest seed. ER names are not automatically used as on-air names.
 
-The current strategy contributes 192 candidate geographic seeds. MeshMapper contributes 29 community source polygons mapped to 27 canonical candidate tags. These are inputs to the complete partition, not competing final layers.
+The current strategy contributes 192 candidate geographic seeds. The generator creates 193 leaves because the former cross-border Lloydminster seed is split into an Alberta leaf and a Saskatchewan leaf. MeshMapper contributes 29 community source polygons mapped to 27 canonical candidate tags. These are assignment inputs, not competing final layers.
 
 | Jurisdiction | ER guardrails | Current candidate leaves | MeshMapper source polygons |
 | --- | ---: | ---: | ---: |
 | British Columbia | 8 | 29 | 9 |
 | Alberta | 8 | 14 | 4 |
-| Saskatchewan | 6 | 11 | 1 |
+| Saskatchewan | 6 | 12 | 1 |
 | Manitoba | 8 | 10 | 1 |
 | Ontario | 11 | 50 | 10 |
 | Québec | 17 | 17 | 4 |
@@ -90,22 +94,22 @@ The current strategy contributes 192 candidate geographic seeds. MeshMapper cont
 | Yukon | 1 | 6 | 0 |
 | Northwest Territories | 1 | 5 | 0 |
 | Nunavut | 1 | 3 | 0 |
-| **Canada** | **76** | **192** | **29** |
+| **Canada** | **76** | **193** | **29** |
 
 The candidate leaf catalog remains machine-readable in [`canada-regions.json`](../assets/regions/canada-regions.json). The table above does not ratify every candidate name or grouping. Fuzzy hub areas—especially in Alberta, Saskatchewan, Manitoba, Newfoundland and Labrador, Yukon, and parts of Québec—remain priorities for local review before activation.
 
 ### Current-system audit
 
-The present prototype confirms why a new authority layer is needed:
+The retired overlapping prototype confirmed why one generated authority layer is needed:
 
-- all 218 hierarchy records still have `proposal` status;
-- 192 overlapping seed-radius areas and 29 raw MeshMapper polygons are displayed together, but they do not form a partition;
+- the catalog records still require community review before activation;
+- 192 overlapping seed-radius areas and 29 raw MeshMapper polygons were displayed together, but did not form a partition;
 - 52 of the 192 seed centres currently resolve to another tag or no tag under the prototype resolver, including three cross-jurisdiction results;
 - the 29 MeshMapper polygons contain 29 non-trivial overlap pairs; they must be reconciled before use as one layer;
 - the current `YXX` source polygon is an obvious area outlier and must be refreshed or explicitly approved before it can anchor Abbotsford;
 - six normalized aliases have more than one owner, so ambiguous searches require jurisdiction context or an explicit choice.
 
-These are migration findings, not accepted region definitions. The active-release checks below turn each one into a fail-closed test.
+These are migration findings, not accepted region definitions. The public map now consumes only the generated partition; source circles and raw source polygons remain evidence for the generator and QA report.
 
 ### Complete guardrail inventory
 
@@ -133,20 +137,20 @@ The **published registry release** is the final operational authority. Its input
 
 | Priority | Source | Role |
 | ---: | --- | --- |
-| 1 | Approved registry decisions | Explicit boundary, naming, split, merge, or overlay decisions |
+| 1 | Approved registry decisions | Explicit boundary, naming, split, merge, or DA-reassignment decisions |
 | 2 | MeshMapper Canada | Main community boundary and identity anchor where it has a Canadian region |
 | 3 | Canada MeshCore Region Strategy v1.1.1 | Candidate tags, parent relationships, and seeds outside MeshMapper coverage |
-| 4 | Deterministic generator | Assigns every still-unclaimed DA without inventing another manual layer |
+| 4 | Deterministic generator | Reconciles every DA into one region without inventing another manual layer |
 
 Statistics Canada is the topology authority at every priority. MeshMapper and approved community shapes decide intended coverage; the final edge is snapped to whole DAs so neighbours share the same boundary.
 
 Other sources have supporting roles:
 
 - SGC Economic Regions prevent unreasonable long-distance growth.
-- Census divisions and census subdivisions add boundary-crossing penalties.
+- Census divisions and census subdivisions provide review context for generated edges.
 - Current provincial and territorial datasets validate municipal changes and local terminology.
 - The Canadian Geographical Names Database validates place names.
-- First Nations reserve, Inuit region, Métis settlement, treaty, and Canada Lands data are context and review overlays. They do not become operational boundaries or names without affected-community review.
+- First Nations reserve, Inuit region, Métis settlement, treaty, and Canada Lands data are reference datasets outside the region layer. They do not become operational boundaries or names without affected-community review.
 
 An approved local decision may refine a MeshMapper anchor. It must identify the changed DAs, explain the local consensus, pass the same QA, and receive a new registry release. Raw polygons from different providers are never stacked together as a final “best effort” layer.
 
@@ -159,7 +163,6 @@ The generator must produce the same result from the same locked inputs.
 Record the download URL, release date, licence, file size, and SHA-256 hash for:
 
 - the 2021 DA digital and cartographic boundary files;
-- the 2021 Dissemination Geographies Relationship File;
 - the 2021 SGC Economic Region classification;
 - the MeshMapper Canada snapshot;
 - the candidate registry, approved overrides, and generator configuration.
@@ -168,54 +171,54 @@ Do not mix a newer Census Subdivision file into the 2021 DA suite. Newer municip
 
 ### 2. Normalize geometry
 
-Validate and repair source geometry, calculate area in `ESRI:102001` (Canada Albers Equal Area Conic), and publish web output in WGS 84. Each DA is addressed by its DGUID, not by a row number or a label.
+Validate and repair source geometry, calculate area and distance in Statistics Canada `EPSG:3347`, and publish web output in WGS 84. Each DA is addressed by its DGUID, not by a row number or a label.
 
-For MCC-REG-1, “DA land geometry” means the matching 2021 cartographic DA geometry after `GEOS MakeValid` and snap-rounding to a 0.1 metre precision grid. “Representative point” means GEOS `PointOnSurface` calculated from that land geometry. Overlap area is measured from that geometry in `ESRI:102001`; the digital DA geometry is not used as a land mask. `sources.lock.json` records the exact cartographic and digital files, while `generator.yml` records the GEOS, PROJ, GDAL, and generator versions plus all repair and precision settings.
+For MCC-REG-1, the digital DA coverage is the ownership geometry. “Representative point” means GEOS `PointOnSurface` calculated from that geometry in Statistics Canada's `EPSG:3347` projection. The complete official DA coverage is preserved as shared atoms; it is not buffered, repaired, or simplified one feature at a time. Only external source polygons are repaired before comparison. `sources.lock.json` records the exact source files, while `generator.yml` records the algorithm, toolchain, and precision settings.
 
-Before a source polygon may anchor cells, it must pass geometry validity, non-zero area, declared-centre containment, declared-jurisdiction compatibility, and area-to-declared-radius sanity checks. A geographic anchor is clipped at its province-or-territory boundary; any source area on the other side is logged and may inform an approved overlay, but cannot claim the neighbouring geographic partition. A source that cannot be reconciled safely is quarantined and the candidate falls back to its reviewed strategy seed until the source is corrected.
+The candidate generator requires each source polygon to have a registry crosswalk, non-empty repaired geometry, a declared jurisdiction, and contact with at least one DA in that jurisdiction. A source marked quarantined is excluded. Centre, radius, and jurisdiction-spill review remain release gates before a candidate can become authoritative.
 
-### 3. Snap approved and MeshMapper anchors
+### 3. Snap MeshMapper envelopes to DAs
 
-A source polygon claims a DA when either:
+A source polygon marks a DA as part of its **macro envelope** when either:
 
 - the DA representative point is covered by the source polygon; or
 - at least 50% of the DA land area overlaps the source polygon.
 
-If anchors claim the same DA, the winner is selected by:
+If envelopes cover the same DA, the winning envelope is selected by:
 
 1. an explicit approved override;
 2. the largest overlap ratio;
 3. the source-priority value in the registry;
 4. the lexically smallest immutable registry ID.
 
-Every conflict is written to the QA report. No conflict is silently discarded.
+Every conflict is written to the QA report. An envelope chooses which MeshMapper target may compete for a DA; it does not own the DA outright. Raw source shapes are never exported as operational polygons.
 
-### 4. Seed uncovered candidate regions
+### 4. Validate community seeds
 
-Each accepted strategy region without a locked anchor claims the DA containing its seed point. A seed on a boundary uses the lexically smallest covering DA DGUID. A seed outside its declared jurisdiction is a release-blocking error.
+Each local region has one reviewed seed point. The DA containing that point is its anchor. A seed on a boundary uses the lexically smallest covering DA DGUID. A seed outside its declared jurisdiction is a release-blocking error.
 
-Two candidate seeds in the same DA, or a seed landing in a DA already locked to another region, is also a release-blocking conflict. The registry must correct the seed or add an explicit reviewed membership override; the generator never silently moves a seed or picks a winner.
+Two candidate seeds in the same DA are a release-blocking conflict. The registry must correct the seed; the generator never silently moves it.
 
-### 5. Build the adjacency graph
+### 5. Set guardrails
 
-Two DAs are neighbours only when their land polygons share an edge. Corner contact does not count. An edge is weighted by the distance between the DAs' representative points. The initial generator adds a 10 km cost when crossing a Census Subdivision boundary and a further 40 km when crossing a Census Division boundary. These constants are versioned in `generator.yml`.
+Automatic assignment never crosses a province or territory. Each seed has one home Economic Region. A MeshMapper target may also compete inside every Economic Region touched by its accepted envelope.
 
-Automatic growth never crosses a province or territory. Every active geographic record also declares `allowed_er_codes`. The initial candidate list is the ER containing its seed plus any ER touched by its accepted locked anchor; additions or removals require review. Growth stays inside that declared list.
+### 6. Assign every DA once
 
-### 6. Fill every gap
+First choose the nearest seed whose home Economic Region matches the DA. Inside a winning MeshMapper envelope, compare its mapped target with the community seeds covered by that envelope whose home Economic Region matches the DA. If only the mapped target remains, also include the ordinary same-ER nearest seed. Assign the DA to the closest candidate in `EPSG:3347`; exact ties resolve by immutable registry ID.
 
-Within each jurisdiction and ER, run a multi-source shortest-path assignment from all eligible locked cells and seeds. Equal-cost ties resolve by source priority, then immutable registry ID. The QA report compares each generated region with every strategy radius and source polygon that informed it, including cells and population added or removed. An unexplained ER truncation is release-blocking.
+This keeps MeshMapper as the main boundary preference while allowing submitted local regions to subdivide a large envelope cleanly. The QA report records each envelope's final per-region DA counts and blocks a dominant envelope that starves a contained community seed.
 
-If an ER has no eligible region, create a neutral proposed fallback record for that ER. Do not let the nearest city in another ER absorb it. The fallback must be named or merged through local review before activation.
+If an Economic Region has no home seed, the generator records a release-blocking fallback and uses the nearest seed inside the same province or territory only to keep the candidate map complete. It never assigns across a jurisdiction border.
 
-For a disconnected island or land component, choose an existing owner in this order: same Census Subdivision, same Census Division, same ER, then shortest geodesic distance within the jurisdiction. MultiPolygon output is valid; synthetic water bridges are not.
+MultiPolygon output is valid for real islands and separated land components; synthetic water bridges are not. A disconnected mainland fragment is flagged for local review.
 
 ### 7. Generate both boundary products
 
 - The resolver uses DA **digital** boundaries so coastal water is handled consistently.
 - The public map uses DA **cartographic** boundaries for a clean shoreline.
 
-Both products use the same DA membership. A point covered by more than one polygon edge resolves to the leaf with the lexically smallest DA DGUID, then the lexically smallest registry ID.
+Both products use the same DA membership. Generated leaf interiors are pairwise disjoint and their union is the complete locked DA extent. Adjacent leaves share one zero-width edge. A point exactly on that edge resolves to the lexically smallest registry ID.
 
 ## Splitting and merging
 
@@ -230,7 +233,7 @@ A split proposal must include:
 - evidence of affected-community review;
 - an updated command-budget report.
 
-All parent cells must belong to exactly one child. The old parent remains in the hierarchy and may remain an on-air parent scope; it no longer owns geographic cells.
+All parent cells must belong to exactly one child. After a split, the parent is a non-leaf grouping only. It has no separate resolver ownership, published fill, or additional routing scope.
 
 Aggregate Dissemination Areas are useful starting groups for a split, but their codes are not permanent identity. They may be divided or combined when local geography calls for it.
 
@@ -247,7 +250,7 @@ Canonical on-air tags must:
 - use no more than 29 UTF-8 bytes;
 - remain stable once active;
 - avoid automatic “largest town wins” naming for broad rural areas;
-- be checked against active, deprecated, retired, alias, and overlay tags.
+- be checked against active, deprecated, retired, alias, and non-geographic search-group names.
 
 IATA and postal codes may be aliases where helpful, but neither system is the national naming authority. New subregions use a locally meaningful flat tag when one is unambiguous. A parent-prefixed tag is a fallback for collision avoidance, not a requirement.
 
@@ -262,7 +265,7 @@ Generated commands use canonical tags only. Search may accept labels and aliases
 | MeshCore Canada region maintainers | Registry integrity, collision checks, releases, generator and QA |
 | Provincial or territorial stewards | Coordinate local proposals and confirm jurisdiction-wide effects |
 | Local operators and communities | First review of local names, grouping, and practical coverage |
-| Cross-boundary partners | Joint approval of overlays and international scopes |
+| Adjacent region stewards | Joint review when a proposal moves their shared DA boundary |
 
 The national maintainers enforce the data model; they do not invent local identity. A technically valid change may still wait for local review. A locally popular change may still fail if it creates a gap, overlap, collision, or command-budget violation.
 
@@ -278,7 +281,7 @@ The national maintainers enforce the data model; they do not invent local identi
 Versioning rules:
 
 - **Major:** census-geography vintage or incompatible authority/model change.
-- **Minor:** DA reassignment, split, merge, hierarchy change, tag change, or overlay change.
+- **Minor:** DA reassignment, split, merge, hierarchy change, or tag change.
 - **Patch:** labels, aliases, documentation, or source metadata with no membership change.
 
 Operational region boundaries are community routing definitions. They are not legal, electoral, cadastral, treaty, title, or sovereignty claims.
@@ -289,9 +292,11 @@ A geographic release fails unless all of these are true:
 
 - all 57,936 DAs appear exactly once in the leaf-membership table;
 - every DA's leaf is inside the same province or territory;
-- sibling leaves have zero land-area overlap;
-- all leaves together equal the chosen Canada digital boundary extent;
+- every pair of leaf interiors has zero positive-area overlap, regardless of hierarchy branch;
+- the symmetric difference between the leaf union and the locked 57,936-DA digital union is zero at the configured precision;
 - every subregion union equals its parent membership;
+- only leaves own geometry; no `routingOverlays`, `sharedParents`, or profile-added scopes exist;
+- every resolver test point returns exactly one leaf;
 - every active region is contiguous by shared land edge, or has a documented island/MultiPolygon exception;
 - every active tag is globally unique and within the firmware byte limit;
 - every old tag resolves to an active record, a deprecated record, or a tombstone;
@@ -300,7 +305,7 @@ A geographic release fails unless all of these are true:
 - every source polygon passes the area, centre, jurisdiction-compatibility, and review-state checks before it is used as an anchor;
 - all generated geometry is valid and reproducible from locked inputs;
 - all generated command fixtures fit the 32-region, 172-byte response, and 160-character serial-line limits;
-- English and French labels are present for every active geographic and overlay record;
+- English and French labels are present for every active geographic record;
 - the QA report contains no unreviewed conflicts or fallback regions.
 
 ## Required registry artifacts
@@ -311,28 +316,27 @@ Before the first MCC-REG-1 geographic release is marked active, the repository m
 | --- | --- |
 | `sources.lock.json` | Exact inputs, licences, and hashes |
 | `generator.yml` | Algorithm version and all constants |
-| `regions.yml` | Geographic records, hierarchy, and reviewed `allowed_er_codes` |
-| `overlays.yml` | Shared routing scopes and approvals |
-| `da-membership.csv` | One row for every DA DGUID and its leaf ID |
+| `canada-regions.json` | Geographic records, hierarchy, aliases, and source crosswalks |
+| `canada-region-membership.csv` | One row for every digital DA DGUID and its leaf tag |
 | `aliases.csv` | Current, deprecated, historical, and search aliases |
-| `regions.geojson` | Generated cartographic map layer |
-| `regions-digital.geojson` | Generated resolver layer |
-| `qa.json` and a readable QA report | Release evidence and source deviations |
+| `canada-region-partition.geojson` | Generated cartographic leaf layer |
+| `canada-region-partition-digital.geojson` | Generated complete resolver layer |
+| `canada-region-partition.qa.json` | Release evidence, hashes, and source deviations |
 | `configuration.yml` | Firmware and radio-setting policy kept separate from geography |
 
-Generated GeoJSON is a build output. `regions.yml`, `overlays.yml`, `da-membership.csv`, and the source lock are the authority inputs. A tag duplicated between `regions.yml` and `overlays.yml` is a release error unless the overlay entry is an explicitly inactive migration marker.
+Generated GeoJSON is a build output. The catalog, membership table, generator configuration, and source lock are the authority inputs. Non-geographic search groups may reference leaf tags, but they never own cells, appear in the map layer, resolve from a point, or enter generated commands.
 
 ## Migration from the current map
 
 | Phase | Result | Boundary status |
 | --- | --- | --- |
-| Current PR | 192 strategy candidates and 29 MeshMapper source polygons mapped to 27 tags in one UI | Source polygons where present; otherwise approximate |
+| Generated candidate | 193 exclusive leaves; every digital DA assigned once | Complete and non-overlapping; still proposed |
 | Source lock | Statistics Canada, MeshMapper, strategy, and override inputs frozen | Reproducible inputs |
 | Generated draft | Every DA assigned; automated QA published | Complete but proposed |
 | Local review | Alberta and other fuzzy hub areas corrected; names reviewed in both official languages | Reviewed |
 | Active release | Membership and artifacts pass every release check | Authoritative |
 
-During migration, MeshMapper remains the main source where it has a region. The current circles and nearest-seed shading are never promoted as final polygons. `ncr`, `lloyd`, and other shared concepts move into the overlay registry without losing their established on-air tags.
+MeshMapper remains the main community assignment source where it has a region. Circles and raw source polygons are never promoted or rendered as final regions. Ottawa and Outaouais remain adjacent provincial leaves, Lloydminster is split into `lloyd-ab` and `lloyd-sk`, and shared names remain search-only groupings.
 
 ## Repeater configuration rules
 

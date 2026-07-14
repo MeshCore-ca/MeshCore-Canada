@@ -39,8 +39,11 @@ MCC-REG-1 authority sources
 
 The region definition and authority standard specifies Statistics Canada 2021
 Dissemination Areas as the topology units and 2021 Economic Regions as broad
-generation guardrails. No Statistics Canada boundary file is included in this
-snapshot. A future generated release must lock and attribute its exact inputs.
+generation guardrails. canada-region-membership.csv and
+canada-region-partition.geojson are derived from those sources. The original
+Statistics Canada shapefiles are not redistributed. sources.lock.json records
+the exact downloads, byte sizes, dates, licences, and SHA-256 hashes used to
+generate the committed candidate layer.
 
 Statistics Canada source information and Open Licence:
 
