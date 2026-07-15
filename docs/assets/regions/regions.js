@@ -11,7 +11,7 @@
   var leafletPromise = null;
   var lucidePromise = null;
   var activeMaps = [];
-  var LUCIDE_SRC = "https://unpkg.com/lucide@0.547.0/dist/umd/lucide.js";
+  var LUCIDE_SRC = new URL("vendor/lucide.js", assetBase).href;
 
   function fetchJsonAsset(filename, errorMessage) {
     return fetch(new URL(filename, assetBase)).then(function (response) {
@@ -2050,11 +2050,11 @@
     leafletPromise = new Promise(function (resolve, reject) {
       var link = document.createElement("link");
       link.rel = "stylesheet";
-      link.href = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
+      link.href = new URL("vendor/leaflet/leaflet.css", assetBase).href;
       document.head.appendChild(link);
 
       var script = document.createElement("script");
-      script.src = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
+      script.src = new URL("vendor/leaflet/leaflet.js", assetBase).href;
       script.onload = function () { resolve(window.L); };
       script.onerror = function () {
         leafletPromise = null;
