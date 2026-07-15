@@ -18,11 +18,19 @@ hide:
 
 ## Tell us what would help
 
-<form id="community-submission-form" class="submission-form">
+<form id="community-submission-form" class="submission-form" action="https://github.com/MeshCore-ca/MeshCore-Canada/issues/new" method="get" target="_blank" rel="noopener">
+  <input type="hidden" name="template" value="community_idea.yml">
+  <noscript>
+    <div class="submission-no-script" role="note">
+      <strong>JavaScript is turned off.</strong> You can still complete this form: “Prepare submission” will open the guided GitHub form directly. The preview and copy tools require JavaScript, so use the forum or Discord links below if you prefer not to use GitHub.
+    </div>
+  </noscript>
+
   <div class="submission-form__grid">
     <div class="submission-field">
       <label for="submission-category">What kind of contribution is this?</label>
-      <select id="submission-category" name="category" required>
+      <span id="submission-category-hint" class="submission-field__hint">Choose the closest match. Maintainers can adjust it later.</span>
+      <select id="submission-category" name="category" aria-describedby="submission-category-hint" required>
         <option value="">Choose the closest match</option>
         <option>Newcomer or accessibility improvement</option>
         <option>Documentation correction</option>
@@ -36,7 +44,8 @@ hide:
 
     <div class="submission-field">
       <label for="submission-experience">How familiar are you with MeshCore?</label>
-      <select id="submission-experience" name="experience" required>
+      <span id="submission-experience-hint" class="submission-field__hint">This helps maintainers explain the next step at a useful level.</span>
+      <select id="submission-experience" name="experience" aria-describedby="submission-experience-hint" required>
         <option value="">Choose one</option>
         <option>Brand new / researching</option>
         <option>Setting up my first node</option>
@@ -49,38 +58,38 @@ hide:
 
   <div class="submission-field">
     <label for="submission-summary">Short title</label>
-    <span class="submission-field__hint">One sentence is enough. Example: “A printable checklist for first-time repeater installs.”</span>
-    <input id="submission-summary" name="summary" type="text" maxlength="100" autocomplete="off" required>
+    <span id="submission-summary-hint" class="submission-field__hint">One sentence is enough. Example: “A printable checklist for first-time repeater installs.”</span>
+    <input id="submission-summary" name="summary" type="text" maxlength="100" autocomplete="off" aria-describedby="submission-summary-hint" required>
   </div>
 
   <div class="submission-field">
     <label for="submission-region">City or broad region <span class="submission-field__hint">(optional)</span></label>
-    <span class="submission-field__hint">This helps when the idea depends on local coverage or community information. Do not post a home address.</span>
-    <input id="submission-region" name="region" type="text" maxlength="100" autocomplete="address-level2" placeholder="Example: Waterloo Region, Ontario">
+    <span id="submission-region-hint" class="submission-field__hint">This helps when the idea depends on local coverage or community information. Do not post a home address.</span>
+    <input id="submission-region" name="region" type="text" maxlength="100" autocomplete="address-level2" aria-describedby="submission-region-hint" placeholder="Example: Waterloo Region, Ontario">
   </div>
 
   <div class="submission-field">
     <label for="submission-need">What are you trying to do, or what is difficult today?</label>
-    <span class="submission-field__hint">Plain language is best. Tell us where you got stuck, what was missing, or what you observed.</span>
-    <textarea id="submission-need" name="need" maxlength="2000" required></textarea>
+    <span id="submission-need-hint" class="submission-field__hint">Plain language is best. Tell us where you got stuck, what was missing, or what you observed.</span>
+    <textarea id="submission-need" name="need" maxlength="2000" aria-describedby="submission-need-hint" required></textarea>
   </div>
 
   <div class="submission-field">
     <label for="submission-idea">What would make it better?</label>
-    <span class="submission-field__hint">A rough idea is welcome. You do not need to design the complete solution.</span>
-    <textarea id="submission-idea" name="idea" maxlength="2000" required></textarea>
+    <span id="submission-idea-hint" class="submission-field__hint">A rough idea is welcome. You do not need to design the complete solution.</span>
+    <textarea id="submission-idea" name="idea" maxlength="2000" aria-describedby="submission-idea-hint" required></textarea>
   </div>
 
   <div class="submission-field">
     <label for="submission-context">Anything else that might help? <span class="submission-field__hint">(optional)</span></label>
-    <span class="submission-field__hint">Examples: device model, app, screenshot description, related page, what you already tried, or who else this may help.</span>
-    <textarea id="submission-context" name="context" maxlength="2000"></textarea>
+    <span id="submission-context-hint" class="submission-field__hint">Examples: device model, app, screenshot description, related page, what you already tried, or who else this may help.</span>
+    <textarea id="submission-context" name="context" maxlength="2000" aria-describedby="submission-context-hint"></textarea>
   </div>
 
   <div class="submission-field">
     <label for="submission-follow-up">Public username or profile for follow-up <span class="submission-field__hint">(optional)</span></label>
-    <span class="submission-field__hint">A Discord username, forum profile, or GitHub username is enough. Do not enter an email address unless you want it published.</span>
-    <input id="submission-follow-up" name="follow_up" type="text" maxlength="120" autocomplete="off" placeholder="Example: @meshfriend on Discord">
+    <span id="submission-follow-up-hint" class="submission-field__hint">A Discord username, forum profile, or GitHub username is enough. Avoid email addresses or other private contact information.</span>
+    <input id="submission-follow-up" name="follow_up" type="text" maxlength="120" autocomplete="off" aria-describedby="submission-follow-up-hint" placeholder="Example: @meshfriend on Discord">
   </div>
 
   <label class="submission-consent" for="submission-public">
@@ -94,26 +103,27 @@ hide:
     <a id="open-github-submission" class="md-button is-disabled" href="#" aria-disabled="true" target="_blank" rel="noopener">Continue on GitHub</a>
   </div>
 
+  <p id="submission-github-note" class="submission-github-note" role="note" hidden></p>
   <p id="submission-status" class="submission-status" role="status" aria-live="polite"></p>
-  <pre id="submission-preview" class="submission-preview" hidden aria-label="Prepared submission preview"></pre>
+  <pre id="submission-preview" class="submission-preview" tabindex="-1" hidden aria-label="Prepared submission preview"></pre>
 </form>
 
 ## Choose where to send it
 
-<div class="submission-routes">
-  <div class="submission-route">
+<ul class="submission-routes">
+  <li class="submission-route">
     <h3>GitHub</h3>
     <p>Best for tracking a proposal through review. The prepared link fills the community idea form for you. A free GitHub account is required.</p>
-  </div>
-  <div class="submission-route">
+  </li>
+  <li class="submission-route">
     <h3>Community forum</h3>
     <p>Prepare and copy the text above, then start a discussion on the <a href="https://forum.meshcore.ca/" target="_blank" rel="noopener">MeshCore Canada forum</a>.</p>
-  </div>
-  <div class="submission-route">
+  </li>
+  <li class="submission-route">
     <h3>Discord</h3>
     <p>For an informal conversation, copy the text and share it in the <a href="https://discord.gg/BESFVMt7yk" target="_blank" rel="noopener">MeshCore Canada Discord</a>.</p>
-  </div>
-</div>
+  </li>
+</ul>
 
 ## What happens next?
 

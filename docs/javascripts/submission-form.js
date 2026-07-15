@@ -6,7 +6,10 @@
   const status = document.getElementById("submission-status");
   const copyButton = document.getElementById("copy-submission");
   const githubLink = document.getElementById("open-github-submission");
+  const githubNote = document.getElementById("submission-github-note");
   const issueEndpoint = "https://github.com/MeshCore-ca/MeshCore-Canada/issues/new";
+  // GitHub warns that oversized issue-prefill URLs may fail, so stay below a conservative budget.
+  const maxGithubUrlLength = 7000;
   let preparedText = "";
 
   const fieldValue = (id) => document.getElementById(id).value.trim();
@@ -58,6 +61,20 @@
     return `${issueEndpoint}?${params.toString()}`;
   }
 
+  function buildGithubFallbackUrl(data) {
+    const params = new URLSearchParams({
+      template: "community_idea.yml",
+      title: `[Community idea] ${data.summary}`
+    });
+
+    return `${issueEndpoint}?${params.toString()}`;
+  }
+
+  function clearGithubNote() {
+    githubNote.hidden = true;
+    githubNote.textContent = "";
+  }
+
   function markUnprepared() {
     preparedText = "";
     copyButton.disabled = true;
@@ -65,7 +82,17 @@
     githubLink.classList.add("is-disabled");
     githubLink.setAttribute("aria-disabled", "true");
     preview.hidden = true;
+    clearGithubNote();
     status.textContent = "Changes have not been prepared yet.";
+  }
+
+  function selectPreviewText() {
+    const selection = window.getSelection();
+    const range = document.createRange();
+    range.selectNodeContents(preview);
+    selection.removeAllRanges();
+    selection.addRange(range);
+    preview.focus();
   }
 
   async function copyText(text) {
@@ -96,11 +123,23 @@
     preview.hidden = false;
 
     copyButton.disabled = false;
-    githubLink.href = buildGithubUrl(data);
+    const githubUrl = buildGithubUrl(data);
+    const canPrefillGithub = githubUrl.length <= maxGithubUrlLength;
+    githubLink.href = canPrefillGithub ? githubUrl : buildGithubFallbackUrl(data);
     githubLink.classList.remove("is-disabled");
     githubLink.setAttribute("aria-disabled", "false");
-    status.textContent = "Submission prepared. Review it below, then copy it or continue on GitHub.";
-    preview.scrollIntoView({ behavior: "smooth", block: "nearest" });
+
+    if (canPrefillGithub) {
+      clearGithubNote();
+      status.textContent = "Submission prepared. Review it below, then copy it or continue on GitHub.";
+    } else {
+      githubNote.textContent = "This submission is too long for a reliable GitHub prefill. Copy the prepared text first. GitHub will open the guided form without your answers; paste the text into Additional context and complete the required choices there.";
+      githubNote.hidden = false;
+      status.textContent = "Submission prepared. Copy the text before continuing to GitHub.";
+    }
+
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    preview.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "nearest" });
   });
 
   form.addEventListener("input", () => {
@@ -113,7 +152,8 @@
       await copyText(preparedText);
       status.textContent = "Copied. You can paste the submission into the forum or Discord.";
     } catch (_error) {
-      status.textContent = "Copy was blocked by the browser. Select the preview text and copy it manually.";
+      selectPreviewText();
+      status.textContent = "Copy was blocked by the browser. The preview is selected; copy it manually.";
     }
   });
 

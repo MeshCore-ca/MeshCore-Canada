@@ -30,6 +30,9 @@ jobs:
         run: |
           pip install mkdocs-macros-plugin pyyaml mkdocs-glightbox pymdown-extensions
 
+      - name: Validate community submission helper
+        run: python scripts/validate_community_submission.py
+
       - name: Build MkDocs site
         run: mkdocs build --strict
 
