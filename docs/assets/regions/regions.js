@@ -1160,6 +1160,7 @@
       '<input class="mcc-input" id="mcc-location-input" type="text" autocomplete="off" spellcheck="false" placeholder="Ottawa, YOW, K1A 0B1">' +
       '<button class="mcc-button" type="button" data-action="locate">' + icon("search") + 'Find</button>' +
       '</div>' +
+      '<p class="mcc-search-privacy">Search sends your query to OpenStreetMap Nominatim / geocoder.ca. Click the map or use device location to stay fully local.</p>' +
       '<div data-role="status"></div>' +
       '<div class="mcc-selected-region" data-role="selected-region" hidden></div>' +
       '<details class="mcc-alternate-regions" data-role="region-browser" hidden>' +
@@ -1512,6 +1513,7 @@
       '<input class="mcc-input" id="mcc-map-location-input" data-role="map-input" type="text" autocomplete="off" spellcheck="false" placeholder="Ottawa, YOW, K1A 0B1">' +
       '<button class="mcc-button" type="button" data-action="map-locate">' + icon("search") + 'Find</button>' +
       '</div>' +
+      '<p class="mcc-search-privacy">Search sends your query to OpenStreetMap Nominatim / geocoder.ca. Click the map or use device location to stay fully local.</p>' +
       '<div data-role="map-status"></div>' +
       '</section>' +
       '<section class="mcc-card mcc-dynamic-card" data-role="map-result-section" hidden>' +

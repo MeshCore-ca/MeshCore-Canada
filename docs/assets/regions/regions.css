@@ -215,6 +215,13 @@ body:has([data-mcc-regions]) .md-typeset a {
   gap: 0.45rem;
 }
 
+.mcc-search-privacy {
+  font-size: 0.72rem;
+  color: var(--mcc-muted, #8d93ae);
+  margin: 0.35rem 0 0;
+  line-height: 1.4;
+}
+
 .mcc-input,
 .mcc-select {
   width: 100%;
