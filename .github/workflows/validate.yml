@@ -32,7 +32,7 @@ jobs:
           python scripts/verify-region-geometry.py --partition docs/assets/regions/canada-region-partition-digital.geojson
 
       - name: Set up Node
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version: "22"
 
