@@ -1,0 +1,260 @@
+{
+  "schema": "mcc-region-editor-data/v1",
+  "censusVintage": 2021,
+  "format": "topojson",
+  "crs": "EPSG:4326",
+  "topologyObject": "cells",
+  "cellProperties": [
+    "DGUID",
+    "DAUID",
+    "PRUID",
+    "CDUID",
+    "CDNAME",
+    "CSDUID",
+    "CSDNAME",
+    "CSDTYPE",
+    "leaf_tag",
+    "seed_tag"
+  ],
+  "simplification": {
+    "tool": "mapshaper",
+    "version": "0.6.113",
+    "method": "weighted-visvalingam",
+    "retainedVertices": "10%",
+    "jointTopologyPerProvince": true,
+    "keepShapes": true,
+    "coordinatePrecision": 1e-06
+  },
+  "inputs": {
+    "membershipSha256": "9e23bf1605a32e469e651dd62c4ecf4ff6f7169da95f8d15fc82ad4fa53f9c87",
+    "catalogSha256": "169804b034fba0060cec9d3117f730622b7d622a0d26c91d95e74423e074f940",
+    "digitalDaDatasetSha256": "1f20088a21bd85707780fd21e6caecb1a7d9efa081b0437f1f3f52112eb877fc",
+    "censusSubdivisionDatasetSha256": "2a582138f030df3caaf6fc8b0ce6edd5f18b0be133a99290d4cead5f60b1ee2c",
+    "censusDivisionDatasetSha256": "d1b6f74a73a3102a95bba594741f571e9a43b2d1f8a01700bc20ac7fdc14a5b6"
+  },
+  "totalCells": 57936,
+  "seedCellCount": 193,
+  "provinces": [
+    {
+      "pruid": "10",
+      "tag": "nl",
+      "name": "Newfoundland and Labrador",
+      "file": "cells-10.topo.json",
+      "object": "cells",
+      "cellCount": 1082,
+      "leafCount": 11,
+      "boundsWgs84": [
+        -67.821685,
+        46.595616,
+        -52.582296,
+        60.377744
+      ],
+      "bytes": 544655,
+      "sha256": "9c984526689ba652039f36d9cd4ba40efd9b7c5dab77e2caa49bc939b31c355a"
+    },
+    {
+      "pruid": "11",
+      "tag": "pe",
+      "name": "Prince Edward Island",
+      "file": "cells-11.topo.json",
+      "object": "cells",
+      "cellCount": 319,
+      "leafCount": 3,
+      "boundsWgs84": [
+        -64.446016,
+        45.858023,
+        -61.954993,
+        47.065968
+      ],
+      "bytes": 119784,
+      "sha256": "7610d7e437e45545cbed1dee459a394a10a3d55e4fde82197295c175ac74495e"
+    },
+    {
+      "pruid": "12",
+      "tag": "ns",
+      "name": "Nova Scotia",
+      "file": "cells-12.topo.json",
+      "object": "cells",
+      "cellCount": 1670,
+      "leafCount": 18,
+      "boundsWgs84": [
+        -66.447081,
+        43.251742,
+        -59.651727,
+        47.235081
+      ],
+      "bytes": 937978,
+      "sha256": "1b0cfc1c4f5951dde479c3bcbe48457c073656716c373fdff22374beefc4c1d1"
+    },
+    {
+      "pruid": "13",
+      "tag": "nb",
+      "name": "New Brunswick",
+      "file": "cells-13.topo.json",
+      "object": "cells",
+      "cellCount": 1470,
+      "leafCount": 15,
+      "boundsWgs84": [
+        -69.053472,
+        44.555681,
+        -63.614712,
+        48.089339
+      ],
+      "bytes": 698964,
+      "sha256": "0ad92189003f70bdc6f6cfddeb96bb2cf9ac4c5b2d891dce62ba03a2c1ce0dc4"
+    },
+    {
+      "pruid": "24",
+      "tag": "qc",
+      "name": "Québec",
+      "file": "cells-24.topo.json",
+      "object": "cells",
+      "cellCount": 13806,
+      "leafCount": 17,
+      "boundsWgs84": [
+        -79.770776,
+        44.991143,
+        -57.105486,
+        62.593591
+      ],
+      "bytes": 5752696,
+      "sha256": "03c1b35516d8e5ab9c6fc2dd4bfd37d68c825435323fffad1cdb04fbec9a60ad"
+    },
+    {
+      "pruid": "35",
+      "tag": "on",
+      "name": "Ontario",
+      "file": "cells-35.topo.json",
+      "object": "cells",
+      "cellCount": 20468,
+      "leafCount": 50,
+      "boundsWgs84": [
+        -95.156001,
+        41.676949,
+        -74.320381,
+        56.861705
+      ],
+      "bytes": 8021619,
+      "sha256": "f500fd34eb74e4ecafb14fa3502ea723291f826fbb3c995928257f27f11ab2e3"
+    },
+    {
+      "pruid": "46",
+      "tag": "mb",
+      "name": "Manitoba",
+      "file": "cells-46.topo.json",
+      "object": "cells",
+      "cellCount": 2223,
+      "leafCount": 10,
+      "boundsWgs84": [
+        -102.007609,
+        48.998861,
+        -88.979577,
+        60.000062
+      ],
+      "bytes": 971376,
+      "sha256": "3fc7c401f67f0a2376ff0e68a3fb945404905577281f1f2f7b15d7cfe0c87a7f"
+    },
+    {
+      "pruid": "47",
+      "tag": "sk",
+      "name": "Saskatchewan",
+      "file": "cells-47.topo.json",
+      "object": "cells",
+      "cellCount": 2625,
+      "leafCount": 12,
+      "boundsWgs84": [
+        -110.010393,
+        48.998926,
+        -101.361875,
+        60.000062
+      ],
+      "bytes": 1009073,
+      "sha256": "d2fe2bbff4113aafd2decca0b9b30455454d23ced9efef8dc1158347eda49732"
+    },
+    {
+      "pruid": "48",
+      "tag": "ab",
+      "name": "Alberta",
+      "file": "cells-48.topo.json",
+      "object": "cells",
+      "cellCount": 6203,
+      "leafCount": 14,
+      "boundsWgs84": [
+        -120.002698,
+        48.99674,
+        -109.999641,
+        60.000073
+      ],
+      "bytes": 2421224,
+      "sha256": "6de719714c1cb83f63eeade311c7b128302c671a49ccd3c4aaa6da369ebeb7c2"
+    },
+    {
+      "pruid": "59",
+      "tag": "bc",
+      "name": "British Columbia",
+      "file": "cells-59.topo.json",
+      "object": "cells",
+      "cellCount": 7848,
+      "leafCount": 29,
+      "boundsWgs84": [
+        -139.052201,
+        48.25,
+        -114.053758,
+        60.000062
+      ],
+      "bytes": 3115355,
+      "sha256": "9d23b1aa35cebf0abd95e6361ba9bc24f32f2732a7851fd7c6fb58725d2421a3"
+    },
+    {
+      "pruid": "60",
+      "tag": "yt",
+      "name": "Yukon",
+      "file": "cells-60.topo.json",
+      "object": "cells",
+      "cellCount": 74,
+      "leafCount": 6,
+      "boundsWgs84": [
+        -141.018073,
+        60.0,
+        -123.789325,
+        69.689427
+      ],
+      "bytes": 37277,
+      "sha256": "de9feaba2d5498673957d138cd281e47fcb3173a6c33f66d318bd967f8aca0ba"
+    },
+    {
+      "pruid": "61",
+      "tag": "nt",
+      "name": "Northwest Territories",
+      "file": "cells-61.topo.json",
+      "object": "cells",
+      "cellCount": 98,
+      "leafCount": 5,
+      "boundsWgs84": [
+        -141.010091,
+        60.0,
+        -102.0,
+        89.999427
+      ],
+      "bytes": 42587,
+      "sha256": "9bf1be4735611c3554c2a8646ee996debf795bfefbf5e312cfaf07b97a3cf8b2"
+    },
+    {
+      "pruid": "62",
+      "tag": "nu",
+      "name": "Nunavut",
+      "file": "cells-62.topo.json",
+      "object": "cells",
+      "cellCount": 50,
+      "leafCount": 3,
+      "boundsWgs84": [
+        -128.942603,
+        51.152426,
+        -59.991263,
+        89.999427
+      ],
+      "bytes": 89864,
+      "sha256": "3247c8a57ab2732708208d4c42b218171a270bab286c5778f67d5ebde782d886"
+    }
+  ]
+}
