@@ -30,6 +30,20 @@ Covers the most common questions about how MeshCore behaves on the Ottawa networ
 ### [MeshCore How-To](general-howto.md)
 Step-by-step walkthroughs for day-to-day tasks in the MeshCore mobile app, such as sharing your contact URL, importing contacts, and tracing routes. Each guide is visual and suitable for both new and experienced users.
 
+### [Repeater Configurator](../config/index.md)
+An interactive tool that finds the right Canadian region for a repeater and produces the exact commands to configure it — radio settings, region path, and verification steps. Also includes the [region map](../config/map.md) and the [region standard](../config/standard.md).
+
+### Firmware Guides
+Everything you need to get firmware onto a device:
+
+- [Flashing a Companion](flash-companion.md)
+- [Flashing a Repeater](flash-repeater.md)
+- [Updating a Repeater (OTA)](update-repeater-ota.md)
+- [Generating a Repeater ID](generate-repeater-id.md)
+- [Flashing a Room Server](flash-room-server.md)
+- [RAK4631 Custom Display Firmware](firmware-rak-custom-display.md)
+- [Heltec V3 Wi-Fi Firmware](firmware-heltec-v3-wifi.md)
+
 ---
 
 ## New to MeshCore?
