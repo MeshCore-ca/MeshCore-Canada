@@ -20,7 +20,7 @@ jobs:
           python-version: "3.x"
 
       - name: Install site dependencies
-        run: pip install mkdocs-material mkdocs-macros-plugin pyyaml mkdocs-glightbox pymdown-extensions
+        run: pip install mkdocs-material mkdocs-macros-plugin pyyaml mkdocs-glightbox pymdown-extensions mkdocs-redirects==1.2.2
 
       - name: Validate community submission helper
         run: python scripts/validate_community_submission.py
