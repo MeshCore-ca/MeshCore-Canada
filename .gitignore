@@ -1,2 +1,5 @@
 .claude/
 *.swp
+__pycache__/
+*.pyc
+docs/assets/regions/*.raw.geojson
