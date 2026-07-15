@@ -1,0 +1,10 @@
+{
+  "name": "malformed change object is rejected",
+  "proposal": {
+    "schema": "mcc-region-editor-proposal/v1",
+    "baseMembershipSha256": "0000000000000000000000000000000000000000000000000000000000000001",
+    "reason": "test",
+    "changes": [{"DGUID": "short", "from": "aaa", "to": "bbb"}]
+  },
+  "expect": "bad-change"
+}

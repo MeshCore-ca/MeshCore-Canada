@@ -1,0 +1,24 @@
+{
+  "name": "valid proposal produces canonical output sorted by DGUID with from re-derived from membership",
+  "proposal": {
+    "schema": "mcc-region-editor-proposal/v1",
+    "baseMembershipSha256": "0000000000000000000000000000000000000000000000000000000000000001",
+    "submittedBy": "  Jane   Doe  ",
+    "reason": "  Please   fix the boundary.  ",
+    "changes": [
+      {"DGUID": "2021S0512TEST0002", "from": "aaa", "to": "bbb"},
+      {"DGUID": "2021S0512TEST0001", "from": "aaa", "to": "bbb"}
+    ]
+  },
+  "expect": "ok",
+  "canonical": {
+    "schema": "mcc-region-editor-proposal/v1",
+    "baseMembershipSha256": "0000000000000000000000000000000000000000000000000000000000000001",
+    "submittedBy": "Jane Doe",
+    "reason": "Please fix the boundary.",
+    "changes": [
+      {"DGUID": "2021S0512TEST0001", "from": "aaa", "to": "bbb"},
+      {"DGUID": "2021S0512TEST0002", "from": "aaa", "to": "bbb"}
+    ]
+  }
+}

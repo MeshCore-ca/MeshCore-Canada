@@ -1,0 +1,10 @@
+{
+  "name": "unsupported schema string is rejected",
+  "proposal": {
+    "schema": "not-a-real-schema",
+    "baseMembershipSha256": "0000000000000000000000000000000000000000000000000000000000000001",
+    "reason": "test",
+    "changes": [{"DGUID": "2021S0512TEST0001", "from": "aaa", "to": "bbb"}]
+  },
+  "expect": "bad-schema"
+}

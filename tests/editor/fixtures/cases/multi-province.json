@@ -1,0 +1,13 @@
+{
+  "name": "changes spanning more than one province are rejected",
+  "proposal": {
+    "schema": "mcc-region-editor-proposal/v1",
+    "baseMembershipSha256": "0000000000000000000000000000000000000000000000000000000000000001",
+    "reason": "test",
+    "changes": [
+      {"DGUID": "2021S0512TEST0001", "from": "aaa", "to": "bbb"},
+      {"DGUID": "2021S0512TEST0004", "from": "ccc", "to": "aaa"}
+    ]
+  },
+  "expect": "multi-province"
+}

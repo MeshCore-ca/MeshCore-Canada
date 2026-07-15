@@ -1,0 +1,10 @@
+{
+  "name": "anchor cell cannot leave its region",
+  "proposal": {
+    "schema": "mcc-region-editor-proposal/v1",
+    "baseMembershipSha256": "0000000000000000000000000000000000000000000000000000000000000001",
+    "reason": "test",
+    "changes": [{"DGUID": "2021S0512TEST0003", "from": "bbb", "to": "aaa"}]
+  },
+  "expect": "anchor-moved"
+}
