@@ -1,112 +1,3 @@
-.preview-shell {
-  max-width: 74rem;
-  margin: 0 auto;
-  padding: 1.2rem;
-}
-
-body:has(.preview-shell) {
-  margin: 0;
-  color: rgba(255, 255, 255, 0.82);
-  background: hsl(232, 15%, 14%);
-  font-family: Roboto, -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
-}
-
-.preview-header {
-  margin-bottom: 1rem;
-  padding: 1rem 1.1rem;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 0.45rem;
-  background: hsl(232, 15%, 18%);
-}
-
-.preview-kicker {
-  margin: 0 0 0.35rem;
-  color: #8ca5ff;
-  font-size: 0.72rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.preview-header h1 {
-  margin: 0;
-  color: #ffffff;
-  font-size: clamp(1.45rem, 3vw, 2.1rem);
-  letter-spacing: 0;
-}
-
-.preview-copy,
-.preview-footer,
-.preview-note {
-  color: rgba(255, 255, 255, 0.56);
-}
-
-.preview-copy {
-  max-width: 52rem;
-  margin: 0.45rem 0 0;
-}
-
-.preview-nav {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.45rem;
-  margin-top: 0.9rem;
-}
-
-.preview-nav a {
-  padding: 0.42rem 0.68rem;
-  border: 1px solid rgba(82, 108, 254, 0.45);
-  border-radius: 0.35rem;
-  color: #a9b8ff;
-  background: rgba(255, 255, 255, 0.06);
-  text-decoration: none;
-  font-weight: 700;
-}
-
-.preview-nav a:hover {
-  border-color: #526cfe;
-  background: rgba(82, 108, 254, 0.16);
-}
-
-.preview-card {
-  padding: 1rem;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 0.45rem;
-  background: var(--md-default-bg-color, hsl(232, 15%, 14%));
-}
-
-.preview-note {
-  margin-bottom: 0.9rem;
-  padding: 0.55rem 0.7rem;
-  border-left: 0.18rem solid #4051b5;
-  border-radius: 0.25rem;
-  background: rgba(64, 81, 181, 0.14);
-  font-size: 0.84rem;
-}
-
-.preview-footer {
-  margin-top: 1rem;
-  font-size: 0.82rem;
-}
-
-body:has([data-mcc-regions="map"]) .preview-shell {
-  max-width: none;
-  padding: 0;
-}
-
-body:has([data-mcc-regions="map"]) .preview-header,
-body:has([data-mcc-regions="map"]) .preview-note,
-body:has([data-mcc-regions="map"]) .preview-footer {
-  display: none;
-}
-
-body:has([data-mcc-regions="map"]) .preview-card {
-  padding: 0;
-  border: 0;
-  border-radius: 0;
-  background: transparent;
-}
-
 body:has([data-mcc-regions="map"]) [data-mcc-regions="map"] {
   margin: 0;
 }
@@ -322,6 +213,13 @@ body:has([data-mcc-regions]) .md-typeset a {
 .mcc-input-row {
   display: flex;
   gap: 0.45rem;
+}
+
+.mcc-search-privacy {
+  font-size: 0.72rem;
+  color: var(--mcc-muted, #8d93ae);
+  margin: 0.35rem 0 0;
+  line-height: 1.4;
 }
 
 .mcc-input,
@@ -829,13 +727,6 @@ body:has([data-mcc-regions]) .md-typeset a {
   background: var(--mcc-panel);
 }
 
-.preview-shell:has([data-mcc-regions="map"]) .mcc-map-shell {
-  min-height: 100vh;
-  height: 100vh;
-  border: 0;
-  border-radius: 0;
-}
-
 .mcc-map-panel {
   display: grid;
   align-content: start;
@@ -955,11 +846,6 @@ body:has([data-mcc-regions]) .md-typeset a {
   position: relative;
   min-height: 0;
   background: var(--mcc-panel);
-}
-
-.preview-shell:has([data-mcc-regions="map"]) .mcc-map-area {
-  min-height: 100vh;
-  height: 100vh;
 }
 
 .mcc-map-canvas {
@@ -1706,22 +1592,6 @@ body:has([data-mcc-regions]) .md-typeset a {
 .mcc-wizard {
   width: min(100%, 54rem);
   margin: 0 auto;
-}
-
-body:has([data-mcc-regions="config"]) .preview-shell {
-  max-width: 62rem;
-}
-
-body:has([data-mcc-regions="config"]) .preview-header {
-  background:
-    linear-gradient(135deg, rgba(82, 108, 254, 0.14), transparent 58%),
-    hsl(232, 15%, 18%);
-}
-
-body:has([data-mcc-regions="config"]) .preview-card {
-  padding: 0;
-  border: 0;
-  background: transparent;
 }
 
 ol.mcc-wizard-progress:not([hidden]) {

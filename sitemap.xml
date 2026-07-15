@@ -53,6 +53,22 @@
          <lastmod>2026-07-15</lastmod>
     </url>
     <url>
+         <loc>https://meshcore.ca/assets/regions/vendor/</loc>
+         <lastmod>2026-07-15</lastmod>
+    </url>
+    <url>
+         <loc>https://meshcore.ca/config/</loc>
+         <lastmod>2026-07-15</lastmod>
+    </url>
+    <url>
+         <loc>https://meshcore.ca/config/map/</loc>
+         <lastmod>2026-07-15</lastmod>
+    </url>
+    <url>
+         <loc>https://meshcore.ca/config/standard/</loc>
+         <lastmod>2026-07-15</lastmod>
+    </url>
+    <url>
          <loc>https://meshcore.ca/hardware/overview/</loc>
          <lastmod>2026-07-15</lastmod>
     </url>
@@ -178,22 +194,6 @@
     </url>
     <url>
          <loc>https://meshcore.ca/provinces/territories/</loc>
-         <lastmod>2026-07-15</lastmod>
-    </url>
-    <url>
-         <loc>https://meshcore.ca/regions/</loc>
-         <lastmod>2026-07-15</lastmod>
-    </url>
-    <url>
-         <loc>https://meshcore.ca/regions/map/</loc>
-         <lastmod>2026-07-15</lastmod>
-    </url>
-    <url>
-         <loc>https://meshcore.ca/regions/setup/</loc>
-         <lastmod>2026-07-15</lastmod>
-    </url>
-    <url>
-         <loc>https://meshcore.ca/regions/standard/</loc>
          <lastmod>2026-07-15</lastmod>
     </url>
     <url>
