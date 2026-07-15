@@ -22,6 +22,15 @@ extra_css:
 extra_javascript:
   - assets/regions/regions.js
 
+plugins:
+  - search
+  - redirects:
+      redirect_maps:
+        regions/index.md: config/index.md
+        regions/setup.md: config/index.md
+        regions/map.md: config/map.md
+        regions/standard.md: config/standard.md
+
 markdown_extensions:
   - admonition
   - attr_list
@@ -79,11 +88,10 @@ nav:
           - RAK4631 Custom Display Firmware: meshcore/firmware-rak-custom-display.md
           - Heltec V3 Wi-Fi Firmware:  meshcore/firmware-heltec-v3-wifi.md
 
-  - Regions:
-      - Overview: regions/index.md
-      - Region Standard: regions/standard.md
-      - Set Up a Repeater: regions/setup.md
-      - Map: regions/map.md
+  - Config:
+      - Configure a Node: config/index.md
+      - Map: config/map.md
+      - Region Standard: config/standard.md
 
   - Mesh Directory:
       - Overview: provinces/index.md

@@ -370,7 +370,7 @@
     if (!host && window.location.pathname.indexOf(".html") !== -1) {
       return (page === "config" ? "config" : page) + ".html";
     }
-    var routes = { dashboard: "", config: "setup/", setup: "setup/", map: "map/", standard: "standard/" };
+    var routes = { dashboard: "", config: "", setup: "", map: "map/", standard: "standard/" };
     var root = host ? host.getAttribute("data-mcc-root") : "./";
     return new URL(routes[page] || "", new URL(root, document.baseURI)).href;
   }

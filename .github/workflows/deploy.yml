@@ -28,7 +28,7 @@ jobs:
 
       - name: Install Mkdocs-plugin
         run: |
-          pip install mkdocs-macros-plugin pyyaml mkdocs-glightbox pymdown-extensions shapely==2.0.6
+          pip install mkdocs-macros-plugin pyyaml mkdocs-glightbox pymdown-extensions shapely==2.0.6 mkdocs-redirects
 
       - name: Validate exclusive national partition
         run: node scripts/validate-regions.js
