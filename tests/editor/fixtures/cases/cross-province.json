@@ -1,0 +1,10 @@
+{
+  "name": "target leaf tag belonging to a different province is rejected",
+  "proposal": {
+    "schema": "mcc-region-editor-proposal/v1",
+    "baseMembershipSha256": "0000000000000000000000000000000000000000000000000000000000000001",
+    "reason": "test",
+    "changes": [{"DGUID": "2021S0512TEST0001", "from": "aaa", "to": "ccc"}]
+  },
+  "expect": "bad-target"
+}

@@ -1,0 +1,11 @@
+{
+  "name": "submittedBy longer than 80 characters is rejected",
+  "proposal": {
+    "schema": "mcc-region-editor-proposal/v1",
+    "baseMembershipSha256": "0000000000000000000000000000000000000000000000000000000000000001",
+    "submittedBy": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "reason": "test",
+    "changes": [{"DGUID": "2021S0512TEST0001", "from": "aaa", "to": "bbb"}]
+  },
+  "expect": "bad-submitted-by"
+}

@@ -16,7 +16,7 @@ const QA_PATH = path.join(ASSET_DIR, "canada-region-partition.qa.json");
 const MUNICIPAL_OVERRIDES_PATH = path.join(ASSET_DIR, "municipal-overrides.json");
 const RADIO_DENSITY_PATH = path.join(ASSET_DIR, "radio-density.json");
 const SCRIPT_PATH = path.join(ASSET_DIR, "regions.js");
-const STANDARD_PATH = path.join(ROOT, "docs", "regions", "standard.md");
+const STANDARD_PATH = path.join(ROOT, "docs", "config", "standard.md");
 
 const MAX_TAG_BYTES = 29;
 const MAX_PROFILE_TAGS = 32;

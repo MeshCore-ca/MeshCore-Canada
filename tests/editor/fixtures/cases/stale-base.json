@@ -1,0 +1,10 @@
+{
+  "name": "mismatched baseMembershipSha256 is rejected as stale",
+  "proposal": {
+    "schema": "mcc-region-editor-proposal/v1",
+    "baseMembershipSha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+    "reason": "test",
+    "changes": [{"DGUID": "2021S0512TEST0001", "from": "aaa", "to": "bbb"}]
+  },
+  "expect": "stale-base"
+}

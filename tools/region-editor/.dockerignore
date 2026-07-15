@@ -1,6 +1,0 @@
-__pycache__/
-*.py[cod]
-tests/
-README.md
-create_secret.py
-.git/

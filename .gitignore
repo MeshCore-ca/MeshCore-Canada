@@ -3,4 +3,3 @@
 __pycache__/
 *.pyc
 docs/assets/regions/*.raw.geojson
-tools/region-editor/data/

@@ -21,7 +21,7 @@ jobs:
           python-version: "3.13"
 
       - name: Install documentation dependencies
-        run: pip install mkdocs-material mkdocs-macros-plugin pyyaml mkdocs-glightbox pymdown-extensions shapely==2.0.6
+        run: pip install mkdocs-material mkdocs-macros-plugin pyyaml mkdocs-glightbox pymdown-extensions shapely==2.0.6 mkdocs-redirects==1.2.2
 
       - name: Validate exclusive national partition
         run: node scripts/validate-regions.js
@@ -31,10 +31,15 @@ jobs:
           python scripts/verify-region-geometry.py
           python scripts/verify-region-geometry.py --partition docs/assets/regions/canada-region-partition-digital.geojson
 
+      - name: Set up Node
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: "22"
+
       - name: Validate region editor
         run: |
-          python -m unittest discover -s tools/region-editor/tests -v
-          node --check tools/region-editor/static/app.js
+          node --test tests/editor/validate.test.mjs
+          node --check docs/config/editor/app.js
 
       - name: Build documentation
         run: mkdocs build --strict
