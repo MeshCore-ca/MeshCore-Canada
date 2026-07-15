@@ -38,8 +38,9 @@ jobs:
 
       - name: Validate region editor
         run: |
-          node --test tests/editor/validate.test.mjs
+          node --test tests/editor/*.test.mjs
           node --check docs/config/editor/app.js
+          node --check docs/config/editor/issue.js
 
       - name: Build documentation
         run: mkdocs build --strict

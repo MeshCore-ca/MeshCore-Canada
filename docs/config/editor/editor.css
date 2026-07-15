@@ -164,6 +164,11 @@ h2 {
   width: 100%;
 }
 
+.proposal-actions {
+  display: grid;
+  gap: 0.55rem;
+}
+
 label {
   display: block;
   font-size: 0.82rem;

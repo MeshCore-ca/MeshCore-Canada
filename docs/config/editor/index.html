@@ -28,7 +28,7 @@
       <section class="panel intro-panel">
         <p class="step-label">Draft only</p>
         <h2>Adjust official census cells</h2>
-        <p class="muted compact">Exports a proposal file for review — nothing is saved or published from this page.</p>
+        <p class="muted compact">Validates a proposed change and opens a GitHub issue for review. Nothing changes until maintainers approve and merge it.</p>
       </section>
 
       <section class="panel">
@@ -81,7 +81,11 @@
         <label for="reason">Reason</label>
         <textarea id="reason" maxlength="1000" rows="3" placeholder="What local knowledge supports this change?" required></textarea>
         <div id="validation-message" class="validation-message" role="status" aria-live="polite"></div>
-        <button id="export-button" class="button primary full" type="button" disabled>Validate and download proposal</button>
+        <div class="proposal-actions">
+          <button id="submit-button" class="button primary full" type="button" disabled>Open review issue</button>
+          <button id="export-button" class="button secondary full" type="button" disabled>Download proposal</button>
+        </div>
+        <p class="hint">GitHub sign-in and one final confirmation are required. Large proposals download a JSON file to attach.</p>
       </section>
     </aside>
 

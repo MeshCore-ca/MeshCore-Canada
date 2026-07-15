@@ -1,4 +1,5 @@
 import { validateProposal } from "./validate.js";
+import { buildRegionProposalIssue } from "./issue.js";
 
 (function () {
   "use strict";
@@ -110,6 +111,7 @@ import { validateProposal } from "./validate.js";
     submittedBy: document.getElementById("submitted-by"),
     reason: document.getElementById("reason"),
     validation: document.getElementById("validation-message"),
+    submit: document.getElementById("submit-button"),
     export: document.getElementById("export-button")
   };
 
@@ -430,6 +432,7 @@ import { validateProposal } from "./validate.js";
     elements.undo.disabled = state.undoStack.length === 0;
     elements.redo.disabled = state.redoStack.length === 0;
     elements.clear.disabled = count === 0;
+    elements.submit.disabled = count === 0 || !state.baseMembershipSha256;
     elements.export.disabled = count === 0 || !state.baseMembershipSha256;
     if (count) {
       setValidation("Ready to validate " + count + (count === 1 ? " cell." : " cells."), "");
@@ -705,10 +708,10 @@ import { validateProposal } from "./validate.js";
     return proposal;
   }
 
-  async function exportProposal() {
+  function validatedProposal() {
     if (!state.proposed.size) {
       setValidation("Choose at least one census cell.", "error");
-      return;
+      return null;
     }
     var seedTags = new Map();
     state.featureById.forEach(function (feature, dguid) {
@@ -731,10 +734,14 @@ import { validateProposal } from "./validate.js";
     });
     if (!result.ok) {
       setValidation(result.errors[0].message, "error");
-      return;
+      return null;
     }
+    return result.canonical;
+  }
+
+  function downloadProposal(canonical) {
     var stamp = new Date().toISOString().replace(/[-:]/g, "").replace(/\..*/, "Z");
-    var blob = new Blob([JSON.stringify(result.canonical, null, 2) + "\n"], { type: "application/json" });
+    var blob = new Blob([JSON.stringify(canonical, null, 2) + "\n"], { type: "application/json" });
     var url = URL.createObjectURL(blob);
     var anchor = document.createElement("a");
     anchor.href = url;
@@ -743,7 +750,26 @@ import { validateProposal } from "./validate.js";
     anchor.click();
     anchor.remove();
     URL.revokeObjectURL(url);
+  }
+
+  function exportProposal() {
+    var canonical = validatedProposal();
+    if (!canonical) return;
+    downloadProposal(canonical);
     setValidation("Proposal validated locally and downloaded. Submit it for review — it is not live until merged.", "success");
+  }
+
+  function submitProposal() {
+    var canonical = validatedProposal();
+    if (!canonical) return;
+    var issue = buildRegionProposalIssue(canonical, { labelForTag: leafLabel });
+    window.open(issue.url, "_blank", "noopener");
+    if (issue.requiresAttachment) {
+      downloadProposal(canonical);
+      setValidation("Proposal validated and downloaded. GitHub will open; attach the JSON file before submitting.", "success");
+    } else {
+      setValidation("Proposal validated. Review the prefilled GitHub issue, then submit it for public review.", "success");
+    }
   }
 
   async function initialise() {
@@ -790,6 +816,7 @@ import { validateProposal } from "./validate.js";
     }
     applyTransaction(municipalityCells(), state.target);
   });
+  elements.submit.addEventListener("click", submitProposal);
   elements.export.addEventListener("click", exportProposal);
   document.addEventListener("mouseup", endPaint);
   document.addEventListener("keydown", function (event) {
