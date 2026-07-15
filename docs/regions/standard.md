@@ -13,6 +13,7 @@ This standard defines one Canada-wide region system: how every location is assig
 | Geographic reference | Statistics Canada 2021 Census geography |
 | Current semantic input | Canada MeshCore Region Strategy v1.1.1 |
 | Current community boundary input | MeshMapper Canada snapshot, 2026-07-12 |
+| Current operational evidence | Privacy-safe MeshCore Canada radio-density snapshot, 2026-07-15 UTC |
 | Adoption | Becomes normative when approved and merged by MeshCore Canada |
 
 !!! important "What is authoritative today?"
@@ -22,7 +23,7 @@ This standard defines one Canada-wide region system: how every location is assig
 
 MeshCore Canada maintains **one geographic partition**. Every part of Canada belongs to exactly one geographic leaf in the path `can → province or territory → region → optional subregion`. Leaf interiors never overlap and their union covers the complete national DA extent.
 
-The published MeshCore Canada registry is the single source of truth. A boundary is not stored as a hand-drawn polygon. It is stored as a list of official Statistics Canada geographic cells, then regenerated from those cells.
+The published MeshCore Canada registry is the single source of truth. A boundary is not stored as a hand-drawn polygon. It is stored as ownership of official Statistics Canada geographic cells, then regenerated from those cells. Census Subdivisions keep a municipality or municipal equivalent together by default; Dissemination Areas remain the exact geometry used to publish the shared edge.
 
 Only leaves own land. Provinces, territories, and larger region records are grouping nodes derived from their children. Raw MeshMapper polygons, strategy circles, shared routing scopes, and event areas are never published as regions and are never added to generated commands.
 
@@ -74,6 +75,8 @@ Future feedback enters the same pipeline as a proposed parent change, seed chang
 ## Nationwide coverage frame
 
 The topology atom is the **2021 Statistics Canada Dissemination Area (DA)**. The digital product contains all 57,936 DAs and is the complete ownership domain. The cartographic product contains 57,932 DAs because four water-only DAs are omitted; it is used only for the cleaner public shoreline. Both products use the same membership wherever a cartographic DA exists.
+
+The default ownership cohort is the **2021 Census Subdivision (CSD)**: the Statistics Canada unit used for a municipality or municipal equivalent. All 5,161 CSDs are kept whole unless an approved exception assigns every DA in that CSD. The 293 **Census Divisions (CDs)** provide a higher grouping for regional municipalities, counties, and comparable areas. A reviewed CD decision may keep an established regional community together, but it may not erase another region seed without review.
 
 The generator uses the 76 official **2021 Economic Regions (ERs)** as broad guardrails. ERs keep an urban seed from absorbing a large, unrelated rural area merely because it is the closest seed. ER names are not automatically used as on-air names.
 
@@ -140,14 +143,17 @@ The **published registry release** is the final operational authority. Its input
 | 1 | Approved registry decisions | Explicit boundary, naming, split, merge, or DA-reassignment decisions |
 | 2 | MeshMapper Canada | Main community boundary and identity anchor where it has a Canadian region |
 | 3 | Canada MeshCore Region Strategy v1.1.1 | Candidate tags, parent relationships, and seeds outside MeshMapper coverage |
-| 4 | Deterministic generator | Reconciles every DA into one region without inventing another manual layer |
+| 4 | Statistics Canada CD/CSD relationships | Keep municipalities and established regional groupings coherent |
+| 5 | Privacy-safe radio-density snapshot | Secondary tie-break evidence for close, unreviewed whole-CSD choices |
+| 6 | Deterministic generator | Reconciles every DA into one region without inventing another manual layer |
 
 Statistics Canada is the topology authority at every priority. MeshMapper and approved community shapes decide intended coverage; the final edge is snapped to whole DAs so neighbours share the same boundary.
 
 Other sources have supporting roles:
 
 - SGC Economic Regions prevent unreasonable long-distance growth.
-- Census divisions and census subdivisions provide review context for generated edges.
+- Census Divisions and Census Subdivisions define the higher grouping and indivisible-by-default ownership cohorts used by the generator.
+- Privacy-safe clusters from the MeshCore Canada live and development directories account for every fresh positioned node. Fixed repeater, room, and sensor nodes provide the assignment evidence; companions add advisory density context because they may move. The clusters are supporting evidence, not a replacement for local review.
 - Current provincial and territorial datasets validate municipal changes and local terminology.
 - The Canadian Geographical Names Database validates place names.
 - First Nations reserve, Inuit region, Métis settlement, treaty, and Canada Lands data are reference datasets outside the region layer. They do not become operational boundaries or names without affected-community review.
@@ -164,8 +170,9 @@ Record the download URL, release date, licence, file size, and SHA-256 hash for:
 
 - the 2021 DA digital and cartographic boundary files;
 - the 2021 SGC Economic Region classification;
+- the 2021 Census Division and Census Subdivision digital boundary files;
 - the MeshMapper Canada snapshot;
-- the candidate registry, approved overrides, and generator configuration.
+- the candidate registry, approved census overrides, privacy-safe radio-density snapshot, and generator configuration.
 
 Do not mix a newer Census Subdivision file into the 2021 DA suite. Newer municipal files are change advisories until a complete compatible census-geography suite is adopted.
 
@@ -203,17 +210,41 @@ Two candidate seeds in the same DA are a release-blocking conflict. The registry
 
 Automatic assignment never crosses a province or territory. Each seed has one home Economic Region. A MeshMapper target may also compete inside every Economic Region touched by its accepted envelope.
 
-### 6. Assign every DA once
+### 6. Produce provisional DA ownership
 
 First choose the nearest seed whose home Economic Region matches the DA. Inside a winning MeshMapper envelope, compare its mapped target with the community seeds covered by that envelope whose home Economic Region matches the DA. If only the mapped target remains, also include the ordinary same-ER nearest seed. Assign the DA to the closest candidate in `EPSG:3347`; exact ties resolve by immutable registry ID.
 
-This keeps MeshMapper as the main boundary preference while allowing submitted local regions to subdivide a large envelope cleanly. The QA report records each envelope's final per-region DA counts and blocks a dominant envelope that starves a contained community seed.
+This is a provisional vote, not final ownership. It keeps MeshMapper as the main boundary preference while allowing submitted local regions to influence a large envelope. The QA report records each envelope's provisional per-region DA counts and blocks a dominant envelope that starves a contained community seed.
 
 If an Economic Region has no home seed, the generator records a release-blocking fallback and uses the nearest seed inside the same province or territory only to keep the candidate map complete. It never assigns across a jurisdiction border.
 
 MultiPolygon output is valid for real islands and separated land components; synthetic water bridges are not. A disconnected mainland fragment is flagged for local review.
 
-### 7. Generate both boundary products
+### 7. Keep census communities coherent
+
+The generator converts provisional DA votes into final whole-CSD ownership in this order:
+
+1. an approved CSD decision;
+2. an approved CD decision that does not conflict with another region seed;
+3. the region whose seed is inside the CSD;
+4. the only region seed inside the containing CD;
+5. the plurality of provisional DA votes;
+6. for a close unreviewed choice only, qualifying privacy-safe radio-cluster evidence;
+7. projected seed distance and immutable registry ID for a remaining exact tie.
+
+A CSD may be divided only by an approved split exception that lists every DGUID in that CSD and its owner. The generator fails if any other CSD has more than one owner. This prevents a nearest-seed edge from slicing an incorporated city merely because one neighbourhood is closer to the next seed.
+
+The Kitchener-Waterloo fixture is release-blocking: all 189 DAs in Cambridge CSD `3530010`, including Hespeler, resolve to `wat`; all 766 DAs in Waterloo CD `3530` resolve to `wat`. These counts are tied to the locked 2021 Census geography and must be reviewed when the census vintage changes.
+
+### 8. Use radio activity only as a privacy-safe tie-break
+
+The locked `radio-density.json` snapshot joins fresh positioned observations from `live.meshcore.ca` with positioned entries currently returned by `dev.meshcore.ca`, then deduplicates matching public keys in memory. The dev endpoint does not provide a per-node observation time, so dev-only entries contribute advisory density but cannot become boundary-decision evidence. Fresh live repeater, room, and sensor observations supply the decision counts; companion locations remain advisory. The snapshot is bound to a SHA-256 digest of each DGUID and its pre-radio provisional owner, so stale candidate labels fail closed while a valid radio tie-break can still change final ownership without a circular hash dependency.
+
+Clusters span no more than 30 kilometres. Every published geographic count is at least five. Candidate counts are published only inside their own CSD, and the complete CSD candidate breakdown is suppressed if any candidate bucket contains fewer than five nodes. Raw node identifiers, names, and exact coordinates are never persisted.
+
+Radio evidence may choose between candidates already present in a CSD only when the provisional margin is at most 10 percentage points and at least 60% of eligible radio evidence supports one candidate. It cannot create a region, split a CSD, cross a province or territory, or override an approved census decision. A radio snapshot is reproducible evidence for a release, not a live automatic authority; changes enter only through a newly locked snapshot and normal review.
+
+### 9. Generate both boundary products
 
 - The resolver uses DA **digital** boundaries so coastal water is handled consistently.
 - The public map uses DA **cartographic** boundaries for a clean shoreline.
@@ -236,6 +267,8 @@ A split proposal must include:
 All parent cells must belong to exactly one child. After a split, the parent is a non-leaf grouping only. It has no separate resolver ownership, published fill, or additional routing scope.
 
 Aggregate Dissemination Areas are useful starting groups for a split, but their codes are not permanent identity. They may be divided or combined when local geography calls for it.
+
+CSDs are the default subregion building blocks. Prefer whole municipalities or municipal equivalents first, then combine adjacent CSDs using their CD, local identity, terrain, and operating evidence. Dividing a CSD is an exception and requires the complete enumerated DA assignment described above.
 
 A merge preserves every retired ID and tag as an alias or tombstone. A retired tag is never silently reused for another place.
 
@@ -278,6 +311,12 @@ The national maintainers enforce the data model; they do not invent local identi
 5. Merge the registry change and publish a versioned release.
 6. Keep the previous release available for rollback and migration.
 
+### Boundary editor proposals
+
+The boundary editor works on the same census cells as the generator. Its normal action reassigns a whole CSD, with its containing CD shown as review context. It never saves a freehand polygon as operational geometry. A reviewer may use DA-level draft edits to shape an exceptional split, but the approved `splitExceptions` record must expand that draft to list every DA in the CSD, with no duplicate or missing DGUID.
+
+Signing in to the editor controls access to the test tool; it does not grant approval authority. The editor exports a versioned proposal with the base membership hash and before/after owner for each changed DGUID. The proposal validator adds CD/CSD context and requires a reason before review; an author may also be recorded. A maintainer must review and merge the resulting decision into `municipal-overrides.json`, regenerate all artifacts, and pass the release checks before the public boundary changes. Editor drafts and browser-local state are never authoritative.
+
 Versioning rules:
 
 - **Major:** census-geography vintage or incompatible authority/model change.
@@ -291,6 +330,8 @@ Operational region boundaries are community routing definitions. They are not le
 A geographic release fails unless all of these are true:
 
 - all 57,936 DAs appear exactly once in the leaf-membership table;
+- all 5,161 CSDs and 293 CDs are identified from the same locked 2021 Census suite;
+- every CSD has one leaf owner unless an approved split exception enumerates every one of its DGUIDs;
 - every DA's leaf is inside the same province or territory;
 - every pair of leaf interiors has zero positive-area overlap, regardless of hierarchy branch;
 - the symmetric difference between the leaf union and the locked 57,936-DA digital union is zero at the configured precision;
@@ -302,6 +343,8 @@ A geographic release fails unless all of these are true:
 - every old tag resolves to an active record, a deprecated record, or a tombstone;
 - every active geographic record has reviewed `allowed_er_codes`, and no seed or locked-cell conflict remains;
 - every MeshMapper anchor has a DA-level deviation report;
+- Cambridge CSD `3530010` has exactly 189 DAs owned by `wat`, and Waterloo CD `3530` has exactly 766 DAs owned by `wat`;
+- any radio-density input contains no raw node identifiers, names, or exact coordinates, uses aggregates of at least five nodes, and cannot split a CSD;
 - every source polygon passes the area, centre, jurisdiction-compatibility, and review-state checks before it is used as an anchor;
 - all generated geometry is valid and reproducible from locked inputs;
 - all generated command fixtures fit the 32-region, 172-byte response, and 160-character serial-line limits;
@@ -317,7 +360,9 @@ Before the first MCC-REG-1 geographic release is marked active, the repository m
 | `sources.lock.json` | Exact inputs, licences, and hashes |
 | `generator.yml` | Algorithm version and all constants |
 | `canada-regions.json` | Geographic records, hierarchy, aliases, and source crosswalks |
-| `canada-region-membership.csv` | One row for every digital DA DGUID and its leaf tag |
+| `municipal-overrides.json` | Approved CD/CSD ownership decisions and complete CSD split exceptions |
+| `radio-density.json` | Optional locked privacy-safe aggregate evidence; never raw node data |
+| `canada-region-membership.csv` | One row for every digital DA, with CD/CSD context, provisional vote, and final leaf |
 | `aliases.csv` | Current, deprecated, historical, and search aliases |
 | `canada-region-partition.geojson` | Generated cartographic leaf layer |
 | `canada-region-partition-digital.geojson` | Generated complete resolver layer |
@@ -357,3 +402,4 @@ The setup tool must generate and test commands from registry parent IDs. It must
 - [MeshMapper](https://meshmapper.net/) Canada snapshot `meshmapper-ca-2026-07-12`.
 - [Statistics Canada 2021 DA definition](https://www12.statcan.gc.ca/census-recensement/2021/ref/dict/az/definition-eng.cfm?ID=geo021), [2021 Boundary Files guide](https://www150.statcan.gc.ca/n1/pub/92-160-g/92-160-g2021001-eng.htm), [2021 dissemination-geography relationships](https://www12.statcan.gc.ca/census-recensement/2021/geo/sip-pis/dguid-idugd/index2021-eng.cfm?year=21), and [2021 Economic Region standard](https://www.statcan.gc.ca/en/subjects/standard/sgc/2021/er-additionalinfo).
 - [Statistics Canada Open Licence](https://www.statcan.gc.ca/en/terms-conditions/open-licence).
+- MeshCore Canada privacy-safe positioned-node snapshot from [`live.meshcore.ca`](https://live.meshcore.ca/) and [`dev.meshcore.ca`](https://dev.meshcore.ca/), with fixed infrastructure used for decisions and all roles retained only as aggregate context.

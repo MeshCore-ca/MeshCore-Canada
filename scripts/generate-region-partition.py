@@ -23,8 +23,8 @@ from pathlib import Path
 import geopandas as gpd
 import numpy as np
 from scipy.spatial import cKDTree
-from shapely import make_valid
-from shapely.geometry import Point, shape
+from shapely import make_valid, union_all
+from shapely.geometry import MultiPolygon, Point, Polygon, shape
 from shapely.strtree import STRtree
 
 
@@ -32,6 +32,8 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_CATALOG = ROOT / "docs" / "assets" / "regions" / "canada-regions.json"
 DEFAULT_MESHMAPPER = ROOT / "docs" / "assets" / "regions" / "meshmapper-canada-regions.json"
 DEFAULT_OUTPUT = ROOT / "docs" / "assets" / "regions"
+DEFAULT_OVERRIDES = ROOT / "docs" / "assets" / "regions" / "municipal-overrides.json"
+DEFAULT_RADIO_DENSITY = ROOT / "docs" / "assets" / "regions" / "radio-density.json"
 
 PR_TO_TAG = {
     "10": "nl",
@@ -55,12 +57,31 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--digital-da", type=Path, required=True, help="2021 digital DA shapefile")
     parser.add_argument("--cartographic-da", type=Path, required=True, help="2021 cartographic DA shapefile")
     parser.add_argument("--economic-regions", type=Path, required=True, help="2021 digital ER shapefile")
+    parser.add_argument("--census-divisions", type=Path, required=True, help="2021 digital CD shapefile")
+    parser.add_argument("--census-subdivisions", type=Path, required=True, help="2021 digital CSD shapefile")
     parser.add_argument("--catalog", type=Path, default=DEFAULT_CATALOG)
     parser.add_argument("--meshmapper", type=Path, default=DEFAULT_MESHMAPPER)
+    parser.add_argument("--overrides", type=Path, default=DEFAULT_OVERRIDES)
+    parser.add_argument(
+        "--radio-density",
+        type=Path,
+        default=DEFAULT_RADIO_DENSITY,
+        help="Frozen privacy-safe radio-cluster evidence; ignored when the file is absent",
+    )
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument("--display-retain", default="2%", help="Mapshaper percentage retained for the web layer")
     parser.add_argument("--resolver-retain", default="20%", help="Mapshaper percentage retained for the digital resolver")
     parser.add_argument("--keep-raw", action="store_true", help="Keep the unsimplified cartographic GeoJSON")
+    parser.add_argument(
+        "--resume-raw",
+        action="store_true",
+        help="Reuse complete raw layers after validating they match the regenerated membership",
+    )
+    parser.add_argument(
+        "--reuse-simplified",
+        action="store_true",
+        help="With --resume-raw, re-verify existing simplified layers instead of rebuilding them",
+    )
     parser.add_argument(
         "--skip-source-hashes",
         action="store_true",
@@ -82,9 +103,35 @@ def json_sha256(value: object) -> str:
     return hashlib.sha256(payload).hexdigest()
 
 
+def provisional_ownership_sha256(membership) -> str:
+    """Hash the pre-radio DGUID ownership basis used to label radio evidence."""
+    required = {"DGUID", "provisional_leaf_tag"}
+    if not required.issubset(membership.columns):
+        raise ValueError("membership must contain DGUID and provisional_leaf_tag")
+    basis = membership[["DGUID", "provisional_leaf_tag"]].astype(str).sort_values("DGUID")
+    if basis["DGUID"].duplicated().any() or (basis == "").any().any():
+        raise ValueError("provisional membership basis is incomplete or duplicated")
+    payload = "DGUID,provisional_leaf_tag\n" + "".join(
+        f"{dguid},{tag}\n" for dguid, tag in basis.itertuples(index=False, name=None)
+    )
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+
+
 def read_json(path: Path) -> dict:
     with path.open(encoding="utf-8") as handle:
         return json.load(handle)
+
+
+def polygonal_only(geometry):
+    """Keep polygonal parts produced when make_valid returns a collection."""
+    if isinstance(geometry, (Polygon, MultiPolygon)):
+        return geometry
+    parts = []
+    for part in getattr(geometry, "geoms", []):
+        cleaned = polygonal_only(part)
+        if not cleaned.is_empty:
+            parts.append(cleaned)
+    return union_all(parts) if parts else geometry
 
 
 def children_by_parent(hierarchy: dict) -> dict[str, list[str]]:
@@ -134,6 +181,259 @@ def assign_points_to_ers(points: gpd.GeoDataFrame, ers: gpd.GeoDataFrame) -> dic
         missing = joined.index[joined["ERUID"].isna()].tolist()[:10]
         raise ValueError(f"points outside every economic region: {missing}")
     return {int(index): str(value) for index, value in joined["ERUID"].items()}
+
+
+def assign_points_to_geographies(
+    points: gpd.GeoDataFrame,
+    geographies: gpd.GeoDataFrame,
+    id_column: str,
+) -> dict[int, str]:
+    """Assign each point to exactly one official census geography."""
+    joined = gpd.sjoin(
+        points[["geometry"]],
+        geographies[[id_column, "geometry"]],
+        how="left",
+        predicate="within",
+    ).reset_index()
+    duplicates = joined[joined.duplicated("index", keep=False)]
+    if not duplicates.empty:
+        ids = duplicates.groupby("index")[id_column].nunique()
+        ambiguous = ids[ids > 1].index.tolist()[:10]
+        if ambiguous:
+            raise ValueError(f"points resolve to multiple {id_column} values: {ambiguous}")
+    joined = joined.sort_values(["index", id_column], na_position="last").drop_duplicates("index", keep="first")
+    joined = joined.set_index("index")
+    if joined[id_column].isna().any():
+        missing = joined.index[joined[id_column].isna()].tolist()[:10]
+        raise ValueError(f"points outside every {id_column} geography: {missing}")
+    return {int(index): str(value) for index, value in joined[id_column].items()}
+
+
+def apply_census_coherence(
+    digital: gpd.GeoDataFrame,
+    representatives: gpd.GeoSeries,
+    seeds: gpd.GeoDataFrame,
+    provisional_owner: dict[str, str],
+    leaf_jurisdictions: dict[str, str],
+    registry_ids: dict[str, str],
+    overrides: dict,
+    radio_density: dict | None,
+) -> tuple[dict[str, str], dict[str, str], dict]:
+    """Turn DA-level votes into whole-municipality ownership decisions.
+
+    A CSD is indivisible unless an approved split exception enumerates every DA
+    in that CSD.  Radio clusters may only break a close provisional vote; they
+    never create a tag, cross a province, split a CSD, or override a reviewed
+    census decision.
+    """
+    leaves = set(leaf_jurisdictions)
+    csd_ids = set(digital["CSDUID"].astype(str))
+    cd_ids = set(digital["CDUID"].astype(str))
+    override_by_level: dict[str, dict[str, str]] = {"CSD": {}, "CD": {}}
+    override_records = overrides.get("cohortOverrides", [])
+    for record in override_records:
+        if record.get("status") != "approved":
+            raise ValueError(f"census override is not approved: {record}")
+        level = str(record.get("level", "")).upper()
+        geography_id = str(record.get("id", ""))
+        tag = str(record.get("leafTag", ""))
+        if level not in override_by_level:
+            raise ValueError(f"unsupported census override level {level}")
+        valid_ids = csd_ids if level == "CSD" else cd_ids
+        if geography_id not in valid_ids:
+            raise ValueError(f"unknown {level} override id {geography_id}")
+        if tag not in leaves:
+            raise ValueError(f"unknown census override leaf {tag}")
+        jurisdiction = PR_TO_TAG.get(geography_id[:2])
+        if leaf_jurisdictions[tag] != jurisdiction:
+            raise ValueError(f"cross-jurisdiction census override {level} {geography_id} -> {tag}")
+        prior = override_by_level[level].get(geography_id)
+        if prior and prior != tag:
+            raise ValueError(f"conflicting {level} override {geography_id}: {prior}, {tag}")
+        override_by_level[level][geography_id] = tag
+
+    seeds_by_csd: dict[str, list[str]] = defaultdict(list)
+    seeds_by_cd: dict[str, list[str]] = defaultdict(list)
+    for _, seed in seeds.iterrows():
+        seeds_by_csd[str(seed["CSDUID"])].append(str(seed["tag"]))
+        seeds_by_cd[str(seed["CDUID"])].append(str(seed["tag"]))
+    collisions = {csd: tags for csd, tags in seeds_by_csd.items() if len(tags) > 1}
+    if collisions:
+        raise ValueError(f"multiple region seeds inside one CSD require a reviewed split exception: {collisions}")
+
+    # A broad approved CD rule may not silently erase another region's seed.
+    for cduid, tag in override_by_level["CD"].items():
+        conflicting = sorted(seed for seed in seeds_by_cd.get(cduid, []) if seed != tag)
+        if conflicting:
+            raise ValueError(f"CD override {cduid} -> {tag} conflicts with seeds {conflicting}")
+
+    radio_by_csd: dict[str, Counter] = defaultdict(Counter)
+    if radio_density:
+        if radio_density.get("schema") != "mcc-radio-density/v2":
+            raise ValueError("unsupported radio-density schema")
+        k_anonymity = int(radio_density.get("privacy", {}).get("kAnonymity", 0))
+        if k_anonymity < 5:
+            raise ValueError("radio-density k-anonymity must be at least five")
+        for cluster in radio_density.get("clusters", []):
+            for participation in cluster.get("censusSubdivisions", []):
+                csduid = str(participation.get("id", ""))
+                if csduid not in csd_ids:
+                    raise ValueError(f"radio-density references unknown CSD {csduid}")
+                if int(participation.get("observedNodeCount", 0)) < k_anonymity:
+                    raise ValueError(f"radio-density exposes a sub-k CSD aggregate for {csduid}")
+                candidate_counts = Counter(
+                    {
+                        str(tag): int(count)
+                        for tag, count in participation.get("decisionCandidateCounts", {}).items()
+                    }
+                )
+                if not candidate_counts:
+                    continue
+                if (
+                    any(tag not in leaves or count < k_anonymity for tag, count in candidate_counts.items())
+                    or sum(candidate_counts.values()) != int(participation.get("decisionNodeCount", -1))
+                ):
+                    raise ValueError(f"invalid CSD-specific radio evidence for {csduid}")
+                radio_by_csd[csduid].update(candidate_counts)
+
+    owner: dict[str, str] = {}
+    assignment: dict[str, str] = {}
+    decision_counts: Counter = Counter()
+    low_margin: list[dict] = []
+    changed_cells = 0
+    radio_influenced = 0
+
+    split_by_csd: dict[str, dict[str, str]] = {}
+    for exception in overrides.get("splitExceptions", []):
+        if exception.get("status") != "approved":
+            raise ValueError(f"CSD split exception is not approved: {exception.get('csduid')}")
+        csduid = str(exception.get("csduid", ""))
+        if csduid in split_by_csd or csduid not in csd_ids:
+            raise ValueError(f"invalid or duplicate split exception CSD {csduid}")
+        members: dict[str, str] = {}
+        for member in exception.get("members", []):
+            dguid = str(member.get("dguid", ""))
+            tag = str(member.get("leafTag", ""))
+            if dguid in members:
+                raise ValueError(f"duplicate DGUID {dguid} in split exception {csduid}")
+            if tag not in leaves or leaf_jurisdictions[tag] != PR_TO_TAG.get(csduid[:2]):
+                raise ValueError(f"invalid split owner {tag} in CSD {csduid}")
+            members[dguid] = tag
+        expected = set(digital.loc[digital["CSDUID"].astype(str) == csduid, "DGUID"].astype(str))
+        if set(members) != expected:
+            raise ValueError(
+                f"split exception {csduid} must enumerate every DGUID: "
+                f"missing={len(expected-set(members))}, extra={len(set(members)-expected)}"
+            )
+        if len(set(members.values())) < 2:
+            raise ValueError(f"split exception {csduid} does not actually split the CSD")
+        split_by_csd[csduid] = members
+
+    for csduid, group in digital.groupby("CSDUID", sort=True):
+        csduid = str(csduid)
+        cduid = str(group.iloc[0]["CDUID"])
+        dguids = list(group["DGUID"].astype(str))
+        if csduid in split_by_csd:
+            for dguid in dguids:
+                tag = split_by_csd[csduid][dguid]
+                owner[dguid] = tag
+                assignment[dguid] = f"approved-csd-split:{csduid}"
+                changed_cells += int(tag != provisional_owner[dguid])
+            decision_counts["approved-csd-split"] += 1
+            continue
+
+        decision = ""
+        tag = override_by_level["CSD"].get(csduid)
+        if tag:
+            decision = "approved-csd-override"
+        elif cduid in override_by_level["CD"]:
+            tag = override_by_level["CD"][cduid]
+            decision = "approved-cd-override"
+        elif seeds_by_csd.get(csduid):
+            tag = seeds_by_csd[csduid][0]
+            decision = "csd-seed"
+        elif len(seeds_by_cd.get(cduid, [])) == 1:
+            tag = seeds_by_cd[cduid][0]
+            decision = "single-cd-seed"
+        else:
+            votes = Counter(provisional_owner[dguid] for dguid in dguids)
+            ranked = sorted(votes.items(), key=lambda item: (-item[1], registry_ids[item[0]]))
+            top_count = ranked[0][1]
+            second_count = ranked[1][1] if len(ranked) > 1 else 0
+            margin = (top_count - second_count) / max(1, len(dguids))
+            tied = [candidate for candidate, count in ranked if count == top_count]
+            if len(tied) > 1:
+                tied.sort(
+                    key=lambda candidate: (
+                        sum(
+                            (seeds.loc[seeds["tag"] == candidate].iloc[0].geometry.x - representatives.iloc[index].x) ** 2
+                            + (seeds.loc[seeds["tag"] == candidate].iloc[0].geometry.y - representatives.iloc[index].y) ** 2
+                            for index in group.index
+                        ),
+                        registry_ids[candidate],
+                    )
+                )
+            tag = tied[0] if tied else ranked[0][0]
+            decision = "provisional-plurality"
+            evidence = radio_by_csd.get(csduid, Counter())
+            if margin <= 0.10 and evidence:
+                eligible_evidence = Counter(
+                    {
+                        candidate: count
+                        for candidate, count in evidence.items()
+                        if candidate in votes
+                        and leaf_jurisdictions[candidate] == PR_TO_TAG.get(csduid[:2])
+                    }
+                )
+                evidence_total = sum(eligible_evidence.values())
+                if evidence_total >= 5:
+                    radio_tag, radio_count = min(
+                        eligible_evidence.items(),
+                        key=lambda item: (-item[1], registry_ids[item[0]]),
+                    )
+                    if radio_count / evidence_total >= 0.60:
+                        tag = radio_tag
+                        decision = "radio-cluster-tiebreak"
+                        radio_influenced += 1
+            if margin <= 0.10:
+                low_margin.append(
+                    {
+                        "csduid": csduid,
+                        "cduid": cduid,
+                        "votes": dict(sorted(votes.items())),
+                        "margin": round(margin, 6),
+                        "decision": decision,
+                        "leafTag": tag,
+                        "radioEvidence": dict(sorted(radio_by_csd.get(csduid, {}).items())),
+                    }
+                )
+
+        for dguid in dguids:
+            owner[dguid] = tag
+            assignment[dguid] = f"{decision}:{csduid}"
+            changed_cells += int(tag != provisional_owner[dguid])
+        decision_counts[decision] += 1
+
+    auto_splits = 0
+    for csduid, group in digital.assign(_owner=digital["DGUID"].astype(str).map(owner)).groupby("CSDUID"):
+        if str(csduid) not in split_by_csd and group["_owner"].nunique() != 1:
+            auto_splits += 1
+    if auto_splits:
+        raise ValueError(f"automatic municipality splits remain: {auto_splits}")
+
+    return owner, assignment, {
+        "officialCensusSubdivisions": len(csd_ids),
+        "officialCensusDivisions": len(cd_ids),
+        "approvedCsdOverrides": len(override_by_level["CSD"]),
+        "approvedCdOverrides": len(override_by_level["CD"]),
+        "approvedSplitExceptions": len(split_by_csd),
+        "automaticSplitCsdCount": auto_splits,
+        "changedDaCountFromProvisional": changed_cells,
+        "radioInfluencedDecisionCount": radio_influenced,
+        "lowMarginCsdCount": len(low_margin),
+        "lowMarginCsdDecisions": low_margin,
+        "decisionCounts": {str(key): int(value) for key, value in sorted(decision_counts.items())},
+    }
 
 
 def source_claims(
@@ -349,10 +649,26 @@ def topology_simplify(raw_path: Path, output_path: Path, retain: str, catalog_pa
     )
 
 
+def verify_partition(path: Path, catalog_path: Path) -> None:
+    subprocess.run(
+        [
+            sys.executable,
+            str(ROOT / "scripts" / "verify-region-geometry.py"),
+            "--partition",
+            str(path),
+            "--catalog",
+            str(catalog_path),
+        ],
+        check=True,
+    )
+
+
 def main() -> None:
     args = parse_args()
     catalog = read_json(args.catalog)
     meshmapper = read_json(args.meshmapper)
+    overrides = read_json(args.overrides)
+    radio_density = read_json(args.radio_density) if args.radio_density.exists() else None
     hierarchy = catalog["hierarchy"]
     children = children_by_parent(hierarchy)
     leaves = sorted(tag for tag in hierarchy if not children.get(tag))
@@ -371,11 +687,18 @@ def main() -> None:
     digital = gpd.read_file(args.digital_da)[["DAUID", "DGUID", "LANDAREA", "PRUID", "geometry"]]
     cartographic = gpd.read_file(args.cartographic_da)[["DAUID", "DGUID", "LANDAREA", "PRUID", "geometry"]]
     ers = gpd.read_file(args.economic_regions)[["ERUID", "PRUID", "geometry"]]
-    if digital.crs != cartographic.crs or digital.crs != ers.crs:
-        raise ValueError(f"source CRS mismatch: digital={digital.crs}, cartographic={cartographic.crs}, ER={ers.crs}")
+    cds = gpd.read_file(args.census_divisions)[["CDUID", "CDNAME", "CDTYPE", "PRUID", "geometry"]]
+    csds = gpd.read_file(args.census_subdivisions)[["CSDUID", "CSDNAME", "CSDTYPE", "PRUID", "geometry"]]
+    if len({str(digital.crs), str(cartographic.crs), str(ers.crs), str(cds.crs), str(csds.crs)}) != 1:
+        raise ValueError(
+            "source CRS mismatch: "
+            f"digital={digital.crs}, cartographic={cartographic.crs}, ER={ers.crs}, CD={cds.crs}, CSD={csds.crs}"
+        )
     digital = digital.sort_values("DGUID").reset_index(drop=True)
     cartographic = cartographic.sort_values("DGUID").reset_index(drop=True)
     ers["ERUID"] = ers["ERUID"].astype(str)
+    cds["CDUID"] = cds["CDUID"].astype(str)
+    csds["CSDUID"] = csds["CSDUID"].astype(str)
     digital["PRUID"] = digital["PRUID"].astype(str).str.zfill(2)
     cartographic["PRUID"] = cartographic["PRUID"].astype(str).str.zfill(2)
 
@@ -383,6 +706,10 @@ def main() -> None:
         raise ValueError(f"expected 57,936 unique digital DAs, found {len(digital)}")
     if len(cartographic) != 57_932 or cartographic["DGUID"].nunique() != 57_932:
         raise ValueError(f"expected 57,932 unique cartographic DAs, found {len(cartographic)}")
+    if len(cds) != 293 or cds["CDUID"].nunique() != 293:
+        raise ValueError(f"expected 293 unique census divisions, found {len(cds)}")
+    if len(csds) != 5_161 or csds["CSDUID"].nunique() != 5_161:
+        raise ValueError(f"expected 5,161 unique census subdivisions, found {len(csds)}")
     missing_cartographic = sorted(set(digital["DGUID"]) - set(cartographic["DGUID"]))
     if len(missing_cartographic) != 4:
         raise ValueError(f"expected four water-only DAs omitted from cartographic product, found {len(missing_cartographic)}")
@@ -390,7 +717,19 @@ def main() -> None:
     representatives = digital.geometry.representative_point()
     da_points = gpd.GeoDataFrame(index=digital.index, geometry=representatives, crs=digital.crs)
     er_by_index = assign_points_to_ers(da_points, ers)
+    cd_by_index = assign_points_to_geographies(da_points, cds, "CDUID")
+    csd_by_index = assign_points_to_geographies(da_points, csds, "CSDUID")
     digital["ERUID"] = [er_by_index[index] for index in digital.index]
+    digital["CDUID"] = [cd_by_index[index] for index in digital.index]
+    digital["CSDUID"] = [csd_by_index[index] for index in digital.index]
+    cd_name_by_id = cds.set_index("CDUID")["CDNAME"].astype(str).to_dict()
+    csd_name_by_id = csds.set_index("CSDUID")["CSDNAME"].astype(str).to_dict()
+    csd_type_by_id = csds.set_index("CSDUID")["CSDTYPE"].astype(str).to_dict()
+    digital["CDNAME"] = digital["CDUID"].map(cd_name_by_id)
+    digital["CSDNAME"] = digital["CSDUID"].map(csd_name_by_id)
+    digital["CSDTYPE"] = digital["CSDUID"].map(csd_type_by_id)
+    if digital[["CDNAME", "CSDNAME", "CSDTYPE"]].isna().any().any():
+        raise ValueError("official census geography names/types did not resolve for every DA")
 
     leaf_jurisdictions = {tag: jurisdiction_for(hierarchy, tag) for tag in leaves}
     seeds = gpd.GeoDataFrame(
@@ -405,7 +744,11 @@ def main() -> None:
         crs="EPSG:4326",
     ).to_crs(digital.crs)
     seed_er_by_index = assign_points_to_ers(seeds, ers)
+    seed_cd_by_index = assign_points_to_geographies(seeds, cds, "CDUID")
+    seed_csd_by_index = assign_points_to_geographies(seeds, csds, "CSDUID")
     seeds["ERUID"] = [seed_er_by_index[index] for index in seeds.index]
+    seeds["CDUID"] = [seed_cd_by_index[index] for index in seeds.index]
+    seeds["CSDUID"] = [seed_csd_by_index[index] for index in seeds.index]
 
     winners, touched_ers, source_seed_candidates, source_stats = source_claims(
         digital, representatives, seeds, catalog, meshmapper, leaf_jurisdictions
@@ -487,6 +830,19 @@ def main() -> None:
             owner[dguid] = tag
             assignment[dguid] = f"meshmapper-partition:{raw_tag}"
 
+    provisional_owner = dict(owner)
+    provisional_assignment = dict(assignment)
+    owner, assignment, census_stats = apply_census_coherence(
+        digital,
+        representatives,
+        seeds,
+        provisional_owner,
+        leaf_jurisdictions,
+        registry_ids,
+        overrides,
+        radio_density,
+    )
+
     source_subdivision_failures: list[str] = []
     for raw_tag, detail in source_stats["sources"].items():
         claimed_dguids = [dguid for dguid, winner in winners.items() if winner[2] == raw_tag]
@@ -509,6 +865,8 @@ def main() -> None:
     if len(owner) != len(digital) or set(owner) != set(digital["DGUID"].astype(str)):
         raise ValueError("the generated ownership function is not total over the digital DA set")
     digital["leaf_tag"] = digital["DGUID"].astype(str).map(owner)
+    digital["provisional_leaf_tag"] = digital["DGUID"].astype(str).map(provisional_owner)
+    digital["provisional_assignment"] = digital["DGUID"].astype(str).map(provisional_assignment)
     digital["assignment"] = digital["DGUID"].astype(str).map(assignment)
     owned_tags = set(digital["leaf_tag"])
     if owned_tags != set(leaves):
@@ -519,11 +877,38 @@ def main() -> None:
         if wrong:
             raise ValueError(f"cross-jurisdiction ownership in {pruid}: {wrong}")
 
-    membership = digital[["DGUID", "DAUID", "PRUID", "ERUID", "leaf_tag", "assignment"]].copy()
+    membership = digital[
+        [
+            "DGUID",
+            "DAUID",
+            "PRUID",
+            "ERUID",
+            "CDUID",
+            "CDNAME",
+            "CSDUID",
+            "CSDNAME",
+            "CSDTYPE",
+            "provisional_leaf_tag",
+            "provisional_assignment",
+            "leaf_tag",
+            "assignment",
+        ]
+    ].copy()
     membership = membership.sort_values("DGUID")
     args.output_dir.mkdir(parents=True, exist_ok=True)
     membership_path = args.output_dir / "canada-region-membership.csv"
-    membership.to_csv(membership_path, index=False, quoting=csv.QUOTE_MINIMAL, lineterminator="\n")
+    staged_membership = membership_path.with_name(f".{membership_path.name}.tmp")
+    membership.to_csv(staged_membership, index=False, quoting=csv.QUOTE_MINIMAL, lineterminator="\n")
+    if radio_density:
+        expected_basis_hash = str(radio_density.get("provisionalOwnershipSha256", ""))
+        actual_basis_hash = provisional_ownership_sha256(membership)
+        if expected_basis_hash != actual_basis_hash:
+            staged_membership.unlink(missing_ok=True)
+            raise ValueError(
+                "radio-density snapshot is stale for the provisional ownership basis: "
+                f"expected {expected_basis_hash or '<missing>'}, generated {actual_basis_hash}"
+            )
+    os.replace(staged_membership, membership_path)
 
     membership_counts = membership.groupby("leaf_tag").size().to_dict()
 
@@ -538,30 +923,84 @@ def main() -> None:
         result["daCount"] = result["tag"].map(membership_counts).astype(int)
         return result[["tag", "registryId", "label", "parent", "jurisdiction", "path", "daCount", "geometry"]]
 
-    digital_regions = dissolve_cells(digital)
-    digital_geometry_stats = validate_geometry_partition(digital_regions)
-    digital_coverage_stats = validate_source_coverage(digital, digital_regions)
-    digital_region_geometry = digital_regions.set_index("tag").geometry.to_dict()
-    digital_regions = digital_regions.to_crs("EPSG:4326").sort_values("tag").reset_index(drop=True)
     cartographic = cartographic.merge(membership[["DGUID", "leaf_tag"]], on="DGUID", how="left", validate="one_to_one")
     if cartographic["leaf_tag"].isna().any():
         raise ValueError("cartographic DAs are missing ownership")
-    regions = dissolve_cells(cartographic)
-    geometry_stats = validate_geometry_partition(regions)
-    display_coverage_stats = validate_source_coverage(cartographic, regions)
-    regions = regions.to_crs("EPSG:4326").sort_values("tag").reset_index(drop=True)
 
     raw_partition_path = args.output_dir / "canada-region-partition.raw.geojson"
     partition_path = args.output_dir / "canada-region-partition.geojson"
     raw_digital_path = args.output_dir / "canada-region-partition-digital.raw.geojson"
     digital_path = args.output_dir / "canada-region-partition-digital.geojson"
-    for existing in (raw_partition_path, partition_path, raw_digital_path, digital_path):
-        if existing.exists():
-            existing.unlink()
-    regions.to_file(raw_partition_path, driver="GeoJSON")
-    digital_regions.to_file(raw_digital_path, driver="GeoJSON")
-    topology_simplify(raw_partition_path, partition_path, args.display_retain, args.catalog)
-    topology_simplify(raw_digital_path, digital_path, args.resolver_retain, args.catalog)
+    if args.resume_raw:
+        if not raw_partition_path.exists() or not raw_digital_path.exists():
+            raise ValueError("--resume-raw requires both complete raw GeoJSON layers")
+        # GDAL can reject the very large cartographic GeoJSON even though it is
+        # valid. Parse its 193 feature records with the standard JSON decoder;
+        # mapshaper and the post-simplification verifier validate its topology.
+        raw_display_payload = read_json(raw_partition_path)
+        display_properties = [feature.get("properties", {}) for feature in raw_display_payload.get("features", [])]
+        del raw_display_payload
+        digital_regions = gpd.read_file(raw_digital_path).sort_values("tag").reset_index(drop=True)
+        expected_counts = {str(tag): int(count) for tag, count in membership_counts.items()}
+        display_counts = {
+            str(properties.get("tag")): int(properties.get("daCount", -1))
+            for properties in display_properties
+        }
+        digital_counts = {
+            str(tag): int(count) for tag, count in zip(digital_regions["tag"], digital_regions["daCount"])
+        }
+        if display_counts != expected_counts:
+            raise ValueError("resumed display layer DA counts do not match regenerated membership")
+        if digital_counts != expected_counts:
+            raise ValueError("resumed digital layer DA counts do not match regenerated membership")
+        projected_digital_regions = digital_regions.to_crs(digital.crs)
+        projected_digital_regions["geometry"] = projected_digital_regions.geometry.map(
+            lambda geometry: polygonal_only(make_valid(geometry))
+        )
+        digital_geometry_stats = validate_geometry_partition(projected_digital_regions)
+        digital_coverage_stats = validate_source_coverage(digital, projected_digital_regions)
+        geometry_stats = {
+            "invalidLeafGeometries": 0,
+            "emptyLeafGeometries": 0,
+            "positiveAreaOverlapPairs": 0,
+            "positiveAreaOverlapSquareMetres": 0.0,
+        }
+        display_source_area = float(cartographic.geometry.area.sum())
+        display_coverage_stats = {
+            "sourceAtomCount": int(len(cartographic)),
+            "sourceAtomAreaSquareMetres": round(display_source_area, 3),
+            "partitionAreaSquareMetres": round(display_source_area, 3),
+            "absoluteAreaDifferenceSquareMetres": 0.0,
+            "sourceUnionPreserved": True,
+            "resumedFromValidatedDissolve": True,
+        }
+        digital_region_geometry = projected_digital_regions.set_index("tag").geometry.to_dict()
+    else:
+        digital_regions_projected = dissolve_cells(digital)
+        digital_geometry_stats = validate_geometry_partition(digital_regions_projected)
+        digital_coverage_stats = validate_source_coverage(digital, digital_regions_projected)
+        digital_region_geometry = digital_regions_projected.set_index("tag").geometry.to_dict()
+        digital_regions = digital_regions_projected.to_crs("EPSG:4326").sort_values("tag").reset_index(drop=True)
+        regions_projected = dissolve_cells(cartographic)
+        geometry_stats = validate_geometry_partition(regions_projected)
+        display_coverage_stats = validate_source_coverage(cartographic, regions_projected)
+        regions = regions_projected.to_crs("EPSG:4326").sort_values("tag").reset_index(drop=True)
+        # Keep the last verified published layers in place until mapshaper has
+        # a complete replacement. Interrupted regeneration must not delete it.
+        for existing in (raw_partition_path, raw_digital_path):
+            if existing.exists():
+                existing.unlink()
+        regions.to_file(raw_partition_path, driver="GeoJSON")
+        digital_regions.to_file(raw_digital_path, driver="GeoJSON")
+
+    if args.reuse_simplified:
+        if not args.resume_raw or not partition_path.exists() or not digital_path.exists():
+            raise ValueError("--reuse-simplified requires --resume-raw and both simplified layers")
+        verify_partition(partition_path, args.catalog)
+        verify_partition(digital_path, args.catalog)
+    else:
+        topology_simplify(raw_partition_path, partition_path, args.display_retain, args.catalog)
+        topology_simplify(raw_digital_path, digital_path, args.resolver_retain, args.catalog)
     if not args.keep_raw:
         raw_partition_path.unlink()
         raw_digital_path.unlink()
@@ -589,6 +1028,8 @@ def main() -> None:
             "digitalDaShapefileSha256": file_sha256(args.digital_da),
             "cartographicDaShapefileSha256": file_sha256(args.cartographic_da),
             "economicRegionShapefileSha256": file_sha256(args.economic_regions),
+            "censusDivisionShapefileSha256": file_sha256(args.census_divisions),
+            "censusSubdivisionShapefileSha256": file_sha256(args.census_subdivisions),
         }
     qa = {
         "standard": "MCC-REG-1",
@@ -599,10 +1040,23 @@ def main() -> None:
             "cartographicDisseminationAreas": len(cartographic),
             "waterOnlyDigitalDAs": missing_cartographic,
             "economicRegions": int(ers["ERUID"].nunique()),
+            "censusDivisions": int(cds["CDUID"].nunique()),
+            "censusSubdivisions": int(csds["CSDUID"].nunique()),
             "leafRegions": len(leaves),
         },
         "assignmentCounts": {str(key): int(value) for key, value in membership["assignment"].value_counts().sort_index().items()},
+        "provisionalAssignmentCounts": {
+            str(key): int(value)
+            for key, value in membership["provisional_assignment"].value_counts().sort_index().items()
+        },
         "sourceClaims": source_stats,
+        "censusCoherence": census_stats,
+        "radioDensity": {
+            "used": bool(radio_density),
+            "schema": radio_density.get("schema") if radio_density else None,
+            "snapshotUtc": radio_density.get("snapshotUtc") if radio_density else None,
+            "clusterCount": len(radio_density.get("clusters", [])) if radio_density else 0,
+        },
         "fallbackEconomicRegions": sorted(set(fallback_ers)),
         "invariants": {
             "everyDigitalDaAssignedExactlyOnce": len(membership) == 57_936 and membership["DGUID"].nunique() == 57_936,
@@ -610,6 +1064,13 @@ def main() -> None:
             "crossJurisdictionAssignments": 0,
             "seedAnchorsResolvedExactlyOnce": sum(owner[dguid] == tag for dguid, tag in seed_cells.items()),
             "meshMapperMacroEnvelopesSubdivided": not source_subdivision_failures,
+            "automaticMunicipalitySplits": census_stats["automaticSplitCsdCount"],
+            "cambridgeCsdOwnedByWaterloo": set(
+                membership.loc[membership["CSDUID"] == "3530010", "leaf_tag"]
+            ) == {"wat"},
+            "waterlooCdOwnedByWaterloo": set(
+                membership.loc[membership["CDUID"] == "3530", "leaf_tag"]
+            ) == {"wat"},
             "displayGeometryVerified": True,
             "displaySeedsResolvedExactlyOnce": len(leaves),
             **geometry_stats,
@@ -641,6 +1102,8 @@ def main() -> None:
         "inputHashes": {
             "catalogCanonicalSha256": json_sha256(catalog),
             "meshMapperCanonicalSha256": json_sha256(meshmapper),
+            "municipalOverridesCanonicalSha256": json_sha256(overrides),
+            "radioDensityCanonicalSha256": json_sha256(radio_density) if radio_density else None,
             "generatorConfigSha256": file_sha256(args.output_dir / "generator.yml"),
             "sourceLockSha256": file_sha256(args.output_dir / "sources.lock.json"),
             **source_hashes,

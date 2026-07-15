@@ -33,6 +33,46 @@
       "licence": "Statistics Canada Open Licence"
     },
     {
+      "id": "statcan-census-divisions-digital-2021",
+      "role": "293 official higher-level regional cohorts",
+      "url": "https://www12.statcan.gc.ca/census-recensement/2021/geo/sip-pis/boundary-limites/files-fichiers/lcd_000a21a_e.zip",
+      "file": "lcd_000a21a_e.zip",
+      "bytes": 10837545,
+      "lastModified": "2021-10-21T23:38:33Z",
+      "sha256": "76a3cef8679ca9845db0322b5e6029d17333eae4e338169d29986523405518a6",
+      "licence": "Statistics Canada Open Licence"
+    },
+    {
+      "id": "statcan-census-subdivisions-digital-2021",
+      "role": "5,161 indivisible municipal or municipal-equivalent cohorts",
+      "url": "https://www12.statcan.gc.ca/census-recensement/2021/geo/sip-pis/boundary-limites/files-fichiers/lcsd000a21a_e.zip",
+      "file": "lcsd000a21a_e.zip",
+      "bytes": 40389252,
+      "lastModified": "2021-10-21T23:38:45Z",
+      "sha256": "79a6b5022e33f2c89ead0356bf9b51c645b47684f643e916700e97842a69dbb2",
+      "licence": "Statistics Canada Open Licence"
+    },
+    {
+      "id": "meshcore-canada-radio-density-2026-07-15",
+      "role": "Privacy-safe secondary evidence for close whole-municipality decisions",
+      "urls": [
+        "https://live.meshcore.ca/api/nodes",
+        "https://dev.meshcore.ca/api/v1/nodes"
+      ],
+      "file": "radio-density.json",
+      "bytes": 22488,
+      "snapshotUtc": "2026-07-15T00:14:42Z",
+      "sha256": "280a54d366ed9f62bb1e7db639b402cb86a8c9fbeea80e33488b6117a9989a81",
+      "privacy": "every published geographic/candidate count is >=5; no node identifiers, names, or exact coordinates"
+    },
+    {
+      "id": "meshcore-canada-reviewed-census-overrides",
+      "role": "Approved CD/CSD decisions and enumerated municipality split exceptions",
+      "file": "municipal-overrides.json",
+      "bytes": 560,
+      "sha256": "7ca7e3a73ff10add6a19653363d0217d9a283a3da521d1cc426074fd590a5e0a"
+    },
+    {
       "id": "meshmapper-canada-2026-07-12",
       "role": "Primary community boundary and identity evidence",
       "url": "https://meshmapper.net/",

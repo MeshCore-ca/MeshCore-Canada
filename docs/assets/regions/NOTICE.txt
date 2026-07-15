@@ -38,12 +38,36 @@ MCC-REG-1 authority sources
 ---------------------------
 
 The region definition and authority standard specifies Statistics Canada 2021
-Dissemination Areas as the topology units and 2021 Economic Regions as broad
+Dissemination Areas as the topology units, 2021 Census Subdivisions as the
+indivisible-by-default municipal or municipal-equivalent cohorts, 2021 Census
+Divisions as higher regional cohorts, and 2021 Economic Regions as broad
 generation guardrails. canada-region-membership.csv and
 canada-region-partition.geojson are derived from those sources. The original
 Statistics Canada shapefiles are not redistributed. sources.lock.json records
 the exact downloads, byte sizes, dates, licences, and SHA-256 hashes used to
 generate the committed candidate layer.
+
+municipal-overrides.json records reviewed CD/CSD ownership decisions and any
+approved CSD split. A split must enumerate every affected Dissemination Area;
+an editor export or draft is not authoritative until reviewed and merged.
+
+radio-density.json
+------------------
+
+This file is a privacy-safe aggregate snapshot derived from the MeshCore Canada
+live and development node directories:
+
+https://live.meshcore.ca/
+https://dev.meshcore.ca/
+
+It is secondary evidence for close whole-CSD decisions only. It joins fresh
+positioned live observations with the current positioned dev directory, but
+uses dev-only records for advisory density because that endpoint has no
+per-node timestamp. Published geographic and candidate counts are at least five,
+candidate evidence is specific to its CSD, and clusters have a maximum 30 km
+diameter. Raw node identifiers, names, and exact coordinates are not persisted.
+The source-response hashes and fetch statistics provide audit evidence without
+redistributing source records.
 
 Statistics Canada source information and Open Licence:
 

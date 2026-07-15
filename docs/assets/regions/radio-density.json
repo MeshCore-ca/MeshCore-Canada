@@ -1,0 +1,1000 @@
+{
+  "provisionalOwnershipSha256": "210df8809a4f2e83c04b3e943fbfd774974d619e1d2e5000dfa22f6fa4edfbec",
+  "clusters": [
+    {
+      "censusSubdivisions": [
+        {
+          "decisionCandidateCounts": {
+            "crd": 15
+          },
+          "decisionNodeCount": 15,
+          "id": "5917021",
+          "observedNodeCount": 17
+        },
+        {
+          "id": "5917041",
+          "observedNodeCount": 5
+        },
+        {
+          "decisionCandidateCounts": {
+            "crd": 5
+          },
+          "decisionNodeCount": 5,
+          "id": "5917044",
+          "observedNodeCount": 8
+        }
+      ],
+      "decisionNodeCount": 20,
+      "id": "radio-018587855c47",
+      "nodeCount": 30,
+      "observedNodeCount": 30
+    },
+    {
+      "censusSubdivisions": [
+        {
+          "decisionCandidateCounts": {
+            "has": 14
+          },
+          "decisionNodeCount": 14,
+          "id": "3512005",
+          "observedNodeCount": 20
+        }
+      ],
+      "decisionNodeCount": 14,
+      "id": "radio-01a73e0ea043",
+      "nodeCount": 20,
+      "observedNodeCount": 20
+    },
+    {
+      "censusSubdivisions": [
+        {
+          "decisionCandidateCounts": {
+            "wel": 6
+          },
+          "decisionNodeCount": 6,
+          "id": "3530010",
+          "observedNodeCount": 10
+        },
+        {
+          "decisionCandidateCounts": {
+            "wat": 5
+          },
+          "decisionNodeCount": 5,
+          "id": "3530013",
+          "observedNodeCount": 7
+        },
+        {
+          "id": "3530016",
+          "observedNodeCount": 6
+        }
+      ],
+      "decisionNodeCount": 11,
+      "id": "radio-0b55da71e1b1",
+      "nodeCount": 23,
+      "observedNodeCount": 23
+    },
+    {
+      "censusSubdivisions": [
+        {
+          "decisionCandidateCounts": {
+            "nia": 7
+          },
+          "decisionNodeCount": 7,
+          "id": "3526053",
+          "observedNodeCount": 8
+        }
+      ],
+      "decisionNodeCount": 7,
+      "id": "radio-0c9ba0bd166a",
+      "nodeCount": 8,
+      "observedNodeCount": 8
+    },
+    {
+      "censusSubdivisions": [
+        {
+          "id": "4811016",
+          "observedNodeCount": 5
+        },
+        {
+          "decisionCandidateCounts": {
+            "edm": 15
+          },
+          "decisionNodeCount": 15,
+          "id": "4811061",
+          "observedNodeCount": 27
+        }
+      ],
+      "decisionNodeCount": 15,
+      "id": "radio-0d699f34dde0",
+      "nodeCount": 32,
+      "observedNodeCount": 32
+    },
+    {
+      "censusSubdivisions": [
+        {
+          "id": "2458007",
+          "observedNodeCount": 6
+        },
+        {
+          "decisionCandidateCounts": {
+            "mtl": 9
+          },
+          "decisionNodeCount": 9,
+          "id": "2458227",
+          "observedNodeCount": 16
+        },
+        {
+          "decisionCandidateCounts": {
+            "mtl": 33
+          },
+          "decisionNodeCount": 33,
+          "id": "2466023",
+          "observedNodeCount": 56
+        },
+        {
+          "id": "2467015",
+          "observedNodeCount": 5
+        },
+        {
+          "id": "2467020",
+          "observedNodeCount": 9
+        }
+      ],
+      "decisionNodeCount": 42,
+      "id": "radio-0d7191e1b9c1",
+      "nodeCount": 92,
+      "observedNodeCount": 92
+    },
+    {
+      "censusSubdivisions": [
+        {
+          "id": "5915001",
+          "observedNodeCount": 6
+        }
+      ],
+      "id": "radio-1762db788c2c",
+      "nodeCount": 6,
+      "observedNodeCount": 6
+    },
+    {
+      "censusSubdivisions": [
+        {
+          "decisionCandidateCounts": {
+            "pec": 5
+          },
+          "decisionNodeCount": 5,
+          "id": "3513020",
+          "observedNodeCount": 8
+        }
+      ],
+      "decisionNodeCount": 5,
+      "id": "radio-27fa70b6a2e7",
+      "nodeCount": 8,
+      "observedNodeCount": 8
+    },
+    {
+      "censusSubdivisions": [
+        {
+          "decisionCandidateCounts": {
+            "tnrd": 12
+          },
+          "decisionNodeCount": 12,
+          "id": "5933042",
+          "observedNodeCount": 32
+        }
+      ],
+      "decisionNodeCount": 12,
+      "id": "radio-288df8d660f5",
+      "nodeCount": 32,
+      "observedNodeCount": 32
+    },
+    {
+      "censusSubdivisions": [
+        {
+          "decisionCandidateCounts": {
+            "psr": 9
+          },
+          "decisionNodeCount": 9,
+          "id": "3502023",
+          "observedNodeCount": 12
+        }
+      ],
+      "decisionNodeCount": 9,
+      "id": "radio-2f730ec87a32",
+      "nodeCount": 12,
+      "observedNodeCount": 12
+    },
+    {
+      "censusSubdivisions": [
+        {
+          "id": "2493042",
+          "observedNodeCount": 7
+        }
+      ],
+      "id": "radio-307ca82273fb",
+      "nodeCount": 7,
+      "observedNodeCount": 7
+    },
+    {
+      "censusSubdivisions": [
+        {
+          "id": "5921018",
+          "observedNodeCount": 5
+        },
+        {
+          "id": "5921032",
+          "observedNodeCount": 5
+        }
+      ],
+      "id": "radio-34cedf11f9b7",
+      "nodeCount": 10,
+      "observedNodeCount": 10
+    },
+    {
+      "censusSubdivisions": [
+        {
+          "decisionCandidateCounts": {
+            "rdn": 15
+          },
+          "decisionNodeCount": 15,
+          "id": "5921007",
+          "observedNodeCount": 24
+        }
+      ],
+      "decisionNodeCount": 15,
+      "id": "radio-356f1af39e50",
+      "nodeCount": 24,
+      "observedNodeCount": 24
+    },
+    {
+      "censusSubdivisions": [
+        {
+          "decisionCandidateCounts": {
+            "fvrd": 5
+          },
+          "decisionNodeCount": 5,
+          "id": "5915075",
+          "observedNodeCount": 6
+        }
+      ],
+      "decisionNodeCount": 5,
+      "id": "radio-38c965938bf0",
+      "nodeCount": 6,
+      "observedNodeCount": 6
+    },
+    {
+      "censusSubdivisions": [
+        {
+          "id": "3524009",
+          "observedNodeCount": 6
+        }
+      ],
+      "id": "radio-3c78caf9634e",
+      "nodeCount": 6,
+      "observedNodeCount": 6
+    },
+    {
+      "censusSubdivisions": [
+        {
+          "decisionCandidateCounts": {
+            "pel": 5,
+            "tor": 56
+          },
+          "decisionNodeCount": 61,
+          "id": "3520005",
+          "observedNodeCount": 92
+        }
+      ],
+      "decisionNodeCount": 61,
+      "id": "radio-40c93ff6d19b",
+      "nodeCount": 92,
+      "observedNodeCount": 92
+    },
+    {
+      "censusSubdivisions": [
+        {
+          "id": "2423027",
+          "observedNodeCount": 6
+        }
+      ],
+      "id": "radio-4cd5e6907a5d",
+      "nodeCount": 6,
+      "observedNodeCount": 6
+    },
+    {
+      "censusSubdivisions": [
+        {
+          "id": "2432040",
+          "observedNodeCount": 8
+        }
+      ],
+      "id": "radio-52876f16029c",
+      "nodeCount": 8,
+      "observedNodeCount": 8
+    },
+    {
+      "censusSubdivisions": [
+        {
+          "decisionCandidateCounts": {
+            "lan": 8
+          },
+          "decisionNodeCount": 8,
+          "id": "3509024",
+          "observedNodeCount": 9
+        }
+      ],
+      "decisionNodeCount": 8,
+      "id": "radio-5d4b5167acb9",
+      "nodeCount": 9,
+      "observedNodeCount": 9
+    },
+    {
+      "censusSubdivisions": [
+        {
+          "decisionCandidateCounts": {
+            "ott": 13
+          },
+          "decisionNodeCount": 13,
+          "id": "3506008",
+          "observedNodeCount": 18
+        }
+      ],
+      "decisionNodeCount": 13,
+      "id": "radio-5ef8480d8b3b",
+      "nodeCount": 18,
+      "observedNodeCount": 18
+    },
+    {
+      "censusSubdivisions": [
+        {
+          "id": "4803004",
+          "observedNodeCount": 6
+        }
+      ],
+      "id": "radio-67443f815449",
+      "nodeCount": 6,
+      "observedNodeCount": 6
+    },
+    {
+      "censusSubdivisions": [
+        {
+          "decisionCandidateCounts": {
+            "cal": 16
+          },
+          "decisionNodeCount": 16,
+          "id": "4806016",
+          "observedNodeCount": 31
+        }
+      ],
+      "decisionNodeCount": 16,
+      "id": "radio-6968997472d9",
+      "nodeCount": 31,
+      "observedNodeCount": 31
+    },
+    {
+      "censusSubdivisions": [
+        {
+          "decisionCandidateCounts": {
+            "mvrd": 6
+          },
+          "decisionNodeCount": 6,
+          "id": "5915004",
+          "observedNodeCount": 7
+        },
+        {
+          "decisionCandidateCounts": {
+            "mvrd": 7
+          },
+          "decisionNodeCount": 7,
+          "id": "5915022",
+          "observedNodeCount": 11
+        },
+        {
+          "decisionCandidateCounts": {
+            "mvrd": 12
+          },
+          "decisionNodeCount": 12,
+          "id": "5915025",
+          "observedNodeCount": 19
+        },
+        {
+          "id": "5915029",
+          "observedNodeCount": 6
+        },
+        {
+          "decisionCandidateCounts": {
+            "mvrd": 14
+          },
+          "decisionNodeCount": 14,
+          "id": "5915034",
+          "observedNodeCount": 23
+        },
+        {
+          "id": "5915039",
+          "observedNodeCount": 6
+        },
+        {
+          "id": "5915043",
+          "observedNodeCount": 5
+        },
+        {
+          "decisionCandidateCounts": {
+            "mvrd": 7
+          },
+          "decisionNodeCount": 7,
+          "id": "5915046",
+          "observedNodeCount": 14
+        }
+      ],
+      "decisionNodeCount": 46,
+      "id": "radio-69a94d25ff75",
+      "nodeCount": 91,
+      "observedNodeCount": 91
+    },
+    {
+      "censusSubdivisions": [
+        {
+          "id": "2464008",
+          "observedNodeCount": 5
+        },
+        {
+          "id": "2465005",
+          "observedNodeCount": 6
+        },
+        {
+          "decisionCandidateCounts": {
+            "mtl": 12
+          },
+          "decisionNodeCount": 12,
+          "id": "2466023",
+          "observedNodeCount": 32
+        },
+        {
+          "id": "2466142",
+          "observedNodeCount": 6
+        }
+      ],
+      "decisionNodeCount": 12,
+      "id": "radio-6cbc3b70cb79",
+      "nodeCount": 49,
+      "observedNodeCount": 49
+    },
+    {
+      "censusSubdivisions": [
+        {
+          "id": "3510010",
+          "observedNodeCount": 9
+        }
+      ],
+      "id": "radio-6ee500b32414",
+      "nodeCount": 9,
+      "observedNodeCount": 9
+    },
+    {
+      "censusSubdivisions": [
+        {
+          "id": "5917005",
+          "observedNodeCount": 5
+        },
+        {
+          "id": "5917010",
+          "observedNodeCount": 9
+        },
+        {
+          "decisionCandidateCounts": {
+            "crd": 5
+          },
+          "decisionNodeCount": 5,
+          "id": "5917027",
+          "observedNodeCount": 8
+        }
+      ],
+      "decisionNodeCount": 5,
+      "id": "radio-725931eb5a88",
+      "nodeCount": 22,
+      "observedNodeCount": 22
+    },
+    {
+      "censusSubdivisions": [
+        {
+          "decisionCandidateCounts": {
+            "fvrd": 13
+          },
+          "decisionNodeCount": 13,
+          "id": "5909056",
+          "observedNodeCount": 19
+        }
+      ],
+      "decisionNodeCount": 13,
+      "id": "radio-750b0852a33a",
+      "nodeCount": 19,
+      "observedNodeCount": 19
+    },
+    {
+      "censusSubdivisions": [
+        {
+          "decisionCandidateCounts": {
+            "rdno": 5
+          },
+          "decisionNodeCount": 5,
+          "id": "5937021",
+          "observedNodeCount": 9
+        }
+      ],
+      "decisionNodeCount": 5,
+      "id": "radio-7596d9d67ba4",
+      "nodeCount": 9,
+      "observedNodeCount": 9
+    },
+    {
+      "censusSubdivisions": [
+        {
+          "id": "2482025",
+          "observedNodeCount": 6
+        },
+        {
+          "decisionCandidateCounts": {
+            "ott": 7
+          },
+          "decisionNodeCount": 7,
+          "id": "3506008",
+          "observedNodeCount": 10
+        }
+      ],
+      "decisionNodeCount": 7,
+      "id": "radio-769f1cc95692",
+      "nodeCount": 16,
+      "observedNodeCount": 16
+    },
+    {
+      "censusSubdivisions": [
+        {
+          "id": "4802012",
+          "observedNodeCount": 6
+        }
+      ],
+      "id": "radio-7f8e7ebae209",
+      "nodeCount": 6,
+      "observedNodeCount": 6
+    },
+    {
+      "censusSubdivisions": [
+        {
+          "decisionCandidateCounts": {
+            "cal": 38
+          },
+          "decisionNodeCount": 38,
+          "id": "4806016",
+          "observedNodeCount": 91
+        }
+      ],
+      "decisionNodeCount": 38,
+      "id": "radio-91c06f624571",
+      "nodeCount": 91,
+      "observedNodeCount": 91
+    },
+    {
+      "censusSubdivisions": [
+        {
+          "decisionCandidateCounts": {
+            "ott": 22
+          },
+          "decisionNodeCount": 22,
+          "id": "3506008",
+          "observedNodeCount": 39
+        }
+      ],
+      "decisionNodeCount": 22,
+      "id": "radio-a08c77916997",
+      "nodeCount": 39,
+      "observedNodeCount": 39
+    },
+    {
+      "censusSubdivisions": [
+        {
+          "decisionCandidateCounts": {
+            "edm": 7
+          },
+          "decisionNodeCount": 7,
+          "id": "4811052",
+          "observedNodeCount": 8
+        },
+        {
+          "decisionCandidateCounts": {
+            "edm": 23
+          },
+          "decisionNodeCount": 23,
+          "id": "4811061",
+          "observedNodeCount": 38
+        }
+      ],
+      "decisionNodeCount": 30,
+      "id": "radio-ae9188a7805d",
+      "nodeCount": 46,
+      "observedNodeCount": 46
+    },
+    {
+      "censusSubdivisions": [
+        {
+          "id": "3539036",
+          "observedNodeCount": 5
+        }
+      ],
+      "id": "radio-b7d26937ecf9",
+      "nodeCount": 5,
+      "observedNodeCount": 5
+    },
+    {
+      "censusSubdivisions": [
+        {
+          "id": "3523008",
+          "observedNodeCount": 5
+        }
+      ],
+      "id": "radio-b9de23ddb09e",
+      "nodeCount": 5,
+      "observedNodeCount": 5
+    },
+    {
+      "censusSubdivisions": [
+        {
+          "decisionCandidateCounts": {
+            "mtrg": 8
+          },
+          "decisionNodeCount": 8,
+          "id": "2456083",
+          "observedNodeCount": 11
+        }
+      ],
+      "decisionNodeCount": 8,
+      "id": "radio-ba2d7284386b",
+      "nodeCount": 11,
+      "observedNodeCount": 11
+    },
+    {
+      "censusSubdivisions": [
+        {
+          "id": "2423027",
+          "observedNodeCount": 5
+        }
+      ],
+      "id": "radio-c4d4c43e412e",
+      "nodeCount": 5,
+      "observedNodeCount": 5
+    },
+    {
+      "censusSubdivisions": [
+        {
+          "decisionCandidateCounts": {
+            "gatout": 8
+          },
+          "decisionNodeCount": 8,
+          "id": "2481017",
+          "observedNodeCount": 15
+        },
+        {
+          "decisionCandidateCounts": {
+            "ott": 28
+          },
+          "decisionNodeCount": 28,
+          "id": "3506008",
+          "observedNodeCount": 41
+        }
+      ],
+      "decisionNodeCount": 36,
+      "id": "radio-c5187674ea48",
+      "nodeCount": 56,
+      "observedNodeCount": 56
+    },
+    {
+      "censusSubdivisions": [
+        {
+          "decisionCandidateCounts": {
+            "dur": 5
+          },
+          "decisionNodeCount": 5,
+          "id": "3518005",
+          "observedNodeCount": 13
+        }
+      ],
+      "decisionNodeCount": 5,
+      "id": "radio-cced69c4e61f",
+      "nodeCount": 13,
+      "observedNodeCount": 13
+    },
+    {
+      "censusSubdivisions": [
+        {
+          "decisionCandidateCounts": {
+            "cvrd": 5
+          },
+          "decisionNodeCount": 5,
+          "id": "5919008",
+          "observedNodeCount": 6
+        },
+        {
+          "decisionCandidateCounts": {
+            "rdn": 8
+          },
+          "decisionNodeCount": 8,
+          "id": "5919017",
+          "observedNodeCount": 12
+        }
+      ],
+      "decisionNodeCount": 13,
+      "id": "radio-ce855c2fa050",
+      "nodeCount": 18,
+      "observedNodeCount": 18
+    },
+    {
+      "censusSubdivisions": [
+        {
+          "id": "2464008",
+          "observedNodeCount": 9
+        }
+      ],
+      "id": "radio-d6f2483f3f24",
+      "nodeCount": 9,
+      "observedNodeCount": 9
+    },
+    {
+      "censusSubdivisions": [
+        {
+          "decisionCandidateCounts": {
+            "capnat": 9
+          },
+          "decisionNodeCount": 9,
+          "id": "2423027",
+          "observedNodeCount": 18
+        },
+        {
+          "id": "2423072",
+          "observedNodeCount": 5
+        },
+        {
+          "decisionCandidateCounts": {
+            "capnat": 7
+          },
+          "decisionNodeCount": 7,
+          "id": "2425213",
+          "observedNodeCount": 11
+        }
+      ],
+      "decisionNodeCount": 16,
+      "id": "radio-da8da64c420a",
+      "nodeCount": 34,
+      "observedNodeCount": 34
+    },
+    {
+      "censusSubdivisions": [
+        {
+          "decisionCandidateCounts": {
+            "edm": 12
+          },
+          "decisionNodeCount": 12,
+          "id": "4811061",
+          "observedNodeCount": 18
+        }
+      ],
+      "decisionNodeCount": 12,
+      "id": "radio-e03ed28b281a",
+      "nodeCount": 18,
+      "observedNodeCount": 18
+    },
+    {
+      "censusSubdivisions": [
+        {
+          "decisionCandidateCounts": {
+            "tor": 7
+          },
+          "decisionNodeCount": 7,
+          "id": "3520005",
+          "observedNodeCount": 12
+        },
+        {
+          "id": "3521005",
+          "observedNodeCount": 24
+        }
+      ],
+      "decisionNodeCount": 7,
+      "id": "radio-e3828639eab5",
+      "nodeCount": 36,
+      "observedNodeCount": 36
+    },
+    {
+      "censusSubdivisions": [
+        {
+          "id": "5915015",
+          "observedNodeCount": 9
+        },
+        {
+          "decisionCandidateCounts": {
+            "mvrd": 7
+          },
+          "decisionNodeCount": 7,
+          "id": "5915020",
+          "observedNodeCount": 8
+        },
+        {
+          "decisionCandidateCounts": {
+            "mvrd": 23
+          },
+          "decisionNodeCount": 23,
+          "id": "5915022",
+          "observedNodeCount": 35
+        },
+        {
+          "decisionCandidateCounts": {
+            "mvrd": 5
+          },
+          "decisionNodeCount": 5,
+          "id": "5915051",
+          "observedNodeCount": 6
+        }
+      ],
+      "decisionNodeCount": 35,
+      "id": "radio-e4c80d66f5b8",
+      "nodeCount": 58,
+      "observedNodeCount": 58
+    },
+    {
+      "censusSubdivisions": [
+        {
+          "decisionCandidateCounts": {
+            "sj": 5
+          },
+          "decisionNodeCount": 5,
+          "id": "1301006",
+          "observedNodeCount": 6
+        }
+      ],
+      "decisionNodeCount": 5,
+      "id": "radio-ec25380f6ccc",
+      "nodeCount": 6,
+      "observedNodeCount": 6
+    },
+    {
+      "censusSubdivisions": [
+        {
+          "decisionCandidateCounts": {
+            "scrd": 10
+          },
+          "decisionNodeCount": 10,
+          "id": "5929011",
+          "observedNodeCount": 13
+        }
+      ],
+      "decisionNodeCount": 10,
+      "id": "radio-eed7fc43952f",
+      "nodeCount": 13,
+      "observedNodeCount": 13
+    },
+    {
+      "censusSubdivisions": [
+        {
+          "id": "2481017",
+          "observedNodeCount": 5
+        },
+        {
+          "decisionCandidateCounts": {
+            "ott": 38
+          },
+          "decisionNodeCount": 38,
+          "id": "3506008",
+          "observedNodeCount": 53
+        }
+      ],
+      "decisionNodeCount": 38,
+      "id": "radio-efaae83bf029",
+      "nodeCount": 58,
+      "observedNodeCount": 58
+    },
+    {
+      "censusSubdivisions": [
+        {
+          "decisionCandidateCounts": {
+            "cal": 6
+          },
+          "decisionNodeCount": 6,
+          "id": "4806021",
+          "observedNodeCount": 14
+        }
+      ],
+      "decisionNodeCount": 6,
+      "id": "radio-f28e9bad7963",
+      "nodeCount": 14,
+      "observedNodeCount": 14
+    },
+    {
+      "censusSubdivisions": [
+        {
+          "decisionCandidateCounts": {
+            "ham": 11
+          },
+          "decisionNodeCount": 11,
+          "id": "3525005",
+          "observedNodeCount": 16
+        }
+      ],
+      "decisionNodeCount": 11,
+      "id": "radio-f779f5789a3c",
+      "nodeCount": 16,
+      "observedNodeCount": 16
+    },
+    {
+      "censusSubdivisions": [
+        {
+          "id": "5917027",
+          "observedNodeCount": 13
+        },
+        {
+          "id": "5917029",
+          "observedNodeCount": 6
+        }
+      ],
+      "id": "radio-fcf96a23b1a2",
+      "nodeCount": 19,
+      "observedNodeCount": 19
+    }
+  ],
+  "privacy": {
+    "clusterMaximumDiameterKilometres": 30.0,
+    "decisionEvidenceUnit": "cluster-census-subdivision-candidate",
+    "decisionRoles": [
+      "repeater",
+      "room",
+      "sensor"
+    ],
+    "devNodeTimestampAvailable": false,
+    "devOnlyUse": "advisory-density-only",
+    "kAnonymity": 5,
+    "liveFreshnessDays": 30,
+    "observedRoles": [
+      "companion",
+      "repeater",
+      "room",
+      "sensor"
+    ],
+    "publishedGeographicCountMinimum": 5,
+    "rawCoordinatesPersisted": 0,
+    "rawIdentifiersPersisted": 0
+  },
+  "schema": "mcc-radio-density/v2",
+  "snapshotUtc": "2026-07-15T00:14:42Z",
+  "sourceAudit": {
+    "crossSourceCoordinateConflictsExcluded": 2,
+    "crossSourceRoleMismatches": 0,
+    "decisionEligibleFixedInfrastructureInsideCanada": 936,
+    "deduplicatedPositionedNodes": 4180,
+    "dev": {
+      "acceptedPositionedRecords": 4171,
+      "nodeTimestampAvailable": false,
+      "pages": 116,
+      "records": 5781,
+      "responseSha256": "18e0fa519a7d4e24e86963aa3440581293469e63bd29d85a4449a4cedf1ee8aa",
+      "url": "https://dev.meshcore.ca/api/v1/nodes"
+    },
+    "devMatchedLive": 2962,
+    "devOnlyInsideCanada": 459,
+    "devOnlyPositionedNodes": 1209,
+    "devRejectedCoordinate": 1609,
+    "devRejectedRole": 1,
+    "duplicateDevRecords": 0,
+    "duplicateLiveRecords": 0,
+    "fixedInfrastructureInsideCanada": 1214,
+    "insideCanada": 1568,
+    "live": {
+      "acceptedFreshPositionedRecords": 2973,
+      "pages": 8,
+      "records": 3644,
+      "responseSha256": "7abb8c72b10bd6909ddc56ab0b6b516b16adf2630a21c5cd56b67af7c4241d3d",
+      "url": "https://live.meshcore.ca/api/nodes"
+    },
+    "liveRejectedCoordinate": 670,
+    "liveRejectedRole": 1,
+    "liveRejectedStale": 0,
+    "suppressedCandidateAggregates": 33,
+    "suppressedGeographicClusters": 11,
+    "suppressedSmallClusters": 34
+  }
+}

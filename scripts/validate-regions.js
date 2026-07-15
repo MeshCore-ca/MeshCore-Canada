@@ -13,6 +13,8 @@ const MEMBERSHIP_PATH = path.join(ASSET_DIR, "canada-region-membership.csv");
 const PARTITION_PATH = path.join(ASSET_DIR, "canada-region-partition.geojson");
 const DIGITAL_PARTITION_PATH = path.join(ASSET_DIR, "canada-region-partition-digital.geojson");
 const QA_PATH = path.join(ASSET_DIR, "canada-region-partition.qa.json");
+const MUNICIPAL_OVERRIDES_PATH = path.join(ASSET_DIR, "municipal-overrides.json");
+const RADIO_DENSITY_PATH = path.join(ASSET_DIR, "radio-density.json");
 const SCRIPT_PATH = path.join(ASSET_DIR, "regions.js");
 const STANDARD_PATH = path.join(ROOT, "docs", "regions", "standard.md");
 
@@ -50,6 +52,38 @@ function unique(values) {
   return [...new Set(values)];
 }
 
+function parseCsvLine(line) {
+  const fields = [];
+  let field = "";
+  let quoted = false;
+  for (let index = 0; index < line.length; index += 1) {
+    const character = line[index];
+    if (character === '"') {
+      if (quoted && line[index + 1] === '"') {
+        field += '"';
+        index += 1;
+      } else {
+        quoted = !quoted;
+      }
+    } else if (character === "," && !quoted) {
+      fields.push(field);
+      field = "";
+    } else {
+      field += character;
+    }
+  }
+  fields.push(field);
+  check(!quoted, "membership contains an unterminated quoted field");
+  return fields;
+}
+
+function checkExactKeys(value, allowed, context) {
+  check(Boolean(value) && typeof value === "object" && !Array.isArray(value), `${context} must be an object`);
+  if (!value || typeof value !== "object" || Array.isArray(value)) return;
+  const extras = Object.keys(value).filter((key) => !allowed.has(key)).sort();
+  check(extras.length === 0, `${context} has unsupported fields: ${extras.join(", ")}`);
+}
+
 function normalizeAlias(value) {
   return String(value || "")
     .normalize("NFD")
@@ -75,7 +109,7 @@ function ancestryFor(data, tag) {
   return result;
 }
 
-function validate(data, meshMapper, partition, digitalPartition, qa, scriptText, standardText) {
+function validate(data, meshMapper, partition, digitalPartition, qa, municipalOverrides, radioDensity, scriptText, standardText) {
   check(data.authority && data.authority.standard === "MCC-REG-1", "catalog does not declare MCC-REG-1");
   check(data.authority && data.authority.geographicModel === "exclusive-national-partition", "catalog is not an exclusive partition");
   check(data.authority && data.authority.currentBoundaryStatus === "generated-candidate", "boundary status must be generated-candidate");
@@ -157,25 +191,282 @@ function validate(data, meshMapper, partition, digitalPartition, qa, scriptText,
 
   const membershipText = fs.readFileSync(MEMBERSHIP_PATH, "utf8").trimEnd();
   const membershipLines = membershipText.split(/\r?\n/);
-  check(membershipLines[0] === "DGUID,DAUID,PRUID,ERUID,leaf_tag,assignment", "membership header is invalid");
+  const membershipHeader = [
+    "DGUID", "DAUID", "PRUID", "ERUID", "CDUID", "CDNAME", "CSDUID", "CSDNAME", "CSDTYPE",
+    "provisional_leaf_tag", "provisional_assignment", "leaf_tag", "assignment"
+  ];
+  check(membershipLines[0] === membershipHeader.join(","), "membership header is invalid");
   check(membershipLines.length === 57_937, `expected 57,936 membership rows, found ${membershipLines.length - 1}`);
   const dguids = new Set();
   const membershipTags = new Set();
   const membershipCounts = new Map();
+  const membershipRows = [];
+  const censusSubdivisions = new Map();
+  const censusDivisions = new Map();
   membershipLines.slice(1).forEach((line, index) => {
-    const [dguid, dauid, pruid, eruid, leafTag, assignment] = line.split(",");
-    check(Boolean(dguid && dauid && pruid && eruid && leafTag && assignment), `membership row ${index + 2} is incomplete`);
+    const fields = parseCsvLine(line);
+    check(fields.length === membershipHeader.length, `membership row ${index + 2} has ${fields.length} fields, expected ${membershipHeader.length}`);
+    const [
+      dguid, dauid, pruid, eruid, cduid, cdname, csduid, csdname, csdtype,
+      provisionalLeafTag, provisionalAssignment, leafTag, assignment
+    ] = fields;
+    check(Boolean(
+      dguid && dauid && pruid && eruid && cduid && cdname && csduid && csdname && csdtype
+      && provisionalLeafTag && provisionalAssignment && leafTag && assignment
+    ), `membership row ${index + 2} is incomplete`);
+    check(/^2021S0512\d{8}$/.test(dguid || ""), `membership row ${index + 2} has invalid DGUID ${dguid}`);
+    check(/^\d{8}$/.test(dauid || ""), `membership row ${index + 2} has invalid DAUID ${dauid}`);
+    check(/^\d{2}$/.test(pruid || ""), `membership row ${index + 2} has invalid PRUID ${pruid}`);
+    check(/^\d{4}$/.test(eruid || ""), `membership row ${index + 2} has invalid ERUID ${eruid}`);
+    check(/^\d{4}$/.test(cduid || ""), `membership row ${index + 2} has invalid CDUID ${cduid}`);
+    check(/^\d{7}$/.test(csduid || ""), `membership row ${index + 2} has invalid CSDUID ${csduid}`);
     check(!dguids.has(dguid), `duplicate membership DGUID ${dguid}`);
     dguids.add(dguid);
+    membershipRows.push({
+      dguid, dauid, pruid, eruid, cduid, cdname, csduid, csdname, csdtype,
+      provisionalLeafTag, provisionalAssignment, leafTag, assignment
+    });
     membershipTags.add(leafTag);
     membershipCounts.set(leafTag, (membershipCounts.get(leafTag) || 0) + 1);
     check(leafSet.has(leafTag), `membership references non-leaf ${leafTag}`);
+    check(leafSet.has(provisionalLeafTag), `membership provisional owner references non-leaf ${provisionalLeafTag}`);
     const chain = ancestryFor(data, leafTag);
     check(chain[1] === PR_TO_TAG[pruid], `${dguid} crosses jurisdiction: ${pruid} -> ${leafTag}`);
+    const provisionalChain = ancestryFor(data, provisionalLeafTag);
+    check(provisionalChain[1] === PR_TO_TAG[pruid], `${dguid} provisional owner crosses jurisdiction: ${pruid} -> ${provisionalLeafTag}`);
+
+    const priorCsd = censusSubdivisions.get(csduid);
+    if (priorCsd) {
+      check(priorCsd.pruid === pruid, `CSD ${csduid} has inconsistent PRUID`);
+      check(priorCsd.cduid === cduid, `CSD ${csduid} has inconsistent CDUID`);
+      check(priorCsd.name === csdname, `CSD ${csduid} has inconsistent name`);
+      check(priorCsd.type === csdtype, `CSD ${csduid} has inconsistent type`);
+      priorCsd.owners.add(leafTag);
+      priorCsd.members.set(dguid, leafTag);
+    } else {
+      censusSubdivisions.set(csduid, {
+        pruid,
+        cduid,
+        name: csdname,
+        type: csdtype,
+        owners: new Set([leafTag]),
+        members: new Map([[dguid, leafTag]])
+      });
+    }
+
+    const priorCd = censusDivisions.get(cduid);
+    if (priorCd) {
+      check(priorCd.pruid === pruid, `CD ${cduid} has inconsistent PRUID`);
+      check(priorCd.name === cdname, `CD ${cduid} has inconsistent name`);
+      priorCd.owners.add(leafTag);
+      priorCd.members.set(dguid, leafTag);
+    } else {
+      censusDivisions.set(cduid, {
+        pruid,
+        name: cdname,
+        owners: new Set([leafTag]),
+        members: new Map([[dguid, leafTag]])
+      });
+    }
   });
   check(dguids.size === 57_936, `expected 57,936 unique DGUIDs, found ${dguids.size}`);
+  check(censusSubdivisions.size === 5_161, `expected 5,161 Census Subdivisions, found ${censusSubdivisions.size}`);
+  check(censusDivisions.size === 293, `expected 293 Census Divisions, found ${censusDivisions.size}`);
   check(JSON.stringify([...membershipTags].sort()) === JSON.stringify(leaves), "membership must populate every leaf and no other tag");
   leaves.forEach((tag) => check((membershipCounts.get(tag) || 0) > 0, `leaf ${tag} owns no DAs`));
+
+  check(municipalOverrides && municipalOverrides.schema === "mcc-census-overrides/v1", "municipal override schema is invalid");
+  check(municipalOverrides && municipalOverrides.censusVintage === 2021, "municipal overrides must use the 2021 Census vintage");
+  const cohortOverrides = municipalOverrides && Array.isArray(municipalOverrides.cohortOverrides)
+    ? municipalOverrides.cohortOverrides
+    : [];
+  check(municipalOverrides && Array.isArray(municipalOverrides.cohortOverrides), "municipal cohortOverrides must be an array");
+  cohortOverrides.forEach((record, index) => {
+    const level = String(record.level || "").toUpperCase();
+    const geographyId = String(record.id || "");
+    const leafTag = String(record.leafTag || "");
+    const geography = level === "CSD" ? censusSubdivisions.get(geographyId) : censusDivisions.get(geographyId);
+    check(["CD", "CSD"].includes(level), `municipal cohort override ${index} has invalid level ${level}`);
+    check(record.status === "approved", `municipal cohort override ${level} ${geographyId} is not approved`);
+    check(Boolean(geography), `municipal cohort override references unknown ${level} ${geographyId}`);
+    check(leafSet.has(leafTag), `municipal cohort override ${level} ${geographyId} references non-leaf ${leafTag}`);
+    check(Boolean(record.decision), `municipal cohort override ${level} ${geographyId} has no decision record`);
+    check(Array.isArray(record.evidence) && record.evidence.length > 0, `municipal cohort override ${level} ${geographyId} has no evidence`);
+    if (geography && leafSet.has(leafTag)) {
+      check(ancestryFor(data, leafTag)[1] === PR_TO_TAG[geography.pruid], `municipal cohort override ${level} ${geographyId} crosses jurisdiction`);
+      check([...geography.owners].every((owner) => owner === leafTag), `municipal cohort override ${level} ${geographyId} is not reflected in membership`);
+    }
+  });
+
+  const splitExceptions = municipalOverrides && Array.isArray(municipalOverrides.splitExceptions)
+    ? municipalOverrides.splitExceptions
+    : [];
+  check(municipalOverrides && Array.isArray(municipalOverrides.splitExceptions), "municipal splitExceptions must be an array");
+  const approvedSplits = new Map();
+  splitExceptions.forEach((exception, index) => {
+    const csduid = String(exception.csduid || "");
+    check(exception.status === "approved", `CSD split exception ${csduid || index} is not approved`);
+    check(Boolean(censusSubdivisions.get(csduid)), `CSD split exception references unknown CSD ${csduid}`);
+    check(!approvedSplits.has(csduid), `duplicate CSD split exception ${csduid}`);
+    check(Array.isArray(exception.members), `CSD split exception ${csduid} has no member list`);
+    const members = new Map();
+    (exception.members || []).forEach((member) => {
+      const dguid = String(member.dguid || "");
+      const leafTag = String(member.leafTag || "");
+      check(!members.has(dguid), `CSD split exception ${csduid} duplicates DGUID ${dguid}`);
+      check(leafSet.has(leafTag), `CSD split exception ${csduid} references non-leaf ${leafTag}`);
+      members.set(dguid, leafTag);
+    });
+    approvedSplits.set(csduid, members);
+  });
+
+  let splitCsdCount = 0;
+  censusSubdivisions.forEach((record, csduid) => {
+    if (record.owners.size <= 1) return;
+    splitCsdCount += 1;
+    const approvedMembers = approvedSplits.get(csduid);
+    check(Boolean(approvedMembers), `CSD ${csduid} has an unreviewed split across ${[...record.owners].sort().join(", ")}`);
+    if (!approvedMembers) return;
+    check(approvedMembers.size === record.members.size, `approved split ${csduid} does not enumerate every DGUID`);
+    record.members.forEach((owner, dguid) => {
+      check(approvedMembers.get(dguid) === owner, `approved split ${csduid} does not match membership for ${dguid}`);
+    });
+  });
+  approvedSplits.forEach((members, csduid) => {
+    const record = censusSubdivisions.get(csduid);
+    check(Boolean(record && record.owners.size > 1), `approved split exception ${csduid} does not produce a split`);
+    if (record) check(members.size === record.members.size, `approved split exception ${csduid} does not enumerate the full CSD`);
+  });
+
+  const cambridgeRows = membershipRows.filter((row) => row.csduid === "3530010");
+  const waterlooCdRows = membershipRows.filter((row) => row.cduid === "3530");
+  check(
+    cohortOverrides.some((record) => String(record.level).toUpperCase() === "CD" && String(record.id) === "3530" && record.leafTag === "wat" && record.status === "approved"),
+    "Waterloo CD fixture must be backed by an approved 3530 -> wat decision"
+  );
+  check(cambridgeRows.length === 189, `Cambridge CSD 3530010 must contain 189 DAs, found ${cambridgeRows.length}`);
+  check(cambridgeRows.every((row) => row.leafTag === "wat"), "Cambridge CSD 3530010, including Hespeler, must be wholly owned by wat");
+  check(cambridgeRows.every((row) => row.csdname === "Cambridge" && row.cduid === "3530"), "Cambridge CSD fixture has inconsistent census context");
+  check(waterlooCdRows.length === 766, `Waterloo CD 3530 must contain 766 DAs, found ${waterlooCdRows.length}`);
+  check(waterlooCdRows.every((row) => row.leafTag === "wat"), "Waterloo CD 3530 must be wholly owned by wat");
+  check(waterlooCdRows.every((row) => row.cdname === "Waterloo"), "Waterloo CD fixture has inconsistent census context");
+  check(waterlooCdRows.every((row) => row.assignment === `approved-cd-override:${row.csduid}`), "Waterloo CD fixture was not generated from its approved decision");
+
+  const provisionalOwnershipPayload = "DGUID,provisional_leaf_tag\n" + membershipRows
+    .slice()
+    .sort((left, right) => left.dguid.localeCompare(right.dguid))
+    .map((row) => `${row.dguid},${row.provisionalLeafTag}\n`)
+    .join("");
+  const provisionalOwnershipHash = crypto.createHash("sha256").update(provisionalOwnershipPayload).digest("hex");
+  checkExactKeys(radioDensity, new Set([
+    "schema", "snapshotUtc", "provisionalOwnershipSha256", "privacy", "sourceAudit", "clusters"
+  ]), "radio-density");
+  check(radioDensity && radioDensity.schema === "mcc-radio-density/v2", "radio-density schema is invalid");
+  check(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/.test(String(radioDensity && radioDensity.snapshotUtc || "")), "radio-density snapshotUtc is invalid");
+  check(/^[a-f0-9]{64}$/.test(String(radioDensity && radioDensity.provisionalOwnershipSha256 || "")), "radio-density provisional ownership hash is invalid");
+  check(radioDensity && radioDensity.provisionalOwnershipSha256 === provisionalOwnershipHash, "radio-density snapshot was built from a different provisional ownership basis");
+  const radioPrivacy = radioDensity && radioDensity.privacy || {};
+  checkExactKeys(radioPrivacy, new Set([
+    "clusterMaximumDiameterKilometres", "decisionEvidenceUnit", "decisionRoles",
+    "devNodeTimestampAvailable", "devOnlyUse", "kAnonymity", "liveFreshnessDays",
+    "observedRoles", "publishedGeographicCountMinimum", "rawCoordinatesPersisted",
+    "rawIdentifiersPersisted"
+  ]), "radio-density privacy");
+  check(radioPrivacy.kAnonymity === 5, "radio-density must enforce k-anonymity of five nodes");
+  check(radioPrivacy.publishedGeographicCountMinimum === radioPrivacy.kAnonymity, "radio-density geographic aggregates must use the declared k-anonymity floor");
+  check(radioPrivacy.rawCoordinatesPersisted === 0, "radio-density must persist zero raw coordinates");
+  check(radioPrivacy.rawIdentifiersPersisted === 0, "radio-density must persist zero raw identifiers");
+  check(Number(radioPrivacy.clusterMaximumDiameterKilometres) > 0 && Number(radioPrivacy.clusterMaximumDiameterKilometres) <= 30, "radio-density clusters must be no wider than 30 km");
+  check(Number(radioPrivacy.liveFreshnessDays) > 0 && Number(radioPrivacy.liveFreshnessDays) <= 30, "radio-density live freshness window must be no more than 30 days");
+  check(radioPrivacy.devNodeTimestampAvailable === false, "radio-density must record that dev nodes have no per-node timestamp");
+  check(radioPrivacy.devOnlyUse === "advisory-density-only", "dev-only nodes must not be decision evidence");
+  check(radioPrivacy.decisionEvidenceUnit === "cluster-census-subdivision-candidate", "radio-density decision evidence must be CSD-specific");
+  check(
+    JSON.stringify([...(radioPrivacy.decisionRoles || [])].sort()) === JSON.stringify(["repeater", "room", "sensor"]),
+    "radio-density decision roles must be repeater, room, and sensor only"
+  );
+  check(
+    JSON.stringify([...(radioPrivacy.observedRoles || [])].sort()) ===
+      JSON.stringify(["companion", "repeater", "room", "sensor"]),
+    "radio-density observation must account for every supported positioned node role"
+  );
+  const sourceAudit = radioDensity && radioDensity.sourceAudit || {};
+  checkExactKeys(sourceAudit, new Set([
+    "crossSourceCoordinateConflictsExcluded", "crossSourceRoleMismatches",
+    "decisionEligibleFixedInfrastructureInsideCanada", "deduplicatedPositionedNodes", "dev",
+    "devMatchedLive", "devOnlyInsideCanada", "devOnlyPositionedNodes", "devRejectedCoordinate",
+    "devRejectedRole", "duplicateDevRecords", "duplicateLiveRecords", "fixedInfrastructureInsideCanada",
+    "insideCanada", "live", "liveRejectedCoordinate", "liveRejectedRole", "liveRejectedStale",
+    "suppressedCandidateAggregates", "suppressedGeographicClusters", "suppressedSmallClusters"
+  ]), "radio-density sourceAudit");
+  checkExactKeys(sourceAudit.live, new Set([
+    "acceptedFreshPositionedRecords", "pages", "records", "responseSha256", "url"
+  ]), "radio-density live audit");
+  checkExactKeys(sourceAudit.dev, new Set([
+    "acceptedPositionedRecords", "nodeTimestampAvailable", "pages", "records", "responseSha256", "url"
+  ]), "radio-density dev audit");
+  check(sourceAudit.live && sourceAudit.live.url === "https://live.meshcore.ca/api/nodes", "radio-density live source is not the canonical endpoint");
+  check(sourceAudit.dev && sourceAudit.dev.url === "https://dev.meshcore.ca/api/v1/nodes", "radio-density dev source is not the canonical endpoint");
+  check(/^[a-f0-9]{64}$/.test(String(sourceAudit.live && sourceAudit.live.responseSha256 || "")), "radio-density live response hash is invalid");
+  check(/^[a-f0-9]{64}$/.test(String(sourceAudit.dev && sourceAudit.dev.responseSha256 || "")), "radio-density dev response hash is invalid");
+  check(sourceAudit.dev && sourceAudit.dev.nodeTimestampAvailable === false, "radio-density dev audit must record unavailable node timestamps");
+  check(Number(sourceAudit.devOnlyPositionedNodes) > 0, "radio-density must account for positioned dev-only nodes");
+  check(Number(sourceAudit.decisionEligibleFixedInfrastructureInsideCanada) > 0, "radio-density has no live-fresh decision evidence");
+  const radioClusters = radioDensity && Array.isArray(radioDensity.clusters) ? radioDensity.clusters : [];
+  check(radioDensity && Array.isArray(radioDensity.clusters), "radio-density clusters must be an array");
+  check(radioClusters.length > 0, "radio-density must contain at least one privacy-safe cluster");
+  const radioClusterIds = new Set();
+  radioClusters.forEach((cluster, index) => {
+    checkExactKeys(cluster, new Set([
+      "censusSubdivisions", "decisionNodeCount", "id", "nodeCount", "observedNodeCount"
+    ]), `radio cluster ${index}`);
+    const clusterId = String(cluster.id || "");
+    const nodeCount = Number(cluster.nodeCount);
+    check(/^radio-[a-f0-9]{12}$/.test(clusterId), `radio cluster ${index} has a non-anonymous ID`);
+    check(!radioClusterIds.has(clusterId), `duplicate radio cluster ID ${clusterId}`);
+    radioClusterIds.add(clusterId);
+    check(Number.isInteger(nodeCount) && nodeCount >= radioPrivacy.kAnonymity, `radio cluster ${clusterId} is below k-anonymity`);
+    check(cluster.observedNodeCount === nodeCount, `radio cluster ${clusterId} observed count differs from its published count`);
+    check(!Object.prototype.hasOwnProperty.call(cluster, "candidateCounts"), `radio cluster ${clusterId} exposes non-CSD-specific candidate evidence`);
+    check(Array.isArray(cluster.censusSubdivisions), `radio cluster ${clusterId} has no CSD aggregates`);
+    let observedTotal = 0;
+    let decisionTotal = 0;
+    (cluster.censusSubdivisions || []).forEach((participation) => {
+      checkExactKeys(participation, new Set([
+        "decisionCandidateCounts", "decisionNodeCount", "id", "observedNodeCount"
+      ]), `radio cluster ${clusterId} CSD participation`);
+      const csduid = String(participation.id || "");
+      const count = Number(participation.observedNodeCount);
+      const csd = censusSubdivisions.get(csduid);
+      check(Boolean(csd), `radio cluster ${clusterId} references unknown CSD ${csduid}`);
+      check(Number.isInteger(count) && count >= radioPrivacy.kAnonymity, `radio cluster ${clusterId} exposes a CSD count below k-anonymity`);
+      check(count <= nodeCount, `radio cluster ${clusterId} has a CSD count above nodeCount`);
+      observedTotal += count;
+      const candidateEntries = Object.entries(participation.decisionCandidateCounts || {});
+      if (!candidateEntries.length) {
+        check(!Object.prototype.hasOwnProperty.call(participation, "decisionNodeCount"), `radio cluster ${clusterId} has an empty decision total for ${csduid}`);
+        return;
+      }
+      let candidateTotal = 0;
+      candidateEntries.forEach(([tag, candidateCount]) => {
+        check(leafSet.has(tag), `radio cluster ${clusterId} references non-leaf ${tag}`);
+        check(Number.isInteger(candidateCount) && candidateCount >= radioPrivacy.kAnonymity, `radio cluster ${clusterId} exposes a candidate bucket below k-anonymity`);
+        if (csd && leafSet.has(tag)) {
+          check(ancestryFor(data, tag)[1] === PR_TO_TAG[csd.pruid], `radio cluster ${clusterId} candidate ${tag} crosses the CSD jurisdiction`);
+        }
+        candidateTotal += Number(candidateCount);
+      });
+      check(candidateTotal === Number(participation.decisionNodeCount), `radio cluster ${clusterId} decision counts do not equal the CSD total`);
+      check(candidateTotal <= count, `radio cluster ${clusterId} decision count exceeds the observed CSD count`);
+      decisionTotal += candidateTotal;
+    });
+    check(observedTotal === nodeCount, `radio cluster ${clusterId} CSD counts do not equal nodeCount`);
+    if (decisionTotal) {
+      check(decisionTotal === Number(cluster.decisionNodeCount), `radio cluster ${clusterId} decision totals are inconsistent`);
+    } else {
+      check(!Object.prototype.hasOwnProperty.call(cluster, "decisionNodeCount"), `radio cluster ${clusterId} has an empty decision total`);
+    }
+  });
 
   const partitionFeatures = partition && Array.isArray(partition.features) ? partition.features : [];
   const partitionTags = partitionFeatures.map((feature) => String(feature.properties && feature.properties.tag || "")).sort();
@@ -207,10 +498,23 @@ function validate(data, meshMapper, partition, digitalPartition, qa, scriptText,
   check(qa && qa.model === "exclusive-national-da-partition", "QA model is not the exclusive national partition");
   check(qa && qa.sourceCounts.digitalDisseminationAreas === 57_936, "QA digital DA count is wrong");
   check(qa && qa.sourceCounts.cartographicDisseminationAreas === 57_932, "QA cartographic DA count is wrong");
+  check(qa && qa.sourceCounts.censusDivisions === 293, "QA Census Division count is wrong");
+  check(qa && qa.sourceCounts.censusSubdivisions === 5_161, "QA Census Subdivision count is wrong");
   check(qa && qa.sourceCounts.leafRegions === expectedLeaves, "QA leaf count is wrong");
+  check(qa && qa.censusCoherence && qa.censusCoherence.officialCensusDivisions === 293, "QA census coherence CD count is wrong");
+  check(qa && qa.censusCoherence && qa.censusCoherence.officialCensusSubdivisions === 5_161, "QA census coherence CSD count is wrong");
+  check(qa && qa.censusCoherence && qa.censusCoherence.automaticSplitCsdCount === 0, "QA reports an automatic municipality split");
+  check(qa && qa.censusCoherence && qa.censusCoherence.approvedSplitExceptions === splitCsdCount, "QA approved CSD split count differs from membership");
+  check(qa && qa.radioDensity && qa.radioDensity.used === true, "QA does not record use of the radio-density snapshot");
+  check(qa && qa.radioDensity && qa.radioDensity.schema === "mcc-radio-density/v2", "QA radio-density schema is wrong");
+  check(qa && qa.radioDensity && qa.radioDensity.snapshotUtc === radioDensity.snapshotUtc, "QA radio-density snapshot differs from the locked evidence");
+  check(qa && qa.radioDensity && qa.radioDensity.clusterCount === radioClusters.length, "QA radio-density cluster count is wrong");
   check(qa && qa.invariants.everyDigitalDaAssignedExactlyOnce === true, "QA does not prove total DA ownership");
   check(qa && qa.invariants.everyLeafOwnsAtLeastOneDa === true, "QA reports an empty leaf");
   check(qa && qa.invariants.crossJurisdictionAssignments === 0, "QA reports cross-jurisdiction assignments");
+  check(qa && qa.invariants.automaticMunicipalitySplits === 0, "QA invariant reports an automatic municipality split");
+  check(qa && qa.invariants.cambridgeCsdOwnedByWaterloo === true, "QA does not preserve Cambridge CSD in wat");
+  check(qa && qa.invariants.waterlooCdOwnedByWaterloo === true, "QA does not preserve Waterloo CD in wat");
   check(qa && qa.invariants.positiveAreaOverlapPairs === 0, "QA reports positive-area overlaps");
   check(qa && qa.invariants.invalidLeafGeometries === 0, "QA reports invalid leaf geometry");
   check(qa && qa.invariants.displayGeometryVerified === true, "QA does not verify the simplified display geometry");
@@ -218,6 +522,8 @@ function validate(data, meshMapper, partition, digitalPartition, qa, scriptText,
   check(qa && qa.artifactHashes.membershipSha256 === sha256(MEMBERSHIP_PATH), "membership hash differs from QA");
   check(qa && qa.artifactHashes.partitionSha256 === sha256(PARTITION_PATH), "partition hash differs from QA");
   check(qa && qa.artifactHashes.digitalPartitionSha256 === sha256(DIGITAL_PARTITION_PATH), "digital partition hash differs from QA");
+  check(/^[a-f0-9]{64}$/.test(String(qa && qa.inputHashes && qa.inputHashes.municipalOverridesCanonicalSha256 || "")), "QA municipal override hash is missing");
+  check(/^[a-f0-9]{64}$/.test(String(qa && qa.inputHashes && qa.inputHashes.radioDensityCanonicalSha256 || "")), "QA radio-density hash is missing");
 
   let maxTags = 0;
   let maxResponseBytes = 0;
@@ -252,6 +558,11 @@ function validate(data, meshMapper, partition, digitalPartition, qa, scriptText,
     "57,936 DAs",
     "57,932 DAs",
     "Selecting a larger region",
+    "Census Subdivision (CSD)",
+    "all 189 DAs in Cambridge CSD `3530010`",
+    "all 766 DAs in Waterloo CD `3530`",
+    "Privacy-safe radio-density snapshot",
+    "Boundary editor proposals",
     "positive-area overlap",
     "canada-region-membership.csv",
     "Run bare `region`"
@@ -261,6 +572,10 @@ function validate(data, meshMapper, partition, digitalPartition, qa, scriptText,
     hierarchy: hierarchyTags.length,
     leaves: leaves.length,
     digitalDAs: dguids.size,
+    censusDivisions: censusDivisions.size,
+    censusSubdivisions: censusSubdivisions.size,
+    approvedCsdSplits: splitCsdCount,
+    radioClusters: radioClusters.length,
     partitionFeatures: partitionFeatures.length,
     digitalFeatures: digitalFeatures.length,
     meshMapperInputs: sourceFeatures.length,
@@ -278,6 +593,8 @@ const meshMapper = readJson(MESH_MAPPER_PATH);
 const partition = readJson(PARTITION_PATH);
 const digitalPartition = readJson(DIGITAL_PARTITION_PATH);
 const qa = readJson(QA_PATH);
+const municipalOverrides = readJson(MUNICIPAL_OVERRIDES_PATH);
+const radioDensity = readJson(RADIO_DENSITY_PATH);
 let scriptText = "";
 let standardText = "";
 try {
@@ -287,8 +604,8 @@ try {
   failures.push(`required source could not be read: ${error.message}`);
 }
 
-const summary = data && meshMapper && partition && digitalPartition && qa
-  ? validate(data, meshMapper, partition, digitalPartition, qa, scriptText, standardText)
+const summary = data && meshMapper && partition && digitalPartition && qa && municipalOverrides && radioDensity
+  ? validate(data, meshMapper, partition, digitalPartition, qa, municipalOverrides, radioDensity, scriptText, standardText)
   : null;
 
 warnings.forEach((warning) => console.warn(`WARN: ${warning}`));

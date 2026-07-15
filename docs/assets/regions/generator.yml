@@ -1,9 +1,10 @@
 standard: MCC-REG-1
 algorithm: exclusive-national-da-partition
-algorithm_version: 2
+algorithm_version: 3
 projection: EPSG:3347
 ownership_atom: Statistics Canada 2021 digital Dissemination Area
 display_atom: Statistics Canada 2021 cartographic Dissemination Area
+ownership_cohort: Statistics Canada 2021 Census Subdivision
 dissolve_method: unary_union
 source_claim:
   representative_point_inside: true
@@ -25,6 +26,29 @@ fill:
   guardrail: economic_region
   distance: projected_representative_point
   tie_breaker: immutable_registry_id
+census_coherence:
+  higher_grouping: Census Division
+  indivisible_by_default: Census Subdivision
+  decision_order:
+    - approved_csd_override
+    - approved_cd_override
+    - seed_inside_csd
+    - single_seed_inside_cd
+    - provisional_da_plurality
+    - radio_cluster_tiebreak
+    - projected_seed_distance
+    - immutable_registry_id
+  split_rule: approved_exception_enumerating_every_dguid
+  radio_cluster_tiebreak:
+    maximum_provisional_margin: 0.10
+    minimum_k_anonymity: 5
+    minimum_candidate_share: 0.60
+    evidence_unit: cluster-census-subdivision-candidate
+    snapshot_binding: provisional-da-ownership-sha256
+    live_fixed_infrastructure_only: true
+    dev_only_nodes: advisory-density-only
+    may_split_csd: false
+    may_cross_jurisdiction: false
 seed_anchor:
   rule: containing_da_owned_by_seed
   applied_during_assignment: true
