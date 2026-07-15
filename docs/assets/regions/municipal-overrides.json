@@ -1,0 +1,19 @@
+{
+  "schema": "mcc-census-overrides/v1",
+  "censusVintage": 2021,
+  "cohortOverrides": [
+    {
+      "level": "CD",
+      "id": "3530",
+      "leafTag": "wat",
+      "status": "approved",
+      "decision": "Keep all seven municipalities of Waterloo Regional Municipality in the Waterloo region.",
+      "evidence": [
+        "Cambridge, including Hespeler, is part of Waterloo Regional Municipality.",
+        "The MeshMapper YKF source covers the complete regional municipality."
+      ],
+      "reviewedAt": "2026-07-14"
+    }
+  ],
+  "splitExceptions": []
+}

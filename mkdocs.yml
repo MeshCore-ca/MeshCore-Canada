@@ -17,6 +17,10 @@ theme:
 
 extra_css:
   - stylesheets/extra.css
+  - assets/regions/regions.css
+
+extra_javascript:
+  - assets/regions/regions.js
 
 markdown_extensions:
   - admonition
@@ -74,6 +78,12 @@ nav:
           - Flashing a Room Server: meshcore/flash-room-server.md
           - RAK4631 Custom Display Firmware: meshcore/firmware-rak-custom-display.md
           - Heltec V3 Wi-Fi Firmware:  meshcore/firmware-heltec-v3-wifi.md
+
+  - Regions:
+      - Overview: regions/index.md
+      - Region Standard: regions/standard.md
+      - Set Up a Repeater: regions/setup.md
+      - Map: regions/map.md
 
   - Mesh Directory:
       - Overview: provinces/index.md

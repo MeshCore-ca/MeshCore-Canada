@@ -1,0 +1,76 @@
+standard: MCC-REG-1
+algorithm: exclusive-national-da-partition
+algorithm_version: 3
+projection: EPSG:3347
+ownership_atom: Statistics Canada 2021 digital Dissemination Area
+display_atom: Statistics Canada 2021 cartographic Dissemination Area
+ownership_cohort: Statistics Canada 2021 Census Subdivision
+dissolve_method: unary_union
+source_claim:
+  representative_point_inside: true
+  minimum_overlap_ratio: 0.5
+  conflict_order:
+    - largest_overlap_ratio
+    - canonical_leaf_tag
+    - source_tag
+  ownership: macro_envelope
+  subdivision:
+    candidates:
+      - mapped_meshmapper_target
+      - contained_seed_with_same_home_economic_region
+      - ordinary_same_er_nearest_when_only_target_remains
+    distance: projected_seed_distance
+    tie_breaker: immutable_registry_id
+fill:
+  hard_boundary: province_or_territory
+  guardrail: economic_region
+  distance: projected_representative_point
+  tie_breaker: immutable_registry_id
+census_coherence:
+  higher_grouping: Census Division
+  indivisible_by_default: Census Subdivision
+  decision_order:
+    - approved_csd_override
+    - approved_cd_override
+    - seed_inside_csd
+    - single_seed_inside_cd
+    - provisional_da_plurality
+    - radio_cluster_tiebreak
+    - projected_seed_distance
+    - immutable_registry_id
+  split_rule: approved_exception_enumerating_every_dguid
+  radio_cluster_tiebreak:
+    maximum_provisional_margin: 0.10
+    minimum_k_anonymity: 5
+    minimum_candidate_share: 0.60
+    evidence_unit: cluster-census-subdivision-candidate
+    snapshot_binding: provisional-da-ownership-sha256
+    live_fixed_infrastructure_only: true
+    dev_only_nodes: advisory-density-only
+    may_split_csd: false
+    may_cross_jurisdiction: false
+seed_anchor:
+  rule: containing_da_owned_by_seed
+  applied_during_assignment: true
+display:
+  simplifier: mapshaper
+  mapshaper_version: 0.6.113
+  method: weighted_visvalingam
+  retain: 2%
+  keep_shapes: true
+  snap_fix_geometry: true
+  clean: true
+  coordinate_precision: 0.000001
+resolver:
+  source: Statistics Canada 2021 digital Dissemination Areas
+  retain: 20%
+  keep_shapes: true
+  snap_fix_geometry: true
+  clean: true
+  coordinate_precision: 0.000001
+toolchain:
+  python: 3.13.6
+  geopandas: 1.0.1
+  shapely: 2.0.6
+  pyproj: 3.7.0
+  scipy: 1.17.1

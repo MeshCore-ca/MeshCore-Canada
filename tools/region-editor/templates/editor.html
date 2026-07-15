@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="mcc-base-path" content="{{BASE_PATH}}">
+  <meta name="csrf-token" content="{{CSRF_TOKEN}}">
+  <title>Region boundary editor · MeshCore Canada</title>
+  <link rel="stylesheet" href="{{BASE_PATH}}/vendor/leaflet/leaflet.css">
+  <link rel="stylesheet" href="{{BASE_PATH}}/static/editor.css">
+  <script defer src="{{BASE_PATH}}/vendor/leaflet/leaflet.js"></script>
+  <script defer src="{{BASE_PATH}}/static/app.js"></script>
+</head>
+<body class="editor-page">
+  <header class="app-header">
+    <div class="brand-lockup">
+      <div class="brand-mark small" aria-hidden="true">MC</div>
+      <div>
+        <p class="eyebrow">MeshCore Canada</p>
+        <h1>Region boundary editor</h1>
+      </div>
+    </div>
+    <div class="account">
+      <span>Signed in as <strong>{{USERNAME}}</strong></span>
+      <button id="logout-button" class="button quiet" type="button">Sign out</button>
+    </div>
+  </header>
+
+  <main class="editor-layout">
+    <aside class="editor-sidebar" aria-label="Boundary editing controls">
+      <section class="panel intro-panel">
+        <p class="step-label">Draft only</p>
+        <h2>Adjust official census cells</h2>
+        <p class="muted compact">Edits move whole dissemination areas. Boundaries stay complete and never overlap.</p>
+      </section>
+
+      <section class="panel">
+        <h2>1. Choose an area</h2>
+        <label for="province-select">Province or territory</label>
+        <select id="province-select"></select>
+        <p id="load-status" class="status-line" role="status" aria-live="polite">Loading editor data…</p>
+      </section>
+
+      <section class="panel">
+        <h2>2. Choose a region</h2>
+        <label for="target-select">Move selected cells to</label>
+        <select id="target-select" disabled>
+          <option value="">Choose a target region</option>
+        </select>
+        <div class="segmented" aria-label="Editing mode">
+          <button id="pan-mode" class="segment active" type="button" aria-pressed="true">Pan map</button>
+          <button id="paint-mode" class="segment" type="button" aria-pressed="false">Paint cells</button>
+        </div>
+        <p class="hint">Click one cell, or use Paint cells and drag across several.</p>
+      </section>
+
+      <section class="panel selected-panel">
+        <h2>Selected cell</h2>
+        <dl id="cell-details" class="details-list">
+          <div><dt>Area</dt><dd>Select a cell on the map</dd></div>
+          <div><dt>Municipality</dt><dd>—</dd></div>
+          <div><dt>Current region</dt><dd>—</dd></div>
+          <div><dt>Region anchor</dt><dd>—</dd></div>
+        </dl>
+        <button id="municipality-button" class="button secondary full" type="button" disabled>Move entire municipality</button>
+      </section>
+
+      <section class="panel">
+        <div class="panel-title-row">
+          <h2>3. Review</h2>
+          <span id="change-count" class="count-badge">0 changes</span>
+        </div>
+        <div class="button-row">
+          <button id="undo-button" class="button quiet" type="button" disabled>Undo</button>
+          <button id="redo-button" class="button quiet" type="button" disabled>Redo</button>
+          <button id="clear-button" class="button quiet danger" type="button" disabled>Clear</button>
+        </div>
+        <div class="segmented" aria-label="Boundary comparison">
+          <button id="before-view" class="segment" type="button" aria-pressed="false">Before</button>
+          <button id="after-view" class="segment active" type="button" aria-pressed="true">After</button>
+        </div>
+        <label for="submitted-by">Submitted by <span class="optional">optional</span></label>
+        <input id="submitted-by" maxlength="80" autocomplete="name">
+        <label for="reason">Reason</label>
+        <textarea id="reason" maxlength="1000" rows="3" placeholder="What local knowledge supports this change?" required></textarea>
+        <div id="validation-message" class="validation-message" role="status" aria-live="polite"></div>
+        <button id="export-button" class="button primary full" type="button" disabled>Validate and download proposal</button>
+      </section>
+    </aside>
+
+    <section class="map-shell" aria-label="Region map editor">
+      <div class="map-toolbar">
+        <span id="map-heading">Canada</span>
+        <span class="map-help">Official census cells · yellow outline means changed</span>
+      </div>
+      <div id="editor-map" role="application" aria-label="Interactive region boundary map"></div>
+      <div class="map-legend" aria-hidden="true">
+        <span><i class="legend-swatch current"></i> Current region</span>
+        <span><i class="legend-swatch changed"></i> Proposed change</span>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
