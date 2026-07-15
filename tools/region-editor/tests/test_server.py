@@ -23,6 +23,7 @@ from server import (  # noqa: E402
     RateLimiter,
     RegionEditorApp,
     ThreadingHTTPServer,
+    _default_repo_root,
     create_auth_file,
 )
 
@@ -382,6 +383,10 @@ class EditorServerTests(unittest.TestCase):
 
 
 class SecurityUnitTests(unittest.TestCase):
+    def test_container_root_path_is_supported(self):
+        app_dir = Path("/app")
+        self.assertEqual(_default_repo_root(app_dir), app_dir)
+
     def test_secret_uses_scrypt_and_never_contains_plaintext(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "secret.json"

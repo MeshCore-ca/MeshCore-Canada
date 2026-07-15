@@ -35,7 +35,14 @@ from urllib.parse import parse_qs, urlsplit
 
 
 APP_DIR = Path(__file__).resolve().parent
-REPO_ROOT = APP_DIR.parents[1]
+
+
+def _default_repo_root(app_dir: Path) -> Path:
+    """Find the checkout root without assuming the container has two parents."""
+    return app_dir.parents[1] if len(app_dir.parents) > 1 else app_dir
+
+
+REPO_ROOT = _default_repo_root(APP_DIR)
 PROPOSAL_SCHEMA = "mcc-region-editor-proposal/v1"
 PRUID_RE = re.compile(r"^[0-9]{2}$")
 TAG_RE = re.compile(r"^[a-z0-9][a-z0-9-]{0,31}$")
