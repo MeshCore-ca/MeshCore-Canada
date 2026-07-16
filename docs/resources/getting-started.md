@@ -55,6 +55,16 @@ set path.hash.mode 2
 
 After changing radio parameters, reboot the device.
 
+### Optional repeater loop protection
+
+Loop detection is not part of the Canada-wide basic setup. MeshCore leaves it off by default. If local operators are troubleshooting a packet storm caused by a looping repeater, firmware 1.14 and newer can use:
+
+```text
+set loop.detect moderate
+```
+
+This is a troubleshooting safeguard for repeaters, not a setting to apply to every new device. Coordinate the change with the local mesh, and leave it off when there is no loop problem. See the [upstream MeshCore CLI reference](https://github.com/meshcore-dev/MeshCore/blob/main/docs/cli_commands.md#view-or-change-this-nodes-loop-detection) for the available modes.
+
 ## Step 4: Configure Your Role
 
 | Role | Next setup step |

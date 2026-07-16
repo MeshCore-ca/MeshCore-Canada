@@ -39,6 +39,19 @@ If you know of a community that is missing or needs an update, open an update re
 | Path hash mode | `3-byte` |
 | Discord | <https://discord.gg/UhGjTF2MfA> |
 
+### Réseau Mesh du Saguenay Lac st-Jean YTF
+
+| Field | Value |
+|-------|-------|
+| Region | Saguenay–Lac-Saint-Jean (YTF) |
+| Status | Active |
+| Radio preset | `USA/Canada (Recommended)` |
+| Raw radio values | `910.525 MHz / 62.5 kHz / SF7 / CR5` |
+| Path hash mode | `3-byte` |
+| Discord | <https://discord.gg/wUR394yXt> |
+| Facebook | <https://www.facebook.com/share/g/1GjkHAyZAM/> |
+| MeshMapper | <https://ytf.meshmapper.net/> |
+
 ### Réseau Libre
 
 | Field | Value |
