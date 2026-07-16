@@ -865,7 +865,7 @@
       : unique(nearbyTags.concat(state.selectedMetros));
     var hiddenCount = Math.max(0, allTags.length - visibleTags.length);
 
-    target.innerHTML = '<p class="mcc-hint">High-site repeaters can carry multiple local areas. Select every area this site is intended to serve.</p>' +
+    target.innerHTML = '<p class="mcc-hint">Select each region this high site will serve.</p>' +
       '<div class="mcc-chip-group"><strong>' + esc(provinceGroup ? provinceGroup.label : labelFor(data, provinceTag)) + '</strong><div class="mcc-chip-list">' +
           visibleTags.map(function (tag) {
             var checked = state.selectedMetros.indexOf(tag) !== -1 ? " checked" : "";
@@ -897,8 +897,8 @@
     if (!state.canGenerate) {
       target.innerHTML = '<div class="mcc-empty-state">' +
         icon("radio-tower") +
-        '<strong>No recommendation yet</strong>' +
-        '<span>Choose a Canadian location.</span>' +
+        '<strong>No region yet</strong>' +
+        '<span>Choose a location first.</span>' +
         '</div>';
       refreshIcons(target);
       return;
@@ -906,7 +906,7 @@
 
     var rec = recommend(data, state.resolution, state.type, state.selectedMetros);
     if (!rec) {
-      target.innerHTML = '<div class="mcc-empty-state">' + icon("radio-tower") + '<strong>No recommendation yet</strong></div>';
+      target.innerHTML = '<div class="mcc-empty-state">' + icon("radio-tower") + '<strong>No region yet</strong></div>';
       refreshIcons(target);
       return;
     }
@@ -936,7 +936,7 @@
     var resultBody = guided
       ? '<div class="mcc-guide-panel">' +
         '<ol class="mcc-guide-steps">' +
-        '<li class="mcc-guide-connect"><div><h4>Connect to the repeater CLI</h4><p>Choose USB when you can reach the repeater, or manage it over LoRa from a companion radio.</p>' +
+        '<li class="mcc-guide-connect"><div><h4>Connect to the repeater CLI</h4><p>Use USB at the repeater or remote management over LoRa.</p>' +
         '<div class="mcc-connect-methods">' +
         '<section class="mcc-connect-method"><div class="mcc-connect-method-head">' + icon("usb") + '<div><h5>USB serial</h5><small>At the repeater</small></div></div>' +
         '<ol><li>Connect the repeater to a computer with a data-capable USB cable.</li>' +
@@ -948,16 +948,16 @@
         '<li>Enter the repeater admin password, tap <strong>Log In</strong>, then open <strong>Command Line</strong>.</li></ol>' +
         '<p class="mcc-connect-note">If the repeater is missing, open Tools → Discover Nearby Nodes. If a wait timer appears, let it finish before logging in.</p></section>' +
         '</div></div></li>' +
-        '<li><div><h4>Confirm the command line</h4><p>Run this first. A version reply means the CLI is ready; make sure it matches your firmware choice.</p>' +
+        '<li><div><h4>Confirm the command line</h4><p>Run <code>ver</code> and check the version.</p>' +
         '<button type="button" class="mcc-command-line" data-cmd="ver"><span>ver</span><em>' + icon("copy") + 'Copy</em></button></div></li>' +
-        '<li><div><h4>Apply the settings</h4><p>Copy and run each line in order. Wait for the device reply before continuing.</p>' +
+        '<li><div><h4>Apply the settings</h4><p>Run each line in order. Wait for a reply.</p>' +
         '<div class="mcc-guide-command-list">' + commands.map(function (line) {
           return '<button type="button" class="mcc-command-line" data-cmd="' + esc(line) + '"><span>' + esc(line) + '</span><em>' + icon("copy") + 'Copy</em></button>';
-        }).join("") + '</div><p class="mcc-guide-stop">If a reply starts with Err, stop. Existing regions are not removed automatically.</p></div></li>' +
-        '<li><div><h4>Check, save, and verify</h4><p>Run <code>region</code>. Confirm that it follows this path:</p>' +
+        }).join("") + '</div><p class="mcc-guide-stop">Stop on <code>Err</code>. Existing regions are not cleared.</p></div></li>' +
+        '<li><div><h4>Check and save</h4><p>Run <code>region</code> and confirm:</p>' +
         '<p class="mcc-region-path"><strong>' + esc(expectedPath) + '</strong></p>' +
         '<div class="mcc-guide-command-list"><button type="button" class="mcc-command-line" data-cmd="region"><span>region</span><em>' + icon("copy") + 'Copy</em></button></div>' +
-        '<p>If the path is correct, save it:</p>' +
+        '<p>Save:</p>' +
         '<div class="mcc-guide-command-list"><button type="button" class="mcc-command-line" data-cmd="region save"><span>region save</span><em>' + icon("copy") + 'Copy</em></button></div>' +
         '<p>' + (state.includeBaseline
           ? 'Restart the device, reconnect, then run these final checks:'
@@ -1160,7 +1160,7 @@
       '<input class="mcc-input" id="mcc-location-input" type="text" autocomplete="off" spellcheck="false" placeholder="Ottawa, YOW, K1A 0B1">' +
       '<button class="mcc-button" type="button" data-action="locate">' + icon("search") + 'Find</button>' +
       '</div>' +
-      '<p class="mcc-search-privacy">Search sends your query to OpenStreetMap Nominatim / geocoder.ca. Click the map or use device location to stay fully local.</p>' +
+      '<p class="mcc-search-privacy">Search uses OpenStreetMap and geocoder.ca. Or click the map.</p>' +
       '<div data-role="status"></div>' +
       '<div class="mcc-selected-region" data-role="selected-region" hidden></div>' +
       '<details class="mcc-alternate-regions" data-role="region-browser" hidden>' +
@@ -1175,9 +1175,9 @@
       '</section>' +
       '<section class="mcc-card mcc-wizard-step" data-wizard-step="2" hidden>' +
       '<p class="mcc-step-label">Step 2 of 4</p>' +
-      '<h2>Use recommended radio settings?</h2>' +
+      '<h2>Use recommended settings?</h2>' +
       '<div class="mcc-choice-list mcc-choice-list-large" data-role="device-path" role="group" aria-label="Recommended radio settings">' +
-      '<label class="mcc-choice"><input type="radio" name="mcc-device-path" value="new" checked><span><strong>Yes — new or reset device</strong></span></label>' +
+      '<label class="mcc-choice"><input type="radio" name="mcc-device-path" value="new" checked><span><strong>Yes — apply defaults</strong></span></label>' +
       '<label class="mcc-choice"><input type="radio" name="mcc-device-path" value="existing"><span><strong>No — keep current settings</strong></span></label>' +
       '</div>' +
       '<details class="mcc-advanced-options">' +
@@ -1192,7 +1192,7 @@
       '</section>' +
       '<section class="mcc-card mcc-wizard-step" data-wizard-step="3" hidden>' +
       '<p class="mcc-step-label">Step 3 of 4</p>' +
-      '<h2>Where will it be installed?</h2>' +
+      '<h2>Installation site</h2>' +
       '<div class="mcc-choice-list" data-role="types" role="group" aria-label="Repeater installation type">' +
       '<label class="mcc-choice"><input type="radio" name="mcc-type" value="residential" checked><span><strong>Home or portable</strong></span></label>' +
       '<label class="mcc-choice"><input type="radio" name="mcc-type" value="urban"><span><strong>Rooftop or tower</strong></span></label>' +
@@ -1203,12 +1203,12 @@
       '</section>' +
       '<section class="mcc-card mcc-wizard-step" data-wizard-step="4" hidden>' +
       '<p class="mcc-step-label">Step 4 of 4</p>' +
-      '<h2>Choose how to finish</h2>' +
+      '<h2>Finish setup</h2>' +
       '<div class="mcc-finish-paths" role="group" aria-label="Choose setup instructions">' +
-      '<button type="button" class="mcc-finish-path is-active" data-finish-path="guided" aria-pressed="true">' + icon("list-checks") + '<span><strong>Guide me</strong><small>Apply the settings step by step</small></span></button>' +
-      '<button type="button" class="mcc-finish-path" data-finish-path="technical" aria-pressed="false">' + icon("terminal") + '<span><strong>Copy commands</strong><small>Show all commands at once</small></span></button>' +
+      '<button type="button" class="mcc-finish-path is-active" data-finish-path="guided" aria-pressed="true">' + icon("list-checks") + '<span><strong>Guide me</strong><small>Step-by-step help</small></span></button>' +
+      '<button type="button" class="mcc-finish-path" data-finish-path="technical" aria-pressed="false">' + icon("terminal") + '<span><strong>Copy commands</strong><small>All commands at once</small></span></button>' +
       '</div>' +
-      '<div data-role="result"><p class="mcc-result-empty">Choose a Canadian location to generate commands.</p></div>' +
+      '<div data-role="result"><p class="mcc-result-empty">Choose a location first.</p></div>' +
       '<div class="mcc-wizard-actions"><button class="mcc-button mcc-button-secondary" type="button" data-prev-step>' + icon("arrow-left") + 'Back</button><a class="mcc-button mcc-button-secondary" data-action="view-map" href="' + esc(regionPageHref("map")) + '" hidden>' + icon("map") + 'View on map</a></div>' +
       '</section>' +
       '</div>';
@@ -1305,7 +1305,7 @@
 
     function advanceStep() {
       if (state.wizardStep === 1 && !state.canGenerate) {
-        setStatus(els.status, "Choose a Canadian location before continuing.", "error");
+        setStatus(els.status, "Choose a location first.", "error");
         return;
       }
       state.maxStep = Math.max(state.maxStep, Math.min(4, state.wizardStep + 1));
@@ -1345,7 +1345,7 @@
             (nested ? leafCount + ' subregions' : child.toUpperCase() + ' · region') +
             '</small></span><span aria-hidden="true">' + (nested ? '›' : '✓') + '</span></button>';
         }).join("")
-        : '<p class="mcc-help">This is the region used for your settings.</p>';
+        : '<p class="mcc-help">Used for your settings.</p>';
     }
 
     function chooseConfigRegionNode(tag) {
@@ -1387,7 +1387,7 @@
       } else {
         state.canGenerate = true;
         state.maxStep = Math.max(state.maxStep, 2);
-        setStatus(els.status, "Region found. Confirm it below, then continue.", "info");
+        setStatus(els.status, "Region found.", "info");
         renderConfigRegionBrowser(state.resolution.primary.seed.tag);
       }
       refreshTool(data, els, state, updateMapLinks);
@@ -1400,7 +1400,7 @@
     function locate() {
       var query = els.input.value.trim();
       if (!query) {
-        setStatus(els.status, "Enter a Canadian city, airport code, or postal code.", "error");
+        setStatus(els.status, "Enter a city, airport code, or postal code.", "error");
         return;
       }
       els.locate.disabled = true;
@@ -1498,7 +1498,7 @@
       '<aside class="mcc-map-panel">' +
       '<div class="mcc-panel-header">' +
       '<h2>Find a region</h2>' +
-      '<p>Every part of Canada belongs to one local region.</p>' +
+
       '<a class="mcc-button mcc-button-secondary" href="' + esc(regionPageHref("config")) + '">' + icon("list-checks") + 'Setup</a>' +
       '</div>' +
       '<section class="mcc-card mcc-card-compact">' +
@@ -1513,12 +1513,12 @@
       '<input class="mcc-input" id="mcc-map-location-input" data-role="map-input" type="text" autocomplete="off" spellcheck="false" placeholder="Ottawa, YOW, K1A 0B1">' +
       '<button class="mcc-button" type="button" data-action="map-locate">' + icon("search") + 'Find</button>' +
       '</div>' +
-      '<p class="mcc-search-privacy">Search sends your query to OpenStreetMap Nominatim / geocoder.ca. Click the map or use device location to stay fully local.</p>' +
+      '<p class="mcc-search-privacy">Search uses OpenStreetMap and geocoder.ca. Or click the map.</p>' +
       '<div data-role="map-status"></div>' +
       '</section>' +
       '<section class="mcc-card mcc-dynamic-card" data-role="map-result-section" hidden>' +
       '<h2>Selected region</h2>' +
-      '<div data-role="map-result"><p class="mcc-result-empty">Choose a Canadian location to see its region.</p></div>' +
+      '<div data-role="map-result"><p class="mcc-result-empty">Choose a location.</p></div>' +
       '</section>' +
       '<details class="mcc-card mcc-map-options">' +
       '<summary>Settings</summary>' +
@@ -1648,7 +1648,7 @@
               '</small></span><span aria-hidden="true">' + (nested ? '›' : '✓') + '</span></button>';
           }).join("");
         } else {
-          els.children.innerHTML = '<p class="mcc-help">This is the region used for location lookup and commands.</p>';
+          els.children.innerHTML = '<p class="mcc-help">Used for lookup and commands.</p>';
         }
 
         browseLayer.clearLayers();
@@ -1707,7 +1707,7 @@
           state.canGenerate = false;
           state.detailTag = null;
           state.resolution = null;
-          setStatus(els.status, "That point appears to be outside Canada.", "warning");
+          setStatus(els.status, "Outside Canada.", "warning");
         } else {
           state.resolution = resolveLocation(data, state.lat, state.lon, state.forcedTag, state.jurisdictionTag);
           state.canGenerate = state.resolution.hasMatch;
@@ -1742,7 +1742,7 @@
         state.resolution = null;
         state.detailTag = null;
         place(state.lat, state.lon);
-        setStatus(els.status, "That point is outside the mapped Canadian regions. Choose land in Canada or search for a nearby city.", "warning");
+        setStatus(els.status, "Choose a mapped point in Canada.", "warning");
         refreshTool(data, els, state, updateBoundaryHighlight);
         if (recenter) map.setView([state.lat, state.lon], Math.max(map.getZoom(), 8));
       }
@@ -1767,7 +1767,7 @@
       function locate() {
         var query = els.input.value.trim();
         if (!query) {
-          setStatus(els.status, "Enter a Canadian city, airport code, or postal code.", "error");
+          setStatus(els.status, "Enter a city, airport code, or postal code.", "error");
           return;
         }
         els.locate.disabled = true;
@@ -1909,7 +1909,7 @@
     el.innerHTML =
       '<div class="mcc-dashboard">' +
       '<section class="mcc-console-header mcc-dashboard-header">' +
-      '<h2>Canadian regions — review map</h2>' +
+      '<h2>Canadian regions</h2>' +
       '<div class="mcc-dashboard-actions">' +
       '<a class="mcc-action-button" href="' + esc(regionPageHref("config")) + '">' + icon("list-checks") + '<span><strong>Setup</strong></span></a>' +
       '<a class="mcc-action-button" href="' + esc(regionPageHref("map")) + '">' + icon("map") + '<span><strong>Map</strong></span></a>' +

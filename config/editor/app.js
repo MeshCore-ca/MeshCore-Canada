@@ -19,7 +19,7 @@ import {
   async function fetchOk(name, options) {
     var response = await fetch(assetUrl(name), options || {});
     if (!response.ok) {
-      throw new Error("The editor data could not be loaded (" + name + ").");
+      throw new Error("Could not load editor data (" + name + ").");
     }
     return response;
   }
@@ -204,8 +204,8 @@ import {
 
   function showSubmissionResult(result, changedWhileSubmitting) {
     var prefix = document.createTextNode(changedWhileSubmitting
-      ? "Review created for the earlier submitted version: "
-      : (result.duplicate ? "This proposal was already submitted: " : "Public review created: "));
+      ? "Earlier version submitted: "
+      : (result.duplicate ? "Already submitted: " : "Review created: "));
     var link = document.createElement("a");
     link.href = result.issueUrl;
     link.target = "_blank";
@@ -491,7 +491,7 @@ import {
       return;
     }
     if (count) {
-      setValidation("Ready to validate " + count + (count === 1 ? " cell." : " cells."), "");
+      setValidation(count + (count === 1 ? " cell ready." : " cells ready."), "");
     } else {
       setValidation("", "");
     }
@@ -716,7 +716,7 @@ import {
       }
       partitionLayer.bringToBack();
       setStatus(
-        state.features.length.toLocaleString() + " editable census cells loaded.",
+        state.features.length.toLocaleString() + " census cells loaded.",
         "success"
       );
     } catch (error) {
@@ -813,7 +813,7 @@ import {
     var canonical = validatedProposal();
     if (!canonical) return;
     downloadProposal(canonical);
-    setValidation("Proposal validated locally and downloaded. Submit it for review — it is not live until merged.", "success");
+    setValidation("Proposal downloaded. It is not live until merged.", "success");
   }
 
   function resetTurnstile(message) {
@@ -824,7 +824,7 @@ import {
     }
     if (state.turnstile && state.turnstileWidgetId !== null) {
       try {
-        setAntiSpamStatus(message || "Running a new anti-spam check…", "");
+        setAntiSpamStatus(message || "Retrying check…", "");
         state.turnstile.reset(state.turnstileWidgetId);
       } catch (_error) {
         if (typeof state.turnstile.remove === "function") {
@@ -832,7 +832,7 @@ import {
         }
         state.turnstileWidgetId = null;
         elements.turnstileContainer.replaceChildren();
-        setAntiSpamStatus("The anti-spam check could not restart. Retry it below.", "error");
+        setAntiSpamStatus("Check failed. Retry.", "error");
         elements.antiSpamRetry.hidden = false;
       }
     }
@@ -852,21 +852,21 @@ import {
     return {
       onToken: function (token) {
         state.turnstileToken = String(token || "");
-        setAntiSpamStatus("Anti-spam check complete.", "success");
+        setAntiSpamStatus("Check complete.", "success");
         elements.antiSpamRetry.hidden = true;
         updateReview(false);
       },
       onError: function () {
-        setAntiSpamStatus("The anti-spam check failed. It will retry automatically.", "error");
-        scheduleTurnstileReset("Retrying the anti-spam check…", 1000);
+        setAntiSpamStatus("Check failed. Retrying…", "error");
+        scheduleTurnstileReset("Retrying check…", 1000);
       },
       onExpired: function () {
-        setAntiSpamStatus("The anti-spam check expired. Running it again…", "");
-        scheduleTurnstileReset("Running a new anti-spam check…", 250);
+        setAntiSpamStatus("Check expired. Retrying…", "");
+        scheduleTurnstileReset("Retrying check…", 250);
       },
       onTimeout: function () {
-        setAntiSpamStatus("The anti-spam check timed out. Running it again…", "error");
-        scheduleTurnstileReset("Retrying the anti-spam check…", 1000);
+        setAntiSpamStatus("Check timed out. Retrying…", "error");
+        scheduleTurnstileReset("Retrying check…", 1000);
       }
     };
   }
@@ -875,7 +875,7 @@ import {
     if (state.submissionInitialising) return;
     state.submissionInitialising = true;
     elements.antiSpamRetry.hidden = true;
-    setAntiSpamStatus("Loading anti-spam protection…", "");
+    setAntiSpamStatus("Loading check…", "");
     try {
       var endpoint = configuredSubmissionEndpoint(document);
       var config = await fetchSubmissionConfig({ endpoint: endpoint });
@@ -883,7 +883,7 @@ import {
       state.submissionConfig = config;
       state.turnstile = turnstile;
       if (state.turnstileWidgetId === null) {
-        setAntiSpamStatus("Complete the anti-spam check if prompted.", "");
+        setAntiSpamStatus("Complete the check.", "");
         state.turnstileWidgetId = renderTurnstile(
           turnstile,
           elements.turnstileContainer,
@@ -891,7 +891,7 @@ import {
           turnstileCallbacks()
         );
       } else {
-        resetTurnstile("Running a new anti-spam check…");
+        resetTurnstile("Retrying check…");
       }
     } catch (error) {
       state.submissionConfig = null;
@@ -908,7 +908,7 @@ import {
     var canonical = validatedProposal();
     if (!canonical) return;
     if (!state.submissionConfig || !state.turnstileToken || state.submitting) {
-      setValidation("Wait for the anti-spam check, then try Submit for review again.", "error");
+      setValidation("Complete the check first.", "error");
       return;
     }
     var token = state.turnstileToken;
@@ -919,7 +919,7 @@ import {
     elements.submit.setAttribute("aria-busy", "true");
     clearSubmissionResult();
     updateReview(false);
-    setValidation("Creating the public review issue…", "");
+    setValidation("Submitting…", "");
     try {
       var result = await submitRegionProposal({
         endpoint: state.submissionConfig.endpoint,
@@ -931,18 +931,18 @@ import {
       showSubmissionResult(result, changedWhileSubmitting);
       setValidation(
         changedWhileSubmitting
-          ? "The review was created, but edits made while submitting are not included. Submit again to include them."
+          ? "Submitted, but later edits were not included. Submit again to include them."
           : result.duplicate
-          ? "This proposal was already submitted. The existing review issue is linked below."
-          : "Proposal submitted. Maintainers can now review it publicly.",
+          ? "Already submitted. Open the issue below."
+          : "Submitted for review.",
         "success"
       );
     } catch (error) {
       var nextStep = error.code === "stale_base"
-        ? " Reload the editor before trying again."
+        ? " Reload and try again."
         : (error.retryable
-          ? " Your edits are still here; wait for the anti-spam check, then try again."
-          : " Download the proposal if you need to send it to a maintainer.");
+          ? " Your edits are saved here. Complete the check and try again."
+          : " Download the proposal to share it.");
       setValidation(
         (error.message || "The proposal could not be submitted.") + nextStep,
         "error"
@@ -951,13 +951,13 @@ import {
       state.submitting = false;
       elements.submit.textContent = "Submit for review";
       elements.submit.removeAttribute("aria-busy");
-      resetTurnstile("Preparing another anti-spam check…");
+      resetTurnstile("Preparing another check…");
       updateReview(false);
     }
   }
 
   async function initialise() {
-    setStatus("Loading editor data…", "");
+    setStatus("Loading editor…", "");
     try {
       state.catalog = await (await fetchOk("canada-regions.json")).json();
       await loadMembershipCsv();
@@ -976,7 +976,7 @@ import {
   }
 
   elements.province.addEventListener("change", function () {
-    if (state.proposed.size && !window.confirm("Discard this unfinished proposal and load another area?")) {
+    if (state.proposed.size && !window.confirm("Discard this draft and load another area?")) {
       elements.province.value = state.province;
       return;
     }

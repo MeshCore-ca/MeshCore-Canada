@@ -3,6 +3,7 @@ export const COMMUNITY_SUBMISSION_ENDPOINT =
   "https://api.meshcore.ca:21323/api/meshcore-canada/submissions";
 export const COMMUNITY_ISSUE_ENDPOINT =
   "https://github.com/MeshCore-ca/MeshCore-Canada/issues/new";
+export const COMMUNITY_SOURCE_PAGE = "https://meshcore.ca/submit-idea/";
 export const MAX_GITHUB_URL_LENGTH = 7000;
 
 export const COMMUNITY_CATEGORIES = Object.freeze([
@@ -69,14 +70,14 @@ export function buildCommunityIdea(data) {
     category,
     experience,
     summary: boundedText(data.summary, 100, "Short title", true),
-    need: boundedText(data.need, 2000, "What is difficult today", true, true),
-    idea: boundedText(data.idea, 2000, "What would make it better", true, true),
+    need: boundedText(data.need, 2000, "What is difficult now", true, true),
+    idea: boundedText(data.idea, 2000, "What would help", true, true),
     publicAcknowledged: true
   };
   const optional = {
     region: boundedText(data.region, 100, "City or broad region"),
     context: boundedText(data.context, 2000, "Additional context", false, true),
-    followUp: boundedText(data.followUp, 120, "Public follow-up contact")
+    followUp: boundedText(data.followUp, 120, "Public contact")
   };
   Object.entries(optional).forEach(([key, value]) => {
     if (value) proposal[key] = value;
@@ -94,15 +95,15 @@ export function buildSubmissionText(proposal) {
     section("Contribution type", proposal.category),
     section("MeshCore experience", proposal.experience),
     section("City or broad region", proposal.region),
-    section("What I am trying to do / what is difficult", proposal.need),
-    section("What would make it better", proposal.idea),
+    section("Problem", proposal.need),
+    section("Suggested change", proposal.idea),
     section("Additional context", proposal.context),
     section(
-      "Public follow-up contact",
+      "Public contact",
       proposal.followUp,
       "Please reply in the submission thread."
     ),
-    "---\n\n_Prepared with the MeshCore Canada community submission helper._"
+    "---\n\n_Prepared on meshcore.ca._"
   ].join("\n\n");
 }
 
@@ -117,7 +118,8 @@ export function buildManualGithubLink(proposal) {
     need: proposal.need,
     idea: proposal.idea,
     context: proposal.context || "",
-    follow_up: proposal.followUp || ""
+    follow_up: proposal.followUp || "",
+    source_page: COMMUNITY_SOURCE_PAGE
   });
   const url = `${COMMUNITY_ISSUE_ENDPOINT}?${params.toString()}`;
   if (url.length <= MAX_GITHUB_URL_LENGTH) {
@@ -125,7 +127,8 @@ export function buildManualGithubLink(proposal) {
   }
   const fallback = new URLSearchParams({
     template: "community_idea.yml",
-    title: `[Community idea] ${proposal.summary}`
+    title: `[Community idea] ${proposal.summary}`,
+    source_page: COMMUNITY_SOURCE_PAGE
   });
   return Object.freeze({
     url: `${COMMUNITY_ISSUE_ENDPOINT}?${fallback.toString()}`,

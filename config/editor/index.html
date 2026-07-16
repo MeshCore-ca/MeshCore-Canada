@@ -27,16 +27,16 @@
   <main class="editor-layout">
     <aside class="editor-sidebar" aria-label="Boundary editing controls">
       <section class="panel intro-panel">
-        <p class="step-label">Draft only</p>
-        <h2>Adjust official census cells</h2>
-        <p class="muted compact">Validates and sends a proposed change for public review. Nothing changes until maintainers approve and merge it.</p>
+        <p class="step-label">Draft</p>
+        <h2>Adjust region boundaries</h2>
+        <p class="muted compact">Submit a boundary change for review. Nothing changes until merged.</p>
       </section>
 
       <section class="panel">
         <h2>1. Choose an area</h2>
         <label for="province-select">Province or territory</label>
         <select id="province-select"></select>
-        <p id="load-status" class="status-line" role="status" aria-live="polite">Loading editor data…</p>
+        <p id="load-status" class="status-line" role="status" aria-live="polite">Loading editor…</p>
       </section>
 
       <section class="panel">
@@ -49,7 +49,7 @@
           <button id="pan-mode" class="segment active" type="button" aria-pressed="true">Pan map</button>
           <button id="paint-mode" class="segment" type="button" aria-pressed="false">Paint cells</button>
         </div>
-        <p class="hint">Click one cell, or use Paint cells and drag across several.</p>
+        <p class="hint">Click a cell, or choose Paint and drag.</p>
       </section>
 
       <section class="panel selected-panel">
@@ -80,28 +80,28 @@
         <label for="submitted-by">Submitted by <span class="optional">optional</span></label>
         <input id="submitted-by" maxlength="80" autocomplete="name">
         <label for="reason">Reason</label>
-        <textarea id="reason" maxlength="1000" rows="3" placeholder="What local knowledge supports this change?" required></textarea>
+        <textarea id="reason" maxlength="1000" rows="3" placeholder="Why should this cell move?" required></textarea>
         <div class="submission-trap" aria-hidden="true">
           <label for="website">Website</label>
           <input id="website" name="website" tabindex="-1" autocomplete="off">
         </div>
         <div id="turnstile-container" class="turnstile-container" aria-label="Anti-spam check"></div>
-        <p id="anti-spam-status" class="anti-spam-status" role="status" aria-live="polite">Loading anti-spam protection…</p>
-        <button id="anti-spam-retry" class="inline-retry" type="button" hidden>Retry anti-spam check</button>
+        <p id="anti-spam-status" class="anti-spam-status" role="status" aria-live="polite">Loading check…</p>
+        <button id="anti-spam-retry" class="inline-retry" type="button" hidden>Retry check</button>
         <div id="validation-message" class="validation-message" role="status" aria-live="polite"></div>
         <div id="submission-result" class="submission-result" role="status" aria-live="polite"></div>
         <div class="proposal-actions">
           <button id="submit-button" class="button primary full" type="button" disabled>Submit for review</button>
           <button id="export-button" class="button secondary full" type="button" disabled>Download proposal</button>
         </div>
-        <p class="hint">No account is needed. The proposal is checked for spam, then a public review issue is created automatically.</p>
+        <p class="hint">No account needed. Changes require review.</p>
       </section>
     </aside>
 
     <section class="map-shell" aria-label="Region map editor">
       <div class="map-toolbar">
         <span id="map-heading">Canada</span>
-        <span class="map-help">Official census cells · yellow outline means changed</span>
+        <span class="map-help">Census cells · yellow means changed</span>
       </div>
       <div id="editor-map" role="application" aria-label="Interactive region boundary map"></div>
       <div class="map-legend" aria-hidden="true">
