@@ -2077,6 +2077,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Step 3: Flash the Firmware">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#optional-repeater-loop-protection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Optional repeater loop protection
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -2355,6 +2372,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Step 3: Flash the Firmware">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#optional-repeater-loop-protection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Optional repeater loop protection
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -2494,6 +2528,11 @@
 <div class="highlight"><pre><span></span><code>set path.hash.mode 2
 </code></pre></div>
 <p>After changing radio parameters, reboot the device.</p>
+<h3 id="optional-repeater-loop-protection">Optional repeater loop protection<a class="headerlink" href="#optional-repeater-loop-protection" title="Permanent link">&para;</a></h3>
+<p>Loop detection is not part of the Canada-wide basic setup. MeshCore leaves it off by default. If local operators are troubleshooting a packet storm caused by a looping repeater, firmware 1.14 and newer can use:</p>
+<div class="highlight"><pre><span></span><code>set loop.detect moderate
+</code></pre></div>
+<p>This is a troubleshooting safeguard for repeaters, not a setting to apply to every new device. Coordinate the change with the local mesh, and leave it off when there is no loop problem. See the <a href="https://github.com/meshcore-dev/MeshCore/blob/main/docs/cli_commands.md#view-or-change-this-nodes-loop-detection">upstream MeshCore CLI reference</a> for the available modes.</p>
 <h2 id="step-4-configure-your-role">Step 4: Configure Your Role<a class="headerlink" href="#step-4-configure-your-role" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
