@@ -91,7 +91,10 @@ test("page exposes anonymous submission, anti-spam, result, and manual fallback 
     readFile(new URL("../../docs/javascripts/submission-form.js", import.meta.url), "utf8")
   ]);
   for (const id of [
+    "review-submission",
     "submit-community-idea",
+    "submission-verification",
+    "submission-final-actions",
     "submission-turnstile",
     "submission-anti-spam-status",
     "submission-anti-spam-retry",
@@ -103,6 +106,11 @@ test("page exposes anonymous submission, anti-spam, result, and manual fallback 
     assert.ok(html.includes(`id="${id}"`), `missing ${id}`);
   }
   assert.match(html, /No GitHub account is needed/);
+  assert.match(html, /<details class="submission-optional">/);
+  assert.match(html, /id="submission-final-actions" class="submission-actions" hidden/);
+  assert.match(controller, /elements\.finalActions\.hidden = !current/);
+  assert.match(controller, /void initialiseSubmission\(\)/);
+  assert.doesNotMatch(controller, /\n  initialiseSubmission\(\);\n/);
   assert.match(controller, /import\(transportModuleUrl\)/);
   assert.match(controller, /submitSubmission\(/);
   assert.match(controller, /COMMUNITY_SUBMISSION_ENDPOINT/);

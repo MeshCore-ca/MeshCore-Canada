@@ -12,11 +12,14 @@
   const elements = {
     preview: document.getElementById("submission-preview"),
     status: document.getElementById("submission-status"),
+    review: document.getElementById("review-submission"),
     copy: document.getElementById("copy-submission"),
     submit: document.getElementById("submit-community-idea"),
     github: document.getElementById("open-github-submission"),
     githubNote: document.getElementById("submission-github-note"),
     result: document.getElementById("submission-result"),
+    verification: document.getElementById("submission-verification"),
+    finalActions: document.getElementById("submission-final-actions"),
     turnstile: document.getElementById("submission-turnstile"),
     antiSpamStatus: document.getElementById("submission-anti-spam-status"),
     antiSpamRetry: document.getElementById("submission-anti-spam-retry"),
@@ -49,6 +52,11 @@
 
   function updateActions() {
     const current = preparedProposal && preparedRevision === revision;
+    form.dataset.prepared = current ? "true" : "false";
+    elements.review.textContent = current ? "Update preview" : "Review idea";
+    elements.review.classList.toggle("md-button--primary", !current);
+    elements.verification.hidden = !current;
+    elements.finalActions.hidden = !current;
     elements.submit.disabled = !current || !config || !token || submitting;
     elements.copy.disabled = !current || submitting;
   }
@@ -203,7 +211,7 @@
       });
       turnstile = await loaded.transport.loadTurnstile();
       if (widgetId === null) {
-        setAntiSpamStatus("Complete the anti-spam check if prompted.");
+        setAntiSpamStatus("Complete the anti-spam check to submit.");
         widgetId = loaded.transport.renderTurnstile(
           turnstile,
           elements.turnstile,
@@ -213,11 +221,11 @@
       } else {
         resetTurnstile("Running a new anti-spam check…");
       }
-    } catch (error) {
+    } catch (_error) {
       config = null;
       token = "";
       setAntiSpamStatus(
-        error.message || "Anti-spam protection is unavailable. Copy the idea or use the manual GitHub option.",
+        "Anonymous submission is unavailable right now. You can still copy the idea or use GitHub.",
         "error"
       );
       elements.antiSpamRetry.hidden = false;
@@ -249,10 +257,11 @@
         elements.githubNote.textContent = "This idea is too long for a reliable GitHub prefill. Copy the prepared text before using the manual GitHub option.";
         elements.githubNote.hidden = false;
       }
-      elements.status.textContent = config && token
-        ? "Review the text below, then submit it. No GitHub account is needed."
-        : "Idea prepared. You can copy it now; anonymous submission will be available when the anti-spam check completes.";
       updateActions();
+      if (!config || !token) void initialiseSubmission();
+      elements.status.textContent = config && token
+        ? "Preview ready. Submit it below or choose another route."
+        : "Preview ready. You can copy it now while anonymous submission is checked.";
       const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       elements.preview.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "nearest" });
     } catch (error) {
@@ -333,5 +342,5 @@
   });
 
   elements.antiSpamRetry.addEventListener("click", initialiseSubmission);
-  initialiseSubmission();
+  updateActions();
 })();
