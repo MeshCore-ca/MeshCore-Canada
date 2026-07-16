@@ -11,6 +11,7 @@ hide:
 
 <form id="community-submission-form" class="submission-form" action="https://github.com/MeshCore-ca/MeshCore-Canada/issues/new" method="get" target="_blank" rel="noopener">
   <input type="hidden" name="template" value="community_idea.yml">
+  <input type="hidden" name="source_page" value="https://meshcore.ca/submit-idea/">
   <noscript>
     <div class="submission-no-script" role="note">
       <strong>JavaScript is turned off.</strong> This form will open the guided GitHub form instead, which requires a GitHub account.
@@ -124,7 +125,7 @@ hide:
 
 <details class="submission-alternatives">
   <summary>Prefer another way to share?</summary>
-  <p><a href="https://github.com/MeshCore-ca/MeshCore-Canada/issues/new?template=community_idea.yml" target="_blank" rel="noopener">GitHub form</a> (account required) · <a href="https://forum.meshcore.ca/" target="_blank" rel="noopener">Community forum</a> · <a href="https://discord.gg/BESFVMt7yk" target="_blank" rel="noopener">Discord</a></p>
+  <p><a href="https://github.com/MeshCore-ca/MeshCore-Canada/issues/new?template=community_idea.yml&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Fsubmit-idea%2F" target="_blank" rel="noopener">GitHub form</a> (account required) · <a href="https://forum.meshcore.ca/" target="_blank" rel="noopener">Community forum</a> · <a href="https://discord.gg/BESFVMt7yk" target="_blank" rel="noopener">Discord</a></p>
 </details>
 
 ## What happens next?

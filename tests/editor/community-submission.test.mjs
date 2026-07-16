@@ -4,6 +4,7 @@ import { readFile } from "node:fs/promises";
 import { DEFAULT_SUBMISSION_ENDPOINT } from "../../docs/config/editor/issue.js";
 import {
   COMMUNITY_IDEA_SCHEMA,
+  COMMUNITY_SOURCE_PAGE,
   COMMUNITY_SUBMISSION_ENDPOINT,
   buildCommunityIdea,
   buildManualGithubLink,
@@ -71,7 +72,9 @@ test("keeps preview and bounded manual GitHub fallbacks", () => {
   const preview = buildSubmissionText(proposal);
   assert.match(preview, /^# Make the setup note clearer/m);
   assert.match(preview, /## Public follow-up contact\n\n@meshfriend/);
-  assert.equal(buildManualGithubLink(proposal).fullyPrefilled, true);
+  const manual = buildManualGithubLink(proposal);
+  assert.equal(manual.fullyPrefilled, true);
+  assert.equal(new URL(manual.url).searchParams.get("source_page"), COMMUNITY_SOURCE_PAGE);
 
   const long = buildCommunityIdea({
     ...validData,
@@ -82,7 +85,15 @@ test("keeps preview and bounded manual GitHub fallbacks", () => {
   const fallback = buildManualGithubLink(long);
   assert.equal(fallback.fullyPrefilled, false);
   assert.match(fallback.url, /template=community_idea\.yml/);
+  assert.equal(new URL(fallback.url).searchParams.get("source_page"), COMMUNITY_SOURCE_PAGE);
   assert.doesNotMatch(fallback.url, /need=/);
+});
+
+test("MkDocs loads the configurator and submission scripts together", async () => {
+  const config = await readFile(new URL("../../mkdocs.yml", import.meta.url), "utf8");
+  assert.equal((config.match(/^extra_javascript:/gm) || []).length, 1);
+  assert.match(config, /^\s+- assets\/regions\/regions\.js$/m);
+  assert.match(config, /^\s+- javascripts\/submission-form\.js$/m);
 });
 
 test("page exposes anonymous submission, anti-spam, result, and manual fallback controls", async () => {
@@ -106,6 +117,7 @@ test("page exposes anonymous submission, anti-spam, result, and manual fallback 
     assert.ok(html.includes(`id="${id}"`), `missing ${id}`);
   }
   assert.match(html, /No GitHub account is needed/);
+  assert.match(html, /name="source_page" value="https:\/\/meshcore\.ca\/submit-idea\/"/);
   assert.match(html, /<details class="submission-optional">/);
   assert.match(html, /id="submission-final-actions" class="submission-actions" hidden/);
   assert.match(controller, /elements\.finalActions\.hidden = !current/);

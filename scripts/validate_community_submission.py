@@ -9,6 +9,7 @@ import yaml
 ROOT = Path(__file__).resolve().parents[1]
 HELPER_PATH = ROOT / "docs" / "submit-idea.md"
 ISSUE_FORM_PATH = ROOT / ".github" / "ISSUE_TEMPLATE" / "community_idea.yml"
+SOURCE_PAGE = "https://meshcore.ca/submit-idea/"
 
 
 class CommunityFormParser(HTMLParser):
@@ -77,11 +78,17 @@ def main() -> None:
     assert parser.controls.get("template", {}).get("value") == (
         "community_idea.yml"
     ), "No-JavaScript fallback must select the community issue template"
+    assert parser.controls.get("source_page", {}).get("value") == SOURCE_PAGE, (
+        "No-JavaScript fallback must identify its source page"
+    )
 
     issue_form = yaml.safe_load(ISSUE_FORM_PATH.read_text(encoding="utf-8"))
     issue_fields = {
         field["id"]: field for field in issue_form["body"] if field["type"] != "markdown"
     }
+    assert issue_fields["source_page"]["attributes"].get("value") == SOURCE_PAGE, (
+        "GitHub issue form must preserve the source-page backlink"
+    )
     helper_fields = set(parser.controls) - {"template"}
     assert helper_fields == set(issue_fields), (
         "Helper fields do not match GitHub issue fields: "

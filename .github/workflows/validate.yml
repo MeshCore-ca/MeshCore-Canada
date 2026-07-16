@@ -57,5 +57,8 @@ jobs:
           node --check docs/javascripts/community-submission.js
           node --check docs/javascripts/submission-form.js
 
+      - name: Validate community submission helper
+        run: python scripts/validate_community_submission.py
+
       - name: Build documentation
         run: mkdocs build --strict

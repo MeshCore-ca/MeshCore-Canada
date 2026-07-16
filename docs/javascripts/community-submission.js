@@ -3,6 +3,7 @@ export const COMMUNITY_SUBMISSION_ENDPOINT =
   "https://api.meshcore.ca:21323/api/meshcore-canada/submissions";
 export const COMMUNITY_ISSUE_ENDPOINT =
   "https://github.com/MeshCore-ca/MeshCore-Canada/issues/new";
+export const COMMUNITY_SOURCE_PAGE = "https://meshcore.ca/submit-idea/";
 export const MAX_GITHUB_URL_LENGTH = 7000;
 
 export const COMMUNITY_CATEGORIES = Object.freeze([
@@ -117,7 +118,8 @@ export function buildManualGithubLink(proposal) {
     need: proposal.need,
     idea: proposal.idea,
     context: proposal.context || "",
-    follow_up: proposal.followUp || ""
+    follow_up: proposal.followUp || "",
+    source_page: COMMUNITY_SOURCE_PAGE
   });
   const url = `${COMMUNITY_ISSUE_ENDPOINT}?${params.toString()}`;
   if (url.length <= MAX_GITHUB_URL_LENGTH) {
@@ -125,7 +127,8 @@ export function buildManualGithubLink(proposal) {
   }
   const fallback = new URLSearchParams({
     template: "community_idea.yml",
-    title: `[Community idea] ${proposal.summary}`
+    title: `[Community idea] ${proposal.summary}`,
+    source_page: COMMUNITY_SOURCE_PAGE
   });
   return Object.freeze({
     url: `${COMMUNITY_ISSUE_ENDPOINT}?${fallback.toString()}`,

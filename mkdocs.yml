@@ -21,6 +21,7 @@ extra_css:
 
 extra_javascript:
   - assets/regions/regions.js
+  - javascripts/submission-form.js
 
 plugins:
   - search
@@ -30,9 +31,6 @@ plugins:
         regions/setup.md: config/index.md
         regions/map.md: config/map.md
         regions/standard.md: config/standard.md
-
-extra_javascript:
-  - javascripts/submission-form.js
 
 markdown_extensions:
   - admonition

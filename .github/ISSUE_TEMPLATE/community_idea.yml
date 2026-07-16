@@ -86,6 +86,13 @@ body:
       description: Optional Discord, forum, or GitHub username. Avoid posting an email address.
       placeholder: "@meshfriend on Discord"
 
+  - type: input
+    id: source_page
+    attributes:
+      label: Source page
+      description: The MeshCore Canada page that prepared this issue.
+      value: https://meshcore.ca/submit-idea/
+
   - type: checkboxes
     id: public
     attributes:
