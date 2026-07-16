@@ -71,7 +71,7 @@ test("keeps preview and bounded manual GitHub fallbacks", () => {
   const proposal = buildCommunityIdea(validData);
   const preview = buildSubmissionText(proposal);
   assert.match(preview, /^# Make the setup note clearer/m);
-  assert.match(preview, /## Public follow-up contact\n\n@meshfriend/);
+  assert.match(preview, /## Public contact\n\n@meshfriend/);
   const manual = buildManualGithubLink(proposal);
   assert.equal(manual.fullyPrefilled, true);
   assert.equal(new URL(manual.url).searchParams.get("source_page"), COMMUNITY_SOURCE_PAGE);
@@ -116,7 +116,7 @@ test("page exposes anonymous submission, anti-spam, result, and manual fallback 
   ]) {
     assert.ok(html.includes(`id="${id}"`), `missing ${id}`);
   }
-  assert.match(html, /No GitHub account is needed/);
+  assert.match(html, /No GitHub account needed/);
   assert.match(html, /name="source_page" value="https:\/\/meshcore\.ca\/submit-idea\/"/);
   assert.match(html, /<details class="submission-optional">/);
   assert.match(html, /id="submission-final-actions" class="submission-actions" hidden/);

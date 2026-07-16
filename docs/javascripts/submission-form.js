@@ -73,10 +73,10 @@
 
   function showResult(value, changedWhileSubmitting) {
     const prefix = changedWhileSubmitting
-      ? "The submitted version has a public review issue. Newer changes are not included. "
+      ? "Earlier version submitted. New changes are not included. "
       : value.duplicate
-        ? "This idea was already submitted. "
-        : "Your idea now has a public review issue. ";
+        ? "Already submitted. "
+        : "Submitted for review. ";
     const link = document.createElement("a");
     link.href = value.issueUrl;
     link.target = "_blank";
@@ -116,7 +116,7 @@
     elements.preview.hidden = true;
     clearGithubNote();
     clearResult();
-    if (!submitting) elements.status.textContent = "Review the updated answers before submitting.";
+    if (!submitting) elements.status.textContent = "Answers changed. Review again.";
     updateActions();
   }
 
@@ -154,7 +154,7 @@
     }
     if (turnstile && widgetId !== null) {
       try {
-        setAntiSpamStatus(message || "Running a new anti-spam check…");
+        setAntiSpamStatus(message || "Retrying check…");
         turnstile.reset(widgetId);
       } catch (_error) {
         if (typeof turnstile.remove === "function") {
@@ -162,7 +162,7 @@
         }
         widgetId = null;
         elements.turnstile.replaceChildren();
-        setAntiSpamStatus("The anti-spam check could not restart. Retry it below.", "error");
+        setAntiSpamStatus("Check failed. Retry.", "error");
         elements.antiSpamRetry.hidden = false;
       }
     }
@@ -180,20 +180,20 @@
     return {
       onToken(value) {
         token = String(value || "");
-        setAntiSpamStatus("Anti-spam check complete.", "success");
+        setAntiSpamStatus("Check complete.", "success");
         elements.antiSpamRetry.hidden = true;
         updateActions();
       },
       onError() {
-        setAntiSpamStatus("The anti-spam check failed. It will retry automatically.", "error");
+        setAntiSpamStatus("Check failed. Retrying…", "error");
         scheduleReset("Retrying the anti-spam check…", 1000);
       },
       onExpired() {
-        setAntiSpamStatus("The anti-spam check expired. Running it again…");
-        scheduleReset("Running a new anti-spam check…", 250);
+        setAntiSpamStatus("Check expired. Retrying…");
+        scheduleReset("Retrying check…", 250);
       },
       onTimeout() {
-        setAntiSpamStatus("The anti-spam check timed out. Running it again…", "error");
+        setAntiSpamStatus("Check timed out. Retrying…", "error");
         scheduleReset("Retrying the anti-spam check…", 1000);
       }
     };
@@ -203,7 +203,7 @@
     if (initialising) return;
     initialising = true;
     elements.antiSpamRetry.hidden = true;
-    setAntiSpamStatus("Loading anti-spam protection…");
+    setAntiSpamStatus("Loading check…");
     try {
       const loaded = await loadModules();
       config = await loaded.transport.fetchSubmissionConfig({
@@ -211,7 +211,7 @@
       });
       turnstile = await loaded.transport.loadTurnstile();
       if (widgetId === null) {
-        setAntiSpamStatus("Complete the anti-spam check to submit.");
+        setAntiSpamStatus("Complete the check.");
         widgetId = loaded.transport.renderTurnstile(
           turnstile,
           elements.turnstile,
@@ -219,13 +219,13 @@
           callbacks()
         );
       } else {
-        resetTurnstile("Running a new anti-spam check…");
+        resetTurnstile("Retrying check…");
       }
     } catch (_error) {
       config = null;
       token = "";
       setAntiSpamStatus(
-        "Anonymous submission is unavailable right now. You can still copy the idea or use GitHub.",
+        "Anonymous submission is unavailable. Copy the idea or use GitHub.",
         "error"
       );
       elements.antiSpamRetry.hidden = false;
@@ -254,14 +254,14 @@
       if (manual.fullyPrefilled) {
         clearGithubNote();
       } else {
-        elements.githubNote.textContent = "This idea is too long for a reliable GitHub prefill. Copy the prepared text before using the manual GitHub option.";
+        elements.githubNote.textContent = "Too long to prefill. Copy the text, then use GitHub.";
         elements.githubNote.hidden = false;
       }
       updateActions();
       if (!config || !token) void initialiseSubmission();
       elements.status.textContent = config && token
-        ? "Preview ready. Submit it below or choose another route."
-        : "Preview ready. You can copy it now while anonymous submission is checked.";
+        ? "Ready to submit."
+        : "Preview ready.";
       const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       elements.preview.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "nearest" });
     } catch (error) {
@@ -279,20 +279,20 @@
     if (!preparedText || preparedRevision !== revision) return;
     try {
       await copyText(preparedText);
-      elements.status.textContent = "Copied. You can paste the idea into the forum or Discord.";
+      elements.status.textContent = "Copied.";
     } catch (_error) {
       selectPreviewText();
-      elements.status.textContent = "Copy was blocked by the browser. The preview is selected; copy it manually.";
+      elements.status.textContent = "Copy blocked. Copy the selected preview.";
     }
   });
 
   elements.submit.addEventListener("click", async () => {
     if (!preparedProposal || preparedRevision !== revision) {
-      elements.status.textContent = "Review the current answers before submitting.";
+      elements.status.textContent = "Review the latest answers.";
       return;
     }
     if (!config || !token || submitting) {
-      elements.status.textContent = "Wait for the anti-spam check, then try Submit idea again.";
+      elements.status.textContent = "Complete the check first.";
       return;
     }
     const loaded = await loadModules();
@@ -305,7 +305,7 @@
     elements.submit.setAttribute("aria-busy", "true");
     clearResult();
     updateActions();
-    elements.status.textContent = "Creating the public review issue…";
+    elements.status.textContent = "Submitting…";
     try {
       const value = await loaded.transport.submitSubmission({
         endpoint: config.endpoint,
@@ -318,18 +318,18 @@
       elements.status.textContent = changed
         ? "The reviewed version was submitted. Review and submit again to include your newer changes."
         : value.duplicate
-          ? "This idea already has a review issue."
-          : "Idea submitted. Maintainers can now review it publicly.";
+          ? "Already submitted."
+          : "Submitted for review.";
     } catch (error) {
       const nextStep = error.retryable
-        ? " Your answers are still here. Wait for the anti-spam check, then try again."
-        : " Copy the prepared text or use the manual GitHub option if you need another route.";
+        ? " Your answers are saved here. Complete the check and try again."
+        : " Copy the text or use GitHub.";
       elements.status.textContent = (error.message || "The idea could not be submitted.") + nextStep;
     } finally {
       submitting = false;
       elements.submit.textContent = "Submit idea";
       elements.submit.removeAttribute("aria-busy");
-      resetTurnstile("Preparing another anti-spam check…");
+      resetTurnstile("Preparing another check…");
       updateActions();
     }
   });
@@ -337,7 +337,7 @@
   elements.github.addEventListener("click", (event) => {
     if (elements.github.getAttribute("aria-disabled") === "true") {
       event.preventDefault();
-      elements.status.textContent = "Review the submission before opening the manual GitHub form.";
+      elements.status.textContent = "Review the idea first.";
     }
   });
 

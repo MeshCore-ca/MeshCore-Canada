@@ -1,5 +1,5 @@
 name: Share a Community Idea
-description: Suggest an improvement without needing code, Git, or perfect MeshCore terminology.
+description: Suggest an improvement or report a problem.
 title: "[Community idea] "
 labels: ["enhancement"]
 assignees: []
@@ -7,14 +7,14 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for helping MeshCore Canada improve. Describe what you experienced in your own words.
-        You do not need to know the technical solution. Please do not post passwords, private channel keys, API tokens, exact home addresses, or private coordinates.
+        Share an idea or report a problem.
+        Do not include passwords, keys, addresses, or private coordinates.
 
   - type: dropdown
     id: category
     attributes:
       label: Contribution type
-      description: Choose the closest match. Maintainers can re-categorize it later.
+      description: Choose the closest match.
       options:
         - Newcomer or accessibility improvement
         - Documentation correction
@@ -43,8 +43,8 @@ body:
     id: summary
     attributes:
       label: Short title
-      description: One sentence describing the idea or need.
-      placeholder: A printable checklist for first-time repeater installs
+      description: Briefly name the idea.
+      placeholder: Add a repeater checklist
     validations:
       required: true
 
@@ -52,24 +52,24 @@ body:
     id: region
     attributes:
       label: City or broad region
-      description: Optional. Do not include a home address or private coordinates.
+      description: Optional. No exact addresses.
       placeholder: Waterloo Region, Ontario
 
   - type: textarea
     id: need
     attributes:
-      label: What are you trying to do, or what is difficult today?
-      description: Tell us where you got stuck, what was missing, or what you observed.
-      placeholder: I was setting up my first node and could not tell whether...
+      label: What is difficult now?
+      description: What happened?
+      placeholder: I could not find...
     validations:
       required: true
 
   - type: textarea
     id: idea
     attributes:
-      label: What would make it better?
-      description: A rough idea is welcome. You do not need to design the complete solution.
-      placeholder: It would help if the site included...
+      label: What would help?
+      description: What should change?
+      placeholder: Add...
     validations:
       required: true
 
@@ -77,26 +77,26 @@ body:
     id: context
     attributes:
       label: Additional context
-      description: Optional device, app, page, screenshot description, prior attempt, or affected audience.
+      description: Optional device, app, page, or details.
 
   - type: input
     id: follow_up
     attributes:
       label: Public username or profile for follow-up
-      description: Optional Discord, forum, or GitHub username. Avoid posting an email address.
+      description: Optional public username. No email.
       placeholder: "@meshfriend on Discord"
 
   - type: input
     id: source_page
     attributes:
       label: Source page
-      description: The MeshCore Canada page that prepared this issue.
+      description: Page that opened this form.
       value: https://meshcore.ca/submit-idea/
 
   - type: checkboxes
     id: public
     attributes:
-      label: Public submission
+      label: Public
       options:
-        - label: I understand this submission is public and contains no secrets or precise private location information.
+        - label: This can be posted publicly and contains no private information.
           required: true

@@ -5,8 +5,8 @@ hide:
 # Share an idea
 
 <div class="submission-intro">
-  <p>Tell us what is missing, confusing, or difficult. We will turn your answers into a public issue for the MeshCore Canada maintainers. <strong>No GitHub account is needed.</strong></p>
-  <p class="submission-privacy"><strong>Keep it public.</strong> Do not include passwords, private keys, API tokens, exact home addresses, or private coordinates. A city or broad region is enough.</p>
+  <p>Share an idea or report a problem. <strong>No GitHub account needed.</strong></p>
+  <p class="submission-privacy"><strong>Public form.</strong> Do not include passwords, keys, addresses, or private coordinates.</p>
 </div>
 
 <form id="community-submission-form" class="submission-form" action="https://github.com/MeshCore-ca/MeshCore-Canada/issues/new" method="get" target="_blank" rel="noopener">
@@ -14,13 +14,13 @@ hide:
   <input type="hidden" name="source_page" value="https://meshcore.ca/submit-idea/">
   <noscript>
     <div class="submission-no-script" role="note">
-      <strong>JavaScript is turned off.</strong> This form will open the guided GitHub form instead, which requires a GitHub account.
+      <strong>JavaScript is off.</strong> Continue on GitHub (account required).
     </div>
   </noscript>
 
   <div class="submission-form__header">
     <h2>Describe your idea</h2>
-    <p>Five short fields are required. You can add more context if it is useful.</p>
+    <p>Five fields are required.</p>
   </div>
 
   <div class="submission-form__grid">
@@ -53,18 +53,18 @@ hide:
 
   <div class="submission-field">
     <label for="submission-summary">Short title</label>
-    <input id="submission-summary" name="summary" type="text" maxlength="100" autocomplete="off" placeholder="Example: Add a first-time repeater checklist" required>
+    <input id="submission-summary" name="summary" type="text" maxlength="100" autocomplete="off" placeholder="Example: Add a repeater checklist" required>
   </div>
 
   <div class="submission-form__grid submission-form__grid--ideas">
     <div class="submission-field">
       <label for="submission-need">What is difficult now?</label>
-      <textarea id="submission-need" name="need" maxlength="2000" rows="5" placeholder="What were you trying to do, and where did you get stuck?" required></textarea>
+      <textarea id="submission-need" name="need" maxlength="2000" rows="5" placeholder="What happened?" required></textarea>
     </div>
 
     <div class="submission-field">
       <label for="submission-idea">What would help?</label>
-      <textarea id="submission-idea" name="idea" maxlength="2000" rows="5" placeholder="Describe the improvement you would like." required></textarea>
+      <textarea id="submission-idea" name="idea" maxlength="2000" rows="5" placeholder="What should change?" required></textarea>
     </div>
   </div>
 
@@ -78,21 +78,21 @@ hide:
         </div>
 
         <div class="submission-field">
-          <label for="submission-follow-up">Public username for follow-up</label>
+          <label for="submission-follow-up">Public username</label>
           <input id="submission-follow-up" name="follow_up" type="text" maxlength="120" autocomplete="off" placeholder="Example: @meshfriend on Discord">
         </div>
       </div>
 
       <div class="submission-field">
         <label for="submission-context">Anything else?</label>
-        <textarea id="submission-context" name="context" maxlength="2000" rows="4" placeholder="Device, app, related page, what you tried, or who else this may help."></textarea>
+        <textarea id="submission-context" name="context" maxlength="2000" rows="4" placeholder="Device, app, page, or other details."></textarea>
       </div>
     </div>
   </details>
 
   <label class="submission-consent" for="submission-public">
     <input id="submission-public" name="public" type="checkbox" required>
-    <span>I understand this will be public and contains no secrets or exact private locations.</span>
+    <span>This can be posted publicly and contains no private information.</span>
   </label>
 
   <div class="submission-trap" aria-hidden="true">
@@ -124,10 +124,10 @@ hide:
 </form>
 
 <details class="submission-alternatives">
-  <summary>Prefer another way to share?</summary>
+  <summary>Other ways to share</summary>
   <p><a href="https://github.com/MeshCore-ca/MeshCore-Canada/issues/new?template=community_idea.yml&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Fsubmit-idea%2F" target="_blank" rel="noopener">GitHub form</a> (account required) · <a href="https://forum.meshcore.ca/" target="_blank" rel="noopener">Community forum</a> · <a href="https://discord.gg/BESFVMt7yk" target="_blank" rel="noopener">Discord</a></p>
 </details>
 
 ## What happens next?
 
-Maintainers will read the public issue, ask questions if needed, and decide where it belongs. Submitting an idea does not guarantee implementation, but it gives the community something concrete to review.
+Maintainers will review the issue and follow up there.

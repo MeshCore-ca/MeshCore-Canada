@@ -543,7 +543,7 @@ function validate(data, meshMapper, partition, digitalPartition, qa, municipalOv
   check(!scriptText.includes("region dump"), "obsolete 'region dump' command remains in regions.js");
   check(scriptText.includes('verificationCommands = ["region"]'), "guided verification must use bare region command");
   check(scriptText.includes('commands.concat(["region", "region save", "region"])'), "technical flow must verify before and after saving");
-  check(scriptText.includes("Check, save, and verify"), "guided flow must verify before saving");
+  check(scriptText.includes("Run <code>region</code> and confirm:"), "guided flow must verify before saving");
   check(scriptText.includes("Too many regions selected"), "command generation must fail closed on firmware limits");
   check(scriptText.includes('"canada-region-partition.geojson"'), "UI does not load the generated partition");
   check(scriptText.includes('"canada-region-partition-digital.geojson"'), "UI does not load the complete resolver partition");
