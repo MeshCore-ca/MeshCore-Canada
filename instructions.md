@@ -309,8 +309,11 @@ Do these one-time repository-owner steps before testing a boundary submission:
 
 1. Create the `boundary-update` issue label. The gateway adds it only to
    boundary proposals; community ideas remain ordinary `enhancement` issues.
-2. In **Settings -> Actions -> General -> Workflow permissions**, select
-   **Read and write permissions**.
+2. Keep the repository's default workflow permission **Read repository
+   contents and packages permissions**, and keep **Allow GitHub Actions to
+   create and approve pull requests** disabled. The boundary workflow requests
+   only `actions: write`, `contents: write`, and `issues: write` in its own
+   `permissions` block.
 3. Confirm the maintainer logins in
    `.github/region-boundary-automation.json`. Only those users may approve a
    boundary by closing its issue.
@@ -408,7 +411,8 @@ curl -fsS http://127.0.0.1:8787/healthz
 - [ ] Caddy presents a valid certificate on `api.meshcore.ca:21323`.
 - [ ] GitHub App is installed only on `MeshCore-ca/MeshCore-Canada` with Issues
       read/write and no Contents permission.
-- [ ] `boundary-update` exists; Actions has read/write workflow permissions.
+- [ ] `boundary-update` exists; the repository workflow default remains
+      read-only and Action pull-request approval remains disabled.
 - [ ] `MCC_SUBMISSION_PUBLIC_KEY_PEM` contains the public key derived from the
       production App PEM; the App itself still has no Contents permission.
 - [ ] Approved maintainer logins in `.github/region-boundary-automation.json`
