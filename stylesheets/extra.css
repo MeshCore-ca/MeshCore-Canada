@@ -1,1 +1,241 @@
-/* (home page community links use the built-in grid cards styling) */
+/* Home page community links use the built-in grid cards styling. */
+
+.submission-hero {
+  margin: 1rem 0 1.5rem;
+  padding: clamp(1.25rem, 4vw, 2.2rem);
+  border: 1px solid var(--md-accent-fg-color);
+  border: 1px solid color-mix(in srgb, var(--md-accent-fg-color) 42%, transparent);
+  border-radius: 1rem;
+  background: var(--md-default-bg-color);
+  background:
+    radial-gradient(circle at top right, color-mix(in srgb, var(--md-accent-fg-color) 24%, transparent), transparent 42%),
+    linear-gradient(145deg, color-mix(in srgb, var(--md-primary-fg-color) 22%, transparent), transparent 72%);
+}
+
+.submission-hero__eyebrow {
+  margin: 0 0 0.35rem;
+  color: var(--md-accent-fg-color);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.submission-hero h2 {
+  margin: 0 0 0.6rem;
+  font-weight: 700;
+}
+
+.submission-hero p:last-child {
+  margin-bottom: 0;
+  max-width: 48rem;
+}
+
+.submission-form {
+  display: grid;
+  gap: 1.15rem;
+  margin: 1.5rem 0;
+  padding: clamp(1rem, 3vw, 1.6rem);
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 0.8rem;
+  background: var(--md-default-bg-color);
+  background: color-mix(in srgb, var(--md-default-bg-color) 94%, var(--md-primary-fg-color));
+  box-shadow: 0 0.35rem 1.25rem rgb(0 0 0 / 12%);
+}
+
+.submission-form__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.submission-field {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.submission-field label,
+.submission-form legend {
+  color: var(--md-default-fg-color);
+  font-weight: 650;
+}
+
+.submission-field__hint {
+  color: var(--md-default-fg-color--light);
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+
+.submission-no-script,
+.submission-github-note {
+  margin: 0;
+  padding: 0.8rem 0.9rem;
+  border-left: 0.2rem solid var(--md-accent-fg-color);
+  border-radius: 0.25rem;
+  background: var(--md-code-bg-color);
+  color: var(--md-default-fg-color);
+  font-size: 0.82rem;
+}
+
+.submission-form input,
+.submission-form select,
+.submission-form textarea {
+  box-sizing: border-box;
+  width: 100%;
+  border: 1px solid var(--md-default-fg-color--lighter);
+  border-radius: 0.45rem;
+  padding: 0.7rem 0.8rem;
+  background: var(--md-default-bg-color);
+  color: var(--md-default-fg-color);
+  font: inherit;
+}
+
+.submission-form textarea {
+  min-height: 7.5rem;
+  resize: vertical;
+}
+
+.submission-form input:focus-visible,
+.submission-form select:focus-visible,
+.submission-form textarea:focus-visible,
+.submission-form button:focus-visible,
+.submission-form a:focus-visible {
+  outline: 0.16rem solid var(--md-accent-fg-color);
+  outline-offset: 0.12rem;
+}
+
+.submission-consent {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: start;
+  gap: 0.65rem;
+  padding: 0.85rem;
+  border-radius: 0.5rem;
+  background: var(--md-code-bg-color);
+  background: color-mix(in srgb, var(--md-accent-fg-color) 9%, transparent);
+}
+
+.submission-consent input {
+  width: auto;
+  margin-top: 0.2rem;
+}
+
+.submission-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  align-items: center;
+}
+
+.submission-actions .md-button {
+  margin: 0;
+}
+
+.submission-actions button {
+  cursor: pointer;
+}
+
+.submission-actions button:disabled,
+.submission-actions .is-disabled {
+  cursor: not-allowed;
+  opacity: 0.48;
+  pointer-events: none;
+}
+
+.submission-trap {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.submission-verification {
+  display: grid;
+  gap: 0.4rem;
+  justify-items: start;
+}
+
+.submission-turnstile {
+  min-height: 2.25rem;
+}
+
+.submission-anti-spam-status,
+.submission-result {
+  min-height: 1.25rem;
+  margin: 0;
+  color: var(--md-default-fg-color--light);
+  font-size: 0.8rem;
+}
+
+.submission-anti-spam-status[data-state="success"],
+.submission-result[data-state="success"] {
+  color: var(--md-typeset-a-color);
+}
+
+.submission-anti-spam-status[data-state="error"] {
+  color: var(--md-code-hl-string-color);
+}
+
+.submission-inline-retry {
+  margin: 0;
+  padding: 0.35rem 0.65rem;
+  font-size: 0.75rem;
+}
+
+.submission-result:not(:empty) {
+  padding: 0.8rem 0.9rem;
+  border-left: 0.2rem solid var(--md-accent-fg-color);
+  border-radius: 0.25rem;
+  background: var(--md-code-bg-color);
+}
+
+.submission-result a {
+  font-weight: 700;
+}
+
+.submission-status {
+  min-height: 1.25rem;
+  margin: 0;
+  color: var(--md-default-fg-color--light);
+  font-size: 0.8rem;
+}
+
+.submission-preview {
+  margin-top: 0.25rem;
+  padding: 1rem;
+  overflow-x: auto;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 0.5rem;
+  background: var(--md-code-bg-color);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.submission-routes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.85rem;
+  margin: 1.2rem 0;
+  padding: 0;
+  list-style: none;
+}
+
+.submission-route {
+  padding: 1rem;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 0.65rem;
+}
+
+.submission-route h3 {
+  margin-top: 0;
+}
+
+@media screen and (max-width: 44.9844em) {
+  .submission-form__grid,
+  .submission-routes {
+    grid-template-columns: 1fr;
+  }
+}

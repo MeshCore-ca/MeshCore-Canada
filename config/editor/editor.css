@@ -164,6 +164,72 @@ h2 {
   width: 100%;
 }
 
+.proposal-actions {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.submission-trap {
+  height: 1px;
+  left: -10000px;
+  overflow: hidden;
+  position: absolute;
+  top: auto;
+  width: 1px;
+}
+
+.turnstile-container {
+  margin-top: 0.85rem;
+  min-height: 1px;
+}
+
+.anti-spam-status {
+  color: var(--muted);
+  font-size: 0.76rem;
+  margin: 0.45rem 0 0;
+}
+
+.anti-spam-status.error {
+  color: #ff9aa2;
+}
+
+.anti-spam-status.success {
+  color: var(--success);
+}
+
+.inline-retry {
+  background: transparent;
+  border: 0;
+  color: #bec1ff;
+  font-size: 0.76rem;
+  font-weight: 800;
+  margin: 0.2rem 0 0;
+  padding: 0;
+  text-decoration: underline;
+}
+
+.inline-retry[hidden] {
+  display: none;
+}
+
+.submission-result {
+  font-size: 0.82rem;
+  margin: 0 0 0.8rem;
+}
+
+.submission-result:empty {
+  display: none;
+}
+
+.submission-result a {
+  color: #bec1ff;
+  font-weight: 800;
+}
+
+.button[aria-busy="true"] {
+  cursor: wait;
+}
+
 label {
   display: block;
   font-size: 0.82rem;

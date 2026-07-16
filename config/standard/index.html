@@ -2061,6 +2061,33 @@
   
   
     <li class="md-nav__item">
+      <a href="../../submit-idea/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Share an Idea
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="https://forum.meshcore.ca/" class="md-nav__link">
         
   
@@ -2967,7 +2994,7 @@
 <p>The national maintainers enforce the data model; they do not invent local identity. A technically valid change may still wait for local review. A locally popular change may still fail if it creates a gap, overlap, collision, or command-budget violation.</p>
 <h3 id="change-process">Change process<a class="headerlink" href="#change-process" title="Permanent link">&para;</a></h3>
 <ol>
-<li>Open a proposal with a map, affected DGUIDs, names, tags, reason, and named reviewers.</li>
+<li>Submit a proposal from the boundary editor. The proposal service opens a public issue with the affected DGUIDs, names, tags, reason, and proposed author; no contributor account is required.</li>
 <li>Generate a before/after diff and QA report.</li>
 <li>Obtain affected local and jurisdiction review. Cross-boundary proposals require every affected side.</li>
 <li>Allow a public review window recorded in the proposal.</li>
@@ -2976,7 +3003,7 @@
 </ol>
 <h3 id="boundary-editor-proposals">Boundary editor proposals<a class="headerlink" href="#boundary-editor-proposals" title="Permanent link">&para;</a></h3>
 <p>The boundary editor works on the same census cells as the generator. Its normal action reassigns a whole CSD, with its containing CD shown as review context. It never saves a freehand polygon as operational geometry. A reviewer may use DA-level draft edits to shape an exceptional split, but the approved <code>splitExceptions</code> record must expand that draft to list every DA in the CSD, with no duplicate or missing DGUID.</p>
-<p>The editor is a static page at <code>/config/editor/</code>, served with the rest of this site with no account and no server-side component. It exports a versioned proposal with the base membership hash and before/after owner for each changed DGUID. Boundary proposals are drafted in the static editor and validated by maintainers with <code>scripts/validate-region-proposal.py</code>, which adds CD/CSD context and requires a reason before review; an author may also be recorded. A maintainer must review and merge the resulting decision into <code>municipal-overrides.json</code>, regenerate all artifacts, and pass the release checks before the public boundary changes. Editor drafts and browser-local state are never authoritative.</p>
+<p>The editor is a static page at <code>/config/editor/</code> and requires no contributor account. It builds a versioned proposal with the base membership hash and before/after owner for each changed DGUID. On submission, a MeshCore Canada-hosted proposal service repeats the authority and proposal checks, verifies the anti-spam challenge, and uses a repository-restricted GitHub App to open the public review issue automatically. The static page and production service are both operated by MeshCore Canada; no GitHub credential or signing secret is placed in the browser. Maintainers may reproduce the proposal check with <code>scripts/validate-region-proposal.py</code>, which adds CD/CSD context and requires a reason before review; an author may also be recorded. A maintainer must review and merge the resulting decision into <code>municipal-overrides.json</code>, regenerate all artifacts, and pass the release checks before the public boundary changes. Editor drafts, browser-local state, and submitted issues are never operational authority.</p>
 <p>The editor's own census-cell geometry (<code>docs/assets/regions/cells/</code>) was last regenerated with <code>scripts/build-region-editor-data.py --retain 10%</code> rather than the script's 8% default, because 8% collapses a BC dissemination area to a degenerate shape; the retained value is recorded alongside the rest of the build inputs in <code>docs/assets/regions/cells/manifest.json</code>.</p>
 <p>Versioning rules:</p>
 <ul>
@@ -3187,7 +3214,7 @@
     
       <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
-        <script src="../../assets/regions/regions.js"></script>
+        <script src="../../javascripts/submission-form.js"></script>
       
     
   </body>

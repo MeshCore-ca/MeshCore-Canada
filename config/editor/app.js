@@ -1,4 +1,11 @@
 import { validateProposal } from "./validate.js";
+import {
+  configuredSubmissionEndpoint,
+  fetchSubmissionConfig,
+  loadTurnstile,
+  renderTurnstile,
+  submitRegionProposal
+} from "./issue.js";
 
 (function () {
   "use strict";
@@ -109,7 +116,13 @@ import { validateProposal } from "./validate.js";
     changeCount: document.getElementById("change-count"),
     submittedBy: document.getElementById("submitted-by"),
     reason: document.getElementById("reason"),
+    website: document.getElementById("website"),
+    turnstileContainer: document.getElementById("turnstile-container"),
+    antiSpamStatus: document.getElementById("anti-spam-status"),
+    antiSpamRetry: document.getElementById("anti-spam-retry"),
+    submissionResult: document.getElementById("submission-result"),
     validation: document.getElementById("validation-message"),
+    submit: document.getElementById("submit-button"),
     export: document.getElementById("export-button")
   };
 
@@ -131,7 +144,15 @@ import { validateProposal } from "./validate.js";
     view: "after",
     painting: false,
     paintAction: null,
-    loadController: null
+    loadController: null,
+    submissionConfig: null,
+    submissionInitialising: false,
+    submitting: false,
+    proposalRevision: 0,
+    turnstile: null,
+    turnstileWidgetId: null,
+    turnstileToken: "",
+    turnstileResetTimer: null
   };
 
   var map = L.map("editor-map", {
@@ -165,6 +186,32 @@ import { validateProposal } from "./validate.js";
   function setValidation(message, kind) {
     elements.validation.textContent = message;
     elements.validation.className = "validation-message" + (kind ? " " + kind : "");
+  }
+
+  function setAntiSpamStatus(message, kind) {
+    elements.antiSpamStatus.textContent = message;
+    elements.antiSpamStatus.className = "anti-spam-status" + (kind ? " " + kind : "");
+  }
+
+  function clearSubmissionResult() {
+    elements.submissionResult.replaceChildren();
+  }
+
+  function markProposalChanged() {
+    state.proposalRevision += 1;
+    clearSubmissionResult();
+  }
+
+  function showSubmissionResult(result, changedWhileSubmitting) {
+    var prefix = document.createTextNode(changedWhileSubmitting
+      ? "Review created for the earlier submitted version: "
+      : (result.duplicate ? "This proposal was already submitted: " : "Public review created: "));
+    var link = document.createElement("a");
+    link.href = result.issueUrl;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.textContent = "GitHub issue #" + result.issueNumber;
+    elements.submissionResult.replaceChildren(prefix, link);
   }
 
   function leafLabel(tag) {
@@ -327,6 +374,7 @@ import { validateProposal } from "./validate.js";
     changes.forEach(function (change) {
       setEffective(change.DGUID, change.after);
     });
+    markProposalChanged();
     state.undoStack.push(changes);
     state.redoStack = [];
     updateReview();
@@ -373,6 +421,7 @@ import { validateProposal } from "./validate.js";
     } else {
       state.paintAction.get(dguid).after = state.target;
     }
+    markProposalChanged();
     setEffective(dguid, state.target);
     updateReview();
   }
@@ -401,6 +450,7 @@ import { validateProposal } from "./validate.js";
     action.forEach(function (change) {
       setEffective(change.DGUID, change.before);
     });
+    markProposalChanged();
     state.redoStack.push(action);
     updateReview();
   }
@@ -413,6 +463,7 @@ import { validateProposal } from "./validate.js";
     action.forEach(function (change) {
       setEffective(change.DGUID, change.after);
     });
+    markProposalChanged();
     state.undoStack.push(action);
     updateReview();
   }
@@ -424,13 +475,21 @@ import { validateProposal } from "./validate.js";
     commitAction(changes);
   }
 
-  function updateReview() {
+  function updateReview(announce) {
     var count = state.proposed.size;
     elements.changeCount.textContent = count + (count === 1 ? " change" : " changes");
     elements.undo.disabled = state.undoStack.length === 0;
     elements.redo.disabled = state.redoStack.length === 0;
     elements.clear.disabled = count === 0;
+    elements.submit.disabled = count === 0 ||
+      !state.baseMembershipSha256 ||
+      !state.submissionConfig ||
+      !state.turnstileToken ||
+      state.submitting;
     elements.export.disabled = count === 0 || !state.baseMembershipSha256;
+    if (announce === false) {
+      return;
+    }
     if (count) {
       setValidation("Ready to validate " + count + (count === 1 ? " cell." : " cells."), "");
     } else {
@@ -599,6 +658,7 @@ import { validateProposal } from "./validate.js";
   }
 
   function resetEdits() {
+    markProposalChanged();
     state.proposed.clear();
     state.undoStack = [];
     state.redoStack = [];
@@ -705,10 +765,10 @@ import { validateProposal } from "./validate.js";
     return proposal;
   }
 
-  async function exportProposal() {
+  function validatedProposal() {
     if (!state.proposed.size) {
       setValidation("Choose at least one census cell.", "error");
-      return;
+      return null;
     }
     var seedTags = new Map();
     state.featureById.forEach(function (feature, dguid) {
@@ -731,10 +791,14 @@ import { validateProposal } from "./validate.js";
     });
     if (!result.ok) {
       setValidation(result.errors[0].message, "error");
-      return;
+      return null;
     }
+    return result.canonical;
+  }
+
+  function downloadProposal(canonical) {
     var stamp = new Date().toISOString().replace(/[-:]/g, "").replace(/\..*/, "Z");
-    var blob = new Blob([JSON.stringify(result.canonical, null, 2) + "\n"], { type: "application/json" });
+    var blob = new Blob([JSON.stringify(canonical, null, 2) + "\n"], { type: "application/json" });
     var url = URL.createObjectURL(blob);
     var anchor = document.createElement("a");
     anchor.href = url;
@@ -743,7 +807,153 @@ import { validateProposal } from "./validate.js";
     anchor.click();
     anchor.remove();
     URL.revokeObjectURL(url);
+  }
+
+  function exportProposal() {
+    var canonical = validatedProposal();
+    if (!canonical) return;
+    downloadProposal(canonical);
     setValidation("Proposal validated locally and downloaded. Submit it for review — it is not live until merged.", "success");
+  }
+
+  function resetTurnstile(message) {
+    state.turnstileToken = "";
+    if (state.turnstileResetTimer) {
+      window.clearTimeout(state.turnstileResetTimer);
+      state.turnstileResetTimer = null;
+    }
+    if (state.turnstile && state.turnstileWidgetId !== null) {
+      try {
+        setAntiSpamStatus(message || "Running a new anti-spam check…", "");
+        state.turnstile.reset(state.turnstileWidgetId);
+      } catch (_error) {
+        if (typeof state.turnstile.remove === "function") {
+          try { state.turnstile.remove(state.turnstileWidgetId); } catch (_removeError) {}
+        }
+        state.turnstileWidgetId = null;
+        elements.turnstileContainer.replaceChildren();
+        setAntiSpamStatus("The anti-spam check could not restart. Retry it below.", "error");
+        elements.antiSpamRetry.hidden = false;
+      }
+    }
+    updateReview(false);
+  }
+
+  function scheduleTurnstileReset(message, delay) {
+    state.turnstileToken = "";
+    updateReview(false);
+    if (state.turnstileResetTimer) window.clearTimeout(state.turnstileResetTimer);
+    state.turnstileResetTimer = window.setTimeout(function () {
+      resetTurnstile(message);
+    }, delay);
+  }
+
+  function turnstileCallbacks() {
+    return {
+      onToken: function (token) {
+        state.turnstileToken = String(token || "");
+        setAntiSpamStatus("Anti-spam check complete.", "success");
+        elements.antiSpamRetry.hidden = true;
+        updateReview(false);
+      },
+      onError: function () {
+        setAntiSpamStatus("The anti-spam check failed. It will retry automatically.", "error");
+        scheduleTurnstileReset("Retrying the anti-spam check…", 1000);
+      },
+      onExpired: function () {
+        setAntiSpamStatus("The anti-spam check expired. Running it again…", "");
+        scheduleTurnstileReset("Running a new anti-spam check…", 250);
+      },
+      onTimeout: function () {
+        setAntiSpamStatus("The anti-spam check timed out. Running it again…", "error");
+        scheduleTurnstileReset("Retrying the anti-spam check…", 1000);
+      }
+    };
+  }
+
+  async function initialiseSubmission() {
+    if (state.submissionInitialising) return;
+    state.submissionInitialising = true;
+    elements.antiSpamRetry.hidden = true;
+    setAntiSpamStatus("Loading anti-spam protection…", "");
+    try {
+      var endpoint = configuredSubmissionEndpoint(document);
+      var config = await fetchSubmissionConfig({ endpoint: endpoint });
+      var turnstile = await loadTurnstile();
+      state.submissionConfig = config;
+      state.turnstile = turnstile;
+      if (state.turnstileWidgetId === null) {
+        setAntiSpamStatus("Complete the anti-spam check if prompted.", "");
+        state.turnstileWidgetId = renderTurnstile(
+          turnstile,
+          elements.turnstileContainer,
+          config,
+          turnstileCallbacks()
+        );
+      } else {
+        resetTurnstile("Running a new anti-spam check…");
+      }
+    } catch (error) {
+      state.submissionConfig = null;
+      state.turnstileToken = "";
+      setAntiSpamStatus(error.message || "Anti-spam protection is unavailable.", "error");
+      elements.antiSpamRetry.hidden = false;
+    } finally {
+      state.submissionInitialising = false;
+      updateReview(false);
+    }
+  }
+
+  async function submitProposal() {
+    var canonical = validatedProposal();
+    if (!canonical) return;
+    if (!state.submissionConfig || !state.turnstileToken || state.submitting) {
+      setValidation("Wait for the anti-spam check, then try Submit for review again.", "error");
+      return;
+    }
+    var token = state.turnstileToken;
+    var submittedRevision = state.proposalRevision;
+    state.turnstileToken = "";
+    state.submitting = true;
+    elements.submit.textContent = "Submitting…";
+    elements.submit.setAttribute("aria-busy", "true");
+    clearSubmissionResult();
+    updateReview(false);
+    setValidation("Creating the public review issue…", "");
+    try {
+      var result = await submitRegionProposal({
+        endpoint: state.submissionConfig.endpoint,
+        proposal: canonical,
+        turnstileToken: token,
+        website: elements.website.value
+      });
+      var changedWhileSubmitting = state.proposalRevision !== submittedRevision;
+      showSubmissionResult(result, changedWhileSubmitting);
+      setValidation(
+        changedWhileSubmitting
+          ? "The review was created, but edits made while submitting are not included. Submit again to include them."
+          : result.duplicate
+          ? "This proposal was already submitted. The existing review issue is linked below."
+          : "Proposal submitted. Maintainers can now review it publicly.",
+        "success"
+      );
+    } catch (error) {
+      var nextStep = error.code === "stale_base"
+        ? " Reload the editor before trying again."
+        : (error.retryable
+          ? " Your edits are still here; wait for the anti-spam check, then try again."
+          : " Download the proposal if you need to send it to a maintainer.");
+      setValidation(
+        (error.message || "The proposal could not be submitted.") + nextStep,
+        "error"
+      );
+    } finally {
+      state.submitting = false;
+      elements.submit.textContent = "Submit for review";
+      elements.submit.removeAttribute("aria-busy");
+      resetTurnstile("Preparing another anti-spam check…");
+      updateReview(false);
+    }
   }
 
   async function initialise() {
@@ -790,7 +1000,11 @@ import { validateProposal } from "./validate.js";
     }
     applyTransaction(municipalityCells(), state.target);
   });
+  elements.submit.addEventListener("click", submitProposal);
   elements.export.addEventListener("click", exportProposal);
+  elements.antiSpamRetry.addEventListener("click", initialiseSubmission);
+  elements.submittedBy.addEventListener("input", markProposalChanged);
+  elements.reason.addEventListener("input", markProposalChanged);
   document.addEventListener("mouseup", endPaint);
   document.addEventListener("keydown", function (event) {
     if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "z") {
@@ -804,4 +1018,5 @@ import { validateProposal } from "./validate.js";
   });
 
   initialise();
+  initialiseSubmission();
 }());

@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="dark">
   <meta name="robots" content="noindex">
+  <meta name="meshcore-submission-endpoint" content="https://api.meshcore.ca:21323/api/meshcore-canada/submissions">
   <link rel="icon" href="../../assets/images/favicon.png">
   <title>Region boundary editor · MeshCore Canada</title>
   <link rel="stylesheet" href="../../assets/regions/vendor/leaflet/leaflet.css">
@@ -28,7 +29,7 @@
       <section class="panel intro-panel">
         <p class="step-label">Draft only</p>
         <h2>Adjust official census cells</h2>
-        <p class="muted compact">Exports a proposal file for review — nothing is saved or published from this page.</p>
+        <p class="muted compact">Validates and sends a proposed change for public review. Nothing changes until maintainers approve and merge it.</p>
       </section>
 
       <section class="panel">
@@ -80,8 +81,20 @@
         <input id="submitted-by" maxlength="80" autocomplete="name">
         <label for="reason">Reason</label>
         <textarea id="reason" maxlength="1000" rows="3" placeholder="What local knowledge supports this change?" required></textarea>
+        <div class="submission-trap" aria-hidden="true">
+          <label for="website">Website</label>
+          <input id="website" name="website" tabindex="-1" autocomplete="off">
+        </div>
+        <div id="turnstile-container" class="turnstile-container" aria-label="Anti-spam check"></div>
+        <p id="anti-spam-status" class="anti-spam-status" role="status" aria-live="polite">Loading anti-spam protection…</p>
+        <button id="anti-spam-retry" class="inline-retry" type="button" hidden>Retry anti-spam check</button>
         <div id="validation-message" class="validation-message" role="status" aria-live="polite"></div>
-        <button id="export-button" class="button primary full" type="button" disabled>Validate and download proposal</button>
+        <div id="submission-result" class="submission-result" role="status" aria-live="polite"></div>
+        <div class="proposal-actions">
+          <button id="submit-button" class="button primary full" type="button" disabled>Submit for review</button>
+          <button id="export-button" class="button secondary full" type="button" disabled>Download proposal</button>
+        </div>
+        <p class="hint">No account is needed. The proposal is checked for spam, then a public review issue is created automatically.</p>
       </section>
     </aside>
 

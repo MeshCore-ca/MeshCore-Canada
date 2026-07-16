@@ -19,13 +19,16 @@ const TAG_RE = /^[a-z0-9][a-z0-9-]{0,31}$/;
 
 function cleanText(value, maxLength) {
   if (typeof value !== "string") return "";
-  // Python's str.strip()/str.split() treat U+001C-U+001F (FS/GS/RS/US) as
-  // whitespace, but JS \s does not. Collapse them alongside \s (then trim, so
+  // Python's str.strip()/str.split() treat U+001C-U+001F (FS/GS/RS/US) and
+  // U+0085 (NEL) as whitespace, but JS \s does not. Collapse them alongside \s (then trim, so
   // leading/trailing runs are removed like Python strip()) BEFORE the
   // control-character scan, matching the server's _clean_text semantics.
-  const cleaned = value.replace(/[\s\x1c-\x1f]+/g, " ").trim();
+  const cleaned = value.replace(/[\s\x1c-\x1f\u0085]+/g, " ").trim();
   if (cleaned.length > maxLength) return "";
-  for (const ch of cleaned) if (ch.codePointAt(0) < 32) return "";
+  for (const ch of cleaned) {
+    const codePoint = ch.codePointAt(0);
+    if (codePoint < 32 || (codePoint >= 0xd800 && codePoint <= 0xdfff)) return "";
+  }
   return cleaned;
 }
 
