@@ -1,193 +1,225 @@
-# Anonymous region proposal service
+# MeshCore Canada anonymous submission service
 
-This server-side service lets a contributor submit a validated boundary
-proposal without a GitHub account. Production is designed to run on a MeshCore
-Canada-managed Linux host at
-`https://regions-api.meshcore.ca/api/meshcore-regions/proposals`. The static
-editor, DNS, host, GitHub App, Turnstile widget, secrets, and issue repository
-all remain under MeshCore Canada administration.
+This server-side service creates public review issues for two MeshCore Canada
+forms without requiring contributors to have GitHub accounts:
 
-The service does **not** edit region data. It opens a fixed-format issue in
-`MeshCore-ca/MeshCore-Canada` with the fixed `enhancement` label. Maintainers
-still review and apply accepted changes through the repository workflow.
+- community ideas from `https://meshcore.ca/submit-idea/`; and
+- region boundary proposals from `https://meshcore.ca/config/editor/`.
+
+Production is owned and operated by MeshCore Canada at exactly:
+
+```text
+https://api.meshcore.ca:21323/api/meshcore-canada/submissions
+```
+
+The service never changes repository contents or region authority. It creates
+fixed-format `enhancement` issues in `MeshCore-ca/MeshCore-Canada`; maintainers
+review and apply accepted work through the normal repository process.
 
 See the repository-root [`instructions.md`](../../instructions.md) for the
-one-time administrator activation checklist and recommended merge order.
+copyable administrator activation, merge, verification, and rollback runbook.
 
-## Browser contract
+## HTTP contract
 
-The default base path is `/api/meshcore-regions/proposals`.
+The base path is `/api/meshcore-canada/submissions`.
 
-- `GET <base>/config` returns
-  `{"version":1,"turnstileSiteKey":"...","turnstileAction":"region_proposal"}`.
-- `POST <base>` accepts exactly
-  `{"version":1,"proposal":{...},"turnstileToken":"...","website":""}`.
-- Success returns
-  `{"ok":true,"issueNumber":123,"issueUrl":"https://github.com/...","proposalSha256":"...","duplicate":false}`.
+- `GET <base>/config` returns:
 
-`website` is a honeypot and must be empty. POST requests require an exact
-allowlisted `Origin`; there is no wildcard or credentialed CORS. A same-origin
-config GET may omit `Origin`. The service handles strict OPTIONS preflights.
+  ```json
+  {"version":1,"turnstileSiteKey":"...","turnstileAction":"meshcore_submission"}
+  ```
 
-`proposalSha256` is the SHA-256 of UTF-8 JSON produced recursively with sorted
-object keys, no ASCII escaping, and separators `,` and `:` with no trailing
-newline. The browser verifies this exact value before displaying the issue.
+- `POST <base>` accepts exactly:
 
-## What is validated
+  ```json
+  {"version":1,"submission":{...},"turnstileToken":"...","website":""}
+  ```
 
-On every request the service checks whether any mounted authority file changed
-and reloads it atomically. Startup and reload fail closed unless:
+- Success returns:
 
-- the catalog hierarchy is valid and every leaf has one jurisdiction;
-- the membership CSV has unique DGUIDs and valid same-jurisdiction leaves;
-- every `cells-<PRUID>.topo.json` file matches the membership table;
-- every TopoJSON DGUID, PRUID, and `leaf_tag` agrees with membership;
-- every catalog leaf has exactly one matching anchor;
-- the proposal base hash and all `from` values are current;
-- all target leaves are valid and in the same province or territory;
-- no anchor moves; and
-- request, proposal, and changed-cell limits are respected.
+  ```json
+  {"ok":true,"issueNumber":123,"issueUrl":"https://github.com/MeshCore-ca/MeshCore-Canada/issues/123","submissionSha256":"...","duplicate":false}
+  ```
 
-Contributor text is normalized to one line. Structural Markdown is escaped,
-GitHub mentions are neutralized, and canonical JSON uses a dynamic code fence
-that contributor text cannot close.
+`website` is a honeypot and must be empty. POST requires an exact allowlisted
+`Origin`; CORS never uses a wildcard or credentials. The service supports a
+strict OPTIONS preflight for `POST` and `Content-Type`. Browser requests omit
+cookies and referrers, then verify the returned hash and exact GitHub issue URL
+before displaying the link.
 
-## GitHub App
+`submissionSha256` is computed over UTF-8 canonical JSON with recursively
+sorted object keys, no ASCII escaping, `,` and `:` separators, and no trailing
+newline. It is the idempotency key for both schemas.
 
-The organization-owned App must have only:
+## Accepted schemas
 
-- Repository permission: **Issues — Read and write**
-- No Contents permission
-- No webhook
+### `mcc-community-idea/v1`
 
-Install it on **only** `MeshCore-ca/MeshCore-Canada`. The service signs a
-short-lived RS256 JWT with `openssl`, requests an installation token restricted
-again to that repository and `issues: write`, and verifies the returned scope.
-No token or private key is sent to the browser.
+The server accepts the fixed category and experience enums plus:
 
-There is no Contents API call or undocumented attachment API. Small proposals
-are inline in the issue. Large proposals use deterministic gzip data split into
-base64url issue-comment chunks. Retries resume only missing chunks.
+- required `summary`, `need`, `idea`, and `publicAcknowledged: true`;
+- optional `region`, `context`, and `followUp`; and
+- the browser field limits enforced again server-side.
 
-## Turnstile and abuse controls
+It normalizes line endings, rejects unknown keys, controls and invalid Unicode,
+escapes contributor HTML, and neutralizes GitHub mentions. The issue contains
+human-readable sections and the exact canonical JSON.
 
-Create the Turnstile widget in a MeshCore Canada-controlled account for the
-editor hostnames `meshcore.ca` and `config.meshcore.ca`. The service verifies
-`success`, exact hostname, and action `region_proposal` at Siteverify. Tokens
-are single-use and bounded to 2,048 characters.
+### `mcc-region-editor-proposal/v1`
 
-The default verified limit is five attempts per IP per hour. Separate higher
-pre-verification and global bounds prevent invalid tokens from creating
-unlimited Siteverify traffic. Caddy is the only trusted proxy and is reached on
-loopback. The service accepts exactly one forwarded client address from that
-trusted peer; all other peers are treated as direct clients.
+The server revalidates every boundary proposal against the mounted authority:
 
-If the GitHub Pages editor later adds a Content-Security-Policy, it must allow
+- catalog hierarchy and jurisdiction ancestry must be valid;
+- membership DGUIDs must be unique and match the per-province TopoJSON cells;
+- every leaf must retain exactly one anchor;
+- the submitted base hash and every `from` value must still be current;
+- target leaves must be valid and in the same province or territory;
+- anchors cannot move; and
+- request, proposal, and changed-cell limits must pass.
+
+Changed authority files reload atomically. Invalid or mismatched authority
+fails closed. Large canonical boundary payloads use deterministic gzip plus
+base64url issue-comment chunks; retries resume only missing valid chunks.
+
+## GitHub App and Turnstile
+
+The organization-owned GitHub App must have only:
+
+- **Issues — Read and write** on `MeshCore-ca/MeshCore-Canada`;
+- implicit metadata read access;
+- no Contents permission; and
+- no webhook.
+
+The service signs a short-lived RS256 App JWT with `openssl`, requests an
+installation token restricted again to that repository and `issues: write`,
+and rejects broader returned scope. No App token or private key reaches a
+browser. Do not replace this with a personal access token.
+
+The Turnstile widget must be held in a MeshCore Canada account and allow
+`meshcore.ca` and `config.meshcore.ca`. Siteverify must return `success`, an
+allowed hostname, and action `meshcore_submission`. Tokens are single-use and
+limited to 2,048 characters.
+
+The default verified limit is five submissions per IP per hour. Separate
+higher pre-verification and global bounds prevent forged requests from turning
+the service into an unlimited Siteverify client. Only the exact Caddy peer is a
+trusted proxy, and only one forwarded client address is accepted.
+
+## Production layout
+
+The supplied files use:
+
+```text
+checkout: /opt/meshcore-canada
+state:    /var/lib/meshcore-submissions
+secrets:  /etc/meshcore-submissions
+compose project: meshcore-submissions
+compose service: submission-gateway
+image: meshcore-canada/submission-gateway:production
+loopback listener: 127.0.0.1:8787
+public listener: api.meshcore.ca:21323 (Caddy)
+```
+
+`compose.example.yml` uses host networking so a non-root UID/GID `10001`
+container can bind only to loopback. It has a read-only root filesystem,
+dropped capabilities, resource and log limits, read-only authority/secret
+mounts, and one writable SQLite state mount.
+
+Copy `environment.example` to `/etc/meshcore-submissions/environment`. Keep
+the Turnstile secret and GitHub App PEM in separate mode-`0600` files owned by
+UID/GID `10001`.
+
+## DNS, TLS, and port 21323
+
+If Cloudflare hosts DNS, `api.meshcore.ca` must be **DNS only** because ordinary
+orange-cloud HTTPS proxying does not support port `21323`. Cloudflare Spectrum
+may be used only as an intentionally configured TCP/TLS alternative. Turnstile
+does not require the DNS record itself to be proxied.
+
+The provider and host firewalls must allow public TCP `21323`. Caddy terminates
+TLS and reverse-proxies only the submission path to `127.0.0.1:8787`. Keep
+`8787` private. Normal Caddy ACME issuance also requires reachability on port
+`80` and/or `443` unless DNS challenge or an existing managed certificate is
+configured. Use `Caddyfile.example`; do not silently move the API to a different
+port.
+
+If a Content-Security-Policy is later added to the GitHub Pages site, allow
 `https://challenges.cloudflare.com` in `script-src`, `frame-src`, and
-`connect-src` while preserving all existing tile and geocoder hosts.
+`connect-src` while retaining the site's existing map and geocoder sources.
 
-## Production deployment model
+## Lifecycle and verification
 
-The supplied files assume:
-
-- a MeshCore Canada-owned Linux host with Docker Engine and Compose;
-- Caddy running directly on that host;
-- DNS for `regions-api.meshcore.ca` pointing to the host;
-- the repository checked out at `/opt/meshcore-region-proposals`;
-- state at `/var/lib/meshcore-region-proposals`; and
-- protected configuration at `/etc/meshcore-region-proposals`.
-
-The host clock must be synchronized for GitHub App JWTs. Outbound HTTPS must
-reach `api.github.com`, `challenges.cloudflare.com`, and Caddy's ACME provider.
-Confirm that loopback port 8787 is unused before starting the service.
-
-`compose.example.yml` is standalone. It uses Linux host networking so the
-non-root container can bind `127.0.0.1:8787`, which is never exposed directly
-to the Internet. `Caddyfile.example` is the public TLS entry point. The
-container has a read-only root filesystem, dropped capabilities, resource and
-log bounds, read-only authority/secret mounts, and one writable ledger mount.
-
-Copy `environment.example` to the protected configuration directory and set
-the public/non-secret IDs. Keep the Turnstile secret and GitHub App PEM as
-separate mode-`0600` files owned by UID/GID 10001.
-
-Typical lifecycle commands, run from
-`/opt/meshcore-region-proposals/tools/region-proposal-gateway`, are:
+Run from `/opt/meshcore-canada/tools/region-proposal-gateway`:
 
 ```sh
 sudo docker compose \
-  --env-file /etc/meshcore-region-proposals/environment \
+  --env-file /etc/meshcore-submissions/environment \
   -f compose.example.yml config
 sudo docker compose \
-  --env-file /etc/meshcore-region-proposals/environment \
+  --env-file /etc/meshcore-submissions/environment \
   -f compose.example.yml up -d --build
 sudo docker compose \
-  --env-file /etc/meshcore-region-proposals/environment \
+  --env-file /etc/meshcore-submissions/environment \
   -f compose.example.yml ps
 curl -fsS http://127.0.0.1:8787/healthz
 ```
 
-Validate and reload Caddy only after the loopback health check passes. Then
-verify the public configuration and exact CORS response:
+After validating and reloading Caddy:
 
 ```sh
-curl -fsS \
-  https://regions-api.meshcore.ca/api/meshcore-regions/proposals/config
-curl -si \
+API='https://api.meshcore.ca:21323/api/meshcore-canada/submissions'
+curl -fsS "$API/config"
+curl -si -H 'Origin: https://meshcore.ca' "$API/config"
+curl -si -X OPTIONS \
   -H 'Origin: https://meshcore.ca' \
-  https://regions-api.meshcore.ca/api/meshcore-regions/proposals/config
+  -H 'Access-Control-Request-Method: POST' \
+  -H 'Access-Control-Request-Headers: content-type' \
+  "$API"
+curl -si -H 'Origin: https://example.invalid' "$API/config"
 ```
 
-## Idempotency and ledger recovery
+Expect HTTP 200 config, action `meshcore_submission`, exact allowed-origin
+CORS, HTTP 204 preflight, and denial without an allow-origin header for the
+invalid origin. The root runbook requires this branch deployment to pass before
+PR #39 is merged, followed by signed-out live tests of both forms.
 
-The canonical proposal hash is the idempotency key. The service signs
-`mcc-region-proposal/v1:<hash>` with the GitHub App key and embeds that
-signature beside the hash. Recovery accepts a search result only when both
-markers match, preventing a public user from forging an idempotency match.
+## Idempotency, recovery, and backups
 
-Before creating an issue, the service writes a durable `pending` ledger row.
-After GitHub returns `201`, it stores the issue number and URL before posting
-chunks. A retry with a `created` row resumes chunks. A retry with only a
-`pending` row searches GitHub and fails closed if search has not indexed the
-issue; it never blindly creates a second issue.
+Before issue creation the service writes a durable `pending` row keyed by the
+canonical submission hash. The hash and an App signature over
+`mcc-submission/v1:<schema>:<hash>` are embedded in the issue. Recovery accepts
+a GitHub search result only when both markers match, preventing a public user
+from forging an idempotency match.
 
-If an operator proves that a request failed before GitHub received it but left
-a pending row, audit GitHub first for the proposal hash. Only after confirming
-that no matching issue exists, stop the service, back up the ledger, and clear
-that one pending hash:
+After GitHub returns `201`, the issue number and URL are persisted before any
+chunk comments. A retry with a `created` row returns the same issue and resumes
+missing chunks. A retry with only a `pending` row searches GitHub and fails
+closed while search indexing catches up; it never blindly creates a duplicate.
 
-```sh
-cd /opt/meshcore-region-proposals/tools/region-proposal-gateway
-sudo docker compose \
-  --env-file /etc/meshcore-region-proposals/environment \
-  -f compose.example.yml stop region-proposal-gateway
-sudo cp -a /var/lib/meshcore-region-proposals \
-  /var/lib/meshcore-region-proposals.audit-backup
-sudo sqlite3 /var/lib/meshcore-region-proposals/proposals.sqlite3 \
-  "SELECT proposal_sha256,state,issue_number,issue_url FROM proposals WHERE proposal_sha256='HASH';"
-sudo sqlite3 /var/lib/meshcore-region-proposals/proposals.sqlite3 \
-  "DELETE FROM proposals WHERE proposal_sha256='HASH' AND state='pending';"
-sudo docker compose \
-  --env-file /etc/meshcore-region-proposals/environment \
-  -f compose.example.yml start region-proposal-gateway
-```
+For migration or manual ledger work:
 
-Never delete a `created` row. Never clear `pending` merely because GitHub
-search is briefly empty; search indexing is eventually consistent.
+1. Stop only `submission-gateway`.
+2. Back up `/var/lib/meshcore-submissions`.
+3. Audit GitHub for the signed hash.
+4. Change only a proven orphaned `pending` row.
+5. Never delete a confirmed `created` row.
 
-Keep the production checkout synchronized with every region-data release. The
-service reloads changed authority files atomically and fails stale proposals
-closed if the website and host temporarily have different membership data.
+Keep the host checkout synchronized with each published region-data release.
+Rotate App and Turnstile keys through protected files, restart, and verify both
+flows before revoking old credentials. Never log request bodies, contributor
+text, Turnstile tokens, App tokens, or secrets.
 
 ## Tests
 
-No third-party Python packages or live credentials are needed:
+No live credentials or third-party Python packages are required:
 
 ```sh
 python -m unittest discover -s tools/region-proposal-gateway/tests -v
+node --test tests/editor/*.test.mjs
+python scripts/validate_community_submission.py
 ```
 
-The suite uses synthetic authority data and mocked Turnstile/GitHub transports.
-It covers strict validation, authority reload, exact CORS/HTTP contracts,
-Turnstile hostname/action checks, least-privilege token requests, idempotent
-issue creation, URL validation, and resumable large-payload chunks.
+The suites cover both schemas, authority reload, canonical hashes, exact
+CORS/HTTP behavior, Turnstile hostname/action checks, least-privilege App
+tokens, safe issue rendering, idempotency, URL validation, and resumable
+large-payload comments.

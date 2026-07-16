@@ -142,6 +142,60 @@
   pointer-events: none;
 }
 
+.submission-trap {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.submission-verification {
+  display: grid;
+  gap: 0.4rem;
+  justify-items: start;
+}
+
+.submission-turnstile {
+  min-height: 2.25rem;
+}
+
+.submission-anti-spam-status,
+.submission-result {
+  min-height: 1.25rem;
+  margin: 0;
+  color: var(--md-default-fg-color--light);
+  font-size: 0.8rem;
+}
+
+.submission-anti-spam-status[data-state="success"],
+.submission-result[data-state="success"] {
+  color: var(--md-typeset-a-color);
+}
+
+.submission-anti-spam-status[data-state="error"] {
+  color: var(--md-code-hl-string-color);
+}
+
+.submission-inline-retry {
+  margin: 0;
+  padding: 0.35rem 0.65rem;
+  font-size: 0.75rem;
+}
+
+.submission-result:not(:empty) {
+  padding: 0.8rem 0.9rem;
+  border-left: 0.2rem solid var(--md-accent-fg-color);
+  border-radius: 0.25rem;
+  background: var(--md-code-bg-color);
+}
+
+.submission-result a {
+  font-weight: 700;
+}
+
 .submission-status {
   min-height: 1.25rem;
   margin: 0;

@@ -1,4 +1,4 @@
-export const DEFAULT_SUBMISSION_ENDPOINT = "https://regions-api.meshcore.ca/api/meshcore-regions/proposals";
+export const DEFAULT_SUBMISSION_ENDPOINT = "https://api.meshcore.ca:21323/api/meshcore-canada/submissions";
 export const SUBMISSION_CONTRACT_VERSION = 1;
 export const TURNSTILE_SCRIPT_URL = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
 export const MAX_SUBMISSION_BYTES = 2 * 1024 * 1024;
@@ -9,13 +9,14 @@ const CONFIG_TIMEOUT_MS = 15000;
 const SUBMISSION_TIMEOUT_MS = 30000;
 
 const PUBLIC_API_ERRORS = Object.freeze({
-  invalid_request: "The proposal request was not accepted.",
+  invalid_request: "The submission request was not accepted.",
+  invalid_submission: "The submission was not accepted.",
   invalid_proposal: "The proposal no longer matches the current region data.",
   stale_base: "The region map changed after this edit began. Reload the editor and try again.",
-  payload_too_large: "This proposal is too large to send at once. Download it and contact a maintainer.",
+  payload_too_large: "This submission is too large to send at once. Save it and contact a maintainer.",
   turnstile_failed: "The anti-spam check was not accepted. Let it refresh and try again.",
-  rate_limited: "Too many proposals were submitted from this connection. Wait a few minutes and try again.",
-  service_unavailable: "The proposal service is temporarily unavailable. Try again shortly."
+  rate_limited: "Too many submissions were sent from this connection. Wait a few minutes and try again.",
+  service_unavailable: "The submission service is temporarily unavailable. Try again shortly."
 });
 
 export class SubmissionError extends Error {
@@ -34,20 +35,20 @@ function cleanEndpoint(value) {
   try {
     url = new URL(raw);
   } catch (_error) {
-    throw new SubmissionError("The proposal service address is invalid.", {
+    throw new SubmissionError("The submission service address is invalid.", {
       code: "invalid_endpoint",
       retryable: false
     });
   }
   const isLocal = url.hostname === "localhost" || url.hostname === "127.0.0.1";
   if (url.protocol !== "https:" && !(isLocal && url.protocol === "http:")) {
-    throw new SubmissionError("The proposal service must use HTTPS.", {
+    throw new SubmissionError("The submission service must use HTTPS.", {
       code: "invalid_endpoint",
       retryable: false
     });
   }
   if (url.username || url.password || url.search || url.hash) {
-    throw new SubmissionError("The proposal service address is invalid.", {
+    throw new SubmissionError("The submission service address is invalid.", {
       code: "invalid_endpoint",
       retryable: false
     });
@@ -91,34 +92,38 @@ function sortJson(value) {
   return value;
 }
 
-export function canonicalProposalJson(proposal) {
-  const json = JSON.stringify(sortJson(proposal));
+export function canonicalSubmissionJson(submission) {
+  const json = JSON.stringify(sortJson(submission));
   if (!json) {
-    throw new SubmissionError("A validated proposal is required.", {
-      code: "invalid_proposal",
+    throw new SubmissionError("A validated submission is required.", {
+      code: "invalid_submission",
       retryable: false
     });
   }
   return json;
 }
 
-export async function proposalSha256(proposal, cryptoImpl = globalThis.crypto) {
+export const canonicalProposalJson = canonicalSubmissionJson;
+
+export async function submissionSha256(submission, cryptoImpl = globalThis.crypto) {
   if (!cryptoImpl || !cryptoImpl.subtle || typeof TextEncoder !== "function") {
-    throw new SubmissionError("This browser cannot verify the submitted proposal.", {
+    throw new SubmissionError("This browser cannot verify the submitted data.", {
       code: "hash_unavailable",
       retryable: false
     });
   }
   const digest = await cryptoImpl.subtle.digest(
     "SHA-256",
-    new TextEncoder().encode(canonicalProposalJson(proposal))
+    new TextEncoder().encode(canonicalSubmissionJson(submission))
   );
   return Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, "0")).join("");
 }
 
+export const proposalSha256 = submissionSha256;
+
 export function configuredSubmissionEndpoint(documentObject = globalThis.document) {
   const meta = documentObject && documentObject.querySelector(
-    'meta[name="meshcore-region-proposal-endpoint"]'
+    'meta[name="meshcore-submission-endpoint"]'
   );
   return cleanEndpoint(meta && meta.content ? meta.content : DEFAULT_SUBMISSION_ENDPOINT);
 }
@@ -146,7 +151,7 @@ export function validateSubmissionConfig(value, endpoint = DEFAULT_SUBMISSION_EN
     typeof action !== "string" ||
     !/^[A-Za-z0-9_-]{1,32}$/.test(action)
   ) {
-    throw new SubmissionError("The proposal service returned invalid public configuration.", {
+    throw new SubmissionError("The submission service returned invalid public configuration.", {
       code: "invalid_config"
     });
   }
@@ -162,7 +167,7 @@ export async function fetchSubmissionConfig(options = {}) {
   const endpoint = cleanEndpoint(options.endpoint || DEFAULT_SUBMISSION_ENDPOINT);
   const fetchImpl = options.fetchImpl || globalThis.fetch;
   if (typeof fetchImpl !== "function") {
-    throw new SubmissionError("This browser cannot contact the proposal service.", {
+    throw new SubmissionError("This browser cannot contact the submission service.", {
       code: "fetch_unavailable",
       retryable: false
     });
@@ -177,10 +182,10 @@ export async function fetchSubmissionConfig(options = {}) {
       mode: "cors",
       referrerPolicy: "no-referrer"
     }, timeoutMilliseconds(options.timeoutMs, CONFIG_TIMEOUT_MS),
-    "The proposal service took too long to respond. Try again shortly.");
+    "The submission service took too long to respond. Try again shortly.");
   } catch (_error) {
     if (_error instanceof SubmissionError) throw _error;
-    throw new SubmissionError("The proposal service could not be reached. Try again shortly.", {
+    throw new SubmissionError("The submission service could not be reached. Try again shortly.", {
       code: "network_error"
     });
   }
@@ -191,15 +196,15 @@ export async function fetchSubmissionConfig(options = {}) {
     });
   }
   return validateSubmissionConfig(
-    await responseJson(response, "The proposal service returned an unreadable configuration."),
+    await responseJson(response, "The submission service returned an unreadable configuration."),
     endpoint
   );
 }
 
-export function buildSubmissionRequest(proposal, turnstileToken, website = "") {
-  if (!proposal || typeof proposal !== "object" || Array.isArray(proposal)) {
-    throw new SubmissionError("A validated proposal is required.", {
-      code: "invalid_proposal",
+export function buildSubmissionRequest(submission, turnstileToken, website = "") {
+  if (!submission || typeof submission !== "object" || Array.isArray(submission)) {
+    throw new SubmissionError("A validated submission is required.", {
+      code: "invalid_submission",
       retryable: false
     });
   }
@@ -212,36 +217,36 @@ export function buildSubmissionRequest(proposal, turnstileToken, website = "") {
   }
   const honeypot = String(website || "");
   if (honeypot.length > 200) {
-    throw new SubmissionError("The proposal could not be submitted.", {
+    throw new SubmissionError("The submission could not be sent.", {
       code: "invalid_request",
       retryable: false
     });
   }
   return {
     version: SUBMISSION_CONTRACT_VERSION,
-    proposal,
+    submission,
     turnstileToken: token,
     website: honeypot
   };
 }
 
-export function validateSubmissionResponse(value, expectedProposalSha256) {
+export function validateSubmissionResponse(value, expectedSubmissionSha256) {
   const issueNumber = value && value.issueNumber;
   const issueUrl = value && value.issueUrl;
-  const proposalSha256 = value && value.proposalSha256;
+  const responseSubmissionSha256 = value && value.submissionSha256;
   if (
     !value ||
     value.ok !== true ||
     !Number.isSafeInteger(issueNumber) ||
     issueNumber < 1 ||
     typeof issueUrl !== "string" ||
-    typeof proposalSha256 !== "string" ||
-    !/^[0-9a-f]{64}$/i.test(proposalSha256) ||
-    typeof expectedProposalSha256 !== "string" ||
-    proposalSha256.toLowerCase() !== expectedProposalSha256.toLowerCase() ||
+    typeof responseSubmissionSha256 !== "string" ||
+    !/^[0-9a-f]{64}$/i.test(responseSubmissionSha256) ||
+    typeof expectedSubmissionSha256 !== "string" ||
+    responseSubmissionSha256.toLowerCase() !== expectedSubmissionSha256.toLowerCase() ||
     (value.duplicate !== undefined && typeof value.duplicate !== "boolean")
   ) {
-    throw new SubmissionError("The proposal was received, but the review link was invalid.", {
+    throw new SubmissionError("The submission was received, but the review link was invalid.", {
       code: "invalid_response"
     });
   }
@@ -249,7 +254,7 @@ export function validateSubmissionResponse(value, expectedProposalSha256) {
   try {
     url = new URL(issueUrl);
   } catch (_error) {
-    throw new SubmissionError("The proposal was received, but the review link was invalid.", {
+    throw new SubmissionError("The submission was received, but the review link was invalid.", {
       code: "invalid_response"
     });
   }
@@ -259,7 +264,7 @@ export function validateSubmissionResponse(value, expectedProposalSha256) {
     url.search ||
     url.hash
   ) {
-    throw new SubmissionError("The proposal was received, but the review link was invalid.", {
+    throw new SubmissionError("The submission was received, but the review link was invalid.", {
       code: "invalid_response"
     });
   }
@@ -267,7 +272,7 @@ export function validateSubmissionResponse(value, expectedProposalSha256) {
     ok: true,
     issueNumber,
     issueUrl: url.href,
-    proposalSha256: proposalSha256.toLowerCase(),
+    submissionSha256: responseSubmissionSha256.toLowerCase(),
     duplicate: value.duplicate === true
   });
 }
@@ -294,16 +299,16 @@ function publicApiError(value, status) {
     status === 429 ||
     status >= 500;
   return new SubmissionError(
-    PUBLIC_API_ERRORS[code] || "The proposal could not be submitted.",
+    PUBLIC_API_ERRORS[code] || "The submission could not be sent.",
     { code, status, retryable }
   );
 }
 
-export async function submitRegionProposal(options = {}) {
+export async function submitSubmission(options = {}) {
   const endpoint = cleanEndpoint(options.endpoint || DEFAULT_SUBMISSION_ENDPOINT);
   const fetchImpl = options.fetchImpl || globalThis.fetch;
   const payload = buildSubmissionRequest(
-    options.proposal,
+    options.submission,
     options.turnstileToken,
     options.website
   );
@@ -314,7 +319,7 @@ export async function submitRegionProposal(options = {}) {
       retryable: false
     });
   }
-  const expectedProposalSha256 = await proposalSha256(payload.proposal, options.cryptoImpl);
+  const expectedSubmissionSha256 = await submissionSha256(payload.submission, options.cryptoImpl);
   let response;
   try {
     response = await fetchWithTimeout(fetchImpl, endpoint, {
@@ -328,18 +333,22 @@ export async function submitRegionProposal(options = {}) {
       referrerPolicy: "no-referrer",
       body
     }, timeoutMilliseconds(options.timeoutMs, SUBMISSION_TIMEOUT_MS),
-    "The proposal service took too long to respond. Your edits are still here; try again.");
+    "The submission service took too long to respond. Your work is still here; try again.");
   } catch (_error) {
     if (_error instanceof SubmissionError) throw _error;
-    throw new SubmissionError("The proposal service could not be reached. Your edits are still here; try again.", {
+    throw new SubmissionError("The submission service could not be reached. Your work is still here; try again.", {
       code: "network_error"
     });
   }
-  const data = await responseJson(response, "The proposal service returned an unreadable response.");
+  const data = await responseJson(response, "The submission service returned an unreadable response.");
   if (!response.ok) {
     throw publicApiError(data, response.status);
   }
-  return validateSubmissionResponse(data, expectedProposalSha256);
+  return validateSubmissionResponse(data, expectedSubmissionSha256);
+}
+
+export function submitRegionProposal(options = {}) {
+  return submitSubmission({ ...options, submission: options.proposal });
 }
 
 let turnstileLoader;

@@ -1,10 +1,10 @@
-name: meshcore-region-proposals
+name: meshcore-submissions
 
 services:
-  region-proposal-gateway:
+  submission-gateway:
     build:
       context: .
-    image: "meshcore-canada/region-proposal-gateway:${REGION_PROPOSAL_IMAGE_TAG:-local}"
+    image: "meshcore-canada/submission-gateway:${SUBMISSION_IMAGE_TAG:-local}"
     restart: unless-stopped
     read_only: true
     init: true
@@ -23,7 +23,7 @@ services:
     environment:
       LISTEN_HOST: 127.0.0.1
       PORT: "8787"
-      BASE_PATH: /api/meshcore-regions/proposals
+      BASE_PATH: /api/meshcore-canada/submissions
       ALLOWED_ORIGINS: https://meshcore.ca,https://config.meshcore.ca
       TURNSTILE_SITE_KEY: "${TURNSTILE_SITE_KEY:?Set TURNSTILE_SITE_KEY in the protected environment file}"
       TURNSTILE_EXPECTED_HOSTNAMES: meshcore.ca,config.meshcore.ca
@@ -34,7 +34,7 @@ services:
       MEMBERSHIP_PATH: /data/regions/canada-region-membership.csv
       CATALOG_PATH: /data/regions/canada-regions.json
       CELLS_DIR: /data/regions/cells
-      LEDGER_PATH: /state/proposals.sqlite3
+      LEDGER_PATH: /state/submissions.sqlite3
       RATE_LIMIT: "5"
       RATE_WINDOW_SECONDS: "3600"
       PRE_RATE_LIMIT: "30"
@@ -52,18 +52,18 @@ services:
         bind:
           create_host_path: false
       - type: bind
-        source: "${REGION_PROPOSAL_STATE_DIR:-/var/lib/meshcore-region-proposals}"
+        source: "${SUBMISSION_STATE_DIR:-/var/lib/meshcore-submissions}"
         target: /state
         bind:
           create_host_path: false
       - type: bind
-        source: "${REGION_PROPOSAL_SECRET_DIR:-/etc/meshcore-region-proposals}/turnstile"
+        source: "${SUBMISSION_SECRET_DIR:-/etc/meshcore-submissions}/turnstile"
         target: /run/secrets/turnstile
         read_only: true
         bind:
           create_host_path: false
       - type: bind
-        source: "${REGION_PROPOSAL_SECRET_DIR:-/etc/meshcore-region-proposals}/github-app.pem"
+        source: "${SUBMISSION_SECRET_DIR:-/etc/meshcore-submissions}/github-app.pem"
         target: /run/secrets/github-app.pem
         read_only: true
         bind:

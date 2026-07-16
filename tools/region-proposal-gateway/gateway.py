@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Anonymous, server-validated MeshCore Canada region proposal gateway.
+"""Anonymous, server-validated MeshCore Canada submission gateway.
 
 The service deliberately has no repository contents permission.  It accepts a
-small, fixed JSON contract, revalidates the proposal against mounted authority
-files, and uses a repository-restricted GitHub App installation token to create
-an issue (and, for large proposals, resumable issue comments).
+small, fixed JSON contract and uses a repository-restricted GitHub App
+installation token to create an issue. Region proposals are revalidated against
+mounted authority files; community ideas never depend on those files.
 """
 
 from __future__ import annotations
@@ -38,9 +38,10 @@ from typing import Any, Callable, Mapping, Protocol
 
 
 API_VERSION = 1
-DEFAULT_BASE_PATH = "/api/meshcore-regions/proposals"
+DEFAULT_BASE_PATH = "/api/meshcore-canada/submissions"
 PROPOSAL_SCHEMA = "mcc-region-editor-proposal/v1"
-TURNSTILE_ACTION = "region_proposal"
+IDEA_SCHEMA = "mcc-community-idea/v1"
+TURNSTILE_ACTION = "meshcore_submission"
 GITHUB_OWNER = "MeshCore-ca"
 GITHUB_REPO = "MeshCore-Canada"
 GITHUB_FULL_NAME = f"{GITHUB_OWNER}/{GITHUB_REPO}"
@@ -61,11 +62,33 @@ SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 DGUID_RE = re.compile(r"^[A-Za-z0-9-]{8,64}$")
 TAG_RE = re.compile(r"^[a-z0-9][a-z0-9-]{0,31}$")
 CHUNK_MARKER_RE = re.compile(
-    r"<!-- mcc-proposal-chunk:([0-9a-f]{64}):(\d{1,3})/(\d{1,3}) -->"
+    r"<!-- mcc-submission-chunk:([0-9a-f]{64}):(\d{1,3})/(\d{1,3}) -->"
 )
 JS_WHITESPACE_RE = re.compile(
     r"[\x09-\x0d\x1c-\x20\x85\xa0\u1680\u2000-\u200a\u2028\u2029\u202f\u205f\u3000\ufeff]+"
 )
+JS_TRIM_START_RE = re.compile(
+    r"^[\x09-\x0d\x20\xa0\u1680\u2000-\u200a\u2028\u2029\u202f\u205f\u3000\ufeff]+"
+)
+JS_TRIM_END_RE = re.compile(
+    r"[\x09-\x0d\x20\xa0\u1680\u2000-\u200a\u2028\u2029\u202f\u205f\u3000\ufeff]+$"
+)
+IDEA_CATEGORIES = frozenset({
+    "Newcomer or accessibility improvement",
+    "Documentation correction",
+    "Hardware or build-guide idea",
+    "Regional community information",
+    "Network tool or service idea",
+    "Feature or project idea",
+    "Other community feedback",
+})
+IDEA_EXPERIENCE_LEVELS = frozenset({
+    "Brand new / researching",
+    "Setting up my first node",
+    "Active mesh user",
+    "Repeater, room server, or observer operator",
+    "Developer or documentation contributor",
+})
 PR_TO_TAG = {
     "10": "nl", "11": "pe", "12": "ns", "13": "nb", "24": "qc",
     "35": "on", "46": "mb", "47": "sk", "48": "ab", "59": "bc",
@@ -86,7 +109,7 @@ class GatewayError(Exception):
 
 class UpstreamError(GatewayError):
     def __init__(self, _code: str = "service_unavailable"):
-        super().__init__(502, "service_unavailable", "The proposal could not be submitted right now. Try again later.")
+        super().__init__(502, "service_unavailable", "The submission could not be sent right now. Try again later.")
 
 
 def _is_int(value: object) -> bool:
@@ -108,12 +131,42 @@ def _clean_text(value: object, maximum: int, *, required: bool) -> str:
     return cleaned
 
 
+def _js_trim(value: str) -> str:
+    return JS_TRIM_END_RE.sub("", JS_TRIM_START_RE.sub("", value))
+
+
+def _clean_idea_text(
+    value: object, maximum: int, *, required: bool, multiline: bool,
+) -> str:
+    if not isinstance(value, str):
+        raise GatewayError(422, "invalid_submission", "The idea contains invalid text.")
+    normalized = value.replace("\r\n", "\n").replace("\r", "\n") if multiline else value
+    cleaned = _js_trim(normalized)
+    if required and not cleaned:
+        raise GatewayError(422, "invalid_submission", "Complete all required idea fields.")
+    if len(cleaned) > maximum:
+        raise GatewayError(422, "invalid_submission", "One or more idea fields are too long.")
+    for character in cleaned:
+        codepoint = ord(character)
+        if 0xD800 <= codepoint <= 0xDFFF:
+            raise GatewayError(422, "invalid_submission", "The idea contains invalid text.")
+        if character == "\n" and multiline:
+            continue
+        if codepoint < 32 or 0x7F <= codepoint <= 0x9F or character in {chr(0x2028), chr(0x2029)}:
+            raise GatewayError(422, "invalid_submission", "The idea contains invalid text.")
+    return cleaned
+
+
 def _sha256(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
 
 
 def _canonical_json(value: object) -> bytes:
     return (json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":")) + "\n").encode("utf-8")
+
+
+def _canonical_submission_json(value: object) -> bytes:
+    return json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
 
 
 def _strict_json_object(pairs: list[tuple[str, object]]) -> dict[str, object]:
@@ -137,6 +190,10 @@ def _safe_markdown_text(value: str) -> str:
     # HTML escaping prevents Markdown structure injection.  A zero-width space
     # prevents user-supplied GitHub @mentions from notifying accounts or teams.
     return html.escape(value, quote=True).replace("@", "@\u200b")
+
+
+def _safe_html_block(value: str) -> str:
+    return "<p>" + _safe_markdown_text(value).replace("\n", "<br>\n") + "</p>"
 
 
 def _json_fence(payload: str) -> str:
@@ -417,6 +474,57 @@ def validate_proposal(raw: object, authority: AuthoritySnapshot) -> tuple[dict[s
     return canonical, payload, _sha256(payload)
 
 
+def validate_idea(raw: object) -> tuple[dict[str, Any], bytes, str]:
+    required_keys = {
+        "schema", "category", "experience", "summary", "need", "idea",
+        "publicAcknowledged",
+    }
+    optional_keys = {"region", "context", "followUp"}
+    if (
+        not isinstance(raw, dict)
+        or not required_keys.issubset(raw)
+        or set(raw) - required_keys - optional_keys
+        or raw.get("schema") != IDEA_SCHEMA
+        or raw.get("publicAcknowledged") is not True
+    ):
+        raise GatewayError(422, "invalid_submission", "The idea format is not supported.")
+
+    category = _clean_idea_text(
+        raw.get("category"), 100, required=True, multiline=False
+    )
+    experience = _clean_idea_text(
+        raw.get("experience"), 100, required=True, multiline=False
+    )
+    if category not in IDEA_CATEGORIES or experience not in IDEA_EXPERIENCE_LEVELS:
+        raise GatewayError(422, "invalid_submission", "Choose a valid idea category and experience level.")
+
+    canonical: dict[str, Any] = {
+        "schema": IDEA_SCHEMA,
+        "category": category,
+        "experience": experience,
+        "summary": _clean_idea_text(raw.get("summary"), 100, required=True, multiline=False),
+        "need": _clean_idea_text(raw.get("need"), 2000, required=True, multiline=True),
+        "idea": _clean_idea_text(raw.get("idea"), 2000, required=True, multiline=True),
+        "publicAcknowledged": True,
+    }
+    optional_fields = (
+        ("region", 100, False),
+        ("context", 2000, True),
+        ("followUp", 120, False),
+    )
+    for name, maximum, multiline in optional_fields:
+        if name not in raw:
+            continue
+        value = _clean_idea_text(raw[name], maximum, required=False, multiline=multiline)
+        if value:
+            canonical[name] = value
+    try:
+        payload = _canonical_submission_json(canonical)
+    except (UnicodeEncodeError, ValueError) as exc:
+        raise GatewayError(422, "invalid_submission", "The idea contains invalid Unicode.") from exc
+    return canonical, payload, _sha256(payload)
+
+
 class JsonTransport(Protocol):
     def request(self, method: str, url: str, headers: Mapping[str, str], body: bytes | None, timeout: float) -> tuple[int, Mapping[str, str], object]: ...
 
@@ -454,7 +562,7 @@ class TurnstileVerifier:
         body = urllib.parse.urlencode({"secret": self.secret, "response": token, "remoteip": remote_ip}).encode("ascii")
         status, _, result = self.transport.request(
             "POST", "https://challenges.cloudflare.com/turnstile/v0/siteverify",
-            {"Content-Type": "application/x-www-form-urlencoded", "User-Agent": "mcc-region-proposal-gateway/1"},
+            {"Content-Type": "application/x-www-form-urlencoded", "User-Agent": "mcc-submission-gateway/1"},
             body, 10.0,
         )
         if status != 200 or not isinstance(result, dict):
@@ -656,7 +764,7 @@ class GitHubAppClient:
             "Accept": "application/vnd.github+json",
             "Authorization": f"Bearer {token}",
             "X-GitHub-Api-Version": GITHUB_API_VERSION,
-            "User-Agent": "mcc-region-proposal-gateway/1",
+            "User-Agent": "mcc-submission-gateway/1",
             "Content-Type": "application/json",
         }
 
@@ -680,13 +788,14 @@ class GitHubAppClient:
             raise UpstreamError("github-rate-limited")
         return status, headers, result
 
-    def _proposal_signature(self, proposal_hash: str) -> str:
-        message = f"mcc-region-proposal/v1:{proposal_hash}".encode("ascii")
+    def _submission_signature(self, schema: str, submission_hash: str) -> str:
+        message = f"mcc-submission/v1:{schema}:{submission_hash}".encode("ascii")
         return _b64url(self.signer.sign(message))
 
-    def _find_issue(self, proposal_hash: str, proposal_signature: str) -> dict[str, Any] | None:
-        marker = f"proposal-sha256:{proposal_hash}"
-        signature_marker = f"proposal-signature-rs256:{proposal_signature}"
+    def _find_issue(self, schema: str, submission_hash: str, submission_signature: str) -> dict[str, Any] | None:
+        schema_marker = f"submission-schema:{schema}"
+        marker = f"submission-sha256:{submission_hash}"
+        signature_marker = f"submission-signature-rs256:{submission_signature}"
         query = urllib.parse.urlencode({"q": f'repo:{GITHUB_FULL_NAME} is:issue in:body "{marker}"', "per_page": "10"})
         status, _, result = self._call("GET", f"/search/issues?{query}")
         if status != 200 or not isinstance(result, dict) or not isinstance(result.get("items"), list):
@@ -695,6 +804,7 @@ class GitHubAppClient:
             body = str(issue.get("body", "")) if isinstance(issue, dict) else ""
             if (
                 isinstance(issue, dict)
+                and schema_marker in body
                 and marker in body
                 and signature_marker in body
                 and _is_int(issue.get("number"))
@@ -704,9 +814,12 @@ class GitHubAppClient:
 
     def submit(self, canonical: dict[str, Any], canonical_bytes: bytes, proposal_hash: str) -> dict[str, Any]:
         with self._mutation_lock:
-            proposal_signature = self._proposal_signature(proposal_hash)
+            schema = canonical.get("schema")
+            if schema not in {PROPOSAL_SCHEMA, IDEA_SCHEMA}:
+                raise UpstreamError("unsupported_submission_schema")
+            submission_signature = self._submission_signature(schema, proposal_hash)
             title, issue_body, chunked = build_issue(
-                canonical, canonical_bytes, proposal_hash, proposal_signature
+                canonical, canonical_bytes, proposal_hash, submission_signature
             )
             entry = self.ledger.lookup(proposal_hash)
             issue: dict[str, Any] | None = None
@@ -714,18 +827,18 @@ class GitHubAppClient:
             if entry and entry["state"] == "created":
                 issue = {"number": entry["issue_number"], "html_url": entry["issue_url"]}
             elif entry and entry["state"] == "pending":
-                issue = self._find_issue(proposal_hash, proposal_signature)
+                issue = self._find_issue(schema, proposal_hash, submission_signature)
                 if issue is None:
                     # A prior create may have succeeded just before a crash and
                     # GitHub search is eventually consistent.  Never create a
                     # second issue from an unresolved pending record.
                     raise GatewayError(
                         503, "service_unavailable",
-                        "This proposal is still being recorded. Try again shortly.",
+                        "This submission is still being recorded. Try again shortly.",
                     )
                 self._record_issue(proposal_hash, issue)
             else:
-                issue = self._find_issue(proposal_hash, proposal_signature)
+                issue = self._find_issue(schema, proposal_hash, submission_signature)
                 if issue is not None:
                     duplicate = True
                     self._record_issue(proposal_hash, issue)
@@ -733,7 +846,7 @@ class GitHubAppClient:
                 if not self.ledger.insert_pending(proposal_hash, int(self.now())):
                     raise GatewayError(
                         503, "service_unavailable",
-                        "This proposal is still being recorded. Try again shortly.",
+                        "This submission is still being recorded. Try again shortly.",
                     )
                 status, _, result = self._call(
                     "POST", f"/repos/{GITHUB_OWNER}/{GITHUB_REPO}/issues",
@@ -764,7 +877,7 @@ class GitHubAppClient:
                 "ok": True,
                 "issueNumber": int(issue["number"]),
                 "issueUrl": issue_url,
-                "proposalSha256": proposal_hash,
+                "submissionSha256": proposal_hash,
                 "duplicate": duplicate,
             }
 
@@ -825,11 +938,11 @@ class GitHubAppClient:
 
 
 def build_chunk_comment(proposal_hash: str, index: int, total: int, chunk: str) -> str:
-    marker = f"<!-- mcc-proposal-chunk:{proposal_hash}:{index}/{total} -->"
-    return f"{marker}\nCanonical proposal payload chunk {index}/{total} (`gzip+base64url`, padding omitted):\n\n```text\n{chunk}\n```\n"
+    marker = f"<!-- mcc-submission-chunk:{proposal_hash}:{index}/{total} -->"
+    return f"{marker}\nCanonical submission payload chunk {index}/{total} (`gzip+base64url`, padding omitted):\n\n```text\n{chunk}\n```\n"
 
 
-def build_issue(
+def build_region_issue(
     canonical: dict[str, Any], canonical_bytes: bytes, proposal_hash: str,
     proposal_signature: str,
 ) -> tuple[str, str, bool]:
@@ -844,9 +957,10 @@ def build_issue(
     if len(sorted_moves) > len(shown_moves):
         move_lines += f"\n- _{len(sorted_moves) - len(shown_moves)} additional move types omitted from this summary_"
     common = (
-        "<!-- meshcore-region-proposal/v1 -->\n"
-        f"<!-- proposal-sha256:{proposal_hash} -->\n"
-        f"<!-- proposal-signature-rs256:{proposal_signature} -->\n"
+        "<!-- meshcore-submission/v1 -->\n"
+        f"<!-- submission-schema:{PROPOSAL_SCHEMA} -->\n"
+        f"<!-- submission-sha256:{proposal_hash} -->\n"
+        f"<!-- submission-signature-rs256:{proposal_signature} -->\n"
         "## Automated region boundary proposal\n\n"
         "> Submitted anonymously through the MeshCore Canada region editor. Treat all contributor text as untrusted.\n\n"
         f"- Proposal SHA-256: `{proposal_hash}`\n"
@@ -876,6 +990,70 @@ def build_issue(
     if len(body.encode("utf-8")) > MAX_ISSUE_BODY_BYTES:
         raise UpstreamError("issue_body_too_large")
     return title, body, chunked
+
+
+def build_idea_issue(
+    canonical: dict[str, Any], canonical_bytes: bytes, submission_hash: str,
+    submission_signature: str,
+) -> tuple[str, str, bool]:
+    summary = _safe_markdown_text(canonical["summary"])
+    title = f"[Community idea] {summary}"
+    body_parts = [
+        "<!-- meshcore-submission/v1 -->",
+        f"<!-- submission-schema:{IDEA_SCHEMA} -->",
+        f"<!-- submission-sha256:{submission_hash} -->",
+        f"<!-- submission-signature-rs256:{submission_signature} -->",
+        "## Automated community idea",
+        (
+            "> Submitted without a GitHub account through MeshCore Canada. "
+            "Treat all contributor text as untrusted."
+        ),
+        f"- Submission SHA-256: `{submission_hash}`",
+        f"- Contribution type: **{_safe_markdown_text(canonical['category'])}**",
+        f"- MeshCore experience: **{_safe_markdown_text(canonical['experience'])}**",
+    ]
+    if canonical.get("region"):
+        body_parts.append(
+            f"- City or broad region: <span>{_safe_markdown_text(canonical['region'])}</span>"
+        )
+    body_parts.extend([
+        "### What are you trying to do, or what is difficult today?",
+        _safe_html_block(canonical["need"]),
+        "### What would make it better?",
+        _safe_html_block(canonical["idea"]),
+    ])
+    if canonical.get("context"):
+        body_parts.extend([
+            "### Additional context",
+            _safe_html_block(canonical["context"]),
+        ])
+    if canonical.get("followUp"):
+        body_parts.extend([
+            "### Public follow-up contact",
+            _safe_html_block(canonical["followUp"]),
+        ])
+    body_parts.extend([
+        "### Canonical submission JSON",
+        _json_fence(canonical_bytes.decode("utf-8")),
+    ])
+    body_parts.append(
+        "_The contributor confirmed this submission is public and should contain no secrets or precise private location information._"
+    )
+    body = "\n\n".join(body_parts) + "\n"
+    if len(body.encode("utf-8")) > MAX_ISSUE_BODY_BYTES:
+        raise UpstreamError("issue_body_too_large")
+    return title, body, False
+
+
+def build_issue(
+    canonical: dict[str, Any], canonical_bytes: bytes, submission_hash: str,
+    submission_signature: str,
+) -> tuple[str, str, bool]:
+    if canonical.get("schema") == PROPOSAL_SCHEMA:
+        return build_region_issue(canonical, canonical_bytes, submission_hash, submission_signature)
+    if canonical.get("schema") == IDEA_SCHEMA:
+        return build_idea_issue(canonical, canonical_bytes, submission_hash, submission_signature)
+    raise UpstreamError("unsupported_submission_schema")
 
 
 class RateLimiter:
@@ -971,33 +1149,46 @@ class GatewayService:
         return str(peer_ip)
 
     def submit(self, envelope: object, client_ip: str) -> dict[str, Any]:
-        if not isinstance(envelope, dict) or set(envelope) != {"version", "proposal", "turnstileToken", "website"} or not _is_int(envelope.get("version")) or envelope.get("version") != API_VERSION:
-            raise GatewayError(400, "invalid_proposal", "The request format is not supported.")
+        if (
+            not isinstance(envelope, dict)
+            or set(envelope) != {"version", "submission", "turnstileToken", "website"}
+            or not _is_int(envelope.get("version"))
+            or envelope.get("version") != API_VERSION
+        ):
+            raise GatewayError(400, "invalid_submission", "The request format is not supported.")
         if not isinstance(envelope.get("website"), str) or envelope["website"]:
-            raise GatewayError(400, "invalid_proposal", "The request could not be accepted.")
+            raise GatewayError(400, "invalid_submission", "The request could not be accepted.")
+        submission = envelope.get("submission")
+        if not isinstance(submission, dict) or submission.get("schema") not in {PROPOSAL_SCHEMA, IDEA_SCHEMA}:
+            raise GatewayError(422, "invalid_submission", "The submission format is not supported.")
         token = envelope.get("turnstileToken")
         if not isinstance(token, str) or not token or len(token) > MAX_TURNSTILE_TOKEN:
             raise GatewayError(400, "turnstile_failed", "Human verification is required.")
         rate_key = hmac.new(self._ip_salt, client_ip.encode("ascii"), hashlib.sha256).hexdigest()
         # Higher pre-verification bounds prevent forged Origin requests from
         # turning the service into an unlimited Siteverify client. They are kept
-        # separate from the low verified-proposal quota below.
+        # separate from the low verified-submission quota below.
         if self.pre_rate_limiter:
             self.pre_rate_limiter.check(rate_key)
         if self.global_pre_limiter:
             self.global_pre_limiter.check("global")
         self.turnstile.verify(token, client_ip)
         self.rate_limiter.check(rate_key)
-        try:
-            authority = self.authority.get()
-        except RuntimeError as exc:
-            raise GatewayError(503, "service_unavailable", "Region data is being updated. Try again shortly.") from exc
-        canonical, payload, proposal_hash = validate_proposal(envelope.get("proposal"), authority)
-        return self.github.submit(canonical, payload, proposal_hash)
+        if submission["schema"] == IDEA_SCHEMA:
+            canonical, payload, submission_hash = validate_idea(submission)
+        else:
+            try:
+                authority = self.authority.get()
+            except RuntimeError as exc:
+                raise GatewayError(
+                    503, "service_unavailable", "Region data is being updated. Try again shortly."
+                ) from exc
+            canonical, payload, submission_hash = validate_proposal(submission, authority)
+        return self.github.submit(canonical, payload, submission_hash)
 
 
 class GatewayHandler(BaseHTTPRequestHandler):
-    server_version = "MCCRegionGateway/1"
+    server_version = "MCCSubmissionGateway/1"
     protocol_version = "HTTP/1.1"
 
     def setup(self) -> None:
@@ -1058,12 +1249,12 @@ class GatewayHandler(BaseHTTPRequestHandler):
 
     def do_OPTIONS(self) -> None:
         if self._route() != "submit" or not self._allowed_origin():
-            self._error(GatewayError(403, "invalid_proposal", "This site is not allowed to submit proposals."), cors=False)
+            self._error(GatewayError(403, "invalid_submission", "This site is not allowed to send submissions."), cors=False)
             return
         requested_method = self.headers.get("Access-Control-Request-Method", "")
         requested_headers = {item.strip().lower() for item in self.headers.get("Access-Control-Request-Headers", "").split(",") if item.strip()}
         if requested_method != "POST" or not requested_headers.issubset({"content-type"}):
-            self._error(GatewayError(400, "invalid_proposal", "The browser preflight was not accepted."), cors=True)
+            self._error(GatewayError(400, "invalid_submission", "The browser preflight was not accepted."), cors=True)
             return
         self.send_response(204)
         self.send_header("Content-Length", "0")
@@ -1079,19 +1270,14 @@ class GatewayHandler(BaseHTTPRequestHandler):
     def do_GET(self) -> None:
         route = self._route()
         if route == "health":
-            try:
-                self.service.authority.get()
-            except RuntimeError:
-                self._send(503, {"ok": False})
-                return
             self._send(200, {"ok": True})
             return
         if route != "config":
-            self._error(GatewayError(404, "invalid_proposal", "The requested endpoint does not exist."), cors=False)
+            self._error(GatewayError(404, "invalid_submission", "The requested endpoint does not exist."), cors=False)
             return
         origin = self._origin()
         if origin is not None and not self._allowed_origin():
-            self._error(GatewayError(403, "invalid_proposal", "This site is not allowed to use the proposal service."), cors=False)
+            self._error(GatewayError(403, "invalid_submission", "This site is not allowed to use the submission service."), cors=False)
             return
         self._send(
             200,
@@ -1103,24 +1289,24 @@ class GatewayHandler(BaseHTTPRequestHandler):
         cors = self._route() == "submit" and self._allowed_origin() is not None
         try:
             if self._route() != "submit":
-                raise GatewayError(404, "invalid_proposal", "The requested endpoint does not exist.")
+                raise GatewayError(404, "invalid_submission", "The requested endpoint does not exist.")
             if not cors:
-                raise GatewayError(403, "invalid_proposal", "This site is not allowed to submit proposals.")
+                raise GatewayError(403, "invalid_submission", "This site is not allowed to send submissions.")
             if self.headers.get("Transfer-Encoding"):
-                raise GatewayError(411, "invalid_proposal", "A fixed request length is required.")
+                raise GatewayError(411, "invalid_submission", "A fixed request length is required.")
             content_type = self.headers.get("Content-Type", "").split(";", 1)[0].strip().lower()
             if content_type != "application/json":
-                raise GatewayError(415, "invalid_proposal", "Send the proposal as JSON.")
+                raise GatewayError(415, "invalid_submission", "Send the submission as JSON.")
             length_value = self.headers.get("Content-Length")
             try:
                 length = int(length_value or "")
             except ValueError:
-                raise GatewayError(411, "invalid_proposal", "A fixed request length is required.")
+                raise GatewayError(411, "invalid_submission", "A fixed request length is required.")
             if length <= 0 or length > MAX_BODY_BYTES:
-                raise GatewayError(413, "payload_too_large", "The proposal request is too large.")
+                raise GatewayError(413, "payload_too_large", "The submission request is too large.")
             body = self.rfile.read(length)
             if len(body) != length:
-                raise GatewayError(400, "invalid_proposal", "The request body was incomplete.")
+                raise GatewayError(400, "invalid_submission", "The request body was incomplete.")
             try:
                 envelope = json.loads(
                     body.decode("utf-8"),
@@ -1128,7 +1314,7 @@ class GatewayHandler(BaseHTTPRequestHandler):
                     parse_constant=_reject_json_constant,
                 )
             except (UnicodeError, json.JSONDecodeError, ValueError):
-                raise GatewayError(400, "invalid_proposal", "The request body is not valid JSON.")
+                raise GatewayError(400, "invalid_submission", "The request body is not valid JSON.")
             client_ip = self.service.client_ip(self.client_address[0], self.headers.get("X-Forwarded-For"))
             result = self.service.submit(envelope, client_ip)
             self._send(200, result, cors=True)
@@ -1137,7 +1323,7 @@ class GatewayHandler(BaseHTTPRequestHandler):
         except Exception:
             # Do not log exception values: transports or parsers may hold secrets
             # or user content.  Operators get a request ID/status from Caddy.
-            self._error(GatewayError(500, "service_unavailable", "The proposal could not be submitted right now."), cors=cors)
+            self._error(GatewayError(500, "service_unavailable", "The submission could not be sent right now."), cors=cors)
 
 
 class SafeThreadingHTTPServer(ThreadingHTTPServer):
@@ -1254,7 +1440,6 @@ def build_server_from_env(environ: Mapping[str, str] = os.environ) -> SafeThread
         Path(environ.get("CATALOG_PATH", "/data/canada-regions.json")),
         Path(environ.get("CELLS_DIR", "/data/cells")),
     )
-    authority.get()  # fail closed before binding the socket
     transport = UrllibJsonTransport()
     service = GatewayService(
         GatewayConfig(
@@ -1269,7 +1454,7 @@ def build_server_from_env(environ: Mapping[str, str] = os.environ) -> SafeThread
             transport,
             OpenSSLSigner(private_key_path, environ.get("OPENSSL_BIN", "openssl")),
             environ["GITHUB_APP_CLIENT_ID"], installation_id,
-            ProposalLedger(Path(environ.get("LEDGER_PATH", "/state/proposals.sqlite3"))),
+            ProposalLedger(Path(environ.get("LEDGER_PATH", "/state/submissions.sqlite3"))),
         ),
         RateLimiter(rate_limit, rate_window),
         RateLimiter(pre_rate_limit, pre_rate_window),

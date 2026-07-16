@@ -8,12 +8,15 @@ import {
   TURNSTILE_SCRIPT_URL,
   buildSubmissionRequest,
   canonicalProposalJson,
+  canonicalSubmissionJson,
   configuredSubmissionEndpoint,
   fetchSubmissionConfig,
   loadTurnstile,
   proposalSha256,
+  submissionSha256,
   renderTurnstile,
   submitRegionProposal,
+  submitSubmission,
   validateSubmissionConfig,
   validateSubmissionResponse
 } from "../../docs/config/editor/issue.js";
@@ -28,7 +31,7 @@ const canonicalProposal = {
   ]
 };
 
-const canonicalProposalHash = await proposalSha256(canonicalProposal);
+const canonicalProposalHash = await submissionSha256(canonicalProposal);
 const editorHtml = await readFile(
   new URL("../../docs/config/editor/index.html", import.meta.url),
   "utf8"
@@ -38,7 +41,7 @@ const successBody = {
   ok: true,
   issueNumber: 123,
   issueUrl: "https://github.com/MeshCore-ca/MeshCore-Canada/issues/123",
-  proposalSha256: canonicalProposalHash,
+  submissionSha256: canonicalProposalHash,
   duplicate: false
 };
 
@@ -50,11 +53,11 @@ function jsonResponse(body, options = {}) {
   };
 }
 
-test("uses the anonymous proposal API by default and allows a trusted page override", () => {
-  const productionEndpoint = "https://regions-api.meshcore.ca/api/meshcore-regions/proposals";
+test("uses the shared anonymous submission API by default and allows a trusted page override", () => {
+  const productionEndpoint = "https://api.meshcore.ca:21323/api/meshcore-canada/submissions";
   assert.equal(DEFAULT_SUBMISSION_ENDPOINT, productionEndpoint);
   assert.ok(editorHtml.includes(
-    `name="meshcore-region-proposal-endpoint" content="${productionEndpoint}"`
+    `name="meshcore-submission-endpoint" content="${productionEndpoint}"`
   ));
   assert.equal(configuredSubmissionEndpoint(null), DEFAULT_SUBMISSION_ENDPOINT);
   assert.equal(configuredSubmissionEndpoint({
@@ -74,7 +77,7 @@ test("fetches and validates the versioned public Turnstile config without creden
       return jsonResponse({
         version: 1,
         turnstileSiteKey: "0x4AAAA-public-site-key",
-        turnstileAction: "region_proposal"
+        turnstileAction: "meshcore_submission"
       });
     }
   });
@@ -83,7 +86,7 @@ test("fetches and validates the versioned public Turnstile config without creden
     version: SUBMISSION_CONTRACT_VERSION,
     endpoint: "https://proposals.example.ca/v1",
     turnstileSiteKey: "0x4AAAA-public-site-key",
-    turnstileAction: "region_proposal"
+    turnstileAction: "meshcore_submission"
   });
   assert.equal(request.url, "https://proposals.example.ca/v1/config");
   const { signal, ...requestOptions } = request.options;
@@ -102,7 +105,7 @@ test("rejects malformed or mismatched public config", () => {
   assert.throws(() => validateSubmissionConfig({
     version: 2,
     turnstileSiteKey: "site-key",
-    turnstileAction: "region_proposal"
+    turnstileAction: "meshcore_submission"
   }), /invalid public configuration/);
   assert.throws(() => validateSubmissionConfig({
     version: 1,
@@ -111,10 +114,10 @@ test("rejects malformed or mismatched public config", () => {
   }), /invalid public configuration/);
 });
 
-test("builds the exact versioned submission wrapper including the honeypot", () => {
+test("builds the exact generic submission wrapper including the honeypot", () => {
   assert.deepEqual(buildSubmissionRequest(canonicalProposal, "turnstile-token", ""), {
     version: 1,
-    proposal: canonicalProposal,
+    submission: canonicalProposal,
     turnstileToken: "turnstile-token",
     website: ""
   });
@@ -128,15 +131,15 @@ test("builds the exact versioned submission wrapper including the honeypot", () 
   );
   assert.throws(
     () => buildSubmissionRequest(canonicalProposal, "turnstile-token", "x".repeat(201)),
-    /could not be submitted/
+    /could not be sent/
   );
 });
 
-test("posts the canonical proposal without cookies and accepts a safe issue response", async () => {
+test("posts a canonical submission without cookies and accepts a safe issue response", async () => {
   let request;
-  const result = await submitRegionProposal({
+  const result = await submitSubmission({
     endpoint: "https://proposals.example.ca/v1",
-    proposal: canonicalProposal,
+    submission: canonicalProposal,
     turnstileToken: "turnstile-token",
     website: "",
     fetchImpl: async (url, options) => {
@@ -160,13 +163,33 @@ test("posts the canonical proposal without cookies and accepts a safe issue resp
     referrerPolicy: "no-referrer",
     body: JSON.stringify({
       version: 1,
-      proposal: canonicalProposal,
+      submission: canonicalProposal,
       turnstileToken: "turnstile-token",
       website: ""
     })
   });
 });
 
+
+test("keeps the region proposal compatibility alias on the generic envelope", async () => {
+  let requestBody;
+  const result = await submitRegionProposal({
+    proposal: canonicalProposal,
+    turnstileToken: "turnstile-token",
+    fetchImpl: async (_url, options) => {
+      requestBody = JSON.parse(options.body);
+      return jsonResponse(successBody);
+    }
+  });
+
+  assert.deepEqual(result, successBody);
+  assert.deepEqual(requestBody, {
+    version: 1,
+    submission: canonicalProposal,
+    turnstileToken: "turnstile-token",
+    website: ""
+  });
+});
 test("canonical hash is stable across object key order", async () => {
   const reordered = {
     changes: canonicalProposal.changes,
@@ -175,7 +198,9 @@ test("canonical hash is stable across object key order", async () => {
     baseMembershipSha256: canonicalProposal.baseMembershipSha256,
     schema: canonicalProposal.schema
   };
-  assert.equal(canonicalProposalJson(reordered), canonicalProposalJson(canonicalProposal));
+  assert.equal(canonicalSubmissionJson(reordered), canonicalSubmissionJson(canonicalProposal));
+  assert.equal(await submissionSha256(reordered), canonicalProposalHash);
+  assert.equal(canonicalProposalJson(reordered), canonicalSubmissionJson(reordered));
   assert.equal(await proposalSha256(reordered), canonicalProposalHash);
 });
 
@@ -198,8 +223,8 @@ test("only accepts the exact public MeshCore Canada issue URL and submitted hash
 
 test("surfaces a bounded public API error while leaving retry to the caller", async () => {
   await assert.rejects(
-    submitRegionProposal({
-      proposal: canonicalProposal,
+    submitSubmission({
+      submission: canonicalProposal,
       turnstileToken: "turnstile-token",
       fetchImpl: async () => jsonResponse({
         ok: false,
@@ -213,7 +238,7 @@ test("surfaces a bounded public API error while leaving retry to the caller", as
       assert.equal(error.code, "rate_limited");
       assert.equal(error.status, 429);
       assert.equal(error.retryable, true);
-      assert.equal(error.message, "Too many proposals were submitted from this connection. Wait a few minutes and try again.");
+      assert.equal(error.message, "Too many submissions were sent from this connection. Wait a few minutes and try again.");
       return true;
     }
   );
@@ -221,8 +246,8 @@ test("surfaces a bounded public API error while leaving retry to the caller", as
 
 test("rejects an oversized submission before contacting the service", async () => {
   let contacted = false;
-  await assert.rejects(submitRegionProposal({
-    proposal: { value: "x".repeat(MAX_SUBMISSION_BYTES) },
+  await assert.rejects(submitSubmission({
+    submission: { value: "x".repeat(MAX_SUBMISSION_BYTES) },
     turnstileToken: "turnstile-token",
     fetchImpl: async () => { contacted = true; return jsonResponse(successBody); }
   }), (error) => error.code === "payload_too_large" && error.retryable === false);
@@ -255,14 +280,14 @@ test("renders Turnstile explicitly without a hidden response field", () => {
     }
   }, "#challenge", {
     turnstileSiteKey: "0x4AAAA-public-site-key",
-    turnstileAction: "region_proposal"
+    turnstileAction: "meshcore_submission"
   }, callbacks);
 
   assert.equal(widgetId, 42);
   assert.equal(receivedContainer, "#challenge");
   assert.deepEqual(receivedOptions, {
     sitekey: "0x4AAAA-public-site-key",
-    action: "region_proposal",
+    action: "meshcore_submission",
     theme: "dark",
     appearance: "interaction-only",
     "response-field": false,

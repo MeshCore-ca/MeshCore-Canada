@@ -26,9 +26,10 @@ jobs:
       - name: Enforce MeshCore Canada production ownership
         shell: bash
         run: |
-          if git grep -n -E 'canadaverse\.org|192\.168\.0\.111|/home/neonx|splashpage' -- \
-            docs/config/editor tools/region-proposal-gateway; then
-            echo 'Production editor and proposal-service files must reference only MeshCore Canada infrastructure.' >&2
+          if git grep -n -E 'canadaverse\.org|regions-api\.meshcore\.ca|/api/meshcore-regions/proposals|192\.168\.0\.111|/home/neonx|splashpage' -- \
+            docs/config/editor docs/javascripts docs/submit-idea.md \
+            tools/region-proposal-gateway instructions.md; then
+            echo 'Production submission files must use only the approved MeshCore Canada endpoint.' >&2
             exit 1
           fi
 
@@ -53,6 +54,8 @@ jobs:
           node --test tests/editor/*.test.mjs
           node --check docs/config/editor/app.js
           node --check docs/config/editor/issue.js
+          node --check docs/javascripts/community-submission.js
+          node --check docs/javascripts/submission-form.js
 
       - name: Build documentation
         run: mkdocs build --strict

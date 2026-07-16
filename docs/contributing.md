@@ -4,13 +4,13 @@ Anyone can contribute an idea, correction, local observation, build note, or doc
 
 ## Easiest option: use the submission helper
 
-The [Share an Idea](submit-idea.md) page asks plain-language questions and prepares a structured submission for you. Nothing is sent automatically. You can review the result, then:
+The [Share an Idea](submit-idea.md) page asks plain-language questions and prepares a structured submission for you. Review the result, complete the anti-spam check, and submit it directly without a GitHub account. You can also:
 
-- open a prepared GitHub issue;
-- copy it into the MeshCore Canada forum; or
-- paste it into the community Discord.
+- copy it into the MeshCore Canada forum;
+- paste it into the community Discord; or
+- open the prepared form manually if you already use GitHub.
 
-No code, Git commands, radio settings, or perfect terminology are required.
+The direct submission creates a public GitHub issue for maintainer review. No code, Git commands, radio settings, GitHub account, or perfect terminology are required.
 
 ---
 

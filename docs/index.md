@@ -93,6 +93,6 @@ The documentation on this site is open to all to contribute to and is backed by 
 
 ## Want to Contribute?
 
-This site is community-driven. You do not need to know Git, GitHub, or MeshCore terminology to help. Use the [Share an Idea](submit-idea.md) page to describe what you noticed or what would make the project better. The page prepares a clear submission you can send through GitHub, the forum, or Discord.
+This site is community-driven. You do not need to know Git, have a GitHub account, or understand MeshCore terminology to help. Use the [Share an Idea](submit-idea.md) page to describe what you noticed or what would make the project better. After you review it, the page can create a public review issue automatically. Forum, Discord, copy, and manual GitHub options remain available.
 
 Experienced contributors can still use the [Contributing](contributing.md) page for issue templates and pull requests.

@@ -1,21 +1,28 @@
 # Add this site block to Caddy on the MeshCore Canada production host.
-# Point regions-api.meshcore.ca at that host before reloading Caddy. Caddy will
-# obtain and renew the public TLS certificate when ports 80 and 443 are open.
+# Point api.meshcore.ca at that host as DNS-only (gray-cloud) if Cloudflare DNS
+# is used. Port 21323 is not on Cloudflare's default proxied HTTPS port list.
+# Public TCP 21323 must reach this host. Caddy still needs normal ACME
+# reachability on ports 80/443 unless DNS challenge or an existing certificate
+# is configured.
 
-regions-api.meshcore.ca {
-	@proposal_api {
-		path /api/meshcore-regions/proposals /api/meshcore-regions/proposals/*
+https://api.meshcore.ca:21323 {
+	@submission_api {
+		path /api/meshcore-canada/submissions /api/meshcore-canada/submissions/*
 	}
 
-	handle @proposal_api {
+	handle @submission_api {
 		# The container uses host networking and listens on loopback only.
 		# Caddy ignores browser-supplied X-Forwarded-For by default and sends
-		# the real direct client address to the proposal service.
+		# the real direct client address to the submission service.
 		reverse_proxy 127.0.0.1:8787
 	}
 
 	respond "Not found" 404
 }
 
-# If the GitHub Pages editor later adds a Content-Security-Policy, it must allow
+# Enterprise Cloudflare Spectrum could proxy 21323 instead of DNS-only, but the
+# ordinary orange-cloud proxy cannot. Do not silently move the public API to a
+# different port: both MeshCore Canada forms use this exact endpoint.
+#
+# If the GitHub Pages site later adds a Content-Security-Policy, it must allow
 # https://challenges.cloudflare.com in script-src, frame-src, and connect-src.

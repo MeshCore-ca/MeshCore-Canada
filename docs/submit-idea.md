@@ -10,8 +10,8 @@ hide:
   <p>Describe the problem in your own words. You do not need to know GitHub, write code, understand radio settings, or have a finished solution. The helper below turns what you know into a clear submission for the MeshCore Canada maintainers.</p>
 </div>
 
-!!! info "Nothing is sent automatically"
-    This page prepares text in your browser. You decide whether to open it on GitHub, copy it to the forum, or paste it into Discord.
+!!! info "No GitHub account is needed"
+    Review the prepared text, complete the anti-spam check if prompted, and select **Submit idea**. The helper creates a public review issue automatically.
 
 !!! warning "Submissions are public"
     Do not include passwords, private channel keys, API tokens, exact home addresses, private coordinates, or anything else you would not post publicly. A city or broad region is enough.
@@ -22,7 +22,7 @@ hide:
   <input type="hidden" name="template" value="community_idea.yml">
   <noscript>
     <div class="submission-no-script" role="note">
-      <strong>JavaScript is turned off.</strong> You can still complete this form: “Prepare submission” will open the guided GitHub form directly. The preview and copy tools require JavaScript, so use the forum or Discord links below if you prefer not to use GitHub.
+      <strong>JavaScript is turned off.</strong> Anonymous submission and the preview require JavaScript. This form will instead open the guided GitHub form, which requires a GitHub account. You can also copy your answers into the forum or Discord.
     </div>
   </noscript>
 
@@ -94,30 +94,43 @@ hide:
 
   <label class="submission-consent" for="submission-public">
     <input id="submission-public" name="public" type="checkbox" required>
-    <span>I understand the prepared submission is intended for a public community space and does not contain secrets or precise private location information.</span>
+    <span>I understand this submission will be public and does not contain secrets or precise private location information.</span>
   </label>
 
+  <div class="submission-trap" aria-hidden="true">
+    <label for="submission-website">Website</label>
+    <input id="submission-website" type="text" maxlength="200" tabindex="-1" autocomplete="off">
+  </div>
+
+  <div class="submission-verification">
+    <div id="submission-turnstile" class="submission-turnstile" aria-label="Anti-spam check"></div>
+    <p id="submission-anti-spam-status" class="submission-anti-spam-status" role="status" aria-live="polite">Loading anti-spam protection…</p>
+    <button id="submission-anti-spam-retry" class="md-button submission-inline-retry" type="button" hidden>Retry anti-spam check</button>
+  </div>
+
   <div class="submission-actions">
-    <button class="md-button md-button--primary" type="submit">Prepare submission</button>
+    <button class="md-button" type="submit">Review submission</button>
     <button id="copy-submission" class="md-button" type="button" disabled>Copy text</button>
-    <a id="open-github-submission" class="md-button is-disabled" href="#" aria-disabled="true" target="_blank" rel="noopener">Continue on GitHub</a>
+    <button id="submit-community-idea" class="md-button md-button--primary" type="button" disabled>Submit idea</button>
+    <a id="open-github-submission" class="md-button is-disabled" href="#" aria-disabled="true" target="_blank" rel="noopener">Open on GitHub manually</a>
   </div>
 
   <p id="submission-github-note" class="submission-github-note" role="note" hidden></p>
   <p id="submission-status" class="submission-status" role="status" aria-live="polite"></p>
+  <div id="submission-result" class="submission-result" role="status" aria-live="polite"></div>
   <pre id="submission-preview" class="submission-preview" tabindex="-1" hidden aria-label="Prepared submission preview"></pre>
 </form>
 
-## Choose where to send it
+## Other ways to share
 
 <ul class="submission-routes">
   <li class="submission-route">
-    <h3>GitHub</h3>
-    <p>Best for tracking a proposal through review. The prepared link fills the community idea form for you. A free GitHub account is required.</p>
+    <h3>Manual GitHub form</h3>
+    <p>If you already use GitHub, review the idea above and open the prepared form manually. This optional route requires a GitHub account.</p>
   </li>
   <li class="submission-route">
     <h3>Community forum</h3>
-    <p>Prepare and copy the text above, then start a discussion on the <a href="https://forum.meshcore.ca/" target="_blank" rel="noopener">MeshCore Canada forum</a>.</p>
+    <p>Review and copy the text above, then start a discussion on the <a href="https://forum.meshcore.ca/" target="_blank" rel="noopener">MeshCore Canada forum</a>.</p>
   </li>
   <li class="submission-route">
     <h3>Discord</h3>
@@ -127,6 +140,6 @@ hide:
 
 ## What happens next?
 
-Maintainers will read the submission, ask questions if something is unclear, and decide whether it belongs in the documentation, directory, tooling, or a future project. Submitting an idea does not guarantee implementation, but it makes the need visible and gives the community something concrete to discuss.
+Maintainers will read the public issue, ask questions if something is unclear, and decide whether it belongs in the documentation, directory, tooling, or a future project. Submitting an idea does not guarantee implementation, but it makes the need visible and gives the community something concrete to discuss.
 
 If you already know GitHub, you can also open the [Share a Community Idea form](https://github.com/MeshCore-ca/MeshCore-Canada/issues/new?template=community_idea.yml) directly.

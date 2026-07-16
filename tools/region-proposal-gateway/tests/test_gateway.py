@@ -66,6 +66,21 @@ def valid_proposal(membership_hash: str) -> dict:
     }
 
 
+
+
+def valid_idea() -> dict:
+    return {
+        "schema": gateway.IDEA_SCHEMA,
+        "category": "Feature or project idea",
+        "experience": "Active mesh user",
+        "summary": "  Better regional setup help  ",
+        "region": "  Waterloo Region, Ontario  ",
+        "need": "  First line\r\n\r\nSecond line  ",
+        "idea": "  Add a guided checklist.  ",
+        "context": "   ",
+        "followUp": "  @meshfriend on Discord  ",
+        "publicAcknowledged": True,
+    }
 class AuthorityTests(unittest.TestCase):
     def test_loads_and_cross_checks_all_authority_sources(self):
         with tempfile.TemporaryDirectory() as temporary:
@@ -148,6 +163,73 @@ class ProposalValidationTests(unittest.TestCase):
         self.assertEqual(canonical["reason"], "keep the town together")
 
 
+
+
+class IdeaValidationTests(unittest.TestCase):
+    def test_canonicalizes_optional_fields_and_hash(self):
+        canonical, payload, digest = gateway.validate_idea(valid_idea())
+        self.assertEqual(canonical["summary"], "Better regional setup help")
+        self.assertEqual(canonical["need"], "First line\n\nSecond line")
+        self.assertEqual(canonical["region"], "Waterloo Region, Ontario")
+        self.assertEqual(canonical["followUp"], "@meshfriend on Discord")
+        self.assertNotIn("context", canonical)
+        expected = json.dumps(
+            canonical, ensure_ascii=False, sort_keys=True, separators=(",", ":")
+        ).encode("utf-8")
+        self.assertEqual(payload, expected)
+        self.assertEqual(digest, hashlib.sha256(expected).hexdigest())
+
+    def test_rejects_invalid_shape_enums_consent_and_text(self):
+        cases = []
+        extra = valid_idea()
+        extra["repository"] = "someone/else"
+        cases.append(extra)
+        missing = valid_idea()
+        missing.pop("summary")
+        cases.append(missing)
+        consent = valid_idea()
+        consent["publicAcknowledged"] = False
+        cases.append(consent)
+        category = valid_idea()
+        category["category"] = "Arbitrary"
+        cases.append(category)
+        title = valid_idea()
+        title["summary"] = "bad\nnewline"
+        cases.append(title)
+        control = valid_idea()
+        control["idea"] = "bad" + chr(0) + "text"
+        cases.append(control)
+        long_text = valid_idea()
+        long_text["need"] = "x" * 2001
+        cases.append(long_text)
+        for submission in cases:
+            with self.subTest(submission=submission):
+                with self.assertRaises(gateway.GatewayError) as raised:
+                    gateway.validate_idea(submission)
+                self.assertEqual(raised.exception.code, "invalid_submission")
+
+    def test_issue_escapes_title_body_mentions_and_fences(self):
+        idea = valid_idea()
+        idea["summary"] = "<script> @team ```"
+        idea["need"] = "Need </p> and @admins"
+        idea["idea"] = "Try ``` inside"
+        canonical, payload, digest = gateway.validate_idea(idea)
+        title, body, chunked = gateway.build_issue(
+            canonical, payload, digest, "signature"
+        )
+        self.assertFalse(chunked)
+        self.assertIn("&lt;script&gt;", title)
+        self.assertNotIn("<script>", title)
+        self.assertIn("@\u200bteam", title)
+        rendered = body.split("### Canonical submission JSON", 1)[0]
+        self.assertNotIn("Need </p>", rendered)
+        self.assertIn("Need &lt;/p&gt;", rendered)
+        self.assertIn("@\u200badmins", rendered)
+        self.assertIn(f"submission-schema:{gateway.IDEA_SCHEMA}", body)
+        self.assertIn("submission-sha256:" + digest, body)
+        self.assertIn("````json", body)
+
+
 class FakeSigner:
     def __init__(self):
         self.inputs = []
@@ -206,6 +288,18 @@ class GitHubTests(unittest.TestCase):
             sleep=(lambda seconds: sleeps.append(seconds)) if sleeps is not None else (lambda _seconds: None),
         )
 
+
+    def test_signature_is_domain_separated_by_schema(self):
+        client = object.__new__(gateway.GitHubAppClient)
+        signer = FakeSigner()
+        client.signer = signer
+        digest = "a" * 64
+        region = client._submission_signature(gateway.PROPOSAL_SCHEMA, digest)
+        idea = client._submission_signature(gateway.IDEA_SCHEMA, digest)
+        self.assertEqual(region, idea)
+        self.assertNotEqual(signer.inputs[0], signer.inputs[1])
+        self.assertIn(gateway.PROPOSAL_SCHEMA.encode("ascii"), signer.inputs[0])
+        self.assertIn(gateway.IDEA_SCHEMA.encode("ascii"), signer.inputs[1])
     def test_small_submission_uses_restricted_token_and_fixed_issue(self):
         transport = RoutingTransport()
         client = self.make_client(transport)
@@ -226,7 +320,7 @@ class GitHubTests(unittest.TestCase):
         issue_call = next(call for call in transport.calls if call[1].endswith("/issues"))
         self.assertEqual(issue_call[3]["labels"], ["enhancement"])
         body = issue_call[3]["body"]
-        self.assertIn("proposal-sha256:" + digest, body)
+        self.assertIn("submission-sha256:" + digest, body)
         self.assertIn("@\u200bteam", body)
         self.assertNotIn("<script>", body.split("### Canonical proposal JSON", 1)[0])
         self.assertIn("````json", body)  # dynamic fence encloses user backticks
@@ -239,10 +333,10 @@ class GitHubTests(unittest.TestCase):
         transport.issue = {
             "number": 9,
             "html_url": "https://github.com/MeshCore-ca/MeshCore-Canada/issues/9",
-            "body": f"proposal-sha256:{digest}\nproposal-signature-rs256:{signature}",
+            "body": f"submission-schema:{gateway.PROPOSAL_SCHEMA}\nsubmission-sha256:{digest}\nsubmission-signature-rs256:{signature}",
         }
         client = self.make_client(transport)
-        canonical = {"baseMembershipSha256": "a" * 64, "reason": "x", "changes": []}
+        canonical = {"schema": gateway.PROPOSAL_SCHEMA, "baseMembershipSha256": "a" * 64, "reason": "x", "changes": []}
         result = client.submit(canonical, b"{}", digest)
         self.assertTrue(result["duplicate"])
         self.assertFalse(any(call[0] == "POST" and call[1].endswith("/issues") for call in transport.calls))
@@ -254,10 +348,10 @@ class GitHubTests(unittest.TestCase):
         transport.issue = {
             "number": 9,
             "html_url": "https://github.com/MeshCore-ca/MeshCore-Canada/issues/9?redirect=evil",
-            "body": f"proposal-sha256:{digest}\nproposal-signature-rs256:{signature}",
+            "body": f"submission-schema:{gateway.PROPOSAL_SCHEMA}\nsubmission-sha256:{digest}\nsubmission-signature-rs256:{signature}",
         }
         client = self.make_client(transport)
-        canonical = {"baseMembershipSha256": "a" * 64, "reason": "x", "changes": []}
+        canonical = {"schema": gateway.PROPOSAL_SCHEMA, "baseMembershipSha256": "a" * 64, "reason": "x", "changes": []}
         with self.assertRaises(gateway.UpstreamError):
             client.submit(canonical, b"{}", digest)
 
@@ -267,10 +361,10 @@ class GitHubTests(unittest.TestCase):
         transport.issue = {
             "number": 7,
             "html_url": "https://github.com/MeshCore-ca/MeshCore-Canada/issues/7",
-            "body": "proposal-sha256:" + digest,
+            "body": "submission-sha256:" + digest,
         }
         client = self.make_client(transport)
-        canonical = {"baseMembershipSha256": "a" * 64, "reason": "x", "changes": []}
+        canonical = {"schema": gateway.PROPOSAL_SCHEMA, "baseMembershipSha256": "a" * 64, "reason": "x", "changes": []}
         result = client.submit(canonical, b"{}", digest)
         self.assertFalse(result["duplicate"])
         self.assertTrue(any(call[0] == "POST" and call[1].endswith("/issues") for call in transport.calls))
@@ -279,7 +373,7 @@ class GitHubTests(unittest.TestCase):
         transport = RoutingTransport()
         sleeps = []
         client = self.make_client(transport, sleeps)
-        canonical = {"baseMembershipSha256": "a" * 64, "reason": "x", "changes": []}
+        canonical = {"schema": gateway.PROPOSAL_SCHEMA, "baseMembershipSha256": "a" * 64, "reason": "x", "changes": []}
         payload = bytes(range(256)) * 200
         digest = hashlib.sha256(payload).hexdigest()
         transport.fail_comment_number = 2
@@ -289,7 +383,7 @@ class GitHubTests(unittest.TestCase):
             first_comment = transport.comments[0]
             self.assertIn(f":1/8 -->", first_comment)
             transport.comments.append(
-                f"<!-- mcc-proposal-chunk:{digest}:2/8 -->\nforged or incomplete data\n"
+                f"<!-- mcc-submission-chunk:{digest}:2/8 -->\nforged or incomplete data\n"
             )
             transport.fail_comment_number = None
             result = client.submit(canonical, payload, digest)
@@ -308,7 +402,7 @@ class GitHubTests(unittest.TestCase):
         client = self.make_client(transport)
         digest = "d" * 64
         client.ledger.insert_pending(digest, 1_900_000_000)
-        canonical = {"baseMembershipSha256": "a" * 64, "reason": "x", "changes": []}
+        canonical = {"schema": gateway.PROPOSAL_SCHEMA, "baseMembershipSha256": "a" * 64, "reason": "x", "changes": []}
         with self.assertRaises(gateway.GatewayError) as raised:
             client.submit(canonical, b"{}", digest)
         self.assertEqual(raised.exception.code, "service_unavailable")
@@ -328,7 +422,7 @@ class GitHubTests(unittest.TestCase):
         transport = RejectOnceTransport()
         client = self.make_client(transport)
         digest = "1" * 64
-        canonical = {"baseMembershipSha256": "a" * 64, "reason": "x", "changes": []}
+        canonical = {"schema": gateway.PROPOSAL_SCHEMA, "baseMembershipSha256": "a" * 64, "reason": "x", "changes": []}
         with self.assertRaises(gateway.UpstreamError):
             client.submit(canonical, b"{}", digest)
         self.assertIsNone(client.ledger.lookup(digest))
@@ -349,7 +443,7 @@ class GitHubTests(unittest.TestCase):
         transport = FailCreateTransport()
         client = self.make_client(transport)
         digest = "2" * 64
-        canonical = {"baseMembershipSha256": "a" * 64, "reason": "x", "changes": []}
+        canonical = {"schema": gateway.PROPOSAL_SCHEMA, "baseMembershipSha256": "a" * 64, "reason": "x", "changes": []}
         with self.assertRaises(gateway.UpstreamError):
             client.submit(canonical, b"{}", digest)
         self.assertEqual(client.ledger.lookup(digest)["state"], "pending")
@@ -418,10 +512,10 @@ class ServiceTests(unittest.TestCase):
             gateway.GatewayConfig("/api", "site", frozenset({"https://meshcore.ca"}), ()),
             Authority(), Turnstile(), Github(), gateway.RateLimiter(1, 60, now=lambda: 0),
         )
-        envelope = {"version": 1, "proposal": {}, "turnstileToken": "token", "website": "bot"}
+        envelope = {"version": 1, "submission": {}, "turnstileToken": "token", "website": "bot"}
         with self.assertRaises(gateway.GatewayError) as raised:
             service.submit(envelope, "192.0.2.1")
-        self.assertEqual(raised.exception.code, "invalid_proposal")
+        self.assertEqual(raised.exception.code, "invalid_submission")
         self.assertEqual(events, [])
 
     def test_failed_turnstile_does_not_consume_primary_quota(self):
@@ -439,7 +533,7 @@ class ServiceTests(unittest.TestCase):
             gateway.GatewayConfig("/api", "site", frozenset(), ()),
             Authority(), Turnstile(), Github(), gateway.RateLimiter(1, 60, now=lambda: 0),
         )
-        envelope = {"version": 1, "proposal": {}, "turnstileToken": "token", "website": ""}
+        envelope = {"version": 1, "submission": {"schema": gateway.PROPOSAL_SCHEMA}, "turnstileToken": "token", "website": ""}
         with self.assertRaises(gateway.GatewayError) as raised:
             service.submit(envelope, "192.0.2.1")
         self.assertEqual(raised.exception.code, "turnstile_failed")
@@ -463,7 +557,7 @@ class ServiceTests(unittest.TestCase):
             gateway.RateLimiter(1, 300, now=lambda: 0),
             global_pre,
         )
-        envelope = {"version": 1, "proposal": {}, "turnstileToken": "bad", "website": ""}
+        envelope = {"version": 1, "submission": {"schema": gateway.PROPOSAL_SCHEMA}, "turnstileToken": "bad", "website": ""}
         with self.assertRaises(gateway.GatewayError) as first:
             service.submit(envelope, "192.0.2.1")
         with self.assertRaises(gateway.GatewayError) as second:
@@ -474,6 +568,37 @@ class ServiceTests(unittest.TestCase):
         self.assertEqual(len(primary._events), 0)
         self.assertEqual(len(global_pre._events["global"]), 1)
 
+
+    def test_community_idea_does_not_load_region_authority(self):
+        events = []
+
+        class Authority:
+            def get(self):
+                raise AssertionError("idea submission loaded region authority")
+
+        class Turnstile:
+            def verify(self, token, ip):
+                events.append(("turnstile", token, ip))
+
+        class Github:
+            def submit(self, canonical, payload, digest):
+                events.append(("github", canonical["schema"], digest))
+                self.payload = payload
+                return {"ok": True, "submissionSha256": digest}
+
+        github = Github()
+        service = gateway.GatewayService(
+            gateway.GatewayConfig("/api", "site", frozenset(), ()),
+            Authority(), Turnstile(), github,
+            gateway.RateLimiter(1, 60, now=lambda: 0),
+        )
+        envelope = {
+            "version": 1, "submission": valid_idea(),
+            "turnstileToken": "token", "website": "",
+        }
+        result = service.submit(envelope, "192.0.2.1")
+        self.assertEqual(result["submissionSha256"], events[-1][2])
+        self.assertEqual(json.loads(github.payload), gateway.validate_idea(valid_idea())[0])
     def test_forwarded_ip_only_from_trusted_private_proxy(self):
         service = object.__new__(gateway.GatewayService)
         service.config = gateway.GatewayConfig(
@@ -507,6 +632,7 @@ class ServiceTests(unittest.TestCase):
         ]
         canonical = {
             "baseMembershipSha256": "a" * 64,
+            "schema": gateway.PROPOSAL_SCHEMA,
             "submittedBy": "<" * 80,
             "reason": "<" * 1000,
             "changes": changes,
@@ -529,7 +655,7 @@ class HttpContractTests(unittest.TestCase):
             authority = Authority()
             def client_ip(self, peer, forwarded): return peer
             def submit(self, envelope, client_ip):
-                return {"ok": True, "issueNumber": 1, "issueUrl": "https://github.com/MeshCore-ca/MeshCore-Canada/issues/1", "proposalSha256": "a" * 64, "duplicate": False}
+                return {"ok": True, "issueNumber": 1, "issueUrl": "https://github.com/MeshCore-ca/MeshCore-Canada/issues/1", "submissionSha256": "a" * 64, "duplicate": False}
         self.server = gateway.SafeThreadingHTTPServer(("127.0.0.1", 0), gateway.GatewayHandler)
         self.server.service = Service()
         self.thread = threading.Thread(target=self.server.serve_forever, daemon=True)
@@ -569,7 +695,7 @@ class HttpContractTests(unittest.TestCase):
         })
         self.assertEqual(status, 204)
         self.assertEqual(headers["Access-Control-Allow-Origin"], "https://meshcore.ca")
-        envelope = json.dumps({"version": 1, "proposal": {}, "turnstileToken": "x", "website": ""})
+        envelope = json.dumps({"version": 1, "submission": {}, "turnstileToken": "x", "website": ""})
         status, _, result = self.request("POST", gateway.DEFAULT_BASE_PATH, body=envelope, headers={
             "Origin": "https://meshcore.ca", "Content-Type": "application/json",
         })
@@ -585,12 +711,12 @@ class HttpContractTests(unittest.TestCase):
         self.assertEqual(result["error"]["code"], "payload_too_large")
 
     def test_rejects_duplicate_json_keys(self):
-        duplicate = '{"version":1,"version":1,"proposal":{},"turnstileToken":"x","website":""}'
+        duplicate = '{"version":1,"version":1,"submission":{},"turnstileToken":"x","website":""}'
         status, _, result = self.request("POST", gateway.DEFAULT_BASE_PATH, body=duplicate, headers={
             "Origin": "https://meshcore.ca", "Content-Type": "application/json",
         })
         self.assertEqual(status, 400)
-        self.assertEqual(result["error"]["code"], "invalid_proposal")
+        self.assertEqual(result["error"]["code"], "invalid_submission")
 
 
 class SecretTests(unittest.TestCase):
