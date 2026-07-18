@@ -5,9 +5,12 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import http.client
 import json
 import os
 import shutil
+import sys
+import time
 import urllib.request
 import zipfile
 from pathlib import Path, PurePosixPath
@@ -21,6 +24,8 @@ SOURCES = {
     "statcan-census-divisions-digital-2021": "census_divisions",
     "statcan-census-subdivisions-digital-2021": "census_subdivisions",
 }
+DOWNLOAD_ATTEMPTS = 3
+DOWNLOAD_RETRY_DELAY_SECONDS = 1.0
 
 
 def parse_args() -> argparse.Namespace:
@@ -44,8 +49,18 @@ def file_sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
-def download(source: dict, destination: Path) -> None:
-    expected_hash = str(source.get("sha256", ""))
+def download(
+    source: dict,
+    destination: Path,
+    *,
+    attempts: int = DOWNLOAD_ATTEMPTS,
+    retry_delay_seconds: float = DOWNLOAD_RETRY_DELAY_SECONDS,
+) -> None:
+    if attempts < 1:
+        raise ValueError("download attempts must be at least one")
+    if retry_delay_seconds < 0:
+        raise ValueError("download retry delay cannot be negative")
+    expected_hash = str(source.get("sha256", "")).lower()
     expected_bytes = int(source.get("bytes", -1))
     if (
         destination.is_file()
@@ -56,20 +71,50 @@ def download(source: dict, destination: Path) -> None:
     destination.parent.mkdir(parents=True, exist_ok=True)
     temporary = destination.with_name(f".{destination.name}.tmp")
     temporary.unlink(missing_ok=True)
-    request = urllib.request.Request(
-        str(source["url"]),
-        headers={"User-Agent": "MeshCore-Canada-region-generator/1"},
-    )
-    try:
-        with urllib.request.urlopen(request, timeout=90) as response, temporary.open("wb") as output:
-            shutil.copyfileobj(response, output, length=1024 * 1024)
-        if temporary.stat().st_size != expected_bytes:
-            raise ValueError(f"downloaded byte count differs for {source['id']}")
-        if file_sha256(temporary) != expected_hash:
-            raise ValueError(f"downloaded SHA-256 differs for {source['id']}")
-        os.replace(temporary, destination)
-    finally:
-        temporary.unlink(missing_ok=True)
+    for attempt in range(1, attempts + 1):
+        headers = {
+            "Accept-Encoding": "identity",
+            "User-Agent": "MeshCore-Canada-region-generator/1",
+        }
+        if attempt > 1:
+            headers["Cache-Control"] = "no-cache"
+        request = urllib.request.Request(str(source["url"]), headers=headers)
+        try:
+            with (
+                urllib.request.urlopen(request, timeout=90) as response,
+                temporary.open("wb") as output,
+            ):
+                shutil.copyfileobj(response, output, length=1024 * 1024)
+            actual_bytes = temporary.stat().st_size
+            if actual_bytes != expected_bytes:
+                raise ValueError(
+                    f"downloaded byte count differs for {source['id']}: "
+                    f"expected {expected_bytes}, got {actual_bytes}"
+                )
+            actual_hash = file_sha256(temporary)
+            if actual_hash != expected_hash:
+                raise ValueError(
+                    f"downloaded SHA-256 differs for {source['id']}: "
+                    f"expected {expected_hash}, got {actual_hash}"
+                )
+            os.replace(temporary, destination)
+            return
+        except (OSError, ValueError, http.client.HTTPException) as error:
+            temporary.unlink(missing_ok=True)
+            if attempt == attempts:
+                raise RuntimeError(
+                    f"failed to fetch and verify {source['id']} after "
+                    f"{attempts} attempts: {error}"
+                ) from error
+            print(
+                f"Fetch attempt {attempt}/{attempts} failed for "
+                f"{source['id']}: {error}; retrying",
+                file=sys.stderr,
+            )
+            if retry_delay_seconds:
+                time.sleep(retry_delay_seconds * (2 ** (attempt - 1)))
+        finally:
+            temporary.unlink(missing_ok=True)
 
 
 def safe_extract(archive: Path, destination: Path, expected_hash: str) -> Path:

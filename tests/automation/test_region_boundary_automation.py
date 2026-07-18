@@ -4,6 +4,7 @@ import base64
 import gzip
 import hashlib
 import importlib.util
+import io
 import tempfile
 import unittest
 import zipfile
@@ -302,6 +303,63 @@ class SourceFetchTests(unittest.TestCase):
             self.assertEqual(fetch_sources.file_sha256(cached), source["sha256"])
             shapefile = fetch_sources.safe_extract(cached, root / "extracted", source["sha256"])
             self.assertEqual(shapefile.read_bytes(), b"shape")
+
+    def test_download_retries_same_size_sha_mismatch(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            expected = b"good archive bytes"
+            corrupted = b"bad! archive bytes"
+            source = {
+                "id": "test",
+                "url": "https://example.invalid/source.zip",
+                "bytes": len(expected),
+                "sha256": hashlib.sha256(expected).hexdigest(),
+            }
+            destination = root / "cache" / "source.zip"
+            responses = [io.BytesIO(corrupted), io.BytesIO(expected)]
+            with mock.patch.object(
+                fetch_sources.urllib.request,
+                "urlopen",
+                side_effect=responses,
+            ) as urlopen:
+                fetch_sources.download(
+                    source,
+                    destination,
+                    retry_delay_seconds=0,
+                )
+            self.assertEqual(urlopen.call_count, 2)
+            self.assertEqual(destination.read_bytes(), expected)
+
+    def test_download_fails_closed_after_persistent_sha_mismatch(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            expected = b"good archive bytes"
+            corrupted = b"bad! archive bytes"
+            source = {
+                "id": "test",
+                "url": "https://example.invalid/source.zip",
+                "bytes": len(expected),
+                "sha256": hashlib.sha256(expected).hexdigest(),
+            }
+            destination = root / "cache" / "source.zip"
+
+            def corrupt_response(*_args, **_kwargs):
+                return io.BytesIO(corrupted)
+
+            with mock.patch.object(
+                fetch_sources.urllib.request,
+                "urlopen",
+                side_effect=corrupt_response,
+            ) as urlopen:
+                with self.assertRaisesRegex(RuntimeError, "after 3 attempts"):
+                    fetch_sources.download(
+                        source,
+                        destination,
+                        retry_delay_seconds=0,
+                    )
+            self.assertEqual(urlopen.call_count, 3)
+            self.assertFalse(destination.exists())
+            self.assertFalse((destination.parent / ".source.zip.tmp").exists())
 
     def test_zip_traversal_is_rejected(self):
         with tempfile.TemporaryDirectory() as temporary:
