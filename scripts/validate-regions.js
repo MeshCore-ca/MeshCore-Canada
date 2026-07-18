@@ -109,6 +109,19 @@ function ancestryFor(data, tag) {
   return result;
 }
 
+function newRegionParentJurisdiction(data, parent, leafSet) {
+  if (!data.hierarchy[parent] || leafSet.has(parent)) return null;
+  const parentChain = ancestryFor(data, parent);
+  const jurisdiction = parentChain[1];
+  if (
+    parentChain[0] !== "can"
+    || !Object.values(PR_TO_TAG).includes(jurisdiction)
+  ) {
+    return null;
+  }
+  return jurisdiction;
+}
+
 function canonicalLeafOrder(data, tags) {
   return unique(tags).sort((left, right) => {
     return ancestryFor(data, left).join("/").localeCompare(ancestryFor(data, right).join("/"));
@@ -496,20 +509,25 @@ function validate(data, meshMapper, partition, digitalPartition, qa, municipalOv
     const parent = String(record.parent || "");
     const anchorDguid = String(record.anchorDguid || "");
     const anchor = membershipByDguid.get(anchorDguid);
+    const parentJurisdiction = newRegionParentJurisdiction(data, parent, leafSet);
     check(!approvedNewTags.has(tag), `duplicate approved new region ${tag}`);
     approvedNewTags.add(tag);
     check(record.status === "approved", `new region ${tag} is not approved`);
     check(leafSet.has(tag), `new region ${tag} is not a catalog leaf`);
-    check(Boolean(data.hierarchy[parent]) && data.hierarchy[parent].parent === "can", `new region ${tag} has an invalid jurisdiction parent`);
+    check(Boolean(parentJurisdiction), `new region ${tag} has an invalid jurisdiction parent`);
     check(Boolean(anchor), `new region ${tag} references unknown anchor ${anchorDguid}`);
     if (anchor) {
       check(anchor.leafTag === tag, `new region ${tag} does not own its approved anchor`);
-      check(PR_TO_TAG[anchor.pruid] === parent, `new region ${tag} anchor crosses jurisdiction`);
+      check(PR_TO_TAG[anchor.pruid] === parentJurisdiction, `new region ${tag} anchor crosses jurisdiction`);
     }
     check(data.hierarchy[tag] && data.hierarchy[tag].parent === parent, `new region ${tag} catalog parent is wrong`);
     check(data.hierarchy[tag] && data.hierarchy[tag].label === record.label, `new region ${tag} catalog label is wrong`);
     check(data.status[tag] && data.status[tag].sourceUrl === record.sourceIssue, `new region ${tag} has the wrong review source`);
     check(Array.isArray(data.aliases[tag]) && data.aliases[tag].includes(tag), `new region ${tag} has no canonical alias`);
+    check(
+      !membershipRows.some((row) => row.provisionalLeafTag === tag),
+      `new region ${tag} must not alter the frozen provisional ownership basis`
+    );
   });
 
   const cohortOverrides = municipalOverrides && Array.isArray(municipalOverrides.cohortOverrides)
@@ -860,30 +878,36 @@ function validate(data, meshMapper, partition, digitalPartition, qa, municipalOv
   };
 }
 
-const data = readJson(DATA_PATH);
-const meshMapper = readJson(MESH_MAPPER_PATH);
-const partition = readJson(PARTITION_PATH);
-const digitalPartition = readJson(DIGITAL_PARTITION_PATH);
-const qa = readJson(QA_PATH);
-const municipalOverrides = readJson(MUNICIPAL_OVERRIDES_PATH);
-const radioDensity = readJson(RADIO_DENSITY_PATH);
-let scriptText = "";
-let standardText = "";
-try {
-  scriptText = fs.readFileSync(SCRIPT_PATH, "utf8");
-  standardText = fs.readFileSync(STANDARD_PATH, "utf8");
-} catch (error) {
-  failures.push(`required source could not be read: ${error.message}`);
+function main() {
+  const data = readJson(DATA_PATH);
+  const meshMapper = readJson(MESH_MAPPER_PATH);
+  const partition = readJson(PARTITION_PATH);
+  const digitalPartition = readJson(DIGITAL_PARTITION_PATH);
+  const qa = readJson(QA_PATH);
+  const municipalOverrides = readJson(MUNICIPAL_OVERRIDES_PATH);
+  const radioDensity = readJson(RADIO_DENSITY_PATH);
+  let scriptText = "";
+  let standardText = "";
+  try {
+    scriptText = fs.readFileSync(SCRIPT_PATH, "utf8");
+    standardText = fs.readFileSync(STANDARD_PATH, "utf8");
+  } catch (error) {
+    failures.push(`required source could not be read: ${error.message}`);
+  }
+
+  const summary = data && meshMapper && partition && digitalPartition && qa && municipalOverrides && radioDensity
+    ? validate(data, meshMapper, partition, digitalPartition, qa, municipalOverrides, radioDensity, scriptText, standardText)
+    : null;
+
+  warnings.forEach((warning) => console.warn(`WARN: ${warning}`));
+  if (failures.length) {
+    failures.forEach((failure) => console.error(`ERROR: ${failure}`));
+    console.error(`Region validation failed with ${failures.length} error(s).`);
+    process.exit(1);
+  }
+  console.log(`Exclusive national partition validation passed: ${JSON.stringify(summary)}`);
 }
 
-const summary = data && meshMapper && partition && digitalPartition && qa && municipalOverrides && radioDensity
-  ? validate(data, meshMapper, partition, digitalPartition, qa, municipalOverrides, radioDensity, scriptText, standardText)
-  : null;
+if (require.main === module) main();
 
-warnings.forEach((warning) => console.warn(`WARN: ${warning}`));
-if (failures.length) {
-  failures.forEach((failure) => console.error(`ERROR: ${failure}`));
-  console.error(`Region validation failed with ${failures.length} error(s).`);
-  process.exit(1);
-}
-console.log(`Exclusive national partition validation passed: ${JSON.stringify(summary)}`);
+module.exports = { ancestryFor, newRegionParentJurisdiction };

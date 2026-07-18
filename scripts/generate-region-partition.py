@@ -168,6 +168,24 @@ def jurisdiction_for(hierarchy: dict, tag: str) -> str:
     return path[1]
 
 
+def provisional_seed_tags(hierarchy: dict, leaves: list[str]) -> list[str]:
+    """Return seeds allowed to influence the frozen pre-radio candidate basis.
+
+    A community-approved region owns cells through its reviewed CSD override or
+    explicit split. Letting its seed participate here would both expand it
+    beyond that decision and invalidate the locked radio-density candidate
+    labels before the reviewed override is applied.
+    """
+    result = sorted(
+        tag
+        for tag in leaves
+        if hierarchy.get(tag, {}).get("basis") != "community-approved"
+    )
+    if not result:
+        raise ValueError("the provisional partition has no automatic region seeds")
+    return result
+
+
 def assign_points_to_ers(points: gpd.GeoDataFrame, ers: gpd.GeoDataFrame) -> dict[int, str]:
     joined = gpd.sjoin(
         points[["geometry"]],
@@ -680,6 +698,7 @@ def main() -> None:
     hierarchy = catalog["hierarchy"]
     children = children_by_parent(hierarchy)
     leaves = sorted(tag for tag in hierarchy if not children.get(tag))
+    provisional_tags = provisional_seed_tags(hierarchy, leaves)
     seed_by_tag = {str(seed["tag"]): seed for seed in catalog["seeds"]}
     if set(leaves) != set(seed_by_tag):
         raise ValueError(
@@ -757,9 +776,10 @@ def main() -> None:
     seeds["ERUID"] = [seed_er_by_index[index] for index in seeds.index]
     seeds["CDUID"] = [seed_cd_by_index[index] for index in seeds.index]
     seeds["CSDUID"] = [seed_csd_by_index[index] for index in seeds.index]
+    provisional_seeds = seeds.loc[seeds["tag"].isin(provisional_tags)].copy()
 
     winners, touched_ers, source_seed_candidates, source_stats = source_claims(
-        digital, representatives, seeds, catalog, meshmapper, leaf_jurisdictions
+        digital, representatives, provisional_seeds, catalog, meshmapper, leaf_jurisdictions
     )
 
     seed_cells: dict[str, str] = {}
@@ -771,6 +791,9 @@ def main() -> None:
         if dguid in seed_cells and seed_cells[dguid] != tag:
             raise ValueError(f"seed collision in {dguid}: {seed_cells[dguid]} and {tag}")
         seed_cells[dguid] = tag
+    provisional_seed_cells = {
+        dguid: tag for dguid, tag in seed_cells.items() if tag in provisional_tags
+    }
 
     allowed_ers: dict[str, set[str]] = {
         str(row["tag"]): {str(row["ERUID"])} | touched_ers.get(str(row["tag"]), set())
@@ -792,12 +815,14 @@ def main() -> None:
             raise ValueError(f"unknown PRUID {pruid}")
         eligible = sorted(
             tag
-            for tag in leaves
+            for tag in provisional_tags
             if leaf_jurisdictions[tag] == jurisdiction and home_er_by_tag[tag] == eruid
         )
         fill_source = "nearest-seed-within-er"
         if not eligible:
-            eligible = sorted(tag for tag in leaves if leaf_jurisdictions[tag] == jurisdiction)
+            eligible = sorted(
+                tag for tag in provisional_tags if leaf_jurisdictions[tag] == jurisdiction
+            )
             fallback_ers.append(eruid)
             fill_source = "nearest-seed-jurisdiction-fallback"
         seed_coordinates = np.array([[seed_lookup.loc[tag].geometry.x, seed_lookup.loc[tag].geometry.y] for tag in eligible])
@@ -805,8 +830,8 @@ def main() -> None:
         nearest = deterministic_nearest(cKDTree(seed_coordinates), eligible, da_coordinates, registry_ids)
         for index, ordinary_tag in zip(indices, nearest):
             dguid = str(digital.iloc[index]["DGUID"])
-            if dguid in seed_cells:
-                tag = seed_cells[dguid]
+            if dguid in provisional_seed_cells:
+                tag = provisional_seed_cells[dguid]
                 owner[dguid] = tag
                 assignment[dguid] = "seed-anchor"
                 continue
@@ -858,7 +883,9 @@ def main() -> None:
         detail["subdivisionDaCounts"] = dict(sorted(subdivision.items()))
         detail["dominantLeafShare"] = round(max(subdivision.values(), default=0) / max(1, len(claimed_dguids)), 6)
         contained = detail["containedLeafSeeds"]
-        non_anchor = Counter(owner[dguid] for dguid in claimed_dguids if dguid not in seed_cells)
+        non_anchor = Counter(
+            owner[dguid] for dguid in claimed_dguids if dguid not in provisional_seed_cells
+        )
         if len(contained) > 1 and detail["dominantLeafShare"] > 0.9:
             starved = [tag for tag in contained if non_anchor[tag] == 0]
             if starved:
