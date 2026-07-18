@@ -137,6 +137,16 @@ class NewRegionAutomationTests(unittest.TestCase):
             self.assertEqual(catalog_value["strategy"]["sourceSelectableRegions"], 3)
 
 
+    def test_community_approved_seed_stays_out_of_frozen_provisional_basis(self):
+        hierarchy = {
+            "aaa": {"basis": "established"},
+            "delta": {"basis": "community-approved"},
+        }
+        self.assertEqual(
+            generate_partition.provisional_seed_tags(hierarchy, ["aaa", "delta"]),
+            ["aaa"],
+        )
+
     def test_approved_split_allows_old_and_new_anchors_in_one_municipality(self):
         digital = gpd.GeoDataFrame(
             [
