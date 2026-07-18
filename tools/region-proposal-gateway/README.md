@@ -78,7 +78,8 @@ The server revalidates every boundary proposal against the mounted authority:
 - membership DGUIDs must be unique and match the per-province TopoJSON cells;
 - every leaf must retain exactly one anchor;
 - the submitted base hash and every `from` value must still be current;
-- target leaves must be valid and in the same province or territory;
+- target leaves must be valid and in the same province or territory; shared cross-province repeater configurations do not move map cells;
+- neighbouring U.S. forwarding paths are catalog metadata and are never boundary-editor geometry;
 - anchors cannot move; and
 - request, proposal, and changed-cell limits must pass.
 

@@ -109,8 +109,30 @@ function ancestryFor(data, tag) {
   return result;
 }
 
+function canonicalLeafOrder(data, tags) {
+  return unique(tags).sort((left, right) => {
+    return ancestryFor(data, left).join("/").localeCompare(ancestryFor(data, right).join("/"));
+  });
+}
+
+function profileTagsForLeaves(data, leaves) {
+  return unique(canonicalLeafOrder(data, leaves).flatMap((tag) => ancestryFor(data, tag)));
+}
+
+function regionDefTokens(data, tags, parentOverrides = {}) {
+  return tags.map((tag, index) => {
+    if (index === tags.length - 1) return tag;
+    const next = tags[index + 1];
+    const nextParent = Object.prototype.hasOwnProperty.call(parentOverrides, next)
+      ? parentOverrides[next]
+      : data.hierarchy[next] && data.hierarchy[next].parent;
+    return nextParent === tag ? tag : `${tag}|${nextParent || "*"}`;
+  });
+}
+
 function validate(data, meshMapper, partition, digitalPartition, qa, municipalOverrides, radioDensity, scriptText, standardText) {
   check(data.authority && data.authority.standard === "MCC-REG-1", "catalog does not declare MCC-REG-1");
+  check(data.authority && data.authority.version === "1.1-proposed", "catalog does not declare MCC-REG-1.1");
   check(data.authority && data.authority.geographicModel === "exclusive-national-partition", "catalog is not an exclusive partition");
   check(data.authority && data.authority.currentBoundaryStatus === "generated-candidate", "boundary status must be generated-candidate");
   check(data.meta && data.meta.rootTag === "can", "root tag must be can");
@@ -149,12 +171,188 @@ function validate(data, meshMapper, partition, digitalPartition, qa, municipalOv
   check(Object.keys(data.status || {}).length === hierarchyTags.length, "status records must match hierarchy records exactly");
 
   const leafSet = new Set(leaves);
+  const sharedRepeaterMembers = new Map();
+  const sharedRepeaterProfiles = [];
+  let sharedRepeaterAreaCount = 0;
   Object.entries(data.searchGroups || {}).forEach(([name, group]) => {
+    checkExactKeys(group, new Set(["label", "members", "geographic", "emitInCommands", "repeaterConfig"]), `search group ${name}`);
     check(group.geographic === false, `search group ${name} must be explicitly non-geographic`);
-    check(group.emitInCommands === false, `search group ${name} must not enter commands`);
+    check(group.emitInCommands === false, `search group ${name} name must not enter commands`);
     check(Array.isArray(group.members) && group.members.length > 1, `search group ${name} needs at least two members`);
     (group.members || []).forEach((member) => check(leafSet.has(member), `search group ${name} references non-leaf ${member}`));
+    check(new Set(group.members || []).size === (group.members || []).length, `search group ${name} has duplicate members`);
+
+    const memberJurisdictions = unique((group.members || []).filter((member) => leafSet.has(member)).map((member) => ancestryFor(data, member)[1]));
+    if (memberJurisdictions.length > 1) {
+      check(Boolean(group.repeaterConfig), `cross-jurisdiction search group ${name} needs a shared repeater configuration`);
+    }
+    if (!group.repeaterConfig) return;
+
+    sharedRepeaterAreaCount += 1;
+    checkExactKeys(
+      group.repeaterConfig,
+      new Set(["mode", "defaultForMembers", "basis"]),
+      `search group ${name} repeaterConfig`
+    );
+    check(group.repeaterConfig.mode === "shared-member-paths", `shared repeater area ${name} has an unsupported mode`);
+    check(group.repeaterConfig.defaultForMembers === true, `shared repeater area ${name} must be the member default`);
+    check(Boolean(String(group.repeaterConfig.basis || "").trim()), `shared repeater area ${name} needs a basis`);
+    check(memberJurisdictions.length > 1, `shared repeater area ${name} must cross a province or territory`);
+    const canonicalMembers = canonicalLeafOrder(data, group.members || []);
+    check(JSON.stringify(group.members || []) === JSON.stringify(canonicalMembers), `shared repeater area ${name} members are not in canonical hierarchy order`);
+    canonicalMembers.forEach((member) => {
+      check(!sharedRepeaterMembers.has(member), `${member} belongs to more than one default shared repeater area`);
+      sharedRepeaterMembers.set(member, name);
+    });
+
+    const profileTags = profileTagsForLeaves(data, canonicalMembers);
+    const responseBytes = Buffer.byteLength(profileTags.join(","), "utf8") + 1;
+    const defLine = `region def ${regionDefTokens(data, profileTags).join(" ")}`;
+    check(profileTags.length <= MAX_PROFILE_TAGS, `shared repeater area ${name} exceeds ${MAX_PROFILE_TAGS} tags`);
+    check(responseBytes <= MAX_RESPONSE_BYTES, `shared repeater area ${name} exceeds ${MAX_RESPONSE_BYTES} response bytes`);
+    check(defLine.length <= MAX_REGION_DEF_CHARS, `shared repeater area ${name} exceeds the ${MAX_REGION_DEF_CHARS}-character region def limit`);
+    check(!profileTags.includes(name), `shared repeater area ${name} incorrectly emits its group name`);
+    sharedRepeaterProfiles.push({
+      name,
+      tags: profileTags.length,
+      responseBytes,
+      defChars: defLine.length
+    });
   });
+
+  const expectedExternalPaths = {
+    "western-new-york": ["us", "us-ny"],
+    washington: ["west", "pnw", "wa"],
+    oregon: ["west", "pnw", "or"],
+    pennsylvania: ["us", "us-pa"],
+    ohio: ["us", "us-oh"],
+    california: ["west", "ca"]
+  };
+  const expectedDocumentedPaths = new Set(["western-new-york", "washington", "oregon"]);
+  const externalEntries = Object.entries(data.externalRegionPaths || {});
+  const externalParents = new Map();
+  const externalLabels = new Map();
+  const externalProfiles = [];
+  check(
+    JSON.stringify(externalEntries.map(([id]) => id).sort()) ===
+      JSON.stringify(Object.keys(expectedExternalPaths).sort()),
+    "neighbouring paths must match the current traffic-evidenced set"
+  );
+  externalEntries.forEach(([id, record]) => {
+    checkExactKeys(
+      record,
+      new Set([
+        "label", "country", "areaCode", "path", "tagLabels", "geographic",
+        "automatic", "eligibility", "authority", "trafficEvidence"
+      ]),
+      `neighbouring path ${id}`
+    );
+    check(Boolean(String(record.label || "").trim()), `neighbouring path ${id} needs a label`);
+    check(record.country === "us", `neighbouring path ${id} must identify country us`);
+    check(/^[A-Z]{2}$/.test(String(record.areaCode || "")), `neighbouring path ${id} has an invalid area code`);
+    check(record.geographic === false, `neighbouring path ${id} must be non-geographic`);
+    check(record.automatic === false, `neighbouring path ${id} must never be automatic`);
+    check(
+      ["border-or-shared-water", "observed-further-route"].includes(record.eligibility),
+      `neighbouring path ${id} has an invalid eligibility rule`
+    );
+
+    const externalPath = Array.isArray(record.path) ? record.path : [];
+    check(
+      JSON.stringify(externalPath) === JSON.stringify(expectedExternalPaths[id] || []),
+      `neighbouring path ${id} does not match its reviewed hierarchy`
+    );
+    check(externalPath.length >= 2, `neighbouring path ${id} needs a complete path`);
+    check(unique(externalPath).length === externalPath.length, `neighbouring path ${id} repeats a tag`);
+    checkExactKeys(record.tagLabels, new Set(externalPath), `neighbouring path ${id} tagLabels`);
+    externalPath.forEach((tag, index) => {
+      check(TAG_RE.test(tag), `neighbouring path ${id} has invalid tag ${tag}`);
+      check(Buffer.byteLength(tag, "utf8") <= MAX_TAG_BYTES, `neighbouring tag exceeds ${MAX_TAG_BYTES} bytes: ${tag}`);
+      check(!Object.prototype.hasOwnProperty.call(data.hierarchy, tag), `neighbouring tag collides with Canadian hierarchy: ${tag}`);
+      check(Boolean(String(record.tagLabels && record.tagLabels[tag] || "").trim()), `neighbouring path ${id} has no label for ${tag}`);
+      const parent = index ? externalPath[index - 1] : null;
+      if (externalParents.has(tag)) {
+        check(externalParents.get(tag) === parent, `neighbouring tag ${tag} has conflicting parents`);
+      } else {
+        externalParents.set(tag, parent);
+      }
+      if (externalLabels.has(tag)) {
+        check(externalLabels.get(tag) === record.tagLabels[tag], `neighbouring tag ${tag} has conflicting labels`);
+      } else {
+        externalLabels.set(tag, record.tagLabels[tag]);
+      }
+    });
+
+    checkExactKeys(record.authority, new Set(["status", "source", "sourceUrl"]), `neighbouring path ${id} authority`);
+    const expectedStatus = expectedDocumentedPaths.has(id) ? "documented" : "provisional";
+    check(record.authority && record.authority.status === expectedStatus, `neighbouring path ${id} has the wrong review status`);
+    check(Boolean(String(record.authority && record.authority.source || "").trim()), `neighbouring path ${id} needs an authority source`);
+    check(/^https:\/\//.test(String(record.authority && record.authority.sourceUrl || "")), `neighbouring path ${id} needs an HTTPS authority URL`);
+
+    checkExactKeys(
+      record.trafficEvidence,
+      new Set(["source", "snapshot", "method", "routePatterns", "observations"]),
+      `neighbouring path ${id} trafficEvidence`
+    );
+    check(record.trafficEvidence && record.trafficEvidence.source === "https://dev.meshcore.ca/", `neighbouring path ${id} has the wrong traffic source`);
+    check(/^\d{4}-\d{2}-\d{2}$/.test(String(record.trafficEvidence && record.trafficEvidence.snapshot || "")), `neighbouring path ${id} has an invalid snapshot date`);
+    check(record.trafficEvidence && record.trafficEvidence.method === "mixed-canada-us-resolved-route", `neighbouring path ${id} has an invalid evidence method`);
+    check(Number.isInteger(record.trafficEvidence && record.trafficEvidence.routePatterns) && record.trafficEvidence.routePatterns > 0, `neighbouring path ${id} needs positive route-pattern evidence`);
+    check(Number.isInteger(record.trafficEvidence && record.trafficEvidence.observations) && record.trafficEvidence.observations > 0, `neighbouring path ${id} needs positive route observations`);
+
+    const parentOverrides = Object.fromEntries(externalPath.map((tag) => [tag, externalParents.get(tag)]));
+    const responseBytes = Buffer.byteLength(externalPath.join(","), "utf8") + 1;
+    const defLine = `region def ${regionDefTokens(data, externalPath, parentOverrides).join(" ")}`;
+    check(externalPath.length <= MAX_PROFILE_TAGS, `neighbouring path ${id} exceeds ${MAX_PROFILE_TAGS} tags`);
+    check(responseBytes <= MAX_RESPONSE_BYTES, `neighbouring path ${id} exceeds ${MAX_RESPONSE_BYTES} response bytes`);
+    check(defLine.length <= MAX_REGION_DEF_CHARS, `neighbouring path ${id} exceeds the ${MAX_REGION_DEF_CHARS}-character region def limit`);
+    externalProfiles.push({ name: id, tags: externalPath.length, responseBytes, defChars: defLine.length });
+  });
+
+  const representativeCanadianLeaves = ["tor", "wat"];
+  representativeCanadianLeaves.forEach((tag) => check(leafSet.has(tag), `missing representative Canadian leaf ${tag}`));
+  const representativeExternal = data.externalRegionPaths && data.externalRegionPaths["western-new-york"];
+  if (representativeCanadianLeaves.every((tag) => leafSet.has(tag)) && representativeExternal) {
+    const localTags = profileTagsForLeaves(data, representativeCanadianLeaves);
+    const tags = unique(localTags.concat(representativeExternal.path));
+    const overrides = Object.fromEntries(representativeExternal.path.map((tag, index) => [
+      tag,
+      index ? representativeExternal.path[index - 1] : null
+    ]));
+    const command = `region def ${regionDefTokens(data, tags, overrides).join(" ")}`;
+    check(
+      command === "region def can on on-gtha gta tor|on on-ktw wat|* us us-ny",
+      `representative Ontario-WNY command is wrong: ${command}`
+    );
+    externalProfiles.push({
+      name: "ontario-wny-fixture",
+      tags: tags.length,
+      responseBytes: Buffer.byteLength(tags.join(","), "utf8") + 1,
+      defChars: command.length
+    });
+  }
+
+  if (leafSet.has("mvrd") && externalEntries.length) {
+    const records = externalEntries.map(([, record]) => record).sort((left, right) => {
+      return left.path.join("/").localeCompare(right.path.join("/"));
+    });
+    const tags = unique(profileTagsForLeaves(data, ["mvrd"]).concat(records.flatMap((record) => record.path)));
+    const overrides = {};
+    records.forEach((record) => record.path.forEach((tag, index) => {
+      overrides[tag] = index ? record.path[index - 1] : null;
+    }));
+    const command = `region def ${regionDefTokens(data, tags, overrides).join(" ")}`;
+    const responseBytes = Buffer.byteLength(tags.join(","), "utf8") + 1;
+    check(tags.length <= MAX_PROFILE_TAGS, `all current neighbouring paths exceed ${MAX_PROFILE_TAGS} tags`);
+    check(responseBytes <= MAX_RESPONSE_BYTES, `all current neighbouring paths exceed ${MAX_RESPONSE_BYTES} response bytes`);
+    check(command.length <= MAX_REGION_DEF_CHARS, `all current neighbouring paths exceed the ${MAX_REGION_DEF_CHARS}-character region def limit`);
+    externalProfiles.push({
+      name: "all-neighbouring-paths-fixture",
+      tags: tags.length,
+      responseBytes,
+      defChars: command.length
+    });
+  }
 
   const aliasOwners = new Map();
   Object.entries(data.aliases || {}).forEach(([owner, aliases]) => {
@@ -539,12 +737,35 @@ function validate(data, meshMapper, partition, digitalPartition, qa, municipalOv
     check(responseBytes <= MAX_RESPONSE_BYTES, `${tag} path exceeds ${MAX_RESPONSE_BYTES} response bytes`);
     check(defChars <= MAX_REGION_DEF_CHARS, `${tag} region def exceeds ${MAX_REGION_DEF_CHARS} characters`);
   });
+  sharedRepeaterProfiles.forEach((profile) => {
+    maxTags = Math.max(maxTags, profile.tags);
+    maxResponseBytes = Math.max(maxResponseBytes, profile.responseBytes);
+    maxRegionDefChars = Math.max(maxRegionDefChars, profile.defChars);
+  });
+  externalProfiles.forEach((profile) => {
+    maxTags = Math.max(maxTags, profile.tags);
+    maxResponseBytes = Math.max(maxResponseBytes, profile.responseBytes);
+    maxRegionDefChars = Math.max(maxRegionDefChars, profile.defChars);
+  });
 
   check(!scriptText.includes("region dump"), "obsolete 'region dump' command remains in regions.js");
   check(scriptText.includes('verificationCommands = ["region"]'), "guided verification must use bare region command");
   check(scriptText.includes('commands.concat(["region", "region save", "region"])'), "technical flow must verify before and after saving");
-  check(scriptText.includes("Run <code>region</code> and confirm:"), "guided flow must verify before saving");
+  check(scriptText.includes("Run <code>region</code> and confirm"), "guided flow must verify before saving");
   check(scriptText.includes("Too many regions selected"), "command generation must fail closed on firmware limits");
+  check(
+    scriptText.includes("if (regionDefLine.length <= 160)") &&
+      scriptText.includes('lines.push(parent ? "region put " + tag + " " + parent : "region put " + tag)'),
+    "command generation must fall back to bounded region put lines"
+  );
+  check(scriptText.includes("Provinces and territories may be mixed."), "wide-coverage UI does not support cross-province selection");
+  check(scriptText.includes("Large or cross-border coverage"), "UI does not offer large and cross-border forwarding");
+  check(scriptText.includes("Different repeaters can carry different paths to spread traffic."), "UI does not explain path distribution");
+  check(scriptText.includes("Neighbouring network paths"), "UI does not expose traffic-evidenced U.S. paths");
+  check(scriptText.includes("requestedExternalPaths"), "map does not restore neighbouring path selections");
+  check(scriptText.includes("is-external"), "UI does not distinguish neighbouring tags");
+  check(scriptText.includes("Shared repeater area"), "UI does not identify shared repeater configurations");
+  check(scriptText.includes("shared-member-paths"), "UI does not load shared repeater area definitions");
   check(scriptText.includes('"canada-region-partition.geojson"'), "UI does not load the generated partition");
   check(scriptText.includes('"canada-region-partition-digital.geojson"'), "UI does not load the complete resolver partition");
   check(!scriptText.includes('fetch(new URL("meshmapper-canada-regions.json"'), "UI must not load raw MeshMapper polygons");
@@ -565,7 +786,19 @@ function validate(data, meshMapper, partition, digitalPartition, qa, municipalOv
     "Boundary editor proposals",
     "positive-area overlap",
     "canada-region-membership.csv",
-    "Run bare `region`"
+    "Run bare `region`",
+    "Cross-province repeater areas",
+    "Large and neighbouring network paths",
+    "Large coverage does not require a mountain",
+    "Do not put every available path on every repeater",
+    "Western New York",
+    "`west → pnw → or`",
+    "never draws U.S. geometry",
+    "shared repeater area",
+    "region def can on on-alg ott|can qc gatout",
+    "32 tags",
+    "172 response bytes",
+    "No generated CLI line may exceed 160 characters"
   ].forEach((phrase) => check(standardText.includes(phrase), `standard is missing required rule: ${phrase}`));
 
   return {
@@ -581,6 +814,8 @@ function validate(data, meshMapper, partition, digitalPartition, qa, municipalOv
     meshMapperInputs: sourceFeatures.length,
     meshMapperCanonicalTags: mappedCanonical.size,
     searchGroups: Object.keys(data.searchGroups || {}).length,
+    sharedRepeaterAreas: sharedRepeaterAreaCount,
+    externalRegionPaths: externalEntries.length,
     ambiguousAliases: ambiguousAliases.length,
     maxTags,
     maxResponseBytes,

@@ -1,5 +1,5 @@
 {
-  "version": "2026-07-13-strategy-v1.1.1",
+  "version": "2026-07-18-mcc-reg-1.1-proposed",
   "strategy": {
     "title": "Canada MeshCore Region Strategy",
     "version": "1.1.1",
@@ -20,7 +20,7 @@
   },
   "authority": {
     "standard": "MCC-REG-1",
-    "version": "1.0-proposed",
+    "version": "1.1-proposed",
     "document": "../../regions/standard/",
     "geographicModel": "exclusive-national-partition",
     "topologyAtom": "Statistics Canada 2021 Dissemination Area",
@@ -6602,7 +6602,12 @@
         "gatout"
       ],
       "geographic": false,
-      "emitInCommands": false
+      "emitInCommands": false,
+      "repeaterConfig": {
+        "mode": "shared-member-paths",
+        "defaultForMembers": true,
+        "basis": "continuous-cross-province-network"
+      }
     },
     "lloyd": {
       "label": "Lloydminster",
@@ -6611,7 +6616,186 @@
         "lloyd-sk"
       ],
       "geographic": false,
-      "emitInCommands": false
+      "emitInCommands": false,
+      "repeaterConfig": {
+        "mode": "shared-member-paths",
+        "defaultForMembers": true,
+        "basis": "single-cross-province-community"
+      }
+    }
+  },
+  "externalRegionPaths": {
+    "western-new-york": {
+      "label": "Western New York",
+      "country": "us",
+      "areaCode": "NY",
+      "path": [
+        "us",
+        "us-ny"
+      ],
+      "tagLabels": {
+        "us": "United States",
+        "us-ny": "New York"
+      },
+      "geographic": false,
+      "automatic": false,
+      "eligibility": "border-or-shared-water",
+      "authority": {
+        "status": "documented",
+        "source": "WNY MeshCore radio settings",
+        "sourceUrl": "https://wnymeshcore.org/guides/radio-settings"
+      },
+      "trafficEvidence": {
+        "source": "https://dev.meshcore.ca/",
+        "snapshot": "2026-07-18",
+        "method": "mixed-canada-us-resolved-route",
+        "routePatterns": 4508,
+        "observations": 33820
+      }
+    },
+    "washington": {
+      "label": "Washington",
+      "country": "us",
+      "areaCode": "WA",
+      "path": [
+        "west",
+        "pnw",
+        "wa"
+      ],
+      "tagLabels": {
+        "west": "Western mesh",
+        "pnw": "Pacific Northwest",
+        "wa": "Washington"
+      },
+      "geographic": false,
+      "automatic": false,
+      "eligibility": "border-or-shared-water",
+      "authority": {
+        "status": "documented",
+        "source": "Pacific Northwest MeshCore Region Strategy",
+        "sourceUrl": "https://gessaman.com/meshcore/regions/"
+      },
+      "trafficEvidence": {
+        "source": "https://dev.meshcore.ca/",
+        "snapshot": "2026-07-18",
+        "method": "mixed-canada-us-resolved-route",
+        "routePatterns": 5384,
+        "observations": 21596
+      }
+    },
+    "oregon": {
+      "label": "Oregon",
+      "country": "us",
+      "areaCode": "OR",
+      "path": [
+        "west",
+        "pnw",
+        "or"
+      ],
+      "tagLabels": {
+        "west": "Western mesh",
+        "pnw": "Pacific Northwest",
+        "or": "Oregon"
+      },
+      "geographic": false,
+      "automatic": false,
+      "eligibility": "observed-further-route",
+      "authority": {
+        "status": "documented",
+        "source": "Pacific Northwest MeshCore Region Strategy",
+        "sourceUrl": "https://gessaman.com/meshcore/regions/"
+      },
+      "trafficEvidence": {
+        "source": "https://dev.meshcore.ca/",
+        "snapshot": "2026-07-18",
+        "method": "mixed-canada-us-resolved-route",
+        "routePatterns": 903,
+        "observations": 1394
+      }
+    },
+    "pennsylvania": {
+      "label": "Pennsylvania",
+      "country": "us",
+      "areaCode": "PA",
+      "path": [
+        "us",
+        "us-pa"
+      ],
+      "tagLabels": {
+        "us": "United States",
+        "us-pa": "Pennsylvania"
+      },
+      "geographic": false,
+      "automatic": false,
+      "eligibility": "border-or-shared-water",
+      "authority": {
+        "status": "provisional",
+        "source": "RegionMesh state-path convention",
+        "sourceUrl": "https://www.regionmesh.com/meshcore-region-configuration/"
+      },
+      "trafficEvidence": {
+        "source": "https://dev.meshcore.ca/",
+        "snapshot": "2026-07-18",
+        "method": "mixed-canada-us-resolved-route",
+        "routePatterns": 37,
+        "observations": 82
+      }
+    },
+    "ohio": {
+      "label": "Ohio",
+      "country": "us",
+      "areaCode": "OH",
+      "path": [
+        "us",
+        "us-oh"
+      ],
+      "tagLabels": {
+        "us": "United States",
+        "us-oh": "Ohio"
+      },
+      "geographic": false,
+      "automatic": false,
+      "eligibility": "border-or-shared-water",
+      "authority": {
+        "status": "provisional",
+        "source": "RegionMesh state-path convention",
+        "sourceUrl": "https://www.regionmesh.com/meshcore-region-configuration/"
+      },
+      "trafficEvidence": {
+        "source": "https://dev.meshcore.ca/",
+        "snapshot": "2026-07-18",
+        "method": "mixed-canada-us-resolved-route",
+        "routePatterns": 6,
+        "observations": 10
+      }
+    },
+    "california": {
+      "label": "California",
+      "country": "us",
+      "areaCode": "CA",
+      "path": [
+        "west",
+        "ca"
+      ],
+      "tagLabels": {
+        "west": "Western mesh",
+        "ca": "California"
+      },
+      "geographic": false,
+      "automatic": false,
+      "eligibility": "observed-further-route",
+      "authority": {
+        "status": "provisional",
+        "source": "Pacific Northwest MeshCore Region Strategy future extension",
+        "sourceUrl": "https://gessaman.com/meshcore/regions/"
+      },
+      "trafficEvidence": {
+        "source": "https://dev.meshcore.ca/",
+        "snapshot": "2026-07-18",
+        "method": "mixed-canada-us-resolved-route",
+        "routePatterns": 7,
+        "observations": 12
+      }
     }
   },
   "retiredCanonicalTags": {

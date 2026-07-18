@@ -9,11 +9,11 @@ This standard defines one Canada-wide region system: how every location is assig
 | Standard | Value |
 | --- | --- |
 | Identifier | MCC-REG-1 |
-| Version | 1.0 proposed |
+| Version | 1.1 proposed |
 | Geographic reference | Statistics Canada 2021 Census geography |
 | Current semantic input | Canada MeshCore Region Strategy v1.1.1 |
 | Current community boundary input | MeshMapper Canada snapshot, 2026-07-12 |
-| Current operational evidence | Privacy-safe MeshCore Canada radio-density snapshot, 2026-07-15 UTC |
+| Current operational evidence | Privacy-safe Canadian radio-density snapshot, 2026-07-15 UTC; aggregate Canada–U.S. route snapshot, 2026-07-18 |
 | Adoption | Becomes normative when approved and merged by MeshCore Canada |
 
 !!! important "What is authoritative today?"
@@ -25,7 +25,7 @@ MeshCore Canada maintains **one geographic partition**. Every part of Canada bel
 
 The published MeshCore Canada registry is the single source of truth. A boundary is not stored as a hand-drawn polygon. It is stored as ownership of official Statistics Canada geographic cells, then regenerated from those cells. Census Subdivisions keep a municipality or municipal equivalent together by default; Dissemination Areas remain the exact geometry used to publish the shared edge.
 
-Only leaves own land. Provinces, territories, and larger region records are grouping nodes derived from their children. Raw MeshMapper polygons, strategy circles, shared routing scopes, and event areas are never published as regions and are never added to generated commands.
+Only leaves own land. Provinces, territories, and larger region records are grouping nodes derived from their children. Raw MeshMapper polygons, strategy circles, and event areas are never published as regions. A shared repeater area is configuration metadata, not another map layer.
 
 ## Canonical model
 
@@ -52,15 +52,63 @@ Every record has separate fields for:
 
 Names, tags, and geometry may change through review. The immutable ID does not.
 
-### Cross-boundary names
+### Cross-province repeater areas
 
-A familiar name may refer to more than one adjacent leaf, but it does not create another region:
+A provincial border separates map ownership, not radio traffic. Every location still has one home leaf, but one repeater may carry several complete leaf paths when its normal coverage crosses a province or territory.
 
-- National Capital Region is a search grouping for Ottawa and Outaouais;
-- Lloydminster is split into `lloyd-ab` and `lloyd-sk` at the provincial boundary;
-- Pacific Northwest, Lake Ontario, and event names may be documented as coordination terms only.
+A **shared repeater area** records an established cross-jurisdiction community. It has a label and member leaves, but no polygon, parent, resolver result, or on-air tag of its own. The configurator emits the complete path for every member instead:
 
-Search groupings have no polygon, parent relationship, resolver result, or generated command. A search for one shows its member leaves and asks the user to choose the correct side.
+- National Capital Region: `can → on → on-alg → ott` and `can → qc → gatout`;
+- Lloydminster: `can → ab → lloyd-ab` and `can → sk → lloyd-sk`.
+
+For firmware v1.16+, the National Capital Region becomes:
+
+```text
+region def can on on-alg ott|can qc gatout
+```
+
+The `ncr` search name is not sent over the air. Both sides keep their canonical tags, and every repeater in the shared area receives the same ordered tree.
+
+This rule applies everywhere in Canada:
+
+1. A registered shared area is selected automatically for each member leaf.
+2. A large-coverage or border repeater outside a registered area may select any verified set of Canadian leaves, including leaves in different provinces or territories.
+3. Commands contain the union of the selected leaf paths. Shared ancestors appear once, parents appear before children, and each new branch jumps back to an ancestor that already exists.
+4. The configurator must fail closed if the result exceeds the firmware limits of 32 tags or 172 response bytes. No generated CLI line may exceed 160 characters; if one `region def` line would be too long, the configurator uses ordered `region put` lines instead.
+5. Adding a shared area never moves a census cell, joins polygons, or weakens the non-overlap checks.
+
+Register an automatic shared area only when operators on every side confirm routine cross-border paths or one continuous community. Other long paths are selected per repeater. This keeps defaults useful without turning every provincial boundary into one oversized radio area.
+
+### Large and neighbouring network paths
+
+A region path is a forwarding choice, not a prediction of RF range. Large coverage does not require a mountain. Elevation, water paths, ordinary rooftop sites, and linked repeaters can all produce long routes.
+
+Every repeater keeps one Canadian home region. Operators may then add complete Canadian or neighbouring U.S. paths that the repeater should forward. Region matching is exact, so every intended scope needs its complete ancestry. The configurator never adds a neighbouring path automatically and never draws U.S. geometry. Hearing traffic from an area is not enough by itself; add its path only when this repeater is meant to forward traffic scoped to that area.
+
+Use the smallest useful set and spread work across repeaters:
+
+| Repeater role | Forwarding choice |
+| --- | --- |
+| Local access | Home path only |
+| Regional bridge | Home path plus the few neighbouring Canadian paths it routinely connects |
+| Long-haul backbone | A reviewed set of Canadian and U.S. paths supported by observed routes |
+
+Do not put every available path on every repeater. For example, traffic between Waterloo, Toronto, and Western New York can be divided among bridge repeaters instead of making each repeater carry all three paths. The choice belongs to local operators and must be coordinated with the communities that use those paths.
+
+A U.S. path is eligible when it is next to Canada or across shared water and appears in resolved route evidence. A farther path requires repeated resolved route evidence. Evidence only makes a path available; it does not make the path a default or prove future performance.
+
+The 2026-07-18 aggregate route snapshot supports these paths:
+
+| Area | Exact path | Status | Canadian side | Route patterns / observations |
+| --- | --- | --- | --- | ---: |
+| Western New York | `us → us-ny` | Documented by WNY operators | Ontario and Québec | 4,508 / 33,820 |
+| Washington | `west → pnw → wa` | Documented PNW path | British Columbia | 5,384 / 21,596 |
+| Oregon | `west → pnw → or` | Documented PNW path; farther route | British Columbia | 903 / 1,394 |
+| Pennsylvania | `us → us-pa` | Provisional; confirm locally | Ontario | 37 / 82 |
+| Ohio | `us → us-oh` | Provisional; confirm locally | Ontario | 6 / 10 |
+| California | `west → ca` | Provisional PNW extension; farther route | British Columbia | 7 / 12 |
+
+The snapshot counts unique resolved route patterns and their observations from `dev.meshcore.ca`. It stores no node names, identifiers, or exact coordinates. Counts are routing evidence, not a performance benchmark. Border or farther states may be added later only with the same evidence and neighbouring-operator review.
 
 ### Selecting a larger region
 
@@ -328,7 +376,7 @@ The editor's own census-cell geometry (`docs/assets/regions/cells/`) was last re
 Versioning rules:
 
 - **Major:** census-geography vintage or incompatible authority/model change.
-- **Minor:** DA reassignment, split, merge, hierarchy change, or tag change.
+- **Minor:** DA reassignment, split, merge, hierarchy change, tag change, or shared repeater area membership change.
 - **Patch:** labels, aliases, documentation, or source metadata with no membership change.
 
 Operational region boundaries are community routing definitions. They are not legal, electoral, cadastral, treaty, title, or sovereignty claims.
@@ -345,6 +393,10 @@ A geographic release fails unless all of these are true:
 - the symmetric difference between the leaf union and the locked 57,936-DA digital union is zero at the configured precision;
 - every subregion union equals its parent membership;
 - only leaves own geometry; no `routingOverlays`, `sharedParents`, or profile-added scopes exist;
+- every shared repeater area contains canonical leaves from at least two provinces or territories, and no leaf belongs to more than one automatic shared area;
+- shared-area names never enter the on-air tree; the complete member paths fit every firmware and serial-line budget;
+- every neighbouring path is non-geographic, optional, backed by aggregate route evidence, and uses a documented or explicitly provisional external hierarchy;
+- neighbouring paths never own Canadian cells, resolve from a map point, or appear as U.S. boundary geometry;
 - every resolver test point returns exactly one leaf;
 - every active region is contiguous by shared land edge, or has a documented island/MultiPolygon exception;
 - every active tag is globally unique and within the firmware byte limit;
@@ -377,7 +429,7 @@ Before the first MCC-REG-1 geographic release is marked active, the repository m
 | `canada-region-partition.qa.json` | Release evidence, hashes, and source deviations |
 | `configuration.yml` | Firmware and radio-setting policy kept separate from geography |
 
-Generated GeoJSON is a build output. The catalog, membership table, generator configuration, and source lock are the authority inputs. Non-geographic search groups may reference leaf tags, but they never own cells, appear in the map layer, resolve from a point, or enter generated commands.
+Generated GeoJSON is a build output. The catalog, membership table, generator configuration, and source lock are the authority inputs. Non-geographic search groups never own cells, appear in the map layer, or resolve from a point. A shared repeater area's group name never enters a command; only the canonical paths of its member leaves do.
 
 ## Migration from the current map
 
@@ -389,7 +441,7 @@ Generated GeoJSON is a build output. The catalog, membership table, generator co
 | Local review | Alberta and other fuzzy hub areas corrected; names reviewed in both official languages | Reviewed |
 | Active release | Membership and artifacts pass every release check | Authoritative |
 
-MeshMapper remains the main community assignment source where it has a region. Circles and raw source polygons are never promoted or rendered as final regions. Ottawa and Outaouais remain adjacent provincial leaves, Lloydminster is split into `lloyd-ab` and `lloyd-sk`, and shared names remain search-only groupings.
+MeshMapper remains the main community assignment source where it has a region. Circles and raw source polygons are never promoted or rendered as final regions. Ottawa and Outaouais remain adjacent provincial leaves, and Lloydminster remains split into `lloyd-ab` and `lloyd-sk`. Their shared repeater configurations join canonical member paths without joining the map geometry.
 
 ## Repeater configuration rules
 
@@ -398,10 +450,14 @@ Generated instructions must follow the current [official MeshCore CLI documentat
 - Use `region def` or `region put` to define the exact tree required by that repeater.
 - `name|jump` creates `name` under the current cursor and then moves the cursor to `jump`; `jump` is not the parent of `name`.
 - `region def` does not clear the current tree and may leave partial changes after an error.
+- A cross-province configuration must use one `can` root with one complete branch per selected leaf. It must not invent a second parent or a shared-area tag.
+- A neighbouring U.S. path keeps the hierarchy used by that community. It is a separate root branch and does not become part of `can`.
+- Registered shared repeater areas use the same deterministic member order on every repeater. Other large-coverage selections are ordered by canonical hierarchy, not by click order.
+- Select paths per repeater role. Do not add every path everywhere.
 - Run bare `region` to inspect the result.
 - Run `region save` only after the tree and flood permissions are correct.
 
-The setup tool must generate and test commands from registry parent IDs. It must never infer command order by splitting a tag string.
+The setup tool must generate and test commands from registry parent IDs. It must never infer command order by splitting a tag string. The map may outline all selected Canadian leaves together, but each fill remains its original non-overlapping geographic region. Neighbouring U.S. paths appear in commands and labels only. The boundary editor continues to accept one province or territory per proposal; shared repeater membership and neighbouring path metadata are changed in the catalog and reviewed by every affected side.
 
 ## Source record
 
@@ -411,3 +467,5 @@ The setup tool must generate and test commands from registry parent IDs. It must
 - [Statistics Canada 2021 DA definition](https://www12.statcan.gc.ca/census-recensement/2021/ref/dict/az/definition-eng.cfm?ID=geo021), [2021 Boundary Files guide](https://www150.statcan.gc.ca/n1/pub/92-160-g/92-160-g2021001-eng.htm), [2021 dissemination-geography relationships](https://www12.statcan.gc.ca/census-recensement/2021/geo/sip-pis/dguid-idugd/index2021-eng.cfm?year=21), and [2021 Economic Region standard](https://www.statcan.gc.ca/en/subjects/standard/sgc/2021/er-additionalinfo).
 - [Statistics Canada Open Licence](https://www.statcan.gc.ca/en/terms-conditions/open-licence).
 - MeshCore Canada privacy-safe positioned-node snapshot from [`live.meshcore.ca`](https://live.meshcore.ca/) and [`dev.meshcore.ca`](https://dev.meshcore.ca/), with fixed infrastructure used for decisions and all roles retained only as aggregate context.
+- Aggregate resolved-route evidence from [`dev.meshcore.ca`](https://dev.meshcore.ca/) on 2026-07-18. Only area totals are retained.
+- [WNY MeshCore radio settings](https://wnymeshcore.org/guides/radio-settings) for `us → us-ny`, the [Pacific Northwest strategy](https://gessaman.com/meshcore/regions/) for `west → pnw → wa` and `west → pnw → or`, and the [RegionMesh state-path convention](https://www.regionmesh.com/meshcore-region-configuration/) for provisional U.S. state paths.

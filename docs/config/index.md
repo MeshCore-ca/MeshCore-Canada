@@ -6,7 +6,7 @@ hide:
 ---
 # Set up repeater regions
 
-Find your repeater region and settings.
+Choose the forwarding paths for this repeater. Add cross-province or U.S. paths when needed.
 
 <div data-mcc-regions="config" data-mcc-root="./"></div>
 
