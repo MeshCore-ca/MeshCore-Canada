@@ -1,6 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
+import { runInNewContext } from "node:vm";
 
 const catalog = JSON.parse(await readFile(
   new URL("../../docs/assets/regions/canada-regions.json", import.meta.url),
@@ -14,6 +15,40 @@ const editorHtml = await readFile(
   new URL("../../docs/config/editor/index.html", import.meta.url),
   "utf8"
 );
+
+function regionInternals() {
+  const marker = "  if (window.document$";
+  assert.ok(regionsScript.includes(marker));
+  const instrumented = regionsScript.replace(
+    marker,
+    "  globalThis.__mccRegionTest = { prepareCatalog, expandSharedRepeaterLeaves, recommend };\n\n" + marker
+  );
+  const context = {
+    URL,
+    URLSearchParams,
+    console,
+    fetch() {
+      throw new Error("Unexpected asset request in unit test");
+    },
+    window: {
+      location: {
+        origin: "https://meshcore.ca",
+        pathname: "/config/",
+        search: ""
+      },
+      setTimeout
+    },
+    document: {
+      currentScript: {
+        src: "https://meshcore.ca/assets/regions/regions.js"
+      },
+      readyState: "loading",
+      addEventListener() {}
+    }
+  };
+  runInNewContext(instrumented, context);
+  return context.__mccRegionTest;
+}
 
 function ancestry(tag) {
   const path = [];
@@ -86,6 +121,30 @@ test("every declared cross-province group uses the shared member-path policy", (
       basis: group.repeaterConfig.basis
     }, id);
     assert.equal(sharedCommand(group.members).includes(` ${id} `), false, id);
+  }
+});
+
+test("adding either shared-area member expands every member path", () => {
+  const internals = regionInternals();
+  const prepared = internals.prepareCatalog(JSON.parse(JSON.stringify(catalog)));
+  const resolution = { primary: { seed: { tag: "tor" } } };
+
+  for (const group of Object.values(catalog.searchGroups)) {
+    if (!group.repeaterConfig?.defaultForMembers) continue;
+    for (const member of group.members) {
+      const recommendation = internals.recommend(
+        prepared,
+        resolution,
+        "high-site",
+        ["tor", member],
+        []
+      );
+      const expected = ["tor", ...group.members].sort((left, right) => {
+        return ancestry(left).join("/").localeCompare(ancestry(right).join("/"));
+      });
+      assert.deepEqual(Array.from(recommendation.leaves), expected, member);
+      assert.ok(group.members.every((tag) => recommendation.tags.includes(tag)), member);
+    }
   }
 });
 

@@ -426,6 +426,17 @@
     });
   }
 
+  function expandSharedRepeaterLeaves(data, tags) {
+    var expanded = canonicalLeafOrder(data, tags);
+    expanded.slice().forEach(function (tag) {
+      var area = sharedRepeaterAreaForTag(data, tag);
+      if (area && area.defaultForMembers) {
+        expanded = expanded.concat(area.members);
+      }
+    });
+    return canonicalLeafOrder(data, expanded);
+  }
+
   function selectedExternalRegionPaths(data, ids) {
     var selected = {};
     unique(ids || []).forEach(function (id) { selected[id] = true; });
@@ -437,9 +448,7 @@
   }
 
   function defaultRepeaterLeaves(data, primaryTag) {
-    var area = sharedRepeaterAreaForTag(data, primaryTag);
-    if (area && area.defaultForMembers) return area.members.slice();
-    return [primaryTag];
+    return expandSharedRepeaterLeaves(data, [primaryTag]);
   }
 
   function labelledPath(data, path) {
@@ -602,7 +611,7 @@
     var carryTags = type === "high-site" && selectedMetros && selectedMetros.length
       ? selectedMetros
       : defaultRepeaterLeaves(data, primaryTag);
-    carryTags = canonicalLeafOrder(data, carryTags);
+    carryTags = expandSharedRepeaterLeaves(data, carryTags);
     var externalPaths = type === "high-site"
       ? selectedExternalRegionPaths(data, selectedExternalPaths)
       : [];
@@ -982,8 +991,8 @@
     }
     state.selectedExternalPaths = state.selectedExternalPaths || [];
     var sharedArea = sharedRepeaterAreaForTag(data, primaryTag);
-    var requiredTags = unique([primaryTag].concat(sharedArea && sharedArea.defaultForMembers ? sharedArea.members : []));
-    state.selectedMetros = canonicalLeafOrder(data, state.selectedMetros.concat(requiredTags));
+    var requiredTags = defaultRepeaterLeaves(data, primaryTag);
+    state.selectedMetros = expandSharedRepeaterLeaves(data, state.selectedMetros.concat(requiredTags));
     var nearbyTags = rankSeeds(data, state.lat, state.lon, null).slice(0, 6).map(function (entry) {
       return entry.seed.tag;
     });
@@ -1048,10 +1057,17 @@
 
     target.querySelectorAll("input[data-canadian-region]").forEach(function (input) {
       input.addEventListener("change", function () {
-        state.selectedMetros = Array.prototype.slice.call(target.querySelectorAll("input[data-canadian-region]:checked")).map(function (item) {
+        var selected = Array.prototype.slice.call(target.querySelectorAll("input[data-canadian-region]:checked")).map(function (item) {
           return item.value;
         });
-        state.selectedMetros = canonicalLeafOrder(data, state.selectedMetros);
+        var changedArea = sharedRepeaterAreaForTag(data, input.value);
+        if (changedArea && changedArea.defaultForMembers) {
+          selected = input.checked
+            ? selected.concat(changedArea.members)
+            : selected.filter(function (tag) { return changedArea.members.indexOf(tag) === -1; });
+        }
+        state.selectedMetros = expandSharedRepeaterLeaves(data, selected.concat(requiredTags));
+        renderMetroChips(data, target, state, onChange);
         onChange();
       });
     });
@@ -1067,7 +1083,7 @@
     if (addRegion) {
       addRegion.addEventListener("change", function () {
         if (!addRegion.value) return;
-        state.selectedMetros = canonicalLeafOrder(data, state.selectedMetros.concat(addRegion.value));
+        state.selectedMetros = expandSharedRepeaterLeaves(data, state.selectedMetros.concat(addRegion.value));
         renderMetroChips(data, target, state, onChange);
         onChange();
       });
@@ -1759,7 +1775,7 @@
 
     var mapParams = new URLSearchParams(window.location.search);
     var requestedLargeCoverage = mapParams.get("type") === "large";
-    var requestedCanadianRegions = canonicalLeafOrder(
+    var requestedCanadianRegions = expandSharedRepeaterLeaves(
       data,
       String(mapParams.get("regions") || "").split(",").map(slug).filter(Boolean)
     );
