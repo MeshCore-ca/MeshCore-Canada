@@ -312,7 +312,7 @@ Do these one-time repository-owner steps before testing a boundary submission:
 2. Keep the repository's default workflow permission **Read repository
    contents and packages permissions**, and keep **Allow GitHub Actions to
    create and approve pull requests** disabled. The boundary workflow requests
-   only `actions: write`, `contents: write`, and `issues: write` in its own
+   only `actions: write`, `contents: read`, and `issues: write` in its own
    `permissions` block.
 3. Confirm the maintainer logins in
    `.github/region-boundary-automation.json`. Only those users may approve a
@@ -334,12 +334,21 @@ sudo rm -f /tmp/mcc-submission-public.pem
 The public key can verify the gateway signature but cannot create one. The
 GitHub App keeps Issues read/write only; do not grant it Contents access.
 
+5. Create a repository-scoped GitHub access token for a dedicated automation
+   account or allowlisted repository administrator. Grant it only the
+   repository Contents read/write permission needed to push the verified
+   boundary commit. Store it as the repository Actions secret
+   `MCC_BOUNDARY_PUSH_TOKEN`. In the `main` branch protection rule, add that
+   account to **Allow specified actors to bypass required pull requests**.
+   Do not use the anonymous-submission App or its private key for publication.
+
 For an accepted proposal, an allowlisted maintainer closes the labelled issue
 as **Completed**. The Action verifies the App author, closer, label, payload
 hash, App signature, current membership hash, and province. It records the
 reviewed CSD/DA decision, regenerates the full national layer from locked
-sources, runs the release checks, commits to `main`, and queues the site
-deployment. A failed check publishes nothing and reopens the issue.
+sources, runs the release checks, commits to `main` with the protected
+publication credential, and queues the site deployment. A failed check
+publishes nothing and reopens the issue.
 
 To reject or close a test without changing the map, choose **Close as not
 planned**. Removing the label also prevents application.
@@ -415,6 +424,9 @@ curl -fsS http://127.0.0.1:8787/healthz
       read-only and Action pull-request approval remains disabled.
 - [ ] `MCC_SUBMISSION_PUBLIC_KEY_PEM` contains the public key derived from the
       production App PEM; the App itself still has no Contents permission.
+- [ ] `MCC_BOUNDARY_PUSH_TOKEN` is repository-scoped, belongs to the approved
+      publication identity, and that identity alone may bypass required pull
+      requests for automated boundary commits.
 - [ ] Approved maintainer logins in `.github/region-boundary-automation.json`
       are current.
 - [ ] Turnstile validates `meshcore.ca`, `config.meshcore.ca`, and action
