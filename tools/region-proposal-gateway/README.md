@@ -250,8 +250,11 @@ text, Turnstile tokens, App tokens, or secrets.
 
 ## Tests
 
-No live credentials are required. Install the pinned renderer dependency, then
-run:
+No live credentials are required. The container installs the pinned Pillow
+renderer. The gateway also includes a deterministic standard-library PNG
+renderer so a minimal host Python cannot take the submission API offline; the
+same Current/Proposed boundary contract remains available. Install the pinned
+dependency to exercise both paths, then run:
 
 ```sh
 python -m pip install -r tools/region-proposal-gateway/requirements.txt

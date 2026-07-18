@@ -6,6 +6,7 @@ import io
 import json
 import os
 import stat
+import subprocess
 import sys
 import tempfile
 import threading
@@ -16,6 +17,7 @@ from unittest import mock
 from PIL import Image
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+import boundary_preview  # noqa: E402
 import gateway  # noqa: E402
 
 
@@ -190,6 +192,23 @@ class ProposalValidationTests(unittest.TestCase):
 
 
 class PreviewTests(unittest.TestCase):
+    def test_gateway_imports_without_site_packages(self):
+        gateway_dir = str(Path(__file__).resolve().parents[1])
+        code = (
+            "import sys;"
+            f"sys.path.insert(0, {gateway_dir!r});"
+            "import boundary_preview, gateway;"
+            "assert boundary_preview.Image is None"
+        )
+        completed = subprocess.run(
+            [sys.executable, "-S", "-c", code],
+            check=False,
+            capture_output=True,
+            text=True,
+            timeout=20,
+        )
+        self.assertEqual(completed.returncode, 0, completed.stderr)
+
     def test_renders_deterministic_current_and_proposed_png(self):
         with tempfile.TemporaryDirectory() as temporary:
             paths = write_authority(Path(temporary))
@@ -201,6 +220,25 @@ class PreviewTests(unittest.TestCase):
             topology = authority.topology(snapshot, "35")
             first = gateway.render_boundary_preview(canonical, topology)
             second = gateway.render_boundary_preview(canonical, topology)
+            self.assertEqual(first, second)
+            self.assertLess(len(first), gateway.MAX_PREVIEW_BYTES)
+            with Image.open(io.BytesIO(first)) as image:
+                self.assertEqual(image.format, "PNG")
+                self.assertEqual(image.size, (1600, 1000))
+                self.assertEqual(image.mode, "RGB")
+
+    def test_renders_valid_preview_without_pillow_at_runtime(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            paths = write_authority(Path(temporary))
+            authority = gateway.AuthorityCache(*paths[:3])
+            snapshot = authority.get()
+            canonical, _, _ = gateway.validate_proposal(
+                valid_proposal(snapshot.membership_sha256), snapshot
+            )
+            topology = authority.topology(snapshot, "35")
+            with mock.patch.object(boundary_preview, "Image", None):
+                first = gateway.render_boundary_preview(canonical, topology)
+                second = gateway.render_boundary_preview(canonical, topology)
             self.assertEqual(first, second)
             self.assertLess(len(first), gateway.MAX_PREVIEW_BYTES)
             with Image.open(io.BytesIO(first)) as image:
