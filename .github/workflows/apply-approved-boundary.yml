@@ -158,6 +158,9 @@ jobs:
           else
             sha="${{ steps.publish.outputs.commit_sha }}"
             message="Boundary update approved and applied in [\`${sha:0:7}\`](https://github.com/$GITHUB_REPOSITORY/commit/$sha). The push started the site deployment."
+            if [[ "${{ steps.apply.outputs.base_membership_matched }}" != "true" ]]; then
+              message="$message The map changed during review, so every requested cell was checked against its current owner before the update was applied."
+            fi
           fi
           gh issue comment "$ISSUE_NUMBER" --body "$message"
 

@@ -144,7 +144,7 @@ class ApprovalTests(unittest.TestCase):
 
 
 class ProposalValidationTests(unittest.TestCase):
-    def test_current_anchor_cannot_be_moved(self):
+    def test_anchor_protection_and_stale_proposals_fail_closed_on_cell_conflicts(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
             membership = root / "membership.csv"
@@ -206,7 +206,7 @@ class ProposalValidationTests(unittest.TestCase):
 
             proposal["changes"] = [{"DGUID": "d3", "from": "aaa", "to": "bbb"}]
             payload = apply_issue.canonical_bytes(proposal)
-            _, changes, requested = apply_issue.validate_proposal(
+            _, changes, requested, base_matched = apply_issue.validate_proposal(
                 proposal,
                 payload,
                 hashlib.sha256(payload).hexdigest(),
@@ -216,6 +216,33 @@ class ProposalValidationTests(unittest.TestCase):
             )
             self.assertEqual(changes[0]["DGUID"], "d3")
             self.assertEqual(requested, {"d3": "bbb"})
+            self.assertTrue(base_matched)
+
+            proposal["baseMembershipSha256"] = "a" * 64
+            payload = apply_issue.canonical_bytes(proposal)
+            _, changes, requested, base_matched = apply_issue.validate_proposal(
+                proposal,
+                payload,
+                hashlib.sha256(payload).hexdigest(),
+                membership,
+                catalog,
+                cells,
+            )
+            self.assertEqual(changes[0]["DGUID"], "d3")
+            self.assertEqual(requested, {"d3": "bbb"})
+            self.assertFalse(base_matched)
+
+            proposal["changes"] = [{"DGUID": "d3", "from": "bbb", "to": "aaa"}]
+            payload = apply_issue.canonical_bytes(proposal)
+            with self.assertRaisesRegex(ValueError, "stale or contains a no-op"):
+                apply_issue.validate_proposal(
+                    proposal,
+                    payload,
+                    hashlib.sha256(payload).hexdigest(),
+                    membership,
+                    catalog,
+                    cells,
+                )
 
 
 class DecisionTests(unittest.TestCase):

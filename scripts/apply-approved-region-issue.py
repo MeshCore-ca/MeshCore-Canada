@@ -337,15 +337,16 @@ def validate_proposal(
     membership_path: Path,
     catalog_path: Path,
     cells_dir: Path,
-) -> tuple[list[dict[str, str]], list[dict[str, str]], dict[str, str]]:
+) -> tuple[list[dict[str, str]], list[dict[str, str]], dict[str, str], bool]:
     allowed = {"schema", "baseMembershipSha256", "submittedBy", "reason", "changes"}
     if not isinstance(proposal, dict) or proposal.get("schema") != PROPOSAL_SCHEMA or set(proposal) - allowed:
         raise ValueError("submission payload is not a region proposal")
     if canonical_bytes(proposal) != payload or hashlib.sha256(payload).hexdigest() != proposal_hash:
         raise ValueError("submission payload is not canonical or does not match its hash")
     claimed_base = proposal.get("baseMembershipSha256")
-    if not isinstance(claimed_base, str) or not SHA256_RE.fullmatch(claimed_base) or claimed_base != file_sha256(membership_path):
-        raise ValueError("boundary proposal is stale for the current membership")
+    if not isinstance(claimed_base, str) or not SHA256_RE.fullmatch(claimed_base):
+        raise ValueError("boundary proposal has an invalid base membership hash")
+    base_membership_matched = claimed_base == file_sha256(membership_path)
     reason = proposal.get("reason")
     if not isinstance(reason, str) or not reason.strip() or len(reason) > 1000:
         raise ValueError("boundary proposal reason is invalid")
@@ -381,7 +382,7 @@ def validate_proposal(
         protected = anchors.get(dguid)
         if protected and to_tag != protected:
             raise ValueError("boundary proposal moves a current region anchor")
-    return rows, list(changes), requested
+    return rows, list(changes), requested, base_membership_matched
 
 
 def already_recorded(overrides: dict[str, Any], issue_url: str) -> bool:
@@ -445,6 +446,7 @@ def write_result(result: dict[str, Any], summary_path: Path | None, github_outpu
             f"issue_url={result['issueUrl']}",
             f"change_count={result['changeCount']}",
             f"touched_csds={','.join(result['touchedCensusSubdivisions'])}",
+            f"base_membership_matched={str(result['baseMembershipMatched']).lower()}",
             f"already_applied={str(result['alreadyApplied']).lower()}",
         ]
         with github_output.open("a", encoding="utf-8", newline="\n") as handle:
@@ -482,11 +484,15 @@ def main() -> None:
             "issueUrl": issue_url,
             "changeCount": len(proposal.get("changes", [])) if isinstance(proposal, dict) else 0,
             "touchedCensusSubdivisions": [],
+            "baseMembershipMatched": (
+                isinstance(proposal, dict)
+                and proposal.get("baseMembershipSha256") == file_sha256(args.membership)
+            ),
             "alreadyApplied": True,
         }
         write_result(result, args.summary, args.github_output)
         return
-    rows, changes, requested = validate_proposal(
+    rows, changes, requested, base_membership_matched = validate_proposal(
         proposal,
         payload,
         proposal_hash,
@@ -511,6 +517,7 @@ def main() -> None:
         "issueUrl": issue_url,
         "changeCount": len(changes),
         "touchedCensusSubdivisions": touched,
+        "baseMembershipMatched": base_membership_matched,
         "alreadyApplied": False,
     }, args.summary, args.github_output)
 
