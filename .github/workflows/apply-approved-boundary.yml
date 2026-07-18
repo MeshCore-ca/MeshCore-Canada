@@ -30,7 +30,7 @@ jobs:
         with:
           ref: main
           fetch-depth: 0
-          token: ${{ secrets.MCC_BOUNDARY_PUSH_TOKEN }}
+          persist-credentials: false
 
       - name: Set up Python
         uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
@@ -125,8 +125,14 @@ jobs:
         id: publish
         if: steps.apply.outputs.already_applied != 'true'
         shell: bash
+        env:
+          MCC_BOUNDARY_PUSH_TOKEN: ${{ secrets.MCC_BOUNDARY_PUSH_TOKEN }}
         run: |
           set -euo pipefail
+          if [[ -z "$MCC_BOUNDARY_PUSH_TOKEN" ]]; then
+            echo "MCC_BOUNDARY_PUSH_TOKEN is not configured." >&2
+            exit 1
+          fi
           git diff --check
           git add docs/assets/regions
           if git diff --cached --quiet; then
@@ -136,7 +142,11 @@ jobs:
           git config user.name "MeshCore Canada Boundary Automation"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git commit -m "Apply boundary update #$ISSUE_NUMBER"
-          git push origin HEAD:main
+          push_auth="$(printf 'x-access-token:%s' "$MCC_BOUNDARY_PUSH_TOKEN" | base64 -w0)"
+          echo "::add-mask::$push_auth"
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $push_auth" \
+            push origin HEAD:main
+          unset push_auth MCC_BOUNDARY_PUSH_TOKEN
           echo "commit_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
           echo "APPLIED=1" >> "$GITHUB_ENV"
 
