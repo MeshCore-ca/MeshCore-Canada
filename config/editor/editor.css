@@ -340,6 +340,31 @@ textarea {
   color: var(--success);
 }
 
+.shared-area-note {
+  display: grid;
+  gap: 0.18rem;
+  margin-top: 0.75rem;
+  padding: 0.7rem;
+  border: 1px solid rgba(133, 139, 255, 0.42);
+  border-radius: 8px;
+  background: var(--accent-soft);
+}
+
+.shared-area-note strong {
+  font-size: 0.8rem;
+}
+
+.shared-area-note span,
+.shared-area-note a {
+  color: var(--muted);
+  font-size: 0.76rem;
+}
+
+.shared-area-note a {
+  color: #bec1ff;
+  font-weight: 750;
+}
+
 .segmented {
   background: #151720;
   border: 1px solid var(--border);

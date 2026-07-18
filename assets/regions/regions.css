@@ -352,6 +352,81 @@ body:has([data-mcc-regions]) .md-typeset a {
   background: var(--mcc-soft);
 }
 
+.mcc-chip.is-required {
+  cursor: default;
+}
+
+.mcc-chip-required {
+  color: var(--mcc-muted);
+  font-size: 0.62rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.mcc-served-region-groups {
+  display: grid;
+  gap: 0.7rem;
+  margin-top: 0.65rem;
+}
+
+.mcc-picker-heading {
+  margin: 0.9rem 0 0.15rem;
+  color: var(--mcc-text);
+  font-size: 0.86rem;
+}
+
+.mcc-add-region-label {
+  display: block;
+  margin-top: 0.8rem;
+}
+
+.mcc-neighbour-paths {
+  margin-top: 0.9rem;
+  padding-top: 0.1rem;
+  border-top: 1px solid var(--mcc-border);
+}
+
+.mcc-neighbour-path-list {
+  display: grid;
+  gap: 0.42rem;
+  margin-top: 0.6rem;
+}
+
+.mcc-neighbour-path {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.5rem;
+  align-items: start;
+  padding: 0.5rem 0.58rem;
+  border: 1px solid var(--mcc-border);
+  border-radius: 0.35rem;
+  background: var(--mcc-surface-2);
+  cursor: pointer;
+}
+
+.mcc-neighbour-path:hover,
+.mcc-neighbour-path:has(input:checked) {
+  border-color: var(--mcc-green);
+  background: var(--mcc-soft);
+}
+
+.mcc-neighbour-path input {
+  margin-top: 0.2rem;
+  accent-color: var(--mcc-green);
+}
+
+.mcc-neighbour-path span,
+.mcc-neighbour-path strong,
+.mcc-neighbour-path small {
+  display: block;
+}
+
+.mcc-neighbour-path small {
+  margin-top: 0.12rem;
+  color: var(--mcc-muted);
+  line-height: 1.35;
+}
+
 .mcc-status {
   margin-top: 0.55rem;
   padding: 0.5rem 0.65rem;
@@ -517,6 +592,37 @@ body:has([data-mcc-regions]) .md-typeset a {
   line-height: 1.45;
 }
 
+.mcc-region-path-list {
+  display: grid;
+  gap: 0.22rem;
+  margin-top: 0.3rem;
+}
+
+.mcc-region-path-list span {
+  display: block;
+}
+
+.mcc-shared-area-note {
+  display: grid;
+  gap: 0.18rem;
+  margin-top: 0.7rem;
+  padding: 0.62rem 0.7rem;
+  border: 1px solid color-mix(in srgb, var(--mcc-green), transparent 55%);
+  border-radius: 0.4rem;
+  background: color-mix(in srgb, var(--mcc-green), transparent 91%);
+}
+
+.mcc-shared-area-note strong {
+  color: var(--mcc-text);
+  font-size: 0.78rem;
+}
+
+.mcc-shared-area-note span {
+  color: var(--mcc-muted);
+  font-size: 0.76rem;
+  line-height: 1.45;
+}
+
 .mcc-result-advanced {
   padding: 0.65rem 0.75rem;
   border: 1px solid var(--mcc-border);
@@ -605,6 +711,10 @@ body:has([data-mcc-regions]) .md-typeset a {
 
 .mcc-tag-pill.is-draft {
   background: #8a5d12;
+}
+
+.mcc-tag-pill.is-external {
+  background: #52616f;
 }
 
 .mcc-command-panel {
@@ -1909,8 +2019,9 @@ ol.mcc-guide-steps > li::before {
   line-height: 1.45;
 }
 
-.mcc-show-more-regions {
-  margin-top: 0.65rem;
+.mcc-selected-region .mcc-selected-shared-area {
+  color: var(--mcc-green-dark);
+  font-weight: 700;
 }
 
 .mcc-alternate-regions > summary,

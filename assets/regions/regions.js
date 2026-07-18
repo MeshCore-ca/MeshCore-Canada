@@ -111,6 +111,68 @@
     data.metroGroups = (data.metroGroups || []).map(function (group) {
       return { label: group.label, tags: group.tags.filter(function (tag) { return Boolean(seedTags[tag]); }) };
     });
+    data.sharedRepeaterAreas = Object.keys(data.searchGroups || {}).map(function (id) {
+      var group = data.searchGroups[id];
+      if (!group || !group.repeaterConfig || group.repeaterConfig.mode !== "shared-member-paths") return null;
+      var members = unique((group.members || []).filter(function (tag) { return Boolean(seedTags[tag]); }));
+      if (members.length !== (group.members || []).length || members.length < 2) {
+        throw new Error("The Canadian region catalog contains an invalid shared repeater area: " + id);
+      }
+      members.sort(function (left, right) {
+        return ancestryText(data, left).localeCompare(ancestryText(data, right));
+      });
+      if (unique(members.map(function (tag) { return provinceTagFor(data, tag); })).length < 2) {
+        throw new Error("A shared repeater area must cross a province or territory: " + id);
+      }
+      return {
+        id: id,
+        label: group.label,
+        members: members,
+        defaultForMembers: group.repeaterConfig.defaultForMembers === true,
+        basis: group.repeaterConfig.basis || ""
+      };
+    }).filter(Boolean);
+    data.externalTagLabels = {};
+    data.externalTagParents = {};
+    data.externalRegionPathList = Object.keys(data.externalRegionPaths || {}).map(function (id) {
+      var record = data.externalRegionPaths[id];
+      var path = unique(((record && record.path) || []).map(slug).filter(Boolean));
+      if (!record || record.geographic !== false || record.automatic !== false || !path.length ||
+          path.length !== (record.path || []).length) {
+        throw new Error("The region catalog contains an invalid neighbouring network path: " + id);
+      }
+      path.forEach(function (tag, index) {
+        if (data.hierarchy[tag]) {
+          throw new Error("A neighbouring network tag collides with the Canadian hierarchy: " + tag);
+        }
+        var label = record.tagLabels && record.tagLabels[tag];
+        if (!label) {
+          throw new Error("A neighbouring network tag has no label: " + tag);
+        }
+        var parent = index ? path[index - 1] : null;
+        if (Object.prototype.hasOwnProperty.call(data.externalTagParents, tag) &&
+            data.externalTagParents[tag] !== parent) {
+          throw new Error("A neighbouring network tag has conflicting parents: " + tag);
+        }
+        if (data.externalTagLabels[tag] && data.externalTagLabels[tag] !== label) {
+          throw new Error("A neighbouring network tag has conflicting labels: " + tag);
+        }
+        data.externalTagParents[tag] = parent;
+        data.externalTagLabels[tag] = label;
+      });
+      return {
+        id: id,
+        label: record.label,
+        path: path,
+        status: record.authority && record.authority.status || "provisional",
+        source: record.authority && record.authority.source || "",
+        sourceUrl: record.authority && record.authority.sourceUrl || "",
+        eligibility: record.eligibility || "",
+        trafficEvidence: record.trafficEvidence || null
+      };
+    }).sort(function (left, right) {
+      return left.label.localeCompare(right.label);
+    });
     Object.defineProperty(data, "__mccPrepared", { value: true });
     return data;
   }
@@ -282,6 +344,7 @@
 
   function labelFor(data, tag) {
     if (data.hierarchy[tag]) return data.hierarchy[tag].label;
+    if (data.externalTagLabels && data.externalTagLabels[tag]) return data.externalTagLabels[tag];
     return tag;
   }
 
@@ -347,6 +410,51 @@
     return ancestryFor(data, tag).join(" -> ");
   }
 
+  function sharedRepeaterAreaForTag(data, tag) {
+    return (data.sharedRepeaterAreas || []).find(function (area) {
+      return area.members.indexOf(tag) !== -1;
+    }) || null;
+  }
+
+  function canonicalLeafOrder(data, tags) {
+    var seedTags = {};
+    (data.seeds || []).forEach(function (seed) { seedTags[seed.tag] = true; });
+    return unique(tags || []).filter(function (tag) {
+      return Boolean(seedTags[tag]);
+    }).sort(function (left, right) {
+      return ancestryText(data, left).localeCompare(ancestryText(data, right));
+    });
+  }
+
+  function expandSharedRepeaterLeaves(data, tags) {
+    var expanded = canonicalLeafOrder(data, tags);
+    expanded.slice().forEach(function (tag) {
+      var area = sharedRepeaterAreaForTag(data, tag);
+      if (area && area.defaultForMembers) {
+        expanded = expanded.concat(area.members);
+      }
+    });
+    return canonicalLeafOrder(data, expanded);
+  }
+
+  function selectedExternalRegionPaths(data, ids) {
+    var selected = {};
+    unique(ids || []).forEach(function (id) { selected[id] = true; });
+    return (data.externalRegionPathList || []).filter(function (record) {
+      return Boolean(selected[record.id]);
+    }).sort(function (left, right) {
+      return left.path.join("/").localeCompare(right.path.join("/"));
+    });
+  }
+
+  function defaultRepeaterLeaves(data, primaryTag) {
+    return expandSharedRepeaterLeaves(data, [primaryTag]);
+  }
+
+  function labelledPath(data, path) {
+    return path.map(function (tag) { return labelFor(data, tag); }).join(" › ");
+  }
+
   function seedText(seed) {
     return seed
       ? seed.lat.toFixed(4) + ", " + seed.lon.toFixed(4) + " / r " + (seed.r || 0) + " km"
@@ -382,6 +490,13 @@
     if (state.name) params.set("name", state.name);
     if (state.resolution && state.resolution.primary) {
       params.set("tag", state.forcedTag || state.resolution.primary.seed.tag);
+    }
+    if (state.type === "high-site") params.set("type", "large");
+    if (state.selectedMetros && state.selectedMetros.length) {
+      params.set("regions", state.selectedMetros.join(","));
+    }
+    if (state.selectedExternalPaths && state.selectedExternalPaths.length) {
+      params.set("external", state.selectedExternalPaths.join(","));
     }
     return regionPageHref("map") + (params.toString() ? "?" + params.toString() : "");
   }
@@ -490,12 +605,16 @@
     };
   }
 
-  function recommend(data, resolution, type, selectedMetros) {
+  function recommend(data, resolution, type, selectedMetros, selectedExternalPaths) {
     if (!resolution || !resolution.primary) return null;
     var primaryTag = resolution.primary.seed.tag;
     var carryTags = type === "high-site" && selectedMetros && selectedMetros.length
       ? selectedMetros
-      : [primaryTag];
+      : defaultRepeaterLeaves(data, primaryTag);
+    carryTags = expandSharedRepeaterLeaves(data, carryTags);
+    var externalPaths = type === "high-site"
+      ? selectedExternalRegionPaths(data, selectedExternalPaths)
+      : [];
     var tags = [];
     var parentOverrides = {};
     var notes = [];
@@ -503,13 +622,28 @@
     carryTags.forEach(function (tag) {
       tags = tags.concat(ancestryFor(data, tag));
     });
+    externalPaths.forEach(function (record) {
+      tags = tags.concat(record.path);
+      record.path.forEach(function (tag) {
+        parentOverrides[tag] = data.externalTagParents[tag];
+      });
+      if (record.status !== "documented") {
+        notes.push("Confirm " + record.label + " tags with neighbouring operators before applying them.");
+      }
+    });
     tags = unique(tags);
+    var paths = carryTags.map(function (tag) { return ancestryFor(data, tag); })
+      .concat(externalPaths.map(function (record) { return record.path; }));
+    var jurisdictions = unique(carryTags.map(function (tag) { return provinceTagFor(data, tag); }));
+    var sharedArea = sharedRepeaterAreaForTag(data, primaryTag);
 
     var reviewTags = tags.filter(function (tag) {
+      if (data.externalTagLabels && data.externalTagLabels[tag]) return false;
       var state = statusFor(data, tag).state;
       return state === "draft";
     });
     var deprecatedTags = tags.filter(function (tag) {
+      if (data.externalTagLabels && data.externalTagLabels[tag]) return false;
       return statusFor(data, tag).state === "deprecated";
     });
     if (reviewTags.length) {
@@ -529,6 +663,11 @@
 
     return {
       tags: tags,
+      leaves: carryTags,
+      paths: paths,
+      jurisdictions: jurisdictions,
+      sharedArea: sharedArea,
+      externalPaths: externalPaths,
       parentOverrides: parentOverrides,
       budget: budget,
       notes: notes
@@ -549,7 +688,10 @@
   }
 
   function effectiveParentFor(data, tag, parentOverrides) {
-    return parentOverrides && parentOverrides[tag] || parentFor(data, tag);
+    if (parentOverrides && Object.prototype.hasOwnProperty.call(parentOverrides, tag)) {
+      return parentOverrides[tag];
+    }
+    return parentFor(data, tag);
   }
 
   function regionDefTokens(data, tags, parentOverrides) {
@@ -844,50 +986,106 @@
       return;
     }
     var primaryTag = state.resolution.primary.seed.tag;
-    var provinceTag = provinceTagFor(data, primaryTag);
-    var provinceGroup = data.metroGroups.find(function (group) {
-      return group.tags.indexOf(primaryTag) !== -1;
-    });
-    var allTags = provinceGroup
-      ? provinceGroup.tags.filter(function (tag) { return provinceTagFor(data, tag) === provinceTag; })
-      : data.seeds.filter(function (seed) { return provinceTagFor(data, seed.tag) === provinceTag; }).map(function (seed) { return seed.tag; });
-    var nearbyTags = unique(state.resolution.top5.map(function (entry) { return entry.seed.tag; }))
-      .filter(function (tag) { return allTags.indexOf(tag) !== -1; });
-    var preselect = {};
     if (!state.selectedMetros.length) {
-      nearbyTags.slice(0, 2).forEach(function (tag) {
-        preselect[tag] = true;
-      });
-      state.selectedMetros = Object.keys(preselect);
+      state.selectedMetros = defaultRepeaterLeaves(data, primaryTag);
     }
-    var visibleTags = state.showAllMetros
-      ? allTags
-      : unique(nearbyTags.concat(state.selectedMetros));
-    var hiddenCount = Math.max(0, allTags.length - visibleTags.length);
+    state.selectedExternalPaths = state.selectedExternalPaths || [];
+    var sharedArea = sharedRepeaterAreaForTag(data, primaryTag);
+    var requiredTags = defaultRepeaterLeaves(data, primaryTag);
+    state.selectedMetros = expandSharedRepeaterLeaves(data, state.selectedMetros.concat(requiredTags));
+    var nearbyTags = rankSeeds(data, state.lat, state.lon, null).slice(0, 6).map(function (entry) {
+      return entry.seed.tag;
+    });
+    var visibleTags = canonicalLeafOrder(data, state.selectedMetros.concat(nearbyTags));
+    var groups = (data.metroGroups || []).map(function (group) {
+      return {
+        label: group.label,
+        tags: group.tags.filter(function (tag) { return visibleTags.indexOf(tag) !== -1; })
+      };
+    }).filter(function (group) { return group.tags.length; });
+    var allGroups = (data.metroGroups || []).map(function (group) {
+      return {
+        label: group.label,
+        tags: group.tags.filter(function (tag) { return visibleTags.indexOf(tag) === -1; })
+      };
+    }).filter(function (group) { return group.tags.length; });
+    var sharedNote = sharedArea
+      ? '<div class="mcc-shared-area-note"><strong>Shared repeater area</strong><span>' +
+        esc(sharedArea.label) + " keeps " + esc(sharedArea.members.map(function (tag) {
+          return labelFor(data, tag);
+        }).join(" and ")) + " in one repeater configuration.</span></div>"
+      : "";
+    var externalChoices = (data.externalRegionPathList || []).map(function (record) {
+      var checked = state.selectedExternalPaths.indexOf(record.id) !== -1 ? " checked" : "";
+      var status = record.status === "documented" ? "community path" : "confirm locally";
+      return '<label class="mcc-neighbour-path"><input type="checkbox" data-external-path value="' +
+        esc(record.id) + '"' + checked + '><span><strong>' + esc(record.label) + '</strong><small><code>' +
+        esc(record.path.join(" › ")) + "</code> · " + esc(status) + "</small></span></label>";
+    }).join("");
 
-    target.innerHTML = '<p class="mcc-hint">Select each region this high site will serve.</p>' +
-      '<div class="mcc-chip-group"><strong>' + esc(provinceGroup ? provinceGroup.label : labelFor(data, provinceTag)) + '</strong><div class="mcc-chip-list">' +
-          visibleTags.map(function (tag) {
+    target.innerHTML = '<p class="mcc-hint">Add only the paths this repeater should forward. Different repeaters can carry different paths to spread traffic.</p>' +
+      sharedNote +
+      '<h3 class="mcc-picker-heading">Canadian regions</h3>' +
+      '<p class="mcc-hint">Provinces and territories may be mixed.</p>' +
+      '<div class="mcc-served-region-groups">' +
+      groups.map(function (group) {
+        return '<div class="mcc-chip-group"><strong>' + esc(group.label) + '</strong><div class="mcc-chip-list">' +
+          group.tags.map(function (tag) {
             var checked = state.selectedMetros.indexOf(tag) !== -1 ? " checked" : "";
-            return '<label class="mcc-chip"><input type="checkbox" value="' + esc(tag) + '"' + checked + '> <code>' + esc(tag) + "</code> " + esc(labelFor(data, tag)) + "</label>";
+            var required = requiredTags.indexOf(tag) !== -1;
+            return '<label class="mcc-chip' + (required ? " is-required" : "") + '"><input type="checkbox" data-canadian-region value="' +
+              esc(tag) + '"' + checked + (required ? " disabled" : "") + '> <code>' + esc(tag) + "</code> " +
+              esc(labelFor(data, tag)) + (required ? '<span class="mcc-chip-required">required</span>' : "") + "</label>";
           }).join("") +
-          "</div>" +
-          (hiddenCount ? '<button type="button" class="mcc-button mcc-button-secondary mcc-show-more-regions" data-action="show-all-regions">Add another region (' + hiddenCount + ' more)</button>' : '') +
-          "</div>";
+          "</div></div>";
+      }).join("") +
+      '</div>' +
+      '<label class="mcc-label mcc-add-region-label">Add any Canadian region</label>' +
+      '<select class="mcc-select" data-action="add-served-region">' +
+      '<option value="">Choose a region</option>' +
+      allGroups.map(function (group) {
+        return '<optgroup label="' + esc(group.label) + '">' + group.tags.map(function (tag) {
+          return '<option value="' + esc(tag) + '">' + esc(labelFor(data, tag)) + " (" + esc(tag) + ")</option>";
+        }).join("") + "</optgroup>";
+      }).join("") +
+      "</select>" +
+      (externalChoices
+        ? '<div class="mcc-neighbour-paths"><h3 class="mcc-picker-heading">Neighbouring network paths</h3>' +
+          '<p class="mcc-hint">Add one only when this repeater should forward traffic for that area. Nothing outside Canada is added to the boundary map.</p>' +
+          '<div class="mcc-neighbour-path-list">' + externalChoices + "</div></div>"
+        : "");
 
-    target.querySelectorAll("input[type='checkbox']").forEach(function (input) {
+    target.querySelectorAll("input[data-canadian-region]").forEach(function (input) {
       input.addEventListener("change", function () {
-        state.selectedMetros = Array.prototype.slice.call(target.querySelectorAll("input[type='checkbox']:checked")).map(function (item) {
+        var selected = Array.prototype.slice.call(target.querySelectorAll("input[data-canadian-region]:checked")).map(function (item) {
+          return item.value;
+        });
+        var changedArea = sharedRepeaterAreaForTag(data, input.value);
+        if (changedArea && changedArea.defaultForMembers) {
+          selected = input.checked
+            ? selected.concat(changedArea.members)
+            : selected.filter(function (tag) { return changedArea.members.indexOf(tag) === -1; });
+        }
+        state.selectedMetros = expandSharedRepeaterLeaves(data, selected.concat(requiredTags));
+        renderMetroChips(data, target, state, onChange);
+        onChange();
+      });
+    });
+    target.querySelectorAll("input[data-external-path]").forEach(function (input) {
+      input.addEventListener("change", function () {
+        state.selectedExternalPaths = Array.prototype.slice.call(target.querySelectorAll("input[data-external-path]:checked")).map(function (item) {
           return item.value;
         });
         onChange();
       });
     });
-    var showAll = target.querySelector("[data-action='show-all-regions']");
-    if (showAll) {
-      showAll.addEventListener("click", function () {
-        state.showAllMetros = true;
+    var addRegion = target.querySelector("[data-action='add-served-region']");
+    if (addRegion) {
+      addRegion.addEventListener("change", function () {
+        if (!addRegion.value) return;
+        state.selectedMetros = expandSharedRepeaterLeaves(data, state.selectedMetros.concat(addRegion.value));
         renderMetroChips(data, target, state, onChange);
+        onChange();
       });
     }
   }
@@ -904,7 +1102,7 @@
       return;
     }
 
-    var rec = recommend(data, state.resolution, state.type, state.selectedMetros);
+    var rec = recommend(data, state.resolution, state.type, state.selectedMetros, state.selectedExternalPaths);
     if (!rec) {
       target.innerHTML = '<div class="mcc-empty-state">' + icon("radio-tower") + '<strong>No region yet</strong></div>';
       refreshIcons(target);
@@ -925,14 +1123,36 @@
     var titleTag = state.resolution.primary.seed.tag;
     var statusNotes = rec.notes.map(function (note) {
       var warning = note.indexOf("Check locally") === 0 || note.indexOf("Do not use") === 0 ||
-        note.indexOf("Approximate") === 0 || note.indexOf("Too many") === 0 || note.indexOf("Region names use") === 0;
+        note.indexOf("Approximate") === 0 || note.indexOf("Confirm ") === 0 ||
+        note.indexOf("Too many") === 0 || note.indexOf("Region names use") === 0;
       return '<div class="mcc-note' + (warning ? " mcc-note-warning" : "") + '">' + esc(note) + "</div>";
     }).join("");
     var firmwareLabel = firmware === "1.16" ? "v1.16+" : firmware === "1.15" ? "v1.15.x" : "v1.14.x";
     var guided = state.finishPath === "guided";
     var verificationCommands = ["region"];
     if (state.includeBaseline) verificationCommands.push("get radio");
-    var expectedPath = rec.tags.map(function (tag) { return labelFor(data, tag); }).join(" › ");
+    var expectedPaths = rec.paths.map(function (path) { return labelledPath(data, path); });
+    var expectedPathMarkup = '<div class="mcc-region-path-list">' + expectedPaths.map(function (path) {
+      return "<span>" + esc(path) + "</span>";
+    }).join("") + "</div>";
+    var multiProvince = rec.jurisdictions.length > 1;
+    var scopeNotices = [];
+    if (rec.sharedArea) {
+      scopeNotices.push('<div class="mcc-shared-area-note"><strong>Shared repeater area</strong><span>' +
+        esc(rec.sharedArea.label) + " combines " + esc(rec.sharedArea.members.map(function (tag) {
+          return labelFor(data, tag);
+        }).join(" and ")) + " in one repeater setup. All map boundaries remain separate.</span></div>");
+    } else if (multiProvince) {
+      scopeNotices.push('<div class="mcc-shared-area-note"><strong>Cross-province repeater setup</strong><span>' +
+        esc(rec.jurisdictions.map(function (tag) { return labelFor(data, tag); }).join(" + ")) +
+        ". Each map region keeps its own boundary.</span></div>");
+    }
+    if (rec.externalPaths.length) {
+      scopeNotices.push('<div class="mcc-shared-area-note"><strong>Neighbouring network paths</strong><span>' +
+        esc(rec.externalPaths.map(function (record) { return record.label; }).join(" + ")) +
+        " is added to this repeater only. MeshCore Canada does not own or draw those boundaries.</span></div>");
+    }
+    var scopeNotice = scopeNotices.join("");
     var resultBody = guided
       ? '<div class="mcc-guide-panel">' +
         '<ol class="mcc-guide-steps">' +
@@ -954,8 +1174,8 @@
         '<div class="mcc-guide-command-list">' + commands.map(function (line) {
           return '<button type="button" class="mcc-command-line" data-cmd="' + esc(line) + '"><span>' + esc(line) + '</span><em>' + icon("copy") + 'Copy</em></button>';
         }).join("") + '</div><p class="mcc-guide-stop">Stop on <code>Err</code>. Existing regions are not cleared.</p></div></li>' +
-        '<li><div><h4>Check and save</h4><p>Run <code>region</code> and confirm:</p>' +
-        '<p class="mcc-region-path"><strong>' + esc(expectedPath) + '</strong></p>' +
+        '<li><div><h4>Check and save</h4><p>Run <code>region</code> and confirm each path:</p>' +
+        expectedPathMarkup +
         '<div class="mcc-guide-command-list"><button type="button" class="mcc-command-line" data-cmd="region"><span>region</span><em>' + icon("copy") + 'Copy</em></button></div>' +
         '<p>Save:</p>' +
         '<div class="mcc-guide-command-list"><button type="button" class="mcc-command-line" data-cmd="region save"><span>region save</span><em>' + icon("copy") + 'Copy</em></button></div>' +
@@ -981,8 +1201,10 @@
       (state.resolution.sourceTier === "generated" ? "Canada-wide region boundary" : "Boundary unavailable") + '</span>';
     var ancestryMarkup = '<div class="mcc-ancestry" aria-label="Region tags">' +
       rec.tags.map(function (tag) {
-        var stateName = statusFor(data, tag).state || "draft";
-        return '<span class="mcc-tag-pill' + (stateName === "draft" ? " is-draft" : "") + '"><code>' + esc(tag) + "</code></span>";
+        var external = Boolean(data.externalTagLabels && data.externalTagLabels[tag]);
+        var stateName = external ? "external" : statusFor(data, tag).state || "draft";
+        return '<span class="mcc-tag-pill' + (stateName === "draft" ? " is-draft" : "") +
+          (external ? " is-external" : "") + '"><code>' + esc(tag) + "</code></span>";
       }).join("") +
       "</div>";
     var metaMarkup = '<dl class="mcc-result-meta">' +
@@ -1000,10 +1222,12 @@
       '<div>' +
       '<h3 class="mcc-result-title"><code>' + esc(titleTag.toUpperCase()) + "</code> — " + esc(labelFor(data, titleTag)) + "</h3>" +
       '<div class="mcc-result-sub">' + esc(state.name || labelFor(data, titleTag)) + "</div>" +
-      '<div class="mcc-region-path"><strong>Your region:</strong> ' + esc(expectedPath) + '</div>' +
+      '<div class="mcc-region-path"><strong>' + (rec.paths.length > 1 ? "Repeater regions:" : "Your region:") + "</strong>" +
+      expectedPathMarkup + "</div>" +
       '</div>' +
       (!guided ? '<button type="button" class="mcc-button mcc-copy-all">' + icon("copy") + 'Copy commands</button>' : '') +
       '</div>' +
+      scopeNotice +
       technicalDetails +
       resultBody +
       (statusNotes ? '<div class="mcc-notes">' + statusNotes + "</div>" : "") +
@@ -1042,7 +1266,7 @@
 
   function currentCommands(data, state) {
     if (!state || !state.canGenerate || !state.resolution) return null;
-    var rec = recommend(data, state.resolution, state.type, state.selectedMetros);
+    var rec = recommend(data, state.resolution, state.type, state.selectedMetros, state.selectedExternalPaths);
     if (!rec) return null;
     if (rec.budget.tagCount > 32 || rec.budget.responseBytes > 172) return null;
     var firmware = state.firmware || data.meta.defaultFirmware || "1.16";
@@ -1061,6 +1285,7 @@
     var seed = seedForTag(data, tag);
     var sourceUrl = sourceUrlFor(data, tag);
     var ancestry = ancestryFor(data, tag);
+    var sharedArea = sharedRepeaterAreaForTag(data, tag);
     var commands = state && state.canGenerate && state.resolution &&
       state.resolution.primary && state.resolution.primary.seed.tag === tag
       ? currentCommands(data, state)
@@ -1088,6 +1313,10 @@
       '<div><dt>Seed</dt><dd>' + (seed
         ? esc(seed.lat.toFixed(4) + ", " + seed.lon.toFixed(4) + " / r " + (seed.r || 0) + " km")
         : "No seed point") + '</dd></div>' +
+      (sharedArea
+        ? '<div><dt>Repeater area</dt><dd>' + esc(sharedArea.label) + " · " +
+          esc(sharedArea.members.map(function (member) { return labelFor(data, member); }).join(" + ")) + "</dd></div>"
+        : "") +
       '<div><dt>Source note</dt><dd>' + (pnwAligned ? "BC coastal seed follows the PNW reference data" : "Strategy draft v1.1.1 region") + '</dd></div>' +
       '</dl>' +
       '<div class="mcc-detail-actions">' +
@@ -1132,11 +1361,13 @@
     renderCandidateList(data, els.candidates, state, function (tag) {
       state.forcedTag = tag;
       state.selectedMetros = [];
-      state.showAllMetros = false;
+      state.selectedExternalPaths = [];
       refreshTool(data, els, state, afterRefresh);
     });
     renderMetroChips(data, els.metro, state, function () {
       renderResult(data, els.result, state);
+      renderRegionDetail(data, els.detailSection, els.detail, state, state.detailTag);
+      if (afterRefresh) afterRefresh();
     });
     renderResult(data, els.result, state);
     renderRegionDetail(data, els.detailSection, els.detail, state, state.detailTag);
@@ -1196,7 +1427,7 @@
       '<div class="mcc-choice-list" data-role="types" role="group" aria-label="Repeater installation type">' +
       '<label class="mcc-choice"><input type="radio" name="mcc-type" value="residential" checked><span><strong>Home or portable</strong></span></label>' +
       '<label class="mcc-choice"><input type="radio" name="mcc-type" value="urban"><span><strong>Rooftop or tower</strong></span></label>' +
-      '<label class="mcc-choice"><input type="radio" name="mcc-type" value="high-site"><span><strong>Mountaintop / wide coverage</strong></span></label>' +
+      '<label class="mcc-choice"><input type="radio" name="mcc-type" value="high-site"><span><strong>Large or cross-border coverage</strong><small>Choose forwarding paths</small></span></label>' +
       '</div>' +
       '<div data-role="metro"></div>' +
       '<div class="mcc-wizard-actions"><button class="mcc-button mcc-button-secondary" type="button" data-prev-step>' + icon("arrow-left") + 'Back</button><button class="mcc-button" type="button" data-next-step>Next' + icon("arrow-right") + '</button></div>' +
@@ -1227,7 +1458,7 @@
       firmware: data.meta.defaultFirmware || "1.16",
       includeBaseline: true,
       selectedMetros: [],
-      showAllMetros: false,
+      selectedExternalPaths: [],
       canGenerate: false,
       resolution: null,
       browseTag: data.meta.rootTag || "can",
@@ -1318,12 +1549,14 @@
       var selectedTag = state.resolution && state.resolution.primary
         ? state.resolution.primary.seed.tag
         : null;
+      var sharedArea = selectedTag ? sharedRepeaterAreaForTag(data, selectedTag) : null;
       if (els.selectedRegion) {
         els.selectedRegion.hidden = !selectedTag;
         els.selectedRegion.innerHTML = selectedTag
-          ? '<strong>Your region</strong><span>' + esc(ancestryFor(data, selectedTag).map(function (item) {
+          ? '<strong>Your home region</strong><span>' + esc(ancestryFor(data, selectedTag).map(function (item) {
             return labelFor(data, item);
-          }).join(" › ")) + '</span>'
+          }).join(" › ")) + '</span>' +
+            (sharedArea ? '<span class="mcc-selected-shared-area">Shared repeater area: ' + esc(sharedArea.label) + "</span>" : "")
           : "";
       }
       if (els.regionBrowser) els.regionBrowser.hidden = !selectedTag;
@@ -1368,7 +1601,7 @@
         ? provinceTagFor(data, state.forcedTag)
         : jurisdictionTagFromGeo(geo);
       state.selectedMetros = [];
-      state.showAllMetros = false;
+      state.selectedExternalPaths = [];
       if (!isCanada(geo)) {
         state.canGenerate = false;
         state.resolution = null;
@@ -1458,8 +1691,9 @@
       input.addEventListener("change", function () {
         state.type = input.value;
         state.selectedMetros = [];
-        state.showAllMetros = false;
-        refreshTool(data, els, state);
+        state.selectedExternalPaths = [];
+        refreshTool(data, els, state, updateMapLinks);
+        updateMapLinks();
       });
     });
     el.querySelectorAll("input[name='mcc-firmware']").forEach(function (input) {
@@ -1525,7 +1759,7 @@
       '<div class="mcc-choice-list" role="group" aria-label="Repeater installation type">' +
       '<label class="mcc-choice"><input type="radio" name="mcc-map-type" value="residential" checked><span><strong>Home or portable</strong></span></label>' +
       '<label class="mcc-choice"><input type="radio" name="mcc-map-type" value="urban"><span><strong>Rooftop or tower</strong></span></label>' +
-      '<label class="mcc-choice"><input type="radio" name="mcc-map-type" value="high-site"><span><strong>Mountaintop / wide coverage</strong></span></label>' +
+      '<label class="mcc-choice"><input type="radio" name="mcc-map-type" value="high-site"><span><strong>Large or cross-border coverage</strong><small>Choose forwarding paths</small></span></label>' +
       '</div>' +
       '<div data-role="map-metro"></div>' +
       '<label class="mcc-label" for="mcc-map-firmware">Firmware</label>' +
@@ -1539,17 +1773,27 @@
       '</div>';
     refreshIcons(el);
 
+    var mapParams = new URLSearchParams(window.location.search);
+    var requestedLargeCoverage = mapParams.get("type") === "large";
+    var requestedCanadianRegions = expandSharedRepeaterLeaves(
+      data,
+      String(mapParams.get("regions") || "").split(",").map(slug).filter(Boolean)
+    );
+    var requestedExternalPaths = selectedExternalRegionPaths(
+      data,
+      String(mapParams.get("external") || "").split(",").map(slug).filter(Boolean)
+    ).map(function (record) { return record.id; });
     var state = {
       lat: null,
       lon: null,
       name: "",
       forcedTag: null,
       jurisdictionTag: null,
-      type: "residential",
+      type: requestedLargeCoverage ? "high-site" : "residential",
       firmware: data.meta.defaultFirmware || "1.16",
       includeBaseline: true,
       selectedMetros: [],
-      showAllMetros: false,
+      selectedExternalPaths: [],
       canGenerate: false,
       resolution: null,
       detailTag: null,
@@ -1572,6 +1816,8 @@
     };
     var afterMapRefresh = function () {};
     el.querySelector("[data-role='map-firmware']").value = state.firmware;
+    var initialTypeInput = el.querySelector("input[name='mcc-map-type'][value='" + state.type + "']");
+    if (initialTypeInput) initialTypeInput.checked = true;
 
     loadLeaflet().then(function (L) {
       if (!el.isConnected) return;
@@ -1621,8 +1867,12 @@
 
       function updateBoundaryHighlight() {
         selectedLayer.clearLayers();
-        if (state.resolution && state.resolution.displayBoundary) {
-          selectedLayer.addData(state.resolution.displayBoundary);
+        var rec = recommend(data, state.resolution, state.type, state.selectedMetros, state.selectedExternalPaths);
+        if (rec) {
+          selectedLayer.addData({
+            type: "FeatureCollection",
+            features: rec.leaves.map(function (tag) { return data.partitionByTag[tag]; }).filter(Boolean)
+          });
           selectedLayer.bringToFront();
         }
       }
@@ -1700,7 +1950,7 @@
           ? provinceTagFor(data, state.forcedTag)
           : jurisdictionTagFromGeo(geo);
         state.selectedMetros = [];
-        state.showAllMetros = false;
+        state.selectedExternalPaths = [];
         place(state.lat, state.lon);
         if (!isCanada(geo)) {
           state.forcedTag = null;
@@ -1737,7 +1987,7 @@
         state.forcedTag = null;
         state.jurisdictionTag = null;
         state.selectedMetros = [];
-        state.showAllMetros = false;
+        state.selectedExternalPaths = [];
         state.canGenerate = false;
         state.resolution = null;
         state.detailTag = null;
@@ -1791,16 +2041,24 @@
         verifyAndUseGeo(lat, lon, lat.toFixed(4) + ", " + lon.toFixed(4), false);
       });
 
-      var params = new URLSearchParams(window.location.search);
-      var initialLatRaw = params.get("lat");
-      var initialLonRaw = params.get("lon");
+      var initialLatRaw = mapParams.get("lat");
+      var initialLonRaw = mapParams.get("lon");
       var initialLat = initialLatRaw === null || initialLatRaw.trim() === "" ? NaN : Number(initialLatRaw);
       var initialLon = initialLonRaw === null || initialLonRaw.trim() === "" ? NaN : Number(initialLonRaw);
       var hasInitialLocation = Number.isFinite(initialLat) && Number.isFinite(initialLon);
       if (hasInitialLocation) {
-        var initialName = params.get("name") || (initialLat.toFixed(4) + ", " + initialLon.toFixed(4));
+        var initialName = mapParams.get("name") || (initialLat.toFixed(4) + ", " + initialLon.toFixed(4));
         els.input.value = initialName;
-        verifyAndUseGeo(initialLat, initialLon, initialName, true, params.get("tag"));
+        verifyAndUseGeo(initialLat, initialLon, initialName, true, mapParams.get("tag")).then(function () {
+          if (!requestedLargeCoverage || !state.canGenerate) return;
+          state.type = "high-site";
+          state.selectedMetros = requestedCanadianRegions;
+          state.selectedExternalPaths = requestedExternalPaths;
+          refreshTool(data, els, state, updateBoundaryHighlight);
+          if (selectedLayer.getBounds().isValid()) {
+            map.fitBounds(selectedLayer.getBounds(), { padding: [28, 28], maxZoom: 8 });
+          }
+        });
       } else {
         fitCanada();
       }
@@ -1816,7 +2074,7 @@
       input.addEventListener("change", function () {
         state.type = input.value;
         state.selectedMetros = [];
-        state.showAllMetros = false;
+        state.selectedExternalPaths = [];
         refreshTool(data, els, state, afterMapRefresh);
       });
     });

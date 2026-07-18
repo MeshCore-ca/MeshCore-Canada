@@ -2196,10 +2196,21 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#cross-boundary-names" class="md-nav__link">
+  <a href="#cross-province-repeater-areas" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Cross-boundary names
+        Cross-province repeater areas
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#large-and-neighbouring-network-paths" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Large and neighbouring network paths
       
     </span>
   </a>
@@ -2551,7 +2562,7 @@
 </tr>
 <tr>
 <td>Version</td>
-<td>1.0 proposed</td>
+<td>1.1 proposed</td>
 </tr>
 <tr>
 <td>Geographic reference</td>
@@ -2567,7 +2578,7 @@
 </tr>
 <tr>
 <td>Current operational evidence</td>
-<td>Privacy-safe MeshCore Canada radio-density snapshot, 2026-07-15 UTC</td>
+<td>Privacy-safe Canadian radio-density snapshot, 2026-07-15 UTC; aggregate Canada–U.S. route snapshot, 2026-07-18</td>
 </tr>
 <tr>
 <td>Adoption</td>
@@ -2582,7 +2593,7 @@
 <h2 id="the-decision">The decision<a class="headerlink" href="#the-decision" title="Permanent link">&para;</a></h2>
 <p>MeshCore Canada maintains <strong>one geographic partition</strong>. Every part of Canada belongs to exactly one geographic leaf in the path <code>can → province or territory → region → optional subregion</code>. Leaf interiors never overlap and their union covers the complete national DA extent.</p>
 <p>The published MeshCore Canada registry is the single source of truth. A boundary is not stored as a hand-drawn polygon. It is stored as ownership of official Statistics Canada geographic cells, then regenerated from those cells. Census Subdivisions keep a municipality or municipal equivalent together by default; Dissemination Areas remain the exact geometry used to publish the shared edge.</p>
-<p>Only leaves own land. Provinces, territories, and larger region records are grouping nodes derived from their children. Raw MeshMapper polygons, strategy circles, shared routing scopes, and event areas are never published as regions and are never added to generated commands.</p>
+<p>Only leaves own land. Provinces, territories, and larger region records are grouping nodes derived from their children. Raw MeshMapper polygons, strategy circles, and event areas are never published as regions. A shared repeater area is configuration metadata, not another map layer.</p>
 <h2 id="canonical-model">Canonical model<a class="headerlink" href="#canonical-model" title="Permanent link">&para;</a></h2>
 <h3 id="geographic-records">Geographic records<a class="headerlink" href="#geographic-records" title="Permanent link">&para;</a></h3>
 <table>
@@ -2628,14 +2639,111 @@
 <li>its release state: <code>proposed</code>, <code>reviewed</code>, <code>active</code>, <code>deprecated</code>, or <code>retired</code>.</li>
 </ul>
 <p>Names, tags, and geometry may change through review. The immutable ID does not.</p>
-<h3 id="cross-boundary-names">Cross-boundary names<a class="headerlink" href="#cross-boundary-names" title="Permanent link">&para;</a></h3>
-<p>A familiar name may refer to more than one adjacent leaf, but it does not create another region:</p>
+<h3 id="cross-province-repeater-areas">Cross-province repeater areas<a class="headerlink" href="#cross-province-repeater-areas" title="Permanent link">&para;</a></h3>
+<p>A provincial border separates map ownership, not radio traffic. Every location still has one home leaf, but one repeater may carry several complete leaf paths when its normal coverage crosses a province or territory.</p>
+<p>A <strong>shared repeater area</strong> records an established cross-jurisdiction community. It has a label and member leaves, but no polygon, parent, resolver result, or on-air tag of its own. The configurator emits the complete path for every member instead:</p>
 <ul>
-<li>National Capital Region is a search grouping for Ottawa and Outaouais;</li>
-<li>Lloydminster is split into <code>lloyd-ab</code> and <code>lloyd-sk</code> at the provincial boundary;</li>
-<li>Pacific Northwest, Lake Ontario, and event names may be documented as coordination terms only.</li>
+<li>National Capital Region: <code>can → on → on-alg → ott</code> and <code>can → qc → gatout</code>;</li>
+<li>Lloydminster: <code>can → ab → lloyd-ab</code> and <code>can → sk → lloyd-sk</code>.</li>
 </ul>
-<p>Search groupings have no polygon, parent relationship, resolver result, or generated command. A search for one shows its member leaves and asks the user to choose the correct side.</p>
+<p>For firmware v1.16+, the National Capital Region becomes:</p>
+<div class="highlight"><pre><span></span><code>region def can on on-alg ott|can qc gatout
+</code></pre></div>
+<p>The <code>ncr</code> search name is not sent over the air. Both sides keep their canonical tags, and every repeater in the shared area receives the same ordered tree.</p>
+<p>This rule applies everywhere in Canada:</p>
+<ol>
+<li>A registered shared area is selected automatically for each member leaf.</li>
+<li>A large-coverage or border repeater outside a registered area may select any verified set of Canadian leaves, including leaves in different provinces or territories.</li>
+<li>Commands contain the union of the selected leaf paths. Shared ancestors appear once, parents appear before children, and each new branch jumps back to an ancestor that already exists.</li>
+<li>The configurator must fail closed if the result exceeds the firmware limits of 32 tags or 172 response bytes. No generated CLI line may exceed 160 characters; if one <code>region def</code> line would be too long, the configurator uses ordered <code>region put</code> lines instead.</li>
+<li>Adding a shared area never moves a census cell, joins polygons, or weakens the non-overlap checks.</li>
+</ol>
+<p>Register an automatic shared area only when operators on every side confirm routine cross-border paths or one continuous community. Other long paths are selected per repeater. This keeps defaults useful without turning every provincial boundary into one oversized radio area.</p>
+<h3 id="large-and-neighbouring-network-paths">Large and neighbouring network paths<a class="headerlink" href="#large-and-neighbouring-network-paths" title="Permanent link">&para;</a></h3>
+<p>A region path is a forwarding choice, not a prediction of RF range. Large coverage does not require a mountain. Elevation, water paths, ordinary rooftop sites, and linked repeaters can all produce long routes.</p>
+<p>Every repeater keeps one Canadian home region. Operators may then add complete Canadian or neighbouring U.S. paths that the repeater should forward. Region matching is exact, so every intended scope needs its complete ancestry. The configurator never adds a neighbouring path automatically and never draws U.S. geometry. Hearing traffic from an area is not enough by itself; add its path only when this repeater is meant to forward traffic scoped to that area.</p>
+<p>Use the smallest useful set and spread work across repeaters:</p>
+<table>
+<thead>
+<tr>
+<th>Repeater role</th>
+<th>Forwarding choice</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Local access</td>
+<td>Home path only</td>
+</tr>
+<tr>
+<td>Regional bridge</td>
+<td>Home path plus the few neighbouring Canadian paths it routinely connects</td>
+</tr>
+<tr>
+<td>Long-haul backbone</td>
+<td>A reviewed set of Canadian and U.S. paths supported by observed routes</td>
+</tr>
+</tbody>
+</table>
+<p>Do not put every available path on every repeater. For example, traffic between Waterloo, Toronto, and Western New York can be divided among bridge repeaters instead of making each repeater carry all three paths. The choice belongs to local operators and must be coordinated with the communities that use those paths.</p>
+<p>A U.S. path is eligible when it is next to Canada or across shared water and appears in resolved route evidence. A farther path requires repeated resolved route evidence. Evidence only makes a path available; it does not make the path a default or prove future performance.</p>
+<p>The 2026-07-18 aggregate route snapshot supports these paths:</p>
+<table>
+<thead>
+<tr>
+<th>Area</th>
+<th>Exact path</th>
+<th>Status</th>
+<th>Canadian side</th>
+<th style="text-align: right;">Route patterns / observations</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Western New York</td>
+<td><code>us → us-ny</code></td>
+<td>Documented by WNY operators</td>
+<td>Ontario and Québec</td>
+<td style="text-align: right;">4,508 / 33,820</td>
+</tr>
+<tr>
+<td>Washington</td>
+<td><code>west → pnw → wa</code></td>
+<td>Documented PNW path</td>
+<td>British Columbia</td>
+<td style="text-align: right;">5,384 / 21,596</td>
+</tr>
+<tr>
+<td>Oregon</td>
+<td><code>west → pnw → or</code></td>
+<td>Documented PNW path; farther route</td>
+<td>British Columbia</td>
+<td style="text-align: right;">903 / 1,394</td>
+</tr>
+<tr>
+<td>Pennsylvania</td>
+<td><code>us → us-pa</code></td>
+<td>Provisional; confirm locally</td>
+<td>Ontario</td>
+<td style="text-align: right;">37 / 82</td>
+</tr>
+<tr>
+<td>Ohio</td>
+<td><code>us → us-oh</code></td>
+<td>Provisional; confirm locally</td>
+<td>Ontario</td>
+<td style="text-align: right;">6 / 10</td>
+</tr>
+<tr>
+<td>California</td>
+<td><code>west → ca</code></td>
+<td>Provisional PNW extension; farther route</td>
+<td>British Columbia</td>
+<td style="text-align: right;">7 / 12</td>
+</tr>
+</tbody>
+</table>
+<p>The snapshot counts unique resolved route patterns and their observations from <code>dev.meshcore.ca</code>. It stores no node names, identifiers, or exact coordinates. Counts are routing evidence, not a performance benchmark. Border or farther states may be added later only with the same evidence and neighbouring-operator review.</p>
 <h3 id="selecting-a-larger-region">Selecting a larger region<a class="headerlink" href="#selecting-a-larger-region" title="Permanent link">&para;</a></h3>
 <p>Selecting a province, territory, or larger region reveals its immediate child regions. Selecting a child with further children drills down again. The smallest displayed choices are the active leaves used for location lookup and commands.</p>
 <p>A parent outline is calculated as the union of its children for highlighting and map navigation. It is never stored or rendered as a competing filled region. This keeps the hierarchy useful without assigning the same place twice.</p>
@@ -3013,7 +3121,7 @@
 <p>Versioning rules:</p>
 <ul>
 <li><strong>Major:</strong> census-geography vintage or incompatible authority/model change.</li>
-<li><strong>Minor:</strong> DA reassignment, split, merge, hierarchy change, or tag change.</li>
+<li><strong>Minor:</strong> DA reassignment, split, merge, hierarchy change, tag change, or shared repeater area membership change.</li>
 <li><strong>Patch:</strong> labels, aliases, documentation, or source metadata with no membership change.</li>
 </ul>
 <p>Operational region boundaries are community routing definitions. They are not legal, electoral, cadastral, treaty, title, or sovereignty claims.</p>
@@ -3028,6 +3136,10 @@
 <li>the symmetric difference between the leaf union and the locked 57,936-DA digital union is zero at the configured precision;</li>
 <li>every subregion union equals its parent membership;</li>
 <li>only leaves own geometry; no <code>routingOverlays</code>, <code>sharedParents</code>, or profile-added scopes exist;</li>
+<li>every shared repeater area contains canonical leaves from at least two provinces or territories, and no leaf belongs to more than one automatic shared area;</li>
+<li>shared-area names never enter the on-air tree; the complete member paths fit every firmware and serial-line budget;</li>
+<li>every neighbouring path is non-geographic, optional, backed by aggregate route evidence, and uses a documented or explicitly provisional external hierarchy;</li>
+<li>neighbouring paths never own Canadian cells, resolve from a map point, or appear as U.S. boundary geometry;</li>
 <li>every resolver test point returns exactly one leaf;</li>
 <li>every active region is contiguous by shared land edge, or has a documented island/MultiPolygon exception;</li>
 <li>every active tag is globally unique and within the firmware byte limit;</li>
@@ -3098,7 +3210,7 @@
 </tr>
 </tbody>
 </table>
-<p>Generated GeoJSON is a build output. The catalog, membership table, generator configuration, and source lock are the authority inputs. Non-geographic search groups may reference leaf tags, but they never own cells, appear in the map layer, resolve from a point, or enter generated commands.</p>
+<p>Generated GeoJSON is a build output. The catalog, membership table, generator configuration, and source lock are the authority inputs. Non-geographic search groups never own cells, appear in the map layer, or resolve from a point. A shared repeater area's group name never enters a command; only the canonical paths of its member leaves do.</p>
 <h2 id="migration-from-the-current-map">Migration from the current map<a class="headerlink" href="#migration-from-the-current-map" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -3136,17 +3248,21 @@
 </tr>
 </tbody>
 </table>
-<p>MeshMapper remains the main community assignment source where it has a region. Circles and raw source polygons are never promoted or rendered as final regions. Ottawa and Outaouais remain adjacent provincial leaves, Lloydminster is split into <code>lloyd-ab</code> and <code>lloyd-sk</code>, and shared names remain search-only groupings.</p>
+<p>MeshMapper remains the main community assignment source where it has a region. Circles and raw source polygons are never promoted or rendered as final regions. Ottawa and Outaouais remain adjacent provincial leaves, and Lloydminster remains split into <code>lloyd-ab</code> and <code>lloyd-sk</code>. Their shared repeater configurations join canonical member paths without joining the map geometry.</p>
 <h2 id="repeater-configuration-rules">Repeater configuration rules<a class="headerlink" href="#repeater-configuration-rules" title="Permanent link">&para;</a></h2>
 <p>Generated instructions must follow the current <a href="https://docs.meshcore.io/cli_commands/">official MeshCore CLI documentation</a>, not copied examples from an older strategy document.</p>
 <ul>
 <li>Use <code>region def</code> or <code>region put</code> to define the exact tree required by that repeater.</li>
 <li><code>name|jump</code> creates <code>name</code> under the current cursor and then moves the cursor to <code>jump</code>; <code>jump</code> is not the parent of <code>name</code>.</li>
 <li><code>region def</code> does not clear the current tree and may leave partial changes after an error.</li>
+<li>A cross-province configuration must use one <code>can</code> root with one complete branch per selected leaf. It must not invent a second parent or a shared-area tag.</li>
+<li>A neighbouring U.S. path keeps the hierarchy used by that community. It is a separate root branch and does not become part of <code>can</code>.</li>
+<li>Registered shared repeater areas use the same deterministic member order on every repeater. Other large-coverage selections are ordered by canonical hierarchy, not by click order.</li>
+<li>Select paths per repeater role. Do not add every path everywhere.</li>
 <li>Run bare <code>region</code> to inspect the result.</li>
 <li>Run <code>region save</code> only after the tree and flood permissions are correct.</li>
 </ul>
-<p>The setup tool must generate and test commands from registry parent IDs. It must never infer command order by splitting a tag string.</p>
+<p>The setup tool must generate and test commands from registry parent IDs. It must never infer command order by splitting a tag string. The map may outline all selected Canadian leaves together, but each fill remains its original non-overlapping geographic region. Neighbouring U.S. paths appear in commands and labels only. The boundary editor continues to accept one province or territory per proposal; shared repeater membership and neighbouring path metadata are changed in the catalog and reviewed by every affected side.</p>
 <h2 id="source-record">Source record<a class="headerlink" href="#source-record" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54">MeshCore Canada forum discussion</a>, including the complete-coverage and administrative-building-block discussion in <a href="https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54/29">posts 29–36</a>, the local-authority discussion in <a href="https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54/43">posts 43–44</a>, and the discoverability concern in <a href="https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54/50">post 50</a>.</li>
@@ -3155,6 +3271,8 @@
 <li><a href="https://www12.statcan.gc.ca/census-recensement/2021/ref/dict/az/definition-eng.cfm?ID=geo021">Statistics Canada 2021 DA definition</a>, <a href="https://www150.statcan.gc.ca/n1/pub/92-160-g/92-160-g2021001-eng.htm">2021 Boundary Files guide</a>, <a href="https://www12.statcan.gc.ca/census-recensement/2021/geo/sip-pis/dguid-idugd/index2021-eng.cfm?year=21">2021 dissemination-geography relationships</a>, and <a href="https://www.statcan.gc.ca/en/subjects/standard/sgc/2021/er-additionalinfo">2021 Economic Region standard</a>.</li>
 <li><a href="https://www.statcan.gc.ca/en/terms-conditions/open-licence">Statistics Canada Open Licence</a>.</li>
 <li>MeshCore Canada privacy-safe positioned-node snapshot from <a href="https://live.meshcore.ca/"><code>live.meshcore.ca</code></a> and <a href="https://dev.meshcore.ca/"><code>dev.meshcore.ca</code></a>, with fixed infrastructure used for decisions and all roles retained only as aggregate context.</li>
+<li>Aggregate resolved-route evidence from <a href="https://dev.meshcore.ca/"><code>dev.meshcore.ca</code></a> on 2026-07-18. Only area totals are retained.</li>
+<li><a href="https://wnymeshcore.org/guides/radio-settings">WNY MeshCore radio settings</a> for <code>us → us-ny</code>, the <a href="https://gessaman.com/meshcore/regions/">Pacific Northwest strategy</a> for <code>west → pnw → wa</code> and <code>west → pnw → or</code>, and the <a href="https://www.regionmesh.com/meshcore-region-configuration/">RegionMesh state-path convention</a> for provisional U.S. state paths.</li>
 </ul>
 
 
