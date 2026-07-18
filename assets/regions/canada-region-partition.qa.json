@@ -1,8 +1,8 @@
 {
   "artifactHashes": {
-    "digitalPartitionSha256": "b3678b97f3ef7a1a49bd19bfbcd43302e75fd7e204a657b2e01629728aa85fef",
-    "membershipSha256": "9e23bf1605a32e469e651dd62c4ecf4ff6f7169da95f8d15fc82ad4fa53f9c87",
-    "partitionSha256": "8762ac9731cddd34684407be3408a97cc85750bfa05e1bee4ad0f3c48fd8273e"
+    "digitalPartitionSha256": "d694d761b14358fd42375c826f417ac827ce9f51fc4954079aca03817b7ddf9e",
+    "membershipSha256": "43382cb86890281b43e8cf3d30f4b01e2993bf6b6ab5c5fb5d492babdacb6ab3",
+    "partitionSha256": "ff7ddd6ae9d08e46df00add98878fa2189a831d58fb37a7653a333b8d4159814"
   },
   "assignmentCounts": {
     "approved-cd-override:3530004": 17,
@@ -12,6 +12,7 @@
     "approved-cd-override:3530020": 29,
     "approved-cd-override:3530027": 19,
     "approved-cd-override:3530035": 36,
+    "approved-csd-split:3523001": 12,
     "csd-seed:1001519": 191,
     "csd-seed:1002005": 5,
     "csd-seed:1003034": 7,
@@ -2896,7 +2897,6 @@
     "single-cd-seed:3522016": 7,
     "single-cd-seed:3522019": 4,
     "single-cd-seed:3522021": 13,
-    "single-cd-seed:3523001": 12,
     "single-cd-seed:3523009": 22,
     "single-cd-seed:3523017": 21,
     "single-cd-seed:3523025": 48,
@@ -5170,14 +5170,15 @@
   "censusCoherence": {
     "approvedCdOverrides": 1,
     "approvedCsdOverrides": 0,
-    "approvedSplitExceptions": 0,
+    "approvedSplitExceptions": 1,
     "automaticSplitCsdCount": 0,
-    "changedDaCountFromProvisional": 4334,
+    "changedDaCountFromProvisional": 4336,
     "decisionCounts": {
       "approved-cd-override": 7,
+      "approved-csd-split": 1,
       "csd-seed": 192,
       "provisional-plurality": 1731,
-      "single-cd-seed": 3231
+      "single-cd-seed": 3230
     },
     "lowMarginCsdCount": 12,
     "lowMarginCsdDecisions": [
@@ -5331,9 +5332,9 @@
     "radioInfluencedDecisionCount": 0
   },
   "digitalCoverage": {
-    "absoluteAreaDifferenceSquareMetres": 0.001953,
-    "partitionAreaSquareMetres": 13832644466413.201,
-    "sourceAtomAreaSquareMetres": 13832644466413.203,
+    "absoluteAreaDifferenceSquareMetres": 0.023438,
+    "partitionAreaSquareMetres": 13832644466413.23,
+    "sourceAtomAreaSquareMetres": 13832644466413.207,
     "sourceAtomCount": 57936,
     "sourceUnionPreserved": true
   },
@@ -5344,9 +5345,8 @@
     "positiveAreaOverlapSquareMetres": 0.0
   },
   "displayCoverage": {
-    "absoluteAreaDifferenceSquareMetres": 0.0,
-    "partitionAreaSquareMetres": 9547211951411.57,
-    "resumedFromValidatedDissolve": true,
+    "absoluteAreaDifferenceSquareMetres": 0.017578,
+    "partitionAreaSquareMetres": 9547211951411.553,
     "sourceAtomAreaSquareMetres": 9547211951411.57,
     "sourceAtomCount": 57932,
     "sourceUnionPreserved": true
@@ -5372,9 +5372,9 @@
     "economicRegionShapefileSha256": "786a98e5159148b98fdb824bb6ce3e237e8b745ca81b15062e12813796f927c5",
     "generatorConfigSha256": "65d2a5eb03cc782bf4ce9ee3789494f614ce42932c6e7cf3e9d4141a7ea9578e",
     "meshMapperCanonicalSha256": "60a0df1478d2a005ff2a518340297869e48fd5140fcfbe55ba51def0ebb190a9",
-    "municipalOverridesCanonicalSha256": "56ba38a6915a28cc5b7b11a7ef436079b4dcb84e32c8373b2998b6ee367587b4",
+    "municipalOverridesCanonicalSha256": "c29dfeed216e052837d2630124490cbdd948182439341a8d6bccd347ce741cb9",
     "radioDensityCanonicalSha256": "c070e3202e3da6754cb03e84936d9e1715c7840076b71d3113ad94471cffefb1",
-    "sourceLockSha256": "5e035c12f8233de3ab4467d9788fe435fcf789400bda1b6fb9e2a44e1e2fcd73"
+    "sourceLockSha256": "9515f09e5795001f8af7d2241c3681d1a091a801750956a2f5266cc1dbbe6dd0"
   },
   "invariants": {
     "automaticMunicipalitySplits": 0,
@@ -7779,10 +7779,10 @@
         "3560",
         "3580"
       ],
-      "areaSquareKilometres": 1455.995,
-      "cartographicDaCount": 766,
+      "areaSquareKilometres": 1495.216,
+      "cartographicDaCount": 768,
       "componentCount": 1,
-      "digitalDaCount": 766,
+      "digitalDaCount": 768,
       "jurisdiction": "on",
       "parent": "on-ktw",
       "registryId": "ca-on-wat",
@@ -7818,10 +7818,10 @@
       "allowedErCodes": [
         "3540"
       ],
-      "areaSquareKilometres": 2829.436,
-      "cartographicDaCount": 359,
+      "areaSquareKilometres": 2790.215,
+      "cartographicDaCount": 357,
       "componentCount": 1,
-      "digitalDaCount": 359,
+      "digitalDaCount": 357,
       "jurisdiction": "on",
       "parent": "on-ktw",
       "registryId": "ca-on-wel",
@@ -8113,15 +8113,15 @@
           "wat",
           "wel"
         ],
-        "dominantLeafShare": 0.487588,
+        "dominantLeafShare": 0.488861,
         "mappedTarget": "wat",
         "subdivisionDaCounts": {
           "bra": 247,
           "msx": 25,
           "oxf": 150,
           "per": 83,
-          "wat": 766,
-          "wel": 300
+          "wat": 768,
+          "wel": 298
         },
         "winningClaimDaCount": 1571
       },

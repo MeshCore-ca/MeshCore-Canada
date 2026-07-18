@@ -15,5 +15,68 @@
       "reviewedAt": "2026-07-14"
     }
   ],
-  "splitExceptions": []
+  "splitExceptions": [
+    {
+      "csduid": "3523001",
+      "status": "approved",
+      "decision": "Approved boundary update #50.",
+      "evidence": [
+        "Pushlinch lake is a part of Cambridge",
+        "https://github.com/MeshCore-ca/MeshCore-Canada/issues/50"
+      ],
+      "reviewedAt": "2026-07-18",
+      "approvedBy": "n30nex",
+      "sourceIssue": "https://github.com/MeshCore-ca/MeshCore-Canada/issues/50",
+      "members": [
+        {
+          "dguid": "2021S051235230381",
+          "leafTag": "wel"
+        },
+        {
+          "dguid": "2021S051235230395",
+          "leafTag": "wel"
+        },
+        {
+          "dguid": "2021S051235230397",
+          "leafTag": "wel"
+        },
+        {
+          "dguid": "2021S051235230398",
+          "leafTag": "wel"
+        },
+        {
+          "dguid": "2021S051235230399",
+          "leafTag": "wel"
+        },
+        {
+          "dguid": "2021S051235230400",
+          "leafTag": "wel"
+        },
+        {
+          "dguid": "2021S051235230401",
+          "leafTag": "wel"
+        },
+        {
+          "dguid": "2021S051235230402",
+          "leafTag": "wel"
+        },
+        {
+          "dguid": "2021S051235230403",
+          "leafTag": "wat"
+        },
+        {
+          "dguid": "2021S051235230404",
+          "leafTag": "wat"
+        },
+        {
+          "dguid": "2021S051235230405",
+          "leafTag": "wel"
+        },
+        {
+          "dguid": "2021S051235230406",
+          "leafTag": "wel"
+        }
+      ]
+    }
+  ]
 }

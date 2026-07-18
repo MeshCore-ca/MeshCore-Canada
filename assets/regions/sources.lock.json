@@ -69,8 +69,8 @@
       "id": "meshcore-canada-reviewed-census-overrides",
       "role": "Approved CD/CSD decisions and enumerated municipality split exceptions",
       "file": "municipal-overrides.json",
-      "bytes": 560,
-      "sha256": "7ca7e3a73ff10add6a19653363d0217d9a283a3da521d1cc426074fd590a5e0a"
+      "bytes": 2053,
+      "sha256": "caf06e367f22df844bd0f3db6e678bc0f487fc310287fe12f621b50d95b99024"
     },
     {
       "id": "meshmapper-canada-2026-07-12",
