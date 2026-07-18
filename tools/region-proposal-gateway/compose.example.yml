@@ -24,6 +24,7 @@ services:
       LISTEN_HOST: 127.0.0.1
       PORT: "8787"
       BASE_PATH: /api/meshcore-canada/submissions
+      PUBLIC_BASE_URL: https://api.meshcore.ca:21323/api/meshcore-canada/submissions
       ALLOWED_ORIGINS: https://meshcore.ca,https://config.meshcore.ca
       TURNSTILE_SITE_KEY: "${TURNSTILE_SITE_KEY:?Set TURNSTILE_SITE_KEY in the protected environment file}"
       TURNSTILE_EXPECTED_HOSTNAMES: meshcore.ca,config.meshcore.ca
@@ -35,6 +36,7 @@ services:
       CATALOG_PATH: /data/regions/canada-regions.json
       CELLS_DIR: /data/regions/cells
       LEDGER_PATH: /state/submissions.sqlite3
+      PREVIEW_DIR: /state/previews
       RATE_LIMIT: "5"
       RATE_WINDOW_SECONDS: "3600"
       PRE_RATE_LIMIT: "30"
