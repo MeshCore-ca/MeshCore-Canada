@@ -127,10 +127,10 @@ Ontario|YPQ|Peterborough
 Ontario|YTR|Trenton / Quinte West
 Ontario|YHD|Dryden
 Ontario|YPL|Pickle Lake
-Ontario|YND|Gatineau (Ottawa area)
 Quebec|YUL|Montreal (Trudeau)
 Quebec|YMX|Montreal (Mirabel)
 Quebec|YQB|Quebec City
+Quebec|YND|Gatineau (Ottawa area)
 Quebec|YBG|Bagotville / Saguenay
 Quebec|YVO|Val-d'Or
 Quebec|YHU|Montreal (St-Hubert)

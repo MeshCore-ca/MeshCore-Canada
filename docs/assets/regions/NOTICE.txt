@@ -51,6 +51,28 @@ municipal-overrides.json records reviewed CD/CSD ownership decisions and any
 approved CSD split. A split must enumerate every affected Dissemination Area;
 an editor export or draft is not authoritative until reviewed and merged.
 
+Cross-province entries in canada-regions.json are non-geographic repeater
+configuration metadata. They join canonical member paths in generated commands
+without changing DA ownership or creating another boundary layer.
+
+Neighbouring U.S. entries are also non-geographic configuration metadata. They
+are optional, never selected from a map point, and never add U.S. geometry to
+the Canadian layer. Documented path names come from:
+
+https://wnymeshcore.org/guides/radio-settings
+https://gessaman.com/meshcore/regions/
+https://www.regionmesh.com/meshcore-region-configuration/
+
+Their 2026-07-18 trafficEvidence fields contain aggregate resolved-route
+pattern and observation counts from:
+
+https://dev.meshcore.ca/
+
+Only areas with observed Canada-U.S. routes are listed. The catalog retains no
+node identifiers, names, or exact coordinates. A route count supports review
+of an optional forwarding path; it is not a coverage guarantee or a boundary
+source.
+
 radio-density.json
 ------------------
 

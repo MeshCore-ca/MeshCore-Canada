@@ -6,7 +6,7 @@ hide:
 
 # Canadian region map
 
-Search or browse Canadian regions.
+Browse Canadian boundaries and build multi-region repeater paths.
 
 <div data-mcc-regions="map" data-mcc-root="../"></div>
 

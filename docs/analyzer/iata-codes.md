@@ -31,7 +31,6 @@ Host-side helper scripts show this same quick list interactively when you omit `
     | YTR | Trenton / Quinte West |
     | YHD | Dryden |
     | YPL | Pickle Lake |
-    | YND | Gatineau (Ottawa area) |
 
 ??? note "Quebec"
 
@@ -40,6 +39,7 @@ Host-side helper scripts show this same quick list interactively when you omit `
     | YUL | Montreal (Trudeau) |
     | YMX | Montreal (Mirabel) |
     | YQB | Quebec City |
+    | YND | Gatineau (Ottawa area) |
     | YBG | Bagotville / Saguenay |
     | YVO | Val-d'Or |
     | YHU | Montreal (St-Hubert) |

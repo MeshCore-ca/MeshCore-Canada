@@ -102,6 +102,7 @@ import {
   var elements = {
     province: document.getElementById("province-select"),
     target: document.getElementById("target-select"),
+    sharedAreaNote: document.getElementById("shared-area-note"),
     loadStatus: document.getElementById("load-status"),
     mapHeading: document.getElementById("map-heading"),
     panMode: document.getElementById("pan-mode"),
@@ -220,6 +221,46 @@ import {
     return entry && entry.label ? entry.label : tag;
   }
 
+  function sharedRepeaterAreaForTag(tag) {
+    var groups = state.catalog && state.catalog.searchGroups || {};
+    var id = Object.keys(groups).find(function (candidate) {
+      var group = groups[candidate];
+      return group && group.repeaterConfig &&
+        group.repeaterConfig.mode === "shared-member-paths" &&
+        Array.isArray(group.members) &&
+        group.members.indexOf(tag) !== -1;
+    });
+    if (!id) return null;
+    return Object.assign({ id: id }, groups[id]);
+  }
+
+  function provinceLabelForLeaf(tag) {
+    var provinces = leafProvinces.get(tag);
+    if (!provinces || !provinces.size) return "";
+    return Array.from(provinces).map(function (pruid) {
+      return provinceNames[pruid] || pruid;
+    }).join(" / ");
+  }
+
+  function updateSharedAreaNote() {
+    if (!elements.sharedAreaNote) return;
+    var selectedTag = state.selectedId ? effectiveLeaf(state.selectedId) : "";
+    var areas = [selectedTag, state.target].filter(Boolean).map(sharedRepeaterAreaForTag).filter(Boolean);
+    var area = areas[0] || null;
+    var heading = elements.sharedAreaNote.querySelector("strong");
+    var text = elements.sharedAreaNote.querySelector("span");
+    if (!area) {
+      heading.textContent = "Repeater paths";
+      text.textContent = "This editor changes Canadian map cells only. Choose cross-province and U.S. paths in the configurator.";
+      return;
+    }
+    heading.textContent = area.label;
+    text.textContent = area.members.map(function (tag) {
+      var province = provinceLabelForLeaf(tag);
+      return (province ? province + ": " : "") + leafLabel(tag);
+    }).join(" + ") + ". Edit each province separately; repeater setup keeps the paths together.";
+  }
+
   function colourForTag(tag) {
     var hash = 0;
     for (var index = 0; index < tag.length; index += 1) {
@@ -333,6 +374,7 @@ import {
     rows[2].textContent = leafLabel(effectiveLeaf(dguid)) + " (" + effectiveLeaf(dguid) + ")";
     rows[3].textContent = properties.seed_tag ? leafLabel(properties.seed_tag) + " (fixed)" : "No";
     elements.municipality.disabled = !properties.CSDUID || !state.target;
+    updateSharedAreaNote();
   }
 
   function setEffective(dguid, leaf) {
@@ -672,6 +714,7 @@ import {
     rows[2].textContent = "—";
     rows[3].textContent = "—";
     elements.municipality.disabled = true;
+    updateSharedAreaNote();
   }
 
   async function loadProvince(pruid) {
@@ -985,6 +1028,7 @@ import {
   elements.target.addEventListener("change", function () {
     state.target = elements.target.value;
     elements.municipality.disabled = !state.selectedId || !state.target;
+    updateSharedAreaNote();
   });
   elements.panMode.addEventListener("click", function () { setMode("pan"); });
   elements.paintMode.addEventListener("click", function () { setMode("paint"); });

@@ -54,6 +54,9 @@ The API accepts two strict schemas:
 The public service creates issues only. It has no Contents permission and
 cannot make a boundary live. A separate repository-owned GitHub Action applies
 an approved boundary after a maintainer closes its issue as **Completed**.
+Cross-province and U.S. forwarding choices are catalog metadata, not boundary
+edits. Operators choose them in `/config/`; the editor and submission service
+never create or modify U.S. geometry.
 The GitHub App, Turnstile account, DNS, host, TLS, secrets, repository
 installation, and Action settings must all be controlled by MeshCore Canada.
 
@@ -371,7 +374,7 @@ Use a signed-out private browser.
 ### Region boundary proposal
 
 1. Open `https://meshcore.ca/config/editor/`.
-2. Make one small valid same-province draft move.
+2. Make one small valid draft move inside one province or territory. Cross-province repeater areas are configuration records, so their map boundaries are edited one side at a time.
 3. Use reason `Production anonymous boundary test — do not apply`.
 4. Complete Turnstile and select **Submit for review**.
 5. Confirm the App-created issue has `enhancement` and `boundary-update`
