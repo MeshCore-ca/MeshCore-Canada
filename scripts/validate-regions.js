@@ -399,6 +399,7 @@ function validate(data, meshMapper, partition, digitalPartition, qa, municipalOv
   const membershipTags = new Set();
   const membershipCounts = new Map();
   const membershipRows = [];
+  const membershipByDguid = new Map();
   const censusSubdivisions = new Map();
   const censusDivisions = new Map();
   membershipLines.slice(1).forEach((line, index) => {
@@ -420,10 +421,12 @@ function validate(data, meshMapper, partition, digitalPartition, qa, municipalOv
     check(/^\d{7}$/.test(csduid || ""), `membership row ${index + 2} has invalid CSDUID ${csduid}`);
     check(!dguids.has(dguid), `duplicate membership DGUID ${dguid}`);
     dguids.add(dguid);
-    membershipRows.push({
+    const membershipRecord = {
       dguid, dauid, pruid, eruid, cduid, cdname, csduid, csdname, csdtype,
       provisionalLeafTag, provisionalAssignment, leafTag, assignment
-    });
+    };
+    membershipRows.push(membershipRecord);
+    membershipByDguid.set(dguid, membershipRecord);
     membershipTags.add(leafTag);
     membershipCounts.set(leafTag, (membershipCounts.get(leafTag) || 0) + 1);
     check(leafSet.has(leafTag), `membership references non-leaf ${leafTag}`);
@@ -473,8 +476,42 @@ function validate(data, meshMapper, partition, digitalPartition, qa, municipalOv
   check(JSON.stringify([...membershipTags].sort()) === JSON.stringify(leaves), "membership must populate every leaf and no other tag");
   leaves.forEach((tag) => check((membershipCounts.get(tag) || 0) > 0, `leaf ${tag} owns no DAs`));
 
-  check(municipalOverrides && municipalOverrides.schema === "mcc-census-overrides/v1", "municipal override schema is invalid");
+  check(municipalOverrides && municipalOverrides.schema === "mcc-census-overrides/v2", "municipal override schema is invalid");
   check(municipalOverrides && municipalOverrides.censusVintage === 2021, "municipal overrides must use the 2021 Census vintage");
+  const newRegions = municipalOverrides && Array.isArray(municipalOverrides.newRegions)
+    ? municipalOverrides.newRegions
+    : [];
+  check(municipalOverrides && Array.isArray(municipalOverrides.newRegions), "municipal newRegions must be an array");
+  const approvedNewTags = new Set();
+  newRegions.forEach((record, index) => {
+    checkExactKeys(
+      record,
+      new Set([
+        "tag", "label", "parent", "anchorDguid", "status", "decision", "evidence",
+        "reviewedAt", "approvedBy", "sourceIssue"
+      ]),
+      `approved new region ${index}`
+    );
+    const tag = String(record.tag || "");
+    const parent = String(record.parent || "");
+    const anchorDguid = String(record.anchorDguid || "");
+    const anchor = membershipByDguid.get(anchorDguid);
+    check(!approvedNewTags.has(tag), `duplicate approved new region ${tag}`);
+    approvedNewTags.add(tag);
+    check(record.status === "approved", `new region ${tag} is not approved`);
+    check(leafSet.has(tag), `new region ${tag} is not a catalog leaf`);
+    check(Boolean(data.hierarchy[parent]) && data.hierarchy[parent].parent === "can", `new region ${tag} has an invalid jurisdiction parent`);
+    check(Boolean(anchor), `new region ${tag} references unknown anchor ${anchorDguid}`);
+    if (anchor) {
+      check(anchor.leafTag === tag, `new region ${tag} does not own its approved anchor`);
+      check(PR_TO_TAG[anchor.pruid] === parent, `new region ${tag} anchor crosses jurisdiction`);
+    }
+    check(data.hierarchy[tag] && data.hierarchy[tag].parent === parent, `new region ${tag} catalog parent is wrong`);
+    check(data.hierarchy[tag] && data.hierarchy[tag].label === record.label, `new region ${tag} catalog label is wrong`);
+    check(data.status[tag] && data.status[tag].sourceUrl === record.sourceIssue, `new region ${tag} has the wrong review source`);
+    check(Array.isArray(data.aliases[tag]) && data.aliases[tag].includes(tag), `new region ${tag} has no canonical alias`);
+  });
+
   const cohortOverrides = municipalOverrides && Array.isArray(municipalOverrides.cohortOverrides)
     ? municipalOverrides.cohortOverrides
     : [];

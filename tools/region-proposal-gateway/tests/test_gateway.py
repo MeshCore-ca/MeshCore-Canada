@@ -26,11 +26,24 @@ def write_authority(root: Path, *, first_leaf: str = "aaa") -> tuple[Path, Path,
     cells.mkdir(exist_ok=True)
     catalog = {
         "hierarchy": {
-            "can": {"parent": None},
-            "on": {"parent": "can"},
-            "aaa": {"parent": "on"},
-            "bbb": {"parent": "on"},
-        }
+            "can": {"label": "Canada", "parent": None},
+            "on": {"label": "Ontario", "parent": "can"},
+            "on-local": {"label": "Ontario Local", "parent": "on"},
+            "aaa": {"label": "Alpha", "parent": "on-local"},
+            "bbb": {"label": "Beta", "parent": "on-local"},
+        },
+        "aliases": {"aaa": ["aaa", "Alpha", "YKF"], "bbb": ["bbb", "Beta"]},
+        "retiredCanonicalTags": {"retired": "Retired test tag"},
+        "searchGroups": {
+            "shared": {"label": "Shared Corridor", "members": ["aaa", "bbb"]}
+        },
+        "externalRegionPaths": {
+            "test-neighbour": {
+                "label": "Test Neighbour",
+                "path": ["us", "us-test"],
+                "tagLabels": {"us": "United States", "us-test": "Test State"},
+            }
+        },
     }
     catalog_path = root / "canada-regions.json"
     catalog_path.write_text(json.dumps(catalog), encoding="utf-8")
@@ -77,6 +90,22 @@ def valid_proposal(membership_hash: str) -> dict:
 
 
 
+def valid_new_region_proposal(membership_hash: str) -> dict:
+    return {
+        "schema": gateway.NEW_REGION_PROPOSAL_SCHEMA,
+        "baseMembershipSha256": membership_hash,
+        "newRegion": {
+            "tag": "delta",
+            "label": "Delta County",
+            "parent": "on-local",
+            "anchorDguid": "2021S0512TEST0003",
+        },
+        "reason": "This radio community needs its own local region.",
+        "changes": [
+            {"DGUID": "2021S0512TEST0003", "from": "aaa", "to": "delta"}
+        ],
+    }
+
 
 def valid_idea() -> dict:
     return {
@@ -99,6 +128,7 @@ class AuthorityTests(unittest.TestCase):
             self.assertEqual(snapshot.membership_sha256, paths[3])
             self.assertEqual(snapshot.seed_tags["2021S0512TEST0001"], "aaa")
             self.assertEqual(snapshot.leaf_jurisdictions, {"aaa": "on", "bbb": "on"})
+            self.assertEqual(snapshot.hierarchy_parents["aaa"], "on-local")
             self.assertEqual(
                 snapshot.topology_sha256["35"],
                 hashlib.sha256((paths[2] / "cells-35.topo.json").read_bytes()).hexdigest(),
@@ -158,6 +188,40 @@ class ProposalValidationTests(unittest.TestCase):
         self.assertFalse(payload.endswith(b"\n"))
         self.assertEqual(digest, hashlib.sha256(expected).hexdigest())
         self.assertEqual(canonical["submittedBy"], "Test Person")
+
+    def test_accepts_a_new_region_with_an_unprotected_changed_anchor(self):
+        proposal = valid_new_region_proposal(self.membership_hash)
+        canonical, payload, digest = gateway.validate_proposal(proposal, self.snapshot)
+        self.assertEqual(canonical, proposal)
+        self.assertEqual(digest, hashlib.sha256(payload).hexdigest())
+        title, body, chunked = gateway.build_issue(canonical, payload, digest, "signature")
+        self.assertFalse(chunked)
+        self.assertEqual(title, "[New region proposal] Delta County (delta)")
+        self.assertIn("New region: **Delta County** (`delta`)", body)
+        self.assertIn(f"submission-schema:{gateway.NEW_REGION_PROPOSAL_SCHEMA}", body)
+
+    def test_rejects_new_region_collisions_and_protected_anchors(self):
+        proposal = valid_new_region_proposal(self.membership_hash)
+        proposal["newRegion"]["tag"] = "aaa"
+        proposal["changes"][0]["to"] = "aaa"
+        with self.assertRaisesRegex(gateway.GatewayError, "invalid_proposal"):
+            gateway.validate_proposal(proposal, self.snapshot)
+        proposal = valid_new_region_proposal(self.membership_hash)
+        proposal["newRegion"]["tag"] = "ykf"
+        proposal["changes"][0]["to"] = "ykf"
+        with self.assertRaisesRegex(gateway.GatewayError, "invalid_proposal"):
+            gateway.validate_proposal(proposal, self.snapshot)
+        proposal = valid_new_region_proposal(self.membership_hash)
+        proposal["newRegion"]["label"] = "Shared Corridor"
+        with self.assertRaisesRegex(gateway.GatewayError, "invalid_proposal"):
+            gateway.validate_proposal(proposal, self.snapshot)
+        proposal = valid_new_region_proposal(self.membership_hash)
+        proposal["newRegion"]["anchorDguid"] = "2021S0512TEST0002"
+        proposal["changes"] = [
+            {"DGUID": "2021S0512TEST0002", "from": "bbb", "to": "delta"}
+        ]
+        with self.assertRaisesRegex(gateway.GatewayError, "invalid_proposal"):
+            gateway.validate_proposal(proposal, self.snapshot)
 
     def test_rejects_stale_base(self):
         proposal = valid_proposal("0" * 64)
@@ -406,11 +470,15 @@ class GitHubTests(unittest.TestCase):
         client.signer = signer
         digest = "a" * 64
         region = client._submission_signature(gateway.PROPOSAL_SCHEMA, digest)
+        new_region = client._submission_signature(gateway.NEW_REGION_PROPOSAL_SCHEMA, digest)
         idea = client._submission_signature(gateway.IDEA_SCHEMA, digest)
+        self.assertEqual(region, new_region)
         self.assertEqual(region, idea)
-        self.assertNotEqual(signer.inputs[0], signer.inputs[1])
+        self.assertEqual(len(set(signer.inputs)), 3)
         self.assertIn(gateway.PROPOSAL_SCHEMA.encode("ascii"), signer.inputs[0])
-        self.assertIn(gateway.IDEA_SCHEMA.encode("ascii"), signer.inputs[1])
+        self.assertIn(gateway.NEW_REGION_PROPOSAL_SCHEMA.encode("ascii"), signer.inputs[1])
+        self.assertIn(gateway.IDEA_SCHEMA.encode("ascii"), signer.inputs[2])
+
     def test_small_submission_uses_restricted_token_and_fixed_issue(self):
         transport = RoutingTransport()
         client = self.make_client(transport)

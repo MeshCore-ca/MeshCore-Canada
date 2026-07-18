@@ -28,6 +28,7 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
+import unicodedata
 from collections import Counter, defaultdict, deque
 from contextlib import contextmanager
 from dataclasses import dataclass
@@ -43,6 +44,8 @@ API_VERSION = 1
 DEFAULT_BASE_PATH = "/api/meshcore-canada/submissions"
 DEFAULT_PUBLIC_BASE_URL = "https://api.meshcore.ca:21323" + DEFAULT_BASE_PATH
 PROPOSAL_SCHEMA = "mcc-region-editor-proposal/v1"
+NEW_REGION_PROPOSAL_SCHEMA = "mcc-region-editor-proposal/v2"
+BOUNDARY_PROPOSAL_SCHEMAS = frozenset({PROPOSAL_SCHEMA, NEW_REGION_PROPOSAL_SCHEMA})
 IDEA_SCHEMA = "mcc-community-idea/v1"
 TURNSTILE_ACTION = "meshcore_submission"
 GITHUB_OWNER = "MeshCore-ca"
@@ -65,7 +68,7 @@ MAX_PREVIEW_BYTES = 4 * 1024 * 1024
 
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 DGUID_RE = re.compile(r"^[A-Za-z0-9-]{8,64}$")
-TAG_RE = re.compile(r"^[a-z0-9][a-z0-9-]{0,31}$")
+TAG_RE = re.compile(r"^[a-z0-9][a-z0-9-]{0,28}$")
 CHUNK_MARKER_RE = re.compile(
     r"<!-- mcc-submission-chunk:([0-9a-f]{64}):(\d{1,3})/(\d{1,3}) -->"
 )
@@ -120,6 +123,88 @@ class UpstreamError(GatewayError):
 
 def _is_int(value: object) -> bool:
     return isinstance(value, int) and not isinstance(value, bool)
+
+
+def _normalized_region_label(value: str) -> str:
+    decomposed = unicodedata.normalize("NFD", value).lower()
+    ascii_text = "".join(character for character in decomposed if not unicodedata.combining(character))
+    return re.sub(r"[^a-z0-9]+", " ", ascii_text).strip()
+
+
+def _catalog_name_authority(catalog: Mapping[str, Any], hierarchy: Mapping[str, Any]) -> tuple[set[str], set[str]]:
+    reserved_tags = set(hierarchy)
+    region_labels: set[str] = set()
+
+    def remember(value: object) -> None:
+        if not isinstance(value, str):
+            return
+        name = value.strip()
+        normalized = _normalized_region_label(name)
+        if normalized:
+            region_labels.add(normalized)
+        possible_tag = name.lower()
+        if TAG_RE.fullmatch(possible_tag):
+            reserved_tags.add(possible_tag)
+
+    retired = catalog.get("retiredCanonicalTags", {})
+    if isinstance(retired, dict):
+        reserved_tags.update(str(tag) for tag in retired)
+    elif isinstance(retired, list):
+        reserved_tags.update(str(tag) for tag in retired if isinstance(tag, str))
+    for entry in hierarchy.values():
+        if isinstance(entry, dict):
+            remember(entry.get("label"))
+    aliases = catalog.get("aliases", {})
+    if isinstance(aliases, dict):
+        for names in aliases.values():
+            if isinstance(names, list):
+                for name in names:
+                    remember(name)
+    search_groups = catalog.get("searchGroups", {})
+    if isinstance(search_groups, dict):
+        for name, entry in search_groups.items():
+            remember(name)
+            if isinstance(entry, dict):
+                remember(entry.get("label"))
+    external = catalog.get("externalRegionPaths", {})
+    if isinstance(external, dict):
+        for entry in external.values():
+            if not isinstance(entry, dict):
+                continue
+            path = entry.get("path", [])
+            if isinstance(path, list):
+                reserved_tags.update(str(tag) for tag in path if isinstance(tag, str))
+            remember(entry.get("label"))
+            tag_labels = entry.get("tagLabels", {})
+            if isinstance(tag_labels, dict):
+                for label in tag_labels.values():
+                    remember(label)
+    return reserved_tags, region_labels
+
+
+def _expected_new_region_parent(
+    source_tags: set[str], hierarchy_parents: Mapping[str, str | None], jurisdiction: str
+) -> str:
+    chains: list[list[str]] = []
+    for tag in sorted(source_tags):
+        chain: list[str] = []
+        seen: set[str] = set()
+        current = hierarchy_parents.get(tag)
+        while current and current not in seen:
+            chain.append(current)
+            seen.add(current)
+            current = hierarchy_parents.get(current)
+        if chain:
+            chains.append(chain)
+    if not chains:
+        return jurisdiction
+    return next(
+        (
+            candidate for candidate in chains[0]
+            if candidate != "can" and all(candidate in chain for chain in chains[1:])
+        ),
+        jurisdiction,
+    )
 
 
 def _clean_text(value: object, maximum: int, *, required: bool) -> str:
@@ -259,6 +344,10 @@ class AuthoritySnapshot:
     membership: Mapping[str, MembershipRow]
     leaves: frozenset[str]
     leaf_jurisdictions: Mapping[str, str]
+    hierarchy_tags: frozenset[str]
+    hierarchy_parents: Mapping[str, str | None]
+    reserved_tags: frozenset[str]
+    region_labels: frozenset[str]
     seed_tags: Mapping[str, str]
     topology_sha256: Mapping[str, str]
 
@@ -341,7 +430,7 @@ class AuthorityCache:
             catalog = json.loads(self.catalog_path.read_text(encoding="utf-8"))
         except (OSError, UnicodeError, json.JSONDecodeError) as exc:
             raise RuntimeError("catalog JSON is invalid") from exc
-        leaves, jurisdictions = self._catalog_leaves(catalog)
+        leaves, jurisdictions, hierarchy_tags, hierarchy_parents, reserved_tags, region_labels = self._catalog_leaves(catalog)
 
         membership: dict[str, MembershipRow] = {}
         for raw in reader:
@@ -405,12 +494,16 @@ class AuthorityCache:
             membership=membership,
             leaves=frozenset(leaves),
             leaf_jurisdictions=jurisdictions,
+            hierarchy_tags=frozenset(hierarchy_tags),
+            hierarchy_parents=hierarchy_parents,
+            reserved_tags=frozenset(reserved_tags),
+            region_labels=frozenset(region_labels),
             seed_tags=seed_tags,
             topology_sha256=topology_hashes,
         )
 
     @staticmethod
-    def _catalog_leaves(catalog: object) -> tuple[set[str], dict[str, str]]:
+    def _catalog_leaves(catalog: object) -> tuple[set[str], dict[str, str], set[str], dict[str, str | None], set[str], set[str]]:
         if not isinstance(catalog, dict) or not isinstance(catalog.get("hierarchy"), dict):
             raise RuntimeError("catalog hierarchy is invalid")
         hierarchy = catalog["hierarchy"]
@@ -432,13 +525,26 @@ class AuthorityCache:
             if len(path) < 3 or path[0] != "can" or path[1] not in PR_TO_TAG.values():
                 raise RuntimeError("a catalog leaf has no jurisdiction ancestor")
             jurisdictions[leaf] = path[1]
-        return leaves, jurisdictions
+        hierarchy_tags = set(hierarchy)
+        hierarchy_parents = {
+            tag: str(entry["parent"]) if entry.get("parent") else None
+            for tag, entry in hierarchy.items()
+        }
+        reserved_tags, region_labels = _catalog_name_authority(catalog, hierarchy)
+        return leaves, jurisdictions, hierarchy_tags, hierarchy_parents, reserved_tags, region_labels
 
 
 def validate_proposal(raw: object, authority: AuthoritySnapshot) -> tuple[dict[str, Any], bytes, str]:
-    if not isinstance(raw, dict) or set(raw) - {"schema", "baseMembershipSha256", "submittedBy", "reason", "changes"}:
+    if not isinstance(raw, dict):
         raise GatewayError(422, "invalid_proposal", "The proposal format is not supported.")
-    if raw.get("schema") != PROPOSAL_SCHEMA:
+    schema = raw.get("schema")
+    if schema not in BOUNDARY_PROPOSAL_SCHEMAS:
+        raise GatewayError(422, "invalid_proposal", "The proposal format is not supported.")
+    is_new_region = schema == NEW_REGION_PROPOSAL_SCHEMA
+    allowed = {"schema", "baseMembershipSha256", "submittedBy", "reason", "changes"}
+    if is_new_region:
+        allowed.add("newRegion")
+    if set(raw) - allowed:
         raise GatewayError(422, "invalid_proposal", "The proposal format is not supported.")
     claimed_hash = raw.get("baseMembershipSha256")
     if not isinstance(claimed_hash, str) or not SHA256_RE.fullmatch(claimed_hash) or not hmac.compare_digest(claimed_hash, authority.membership_sha256):
@@ -448,6 +554,25 @@ def validate_proposal(raw: object, authority: AuthoritySnapshot) -> tuple[dict[s
         raise GatewayError(422, "invalid_proposal", "Choose at least one cell before submitting.")
     if len(changes) > MAX_CHANGES:
         raise GatewayError(413, "payload_too_large", "Choose fewer cells before submitting.")
+
+    canonical_new_region: dict[str, str] | None = None
+    new_tag = ""
+    if is_new_region:
+        new_region = raw.get("newRegion")
+        if not isinstance(new_region, dict) or set(new_region) != {"tag", "label", "parent", "anchorDguid"}:
+            raise GatewayError(422, "invalid_proposal", "Add a valid name, tag, and anchor for the new region.")
+        tag = new_region.get("tag")
+        parent = new_region.get("parent")
+        anchor = new_region.get("anchorDguid")
+        if not isinstance(tag, str) or not TAG_RE.fullmatch(tag) or not isinstance(parent, str) or not TAG_RE.fullmatch(parent) or not isinstance(anchor, str) or not DGUID_RE.fullmatch(anchor):
+            raise GatewayError(422, "invalid_proposal", "Add a valid name, tag, and anchor for the new region.")
+        label = _clean_text(new_region.get("label"), 80, required=True)
+        if tag in authority.reserved_tags:
+            raise GatewayError(422, "invalid_proposal", "That region tag is already in use.")
+        if _normalized_region_label(label) in authority.region_labels:
+            raise GatewayError(422, "invalid_proposal", "That region already exists. Choose it from the list.")
+        new_tag = tag
+        canonical_new_region = {"tag": tag, "label": label, "parent": parent, "anchorDguid": anchor}
 
     requested: dict[str, tuple[str, str]] = {}
     for change in changes:
@@ -471,7 +596,10 @@ def validate_proposal(raw: object, authority: AuthoritySnapshot) -> tuple[dict[s
             raise GatewayError(409, "stale_base", "The region map changed. Reload the editor and try again.")
         if to_tag == from_tag:
             raise GatewayError(422, "invalid_proposal", "The proposal contains a change that has no effect.")
-        if to_tag not in authority.leaves or authority.leaf_jurisdictions.get(to_tag) != PR_TO_TAG[row.pruid]:
+        if is_new_region:
+            if to_tag != new_tag:
+                raise GatewayError(422, "invalid_proposal", "Every changed cell must move to the new region.")
+        elif to_tag not in authority.leaves or authority.leaf_jurisdictions.get(to_tag) != PR_TO_TAG[row.pruid]:
             raise GatewayError(422, "invalid_proposal", "A target region must belong to the same province or territory.")
         protected = authority.seed_tags.get(dguid)
         if protected and to_tag != protected:
@@ -481,16 +609,31 @@ def validate_proposal(raw: object, authority: AuthoritySnapshot) -> tuple[dict[s
     if len(provinces) != 1:
         raise GatewayError(422, "invalid_proposal", "A proposal may change cells in only one province or territory.")
 
+    if canonical_new_region:
+        pruid = next(iter(provinces))
+        anchor = canonical_new_region["anchorDguid"]
+        expected_parent = _expected_new_region_parent(
+            {change["from"] for change in canonical_changes},
+            authority.hierarchy_parents,
+            PR_TO_TAG[pruid],
+        )
+        if canonical_new_region["parent"] != expected_parent or expected_parent not in authority.hierarchy_tags:
+            raise GatewayError(422, "invalid_proposal", "The new region has the wrong catalogue parent.")
+        if anchor not in requested or anchor in authority.seed_tags:
+            raise GatewayError(422, "invalid_proposal", "Choose one changed cell without an existing region anchor.")
+
     submitted_by = _clean_text(raw.get("submittedBy"), 80, required=False)
     reason = _clean_text(raw.get("reason"), 1000, required=True)
     canonical: dict[str, Any] = {
-        "schema": PROPOSAL_SCHEMA,
+        "schema": schema,
         "baseMembershipSha256": authority.membership_sha256,
-        "reason": reason,
-        "changes": canonical_changes,
     }
+    if canonical_new_region:
+        canonical["newRegion"] = canonical_new_region
     if submitted_by:
         canonical["submittedBy"] = submitted_by
+    canonical["reason"] = reason
+    canonical["changes"] = canonical_changes
     # This byte representation is a public browser/server contract.  Do not add
     # a trailing newline or change escaping/separators without a schema bump.
     try:
@@ -959,9 +1102,9 @@ class GitHubAppClient:
     ) -> dict[str, Any]:
         with self._mutation_lock:
             schema = canonical.get("schema")
-            if schema not in {PROPOSAL_SCHEMA, IDEA_SCHEMA}:
+            if schema not in BOUNDARY_PROPOSAL_SCHEMAS | {IDEA_SCHEMA}:
                 raise UpstreamError("unsupported_submission_schema")
-            if preview_url is not None and schema != PROPOSAL_SCHEMA:
+            if preview_url is not None and schema not in BOUNDARY_PROPOSAL_SCHEMAS:
                 raise UpstreamError("unexpected_boundary_preview")
             submission_signature = self._submission_signature(schema, proposal_hash)
             title, issue_body, chunked = build_issue(
@@ -1000,7 +1143,7 @@ class GitHubAppClient:
                         "title": title,
                         "body": issue_body,
                         "labels": [GITHUB_LABEL]
-                        + ([BOUNDARY_UPDATE_LABEL] if schema == PROPOSAL_SCHEMA else []),
+                        + ([BOUNDARY_UPDATE_LABEL] if schema in BOUNDARY_PROPOSAL_SCHEMAS else []),
                     },
                     return_definitive_client_error=True,
                 )
@@ -1157,7 +1300,11 @@ def build_region_issue(
 ) -> tuple[str, str, bool]:
     changes = canonical["changes"]
     moves = Counter(f"{change['from']} -> {change['to']}" for change in changes)
-    title = f"[Region boundary proposal] {len(changes)} cell{'s' if len(changes) != 1 else ''}"
+    new_region = canonical.get("newRegion")
+    if isinstance(new_region, dict):
+        title = f"[New region proposal] {new_region['label']} ({new_region['tag']})"
+    else:
+        title = f"[Region boundary proposal] {len(changes)} cell{'s' if len(changes) != 1 else ''}"
     submitted = _safe_markdown_text(canonical.get("submittedBy") or "Anonymous contributor")
     reason = _safe_markdown_text(canonical["reason"])
     sorted_moves = sorted(moves.items())
@@ -1167,7 +1314,7 @@ def build_region_issue(
         move_lines += f"\n- _{len(sorted_moves) - len(shown_moves)} additional move types omitted from this summary_"
     common = (
         "<!-- meshcore-submission/v1 -->\n"
-        f"<!-- submission-schema:{PROPOSAL_SCHEMA} -->\n"
+        f"<!-- submission-schema:{canonical['schema']} -->\n"
         f"<!-- submission-sha256:{proposal_hash} -->\n"
         f"<!-- submission-signature-rs256:{proposal_signature} -->\n"
         "## Automated region boundary proposal\n\n"
@@ -1175,7 +1322,13 @@ def build_region_issue(
         f"- Proposal SHA-256: `{proposal_hash}`\n"
         f"- Base membership SHA-256: `{canonical['baseMembershipSha256']}`\n"
         f"- Changed cells: **{len(changes)}**\n"
-        f"- Submitted by: <span>{submitted}</span>\n\n"
+        + (
+            f"- New region: **{_safe_markdown_text(new_region['label'])}** (`{html.escape(new_region['tag'])}`)\n"
+            f"- Parent: `{html.escape(new_region['parent'])}`\n"
+            f"- Anchor census cell: `{html.escape(new_region['anchorDguid'])}`\n"
+            if isinstance(new_region, dict) else ""
+        )
+        + f"- Submitted by: <span>{submitted}</span>\n\n"
         "### Reason\n\n"
         f"<p>{reason}</p>\n\n"
         "### Moves\n\n"
@@ -1257,7 +1410,7 @@ def build_issue(
     canonical: dict[str, Any], canonical_bytes: bytes, submission_hash: str,
     submission_signature: str,
 ) -> tuple[str, str, bool]:
-    if canonical.get("schema") == PROPOSAL_SCHEMA:
+    if canonical.get("schema") in BOUNDARY_PROPOSAL_SCHEMAS:
         return build_region_issue(canonical, canonical_bytes, submission_hash, submission_signature)
     if canonical.get("schema") == IDEA_SCHEMA:
         return build_idea_issue(canonical, canonical_bytes, submission_hash, submission_signature)
@@ -1372,7 +1525,7 @@ class GatewayService:
         if not isinstance(envelope.get("website"), str) or envelope["website"]:
             raise GatewayError(400, "invalid_submission", "The request could not be accepted.")
         submission = envelope.get("submission")
-        if not isinstance(submission, dict) or submission.get("schema") not in {PROPOSAL_SCHEMA, IDEA_SCHEMA}:
+        if not isinstance(submission, dict) or submission.get("schema") not in BOUNDARY_PROPOSAL_SCHEMAS | {IDEA_SCHEMA}:
             raise GatewayError(422, "invalid_submission", "The submission format is not supported.")
         token = envelope.get("turnstileToken")
         if not isinstance(token, str) or not token or len(token) > MAX_TURNSTILE_TOKEN:

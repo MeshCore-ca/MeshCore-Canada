@@ -98,10 +98,20 @@ import {
     "61": "Northwest Territories",
     "62": "Nunavut"
   };
+  var provinceTags = {
+    "10": "nl", "11": "pe", "12": "ns", "13": "nb", "24": "qc",
+    "35": "on", "46": "mb", "47": "sk", "48": "ab", "59": "bc",
+    "60": "yt", "61": "nt", "62": "nu"
+  };
 
   var elements = {
     province: document.getElementById("province-select"),
     target: document.getElementById("target-select"),
+    newRegionFields: document.getElementById("new-region-fields"),
+    newRegionName: document.getElementById("new-region-name"),
+    newRegionTag: document.getElementById("new-region-tag"),
+    anchor: document.getElementById("anchor-button"),
+    anchorStatus: document.getElementById("anchor-status"),
     sharedAreaNote: document.getElementById("shared-area-note"),
     loadStatus: document.getElementById("load-status"),
     mapHeading: document.getElementById("map-heading"),
@@ -141,6 +151,9 @@ import {
     selectedId: "",
     target: "",
     province: "",
+    creatingNewRegion: false,
+    newRegionAnchor: "",
+    newRegionTagTouched: false,
     mode: "pan",
     view: "after",
     painting: false,
@@ -216,9 +229,61 @@ import {
   }
 
   function leafLabel(tag) {
+    if (state.creatingNewRegion && tag === state.target && elements.newRegionName.value.trim()) {
+      return elements.newRegionName.value.trim();
+    }
     var hierarchy = state.catalog && state.catalog.hierarchy;
     var entry = hierarchy && hierarchy[tag];
     return entry && entry.label ? entry.label : tag;
+  }
+
+  function normalizedRegionLabel(value) {
+    return String(value || "").normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, " ")
+      .trim();
+  }
+
+  function regionTag(value) {
+    return normalizedRegionLabel(value).replace(/ /g, "-").slice(0, 29);
+  }
+
+  function newRegionParent() {
+    var hierarchy = state.catalog && state.catalog.hierarchy || {};
+    var sources = Array.from(new Set(Array.from(state.proposed.keys()).map(originalLeaf)));
+    var chains = sources.map(function (tag) {
+      var chain = [];
+      var seen = new Set();
+      var current = hierarchy[tag] && hierarchy[tag].parent;
+      while (current && !seen.has(current) && hierarchy[current]) {
+        chain.push(String(current));
+        seen.add(current);
+        current = hierarchy[current].parent;
+      }
+      return chain;
+    }).filter(function (chain) { return chain.length; });
+    if (!chains.length) return provinceTags[state.province] || "";
+    return chains[0].find(function (candidate) {
+      return candidate !== "can" && chains.every(function (chain) { return chain.includes(candidate); });
+    }) || provinceTags[state.province] || "";
+  }
+
+  function updateAnchorUi() {
+    var active = state.creatingNewRegion;
+    elements.anchor.hidden = !active;
+    elements.anchorStatus.hidden = !active;
+    if (!active) return;
+    var selected = state.featureById.get(state.selectedId);
+    var selectedSeed = selected && String(selected.properties.seed_tag || "");
+    elements.anchor.disabled = !state.selectedId || !state.proposed.has(state.selectedId) || Boolean(selectedSeed);
+    if (state.newRegionAnchor) {
+      var feature = state.featureById.get(state.newRegionAnchor);
+      var name = feature && (feature.properties.CSDNAME || feature.properties.CDNAME);
+      elements.anchorStatus.textContent = "Anchor: " + (name || state.newRegionAnchor);
+    } else {
+      elements.anchorStatus.textContent = "Choose one changed cell near the centre of the new region.";
+    }
   }
 
   function sharedRepeaterAreaForTag(tag) {
@@ -374,6 +439,7 @@ import {
     rows[2].textContent = leafLabel(effectiveLeaf(dguid)) + " (" + effectiveLeaf(dguid) + ")";
     rows[3].textContent = properties.seed_tag ? leafLabel(properties.seed_tag) + " (fixed)" : "No";
     elements.municipality.disabled = !properties.CSDUID || !state.target;
+    updateAnchorUi();
     updateSharedAreaNote();
   }
 
@@ -384,6 +450,7 @@ import {
     }
     if (leaf === original) {
       state.proposed.delete(dguid);
+      if (state.newRegionAnchor === dguid) state.newRegionAnchor = "";
     } else {
       state.proposed.set(dguid, leaf);
     }
@@ -416,6 +483,14 @@ import {
     changes.forEach(function (change) {
       setEffective(change.DGUID, change.after);
     });
+    if (state.creatingNewRegion && !state.newRegionAnchor) {
+      var anchorChange = changes.find(function (change) {
+        var feature = state.featureById.get(change.DGUID);
+        return change.after === state.target && feature && !feature.properties.seed_tag;
+      });
+      if (anchorChange) state.newRegionAnchor = anchorChange.DGUID;
+    }
+    updateAnchorUi();
     markProposalChanged();
     state.undoStack.push(changes);
     state.redoStack = [];
@@ -523,12 +598,19 @@ import {
     elements.undo.disabled = state.undoStack.length === 0;
     elements.redo.disabled = state.redoStack.length === 0;
     elements.clear.disabled = count === 0;
+    var newRegionReady = !state.creatingNewRegion || Boolean(
+      state.target &&
+      elements.newRegionName.value.trim() &&
+      state.newRegionAnchor &&
+      state.proposed.get(state.newRegionAnchor) === state.target
+    );
     elements.submit.disabled = count === 0 ||
+      !newRegionReady ||
       !state.baseMembershipSha256 ||
       !state.submissionConfig ||
       !state.turnstileToken ||
       state.submitting;
-    elements.export.disabled = count === 0 || !state.baseMembershipSha256;
+    elements.export.disabled = count === 0 || !newRegionReady || !state.baseMembershipSha256;
     if (announce === false) {
       return;
     }
@@ -621,8 +703,14 @@ import {
       option.textContent = leafLabel(tag) + " (" + tag + ")";
       elements.target.appendChild(option);
     });
+    var create = document.createElement("option");
+    create.value = "__new__";
+    create.textContent = "Create a new region…";
+    elements.target.appendChild(create);
     elements.target.disabled = tags.size === 0;
-    if (tags.has(previous)) {
+    if (state.creatingNewRegion) {
+      elements.target.value = "__new__";
+    } else if (tags.has(previous)) {
       elements.target.value = previous;
     } else {
       state.target = "";
@@ -705,8 +793,10 @@ import {
     state.undoStack = [];
     state.redoStack = [];
     state.selectedId = "";
+    state.newRegionAnchor = "";
     state.painting = false;
     state.paintAction = null;
+    updateAnchorUi();
     updateReview();
     var rows = elements.cellDetails.querySelectorAll("dd");
     rows[0].textContent = "Select a cell on the map";
@@ -728,6 +818,13 @@ import {
     var signal = state.loadController.signal;
     setStatus("Loading " + provinceNames[pruid] + "…", "");
     elements.target.disabled = true;
+    state.creatingNewRegion = false;
+    state.target = "";
+    state.newRegionAnchor = "";
+    state.newRegionTagTouched = false;
+    elements.newRegionFields.hidden = true;
+    elements.newRegionName.value = "";
+    elements.newRegionTag.value = "";
     resetEdits();
     try {
       var topology = await (await fetchOk("cells/cells-" + pruid + ".topo.json", { signal: signal })).json();
@@ -795,10 +892,20 @@ import {
       return left.DGUID.localeCompare(right.DGUID);
     });
     var proposal = {
-      schema: "mcc-region-editor-proposal/v1",
+      schema: state.creatingNewRegion
+        ? "mcc-region-editor-proposal/v2"
+        : "mcc-region-editor-proposal/v1",
       baseMembershipSha256: state.baseMembershipSha256,
       changes: changes
     };
+    if (state.creatingNewRegion) {
+      proposal.newRegion = {
+        tag: state.target,
+        label: elements.newRegionName.value.trim(),
+        parent: newRegionParent(),
+        anchorDguid: state.newRegionAnchor
+      };
+    }
     var submittedBy = elements.submittedBy.value.trim();
     var reason = elements.reason.value.trim();
     if (submittedBy) {
@@ -825,12 +932,44 @@ import {
       if (parent) parents.add(String(parent));
     });
     var leafTags = new Set(Object.keys(hierarchy).filter(function (tag) { return !parents.has(tag); }));
+    var retired = state.catalog.retiredCanonicalTags || {};
+    var reservedTags = new Set((Array.isArray(retired) ? retired : Object.keys(retired)).map(String));
+    var regionLabels = new Set();
+    function rememberAuthorityName(value) {
+      var name = String(value || "").trim();
+      var normalized = normalizedRegionLabel(name);
+      if (normalized) regionLabels.add(normalized);
+      var possibleTag = name.toLowerCase();
+      if (/^[a-z0-9][a-z0-9-]{0,28}$/.test(possibleTag)) reservedTags.add(possibleTag);
+    }
+    Object.keys(hierarchy).forEach(function (tag) {
+      rememberAuthorityName(hierarchy[tag] && hierarchy[tag].label);
+    });
+    Object.values(state.catalog.aliases || {}).forEach(function (names) {
+      (Array.isArray(names) ? names : []).forEach(rememberAuthorityName);
+    });
+    Object.entries(state.catalog.searchGroups || {}).forEach(function (entry) {
+      rememberAuthorityName(entry[0]);
+      rememberAuthorityName(entry[1] && entry[1].label);
+    });
+    Object.values(state.catalog.externalRegionPaths || {}).forEach(function (entry) {
+      (entry.path || []).forEach(function (tag) { reservedTags.add(String(tag)); });
+      rememberAuthorityName(entry.label);
+      Object.values(entry.tagLabels || {}).forEach(rememberAuthorityName);
+    });
     var result = validateProposal(localProposal(), {
       baseMembershipSha256: state.baseMembershipSha256,
       membership: allMembership,
       leafTags: leafTags,
       leafProvinces: leafProvinces,
-      seedTags: seedTags
+      seedTags: seedTags,
+      hierarchyTags: new Set(Object.keys(hierarchy)),
+      hierarchyParents: new Map(Object.keys(hierarchy).map(function (tag) {
+        return [tag, hierarchy[tag] && hierarchy[tag].parent ? String(hierarchy[tag].parent) : null];
+      })),
+      reservedTags: reservedTags,
+      regionLabels: regionLabels,
+      jurisdictionTag: provinceTags[state.province] || ""
     });
     if (!result.ok) {
       setValidation(result.errors[0].message, "error");
@@ -1026,9 +1165,67 @@ import {
     loadProvince(elements.province.value);
   });
   elements.target.addEventListener("change", function () {
-    state.target = elements.target.value;
+    var wantsNewRegion = elements.target.value === "__new__";
+    if (state.proposed.size && wantsNewRegion !== state.creatingNewRegion) {
+      if (!window.confirm("Discard these edits and change the proposal type?")) {
+        elements.target.value = state.creatingNewRegion ? "__new__" : state.target;
+        return;
+      }
+      state.creatingNewRegion = wantsNewRegion;
+      resetEdits();
+    } else {
+      state.creatingNewRegion = wantsNewRegion;
+    }
+    elements.newRegionFields.hidden = !wantsNewRegion;
+    if (wantsNewRegion) {
+      state.target = regionTag(elements.newRegionTag.value);
+      elements.newRegionTag.value = state.target;
+    } else {
+      state.target = elements.target.value;
+      state.newRegionAnchor = "";
+    }
     elements.municipality.disabled = !state.selectedId || !state.target;
+    updateAnchorUi();
     updateSharedAreaNote();
+    updateReview(false);
+  });
+  elements.newRegionName.addEventListener("input", function () {
+    if (!state.newRegionTagTouched) {
+      var prior = state.target;
+      state.target = regionTag(elements.newRegionName.value);
+      elements.newRegionTag.value = state.target;
+      if (prior && prior !== state.target) {
+        state.proposed.forEach(function (tag, dguid) {
+          if (tag === prior) state.proposed.set(dguid, state.target);
+        });
+      }
+    }
+    markProposalChanged();
+    refreshAllStyles();
+    updateReview(false);
+  });
+  elements.newRegionTag.addEventListener("input", function () {
+    state.newRegionTagTouched = true;
+    var prior = state.target;
+    var next = regionTag(elements.newRegionTag.value);
+    elements.newRegionTag.value = next;
+    state.target = next;
+    if (prior !== next) {
+      state.proposed.forEach(function (tag, dguid) {
+        if (tag === prior) state.proposed.set(dguid, next);
+      });
+      markProposalChanged();
+      refreshAllStyles();
+    }
+    elements.municipality.disabled = !state.selectedId || !state.target;
+    updateReview(false);
+  });
+  elements.anchor.addEventListener("click", function () {
+    if (elements.anchor.disabled) return;
+    state.newRegionAnchor = state.selectedId;
+    markProposalChanged();
+    updateAnchorUi();
+    updateReview(false);
   });
   elements.panMode.addEventListener("click", function () { setMode("pan"); });
   elements.paintMode.addEventListener("click", function () { setMode("paint"); });

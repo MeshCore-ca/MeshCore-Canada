@@ -14,6 +14,7 @@ import re
 import shutil
 import subprocess
 import tempfile
+import unicodedata
 from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any
@@ -21,11 +22,15 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 PROPOSAL_SCHEMA = "mcc-region-editor-proposal/v1"
+NEW_REGION_PROPOSAL_SCHEMA = "mcc-region-editor-proposal/v2"
+PROPOSAL_SCHEMAS = frozenset({PROPOSAL_SCHEMA, NEW_REGION_PROPOSAL_SCHEMA})
 AUTOMATION_SCHEMA = "mcc-region-boundary-automation/v1"
-OVERRIDES_SCHEMA = "mcc-census-overrides/v1"
+OVERRIDES_SCHEMA = "mcc-census-overrides/v2"
 SOURCE_ID = "meshcore-canada-reviewed-census-overrides"
 SIGNATURE_DOMAIN = "mcc-submission/v1"
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
+DGUID_RE = re.compile(r"^[A-Za-z0-9-]{8,64}$")
+TAG_RE = re.compile(r"^[a-z0-9][a-z0-9-]{0,28}$")
 BASE64URL_RE = re.compile(r"^[A-Za-z0-9_-]+$")
 PR_TO_TAG = {
     "10": "nl", "11": "pe", "12": "ns", "13": "nb", "24": "qc",
@@ -53,6 +58,90 @@ def parse_args() -> argparse.Namespace:
 def read_json(path: Path) -> Any:
     with path.open(encoding="utf-8") as handle:
         return json.load(handle)
+
+
+def normalized_region_label(value: str) -> str:
+    decomposed = unicodedata.normalize("NFD", value).lower()
+    ascii_text = "".join(character for character in decomposed if not unicodedata.combining(character))
+    return re.sub(r"[^a-z0-9]+", " ", ascii_text).strip()
+
+
+def catalog_name_authority(catalog: dict[str, Any], hierarchy: dict[str, Any]) -> tuple[set[str], set[str]]:
+    reserved_tags = set(hierarchy)
+    region_labels: set[str] = set()
+
+    def remember(value: object) -> None:
+        if not isinstance(value, str):
+            return
+        name = value.strip()
+        normalized = normalized_region_label(name)
+        if normalized:
+            region_labels.add(normalized)
+        possible_tag = name.lower()
+        if TAG_RE.fullmatch(possible_tag):
+            reserved_tags.add(possible_tag)
+
+    retired = catalog.get("retiredCanonicalTags", {})
+    if isinstance(retired, dict):
+        reserved_tags.update(str(tag) for tag in retired)
+    elif isinstance(retired, list):
+        reserved_tags.update(str(tag) for tag in retired if isinstance(tag, str))
+    for entry in hierarchy.values():
+        if isinstance(entry, dict):
+            remember(entry.get("label"))
+    aliases = catalog.get("aliases", {})
+    if isinstance(aliases, dict):
+        for names in aliases.values():
+            if isinstance(names, list):
+                for name in names:
+                    remember(name)
+    search_groups = catalog.get("searchGroups", {})
+    if isinstance(search_groups, dict):
+        for name, entry in search_groups.items():
+            remember(name)
+            if isinstance(entry, dict):
+                remember(entry.get("label"))
+    external = catalog.get("externalRegionPaths", {})
+    if isinstance(external, dict):
+        for entry in external.values():
+            if not isinstance(entry, dict):
+                continue
+            path = entry.get("path", [])
+            if isinstance(path, list):
+                reserved_tags.update(str(tag) for tag in path if isinstance(tag, str))
+            remember(entry.get("label"))
+            tag_labels = entry.get("tagLabels", {})
+            if isinstance(tag_labels, dict):
+                for label in tag_labels.values():
+                    remember(label)
+    return reserved_tags, region_labels
+
+
+def expected_new_region_parent(source_tags: set[str], hierarchy: dict[str, Any], jurisdiction: str) -> str:
+    parents = {
+        tag: str(entry["parent"]) if isinstance(entry, dict) and entry.get("parent") else None
+        for tag, entry in hierarchy.items()
+    }
+    chains: list[list[str]] = []
+    for tag in sorted(source_tags):
+        chain: list[str] = []
+        seen: set[str] = set()
+        current = parents.get(tag)
+        while current and current not in seen:
+            chain.append(current)
+            seen.add(current)
+            current = parents.get(current)
+        if chain:
+            chains.append(chain)
+    if not chains:
+        return jurisdiction
+    return next(
+        (
+            candidate for candidate in chains[0]
+            if candidate != "can" and all(candidate in chain for chain in chains[1:])
+        ),
+        jurisdiction,
+    )
 
 
 def canonical_bytes(value: object) -> bytes:
@@ -337,9 +426,14 @@ def validate_proposal(
     membership_path: Path,
     catalog_path: Path,
     cells_dir: Path,
-) -> tuple[list[dict[str, str]], list[dict[str, str]], dict[str, str], bool]:
+) -> tuple[list[dict[str, str]], list[dict[str, str]], dict[str, str], bool, dict[str, str] | None]:
+    if not isinstance(proposal, dict) or proposal.get("schema") not in PROPOSAL_SCHEMAS:
+        raise ValueError("submission payload is not a region proposal")
+    is_new_region = proposal.get("schema") == NEW_REGION_PROPOSAL_SCHEMA
     allowed = {"schema", "baseMembershipSha256", "submittedBy", "reason", "changes"}
-    if not isinstance(proposal, dict) or proposal.get("schema") != PROPOSAL_SCHEMA or set(proposal) - allowed:
+    if is_new_region:
+        allowed.add("newRegion")
+    if set(proposal) - allowed:
         raise ValueError("submission payload is not a region proposal")
     if canonical_bytes(proposal) != payload or hashlib.sha256(payload).hexdigest() != proposal_hash:
         raise ValueError("submission payload is not canonical or does not match its hash")
@@ -354,6 +448,29 @@ def validate_proposal(
     if not isinstance(catalog, dict):
         raise ValueError("region catalog is invalid")
     leaves, jurisdictions = catalog_leaves(catalog)
+    hierarchy = catalog.get("hierarchy", {})
+
+    new_region: dict[str, str] | None = None
+    new_tag = ""
+    if is_new_region:
+        raw = proposal.get("newRegion")
+        if not isinstance(raw, dict) or set(raw) != {"tag", "label", "parent", "anchorDguid"}:
+            raise ValueError("new region definition is invalid")
+        tag, label, parent, anchor = raw.get("tag"), raw.get("label"), raw.get("parent"), raw.get("anchorDguid")
+        if (
+            not isinstance(tag, str) or not TAG_RE.fullmatch(tag)
+            or not isinstance(label, str) or not label.strip() or len(label) > 80
+            or any(ord(character) < 32 or 0xD800 <= ord(character) <= 0xDFFF for character in label)
+            or not isinstance(parent, str) or not TAG_RE.fullmatch(parent)
+            or not isinstance(anchor, str) or not DGUID_RE.fullmatch(anchor)
+        ):
+            raise ValueError("new region definition is invalid")
+        reserved, labels = catalog_name_authority(catalog, hierarchy)
+        if tag in reserved or normalized_region_label(label) in labels:
+            raise ValueError("new region tag or name already exists")
+        new_tag = tag
+        new_region = {"tag": tag, "label": label.strip(), "parent": parent, "anchorDguid": anchor}
+
     rows, by_dguid = membership_rows(membership_path)
     changes = proposal.get("changes")
     if not isinstance(changes, list) or not changes:
@@ -370,7 +487,10 @@ def validate_proposal(
         if not row or row["leaf_tag"] != from_tag or from_tag == to_tag:
             raise ValueError("boundary proposal is stale or contains a no-op")
         pruid = str(row["PRUID"]).zfill(2)
-        if to_tag not in leaves or jurisdictions.get(to_tag) != PR_TO_TAG.get(pruid):
+        if is_new_region:
+            if to_tag != new_tag:
+                raise ValueError("new region proposal has more than one target")
+        elif to_tag not in leaves or jurisdictions.get(to_tag) != PR_TO_TAG.get(pruid):
             raise ValueError("boundary proposal crosses a province or territory")
         provinces.add(pruid)
         requested[dguid] = to_tag
@@ -382,16 +502,35 @@ def validate_proposal(
         protected = anchors.get(dguid)
         if protected and to_tag != protected:
             raise ValueError("boundary proposal moves a current region anchor")
-    return rows, list(changes), requested, base_membership_matched
+    if new_region:
+        expected_parent = expected_new_region_parent(
+            {str(change["from"]) for change in changes}, hierarchy, str(PR_TO_TAG.get(pruid, ""))
+        )
+        if new_region["parent"] != expected_parent or expected_parent not in hierarchy:
+            raise ValueError("new region parent does not match the affected hierarchy")
+        anchor = new_region["anchorDguid"]
+        if anchor not in requested or anchor in anchors:
+            raise ValueError("new region anchor is not a changed, unprotected cell")
+    return rows, list(changes), requested, base_membership_matched, new_region
 
 
 def already_recorded(overrides: dict[str, Any], issue_url: str) -> bool:
-    records = list(overrides.get("cohortOverrides", [])) + list(overrides.get("splitExceptions", []))
+    records = (
+        list(overrides.get("cohortOverrides", []))
+        + list(overrides.get("splitExceptions", []))
+        + list(overrides.get("newRegions", []))
+    )
     return any(isinstance(record, dict) and record.get("sourceIssue") == issue_url for record in records)
 
 
 def record_decision(overrides: dict[str, Any], rows: list[dict[str, str]], requested: dict[str, str], reason: str, issue_number: int, issue_url: str, reviewed_at: str, approved_by: str) -> list[str]:
-    if overrides.get("schema") != OVERRIDES_SCHEMA or overrides.get("censusVintage") != 2021 or not isinstance(overrides.get("cohortOverrides"), list) or not isinstance(overrides.get("splitExceptions"), list):
+    if (
+        overrides.get("schema") != OVERRIDES_SCHEMA
+        or overrides.get("censusVintage") != 2021
+        or not isinstance(overrides.get("cohortOverrides"), list)
+        or not isinstance(overrides.get("splitExceptions"), list)
+        or not isinstance(overrides.get("newRegions"), list)
+    ):
         raise ValueError("municipal override authority is invalid")
     rows_by_csd: dict[str, list[dict[str, str]]] = defaultdict(list)
     row_by_dguid: dict[str, dict[str, str]] = {}
@@ -424,6 +563,34 @@ def record_decision(overrides: dict[str, Any], rows: list[dict[str, str]], reque
     overrides["cohortOverrides"] = sorted(cohort, key=lambda record: (str(record.get("level", "")).upper(), str(record.get("id", ""))))
     overrides["splitExceptions"] = sorted(splits, key=lambda record: str(record.get("csduid", "")))
     return touched
+
+
+def record_new_region(
+    overrides: dict[str, Any],
+    new_region: dict[str, str] | None,
+    reason: str,
+    issue_number: int,
+    issue_url: str,
+    reviewed_at: str,
+    approved_by: str,
+) -> None:
+    if not new_region:
+        return
+    records = overrides.get("newRegions")
+    if not isinstance(records, list):
+        raise ValueError("municipal override new-region authority is invalid")
+    if any(isinstance(record, dict) and record.get("tag") == new_region["tag"] for record in records):
+        raise ValueError("approved new region tag already exists in authority")
+    records.append({
+        **new_region,
+        "status": "approved",
+        "decision": f"Approved new region #{issue_number}.",
+        "evidence": [reason, issue_url],
+        "reviewedAt": reviewed_at,
+        "approvedBy": approved_by,
+        "sourceIssue": issue_url,
+    })
+    overrides["newRegions"] = sorted(records, key=lambda record: str(record.get("tag", "")))
 
 
 def update_source_lock(lock: dict[str, Any], override_payload: bytes) -> None:
@@ -462,7 +629,7 @@ def main() -> None:
     issue, issue_number, issue_url, reviewed_at = validate_event(event, config)
     body = str(issue.get("body", ""))
     schema = single_marker(body, "submission schema", r"<!-- submission-schema:([^ >]+) -->")
-    if schema != PROPOSAL_SCHEMA:
+    if schema not in PROPOSAL_SCHEMAS:
         raise ValueError("closed issue is not a region proposal")
     proposal_hash = single_marker(body, "submission hash", r"<!-- submission-sha256:([0-9a-f]{64}) -->")
     signature_text = single_marker(body, "submission signature", r"<!-- submission-signature-rs256:([A-Za-z0-9_-]+) -->")
@@ -492,7 +659,7 @@ def main() -> None:
         }
         write_result(result, args.summary, args.github_output)
         return
-    rows, changes, requested, base_membership_matched = validate_proposal(
+    rows, changes, requested, base_membership_matched, new_region = validate_proposal(
         proposal,
         payload,
         proposal_hash,
@@ -500,9 +667,14 @@ def main() -> None:
         args.catalog,
         args.cells_dir,
     )
+    approved_by = str(event["sender"]["login"])
     touched = record_decision(
         overrides, rows, requested, str(proposal["reason"]), issue_number,
-        issue_url, reviewed_at, str(event["sender"]["login"]),
+        issue_url, reviewed_at, approved_by,
+    )
+    record_new_region(
+        overrides, new_region, str(proposal["reason"]), issue_number,
+        issue_url, reviewed_at, approved_by,
     )
     override_payload = pretty_bytes(overrides)
     source_lock = read_json(args.sources_lock)

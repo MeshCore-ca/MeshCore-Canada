@@ -70,9 +70,9 @@ It normalizes line endings, rejects unknown keys, controls and invalid Unicode,
 escapes contributor HTML, and neutralizes GitHub mentions. The issue contains
 human-readable sections and the exact canonical JSON.
 
-### `mcc-region-editor-proposal/v1`
+### `mcc-region-editor-proposal/v1` and `/v2`
 
-The server revalidates every boundary proposal against the mounted authority:
+The server revalidates every boundary proposal against the mounted authority. Version 1 moves cells between existing regions. Version 2 creates one new region from changed cells and records its name, short tag, nearest shared catalogue parent, and one changed anchor DGUID.
 
 - catalog hierarchy and jurisdiction ancestry must be valid;
 - membership DGUIDs must be unique and match the per-province TopoJSON cells;
@@ -80,7 +80,9 @@ The server revalidates every boundary proposal against the mounted authority:
 - the submitted base hash and every `from` value must still be current;
 - target leaves must be valid and in the same province or territory; shared cross-province repeater configurations do not move map cells;
 - neighbouring U.S. forwarding paths are catalog metadata and are never boundary-editor geometry;
-- anchors cannot move; and
+- anchors cannot move;
+- a new-region name and tag cannot collide with Canadian, retired, or neighbouring-path authority;
+- a new region has exactly one target, uses the nearest shared parent of its source regions, stays inside one province or territory, and anchors to a changed cell without an existing anchor; and
 - request, proposal, and changed-cell limits must pass.
 
 Changed authority files reload atomically. Invalid or mismatched authority

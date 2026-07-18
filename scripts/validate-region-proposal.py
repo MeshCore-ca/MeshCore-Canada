@@ -12,6 +12,7 @@ import hashlib
 import json
 import os
 import re
+import unicodedata
 from collections import Counter
 from pathlib import Path
 
@@ -21,8 +22,13 @@ from shapely.geometry import Point
 
 
 PROPOSAL_SCHEMA = "mcc-region-editor-proposal/v1"
+NEW_REGION_PROPOSAL_SCHEMA = "mcc-region-editor-proposal/v2"
+PROPOSAL_SCHEMAS = frozenset({PROPOSAL_SCHEMA, NEW_REGION_PROPOSAL_SCHEMA})
 OUTPUT_SCHEMA = "mcc-region-editor-reviewed-diff/v1"
+NEW_REGION_OUTPUT_SCHEMA = "mcc-region-editor-reviewed-diff/v2"
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
+DGUID_RE = re.compile(r"^[A-Za-z0-9-]{8,64}$")
+TAG_RE = re.compile(r"^[a-z0-9][a-z0-9-]{0,28}$")
 PR_TO_TAG = {
     "10": "nl",
     "11": "pe",
@@ -152,6 +158,90 @@ def clean_optional_string(proposal: dict, key: str, maximum: int) -> str | None:
     return value
 
 
+def normalized_region_label(value: str) -> str:
+    decomposed = unicodedata.normalize("NFD", value).lower()
+    ascii_text = "".join(character for character in decomposed if not unicodedata.combining(character))
+    return re.sub(r"[^a-z0-9]+", " ", ascii_text).strip()
+
+
+def catalog_name_authority(catalog: dict, hierarchy: dict) -> tuple[set[str], set[str]]:
+    reserved_tags = set(hierarchy)
+    region_labels: set[str] = set()
+
+    def remember(value: object) -> None:
+        if not isinstance(value, str):
+            return
+        name = value.strip()
+        normalized = normalized_region_label(name)
+        if normalized:
+            region_labels.add(normalized)
+        possible_tag = name.lower()
+        if TAG_RE.fullmatch(possible_tag):
+            reserved_tags.add(possible_tag)
+
+    retired = catalog.get("retiredCanonicalTags", {})
+    if isinstance(retired, dict):
+        reserved_tags.update(str(tag) for tag in retired)
+    elif isinstance(retired, list):
+        reserved_tags.update(str(tag) for tag in retired if isinstance(tag, str))
+    for entry in hierarchy.values():
+        if isinstance(entry, dict):
+            remember(entry.get("label"))
+    aliases = catalog.get("aliases", {})
+    if isinstance(aliases, dict):
+        for names in aliases.values():
+            if isinstance(names, list):
+                for name in names:
+                    remember(name)
+    search_groups = catalog.get("searchGroups", {})
+    if isinstance(search_groups, dict):
+        for name, entry in search_groups.items():
+            remember(name)
+            if isinstance(entry, dict):
+                remember(entry.get("label"))
+    external = catalog.get("externalRegionPaths", {})
+    if isinstance(external, dict):
+        for entry in external.values():
+            if not isinstance(entry, dict):
+                continue
+            path = entry.get("path", [])
+            if isinstance(path, list):
+                reserved_tags.update(str(tag) for tag in path if isinstance(tag, str))
+            remember(entry.get("label"))
+            tag_labels = entry.get("tagLabels", {})
+            if isinstance(tag_labels, dict):
+                for label in tag_labels.values():
+                    remember(label)
+    return reserved_tags, region_labels
+
+
+def expected_new_region_parent(source_tags: set[str], hierarchy: dict, jurisdiction: str) -> str:
+    parents = {
+        tag: str(entry["parent"]) if isinstance(entry, dict) and entry.get("parent") else None
+        for tag, entry in hierarchy.items()
+    }
+    chains: list[list[str]] = []
+    for tag in sorted(source_tags):
+        chain: list[str] = []
+        seen: set[str] = set()
+        current = parents.get(tag)
+        while current and current not in seen:
+            chain.append(current)
+            seen.add(current)
+            current = parents.get(current)
+        if chain:
+            chains.append(chain)
+    if not chains:
+        return jurisdiction
+    return next(
+        (
+            candidate for candidate in chains[0]
+            if candidate != "can" and all(candidate in chain for chain in chains[1:])
+        ),
+        jurisdiction,
+    )
+
+
 def main() -> None:
     args = parse_args()
     inputs = [args.proposal, args.membership, args.catalog, args.digital_da]
@@ -164,8 +254,9 @@ def main() -> None:
         raise ValueError("--output must be a JSON file")
 
     proposal = read_json(args.proposal)
-    if proposal.get("schema") != PROPOSAL_SCHEMA:
-        raise ValueError(f"unsupported proposal schema; expected {PROPOSAL_SCHEMA}")
+    if proposal.get("schema") not in PROPOSAL_SCHEMAS:
+        raise ValueError(f"unsupported proposal schema; expected one of {sorted(PROPOSAL_SCHEMAS)}")
+    is_new_region = proposal.get("schema") == NEW_REGION_PROPOSAL_SCHEMA
     allowed_top_level = {
         "schema",
         "baseMembershipSha256",
@@ -174,6 +265,8 @@ def main() -> None:
         "createdAt",
         "changes",
     }
+    if is_new_region:
+        allowed_top_level.add("newRegion")
     unexpected_top_level = sorted(set(proposal) - allowed_top_level)
     if unexpected_top_level:
         raise ValueError(f"unexpected proposal fields: {unexpected_top_level}")
@@ -195,6 +288,27 @@ def main() -> None:
 
     catalog = read_json(args.catalog)
     leaves, leaf_jurisdictions = catalog_leaves(catalog)
+    hierarchy = catalog.get("hierarchy", {})
+    new_region = None
+    new_tag = ""
+    if is_new_region:
+        raw = proposal.get("newRegion")
+        if not isinstance(raw, dict) or set(raw) != {"tag", "label", "parent", "anchorDguid"}:
+            raise ValueError("newRegion must contain tag, label, parent, and anchorDguid")
+        tag, label, parent, anchor = raw.get("tag"), raw.get("label"), raw.get("parent"), raw.get("anchorDguid")
+        if (
+            not isinstance(tag, str) or not TAG_RE.fullmatch(tag)
+            or not isinstance(label, str) or not label.strip() or len(label) > 80
+            or any(ord(character) < 32 or 0xD800 <= ord(character) <= 0xDFFF for character in label)
+            or not isinstance(parent, str) or not TAG_RE.fullmatch(parent)
+            or not isinstance(anchor, str) or not DGUID_RE.fullmatch(anchor)
+        ):
+            raise ValueError("newRegion contains an invalid name, tag, parent, or anchor")
+        reserved, labels = catalog_name_authority(catalog, hierarchy)
+        if tag in reserved or normalized_region_label(label) in labels:
+            raise ValueError("new region tag or name already exists")
+        new_tag = tag
+        new_region = {"tag": tag, "label": label.strip(), "parent": parent, "anchorDguid": anchor}
     membership = pd.read_csv(args.membership, dtype=str, keep_default_na=False)
     required_columns = {"DGUID", "PRUID", "leaf_tag"}
     if not required_columns.issubset(membership.columns):
@@ -262,13 +376,17 @@ def main() -> None:
             raise ValueError(f"stale from value for {dguid}: proposal={from_tag}, current={current_tag}")
         if to_tag == from_tag:
             raise ValueError(f"no-op change for {dguid}: {from_tag} -> {to_tag}")
-        if to_tag not in leaves:
-            raise ValueError(f"target {to_tag} for {dguid} is not a catalog leaf")
         jurisdiction = PR_TO_TAG.get(pruid)
         if not jurisdiction:
             raise ValueError(f"unknown PRUID {pruid} for {dguid}")
-        if leaf_jurisdictions.get(to_tag) != jurisdiction:
-            raise ValueError(f"cross-jurisdiction change for {dguid}: PRUID {pruid} -> {to_tag}")
+        if is_new_region:
+            if to_tag != new_tag:
+                raise ValueError(f"new region proposal has an unexpected target {to_tag}")
+        else:
+            if to_tag not in leaves:
+                raise ValueError(f"target {to_tag} for {dguid} is not a catalog leaf")
+            if leaf_jurisdictions.get(to_tag) != jurisdiction:
+                raise ValueError(f"cross-jurisdiction change for {dguid}: PRUID {pruid} -> {to_tag}")
         protected_tag = seed_by_dguid.get(dguid)
         if protected_tag and to_tag != protected_tag:
             raise ValueError(f"seed protection forbids moving {dguid} away from {protected_tag}")
@@ -289,6 +407,19 @@ def main() -> None:
             canonical["note"] = note
         canonical_changes.append(canonical)
 
+    if new_region:
+        affected_pruids = {change["PRUID"] for change in canonical_changes}
+        jurisdiction = PR_TO_TAG.get(next(iter(affected_pruids))) if len(affected_pruids) == 1 else None
+        expected_parent = expected_new_region_parent(
+            {str(change["from"]) for change in canonical_changes}, hierarchy, str(jurisdiction or "")
+        )
+        if not jurisdiction or new_region["parent"] != expected_parent or expected_parent not in hierarchy:
+            raise ValueError("new region parent does not match the changed cells")
+        anchor = new_region["anchorDguid"]
+        changed_dguids = {change["DGUID"] for change in canonical_changes}
+        if anchor not in changed_dguids or anchor in seed_by_dguid:
+            raise ValueError("new region anchor must be a changed, unprotected cell")
+
     canonical_changes.sort(key=lambda change: change["DGUID"])
     moves = Counter(f"{change['from']}->{change['to']}" for change in canonical_changes)
     provinces = Counter(change["PRUID"] for change in canonical_changes)
@@ -303,7 +434,7 @@ def main() -> None:
     )
     changed_seed_cells = sum(change["DGUID"] in seed_by_dguid for change in canonical_changes)
     output = {
-        "schema": OUTPUT_SCHEMA,
+        "schema": NEW_REGION_OUTPUT_SCHEMA if new_region else OUTPUT_SCHEMA,
         "status": "valid-not-approved",
         "base": {
             "membershipSha256": actual_membership_hash,
@@ -322,6 +453,8 @@ def main() -> None:
         },
         "changes": canonical_changes,
     }
+    if new_region:
+        output["newRegion"] = new_region
     payload = (json.dumps(output, ensure_ascii=False, indent=2, sort_keys=False) + "\n").encode("utf-8")
     args.output.parent.mkdir(parents=True, exist_ok=True)
     temporary = args.output.with_name(f".{args.output.name}.tmp")

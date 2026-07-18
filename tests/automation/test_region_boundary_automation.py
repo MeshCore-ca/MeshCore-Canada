@@ -206,7 +206,7 @@ class ProposalValidationTests(unittest.TestCase):
 
             proposal["changes"] = [{"DGUID": "d3", "from": "aaa", "to": "bbb"}]
             payload = apply_issue.canonical_bytes(proposal)
-            _, changes, requested, base_matched = apply_issue.validate_proposal(
+            _, changes, requested, base_matched, new_region = apply_issue.validate_proposal(
                 proposal,
                 payload,
                 hashlib.sha256(payload).hexdigest(),
@@ -217,10 +217,11 @@ class ProposalValidationTests(unittest.TestCase):
             self.assertEqual(changes[0]["DGUID"], "d3")
             self.assertEqual(requested, {"d3": "bbb"})
             self.assertTrue(base_matched)
+            self.assertIsNone(new_region)
 
             proposal["baseMembershipSha256"] = "a" * 64
             payload = apply_issue.canonical_bytes(proposal)
-            _, changes, requested, base_matched = apply_issue.validate_proposal(
+            _, changes, requested, base_matched, new_region = apply_issue.validate_proposal(
                 proposal,
                 payload,
                 hashlib.sha256(payload).hexdigest(),
@@ -231,6 +232,7 @@ class ProposalValidationTests(unittest.TestCase):
             self.assertEqual(changes[0]["DGUID"], "d3")
             self.assertEqual(requested, {"d3": "bbb"})
             self.assertFalse(base_matched)
+            self.assertIsNone(new_region)
 
             proposal["changes"] = [{"DGUID": "d3", "from": "bbb", "to": "aaa"}]
             payload = apply_issue.canonical_bytes(proposal)
@@ -260,6 +262,7 @@ class DecisionTests(unittest.TestCase):
             "censusVintage": 2021,
             "cohortOverrides": [],
             "splitExceptions": [],
+            "newRegions": [],
         }
 
     def test_partial_csd_change_becomes_complete_split_exception(self):

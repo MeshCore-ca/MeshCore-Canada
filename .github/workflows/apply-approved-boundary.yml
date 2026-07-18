@@ -87,6 +87,14 @@ jobs:
           python -m pip install -r scripts/requirements-regions.txt
           python -m pip install -r tools/region-proposal-gateway/requirements.txt
 
+      - name: Materialize approved new regions
+        if: steps.apply.outputs.already_applied != 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/materialize-approved-new-regions.py \
+            --digital-da "${{ steps.sources.outputs.digital_da }}"
+
       - name: Regenerate the national partition
         if: steps.apply.outputs.already_applied != 'true'
         env:

@@ -45,6 +45,13 @@
         <select id="target-select" disabled>
           <option value="">Choose a target region</option>
         </select>
+        <div id="new-region-fields" class="new-region-fields" hidden>
+          <label for="new-region-name">New region name</label>
+          <input id="new-region-name" maxlength="80" placeholder="Laval">
+          <label for="new-region-tag">Short tag</label>
+          <input id="new-region-tag" maxlength="29" inputmode="latin" spellcheck="false" placeholder="laval">
+          <p class="hint">Use a short, unique tag. Select the cells below, then choose an anchor.</p>
+        </div>
         <div id="shared-area-note" class="shared-area-note">
           <strong>Repeater paths</strong>
           <span>This editor changes Canadian map cells only. Choose cross-province and U.S. paths in the configurator.</span>
@@ -66,6 +73,8 @@
           <div><dt>Region anchor</dt><dd>—</dd></div>
         </dl>
         <button id="municipality-button" class="button secondary full" type="button" disabled>Move entire municipality</button>
+        <button id="anchor-button" class="button secondary full anchor-button" type="button" hidden disabled>Use selected cell as anchor</button>
+        <p id="anchor-status" class="hint" hidden>Choose one changed cell near the centre of the new region.</p>
       </section>
 
       <section class="panel">

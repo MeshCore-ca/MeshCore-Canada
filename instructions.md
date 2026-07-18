@@ -82,16 +82,22 @@ MeshCore Canada GitHub App -> MeshCore-ca/MeshCore-Canada issue
                          main -> GitHub Pages deployment
 ```
 
-The API accepts two strict schemas:
+The API accepts three strict schemas:
 
 - `mcc-community-idea/v1` creates a public community-idea issue.
-- `mcc-region-editor-proposal/v1` revalidates the proposed census-cell moves
-  against the mounted region authority, creates a current/proposed PNG, then
-  creates a public boundary issue with the preview in an App-authored comment.
+- `mcc-region-editor-proposal/v1` revalidates moves between existing regions.
+- `mcc-region-editor-proposal/v2` revalidates a proposed new region, including
+  its unique name, short tag, logical catalogue parent, changed cells, and
+  one unprotected anchor cell.
+
+Both region schemas create a current/proposed PNG and a public boundary issue
+with the preview in an App-authored comment.
 
 The public service creates issues only. It has no Contents permission and
 cannot make a boundary live. A separate repository-owned GitHub Action applies
-an approved boundary after a maintainer closes its issue as **Completed**.
+an approved boundary after a maintainer closes its issue as **Completed**. For an
+approved new region, the Action derives its seed from the official anchor
+census cell before regenerating the complete national partition.
 Cross-province and U.S. forwarding choices are catalog metadata, not boundary
 edits. Operators choose them in `/config/`; the editor and submission service
 never create or modify U.S. geometry.
@@ -417,7 +423,7 @@ Use a signed-out private browser.
 ### Region boundary proposal
 
 1. Open `https://meshcore.ca/config/editor/`.
-2. Make one small valid draft move inside one province or territory. Cross-province repeater areas are configuration records, so their map boundaries are edited one side at a time.
+2. Make one small valid draft move inside one province or territory. Also test **Create a new region** with a unique tag and a changed anchor cell. Cross-province repeater areas are configuration records, so their map boundaries are edited one side at a time.
 3. Use reason `Production anonymous boundary test — do not apply`.
 4. Complete Turnstile and select **Submit for review**.
 5. Confirm the App-created issue has `enhancement` and `boundary-update`

@@ -257,7 +257,15 @@ def apply_census_coherence(
     for _, seed in seeds.iterrows():
         seeds_by_csd[str(seed["CSDUID"])].append(str(seed["tag"]))
         seeds_by_cd[str(seed["CDUID"])].append(str(seed["tag"]))
-    collisions = {csd: tags for csd, tags in seeds_by_csd.items() if len(tags) > 1}
+    approved_split_csds = {
+        str(exception.get("csduid", ""))
+        for exception in overrides.get("splitExceptions", [])
+        if isinstance(exception, dict) and exception.get("status") == "approved"
+    }
+    collisions = {
+        csd: tags for csd, tags in seeds_by_csd.items()
+        if len(tags) > 1 and csd not in approved_split_csds
+    }
     if collisions:
         raise ValueError(f"multiple region seeds inside one CSD require a reviewed split exception: {collisions}")
 
