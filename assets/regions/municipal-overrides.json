@@ -1,5 +1,5 @@
 {
-  "schema": "mcc-census-overrides/v1",
+  "schema": "mcc-census-overrides/v2",
   "censusVintage": 2021,
   "cohortOverrides": [
     {
@@ -78,5 +78,6 @@
         }
       ]
     }
-  ]
+  ],
+  "newRegions": []
 }

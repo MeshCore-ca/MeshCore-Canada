@@ -5,17 +5,19 @@
 // standard JS (RegExp, Map, Set, JSON) so it can run unmodified in a
 // <script type="module"> in the static editor page and under `node --test`.
 
-const PROPOSAL_SCHEMA = "mcc-region-editor-proposal/v1";
-const ALLOWED_TOP_LEVEL_KEYS = new Set([
+const PROPOSAL_SCHEMA_V1 = "mcc-region-editor-proposal/v1";
+const PROPOSAL_SCHEMA_V2 = "mcc-region-editor-proposal/v2";
+const ALLOWED_V1_KEYS = new Set([
   "schema",
   "baseMembershipSha256",
   "submittedBy",
   "reason",
   "changes",
 ]);
+const ALLOWED_V2_KEYS = new Set([...ALLOWED_V1_KEYS, "newRegion"]);
 const MAX_PROPOSAL_CHANGES = 25000;
 const DGUID_RE = /^[A-Za-z0-9-]{8,64}$/;
-const TAG_RE = /^[a-z0-9][a-z0-9-]{0,31}$/;
+const TAG_RE = /^[a-z0-9][a-z0-9-]{0,28}$/;
 
 function cleanText(value, maxLength) {
   if (typeof value !== "string") return "";
@@ -40,6 +42,24 @@ function err(code, message) {
   return { ok: false, errors: [{ code, message }], canonical: null };
 }
 
+function expectedNewRegionParent(sourceTags, hierarchyParents, jurisdictionTag) {
+  const chains = [...new Set(sourceTags)].map((tag) => {
+    const chain = [];
+    const seen = new Set();
+    let current = hierarchyParents && hierarchyParents.get(tag);
+    while (current && !seen.has(current)) {
+      chain.push(current);
+      seen.add(current);
+      current = hierarchyParents.get(current);
+    }
+    return chain;
+  }).filter((chain) => chain.length);
+  if (!chains.length) return jurisdictionTag;
+  return chains[0].find((candidate) => (
+    candidate !== "can" && chains.every((chain) => chain.includes(candidate))
+  )) || jurisdictionTag;
+}
+
 /**
  * Validate an incoming region-boundary proposal against the current
  * membership context, mirroring the server's export_proposal rules 1-10.
@@ -51,16 +71,26 @@ function err(code, message) {
  *   leafTags: Set<string>,
  *   leafProvinces: Map<string, Set<string>>,
  *   seedTags: Map<string, string>,
+ *   hierarchyTags: Set<string>,
+ *   hierarchyParents: Map<string, string|null>,
+ *   reservedTags: Set<string>,
+ *   regionLabels: Set<string>,
+ *   jurisdictionTag: string,
  * }} context
  * @returns {{ok: boolean, errors: Array<{code: string, message: string}>, canonical: object|null}}
  */
 export function validateProposal(proposal, context) {
   // Rule 1: schema + allowed top-level keys.
-  if (!isPlainObject(proposal) || proposal.schema !== PROPOSAL_SCHEMA) {
+  if (
+    !isPlainObject(proposal) ||
+    ![PROPOSAL_SCHEMA_V1, PROPOSAL_SCHEMA_V2].includes(proposal.schema)
+  ) {
     return err("bad-schema", "The proposal format is not supported.");
   }
+  const isNewRegion = proposal.schema === PROPOSAL_SCHEMA_V2;
+  const allowedKeys = isNewRegion ? ALLOWED_V2_KEYS : ALLOWED_V1_KEYS;
   for (const key of Object.keys(proposal)) {
-    if (!ALLOWED_TOP_LEVEL_KEYS.has(key)) {
+    if (!allowedKeys.has(key)) {
       return err("unsupported-field", "The proposal contains unsupported fields.");
     }
   }
@@ -128,13 +158,64 @@ export function validateProposal(proposal, context) {
   }
   const [pruid] = provinces;
 
-  // Rule 7: target must be a leaf tag belonging exclusively to that province.
-  for (const dguid of sortedDguids) {
-    const target = requested.get(dguid).to;
-    const targetProvinces = context.leafProvinces.get(target);
-    const isSoleProvince = !!targetProvinces && targetProvinces.size === 1 && targetProvinces.has(pruid);
-    if (!context.leafTags.has(target) || !isSoleProvince) {
-      return err("bad-target", "A target region must belong to the same province or territory.");
+  let canonicalNewRegion = null;
+  if (isNewRegion) {
+    const raw = proposal.newRegion;
+    const expectedKeys = new Set(["tag", "label", "parent", "anchorDguid"]);
+    if (
+      !isPlainObject(raw) ||
+      Object.keys(raw).length !== expectedKeys.size ||
+      Object.keys(raw).some((key) => !expectedKeys.has(key))
+    ) {
+      return err("bad-new-region", "Add a valid name, tag, and anchor for the new region.");
+    }
+    const label = cleanText(raw.label, 80);
+    const tag = typeof raw.tag === "string" ? raw.tag : "";
+    const parent = typeof raw.parent === "string" ? raw.parent : "";
+    const anchorDguid = typeof raw.anchorDguid === "string" ? raw.anchorDguid : "";
+    if (!TAG_RE.test(tag) || !label || !DGUID_RE.test(anchorDguid)) {
+      return err("bad-new-region", "Add a valid name, tag, and anchor for the new region.");
+    }
+    const expectedParent = expectedNewRegionParent(
+      sortedDguids.map((dguid) => requested.get(dguid).from),
+      context.hierarchyParents,
+      context.jurisdictionTag
+    );
+    if (parent !== expectedParent || !context.hierarchyTags.has(parent)) {
+      return err("bad-new-region-parent", "The new region has the wrong catalogue parent.");
+    }
+    if (
+      context.hierarchyTags.has(tag) ||
+      (context.reservedTags && context.reservedTags.has(tag))
+    ) {
+      return err("region-tag-exists", "That region tag is already in use.");
+    }
+    const normalizedLabel = label.normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, " ")
+      .trim();
+    if (context.regionLabels && context.regionLabels.has(normalizedLabel)) {
+      return err("region-name-exists", "That region already exists. Choose it from the list.");
+    }
+    if (!requested.has(anchorDguid) || context.seedTags.has(anchorDguid)) {
+      return err("bad-new-region-anchor", "Choose one changed cell without an existing region anchor.");
+    }
+    for (const dguid of sortedDguids) {
+      if (requested.get(dguid).to !== tag) {
+        return err("bad-target", "Every changed cell must move to the new region.");
+      }
+    }
+    canonicalNewRegion = { tag, label, parent, anchorDguid };
+  } else {
+    // Rule 7: target must be a leaf tag belonging exclusively to that province.
+    for (const dguid of sortedDguids) {
+      const target = requested.get(dguid).to;
+      const targetProvinces = context.leafProvinces.get(target);
+      const isSoleProvince = !!targetProvinces && targetProvinces.size === 1 && targetProvinces.has(pruid);
+      if (!context.leafTags.has(target) || !isSoleProvince) {
+        return err("bad-target", "A target region must belong to the same province or territory.");
+      }
     }
   }
 
@@ -174,9 +255,10 @@ export function validateProposal(proposal, context) {
   }
 
   const canonical = {
-    schema: PROPOSAL_SCHEMA,
+    schema: proposal.schema,
     baseMembershipSha256: context.baseMembershipSha256,
   };
+  if (canonicalNewRegion) canonical.newRegion = canonicalNewRegion;
   if (submittedBy) canonical.submittedBy = submittedBy;
   canonical.reason = reason;
   canonical.changes = canonicalChanges;

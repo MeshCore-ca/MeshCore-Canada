@@ -600,3 +600,19 @@ textarea {
     padding: 0.7rem;
   }
 }
+
+.new-region-fields {
+  border-left: 3px solid var(--accent);
+  margin-top: 0.75rem;
+  padding-left: 0.75rem;
+}
+
+.new-region-fields[hidden],
+.anchor-button[hidden],
+#anchor-status[hidden] {
+  display: none;
+}
+
+.anchor-button {
+  margin-top: 0.55rem;
+}
