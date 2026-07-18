@@ -340,6 +340,8 @@ GitHub App keeps Issues read/write only; do not grant it Contents access.
    boundary commit. Store it as the repository Actions secret
    `MCC_BOUNDARY_PUSH_TOKEN`. In the `main` branch protection rule, add that
    account to **Allow specified actors to bypass required pull requests**.
+   The workflow exposes this secret only to the final publication step, masks
+   its derived authorization header, and does not persist it in the checkout.
    Do not use the anonymous-submission App or its private key for publication.
 
 For an accepted proposal, an allowlisted maintainer closes the labelled issue
