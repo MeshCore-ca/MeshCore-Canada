@@ -5,6 +5,7 @@ import gzip
 import hashlib
 import importlib.util
 import io
+import json
 import tempfile
 import unittest
 import zipfile
@@ -285,6 +286,23 @@ class DecisionTests(unittest.TestCase):
 
 
 class SourceFetchTests(unittest.TestCase):
+    def test_required_source_lock_digests_are_sha256(self):
+        lock_path = ROOT / "docs" / "assets" / "regions" / "sources.lock.json"
+        lock = json.loads(lock_path.read_text(encoding="utf-8"))
+        records = {
+            str(source.get("id")): source
+            for source in lock.get("sources", [])
+            if isinstance(source, dict)
+        }
+        for source_id in fetch_sources.SOURCES:
+            self.assertIn(source_id, records)
+            digest = str(records[source_id].get("sha256", ""))
+            self.assertRegex(
+                digest,
+                r"\A[0-9a-f]{64}\Z",
+                f"{source_id} must have a complete lowercase SHA-256 digest",
+            )
+
     def test_locked_archive_download_and_safe_extract(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
