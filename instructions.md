@@ -26,6 +26,42 @@ https://api.meshcore.ca:21323/api/meshcore-canada/submissions
 Do not substitute another hostname, route, or port without changing and
 reviewing both browser clients, tests, Caddy, and deployment configuration.
 
+## Pull-request responsibility split
+
+Use this split for this pull request and later submission, region, or
+configuration pull requests.
+
+Before asking for final approval, an organization administrator working from a
+trusted checkout can and should:
+
+- confirm the exact branch and commit, a clean worktree, and mergeability with
+  current `main`;
+- review the diff for secrets and unintended production or endpoint changes;
+- run the repository validation commands and confirm the required GitHub
+  checks pass;
+- verify the required label, repository secret names, maintainer allowlist,
+  branch protection, and least-privilege Action settings without reading or
+  printing secret values;
+- run the public config, CORS, and preflight checks that do not change
+  production state; and
+- push any corrections and record the tested commit and remaining host checks
+  in the pull request.
+
+The production owner must complete the steps that require MeshCore Canada host
+or provider access:
+
+- deploy and rebuild the pull-request branch when it changes the gateway,
+  container, Caddy route, or public API contract;
+- verify protected files, mounts, loopback isolation, DNS, firewall, TLS,
+  Turnstile, GitHub App installation, logs, health, and rollback on that host;
+- run the signed-out end-to-end tests against that branch deployment; and
+- give final approval, merge, switch the production checkout to clean `main`,
+  rebuild where required, and verify the live service.
+
+Do not merge or change the production checkout merely because repository and
+public read-only checks pass. Record any skipped host test and why in the pull
+request.
+
 ## What is being deployed
 
 ```text
