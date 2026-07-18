@@ -91,6 +91,14 @@ MeshCore observers capture mesh traffic and publish packet telemetry to MQTT bro
 
     [:octicons-arrow-right-24: Broker Details](broker-reference.md)
 
+-   :material-eye:{ .lg .middle } **Data Collection & Access**
+
+    ---
+
+    Learn what observer data is collected, where it is stored, and who administers MQTT access.
+
+    [:octicons-arrow-right-24: Data Collection & Access](data-collection-access.md)
+
 -   :material-airplane:{ .lg .middle } **IATA Codes**
 
     ---

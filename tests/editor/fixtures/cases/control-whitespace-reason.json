@@ -1,0 +1,40 @@
+{
+  "name": "reason with U+001C separator is collapsed to a space like Python whitespace",
+  "proposal": {
+    "schema": "mcc-region-editor-proposal/v1",
+    "baseMembershipSha256": "0000000000000000000000000000000000000000000000000000000000000001",
+    "submittedBy": "  Jane   Doe  ",
+    "reason": "hello\u001cworld",
+    "changes": [
+      {
+        "DGUID": "2021S0512TEST0002",
+        "from": "aaa",
+        "to": "bbb"
+      },
+      {
+        "DGUID": "2021S0512TEST0001",
+        "from": "aaa",
+        "to": "bbb"
+      }
+    ]
+  },
+  "expect": "ok",
+  "canonical": {
+    "schema": "mcc-region-editor-proposal/v1",
+    "baseMembershipSha256": "0000000000000000000000000000000000000000000000000000000000000001",
+    "submittedBy": "Jane Doe",
+    "reason": "hello world",
+    "changes": [
+      {
+        "DGUID": "2021S0512TEST0001",
+        "from": "aaa",
+        "to": "bbb"
+      },
+      {
+        "DGUID": "2021S0512TEST0002",
+        "from": "aaa",
+        "to": "bbb"
+      }
+    ]
+  }
+}

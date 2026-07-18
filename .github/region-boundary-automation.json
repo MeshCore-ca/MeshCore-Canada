@@ -1,0 +1,10 @@
+{
+  "schema": "mcc-region-boundary-automation/v1",
+  "label": "boundary-update",
+  "repository": "MeshCore-ca/MeshCore-Canada",
+  "approvers": ["MrAlders0n", "n30nex"],
+  "submissionBots": [
+    "meshcore-canada-submissions[bot]",
+    "app/meshcore-canada-submissions"
+  ]
+}

@@ -1,1 +1,339 @@
-/* (home page community links use the built-in grid cards styling) */
+/* Home page community links use the built-in grid cards styling. */
+
+:root {
+  --submission-error-color: #b42318;
+  --submission-error-bg: rgb(180 35 24 / 8%);
+}
+
+[data-md-color-scheme="slate"] {
+  --submission-error-color: #ffb4ab;
+  --submission-error-bg: rgb(255 180 171 / 8%);
+}
+
+.submission-intro {
+  max-width: 48rem;
+  margin: 0 0 1.5rem;
+}
+
+.submission-intro > p:first-child {
+  margin-top: 0;
+  font-size: 1.02rem;
+  line-height: 1.65;
+}
+
+.submission-privacy {
+  margin: 1rem 0 0;
+  padding: 0.75rem 0.9rem;
+  border-left: 3px solid var(--md-default-fg-color--lighter);
+  background: var(--md-code-bg-color);
+  color: var(--md-default-fg-color--light);
+  font-size: 0.82rem;
+}
+
+.submission-privacy strong {
+  color: var(--md-default-fg-color);
+}
+
+.submission-form {
+  display: grid;
+  gap: 1.2rem;
+  margin: 1.5rem 0;
+  padding: clamp(1rem, 2.5vw, 1.5rem);
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 0.55rem;
+  background: var(--md-default-bg-color);
+}
+
+.submission-form__header {
+  padding-bottom: 0.2rem;
+}
+
+.submission-form__header h2 {
+  margin: 0 0 0.25rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.submission-form__header p {
+  margin: 0;
+  color: var(--md-default-fg-color--light);
+  font-size: 0.82rem;
+}
+
+.submission-form__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.submission-field {
+  display: grid;
+  align-content: start;
+  gap: 0.4rem;
+}
+
+.submission-field label,
+.submission-form legend {
+  color: var(--md-default-fg-color);
+  font-size: 0.84rem;
+  font-weight: 650;
+}
+
+.submission-no-script,
+.submission-github-note {
+  margin: 0;
+  padding: 0.75rem 0.9rem;
+  border-left: 3px solid var(--md-accent-fg-color);
+  background: var(--md-code-bg-color);
+  color: var(--md-default-fg-color);
+  font-size: 0.82rem;
+}
+
+.submission-form input,
+.submission-form select,
+.submission-form textarea {
+  box-sizing: border-box;
+  width: 100%;
+  border: 1px solid var(--md-default-fg-color--lighter);
+  border-radius: 0.4rem;
+  padding: 0.65rem 0.75rem;
+  background: var(--md-default-bg-color);
+  color: var(--md-default-fg-color);
+  font: inherit;
+}
+
+.submission-form input,
+.submission-form select {
+  min-height: 2.65rem;
+}
+
+.submission-form textarea {
+  min-height: 6rem;
+  line-height: 1.5;
+  resize: vertical;
+}
+
+.submission-form__grid--ideas textarea {
+  min-height: 9rem;
+}
+
+.submission-form input::placeholder,
+.submission-form textarea::placeholder {
+  color: var(--md-default-fg-color--lighter);
+  opacity: 1;
+}
+
+.submission-form input:focus-visible,
+.submission-form select:focus-visible,
+.submission-form textarea:focus-visible,
+.submission-form button:focus-visible,
+.submission-form a:focus-visible,
+.submission-optional summary:focus-visible,
+.submission-alternatives summary:focus-visible {
+  outline: 2px solid var(--md-accent-fg-color);
+  outline-offset: 2px;
+}
+
+.submission-optional {
+  padding: 0.85rem 0;
+  border-top: 1px solid var(--md-default-fg-color--lightest);
+  border-bottom: 1px solid var(--md-default-fg-color--lightest);
+}
+
+.submission-optional summary,
+.submission-alternatives summary {
+  cursor: pointer;
+  color: var(--md-default-fg-color);
+  font-weight: 700;
+}
+
+.submission-optional summary span {
+  margin-left: 0.35rem;
+  color: var(--md-default-fg-color--light);
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.submission-optional__body {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.submission-consent {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: start;
+  gap: 0.65rem;
+  padding: 0.8rem 0.9rem;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 0.4rem;
+  background: var(--md-code-bg-color);
+  font-size: 0.84rem;
+}
+
+.submission-consent input {
+  width: auto;
+  min-height: auto;
+  margin-top: 0.2rem;
+}
+
+.submission-trap {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.submission-review-action {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.submission-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.submission-review-action .md-button,
+.submission-actions .md-button {
+  margin: 0;
+}
+
+.submission-actions button,
+.submission-review-action button {
+  cursor: pointer;
+}
+
+.submission-actions button:disabled,
+.submission-actions .is-disabled {
+  cursor: not-allowed;
+  opacity: 0.48;
+  pointer-events: none;
+}
+
+.submission-form [hidden],
+.submission-alternatives[hidden] {
+  display: none !important;
+}
+
+.submission-verification {
+  display: grid;
+  gap: 0.45rem;
+  justify-items: start;
+  padding-top: 0.2rem;
+}
+
+.submission-turnstile {
+  min-height: 0;
+}
+
+.submission-anti-spam-status,
+.submission-status,
+.submission-result {
+  margin: 0;
+  color: var(--md-default-fg-color--light);
+  font-size: 0.8rem;
+}
+
+.submission-status:empty,
+.submission-anti-spam-status:empty,
+.submission-result:empty {
+  display: none;
+}
+
+.submission-anti-spam-status[data-state="success"],
+.submission-result[data-state="success"] {
+  color: var(--md-typeset-a-color);
+}
+
+.submission-anti-spam-status[data-state="error"] {
+  padding: 0.55rem 0.7rem;
+  border-left: 3px solid var(--submission-error-color);
+  background: var(--submission-error-bg);
+  color: var(--submission-error-color);
+}
+
+.submission-inline-retry {
+  padding: 0.35rem 0.65rem;
+  font-size: 0.75rem;
+}
+
+.submission-result:not(:empty) {
+  padding: 0.75rem 0.9rem;
+  border-left: 3px solid var(--md-accent-fg-color);
+  background: var(--md-code-bg-color);
+}
+
+.submission-result a {
+  font-weight: 700;
+}
+
+.submission-preview {
+  max-height: 22rem;
+  margin: 0;
+  padding: 0.9rem;
+  overflow: auto;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 0.4rem;
+  background: var(--md-code-bg-color);
+  font-size: 0.78rem;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.submission-alternatives {
+  margin: 1.25rem 0 2rem;
+  padding: 0.8rem 0;
+  border-top: 1px solid var(--md-default-fg-color--lightest);
+  border-bottom: 1px solid var(--md-default-fg-color--lightest);
+}
+
+.submission-alternatives p {
+  margin: 0.75rem 0 0;
+  color: var(--md-default-fg-color--light);
+  font-size: 0.84rem;
+}
+
+@media screen and (max-width: 52em) {
+  .submission-form__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .submission-form__grid--ideas textarea {
+    min-height: 7.5rem;
+  }
+}
+
+@media screen and (max-width: 44.9844em) {
+  .submission-form {
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .submission-review-action {
+    align-items: stretch;
+  }
+
+  .submission-review-action .md-button {
+    width: 100%;
+    text-align: center;
+  }
+
+  .submission-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .submission-actions .md-button {
+    width: 100%;
+    text-align: center;
+  }
+}

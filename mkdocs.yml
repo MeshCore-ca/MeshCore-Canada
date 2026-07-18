@@ -17,6 +17,20 @@ theme:
 
 extra_css:
   - stylesheets/extra.css
+  - assets/regions/regions.css
+
+extra_javascript:
+  - assets/regions/regions.js
+  - javascripts/submission-form.js
+
+plugins:
+  - search
+  - redirects:
+      redirect_maps:
+        regions/index.md: config/index.md
+        regions/setup.md: config/index.md
+        regions/map.md: config/map.md
+        regions/standard.md: config/standard.md
 
 markdown_extensions:
   - admonition
@@ -37,6 +51,7 @@ nav:
   - Welcome: index.md
   - Analyzer & MQTT:
       - Overview: analyzer/intro.md
+      - Data Collection & Access: analyzer/data-collection-access.md
       - Check Your Observer: analyzer/verify.md
       - Troubleshooting: analyzer/troubleshooting.md
       - Broker Reference: analyzer/broker-reference.md
@@ -65,7 +80,8 @@ nav:
           - MeshCore FAQ: meshcore/general-faq.md
           - MeshCore How-To: meshcore/general-howto.md
           - MeshCore Roles: meshcore/general-meshcore-roles.md
-      - Configuration:
+          - Repeater Configurator: /config/
+      - Firmware Guides:
           - Flashing a Companion:  meshcore/flash-companion.md
           - Flashing a Repeater: meshcore/flash-repeater.md
           - Updating a Repeater (OTA): meshcore/update-repeater-ota.md
@@ -91,4 +107,6 @@ nav:
       - Getting Started: resources/getting-started.md
       - Useful Links: resources/links.md
       - Glossary: resources/glossary.md
+  - Share an Idea: submit-idea.md
+  - Forum: https://forum.meshcore.ca/
   - Contributing: contributing.md

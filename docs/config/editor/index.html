@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="robots" content="noindex">
+  <meta name="meshcore-submission-endpoint" content="https://api.meshcore.ca:21323/api/meshcore-canada/submissions">
+  <link rel="icon" href="../../assets/images/favicon.png">
+  <title>Region boundary editor · MeshCore Canada</title>
+  <link rel="stylesheet" href="../../assets/regions/vendor/leaflet/leaflet.css">
+  <link rel="stylesheet" href="./editor.css">
+  <script defer src="../../assets/regions/vendor/leaflet/leaflet.js"></script>
+  <script type="module" src="./app.js"></script>
+</head>
+<body class="editor-page">
+  <header class="app-header">
+    <div class="brand-lockup">
+      <div class="brand-mark small" aria-hidden="true">MC</div>
+      <div>
+        <p class="eyebrow">MeshCore Canada</p>
+        <h1>Region boundary editor</h1>
+      </div>
+    </div>
+  </header>
+
+  <main class="editor-layout">
+    <aside class="editor-sidebar" aria-label="Boundary editing controls">
+      <section class="panel intro-panel">
+        <p class="step-label">Draft</p>
+        <h2>Adjust region boundaries</h2>
+        <p class="muted compact">Submit a boundary change for review. Nothing changes until merged.</p>
+      </section>
+
+      <section class="panel">
+        <h2>1. Choose an area</h2>
+        <label for="province-select">Province or territory</label>
+        <select id="province-select"></select>
+        <p id="load-status" class="status-line" role="status" aria-live="polite">Loading editor…</p>
+      </section>
+
+      <section class="panel">
+        <h2>2. Choose a region</h2>
+        <label for="target-select">Move selected cells to</label>
+        <select id="target-select" disabled>
+          <option value="">Choose a target region</option>
+        </select>
+        <div class="segmented" aria-label="Editing mode">
+          <button id="pan-mode" class="segment active" type="button" aria-pressed="true">Pan map</button>
+          <button id="paint-mode" class="segment" type="button" aria-pressed="false">Paint cells</button>
+        </div>
+        <p class="hint">Click a cell, or choose Paint and drag.</p>
+      </section>
+
+      <section class="panel selected-panel">
+        <h2>Selected cell</h2>
+        <dl id="cell-details" class="details-list">
+          <div><dt>Area</dt><dd>Select a cell on the map</dd></div>
+          <div><dt>Municipality</dt><dd>—</dd></div>
+          <div><dt>Current region</dt><dd>—</dd></div>
+          <div><dt>Region anchor</dt><dd>—</dd></div>
+        </dl>
+        <button id="municipality-button" class="button secondary full" type="button" disabled>Move entire municipality</button>
+      </section>
+
+      <section class="panel">
+        <div class="panel-title-row">
+          <h2>3. Review</h2>
+          <span id="change-count" class="count-badge">0 changes</span>
+        </div>
+        <div class="button-row">
+          <button id="undo-button" class="button quiet" type="button" disabled>Undo</button>
+          <button id="redo-button" class="button quiet" type="button" disabled>Redo</button>
+          <button id="clear-button" class="button quiet danger" type="button" disabled>Clear</button>
+        </div>
+        <div class="segmented" aria-label="Boundary comparison">
+          <button id="before-view" class="segment" type="button" aria-pressed="false">Before</button>
+          <button id="after-view" class="segment active" type="button" aria-pressed="true">After</button>
+        </div>
+        <label for="submitted-by">Submitted by <span class="optional">optional</span></label>
+        <input id="submitted-by" maxlength="80" autocomplete="name">
+        <label for="reason">Reason</label>
+        <textarea id="reason" maxlength="1000" rows="3" placeholder="Why should this cell move?" required></textarea>
+        <div class="submission-trap" aria-hidden="true">
+          <label for="website">Website</label>
+          <input id="website" name="website" tabindex="-1" autocomplete="off">
+        </div>
+        <div id="turnstile-container" class="turnstile-container" aria-label="Anti-spam check"></div>
+        <p id="anti-spam-status" class="anti-spam-status" role="status" aria-live="polite">Loading check…</p>
+        <button id="anti-spam-retry" class="inline-retry" type="button" hidden>Retry check</button>
+        <div id="validation-message" class="validation-message" role="status" aria-live="polite"></div>
+        <div id="submission-result" class="submission-result" role="status" aria-live="polite"></div>
+        <div class="proposal-actions">
+          <button id="submit-button" class="button primary full" type="button" disabled>Submit for review</button>
+          <button id="export-button" class="button secondary full" type="button" disabled>Download proposal</button>
+        </div>
+        <p class="hint">No account needed. Changes require review.</p>
+      </section>
+    </aside>
+
+    <section class="map-shell" aria-label="Region map editor">
+      <div class="map-toolbar">
+        <span id="map-heading">Canada</span>
+        <span class="map-help">Census cells · yellow means changed</span>
+      </div>
+      <div id="editor-map" role="application" aria-label="Interactive region boundary map"></div>
+      <div class="map-legend" aria-hidden="true">
+        <span><i class="legend-swatch current"></i> Current region</span>
+        <span><i class="legend-swatch changed"></i> Proposed change</span>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

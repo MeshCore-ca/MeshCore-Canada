@@ -1,0 +1,16 @@
+{
+  "name": "reason containing a control character is rejected",
+  "proposal": {
+    "schema": "mcc-region-editor-proposal/v1",
+    "baseMembershipSha256": "0000000000000000000000000000000000000000000000000000000000000001",
+    "reason": "Bad\u0007Reason",
+    "changes": [
+      {
+        "DGUID": "2021S0512TEST0001",
+        "from": "aaa",
+        "to": "bbb"
+      }
+    ]
+  },
+  "expect": "bad-reason"
+}

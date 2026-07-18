@@ -1,0 +1,10 @@
+{
+  "name": "DGUID not present in membership is rejected",
+  "proposal": {
+    "schema": "mcc-region-editor-proposal/v1",
+    "baseMembershipSha256": "0000000000000000000000000000000000000000000000000000000000000001",
+    "reason": "test",
+    "changes": [{"DGUID": "2021S0512TEST9999", "from": "aaa", "to": "bbb"}]
+  },
+  "expect": "unknown-dguid"
+}

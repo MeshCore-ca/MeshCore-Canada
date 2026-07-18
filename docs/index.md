@@ -53,6 +53,14 @@ Whether you're brand new to mesh networking or looking to deploy repeaters acros
 
     [:octicons-arrow-right-24: Overview](analyzer/intro.md)
 
+-   :material-map-search:{ .lg .middle } **Canadian Regions**
+
+    ---
+
+    Find the right region for a repeater, follow the setup guide, or explore the map.
+
+    [:octicons-arrow-right-24: Open Config](config/index.md)
+
 -   :material-map-marker-radius:{ .lg .middle } **Mesh Directory**
 
     ---
@@ -77,7 +85,7 @@ Whether you're brand new to mesh networking or looking to deploy repeaters acros
 
 We are a group of Canadian meshes across the country from British Columbia, Alberta, Ontario, and Quebec (hopefully more soon) that are working together to bring services and standards across Canada for all MeshCore users. We host MQTT servers and a packet analyzer at this site for all Canadians to use.
 
-The servers and services are currently managed by **MrAlders0n**, **Ded**, and **n30nex**.
+The servers and services are currently managed by [**Mr. Alderson**](https://github.com/MrAlders0n), [**Ded**](https://github.com/446564), [**n30nex**](https://github.com/n30nex), and [**Kranic**](https://forum.meshcore.ca/u/djkranic).
 
 The documentation on this site is open to all to contribute to and is backed by markdown files in GitHub at [MeshCore-ca/MeshCore-Canada](https://github.com/MeshCore-ca/MeshCore-Canada).
 
@@ -85,4 +93,6 @@ The documentation on this site is open to all to contribute to and is backed by 
 
 ## Want to Contribute?
 
-This site is community-driven. If you want to add your local mesh, fix a typo, or contribute a build guide, check out the [Contributing](contributing.md) page.
+This site is community-driven. You do not need to know Git, have a GitHub account, or understand MeshCore terminology to help. Use the [Share an Idea](submit-idea.md) page to describe what you noticed or what would make the project better. After you review it, the page can create a public review issue automatically. Forum, Discord, copy, and manual GitHub options remain available.
+
+Experienced contributors can still use the [Contributing](contributing.md) page for issue templates and pull requests.

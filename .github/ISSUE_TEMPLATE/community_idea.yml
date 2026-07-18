@@ -1,0 +1,102 @@
+name: Share a Community Idea
+description: Suggest an improvement or report a problem.
+title: "[Community idea] "
+labels: ["enhancement"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Share an idea or report a problem.
+        Do not include passwords, keys, addresses, or private coordinates.
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Contribution type
+      description: Choose the closest match.
+      options:
+        - Newcomer or accessibility improvement
+        - Documentation correction
+        - Hardware or build-guide idea
+        - Regional community information
+        - Network tool or service idea
+        - Feature or project idea
+        - Other community feedback
+    validations:
+      required: true
+
+  - type: dropdown
+    id: experience
+    attributes:
+      label: MeshCore experience
+      options:
+        - Brand new / researching
+        - Setting up my first node
+        - Active mesh user
+        - Repeater, room server, or observer operator
+        - Developer or documentation contributor
+    validations:
+      required: true
+
+  - type: input
+    id: summary
+    attributes:
+      label: Short title
+      description: Briefly name the idea.
+      placeholder: Add a repeater checklist
+    validations:
+      required: true
+
+  - type: input
+    id: region
+    attributes:
+      label: City or broad region
+      description: Optional. No exact addresses.
+      placeholder: Waterloo Region, Ontario
+
+  - type: textarea
+    id: need
+    attributes:
+      label: What is difficult now?
+      description: What happened?
+      placeholder: I could not find...
+    validations:
+      required: true
+
+  - type: textarea
+    id: idea
+    attributes:
+      label: What would help?
+      description: What should change?
+      placeholder: Add...
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Optional device, app, page, or details.
+
+  - type: input
+    id: follow_up
+    attributes:
+      label: Public username or profile for follow-up
+      description: Optional public username. No email.
+      placeholder: "@meshfriend on Discord"
+
+  - type: input
+    id: source_page
+    attributes:
+      label: Source page
+      description: Page that opened this form.
+      value: https://meshcore.ca/submit-idea/
+
+  - type: checkboxes
+    id: public
+    attributes:
+      label: Public
+      options:
+        - label: This can be posted publicly and contains no private information.
+          required: true

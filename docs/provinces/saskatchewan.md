@@ -1,17 +1,18 @@
 # MeshCore Communities in Saskatchewan
 
-This page is ready for Saskatchewan MeshCore community listings.
+This page lists MeshCore communities in Saskatchewan.
 
-## Current Status
+If you know of a community that is missing or needs an update, open an update request through [Contributing](../contributing.md).
 
-No Saskatchewan community listing has been submitted yet.
+## Communities
 
-If you operate or know of a Saskatchewan MeshCore group, open an update request through [Contributing](../contributing.md) with the community name, region, status, contact link, and radio settings.
+### StoonMesh
 
-## Default Settings
-
-| Setting | Value |
-|---------|-------|
+| Field | Value |
+|-------|-------|
+| Region | Central Saskatchewan |
+| Status | Active |
 | Radio preset | `USA/Canada (Recommended)` |
 | Raw radio values | `910.525 MHz / 62.5 kHz / SF7 / CR5` |
-| Path hash mode | `3-byte` |
+| Path hash mode | `1-byte` |
+| Discord | <https://discord.gg/7yGnJuMGkG> |

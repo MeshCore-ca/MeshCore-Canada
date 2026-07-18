@@ -1,0 +1,12 @@
+{
+  "baseMembershipSha256": "0000000000000000000000000000000000000000000000000000000000000001",
+  "membership": {
+    "2021S0512TEST0001": {"leaf_tag": "aaa", "PRUID": "35"},
+    "2021S0512TEST0002": {"leaf_tag": "aaa", "PRUID": "35"},
+    "2021S0512TEST0003": {"leaf_tag": "bbb", "PRUID": "35"},
+    "2021S0512TEST0004": {"leaf_tag": "ccc", "PRUID": "59"}
+  },
+  "leafTags": ["aaa", "bbb", "ccc"],
+  "leafProvinces": {"aaa": ["35"], "bbb": ["35"], "ccc": ["59"]},
+  "seedTags": {"2021S0512TEST0003": "bbb"}
+}

@@ -1,1 +1,8 @@
 blank_issues_enabled: false
+contact_links:
+  - name: Share an idea without GitHub experience
+    url: https://meshcore.ca/submit-idea/
+    about: Use the community submission helper and choose GitHub, forum, or Discord.
+  - name: Ask the community forum
+    url: https://forum.meshcore.ca/
+    about: Start a discussion or ask for help from other MeshCore users.

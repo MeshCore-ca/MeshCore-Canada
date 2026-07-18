@@ -1,0 +1,13 @@
+# Copy this file outside the repository to
+# /etc/meshcore-submissions/environment and replace the placeholders.
+# These values are identifiers or public configuration. The GitHub App PEM and
+# Turnstile secret remain separate files and must never be placed here.
+
+MCC_REPO_ROOT=/opt/meshcore-canada
+SUBMISSION_STATE_DIR=/var/lib/meshcore-submissions
+SUBMISSION_SECRET_DIR=/etc/meshcore-submissions
+SUBMISSION_IMAGE_TAG=production
+
+TURNSTILE_SITE_KEY=replace-with-public-site-key
+GITHUB_APP_CLIENT_ID=Iv1.replace-me
+GITHUB_APP_INSTALLATION_ID=12345678

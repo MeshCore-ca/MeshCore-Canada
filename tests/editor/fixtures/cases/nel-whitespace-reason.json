@@ -1,0 +1,22 @@
+{
+  "name": "reason with U+0085 next-line whitespace matches server normalization",
+  "proposal": {
+    "schema": "mcc-region-editor-proposal/v1",
+    "baseMembershipSha256": "0000000000000000000000000000000000000000000000000000000000000001",
+    "submittedBy": "Local\u0085operator",
+    "reason": "These\u0085cells belong together.",
+    "changes": [
+      { "DGUID": "2021S0512TEST0001", "from": "aaa", "to": "bbb" }
+    ]
+  },
+  "expect": "ok",
+  "canonical": {
+    "schema": "mcc-region-editor-proposal/v1",
+    "baseMembershipSha256": "0000000000000000000000000000000000000000000000000000000000000001",
+    "submittedBy": "Local operator",
+    "reason": "These cells belong together.",
+    "changes": [
+      { "DGUID": "2021S0512TEST0001", "from": "aaa", "to": "bbb" }
+    ]
+  }
+}

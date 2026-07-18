@@ -1,0 +1,12 @@
+{
+  "name": "reason containing an unpaired Unicode surrogate is rejected",
+  "proposal": {
+    "schema": "mcc-region-editor-proposal/v1",
+    "baseMembershipSha256": "0000000000000000000000000000000000000000000000000000000000000001",
+    "reason": "Invalid \ud800 text",
+    "changes": [
+      { "DGUID": "2021S0512TEST0001", "from": "aaa", "to": "bbb" }
+    ]
+  },
+  "expect": "bad-reason"
+}
