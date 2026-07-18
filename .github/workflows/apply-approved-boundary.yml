@@ -83,7 +83,9 @@ jobs:
 
       - name: Install region generator dependencies
         if: steps.apply.outputs.already_applied != 'true'
-        run: python -m pip install -r scripts/requirements-regions.txt
+        run: |
+          python -m pip install -r scripts/requirements-regions.txt
+          python -m pip install -r tools/region-proposal-gateway/requirements.txt
 
       - name: Regenerate the national partition
         if: steps.apply.outputs.already_applied != 'true'

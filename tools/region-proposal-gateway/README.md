@@ -14,9 +14,9 @@ https://api.meshcore.ca:21323/api/meshcore-canada/submissions
 
 The service never changes repository contents or region authority. It creates
 fixed-format issues in `MeshCore-ca/MeshCore-Canada`. Boundary proposals also
-receive `boundary-update`; after public review, a repository-owned GitHub
-Action applies only a proposal closed as **Completed** by an allowlisted
-maintainer.
+receive `boundary-update` and an App-authored PNG preview comment; after public
+review, a repository-owned GitHub Action applies only a proposal closed as
+**Completed** by an allowlisted maintainer.
 
 See the repository-root [`instructions.md`](../../instructions.md) for the
 copyable administrator activation, merge, verification, and rollback runbook.
@@ -36,6 +36,9 @@ The base path is `/api/meshcore-canada/submissions`.
   ```json
   {"version":1,"submission":{...},"turnstileToken":"...","website":""}
   ```
+
+- `GET <base>/previews/<submission-sha256>.png` serves the immutable,
+  server-generated boundary preview referenced by the GitHub issue comment.
 
 - Success returns:
 
@@ -84,6 +87,13 @@ fails closed. Large canonical boundary payloads use deterministic gzip plus
 base64url issue-comment chunks; retries resume only missing valid chunks. The
 canonical boundary payload is stored in machine-readable HTML comments instead
 of adding a large JSON block to the public review text.
+
+After validation, the gateway renders a deterministic two-panel **Current /
+Proposed** PNG from the exact per-province census-cell TopoJSON. It uses no
+external map tiles or contributor-controlled URLs. The image is marked
+**Preview - not approved**, stored immutably under the proposal hash, and
+served from the existing API path. The GitHub App posts one visible image
+comment; retries restore a missing comment without duplicating it.
 
 ## GitHub App and Turnstile
 
@@ -142,7 +152,8 @@ public listener: api.meshcore.ca:21323 (Caddy)
 `compose.example.yml` uses host networking so a non-root UID/GID `10001`
 container can bind only to loopback. It has a read-only root filesystem,
 dropped capabilities, resource and log limits, read-only authority/secret
-mounts, and one writable SQLite state mount.
+mounts, and one writable state mount. That mount holds the SQLite ledger and
+immutable preview PNGs under `previews/`.
 
 Copy `environment.example` to `/etc/meshcore-submissions/environment`. Keep
 the Turnstile secret and GitHub App PEM in separate mode-`0600` files owned by
@@ -195,13 +206,16 @@ curl -si -X OPTIONS \
   -H 'Access-Control-Request-Headers: content-type' \
   "$API"
 curl -si -H 'Origin: https://example.invalid' "$API/config"
+MISSING_PREVIEW="$(printf '0%.0s' {1..64})"
+curl -si "$API/previews/$MISSING_PREVIEW.png"
 ```
 
 Expect HTTP 200 config, action `meshcore_submission`, exact allowed-origin
 CORS, HTTP 204 preflight, and denial without an allow-origin header for the
-invalid origin. The root runbook requires the branch deployment to pass before
-the reviewed pull request is merged, followed by signed-out live tests of both
-forms and a not-planned boundary rejection test.
+invalid origin. The unknown preview must return HTTP 404. The root runbook
+requires the branch deployment to pass before the reviewed pull request is
+merged, followed by signed-out live tests of both forms and a not-planned
+boundary rejection test.
 
 ## Idempotency, recovery, and backups
 
@@ -212,9 +226,10 @@ a GitHub search result only when both markers match, preventing a public user
 from forging an idempotency match.
 
 After GitHub returns `201`, the issue number and URL are persisted before any
-chunk comments. A retry with a `created` row returns the same issue and resumes
-missing chunks. A retry with only a `pending` row searches GitHub and fails
-closed while search indexing catches up; it never blindly creates a duplicate.
+comments. A retry with a `created` row returns the same issue and resumes a
+missing exact preview comment or payload chunks. A retry with only a `pending`
+row searches GitHub and fails closed while search indexing catches up; it never
+blindly creates a duplicate.
 
 For migration or manual ledger work:
 
@@ -224,6 +239,9 @@ For migration or manual ledger work:
 4. Change only a proven orphaned `pending` row.
 5. Never delete a confirmed `created` row.
 
+Do not prune a preview PNG while its issue may still be viewed. Preview URLs
+are immutable and intentionally remain valid for the issue history.
+
 Keep the host checkout synchronized with each published region-data release.
 Rotate App and Turnstile keys through protected files, restart, and verify both
 flows before revoking old credentials. Never log request bodies, contributor
@@ -231,9 +249,11 @@ text, Turnstile tokens, App tokens, or secrets.
 
 ## Tests
 
-No live credentials or third-party Python packages are required:
+No live credentials are required. Install the pinned renderer dependency, then
+run:
 
 ```sh
+python -m pip install -r tools/region-proposal-gateway/requirements.txt
 python -m unittest discover -s tools/region-proposal-gateway/tests -v
 python -m unittest discover -s tests/automation -v
 node --test tests/editor/*.test.mjs
@@ -243,6 +263,7 @@ python scripts/validate_community_submission.py
 The suites cover both schemas, authority reload, canonical hashes, exact
 CORS/HTTP behavior, Turnstile hostname/action checks, least-privilege App
 tokens, safe issue rendering, idempotency, URL validation, and resumable
-large-payload comments. The automation suite also covers approval gates,
-signature-bound payload extraction, source locking, safe archive extraction,
-and complete CSD/split decision recording.
+large-payload comments. They also cover deterministic PNG rendering, immutable
+storage, public cache headers, and retry-safe preview comments. The automation
+suite covers approval gates, signature-bound payload extraction, source
+locking, safe archive extraction, and complete CSD/split decision recording.

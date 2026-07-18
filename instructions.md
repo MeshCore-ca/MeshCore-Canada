@@ -34,6 +34,7 @@ meshcore.ca/config/editor/     boundary proposal (static GitHub Pages editor)
               | HTTPS POST, Turnstile token, no GitHub login
               v
 api.meshcore.ca:21323/api/meshcore-canada/submissions
+              | validate cells, save PNG preview, create issue/comment
               | short-lived repository-restricted installation token
               v
 MeshCore Canada GitHub App -> MeshCore-ca/MeshCore-Canada issue
@@ -49,7 +50,8 @@ The API accepts two strict schemas:
 
 - `mcc-community-idea/v1` creates a public community-idea issue.
 - `mcc-region-editor-proposal/v1` revalidates the proposed census-cell moves
-  against the mounted region authority, then creates a public boundary issue.
+  against the mounted region authority, creates a current/proposed PNG, then
+  creates a public boundary issue with the preview in an App-authored comment.
 
 The public service creates issues only. It has no Contents permission and
 cannot make a boundary live. A separate repository-owned GitHub Action applies
@@ -231,8 +233,9 @@ configuration. Do not overwrite unrelated sites. It terminates TLS at:
 https://api.meshcore.ca:21323
 ```
 
-and proxies only `/api/meshcore-canada/submissions` and its `/config` child to
-`127.0.0.1:8787`. Validate and reload:
+and proxies only `/api/meshcore-canada/submissions` and its children
+(`/config` and immutable `/previews/...png`) to `127.0.0.1:8787`. Validate and
+reload:
 
 ```sh
 sudo caddy validate --config /etc/caddy/Caddyfile --adapter caddyfile
@@ -264,6 +267,9 @@ curl -si -X OPTIONS \
 curl -si \
   -H 'Origin: https://example.invalid' \
   "$API/config"
+
+MISSING_PREVIEW="$(printf '0%.0s' {1..64})"
+curl -si "$API/previews/$MISSING_PREVIEW.png"
 ```
 
 Required evidence:
@@ -275,6 +281,7 @@ Required evidence:
   `Access-Control-Allow-Origin: https://meshcore.ca`.
 - OPTIONS returns HTTP 204 and allows `POST` plus `Content-Type`.
 - The invalid origin is denied and receives no allow-origin header.
+- The unknown preview returns HTTP 404 and no CORS header.
 - Public port `8787` remains unreachable.
 
 Do not merge until these checks pass.
@@ -376,7 +383,12 @@ Use a signed-out private browser.
 4. Complete Turnstile and select **Submit for review**.
 5. Confirm the App-created issue has `enhancement` and `boundary-update`
    labels, a readable summary, and signed submission markers.
-6. Choose **Close as not planned** and confirm no boundary commit is created.
+6. Confirm the App posts one **Boundary preview** comment, the PNG renders
+   directly in GitHub, and it clearly shows **Current**, **Proposed**, and
+   **Preview - not approved**.
+7. Open the image URL and confirm it is under
+   `api.meshcore.ca:21323/api/meshcore-canada/submissions/previews/`.
+8. Choose **Close as not planned** and confirm no boundary commit is created.
 
 Both pages must retain their copy/download or manual fallback when the API is
 unavailable. Neither flow should request a GitHub login for direct submission.
@@ -403,7 +415,9 @@ curl -fsS http://127.0.0.1:8787/healthz
 - To roll back an approved boundary, revert its `Apply boundary update #N`
   commit. The source decision and every generated artifact are in that commit.
 - Before migration or ledger maintenance, stop the gateway and back up
-  `/var/lib/meshcore-submissions`. Never delete a confirmed `created` row.
+  `/var/lib/meshcore-submissions`. This includes the ledger and issue preview
+  PNGs. Never delete a confirmed `created` row or a preview referenced by an
+  issue.
 - If a row remains `pending`, audit GitHub for its signed hash before changing
   the ledger; search indexing is eventually consistent.
 - Rotate the GitHub App PEM by installing a new key, restarting and testing,
@@ -438,5 +452,7 @@ curl -fsS http://127.0.0.1:8787/healthz
 - [ ] The reviewed pull request is merged and GitHub Pages publishes
       successfully.
 - [ ] Signed-out idea and boundary submissions each create a test issue.
+- [ ] The boundary issue has one App-authored Current/Proposed PNG comment and
+      its immutable image URL loads without GitHub authentication.
 - [ ] The boundary test is closed as not planned; no test boundary is applied.
 - [ ] Production checkout is on clean `main` and the ledger is backed up.

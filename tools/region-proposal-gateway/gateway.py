@@ -36,9 +36,12 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Any, Callable, Mapping, Protocol
 
+from boundary_preview import PNG_SIGNATURE, PreviewRenderError, render_boundary_preview
+
 
 API_VERSION = 1
 DEFAULT_BASE_PATH = "/api/meshcore-canada/submissions"
+DEFAULT_PUBLIC_BASE_URL = "https://api.meshcore.ca:21323" + DEFAULT_BASE_PATH
 PROPOSAL_SCHEMA = "mcc-region-editor-proposal/v1"
 IDEA_SCHEMA = "mcc-community-idea/v1"
 TURNSTILE_ACTION = "meshcore_submission"
@@ -58,6 +61,7 @@ COMMENTS_PAGE_SIZE = 20
 MAX_COMMENT_PAGES = 100
 MAX_ISSUE_BODY_BYTES = 65_000
 MAX_MOVE_SUMMARY = 100
+MAX_PREVIEW_BYTES = 4 * 1024 * 1024
 
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 DGUID_RE = re.compile(r"^[A-Za-z0-9-]{8,64}$")
@@ -65,6 +69,7 @@ TAG_RE = re.compile(r"^[a-z0-9][a-z0-9-]{0,31}$")
 CHUNK_MARKER_RE = re.compile(
     r"<!-- mcc-submission-chunk:([0-9a-f]{64}):(\d{1,3})/(\d{1,3}) -->"
 )
+PREVIEW_MARKER_RE = re.compile(r"<!-- mcc-boundary-preview:([0-9a-f]{64}) -->")
 JS_WHITESPACE_RE = re.compile(
     r"[\x09-\x0d\x1c-\x20\x85\xa0\u1680\u2000-\u200a\u2028\u2029\u202f\u205f\u3000\ufeff]+"
 )
@@ -255,6 +260,7 @@ class AuthoritySnapshot:
     leaves: frozenset[str]
     leaf_jurisdictions: Mapping[str, str]
     seed_tags: Mapping[str, str]
+    topology_sha256: Mapping[str, str]
 
 
 class AuthorityCache:
@@ -303,6 +309,23 @@ class AuthorityCache:
                     return snapshot
             raise RuntimeError("mounted authority data changed repeatedly while loading")
 
+    def topology(self, snapshot: AuthoritySnapshot, pruid: str) -> object:
+        """Read exactly the province topology validated into this snapshot."""
+        expected_hash = snapshot.topology_sha256.get(pruid)
+        if expected_hash is None or pruid not in PR_TO_TAG:
+            raise RuntimeError("preview jurisdiction is not part of the authority snapshot")
+        path = self.cells_dir / f"cells-{pruid}.topo.json"
+        try:
+            raw = path.read_bytes()
+        except OSError as exc:
+            raise RuntimeError("preview authority is unavailable") from exc
+        if not hmac.compare_digest(_sha256(raw), expected_hash):
+            raise RuntimeError("preview authority changed after proposal validation")
+        try:
+            return json.loads(raw.decode("utf-8"))
+        except (UnicodeError, json.JSONDecodeError) as exc:
+            raise RuntimeError("preview authority is invalid") from exc
+
     def _load(self) -> AuthoritySnapshot:
         membership_bytes = self.membership_path.read_bytes()
         try:
@@ -343,9 +366,11 @@ class AuthorityCache:
         seen: set[str] = set()
         seed_tags: dict[str, str] = {}
         seed_counts: Counter[str] = Counter()
+        topology_hashes: dict[str, str] = {}
         for filename in sorted(expected_files):
             try:
-                topology = json.loads(actual_paths[filename].read_text(encoding="utf-8"))
+                topology_bytes = actual_paths[filename].read_bytes()
+                topology = json.loads(topology_bytes.decode("utf-8"))
                 geometries = topology["objects"]["cells"]["geometries"]
             except (OSError, UnicodeError, json.JSONDecodeError, KeyError, TypeError) as exc:
                 raise RuntimeError("a per-province TopoJSON file is invalid") from exc
@@ -369,6 +394,7 @@ class AuthorityCache:
                         raise RuntimeError("TopoJSON contains an invalid seed_tag")
                     seed_tags[dguid] = seed
                     seed_counts[seed] += 1
+            topology_hashes[file_pruid] = _sha256(topology_bytes)
         if seen != set(membership):
             raise RuntimeError("TopoJSON and membership DGUID sets differ")
         if set(seed_counts) != leaves or any(count != 1 for count in seed_counts.values()):
@@ -380,6 +406,7 @@ class AuthorityCache:
             leaves=frozenset(leaves),
             leaf_jurisdictions=jurisdictions,
             seed_tags=seed_tags,
+            topology_sha256=topology_hashes,
         )
 
     @staticmethod
@@ -699,6 +726,119 @@ class ProposalLedger:
             raise UpstreamError("ledger_failed") from exc
 
 
+class PreviewStore:
+    """Immutable proposal-hash-addressed PNG storage on the durable state mount."""
+
+    def __init__(self, root: Path, public_base_url: str, base_path: str):
+        parsed = urllib.parse.urlsplit(public_base_url)
+        if (
+            parsed.scheme != "https"
+            or not parsed.netloc
+            or parsed.username is not None
+            or parsed.password is not None
+            or parsed.path != base_path
+            or parsed.query
+            or parsed.fragment
+            or public_base_url.endswith("/")
+        ):
+            raise RuntimeError("PUBLIC_BASE_URL must be the exact public HTTPS base path")
+        self.root = root
+        self.public_base_url = public_base_url
+        try:
+            root.mkdir(parents=True, exist_ok=True, mode=0o700)
+            metadata = root.lstat()
+        except OSError as exc:
+            raise RuntimeError("the preview directory cannot be initialized") from exc
+        if (
+            stat.S_ISLNK(metadata.st_mode)
+            or not stat.S_ISDIR(metadata.st_mode)
+            or os.name != "nt" and stat.S_IMODE(metadata.st_mode) & 0o077
+        ):
+            raise RuntimeError("the preview path is not a directory")
+
+    @staticmethod
+    def _validate_payload(payload: bytes) -> None:
+        if (
+            not isinstance(payload, bytes)
+            or len(payload) <= len(PNG_SIGNATURE)
+            or len(payload) > MAX_PREVIEW_BYTES
+            or not payload.startswith(PNG_SIGNATURE)
+        ):
+            raise RuntimeError("the generated preview PNG is invalid")
+
+    def _path(self, proposal_hash: str) -> Path:
+        if not SHA256_RE.fullmatch(proposal_hash):
+            raise RuntimeError("the preview hash is invalid")
+        return self.root / f"{proposal_hash}.png"
+
+    def url(self, proposal_hash: str) -> str:
+        self._path(proposal_hash)
+        return f"{self.public_base_url}/previews/{proposal_hash}.png"
+
+    def put(self, proposal_hash: str, payload: bytes) -> str:
+        self._validate_payload(payload)
+        destination = self._path(proposal_hash)
+        if destination.exists():
+            existing = self.get(proposal_hash)
+            if existing is None:
+                raise RuntimeError("the existing preview is unavailable")
+            return self.url(proposal_hash)
+        temporary = self.root / f".{proposal_hash}.{secrets.token_hex(8)}.tmp"
+        try:
+            descriptor = os.open(temporary, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+            with os.fdopen(descriptor, "wb") as stream:
+                stream.write(payload)
+                stream.flush()
+                os.fsync(stream.fileno())
+            try:
+                os.replace(temporary, destination)
+            except OSError:
+                # A concurrent retry may have installed the same immutable key.
+                if not destination.exists():
+                    raise
+            if os.name != "nt":
+                directory_descriptor = os.open(
+                    self.root, os.O_RDONLY | getattr(os, "O_DIRECTORY", 0)
+                )
+                try:
+                    os.fsync(directory_descriptor)
+                finally:
+                    os.close(directory_descriptor)
+            stored = self.get(proposal_hash)
+            if stored is None:
+                raise RuntimeError("the preview could not be persisted")
+        except OSError as exc:
+            raise RuntimeError("the preview could not be persisted") from exc
+        finally:
+            try:
+                temporary.unlink(missing_ok=True)
+            except OSError:
+                pass
+        return self.url(proposal_hash)
+
+    def get(self, proposal_hash: str) -> bytes | None:
+        path = self._path(proposal_hash)
+        try:
+            metadata = path.lstat()
+        except FileNotFoundError:
+            return None
+        except OSError as exc:
+            raise RuntimeError("the preview cannot be read") from exc
+        if (
+            stat.S_ISLNK(metadata.st_mode)
+            or not stat.S_ISREG(metadata.st_mode)
+            or metadata.st_size <= len(PNG_SIGNATURE)
+            or metadata.st_size > MAX_PREVIEW_BYTES
+        ):
+            raise RuntimeError("the stored preview is invalid")
+        try:
+            payload = path.read_bytes()
+        except OSError as exc:
+            raise RuntimeError("the preview cannot be read") from exc
+        self._validate_payload(payload)
+        return payload
+
+
 class GitHubAppClient:
     def __init__(
         self, transport: JsonTransport, signer: OpenSSLSigner, client_id: str,
@@ -813,11 +953,16 @@ class GitHubAppClient:
                 return issue
         return None
 
-    def submit(self, canonical: dict[str, Any], canonical_bytes: bytes, proposal_hash: str) -> dict[str, Any]:
+    def submit(
+        self, canonical: dict[str, Any], canonical_bytes: bytes, proposal_hash: str,
+        *, preview_url: str | None = None,
+    ) -> dict[str, Any]:
         with self._mutation_lock:
             schema = canonical.get("schema")
             if schema not in {PROPOSAL_SCHEMA, IDEA_SCHEMA}:
                 raise UpstreamError("unsupported_submission_schema")
+            if preview_url is not None and schema != PROPOSAL_SCHEMA:
+                raise UpstreamError("unexpected_boundary_preview")
             submission_signature = self._submission_signature(schema, proposal_hash)
             title, issue_body, chunked = build_issue(
                 canonical, canonical_bytes, proposal_hash, submission_signature
@@ -871,10 +1016,16 @@ class GitHubAppClient:
                 # Persist immediately after GitHub confirms creation, before any
                 # optional comment writes.  Retries can then resume safely.
                 self._record_issue(proposal_hash, issue)
+            preview_posted = False
+            if preview_url is not None:
+                preview_posted = self._resume_preview(
+                    int(issue["number"]), proposal_hash, preview_url,
+                    len(canonical["changes"]), delay_before_first=not duplicate,
+                )
             if chunked:
                 self._resume_chunks(
                     int(issue["number"]), canonical_bytes, proposal_hash,
-                    delay_before_first=not duplicate,
+                    delay_before_first=preview_posted or not duplicate,
                 )
             issue_url = issue.get("html_url")
             if not _valid_issue_url(issue_url, int(issue["number"])):
@@ -894,6 +1045,46 @@ class GitHubAppClient:
             raise UpstreamError()
         self.ledger.mark_created(proposal_hash, int(number), issue_url, int(self.now()))
 
+    def _comment_bodies(self, issue_number: int) -> list[str]:
+        bodies: list[str] = []
+        page = 1
+        while True:
+            status, _, result = self._call(
+                "GET", f"/repos/{GITHUB_OWNER}/{GITHUB_REPO}/issues/{issue_number}/comments?per_page={COMMENTS_PAGE_SIZE}&page={page}"
+            )
+            if status != 200 or not isinstance(result, list):
+                raise UpstreamError()
+            bodies.extend(
+                str(comment.get("body", ""))
+                for comment in result
+                if isinstance(comment, dict)
+            )
+            if len(result) < COMMENTS_PAGE_SIZE:
+                return bodies
+            page += 1
+            if page > MAX_COMMENT_PAGES:
+                raise UpstreamError()
+
+    def _resume_preview(
+        self, issue_number: int, proposal_hash: str, preview_url: str,
+        change_count: int, *, delay_before_first: bool,
+    ) -> bool:
+        expected = build_preview_comment(proposal_hash, preview_url, change_count)
+        for body in self._comment_bodies(issue_number):
+            match = PREVIEW_MARKER_RE.search(body)
+            if match and match.group(1) == proposal_hash and body == expected:
+                return False
+        if delay_before_first:
+            self.sleep(1.0)
+        status, _, result = self._call(
+            "POST",
+            f"/repos/{GITHUB_OWNER}/{GITHUB_REPO}/issues/{issue_number}/comments",
+            {"body": expected},
+        )
+        if status != 201 or not isinstance(result, dict):
+            raise UpstreamError()
+        return True
+
     def _resume_chunks(
         self, issue_number: int, canonical_bytes: bytes, proposal_hash: str,
         *, delay_before_first: bool,
@@ -908,25 +1099,12 @@ class GitHubAppClient:
             for index, chunk in enumerate(chunks, 1)
         }
         existing: set[int] = set()
-        page = 1
-        while True:
-            status, _, result = self._call(
-                "GET", f"/repos/{GITHUB_OWNER}/{GITHUB_REPO}/issues/{issue_number}/comments?per_page={COMMENTS_PAGE_SIZE}&page={page}"
-            )
-            if status != 200 or not isinstance(result, list):
-                raise UpstreamError()
-            for comment in result:
-                body = str(comment.get("body", "")) if isinstance(comment, dict) else ""
-                match = CHUNK_MARKER_RE.search(body)
-                if match and match.group(1) == proposal_hash and int(match.group(3)) == len(chunks):
-                    index = int(match.group(2))
-                    if expected_bodies.get(index) == body:
-                        existing.add(index)
-            if len(result) < COMMENTS_PAGE_SIZE:
-                break
-            page += 1
-            if page > MAX_COMMENT_PAGES:
-                raise UpstreamError()
+        for body in self._comment_bodies(issue_number):
+            match = CHUNK_MARKER_RE.search(body)
+            if match and match.group(1) == proposal_hash and int(match.group(3)) == len(chunks):
+                index = int(match.group(2))
+                if expected_bodies.get(index) == body:
+                    existing.add(index)
         posted = False
         for index, chunk in enumerate(chunks, 1):
             if index in existing:
@@ -946,6 +1124,31 @@ class GitHubAppClient:
 def build_chunk_comment(proposal_hash: str, index: int, total: int, chunk: str) -> str:
     marker = f"<!-- mcc-submission-chunk:{proposal_hash}:{index}/{total} -->"
     return f"{marker}\n<!-- submission-payload-chunk-gzip-base64url:{chunk} -->\n"
+
+
+def build_preview_comment(proposal_hash: str, preview_url: str, change_count: int) -> str:
+    if not SHA256_RE.fullmatch(proposal_hash) or not _is_int(change_count) or change_count <= 0:
+        raise UpstreamError("invalid_boundary_preview")
+    parsed = urllib.parse.urlsplit(preview_url)
+    expected_path = f"/previews/{proposal_hash}.png"
+    if (
+        parsed.scheme != "https"
+        or not parsed.netloc
+        or parsed.username is not None
+        or parsed.password is not None
+        or not parsed.path.endswith(expected_path)
+        or parsed.query
+        or parsed.fragment
+    ):
+        raise UpstreamError("invalid_boundary_preview")
+    cell_text = f"{change_count:,} census cell{'s' if change_count != 1 else ''}"
+    return (
+        f"<!-- mcc-boundary-preview:{proposal_hash} -->\n"
+        "## Boundary preview\n\n"
+        f"![Current and proposed map preview for {cell_text}]({preview_url})\n\n"
+        f"This preview shows the current and proposed ownership of **{cell_text}**. "
+        "Outlined cells are proposed changes; nothing has been approved yet.\n"
+    )
 
 
 def build_region_issue(
@@ -1124,6 +1327,7 @@ class GatewayService:
         turnstile: TurnstileVerifier, github: GitHubAppClient, rate_limiter: RateLimiter,
         pre_rate_limiter: RateLimiter | None = None,
         global_pre_limiter: RateLimiter | None = None,
+        preview_store: PreviewStore | None = None,
     ):
         self.config = config
         self.authority = authority
@@ -1132,7 +1336,11 @@ class GatewayService:
         self.rate_limiter = rate_limiter
         self.pre_rate_limiter = pre_rate_limiter
         self.global_pre_limiter = global_pre_limiter
+        self.preview_store = preview_store
         self._ip_salt = secrets.token_bytes(32)
+        # Topology decoding is deliberately serialized to keep the hardened
+        # container's memory bound predictable under concurrent submissions.
+        self._preview_lock = threading.Lock()
 
     def client_ip(self, peer: str, forwarded_for: str | None) -> str:
         try:
@@ -1181,6 +1389,7 @@ class GatewayService:
         self.rate_limiter.check(rate_key)
         if submission["schema"] == IDEA_SCHEMA:
             canonical, payload, submission_hash = validate_idea(submission)
+            preview_url = None
         else:
             try:
                 authority = self.authority.get()
@@ -1189,7 +1398,25 @@ class GatewayService:
                     503, "service_unavailable", "Region data is being updated. Try again shortly."
                 ) from exc
             canonical, payload, submission_hash = validate_proposal(submission, authority)
-        return self.github.submit(canonical, payload, submission_hash)
+            if self.preview_store is None:
+                raise GatewayError(
+                    503, "service_unavailable", "The boundary preview service is unavailable."
+                )
+            try:
+                first_dguid = canonical["changes"][0]["DGUID"]
+                pruid = authority.membership[first_dguid].pruid
+                with self._preview_lock:
+                    topology = self.authority.topology(authority, pruid)
+                    preview_png = render_boundary_preview(canonical, topology)
+                    preview_url = self.preview_store.put(submission_hash, preview_png)
+            except (KeyError, RuntimeError, PreviewRenderError) as exc:
+                raise GatewayError(
+                    503, "service_unavailable",
+                    "The boundary preview could not be generated. Try again shortly.",
+                ) from exc
+        return self.github.submit(
+            canonical, payload, submission_hash, preview_url=preview_url
+        )
 
 
 class GatewayHandler(BaseHTTPRequestHandler):
@@ -1223,9 +1450,24 @@ class GatewayHandler(BaseHTTPRequestHandler):
             return "submit"
         if parsed.path == self.service.config.base_path + "/config":
             return "config"
+        prefix = self.service.config.base_path + "/previews/"
+        if (
+            parsed.path.startswith(prefix)
+            and parsed.path.endswith(".png")
+            and SHA256_RE.fullmatch(parsed.path[len(prefix):-4])
+        ):
+            return "preview"
         if parsed.path == "/healthz":
             return "health"
         return "unknown"
+
+    def _preview_hash(self) -> str | None:
+        parsed = urllib.parse.urlsplit(self.path)
+        prefix = self.service.config.base_path + "/previews/"
+        if parsed.path.startswith(prefix) and parsed.path.endswith(".png"):
+            value = parsed.path[len(prefix):-4]
+            return value if SHA256_RE.fullmatch(value) else None
+        return None
 
     def _send(self, status: int, value: object | None, *, cors: bool = False, retry_after: int | None = None) -> None:
         payload = b"" if value is None else _canonical_json(value)
@@ -1252,6 +1494,29 @@ class GatewayHandler(BaseHTTPRequestHandler):
     def _error(self, error: GatewayError, *, cors: bool) -> None:
         self._send(error.status, {"ok": False, "error": {"code": error.code, "message": error.message}}, cors=cors, retry_after=error.retry_after)
 
+    def _send_preview(self, proposal_hash: str, payload: bytes) -> None:
+        etag = f'"{proposal_hash}"'
+        if self.headers.get("If-None-Match") == etag:
+            self.send_response(304)
+            self.send_header("Content-Length", "0")
+        else:
+            self.send_response(200)
+            self.send_header("Content-Length", str(len(payload)))
+            self.send_header("Content-Type", "image/png")
+        self.send_header("Cache-Control", "public, max-age=31536000, immutable")
+        self.send_header("ETag", etag)
+        self.send_header("X-Content-Type-Options", "nosniff")
+        self.send_header("Content-Security-Policy", "default-src 'none'; sandbox")
+        self.send_header("Referrer-Policy", "no-referrer")
+        self.send_header(
+            "Content-Disposition", f'inline; filename="boundary-preview-{proposal_hash[:12]}.png"'
+        )
+        self.send_header("Connection", "close")
+        self.close_connection = True
+        self.end_headers()
+        if self.command != "HEAD" and self.headers.get("If-None-Match") != etag:
+            self.wfile.write(payload)
+
     def do_OPTIONS(self) -> None:
         if self._route() != "submit" or not self._allowed_origin():
             self._error(GatewayError(403, "invalid_submission", "This site is not allowed to send submissions."), cors=False)
@@ -1277,6 +1542,24 @@ class GatewayHandler(BaseHTTPRequestHandler):
         if route == "health":
             self._send(200, {"ok": True})
             return
+        if route == "preview":
+            proposal_hash = self._preview_hash()
+            if proposal_hash is None or self.service.preview_store is None:
+                self._error(GatewayError(404, "not_found", "The preview does not exist."), cors=False)
+                return
+            try:
+                payload = self.service.preview_store.get(proposal_hash)
+            except RuntimeError:
+                self._error(
+                    GatewayError(500, "service_unavailable", "The preview is unavailable."),
+                    cors=False,
+                )
+                return
+            if payload is None:
+                self._error(GatewayError(404, "not_found", "The preview does not exist."), cors=False)
+                return
+            self._send_preview(proposal_hash, payload)
+            return
         if route != "config":
             self._error(GatewayError(404, "invalid_submission", "The requested endpoint does not exist."), cors=False)
             return
@@ -1289,6 +1572,9 @@ class GatewayHandler(BaseHTTPRequestHandler):
             {"version": API_VERSION, "turnstileSiteKey": self.service.config.turnstile_site_key, "turnstileAction": TURNSTILE_ACTION},
             cors=origin is not None,
         )
+
+    def do_HEAD(self) -> None:
+        self.do_GET()
 
     def do_POST(self) -> None:
         cors = self._route() == "submit" and self._allowed_origin() is not None
@@ -1445,6 +1731,11 @@ def build_server_from_env(environ: Mapping[str, str] = os.environ) -> SafeThread
         Path(environ.get("CATALOG_PATH", "/data/canada-regions.json")),
         Path(environ.get("CELLS_DIR", "/data/cells")),
     )
+    preview_store = PreviewStore(
+        Path(environ.get("PREVIEW_DIR", "/state/previews")),
+        environ.get("PUBLIC_BASE_URL", DEFAULT_PUBLIC_BASE_URL),
+        base_path,
+    )
     transport = UrllibJsonTransport()
     service = GatewayService(
         GatewayConfig(
@@ -1464,6 +1755,7 @@ def build_server_from_env(environ: Mapping[str, str] = os.environ) -> SafeThread
         RateLimiter(rate_limit, rate_window),
         RateLimiter(pre_rate_limit, pre_rate_window),
         RateLimiter(global_pre_limit, global_pre_window, max_keys=1),
+        preview_store,
     )
     server = SafeThreadingHTTPServer(
         (environ.get("LISTEN_HOST", "0.0.0.0"), port), GatewayHandler,

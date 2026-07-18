@@ -7,7 +7,9 @@ RUN apt-get update \
     && useradd --uid 10001 --gid 10001 --no-create-home --home-dir /nonexistent gateway
 
 WORKDIR /app
-COPY --chown=10001:10001 gateway.py /app/gateway.py
+COPY requirements.txt /app/requirements.txt
+RUN python -m pip install --no-cache-dir -r /app/requirements.txt
+COPY --chown=10001:10001 gateway.py boundary_preview.py /app/
 
 USER 10001:10001
 EXPOSE 8787

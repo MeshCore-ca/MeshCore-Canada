@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import http.client
+import io
 import json
 import os
 import stat
@@ -11,6 +12,8 @@ import threading
 import unittest
 from pathlib import Path
 from unittest import mock
+
+from PIL import Image
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import gateway  # noqa: E402
@@ -39,17 +42,22 @@ def write_authority(root: Path, *, first_leaf: str = "aaa") -> tuple[Path, Path,
     membership_path.write_text(membership_text, encoding="utf-8", newline="")
     topology = {
         "type": "Topology",
+        "transform": {"scale": [0.01, 0.01], "translate": [-80.5, 43.3]},
         "objects": {
             "cells": {
                 "type": "GeometryCollection",
                 "geometries": [
-                    {"type": "Polygon", "arcs": [], "properties": {"DGUID": "2021S0512TEST0001", "PRUID": "35", "leaf_tag": first_leaf, "seed_tag": first_leaf if first_leaf == "aaa" else ""}},
-                    {"type": "Polygon", "arcs": [], "properties": {"DGUID": "2021S0512TEST0002", "PRUID": "35", "leaf_tag": "bbb", "seed_tag": "bbb"}},
-                    {"type": "Polygon", "arcs": [], "properties": {"DGUID": "2021S0512TEST0003", "PRUID": "35", "leaf_tag": "aaa", "seed_tag": "aaa" if first_leaf != "aaa" else ""}},
+                    {"type": "Polygon", "arcs": [[0]], "properties": {"DGUID": "2021S0512TEST0001", "PRUID": "35", "leaf_tag": first_leaf, "seed_tag": first_leaf if first_leaf == "aaa" else ""}},
+                    {"type": "Polygon", "arcs": [[1]], "properties": {"DGUID": "2021S0512TEST0002", "PRUID": "35", "leaf_tag": "bbb", "seed_tag": "bbb"}},
+                    {"type": "Polygon", "arcs": [[2]], "properties": {"DGUID": "2021S0512TEST0003", "PRUID": "35", "leaf_tag": "aaa", "seed_tag": "aaa" if first_leaf != "aaa" else ""}},
                 ],
             }
         },
-        "arcs": [],
+        "arcs": [
+            [[0, 0], [10, 0], [0, 10], [-10, 0], [0, -10]],
+            [[20, 0], [10, 0], [0, 10], [-10, 0], [0, -10]],
+            [[0, 20], [10, 0], [0, 10], [-10, 0], [0, -10]],
+        ],
     }
     (cells / "cells-35.topo.json").write_text(json.dumps(topology), encoding="utf-8")
     raw = membership_path.read_bytes()
@@ -89,6 +97,10 @@ class AuthorityTests(unittest.TestCase):
             self.assertEqual(snapshot.membership_sha256, paths[3])
             self.assertEqual(snapshot.seed_tags["2021S0512TEST0001"], "aaa")
             self.assertEqual(snapshot.leaf_jurisdictions, {"aaa": "on", "bbb": "on"})
+            self.assertEqual(
+                snapshot.topology_sha256["35"],
+                hashlib.sha256((paths[2] / "cells-35.topo.json").read_bytes()).hexdigest(),
+            )
 
     def test_reloads_when_mounted_files_change(self):
         with tempfile.TemporaryDirectory() as temporary:
@@ -111,6 +123,20 @@ class AuthorityTests(unittest.TestCase):
             topology_path.write_text(json.dumps(topology), encoding="utf-8")
             with self.assertRaisesRegex(RuntimeError, "disagrees"):
                 gateway.AuthorityCache(*paths[:3]).get()
+
+    def test_preview_topology_must_match_loaded_snapshot(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            paths = write_authority(Path(temporary))
+            cache = gateway.AuthorityCache(*paths[:3])
+            snapshot = cache.get()
+            self.assertEqual(cache.topology(snapshot, "35")["type"], "Topology")
+            topology_path = paths[2] / "cells-35.topo.json"
+            topology_path.write_text(
+                topology_path.read_text(encoding="utf-8") + " ",
+                encoding="utf-8",
+            )
+            with self.assertRaisesRegex(RuntimeError, "changed"):
+                cache.topology(snapshot, "35")
 
 
 class ProposalValidationTests(unittest.TestCase):
@@ -161,6 +187,53 @@ class ProposalValidationTests(unittest.TestCase):
         proposal["reason"] = "keep\u0085the town together"
         canonical, _, _ = gateway.validate_proposal(proposal, self.snapshot)
         self.assertEqual(canonical["reason"], "keep the town together")
+
+
+class PreviewTests(unittest.TestCase):
+    def test_renders_deterministic_current_and_proposed_png(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            paths = write_authority(Path(temporary))
+            authority = gateway.AuthorityCache(*paths[:3])
+            snapshot = authority.get()
+            canonical, _, _ = gateway.validate_proposal(
+                valid_proposal(snapshot.membership_sha256), snapshot
+            )
+            topology = authority.topology(snapshot, "35")
+            first = gateway.render_boundary_preview(canonical, topology)
+            second = gateway.render_boundary_preview(canonical, topology)
+            self.assertEqual(first, second)
+            self.assertLess(len(first), gateway.MAX_PREVIEW_BYTES)
+            with Image.open(io.BytesIO(first)) as image:
+                self.assertEqual(image.format, "PNG")
+                self.assertEqual(image.size, (1600, 1000))
+                self.assertEqual(image.mode, "RGB")
+
+    def test_store_uses_immutable_hash_path_and_rejects_invalid_files(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            store = gateway.PreviewStore(
+                root,
+                "https://api.meshcore.ca:21323/api/meshcore-canada/submissions",
+                gateway.DEFAULT_BASE_PATH,
+            )
+            output = io.BytesIO()
+            Image.new("RGB", (2, 2), "white").save(output, format="PNG")
+            digest = "a" * 64
+            url = store.put(digest, output.getvalue())
+            self.assertEqual(
+                url,
+                "https://api.meshcore.ca:21323/api/meshcore-canada/submissions/"
+                f"previews/{digest}.png",
+            )
+            self.assertEqual(store.get(digest), output.getvalue())
+            # An existing hash remains immutable across a later renderer change.
+            other = io.BytesIO()
+            Image.new("RGB", (3, 3), "black").save(other, format="PNG")
+            self.assertEqual(store.put(digest, other.getvalue()), url)
+            self.assertEqual(store.get(digest), output.getvalue())
+            (root / f"{digest}.png").write_bytes(b"not a png")
+            with self.assertRaisesRegex(RuntimeError, "invalid"):
+                store.get(digest)
 
 
 
@@ -327,6 +400,66 @@ class GitHubTests(unittest.TestCase):
         self.assertIn("submission-payload-gzip-base64url:", body)
         self.assertIn("close this issue as **Completed**", body)
         self.assertNotIn("contents", json.dumps(transport.calls).lower())
+
+    def test_boundary_preview_comment_is_visible_and_idempotent(self):
+        transport = RoutingTransport()
+        client = self.make_client(transport)
+        canonical = {
+            "schema": gateway.PROPOSAL_SCHEMA,
+            "baseMembershipSha256": "a" * 64,
+            "reason": "Keep the city together",
+            "changes": [
+                {"DGUID": "2021S0512TEST0001", "from": "aaa", "to": "bbb"}
+            ],
+        }
+        payload = json.dumps(canonical, sort_keys=True, separators=(",", ":")).encode()
+        digest = hashlib.sha256(payload).hexdigest()
+        preview_url = (
+            "https://api.meshcore.ca:21323/api/meshcore-canada/submissions/"
+            f"previews/{digest}.png"
+        )
+        first = client.submit(
+            canonical, payload, digest, preview_url=preview_url
+        )
+        second = client.submit(
+            canonical, payload, digest, preview_url=preview_url
+        )
+        self.assertFalse(first["duplicate"])
+        self.assertTrue(second["duplicate"])
+        self.assertEqual(len(transport.comments), 1)
+        comment = transport.comments[0]
+        self.assertIn(f"<!-- mcc-boundary-preview:{digest} -->", comment)
+        self.assertIn(f"]({preview_url})", comment)
+        self.assertIn("nothing has been approved yet", comment)
+
+    def test_boundary_preview_comment_resumes_after_ambiguous_failure(self):
+        transport = RoutingTransport()
+        client = self.make_client(transport)
+        canonical = {
+            "schema": gateway.PROPOSAL_SCHEMA,
+            "baseMembershipSha256": "a" * 64,
+            "reason": "Keep the city together",
+            "changes": [
+                {"DGUID": "2021S0512TEST0001", "from": "aaa", "to": "bbb"}
+            ],
+        }
+        payload = json.dumps(canonical, sort_keys=True, separators=(",", ":")).encode()
+        digest = hashlib.sha256(payload).hexdigest()
+        preview_url = (
+            "https://api.meshcore.ca:21323/api/meshcore-canada/submissions/"
+            f"previews/{digest}.png"
+        )
+        transport.fail_comment_number = 1
+        with self.assertRaises(gateway.UpstreamError):
+            client.submit(canonical, payload, digest, preview_url=preview_url)
+        self.assertEqual(client.ledger.lookup(digest)["state"], "created")
+        transport.fail_comment_number = None
+        result = client.submit(
+            canonical, payload, digest, preview_url=preview_url
+        )
+        self.assertTrue(result["duplicate"])
+        self.assertEqual(len(transport.comments), 1)
+        self.assertIn(f"mcc-boundary-preview:{digest}", transport.comments[0])
 
     def test_duplicate_search_returns_existing_issue_without_create(self):
         transport = RoutingTransport()
@@ -509,7 +642,7 @@ class ServiceTests(unittest.TestCase):
         class Turnstile:
             def verify(self, token, ip): events.append(("turnstile", token, ip))
         class Github:
-            def submit(self, *args): events.append("github"); return {"ok": True}
+            def submit(self, *args, **kwargs): events.append("github"); return {"ok": True}
         service = gateway.GatewayService(
             gateway.GatewayConfig("/api", "site", frozenset({"https://meshcore.ca"}), ()),
             Authority(), Turnstile(), Github(), gateway.RateLimiter(1, 60, now=lambda: 0),
@@ -530,17 +663,16 @@ class ServiceTests(unittest.TestCase):
                 if self.calls == 1:
                     raise gateway.GatewayError(403, "turnstile_failed", "failed")
         class Github:
-            def submit(self, *args): return {"ok": True}
+            def submit(self, *args, **kwargs): return {"ok": True}
         service = gateway.GatewayService(
             gateway.GatewayConfig("/api", "site", frozenset(), ()),
             Authority(), Turnstile(), Github(), gateway.RateLimiter(1, 60, now=lambda: 0),
         )
-        envelope = {"version": 1, "submission": {"schema": gateway.PROPOSAL_SCHEMA}, "turnstileToken": "token", "website": ""}
+        envelope = {"version": 1, "submission": valid_idea(), "turnstileToken": "token", "website": ""}
         with self.assertRaises(gateway.GatewayError) as raised:
             service.submit(envelope, "192.0.2.1")
         self.assertEqual(raised.exception.code, "turnstile_failed")
-        with mock.patch.object(gateway, "validate_proposal", return_value=({}, b"{}", "a" * 64)):
-            self.assertTrue(service.submit(envelope, "192.0.2.1")["ok"])
+        self.assertTrue(service.submit(envelope, "192.0.2.1")["ok"])
 
     def test_invalid_turnstile_is_bounded_by_separate_prelimit(self):
         class Authority:
@@ -583,9 +715,10 @@ class ServiceTests(unittest.TestCase):
                 events.append(("turnstile", token, ip))
 
         class Github:
-            def submit(self, canonical, payload, digest):
+            def submit(self, canonical, payload, digest, *, preview_url=None):
                 events.append(("github", canonical["schema"], digest))
                 self.payload = payload
+                self.preview_url = preview_url
                 return {"ok": True, "submissionSha256": digest}
 
         github = Github()
@@ -601,6 +734,55 @@ class ServiceTests(unittest.TestCase):
         result = service.submit(envelope, "192.0.2.1")
         self.assertEqual(result["submissionSha256"], events[-1][2])
         self.assertEqual(json.loads(github.payload), gateway.validate_idea(valid_idea())[0])
+        self.assertIsNone(github.preview_url)
+
+    def test_boundary_submission_persists_and_passes_preview_url(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            paths = write_authority(root)
+            authority = gateway.AuthorityCache(*paths[:3])
+            preview_store = gateway.PreviewStore(
+                root / "previews",
+                gateway.DEFAULT_PUBLIC_BASE_URL,
+                gateway.DEFAULT_BASE_PATH,
+            )
+
+            class Turnstile:
+                def verify(self, _token, _ip): return None
+
+            class Github:
+                def submit(self, canonical, payload, digest, *, preview_url=None):
+                    self.canonical = canonical
+                    self.payload = payload
+                    self.digest = digest
+                    self.preview_url = preview_url
+                    return {"ok": True, "submissionSha256": digest}
+
+            github = Github()
+            service = gateway.GatewayService(
+                gateway.GatewayConfig(
+                    gateway.DEFAULT_BASE_PATH, "site", frozenset(), ()
+                ),
+                authority,
+                Turnstile(),
+                github,
+                gateway.RateLimiter(1, 60, now=lambda: 0),
+                preview_store=preview_store,
+            )
+            envelope = {
+                "version": 1,
+                "submission": valid_proposal(paths[3]),
+                "turnstileToken": "token",
+                "website": "",
+            }
+            result = service.submit(envelope, "192.0.2.1")
+            self.assertEqual(result["submissionSha256"], github.digest)
+            self.assertEqual(github.preview_url, preview_store.url(github.digest))
+            preview = preview_store.get(github.digest)
+            self.assertIsNotNone(preview)
+            with Image.open(io.BytesIO(preview)) as image:
+                self.assertEqual(image.size, (1600, 1000))
+
     def test_forwarded_ip_only_from_trusted_private_proxy(self):
         service = object.__new__(gateway.GatewayService)
         service.config = gateway.GatewayConfig(
@@ -647,6 +829,12 @@ class ServiceTests(unittest.TestCase):
 
 class HttpContractTests(unittest.TestCase):
     def setUp(self):
+        self.temporary = tempfile.TemporaryDirectory()
+        self.preview_store = gateway.PreviewStore(
+            Path(self.temporary.name),
+            gateway.DEFAULT_PUBLIC_BASE_URL,
+            gateway.DEFAULT_BASE_PATH,
+        )
         class Authority:
             def get(self): return True
         class Service:
@@ -659,7 +847,9 @@ class HttpContractTests(unittest.TestCase):
             def submit(self, envelope, client_ip):
                 return {"ok": True, "issueNumber": 1, "issueUrl": "https://github.com/MeshCore-ca/MeshCore-Canada/issues/1", "submissionSha256": "a" * 64, "duplicate": False}
         self.server = gateway.SafeThreadingHTTPServer(("127.0.0.1", 0), gateway.GatewayHandler)
-        self.server.service = Service()
+        service = Service()
+        service.preview_store = self.preview_store
+        self.server.service = service
         self.thread = threading.Thread(target=self.server.serve_forever, daemon=True)
         self.thread.start()
 
@@ -667,13 +857,19 @@ class HttpContractTests(unittest.TestCase):
         self.server.shutdown()
         self.server.server_close()
         self.thread.join(timeout=2)
+        self.temporary.cleanup()
 
     def request(self, method, path, body=None, headers=None):
         connection = http.client.HTTPConnection("127.0.0.1", self.server.server_port, timeout=3)
         connection.request(method, path, body=body, headers=headers or {})
         response = connection.getresponse()
         payload = response.read()
-        result = (response.status, dict(response.getheaders()), json.loads(payload) if payload else None)
+        response_headers = dict(response.getheaders())
+        if payload and response_headers.get("Content-Type", "").startswith("application/json"):
+            decoded = json.loads(payload)
+        else:
+            decoded = payload if payload else None
+        result = (response.status, response_headers, decoded)
         connection.close()
         return result
 
@@ -719,6 +915,39 @@ class HttpContractTests(unittest.TestCase):
         })
         self.assertEqual(status, 400)
         self.assertEqual(result["error"]["code"], "invalid_submission")
+
+    def test_public_preview_get_head_cache_and_missing_contract(self):
+        digest = "b" * 64
+        output = io.BytesIO()
+        Image.new("RGB", (4, 4), "#336699").save(output, format="PNG")
+        payload = output.getvalue()
+        self.preview_store.put(digest, payload)
+        path = gateway.DEFAULT_BASE_PATH + f"/previews/{digest}.png"
+
+        status, headers, result = self.request("GET", path)
+        self.assertEqual(status, 200)
+        self.assertEqual(result, payload)
+        self.assertEqual(headers["Content-Type"], "image/png")
+        self.assertEqual(headers["Cache-Control"], "public, max-age=31536000, immutable")
+        self.assertEqual(headers["ETag"], f'"{digest}"')
+        self.assertNotIn("Access-Control-Allow-Origin", headers)
+
+        status, headers, result = self.request("HEAD", path)
+        self.assertEqual(status, 200)
+        self.assertIsNone(result)
+        self.assertEqual(int(headers["Content-Length"]), len(payload))
+
+        status, _, result = self.request(
+            "GET", path, headers={"If-None-Match": f'"{digest}"'}
+        )
+        self.assertEqual(status, 304)
+        self.assertIsNone(result)
+
+        status, _, result = self.request(
+            "GET", gateway.DEFAULT_BASE_PATH + f"/previews/{'c' * 64}.png"
+        )
+        self.assertEqual(status, 404)
+        self.assertEqual(result["error"]["code"], "not_found")
 
 
 class SecretTests(unittest.TestCase):
