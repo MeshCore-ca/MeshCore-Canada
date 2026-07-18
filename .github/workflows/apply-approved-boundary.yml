@@ -5,7 +5,6 @@ on:
     types: [closed]
 
 permissions:
-  actions: write
   contents: read
   issues: write
 
@@ -150,21 +149,15 @@ jobs:
           echo "commit_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
           echo "APPLIED=1" >> "$GITHUB_ENV"
 
-      - name: Queue site deployment
-        shell: bash
-        run: |
-          set -euo pipefail
-          gh workflow run deploy.yml --ref main
-
       - name: Record successful application
         shell: bash
         run: |
           set -euo pipefail
           if [[ "${{ steps.apply.outputs.already_applied }}" == "true" ]]; then
-            message="This boundary update was already applied. A fresh site deployment has been queued."
+            message="This boundary update was already applied. No authority change was needed."
           else
             sha="${{ steps.publish.outputs.commit_sha }}"
-            message="Boundary update approved and applied in [\`${sha:0:7}\`](https://github.com/$GITHUB_REPOSITORY/commit/$sha). A site deployment has been queued."
+            message="Boundary update approved and applied in [\`${sha:0:7}\`](https://github.com/$GITHUB_REPOSITORY/commit/$sha). The push started the site deployment."
           fi
           gh issue comment "$ISSUE_NUMBER" --body "$message"
 

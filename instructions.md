@@ -312,7 +312,7 @@ Do these one-time repository-owner steps before testing a boundary submission:
 2. Keep the repository's default workflow permission **Read repository
    contents and packages permissions**, and keep **Allow GitHub Actions to
    create and approve pull requests** disabled. The boundary workflow requests
-   only `actions: write`, `contents: read`, and `issues: write` in its own
+   only `contents: read` and `issues: write` in its own
    `permissions` block.
 3. Confirm the maintainer logins in
    `.github/region-boundary-automation.json`. Only those users may approve a
@@ -349,8 +349,8 @@ as **Completed**. The Action verifies the App author, closer, label, payload
 hash, App signature, current membership hash, and province. It records the
 reviewed CSD/DA decision, regenerates the full national layer from locked
 sources, runs the release checks, commits to `main` with the protected
-publication credential, and queues the site deployment. A failed check
-publishes nothing and reopens the issue.
+publication credential, and the resulting push starts the normal site
+deployment. A failed check publishes nothing and reopens the issue.
 
 To reject or close a test without changing the map, choose **Close as not
 planned**. Removing the label also prevents application.
