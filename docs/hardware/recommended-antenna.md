@@ -1,51 +1,105 @@
-# Antenna Recommendation
+---
+title: Compare antennas and feed lines
+description: Shortlist 915 MHz antennas and cables while checking connector fit, evidence, site needs, and dated pricing.
+audience:
+  - companion-owner
+  - repeater-builder
+task: choose-antenna
+scope: ottawa-field-practice
+status: draft
+owner: docs-hardware
+last_reviewed: 2026-07-19
+review_by: 2026-10-17
+difficulty: intermediate
+estimated_time: 10-15 minutes
+destructive: false
+requires:
+  - confirmed-radio-band
+  - confirmed-device-connector
+page_styles:
+  - assets/styles/devices-builds.css
+---
 
-Most LoRa devices ship with a very basic factory antenna that performs poorly.  
-The Ottawa mesh community has tested many replacements, and the antennas below are highly recommended as reliable upgrades.
+# Compare Antennas and Feed Lines
 
-!!! warning "Swapping Antennas"
-    Make sure your device is disconnected to power/battery when swapping an antenna. Since these devices can transmit radio signals, turning on a device without an antenna can damage it. [See more information here.](https://electronics.stackexchange.com/questions/335912/can-i-break-a-radio-tranceiving-device-by-operating-it-with-no-antenna-connected)
+Build a shortlist, then verify the radio band, connector, dimensions, mounting method, and current manufacturer specifications before ordering.
 
-## Companion Antennas
+<div class="mc-guide-status" data-status="draft" markdown>
 
-These are SMA antennas and are more compact, yet they’ve consistently shown excellent performance in Ottawa and other meshes. We recommend any of the options listed here.
+**Draft Ottawa field notes.** The products and legacy prices below were carried forward from community notes. No controlled comparison, link-health review, or product-revision audit was attached. Treat them as leads, not verified MeshCore Canada recommendations.
 
-!!! warning "SMA vs. RP-SMA"
-    Pay close attention to what connection type a Companion/Repeater has since some come with Reverse Polarity SMA (RP-SMA). You will need an adapter to connect your SMA antenna or you will need to buy a RP-SMA antenna.
-    [More information on the differences between these connections.](https://blog.linitx.com/what-are-sma-rp-sma-connectors-and-whats-the-difference/)
+</div>
 
-| Product                     | Connector | Cost (CAD) | Link |
-|-----------------------------|-----------|------------|------|
-| Gizont 167CM 915MHz SMA M   | SMA       | $12     | [Space Hedgehog (Local Store)](https://space-hedgehog.com/products/gizont-915mhz-antenna?variant=51602989711416) |
-| Gizont 167CM 915MHz SMA M   | SMA       | $10.53     | [AliExpress](https://www.aliexpress.com/item/1005004607615001.html) |
-| Gizont 167CM 915MHz RP-SMA M   | RP-SMA       | $10.53     | [AliExpress](https://www.aliexpress.com/item/1005004607615001.html) |
-| LINX ANT-916-CW-HW-SMA      | SMA       | $14.65     | [DigiKey](https://www.digikey.ca/en/products/detail/te-connectivity-linx/ANT-916-CW-HW-SMA/2694126?s=N4IgTCBcDaIDIEkByANABAQSQFQLQE4BGANlwGEB1XACSoGUBZDEAXQF8g) |
-| Taoglas TI.09.A.0111        | SMA       | $17.47     | [DigiKey](https://www.digikey.ca/en/products/detail/taoglas-limited/TI-09-A-0111/2332695?s=N4IgTCBcDaICoEMD2BzANggzgAjgSQDoAGATgIEFiBGGkAXQF8g) |
-| Seeed Studio LoRa Antenna Kit        | SMA       | $6.79     | [Seeed Studio](https://www.seeedstudio.com/LoRa-Antenna-Kit-for-reTerminal-DM-p-5714.html) |
+!!! danger "Disconnect power before changing an antenna"
+    Do not power or transmit from a radio without the correct antenna attached. Disconnect USB and battery power before connecting or removing an antenna, and follow the radio manufacturer's instructions.
 
-## Repeater Omni Antennas
+## Check compatibility first
 
-These are N-Type antennas and are best suited for repeaters. At an absolute minimum, all repeaters should use the Alfa antenna — it’s a major reason the Ottawa mesh performs as well as it does. MrAlders0n has made a link between a repeater and a companion at 110KM distance with an Alfa on both ends.
+<ul class="mc-checklist">
+  <li>The antenna is specified for the Canadian 902–928 MHz band.</li>
+  <li>The connector family and polarity match: SMA and RP-SMA can look similar but do not mate electrically in the same way.</li>
+  <li>The connector gender, pigtail, and feed line form one complete path.</li>
+  <li>The device and mount can support the antenna's size, weight, wind load, and cable strain.</li>
+  <li>Outdoor connectors can be weatherproofed and inspected without trapping water.</li>
+  <li>The current product page and datasheet support the details used in your decision.</li>
+</ul>
 
-If you want something larger and higher-performing, we’ve tested the Seeed 1300 mm fiberglass antenna with excellent results. Please note that it is 1.3 metres long. We only recommend this antenna for repeaters installed at significant height (around 30 m AGL or higher) and intended for long-distance links or backbone use.
+## Companion antenna leads
 
-| Product                     | Connector | Cost (CAD) | Link |
-|-----------------------------|-----------|------------|------|
-| Alfa AOA-915-5ACM           | N-Type    | $34.99     | [Amazon](https://a.co/d/ieEIQpy) |
-| Seeed Studio RF Explorer 902-928MHz 8dBi; 1300mm | N-Type | $110 | [Mouser](https://www.mouser.ca/ProductDetail/Seeed-Studio/318020693?qs=By6Nw2ByBD0kjpJjgHd0aQ%3D%3D) |
+These portable antenna leads use SMA-family connectors. Confirm the exact connector on your device before ordering.
 
-## Repeater Directional Antennas
+<div class="mc-table-wrap" markdown>
 
-Directional antennas are intended for fixed repeaters and long-distance point-to-point or point-to-multipoint links. All antennas listed here use N-Type connectors and are suitable for permanent outdoor installations.
+| Product lead | Connector recorded in prior notes | Evidence available here | Legacy CAD figure | Source |
+|---|---|---|---:|---|
+| Gizont 167 cm 915 MHz | SMA male | Ottawa community field note; no test record attached | $10.53–$12 | [Space Hedgehog](https://space-hedgehog.com/products/gizont-915mhz-antenna?variant=51602989711416) / [AliExpress](https://www.aliexpress.com/item/1005004607615001.html) |
+| Gizont 167 cm 915 MHz | RP-SMA male | Ottawa community field note; no test record attached | $10.53 | [AliExpress](https://www.aliexpress.com/item/1005004607615001.html) |
+| LINX ANT-916-CW-HW-SMA | SMA | Product lead only | $14.65 | [DigiKey](https://www.digikey.ca/en/products/detail/te-connectivity-linx/ANT-916-CW-HW-SMA/2694126?s=N4IgTCBcDaIDIEkByANABAQSQFQLQE4BGANlwGEB1XACSoGUBZDEAXQF8g) |
+| Taoglas TI.09.A.0111 | SMA | Product lead only | $17.47 | [DigiKey](https://www.digikey.ca/en/products/detail/taoglas-limited/TI-09-A-0111/2332695?s=N4IgTCBcDaICoEMD2BzANggzgAjgSQDoAGATgIEFiBGGkAXQF8g) |
+| Seeed Studio LoRa Antenna Kit | SMA | Product lead only | $6.79 | [Seeed Studio](https://www.seeedstudio.com/LoRa-Antenna-Kit-for-reTerminal-DM-p-5714.html) |
 
-| Product                | Connector | Cost (CAD) | Link |
-|------------------------|-----------|------------|------|
-| L-com HG913Y-NF      | N-Type    | $237.17     | [DigiKey](https://www.digikey.ca/en/products/detail/l-com/HG913Y-NF/21289980) |
+</div>
 
-## Antenna Cables
+## Fixed repeater antenna leads
 
-For short, high-quality LMR-240 cables, [Infinite Cables](https://www.infinitecables.com/) in Toronto is the best source we’ve found. Their cables are on the expensive side, but the build quality is excellent and they offer a wide variety of lengths and connector combinations to suit any installation.
+A permanent repeater antenna is a complete installation decision, not just a gain number. Include feed-line loss, connector count, pattern, local RF conditions, structure, lightning/grounding review, weather, and safe access.
 
-| Product                | Connector | Link |
-|------------------------|-----------|------|
-| LMR-240 Ultra Flex N-Type Male to N-Type Female | N-Type M to N-Type F | [Infinite Cables](https://www.infinitecables.com/products/lmr-240-ultra-flex-n-type-male-to-n-type-female-cable?variant=42809804980465) |
+<div class="mc-table-wrap" markdown>
+
+| Product lead | Type recorded in prior notes | Connector | Evidence available here | Legacy CAD figure | Source |
+|---|---|---|---|---:|---|
+| Alfa AOA-915-5ACM | Omnidirectional | N-type | Ottawa community field note; no controlled result attached | $34.99 | [Amazon Canada](https://www.amazon.ca/dp/B08H8J6ZV6) |
+| Seeed Studio 318020693 | 902–928 MHz fiberglass omni, 1300 mm | N-type | Product lead and Ottawa field note | $110 | [Mouser](https://www.mouser.ca/ProductDetail/Seeed-Studio/318020693?qs=By6Nw2ByBD0kjpJjgHd0aQ%3D%3D) |
+| L-com HG913Y-NF | Directional | N-type | Product lead only | $237.17 | [DigiKey](https://www.digikey.ca/en/products/detail/l-com/HG913Y-NF/21289980) |
+
+</div>
+
+<p class="mc-table-note">Price snapshot date was not recorded in the legacy page. Recheck every figure, shipping cost, duty, connector, and revision at the linked source.</p>
+
+## Feed-line lead
+
+The previous guide pointed to [Infinite Cables](https://www.infinitecables.com/) in Toronto for short LMR-240 Ultra Flex assemblies. The linked example was an [N-type male to N-type female cable](https://www.infinitecables.com/products/lmr-240-ultra-flex-n-type-male-to-n-type-female-cable?variant=42809804980465). Confirm both end connectors, length, loss, weather rating, and bend/strain requirements for your installation.
+
+## Record the decision
+
+Before installation, record:
+
+- antenna product and revision;
+- published band and pattern;
+- every connector and adapter in order;
+- cable type and length;
+- mounting and weatherproofing method;
+- source links and the date checked; and
+- the local test you will use after installation.
+
+## Verify after installation
+
+With the enclosure still accessible, confirm the radio reports its expected settings, the feed line is not loose or sharply bent, the weather seal does not create a water path, and a local message test succeeds. Do not attribute a change in coverage to the antenna alone without repeatable before/after evidence.
+
+## Human review required
+
+A hardware/RF reviewer must attach dated datasheets, connector verification, link checks, and repeatable evidence before any product on this page can carry a verified recommendation label.
+
+## Next step
+
+For a fixed installation, continue to [mounting options](repeater-mounting-options.md). For a portable node, return to [companion choices](recommended-companions.md).

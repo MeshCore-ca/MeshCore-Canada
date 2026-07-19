@@ -12,11 +12,40 @@
   var lucidePromise = null;
   var activeMaps = [];
   var LUCIDE_SRC = new URL("vendor/lucide.js", assetBase).href;
+  var configuratorSupport = window.MeshCoreRegionConfiguratorSupport || {};
+  var REQUEST_TIMEOUT_MS = 12000;
 
-  function fetchJsonAsset(filename, errorMessage) {
-    return fetch(new URL(filename, assetBase)).then(function (response) {
+  function fetchWithTimeout(url, options, timeoutMs) {
+    var requestOptions = Object.assign({}, options || {});
+    var upstreamSignal = requestOptions.signal;
+    var controller = typeof AbortController !== "undefined" ? new AbortController() : null;
+    var timer = null;
+    var abortFromUpstream = function () {
+      if (controller) controller.abort();
+    };
+    if (controller) {
+      requestOptions.signal = controller.signal;
+      timer = window.setTimeout(function () { controller.abort(); }, timeoutMs || REQUEST_TIMEOUT_MS);
+      if (upstreamSignal) {
+        if (upstreamSignal.aborted) controller.abort();
+        else upstreamSignal.addEventListener("abort", abortFromUpstream, { once: true });
+      }
+    }
+    return fetch(url, requestOptions).finally(function () {
+      if (timer) window.clearTimeout(timer);
+      if (upstreamSignal) upstreamSignal.removeEventListener("abort", abortFromUpstream);
+    });
+  }
+
+  function fetchJsonAsset(filename, errorMessage, retrying) {
+    return fetchWithTimeout(new URL(filename, assetBase), {}, REQUEST_TIMEOUT_MS).then(function (response) {
       if (!response.ok) throw new Error(errorMessage);
       return response.json();
+    }).catch(function (error) {
+      if (!retrying && error && error.name !== "AbortError") {
+        return fetchJsonAsset(filename, errorMessage, true);
+      }
+      throw error && error.name === "AbortError" ? new Error(errorMessage + " (request timed out)") : error;
     });
   }
 
@@ -59,17 +88,15 @@
   }
 
   function loadData(mode) {
-    if (mode === "map") {
-      return Promise.all([loadCatalog(), loadDisplayPartition()]).then(function (loaded) {
-        return applyGeneratedPartition(loaded[0], loaded[1], null);
-      });
-    }
-    if (mode === "config") {
-      return Promise.all([loadCatalog(), loadResolverPartition()]).then(function (loaded) {
-        return applyGeneratedPartition(loaded[0], null, loaded[1]);
-      });
-    }
+    if (mode === "map" || mode === "config") return loadCatalog();
     return loadCatalog();
+  }
+
+  function ensureResolverData(data) {
+    if (data.resolverRegions) return Promise.resolve(data);
+    return loadResolverPartition().then(function (partition) {
+      return applyGeneratedPartition(data, null, partition);
+    });
   }
 
   function prepareCatalog(data) {
@@ -281,10 +308,18 @@
   function copyText(text, button, resetLabel) {
     var feedback = function (copied) {
       if (!button) return;
+      var host = button.closest ? button.closest("[data-mcc-regions]") : null;
+      var live = host && host.querySelector("[data-mcc-copy-status]");
       var originalHtml = button.dataset.originalHtml || button.innerHTML || resetLabel || "Copy";
       button.dataset.originalHtml = originalHtml;
       button.classList.toggle("is-copied", copied);
       button.innerHTML = copied ? "Copied" : "Copy failed";
+      if (live) {
+        live.textContent = "";
+        window.setTimeout(function () {
+          live.textContent = copied ? "Copied to clipboard." : "Copy failed. Select and copy the command manually.";
+        }, 10);
+      }
       window.setTimeout(function () {
         button.classList.remove("is-copied");
         button.innerHTML = button.dataset.originalHtml || resetLabel || "Copy";
@@ -501,6 +536,10 @@
     return regionPageHref("map") + (params.toString() ? "?" + params.toString() : "");
   }
 
+  function configHrefForState(state) {
+    var mapHref = new URL(mapHrefForState(state));
+    return regionPageHref("config") + mapHref.search;
+  }
   function haversineKm(aLat, aLon, bLat, bLon) {
     var rad = function (d) { return d * Math.PI / 180; };
     var dLat = rad(bLat - aLat);
@@ -870,8 +909,12 @@
     };
   }
 
-  function geocoderCaSearch(query) {
-    return fetch("https://geocoder.ca/?locate=" + encodeURIComponent(query) + "&json=1")
+  function geocoderCaSearch(query, signal) {
+    return fetchWithTimeout(
+      "https://geocoder.ca/?locate=" + encodeURIComponent(query) + "&json=1",
+      { signal: signal },
+      REQUEST_TIMEOUT_MS
+    )
       .then(function (res) {
         if (!res.ok) throw new Error("Geocoding service error");
         return res.json();
@@ -881,13 +924,16 @@
       });
   }
 
-  function nominatimSearch(params) {
+  function nominatimSearch(params, signal) {
     var url = "https://nominatim.openstreetmap.org/search?" + new URLSearchParams(Object.assign({
       format: "json",
       limit: "1",
       addressdetails: "1"
     }, params));
-    return fetch(url, { headers: { "Accept-Language": "en-CA,en" } })
+    return fetchWithTimeout(url, {
+      headers: { "Accept-Language": "en-CA,en" },
+      signal: signal
+    }, REQUEST_TIMEOUT_MS)
       .then(function (res) {
         if (!res.ok) throw new Error("Geocoding service error");
         return res.json();
@@ -897,13 +943,17 @@
       });
   }
 
-  function geocodeCanadianPostal(postal) {
-    return nominatimSearch({ postalcode: postal.formatted, country: "ca" }).then(function (hit) {
+  function geocodeCanadianPostal(postal, signal) {
+    return nominatimSearch({ postalcode: postal.formatted, country: "ca" }, signal).then(function (hit) {
       if (hit) return hit;
-      return nominatimSearch({ q: postal.formatted, countrycodes: "ca" });
+      return nominatimSearch({ q: postal.formatted, countrycodes: "ca" }, signal);
     }).then(function (hit) {
       if (hit) return hit;
-      return fetch("https://geocoder.ca/?locate=" + encodeURIComponent(postal.compact) + "&json=1")
+      return fetchWithTimeout(
+        "https://geocoder.ca/?locate=" + encodeURIComponent(postal.compact) + "&json=1",
+        { signal: signal },
+        REQUEST_TIMEOUT_MS
+      )
         .then(function (res) {
           if (!res.ok) throw new Error("Geocoding service error");
           return res.json();
@@ -917,26 +967,33 @@
     });
   }
 
-  function geocode(data, query) {
+  function geocode(data, query, allowExternal, signal) {
     var localMatch = localGeocode(data, query);
     if (localMatch && localMatch.ambiguous) {
       return Promise.reject(new Error("That name matches more than one region (" + localMatch.choices.join("; ") + "). Add a province or postal code."));
     }
     if (localMatch && localMatch.exactLocalMatch) return Promise.resolve(localMatch);
+    if (!allowExternal) {
+      if (localMatch) return Promise.resolve(localMatch);
+      return Promise.reject(new Error(
+        "No local region matched. Allow online place lookup, enter coordinates, or browse the region list."
+      ));
+    }
     var postal = parseCanadianPostalCode(query);
     var primaryLookup = postal
-      ? geocodeCanadianPostal(postal)
-      : nominatimSearch({ q: query, countrycodes: "ca" }).then(function (hit) {
+      ? geocodeCanadianPostal(postal, signal)
+      : nominatimSearch({ q: query, countrycodes: "ca" }, signal).then(function (hit) {
         if (hit) return hit;
-        return nominatimSearch({ q: query });
+        return nominatimSearch({ q: query }, signal);
       });
 
     return primaryLookup.catch(function () {
-      return geocoderCaSearch(postal ? postal.formatted : query).catch(function () { return null; });
+      if (signal && signal.aborted) throw new DOMException("Request cancelled", "AbortError");
+      return geocoderCaSearch(postal ? postal.formatted : query, signal).catch(function () { return null; });
     }).then(function (hit) {
       if (hit) return hit;
       if (localMatch) return localMatch;
-      throw new Error("Location lookup is temporarily unavailable. Try an airport code or use the map.");
+      throw new Error("Online place lookup is unavailable. Enter coordinates or browse the region list.");
     });
   }
 
@@ -1160,10 +1217,10 @@
         '<div class="mcc-connect-methods">' +
         '<section class="mcc-connect-method"><div class="mcc-connect-method-head">' + icon("usb") + '<div><h5>USB serial</h5><small>At the repeater</small></div></div>' +
         '<ol><li>Connect the repeater to a computer with a data-capable USB cable.</li>' +
-        '<li>In desktop Chrome or Edge, open the <a href="https://meshcore.io/flasher" target="_blank" rel="noopener">MeshCore Flasher</a>. For Gessaman\'s MQTT Observer firmware, use the <a href="https://observer.gessaman.com/" target="_blank" rel="noopener">MeshCore Observer Flasher</a> instead.</li>' +
+        '<li>In desktop Chrome or Edge, open the <a href="https://meshcore.io/flasher" target="_blank" rel="noopener noreferrer">MeshCore Flasher</a>. For Gessaman\'s MQTT Observer firmware, use the <a href="https://observer.gessaman.com/" target="_blank" rel="noopener noreferrer">MeshCore Observer Flasher</a> instead.</li>' +
         '<li>Choose <strong>Console</strong>, then approve the repeater\'s serial or COM port when the browser asks.</li></ol></section>' +
         '<section class="mcc-connect-method"><div class="mcc-connect-method-head">' + icon("radio-tower") + '<div><h5>Remote over LoRa</h5><small>Through a companion radio</small></div></div>' +
-        '<ol><li>On a phone or computer, connect the <a href="https://meshcore.io/" target="_blank" rel="noopener">official MeshCore app</a> to your companion radio.</li>' +
+        '<ol><li>On a phone or computer, connect the <a href="https://meshcore.io/" target="_blank" rel="noopener noreferrer">official MeshCore app</a> to your companion radio.</li>' +
         '<li>Open <strong>Contacts</strong>, select the repeater, then choose <strong>Remote Management</strong> from its menu.</li>' +
         '<li>Enter the repeater admin password, tap <strong>Log In</strong>, then open <strong>Command Line</strong>.</li></ol>' +
         '<p class="mcc-connect-note">If the repeater is missing, open Tools → Discover Nearby Nodes. If a wait timer appears, let it finish before logging in.</p></section>' +
@@ -1186,7 +1243,7 @@
           return '<button type="button" class="mcc-command-line" data-cmd="' + esc(line) + '"><span>' + esc(line) + '</span><em>' + icon("copy") + 'Copy</em></button>';
         }).join("") + '</div></div></li>' +
         '</ol>' +
-        '<a class="mcc-guide-docs" href="https://docs.meshcore.io/cli_commands/" target="_blank" rel="noopener">MeshCore command help ' + icon("external-link") + '</a>' +
+        '<a class="mcc-guide-docs" href="https://docs.meshcore.io/cli_commands/" target="_blank" rel="noopener noreferrer">MeshCore command help ' + icon("external-link") + '</a>' +
         '</div>'
       : '<div class="mcc-command-panel">' +
         '<div class="mcc-command-toolbar"><span>Commands</span></div>' +
@@ -1230,6 +1287,11 @@
       scopeNotice +
       technicalDetails +
       resultBody +
+      '<section class="mcc-record-actions" aria-labelledby="mcc-record-heading">' +
+      '<div><h4 id="mcc-record-heading">Commissioning record</h4><p>Download or print a summary without exact coordinates, credentials, or device identifiers.</p></div>' +
+      '<div><button type="button" class="mcc-button mcc-button-secondary" data-action="download-commissioning">' + icon("download") + 'Download</button>' +
+      '<button type="button" class="mcc-button mcc-button-secondary" data-action="print-commissioning">' + icon("printer") + 'Print</button></div>' +
+      '</section>' +
       (statusNotes ? '<div class="mcc-notes">' + statusNotes + "</div>" : "") +
       "</div>";
 
@@ -1244,6 +1306,18 @@
         copyText(button.getAttribute("data-cmd") || "", button.querySelector("em"), "Copy");
       });
     });
+    var downloadSummary = target.querySelector("[data-action='download-commissioning']");
+    if (downloadSummary) {
+      downloadSummary.addEventListener("click", function () {
+        downloadCommissioningSummary(data, state, downloadSummary);
+      });
+    }
+    var printSummary = target.querySelector("[data-action='print-commissioning']");
+    if (printSummary) {
+      printSummary.addEventListener("click", function () {
+        printCommissioningSummary(data, state, printSummary);
+      });
+    }
     refreshIcons(target);
   }
 
@@ -1274,6 +1348,70 @@
       .concat(["region", "region save", "region"]);
   }
 
+  function commissioningSummary(data, state) {
+    if (!state || !state.canGenerate || !state.resolution || !configuratorSupport.commissioningRecord) return null;
+    var rec = recommend(data, state.resolution, state.type, state.selectedMetros, state.selectedExternalPaths);
+    var commands = currentCommands(data, state);
+    if (!rec || !commands) return null;
+    var homeTag = state.resolution.primary.seed.tag;
+    return configuratorSupport.commissioningRecord({
+      generatedAt: new Date().toISOString(),
+      locationLabel: labelFor(data, homeTag),
+      homeRegion: labelledPath(data, ancestryFor(data, homeTag)),
+      firmware: state.firmware === "1.16" ? "v1.16+" : "v" + state.firmware + ".x",
+      budget: rec.budget.tagCount + " / 32 tags, " + rec.budget.responseBytes + " / 172 bytes",
+      paths: rec.paths.map(function (path) { return labelledPath(data, path); }),
+      commands: commands
+    });
+  }
+
+  function announceAction(button, message) {
+    var host = button && button.closest ? button.closest("[data-mcc-regions]") : null;
+    var live = host && host.querySelector("[data-mcc-copy-status]");
+    if (!live) return;
+    live.textContent = "";
+    window.setTimeout(function () { live.textContent = message; }, 10);
+  }
+
+  function downloadCommissioningSummary(data, state, button) {
+    var summary = commissioningSummary(data, state);
+    if (!summary) return;
+    var homeTag = state.resolution.primary.seed.tag;
+    var stem = configuratorSupport.safeFileStem
+      ? configuratorSupport.safeFileStem(homeTag)
+      : "repeater";
+    var blob = new Blob([summary], { type: "text/plain;charset=utf-8" });
+    var url = URL.createObjectURL(blob);
+    var link = document.createElement("a");
+    link.href = url;
+    link.download = "meshcore-" + stem + "-commissioning.txt";
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.setTimeout(function () { URL.revokeObjectURL(url); }, 0);
+    announceAction(button, "Commissioning summary downloaded. Exact coordinates and credentials were omitted.");
+  }
+
+  function printCommissioningSummary(data, state, button) {
+    var summary = commissioningSummary(data, state);
+    if (!summary) return;
+    var popup = window.open("", "_blank", "noopener,noreferrer");
+    if (!popup) {
+      announceAction(button, "The print window was blocked. Download the summary instead.");
+      return;
+    }
+    popup.opener = null;
+    popup.document.title = "MeshCore Canada commissioning summary";
+    var heading = popup.document.createElement("h1");
+    heading.textContent = "MeshCore Canada commissioning summary";
+    var pre = popup.document.createElement("pre");
+    pre.textContent = summary;
+    popup.document.body.appendChild(heading);
+    popup.document.body.appendChild(pre);
+    popup.focus();
+    popup.print();
+    announceAction(button, "Commissioning summary opened for printing. Exact coordinates and credentials were omitted.");
+  }
   function renderRegionDetail(data, section, target, state, tag) {
     if (!section || !target) return;
     if (!tag) {
@@ -1322,7 +1460,7 @@
       '<div class="mcc-detail-actions">' +
       '<button type="button" class="mcc-button mcc-button-secondary" data-action="copy-detail-tag">' + icon("copy") + 'Copy tag</button>' +
       (commands ? '<button type="button" class="mcc-button mcc-button-secondary" data-action="copy-detail-commands">' + icon("clipboard") + 'Copy commands</button>' : '') +
-      (sourceUrl ? '<a class="mcc-button mcc-button-secondary" href="' + esc(sourceUrl) + '" target="_blank" rel="noopener">' + icon("external-link") + 'Open source</a>' : '') +
+      (sourceUrl ? '<a class="mcc-button mcc-button-secondary" href="' + esc(sourceUrl) + '" target="_blank" rel="noopener noreferrer">' + icon("external-link") + 'Open source</a>' : '') +
       '</div>';
 
     var copyTag = target.querySelector("[data-action='copy-detail-tag']");
@@ -1377,70 +1515,98 @@
   function toolUi() {
     return '' +
       '<div class="mcc-wizard">' +
+      '<div class="mcc-visually-hidden" data-mcc-copy-status role="status" aria-live="polite" aria-atomic="true"></div>' +
       '<ol class="mcc-wizard-progress" aria-label="Setup progress">' +
-      '<li><button type="button" data-go-step="1"><span>1</span><strong>Location</strong></button></li>' +
-      '<li><button type="button" data-go-step="2" disabled><span>2</span><strong>Radio</strong></button></li>' +
-      '<li><button type="button" data-go-step="3" disabled><span>3</span><strong>Site</strong></button></li>' +
-      '<li><button type="button" data-go-step="4" disabled><span>4</span><strong>Finish</strong></button></li>' +
+      '<li><button type="button" data-go-step="1"><span>1</span><strong>Device</strong></button></li>' +
+      '<li><button type="button" data-go-step="2" disabled><span>2</span><strong>Location</strong></button></li>' +
+      '<li><button type="button" data-go-step="3" disabled><span>3</span><strong>Coverage</strong></button></li>' +
+      '<li><button type="button" data-go-step="4" disabled><span>4</span><strong>Apply</strong></button></li>' +
       '</ol>' +
       '<section class="mcc-card mcc-wizard-step" data-wizard-step="1">' +
       '<p class="mcc-step-label">Step 1 of 4</p>' +
-      '<h2>Choose a location</h2>' +
-      '<label class="mcc-label" for="mcc-location-input">City, airport code, or postal code</label>' +
+      '<h2>What are you configuring?</h2>' +
+      '<p class="mcc-step-intro">We will recommend forwarding paths, then show how to apply them.</p>' +
+      '<div class="mcc-choice-list mcc-choice-list-large" role="radiogroup" aria-label="Device and experience">' +
+      '<label class="mcc-choice"><input type="radio" name="mcc-device-role" value="repeater" checked><span><strong>Repeater</strong><small>Recommended for most operators</small></span></label>' +
+      '<label class="mcc-choice"><input type="radio" name="mcc-device-role" value="room"><span><strong>Room server with repeating</strong><small>Uses the same region paths</small></span></label>' +
+      '<label class="mcc-choice"><input type="radio" name="mcc-device-role" value="advanced"><span><strong>Advanced operator</strong><small>Review wide and cross-border paths</small></span></label>' +
+      '</div>' +
+      '<div class="mcc-wizard-actions"><button class="mcc-button" type="button" data-next-step>Next' + icon("arrow-right") + '</button></div>' +
+      '</section>' +
+      '<section class="mcc-card mcc-wizard-step" data-wizard-step="2" hidden>' +
+      '<p class="mcc-step-label">Step 2 of 4</p>' +
+      '<h2>Where is the node?</h2>' +
+      '<div class="mcc-location-method">' +
+      '<h3>Search a place</h3>' +
+      '<label class="mcc-label" for="mcc-location-input">City, airport code, postal code, or region name</label>' +
       '<div class="mcc-input-row">' +
       '<input class="mcc-input" id="mcc-location-input" type="text" autocomplete="off" spellcheck="false" placeholder="Ottawa, YOW, K1A 0B1">' +
       '<button class="mcc-button" type="button" data-action="locate">' + icon("search") + 'Find</button>' +
       '</div>' +
-      '<p class="mcc-search-privacy">Search uses OpenStreetMap and geocoder.ca. Or click the map.</p>' +
+      '<label class="mcc-consent-choice"><input type="checkbox" data-action="online-search-consent"><span><strong>Allow online place lookup</strong><small>If a local region name is not enough, the search text is sent to OpenStreetMap Nominatim and geocoder.ca.</small></span></label>' +
+      '</div>' +
+      '<div class="mcc-location-options">' +
+      '<section class="mcc-location-method">' +
+      '<h3>Enter coordinates</h3>' +
+      '<div class="mcc-coordinate-grid">' +
+      '<label><span>Latitude</span><input class="mcc-input" data-role="latitude" inputmode="decimal" autocomplete="off" placeholder="45.4215"></label>' +
+      '<label><span>Longitude</span><input class="mcc-input" data-role="longitude" inputmode="decimal" autocomplete="off" placeholder="-75.6972"></label>' +
+      '</div>' +
+      '<button class="mcc-button mcc-button-secondary" type="button" data-action="use-coordinates">Use coordinates</button>' +
+      '<p class="mcc-hint">Coordinates are checked against the Canadian region data in this page.</p>' +
+      '</section>' +
+      '<section class="mcc-location-method">' +
+      '<h3>Use this device</h3>' +
+      '<button class="mcc-button mcc-button-secondary" type="button" data-action="use-browser-location">' + icon("locate-fixed") + 'Use my location</button>' +
+      '<p class="mcc-hint">Your browser asks first. MeshCore Canada does not receive or store your coordinates.</p>' +
+      '</section>' +
+      '</div>' +
       '<div data-role="status"></div>' +
       '<div class="mcc-selected-region" data-role="selected-region" hidden></div>' +
-      '<details class="mcc-alternate-regions" data-role="region-browser" hidden>' +
-      '<summary>Choose a different region</summary>' +
+      '<details class="mcc-alternate-regions" data-role="region-browser" open>' +
+      '<summary>Browse regions without search or a map</summary>' +
       '<div class="mcc-region-breadcrumbs" data-role="config-region-breadcrumbs"></div>' +
       '<div class="mcc-region-children" data-role="config-region-children"></div>' +
       '</details>' +
       '<div class="mcc-wizard-actions">' +
-      '<a class="mcc-button mcc-button-secondary" data-action="view-map" href="' + esc(regionPageHref("map")) + '" hidden>' + icon("map") + 'View on map</a>' +
+      '<button class="mcc-button mcc-button-secondary" type="button" data-prev-step>' + icon("arrow-left") + 'Back</button>' +
+      '<a class="mcc-button mcc-button-secondary" data-action="view-map" href="' + esc(regionPageHref("map")) + '">' + icon("map") + 'Explore regions</a>' +
       '<button class="mcc-button" type="button" data-next-step disabled>Next' + icon("arrow-right") + '</button>' +
       '</div>' +
       '</section>' +
-      '<section class="mcc-card mcc-wizard-step" data-wizard-step="2" hidden>' +
-      '<p class="mcc-step-label">Step 2 of 4</p>' +
-      '<h2>Use recommended settings?</h2>' +
-      '<div class="mcc-choice-list mcc-choice-list-large" data-role="device-path" role="group" aria-label="Recommended radio settings">' +
-      '<label class="mcc-choice"><input type="radio" name="mcc-device-path" value="new" checked><span><strong>Yes — apply defaults</strong></span></label>' +
-      '<label class="mcc-choice"><input type="radio" name="mcc-device-path" value="existing"><span><strong>No — keep current settings</strong></span></label>' +
+      '<section class="mcc-card mcc-wizard-step" data-wizard-step="3" hidden>' +
+      '<p class="mcc-step-label">Step 3 of 4</p>' +
+      '<h2>What should this node serve?</h2>' +
+      '<div class="mcc-choice-list mcc-choice-list-large" data-role="types" role="radiogroup" aria-label="Repeater forwarding coverage">' +
+      '<label class="mcc-choice"><input type="radio" name="mcc-type" value="residential" checked><span><strong>Recommended local area</strong><small>Use the home region and any registered shared area</small></span></label>' +
+      '<label class="mcc-choice"><input type="radio" name="mcc-type" value="high-site"><span><strong>Add nearby or cross-border paths</strong><small>For bridge, wide-coverage, mountain, or water-path repeaters</small></span></label>' +
       '</div>' +
-      '<details class="mcc-advanced-options">' +
-      '<summary>Firmware (advanced)</summary>' +
-      '<div class="mcc-choice-list" data-role="firmware" role="group" aria-label="Firmware version">' +
+      '<div data-role="metro"></div>' +
+      '<details class="mcc-advanced-options" data-role="technical-settings">' +
+      '<summary>Radio and firmware options</summary>' +
+      '<div class="mcc-choice-list" data-role="device-path" role="radiogroup" aria-label="Recommended radio settings">' +
+      '<label class="mcc-choice"><input type="radio" name="mcc-device-path" value="new" checked><span><strong>Include recommended radio defaults</strong><small>For a new setup</small></span></label>' +
+      '<label class="mcc-choice"><input type="radio" name="mcc-device-path" value="existing"><span><strong>Keep current radio settings</strong><small>For an existing coordinated network</small></span></label>' +
+      '</div>' +
+      '<p class="mcc-label">Firmware version</p>' +
+      '<div class="mcc-choice-list" data-role="firmware" role="radiogroup" aria-label="Firmware version">' +
       '<label class="mcc-choice"><input type="radio" name="mcc-firmware" value="1.16" checked><span><strong>v1.16+</strong></span></label>' +
       '<label class="mcc-choice"><input type="radio" name="mcc-firmware" value="1.15"><span><strong>v1.15.x</strong></span></label>' +
       '<label class="mcc-choice"><input type="radio" name="mcc-firmware" value="1.14"><span><strong>v1.14.x</strong></span></label>' +
       '</div>' +
       '</details>' +
-      '<div class="mcc-wizard-actions"><button class="mcc-button mcc-button-secondary" type="button" data-prev-step>' + icon("arrow-left") + 'Back</button><button class="mcc-button" type="button" data-next-step>Next' + icon("arrow-right") + '</button></div>' +
-      '</section>' +
-      '<section class="mcc-card mcc-wizard-step" data-wizard-step="3" hidden>' +
-      '<p class="mcc-step-label">Step 3 of 4</p>' +
-      '<h2>Installation site</h2>' +
-      '<div class="mcc-choice-list" data-role="types" role="group" aria-label="Repeater installation type">' +
-      '<label class="mcc-choice"><input type="radio" name="mcc-type" value="residential" checked><span><strong>Home or portable</strong></span></label>' +
-      '<label class="mcc-choice"><input type="radio" name="mcc-type" value="urban"><span><strong>Rooftop or tower</strong></span></label>' +
-      '<label class="mcc-choice"><input type="radio" name="mcc-type" value="high-site"><span><strong>Large or cross-border coverage</strong><small>Choose forwarding paths</small></span></label>' +
-      '</div>' +
-      '<div data-role="metro"></div>' +
-      '<div class="mcc-wizard-actions"><button class="mcc-button mcc-button-secondary" type="button" data-prev-step>' + icon("arrow-left") + 'Back</button><button class="mcc-button" type="button" data-next-step>Next' + icon("arrow-right") + '</button></div>' +
+      '<div class="mcc-wizard-actions"><button class="mcc-button mcc-button-secondary" type="button" data-prev-step>' + icon("arrow-left") + 'Back</button><button class="mcc-button" type="button" data-next-step>Review' + icon("arrow-right") + '</button></div>' +
       '</section>' +
       '<section class="mcc-card mcc-wizard-step" data-wizard-step="4" hidden>' +
       '<p class="mcc-step-label">Step 4 of 4</p>' +
-      '<h2>Finish setup</h2>' +
+      '<h2>Review and apply</h2>' +
+      '<div class="mcc-review-summary" data-role="review-summary"></div>' +
       '<div class="mcc-finish-paths" role="group" aria-label="Choose setup instructions">' +
-      '<button type="button" class="mcc-finish-path is-active" data-finish-path="guided" aria-pressed="true">' + icon("list-checks") + '<span><strong>Guide me</strong><small>Step-by-step help</small></span></button>' +
-      '<button type="button" class="mcc-finish-path" data-finish-path="technical" aria-pressed="false">' + icon("terminal") + '<span><strong>Copy commands</strong><small>All commands at once</small></span></button>' +
+      '<button type="button" class="mcc-finish-path is-active" data-finish-path="guided" aria-pressed="true">' + icon("list-checks") + '<span><strong>Guide me</strong><small>Connect, apply, verify, then save</small></span></button>' +
+      '<button type="button" class="mcc-finish-path" data-finish-path="technical" aria-pressed="false">' + icon("terminal") + '<span><strong>Copy commands</strong><small>Technical operator flow</small></span></button>' +
       '</div>' +
       '<div data-role="result"><p class="mcc-result-empty">Choose a location first.</p></div>' +
-      '<div class="mcc-wizard-actions"><button class="mcc-button mcc-button-secondary" type="button" data-prev-step>' + icon("arrow-left") + 'Back</button><a class="mcc-button mcc-button-secondary" data-action="view-map" href="' + esc(regionPageHref("map")) + '" hidden>' + icon("map") + 'View on map</a></div>' +
+      '<div class="mcc-wizard-actions"><button class="mcc-button mcc-button-secondary" type="button" data-prev-step>' + icon("arrow-left") + 'Back</button><a class="mcc-button mcc-button-secondary" data-action="view-map" href="' + esc(regionPageHref("map")) + '">' + icon("map") + 'Explore regions</a></div>' +
       '</section>' +
       '</div>';
   }
@@ -1452,8 +1618,10 @@
       lat: null,
       lon: null,
       name: "",
+      locationSource: "",
       forcedTag: null,
       jurisdictionTag: null,
+      deviceRole: "repeater",
       type: "residential",
       firmware: data.meta.defaultFirmware || "1.16",
       includeBaseline: true,
@@ -1469,6 +1637,11 @@
     var els = {
       input: el.querySelector("#mcc-location-input"),
       locate: el.querySelector("[data-action='locate']"),
+      onlineConsent: el.querySelector("[data-action='online-search-consent']"),
+      latitude: el.querySelector("[data-role='latitude']"),
+      longitude: el.querySelector("[data-role='longitude']"),
+      coordinates: el.querySelector("[data-action='use-coordinates']"),
+      browserLocation: el.querySelector("[data-action='use-browser-location']"),
       status: el.querySelector("[data-role='status']"),
       selectedRegion: el.querySelector("[data-role='selected-region']"),
       regionBrowser: el.querySelector("[data-role='region-browser']"),
@@ -1478,20 +1651,50 @@
       candidates: null,
       metro: el.querySelector("[data-role='metro']"),
       result: el.querySelector("[data-role='result']"),
+      reviewSummary: el.querySelector("[data-role='review-summary']"),
+      technicalSettings: el.querySelector("[data-role='technical-settings']"),
       finishPaths: Array.prototype.slice.call(el.querySelectorAll("[data-finish-path]")),
       steps: Array.prototype.slice.call(el.querySelectorAll("[data-wizard-step]")),
       progress: Array.prototype.slice.call(el.querySelectorAll("[data-go-step]")),
       viewMap: Array.prototype.slice.call(el.querySelectorAll("[data-action='view-map']"))
     };
+    var activeGeocodeController = null;
+    var locationRequestId = 0;
 
     var firmwareInput = el.querySelector("input[name='mcc-firmware'][value='" + state.firmware + "']");
     if (firmwareInput) firmwareInput.checked = true;
 
     function updateMapLinks() {
       els.viewMap.forEach(function (link) {
-        link.hidden = !state.canGenerate;
-        if (state.canGenerate) link.href = mapHrefForState(state);
+        link.hidden = false;
+        link.href = state.canGenerate ? mapHrefForState(state) : regionPageHref("map");
       });
+    }
+
+    function renderReviewSummary() {
+      if (!els.reviewSummary || !state.canGenerate || !state.resolution) return;
+      var rec = recommend(data, state.resolution, state.type, state.selectedMetros, state.selectedExternalPaths);
+      if (!rec) return;
+      var deviceLabels = {
+        repeater: "Repeater",
+        room: "Room server with repeating",
+        advanced: "Advanced operator"
+      };
+      var paths = rec.paths.map(function (path) {
+        return '<li>' + esc(labelledPath(data, path)) + '</li>';
+      }).join("");
+      els.reviewSummary.innerHTML =
+        '<h3>Selection</h3>' +
+        '<dl class="mcc-review-list">' +
+        '<div><dt>Node</dt><dd>' + esc(deviceLabels[state.deviceRole] || deviceLabels.repeater) + '</dd></div>' +
+        '<div><dt>Place</dt><dd>' + esc(state.name || labelFor(data, state.resolution.primary.seed.tag)) + '</dd></div>' +
+        '<div><dt>Home region</dt><dd>' + esc(labelledPath(data, ancestryFor(data, state.resolution.primary.seed.tag))) + '</dd></div>' +
+        '<div><dt>Budget</dt><dd>' + esc(rec.budget.tagCount) + ' / 32 tags · ' + esc(rec.budget.responseBytes) + ' / 172 bytes</dd></div>' +
+        '</dl>' +
+        '<h3>Forwarding paths</h3><ul class="mcc-review-paths">' + paths + '</ul>' +
+        (rec.externalPaths.length
+          ? '<p class="mcc-note mcc-note-warning">Neighbouring paths are included only on this repeater. Confirm provisional paths with the neighbouring operators.</p>'
+          : '');
     }
 
     function showStep(step) {
@@ -1510,7 +1713,10 @@
         if (buttonStep === next) button.setAttribute("aria-current", "step");
         else button.removeAttribute("aria-current");
       });
-      if (next === 4) renderResult(data, els.result, state);
+      if (next === 4) {
+        renderReviewSummary();
+        renderResult(data, els.result, state);
+      }
       if (changed) {
         var activeStep = els.steps.find(function (section) {
           return Number(section.getAttribute("data-wizard-step")) === next;
@@ -1535,8 +1741,8 @@
     }
 
     function advanceStep() {
-      if (state.wizardStep === 1 && !state.canGenerate) {
-        setStatus(els.status, "Choose a location first.", "error");
+      if (state.wizardStep === 2 && !state.canGenerate) {
+        setStatus(els.status, "Choose a location or browse to a region first.", "error");
         return;
       }
       state.maxStep = Math.max(state.maxStep, Math.min(4, state.wizardStep + 1));
@@ -1559,7 +1765,7 @@
             (sharedArea ? '<span class="mcc-selected-shared-area">Shared repeater area: ' + esc(sharedArea.label) + "</span>" : "")
           : "";
       }
-      if (els.regionBrowser) els.regionBrowser.hidden = !selectedTag;
+      if (els.regionBrowser) els.regionBrowser.hidden = false;
       if (!els.breadcrumbs || !els.children) return;
 
       var path = ancestryFor(data, tag);
@@ -1578,7 +1784,7 @@
             (nested ? leafCount + ' subregions' : child.toUpperCase() + ' · region') +
             '</small></span><span aria-hidden="true">' + (nested ? '›' : '✓') + '</span></button>';
         }).join("")
-        : '<p class="mcc-help">Used for your settings.</p>';
+        : '<p class="mcc-help">Select this region to use it as the home region.</p>';
     }
 
     function chooseConfigRegionNode(tag) {
@@ -1587,15 +1793,24 @@
       if (!children.length) {
         var seed = seedForTag(data, tag);
         if (seed) {
-          useGeo({ lat: seed.lat, lon: seed.lon, name: labelFor(data, tag), countryCode: "ca", tag: tag });
+          useGeo({
+            lat: seed.lat,
+            lon: seed.lon,
+            name: labelFor(data, tag),
+            countryCode: "ca",
+            tag: tag,
+            source: "region"
+          });
         }
       }
     }
 
-    function useGeo(geo) {
-      state.lat = geo.lat;
-      state.lon = geo.lon;
-      state.name = geo.name;
+    function finishGeo(geo, requestId) {
+      if (requestId !== locationRequestId) return;
+      state.lat = Number(geo.lat);
+      state.lon = Number(geo.lon);
+      state.name = geo.name || (state.lat.toFixed(4) + ", " + state.lon.toFixed(4));
+      state.locationSource = geo.source || "search";
       state.forcedTag = geo.tag || null;
       state.jurisdictionTag = state.forcedTag
         ? provinceTagFor(data, state.forcedTag)
@@ -1606,7 +1821,6 @@
         state.canGenerate = false;
         state.resolution = null;
         if (els.selectedRegion) els.selectedRegion.hidden = true;
-        if (els.regionBrowser) els.regionBrowser.hidden = true;
         setStatus(els.status, "This location is outside Canada.", "warning");
         refreshTool(data, els, state);
         return;
@@ -1615,44 +1829,105 @@
       if (!state.resolution.hasMatch) {
         state.canGenerate = false;
         if (els.selectedRegion) els.selectedRegion.hidden = true;
-        if (els.regionBrowser) els.regionBrowser.hidden = true;
-        setStatus(els.status, "No region found here. Try a nearby city.", "warning");
+        setStatus(els.status, "No Canadian region contains that point. Browse the region list instead.", "warning");
       } else {
         state.canGenerate = true;
-        state.maxStep = Math.max(state.maxStep, 2);
+        state.maxStep = Math.max(state.maxStep, 3);
         setStatus(els.status, "Region found.", "info");
         renderConfigRegionBrowser(state.resolution.primary.seed.tag);
       }
       refreshTool(data, els, state, updateMapLinks);
       updateMapLinks();
-      var nextButton = el.querySelector("[data-wizard-step='1'] [data-next-step]");
+      var nextButton = el.querySelector("[data-wizard-step='2'] [data-next-step]");
       if (nextButton) nextButton.disabled = !state.canGenerate;
-      showStep(1);
+      showStep(2);
+    }
+
+    function useGeo(geo) {
+      var requestId = ++locationRequestId;
+      setStatus(els.status, "Checking the Canadian region data…", "info");
+      return ensureResolverData(data).then(function () {
+        finishGeo(geo, requestId);
+      }).catch(function (error) {
+        if (requestId !== locationRequestId) return;
+        state.canGenerate = false;
+        setStatus(els.status, esc(error.message || "Unable to load the Canadian location data."), "error");
+      });
     }
 
     function locate() {
       var query = els.input.value.trim();
       if (!query) {
-        setStatus(els.status, "Enter a city, airport code, or postal code.", "error");
+        setStatus(els.status, "Enter a city, airport code, postal code, or region name.", "error");
         return;
       }
+      if (activeGeocodeController) activeGeocodeController.abort();
+      activeGeocodeController = typeof AbortController !== "undefined" ? new AbortController() : null;
+      var thisController = activeGeocodeController;
       els.locate.disabled = true;
       els.locate.textContent = "Finding";
-      geocode(data, query).then(useGeo).catch(function (err) {
+      geocode(data, query, Boolean(els.onlineConsent && els.onlineConsent.checked),
+        thisController && thisController.signal).then(function (geo) {
+        geo.source = "search";
+        return useGeo(geo);
+      }).catch(function (err) {
+        if (err && err.name === "AbortError") return;
         state.canGenerate = false;
         setStatus(els.status, esc(err.message || "Location lookup failed"), "error");
         refreshTool(data, els, state, updateMapLinks);
       }).finally(function () {
+        if (activeGeocodeController !== thisController) return;
         els.locate.disabled = false;
         els.locate.innerHTML = icon("search") + "Find";
         refreshIcons(els.locate);
       });
     }
 
+    function useCoordinates() {
+      var coordinates = configuratorSupport.parseCoordinates
+        ? configuratorSupport.parseCoordinates(els.latitude.value, els.longitude.value)
+        : null;
+      if (!coordinates) {
+        setStatus(els.status, "Enter a latitude from -90 to 90 and a longitude from -180 to 180.", "error");
+        return;
+      }
+      useGeo({
+        lat: coordinates.lat,
+        lon: coordinates.lon,
+        name: coordinates.lat.toFixed(4) + ", " + coordinates.lon.toFixed(4),
+        countryCode: "ca",
+        source: "coordinates"
+      });
+    }
+
+    function useBrowserLocation() {
+      if (!navigator.geolocation) {
+        setStatus(els.status, "This browser does not provide location access. Enter coordinates or browse regions.", "error");
+        return;
+      }
+      els.browserLocation.disabled = true;
+      setStatus(els.status, "Waiting for browser location permission…", "info");
+      navigator.geolocation.getCurrentPosition(function (position) {
+        els.browserLocation.disabled = false;
+        useGeo({
+          lat: position.coords.latitude,
+          lon: position.coords.longitude,
+          name: "Current browser location",
+          countryCode: "ca",
+          source: "browser"
+        });
+      }, function () {
+        els.browserLocation.disabled = false;
+        setStatus(els.status, "Location was not available. Enter coordinates or browse regions.", "error");
+      }, { enableHighAccuracy: false, timeout: REQUEST_TIMEOUT_MS, maximumAge: 300000 });
+    }
+
     els.locate.addEventListener("click", locate);
     els.input.addEventListener("keydown", function (event) {
       if (event.key === "Enter") locate();
     });
+    els.coordinates.addEventListener("click", useCoordinates);
+    els.browserLocation.addEventListener("click", useBrowserLocation);
     if (els.breadcrumbs) {
       els.breadcrumbs.addEventListener("click", function (event) {
         var button = event.target.closest("[data-config-region-node]");
@@ -1681,6 +1956,12 @@
         selectFinishPath(button.getAttribute("data-finish-path"));
       });
     });
+    el.querySelectorAll("input[name='mcc-device-role']").forEach(function (input) {
+      input.addEventListener("change", function () {
+        state.deviceRole = input.value;
+        if (state.deviceRole === "advanced" && els.technicalSettings) els.technicalSettings.open = true;
+      });
+    });
     el.querySelectorAll("input[name='mcc-device-path']").forEach(function (input) {
       input.addEventListener("change", function () {
         state.includeBaseline = input.value === "new";
@@ -1702,7 +1983,24 @@
         renderResult(data, els.result, state);
       });
     });
-    showStep(1);
+    renderConfigRegionBrowser(state.browseTag);
+    updateMapLinks();
+    var initialParams = new URLSearchParams(window.location.search);
+    var initialQuery = (initialParams.get("q") || "").trim();
+    if (initialQuery) {
+      state.maxStep = 2;
+      els.input.value = initialQuery;
+      var allowInitialLookup = initialParams.get("lookup") === "online";
+      if (els.onlineConsent) els.onlineConsent.checked = allowInitialLookup;
+      showStep(2);
+      if (allowInitialLookup) {
+        locate();
+      } else {
+        setStatus(els.status, "Allow online place lookup, then select Find.", "info");
+      }
+    } else {
+      showStep(1);
+    }
   }
 
   function loadLeaflet() {
@@ -1728,48 +2026,67 @@
 
   function initMap(el, data) {
     el.innerHTML = '' +
-      '<div class="mcc-map-shell">' +
-      '<aside class="mcc-map-panel">' +
-      '<div class="mcc-panel-header">' +
-      '<h2>Find a region</h2>' +
-
-      '<a class="mcc-button mcc-button-secondary" href="' + esc(regionPageHref("config")) + '">' + icon("list-checks") + 'Setup</a>' +
+      '<div class="mcc-map-experience">' +
+      '<div class="mcc-visually-hidden" data-mcc-copy-status role="status" aria-live="polite" aria-atomic="true"></div>' +
+      '<header class="mcc-map-product-header">' +
+      '<div><p class="mcc-eyebrow">MeshCore Canada regions</p><h2>Explore or audit the region release</h2>' +
+      '<p>Find a home region without loading a map, or inspect the published release evidence.</p></div>' +
+      '<a class="mcc-button" href="' + esc(regionPageHref("config")) + '">' + icon("list-checks") + 'Set up a repeater</a>' +
+      '</header>' +
+      '<div class="mcc-map-mode-switch" role="group" aria-label="Region map mode">' +
+      '<button type="button" data-map-mode="explore" aria-pressed="true" aria-controls="mcc-explore-panel">Explore regions</button>' +
+      '<button type="button" data-map-mode="audit" aria-pressed="false" aria-controls="mcc-audit-panel">Audit the release</button>' +
       '</div>' +
+      '<section id="mcc-explore-panel" data-map-panel="explore">' +
+      '<div class="mcc-map-shell">' +
+      '<aside class="mcc-map-panel" aria-label="Region search and details">' +
       '<section class="mcc-card mcc-card-compact">' +
-      '<h2>Browse regions</h2>' +
-      '<div class="mcc-region-breadcrumbs" data-role="region-breadcrumbs"></div>' +
-      '<div class="mcc-region-children" data-role="region-children"></div>' +
-      '</section>' +
-      '<section class="mcc-card mcc-card-compact">' +
-      '<h2>Choose a location</h2>' +
-      '<label class="mcc-label" for="mcc-map-location-input">City, airport code, or postal code</label>' +
+      '<h3>Find a place</h3>' +
+      '<label class="mcc-label" for="mcc-map-location-input">City, airport code, postal code, or region name</label>' +
       '<div class="mcc-input-row">' +
       '<input class="mcc-input" id="mcc-map-location-input" data-role="map-input" type="text" autocomplete="off" spellcheck="false" placeholder="Ottawa, YOW, K1A 0B1">' +
       '<button class="mcc-button" type="button" data-action="map-locate">' + icon("search") + 'Find</button>' +
       '</div>' +
-      '<p class="mcc-search-privacy">Search uses OpenStreetMap and geocoder.ca. Or click the map.</p>' +
+      '<label class="mcc-consent-choice"><input type="checkbox" data-action="map-online-search-consent"><span><strong>Allow online place lookup</strong><small>If local region names are not enough, the search text is sent to OpenStreetMap Nominatim and geocoder.ca.</small></span></label>' +
+      '<details class="mcc-coordinate-entry"><summary>Enter coordinates instead</summary>' +
+      '<div class="mcc-coordinate-grid">' +
+      '<label><span>Latitude</span><input class="mcc-input" data-role="map-latitude" inputmode="decimal" autocomplete="off" placeholder="45.4215"></label>' +
+      '<label><span>Longitude</span><input class="mcc-input" data-role="map-longitude" inputmode="decimal" autocomplete="off" placeholder="-75.6972"></label>' +
+      '</div><button class="mcc-button mcc-button-secondary" type="button" data-action="map-use-coordinates">Use coordinates</button></details>' +
       '<div data-role="map-status"></div>' +
       '</section>' +
-      '<section class="mcc-card mcc-dynamic-card" data-role="map-result-section" hidden>' +
-      '<h2>Selected region</h2>' +
-      '<div data-role="map-result"><p class="mcc-result-empty">Choose a location.</p></div>' +
+      '<section class="mcc-card mcc-card-compact">' +
+      '<h3>Browse the hierarchy</h3>' +
+      '<div class="mcc-region-breadcrumbs" data-role="region-breadcrumbs"></div>' +
+      '<div class="mcc-region-children" data-role="region-children"></div>' +
       '</section>' +
-      '<details class="mcc-card mcc-map-options">' +
-      '<summary>Settings</summary>' +
-      '<div class="mcc-choice-list" role="group" aria-label="Repeater installation type">' +
-      '<label class="mcc-choice"><input type="radio" name="mcc-map-type" value="residential" checked><span><strong>Home or portable</strong></span></label>' +
-      '<label class="mcc-choice"><input type="radio" name="mcc-map-type" value="urban"><span><strong>Rooftop or tower</strong></span></label>' +
-      '<label class="mcc-choice"><input type="radio" name="mcc-map-type" value="high-site"><span><strong>Large or cross-border coverage</strong><small>Choose forwarding paths</small></span></label>' +
-      '</div>' +
-      '<div data-role="map-metro"></div>' +
-      '<label class="mcc-label" for="mcc-map-firmware">Firmware</label>' +
-      '<select class="mcc-select" id="mcc-map-firmware" data-role="map-firmware">' +
-      '<option value="1.16">v1.16+</option><option value="1.15">v1.15.x</option><option value="1.14">v1.14.x</option>' +
-      '</select>' +
-      '<label class="mcc-choice" style="margin-top:0.55rem"><input type="checkbox" data-action="map-baseline" checked><span><strong>Include recommended radio defaults</strong></span></label>' +
-      '</details>' +
+      '<section class="mcc-card mcc-dynamic-card" data-role="map-result-section" hidden>' +
+      '<h3>Selected region</h3><div data-role="map-text-result"></div>' +
+      '</section>' +
       '</aside>' +
-      '<div class="mcc-map-area"><div class="mcc-map-canvas" data-role="map-canvas" role="region" aria-label="Interactive Canadian region map"></div></div>' +
+      '<div class="mcc-map-stage">' +
+      '<a class="mcc-skip-map" href="#mcc-region-list">Skip the interactive map</a>' +
+      '<div class="mcc-map-consent" data-role="map-consent">' +
+      '<div><h3>Interactive map is off</h3><p>The region list below works without map tiles. Loading the map contacts OpenStreetMap and shares normal request data such as your IP address.</p></div>' +
+      '<label class="mcc-consent-choice"><input type="checkbox" data-action="tile-consent"><span><strong>Allow OpenStreetMap tiles for this visit</strong><small>The Canadian boundary file and Leaflet library are served by MeshCore Canada.</small></span></label>' +
+      '<button class="mcc-button" type="button" data-action="load-map">' + icon("map") + 'Load interactive map</button>' +
+      '<div data-role="map-load-status" aria-live="polite"></div>' +
+      '</div>' +
+      '<div class="mcc-map-area" data-role="map-area" hidden>' +
+      '<div class="mcc-map-canvas" data-role="map-canvas" role="region" aria-label="Interactive Canadian region map" tabindex="0"></div>' +
+      '<details class="mcc-map-legend"><summary>Map legend</summary><p><span><i class="mcc-legend-selected"></i>Selected boundary</span><span><i class="mcc-legend-browse"></i>Browsed group outline</span></p></details>' +
+      '</div>' +
+      '</div>' +
+      '</div>' +
+      '<section class="mcc-card mcc-map-list-card" id="mcc-region-list">' +
+      '<div class="mcc-section-head"><div><p class="mcc-eyebrow">List alternative</p><h3>All regions</h3><p>Search and select a region without map tiles.</p></div></div>' +
+      '<div data-role="map-region-table"></div>' +
+      '</section>' +
+      '</section>' +
+      '<section id="mcc-audit-panel" class="mcc-audit-panel" data-map-panel="audit" hidden>' +
+      '<div class="mcc-status mcc-status-info" data-role="audit-status" role="status">Audit data loads when this view is opened.</div>' +
+      '<div data-role="audit-content"></div>' +
+      '</section>' +
       '</div>';
     refreshIcons(el);
 
@@ -1777,7 +2094,9 @@
     var requestedLargeCoverage = mapParams.get("type") === "large";
     var requestedCanadianRegions = expandSharedRepeaterLeaves(
       data,
-      String(mapParams.get("regions") || "").split(",").map(slug).filter(Boolean)
+      String(mapParams.get("regions") || "").split(",").map(slug).filter(function (tag) {
+        return Boolean(data.hierarchy[tag] && seedForTag(data, tag));
+      })
     );
     var requestedExternalPaths = selectedExternalRegionPaths(
       data,
@@ -1792,8 +2111,8 @@
       type: requestedLargeCoverage ? "high-site" : "residential",
       firmware: data.meta.defaultFirmware || "1.16",
       includeBaseline: true,
-      selectedMetros: [],
-      selectedExternalPaths: [],
+      selectedMetros: requestedLargeCoverage ? requestedCanadianRegions : [],
+      selectedExternalPaths: requestedLargeCoverage ? requestedExternalPaths : [],
       canGenerate: false,
       resolution: null,
       detailTag: null,
@@ -1802,292 +2121,356 @@
     var els = {
       input: el.querySelector("[data-role='map-input']"),
       locate: el.querySelector("[data-action='map-locate']"),
+      onlineConsent: el.querySelector("[data-action='map-online-search-consent']"),
+      latitude: el.querySelector("[data-role='map-latitude']"),
+      longitude: el.querySelector("[data-role='map-longitude']"),
+      coordinates: el.querySelector("[data-action='map-use-coordinates']"),
       status: el.querySelector("[data-role='map-status']"),
       breadcrumbs: el.querySelector("[data-role='region-breadcrumbs']"),
       children: el.querySelector("[data-role='region-children']"),
-      candidatesSection: null,
-      candidates: null,
-      metro: el.querySelector("[data-role='map-metro']"),
       resultSection: el.querySelector("[data-role='map-result-section']"),
-      result: el.querySelector("[data-role='map-result']"),
-      detailSection: null,
-      detail: null,
-      canvas: el.querySelector("[data-role='map-canvas']")
+      textResult: el.querySelector("[data-role='map-text-result']"),
+      table: el.querySelector("[data-role='map-region-table']"),
+      tileConsent: el.querySelector("[data-action='tile-consent']"),
+      loadMap: el.querySelector("[data-action='load-map']"),
+      mapConsent: el.querySelector("[data-role='map-consent']"),
+      mapLoadStatus: el.querySelector("[data-role='map-load-status']"),
+      mapArea: el.querySelector("[data-role='map-area']"),
+      canvas: el.querySelector("[data-role='map-canvas']"),
+      auditStatus: el.querySelector("[data-role='audit-status']"),
+      auditContent: el.querySelector("[data-role='audit-content']")
     };
-    var afterMapRefresh = function () {};
-    el.querySelector("[data-role='map-firmware']").value = state.firmware;
-    var initialTypeInput = el.querySelector("input[name='mcc-map-type'][value='" + state.type + "']");
-    if (initialTypeInput) initialTypeInput.checked = true;
+    var map = null;
+    var marker = null;
+    var browseLayer = null;
+    var selectedLayer = null;
+    var activeGeocodeController = null;
+    var locationRequestId = 0;
+    var auditLoaded = false;
 
-    loadLeaflet().then(function (L) {
-      if (!el.isConnected) return;
-      var map = L.map(els.canvas, { minZoom: 3, maxZoom: 13 });
-      activeMaps.push({ container: el, map: map });
-      var canadaBounds = data.meta.map.bounds || [[41.5, -141.5], [83.5, -52]];
-      function fitCanada() {
-        map.fitBounds(canadaBounds, { padding: [24, 24], maxZoom: 4 });
-      }
-      fitCanada();
-      L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        maxZoom: 19,
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      }).addTo(map);
+    function setMapMode(mode) {
+      var next = mode === "audit" ? "audit" : "explore";
+      el.querySelectorAll("[data-map-mode]").forEach(function (button) {
+        var active = button.getAttribute("data-map-mode") === next;
+        button.setAttribute("aria-pressed", active ? "true" : "false");
+      });
+      el.querySelectorAll("[data-map-panel]").forEach(function (panel) {
+        panel.hidden = panel.getAttribute("data-map-panel") !== next;
+      });
+      if (next === "audit") loadAudit();
+      if (next === "explore" && map) window.setTimeout(function () { map.invalidateSize(); }, 0);
+    }
 
-      var partitionLayer = L.geoJSON(data.partitionRegions, {
-        style: function (feature) {
-          return {
-            color: "#aeb8ff",
-            opacity: 0.8,
-            weight: 1,
-            fillColor: colorForTag(feature.properties.tag),
-            fillOpacity: 0.2
-          };
-        },
-        onEachFeature: function (feature, layer) {
-          layer.bindTooltip('<strong>' + esc(feature.properties.tag.toUpperCase()) + '</strong> - ' + esc(feature.properties.label));
-          layer.on("click", function (event) {
-            if (event.originalEvent) L.DomEvent.stopPropagation(event.originalEvent);
-            useGeo({
-              lat: event.latlng.lat,
-              lon: event.latlng.lng,
-              name: feature.properties.label,
-              countryCode: "ca"
-            }, false, feature.properties.tag);
-          });
+    function renderAudit() {
+      Promise.all([
+        fetchJsonAsset("canada-region-partition.qa.json", "Unable to load release QA"),
+        fetchJsonAsset("sources.lock.json", "Unable to load the source lock")
+      ]).then(function (loaded) {
+        var qa = loaded[0];
+        var sourceLock = loaded[1];
+        var invariantValues = Object.keys(qa.invariants || {}).map(function (key) {
+          return qa.invariants[key];
+        });
+        var passed = invariantValues.filter(function (value) {
+          return value === true || value === 0;
+        }).length;
+        var total = invariantValues.length;
+        var hashes = qa.artifactHashes || {};
+        els.auditStatus.hidden = true;
+        els.auditContent.innerHTML =
+          '<div class="mcc-audit-grid">' +
+          '<section class="mcc-card"><p class="mcc-eyebrow">Release</p><h3>' + esc(data.version) + '</h3>' +
+          '<dl class="mcc-audit-list"><div><dt>Status</dt><dd>' + esc(data.authority.currentBoundaryStatus) + '</dd></div>' +
+          '<div><dt>Standard</dt><dd>' + esc(data.authority.standard) + ' · ' + esc(data.authority.version) + '</dd></div>' +
+          '<div><dt>Connectivity</dt><dd>' + (navigator.onLine ? 'Online' : 'Offline; showing cached static data when available') + '</dd></div></dl></section>' +
+          '<section class="mcc-card"><p class="mcc-eyebrow">Coverage</p><h3>' + esc(data.regionCounts.generated) + ' leaf regions</h3>' +
+          '<dl class="mcc-audit-list"><div><dt>Digital census cells</dt><dd>' + esc(qa.digitalCoverage.sourceAtomCount) + '</dd></div>' +
+          '<div><dt>Census subdivisions</dt><dd>' + esc(qa.censusCoherence.officialCensusSubdivisions) + '</dd></div>' +
+          '<div><dt>Positive-area overlaps</dt><dd>' + esc(qa.digitalGeometry.positiveAreaOverlapPairs) + '</dd></div></dl></section>' +
+          '<section class="mcc-card"><p class="mcc-eyebrow">Quality checks</p><h3>' + passed + ' of ' + total + ' reported invariants pass</h3>' +
+          '<p>Source lock: ' + esc(sourceLock.censusVintage) + ' census vintage · ' + esc((sourceLock.sources || []).length) + ' locked sources.</p></section>' +
+          '</div>' +
+          '<section class="mcc-card mcc-audit-artifacts"><h3>Release artifacts</h3>' +
+          '<dl class="mcc-hash-list"><div><dt>Public partition SHA-256</dt><dd><code>' + esc(hashes.partitionSha256 || "Unavailable") + '</code></dd></div>' +
+          '<div><dt>Resolver partition SHA-256</dt><dd><code>' + esc(hashes.digitalPartitionSha256 || "Unavailable") + '</code></dd></div>' +
+          '<div><dt>Membership SHA-256</dt><dd><code>' + esc(hashes.membershipSha256 || "Unavailable") + '</code></dd></div></dl>' +
+          '<div class="mcc-detail-actions">' +
+          '<a class="mcc-button mcc-button-secondary" href="' + esc(new URL("canada-region-partition.qa.json", assetBase).href) + '" download>Download QA JSON</a>' +
+          '<a class="mcc-button mcc-button-secondary" href="' + esc(new URL("canada-regions.json", assetBase).href) + '" download>Download catalog</a>' +
+          '<a class="mcc-button mcc-button-secondary" href="' + esc(regionPageHref("standard")) + '">Open standard and change process</a>' +
+          '</div></section>';
+        refreshIcons(els.auditContent);
+        auditLoaded = true;
+      }).catch(function (error) {
+        els.auditStatus.hidden = false;
+        els.auditStatus.className = "mcc-status mcc-status-error";
+        els.auditStatus.innerHTML = '<p>' + esc(error.message) + '</p><button type="button" class="mcc-button mcc-button-secondary" data-action="retry-audit">Try again</button>';
+        var retry = els.auditStatus.querySelector("[data-action='retry-audit']");
+        if (retry) retry.addEventListener("click", renderAudit, { once: true });
+      });
+    }
+
+    function loadAudit() {
+      if (auditLoaded) return;
+      els.auditStatus.textContent = "Loading release evidence…";
+      renderAudit();
+    }
+
+    function renderRegionBrowser(tag, fitSelection) {
+      if (!data.hierarchy[tag]) tag = data.meta.rootTag || "can";
+      state.browseTag = tag;
+      var path = ancestryFor(data, tag);
+      els.breadcrumbs.innerHTML = path.map(function (item, index) {
+        var current = index === path.length - 1;
+        return '<button type="button" class="mcc-region-crumb' + (current ? ' is-current' : '') + '" data-region-node="' + esc(item) + '"' + (current ? ' aria-current="page"' : '') + '>' + esc(labelFor(data, item)) + '</button>';
+      }).join('<span aria-hidden="true">›</span>');
+      var children = childrenFor(data, tag);
+      els.children.innerHTML = children.length ? children.map(function (child) {
+        var nested = childrenFor(data, child).length > 0;
+        var leafCount = leafDescendants(data, child).length;
+        return '<button type="button" class="mcc-region-child" data-region-node="' + esc(child) + '">' +
+          '<span><strong>' + esc(labelFor(data, child)) + '</strong><small>' +
+          (nested ? leafCount + ' subregions' : child.toUpperCase() + ' · region') +
+          '</small></span><span aria-hidden="true">' + (nested ? '›' : '✓') + '</span></button>';
+      }).join("") : '<p class="mcc-help">Select this leaf to see its full path.</p>';
+      if (!map || !browseLayer) return;
+      browseLayer.clearLayers();
+      if (tag !== (data.meta.rootTag || "can") && data.partitionByTag) {
+        browseLayer.addData(featuresForNode(data, tag));
+        browseLayer.bringToFront();
+        if (selectedLayer) selectedLayer.bringToFront();
+        if (fitSelection && browseLayer.getBounds().isValid()) {
+          map.fitBounds(browseLayer.getBounds(), { padding: [28, 28], maxZoom: children.length ? 6 : 8 });
         }
-      }).addTo(map);
-      var browseLayer = L.geoJSON(null, {
-        interactive: false,
-        style: { color: "#ffd166", opacity: 1, weight: 3, fillColor: "#ffd166", fillOpacity: 0.12 }
-      }).addTo(map);
-      var selectedLayer = L.geoJSON(null, {
-        interactive: false,
-        style: { color: "#ffffff", opacity: 1, weight: 4, fillColor: "#4287ff", fillOpacity: 0.38 }
-      }).addTo(map);
+      } else if (fitSelection) {
+        map.fitBounds(data.meta.map.bounds || [[41.5, -141.5], [83.5, -52]], { padding: [24, 24], maxZoom: 4 });
+      }
+    }
 
-      function updateBoundaryHighlight() {
-        selectedLayer.clearLayers();
+    function updateMapVisuals(recenter) {
+      if (!map || !selectedLayer) return;
+      selectedLayer.clearLayers();
+      if (state.canGenerate) {
         var rec = recommend(data, state.resolution, state.type, state.selectedMetros, state.selectedExternalPaths);
-        if (rec) {
+        if (rec && data.partitionByTag) {
           selectedLayer.addData({
             type: "FeatureCollection",
             features: rec.leaves.map(function (tag) { return data.partitionByTag[tag]; }).filter(Boolean)
           });
           selectedLayer.bringToFront();
-        }
-      }
-      afterMapRefresh = updateBoundaryHighlight;
-
-      function renderRegionBrowser(tag, fitSelection) {
-        if (!data.hierarchy[tag]) tag = data.meta.rootTag || "can";
-        state.browseTag = tag;
-        var path = ancestryFor(data, tag);
-        els.breadcrumbs.innerHTML = path.map(function (item, index) {
-          var current = index === path.length - 1;
-          return '<button type="button" class="mcc-region-crumb' + (current ? ' is-current' : '') + '" data-region-node="' + esc(item) + '"' + (current ? ' aria-current="page"' : '') + '>' + esc(labelFor(data, item)) + '</button>';
-        }).join('<span aria-hidden="true">›</span>');
-
-        var children = childrenFor(data, tag);
-        if (children.length) {
-          els.children.innerHTML = children.map(function (child) {
-            var nested = childrenFor(data, child).length > 0;
-            var leafCount = leafDescendants(data, child).length;
-            return '<button type="button" class="mcc-region-child" data-region-node="' + esc(child) + '">' +
-              '<span><strong>' + esc(labelFor(data, child)) + '</strong><small>' +
-              (nested ? leafCount + ' subregions' : child.toUpperCase() + ' · region') +
-              '</small></span><span aria-hidden="true">' + (nested ? '›' : '✓') + '</span></button>';
-          }).join("");
-        } else {
-          els.children.innerHTML = '<p class="mcc-help">Used for lookup and commands.</p>';
-        }
-
-        browseLayer.clearLayers();
-        if (tag !== (data.meta.rootTag || "can")) {
-          browseLayer.addData(featuresForNode(data, tag));
-          browseLayer.bringToFront();
-          selectedLayer.bringToFront();
-          if (fitSelection && browseLayer.getBounds().isValid()) {
-            map.fitBounds(browseLayer.getBounds(), { padding: [28, 28], maxZoom: children.length ? 6 : 8 });
-          }
-        } else if (fitSelection) {
-          fitCanada();
-        }
-      }
-
-      function chooseRegionNode(tag) {
-        var children = childrenFor(data, tag);
-        renderRegionBrowser(tag, true);
-        if (!children.length) {
-          var seed = data.seeds.find(function (entry) { return entry.tag === tag; });
-          if (seed) {
-            useGeo({ lat: seed.lat, lon: seed.lon, name: labelFor(data, tag), countryCode: "ca" }, false, tag);
+          if (recenter && selectedLayer.getBounds().isValid()) {
+            map.fitBounds(selectedLayer.getBounds(), { padding: [28, 28], maxZoom: 9 });
           }
         }
+        if (marker) marker.setLatLng([state.lat, state.lon]);
+        else marker = window.L.marker([state.lat, state.lon]).addTo(map);
       }
+    }
 
-      els.breadcrumbs.addEventListener("click", function (event) {
-        var button = event.target.closest("[data-region-node]");
-        if (button) chooseRegionNode(button.getAttribute("data-region-node"));
+    function renderTextResult() {
+      if (!state.canGenerate || !state.resolution) {
+        els.resultSection.hidden = true;
+        els.textResult.innerHTML = "";
+        return;
+      }
+      var tag = state.resolution.primary.seed.tag;
+      var rec = recommend(data, state.resolution, state.type, state.selectedMetros, state.selectedExternalPaths);
+      var aliases = (data.regionAliases[tag] || []).filter(function (alias) {
+        return normalizeLocationSearch(alias) !== normalizeLocationSearch(tag) &&
+          normalizeLocationSearch(alias) !== normalizeLocationSearch(labelFor(data, tag));
       });
-      els.children.addEventListener("click", function (event) {
-        var button = event.target.closest("[data-region-node]");
-        if (button) chooseRegionNode(button.getAttribute("data-region-node"));
+      els.resultSection.hidden = false;
+      els.textResult.innerHTML =
+        '<p class="mcc-deterministic-result"><strong>' + esc(state.name) + '</strong> resolves to <strong>' +
+        esc(labelFor(data, tag)) + '</strong> (<code>' + esc(tag) + '</code>).</p>' +
+        '<p class="mcc-region-path">' + esc(labelledPath(data, ancestryFor(data, tag))) + '</p>' +
+        '<dl class="mcc-review-list"><div><dt>Province or territory</dt><dd>' + esc(labelFor(data, provinceTagFor(data, tag))) + '</dd></div>' +
+        '<div><dt>Status</dt><dd>' + esc(statusLabel(statusFor(data, tag).state || "draft")) + '</dd></div>' +
+        '<div><dt>Aliases</dt><dd>' + esc(aliases.length ? aliases.join(", ") : "None recorded") + '</dd></div>' +
+        '<div><dt>Planned paths</dt><dd>' + esc(rec ? rec.paths.length : 1) + '</dd></div></dl>' +
+        '<div class="mcc-detail-actions"><a class="mcc-button" href="' + esc(configHrefForState(state)) + '">Configure this region</a>' +
+        '<button type="button" class="mcc-button mcc-button-secondary" data-action="copy-region-link">' + icon("link") + 'Copy link</button></div>';
+      var copyLink = els.textResult.querySelector("[data-action='copy-region-link']");
+      if (copyLink) copyLink.addEventListener("click", function () {
+        copyText(mapHrefForState(state), copyLink, "Copy link");
       });
-      renderRegionBrowser(state.browseTag, false);
+      refreshIcons(els.textResult);
+    }
 
-      var marker = null;
-      function place(lat, lon) {
-        if (marker) marker.setLatLng([lat, lon]);
-        else marker = L.marker([lat, lon]).addTo(map);
-      }
-
-      function useGeo(geo, recenter, forcedTag) {
-        state.lat = Number(geo.lat);
-        state.lon = Number(geo.lon);
-        state.name = geo.name || (state.lat.toFixed(4) + ", " + state.lon.toFixed(4));
-        state.forcedTag = forcedTag || geo.tag || null;
-        state.jurisdictionTag = state.forcedTag
-          ? provinceTagFor(data, state.forcedTag)
-          : jurisdictionTagFromGeo(geo);
-        state.selectedMetros = [];
-        state.selectedExternalPaths = [];
-        place(state.lat, state.lon);
-        if (!isCanada(geo)) {
-          state.forcedTag = null;
-          state.canGenerate = false;
-          state.detailTag = null;
-          state.resolution = null;
-          setStatus(els.status, "Outside Canada.", "warning");
-        } else {
-          state.resolution = resolveLocation(data, state.lat, state.lon, state.forcedTag, state.jurisdictionTag);
-          state.canGenerate = state.resolution.hasMatch;
-          state.detailTag = state.canGenerate ? state.resolution.primary.seed.tag : null;
-          if (state.canGenerate) {
-            setStatus(els.status, state.detailTag.toUpperCase() + " — " + labelFor(data, state.detailTag), "info");
-            renderRegionBrowser(state.detailTag, false);
-          } else {
-            setStatus(els.status, "No region here.", "warning");
-          }
-        }
-        refreshTool(data, els, state, updateBoundaryHighlight);
-        if (recenter) {
-          if (state.resolution && state.resolution.displayBoundary) {
-            var selectedBounds = L.geoJSON(state.resolution.displayBoundary).getBounds();
-            if (selectedBounds.isValid()) map.fitBounds(selectedBounds, { padding: [28, 28], maxZoom: 9 });
-          } else {
-            map.setView([state.lat, state.lon], Math.max(map.getZoom(), 8));
-          }
-        }
-      }
-
-      function rejectUnverifiedPoint(lat, lon, name, recenter) {
-        state.lat = Number(lat);
-        state.lon = Number(lon);
-        state.name = name || (state.lat.toFixed(4) + ", " + state.lon.toFixed(4));
-        state.forcedTag = null;
-        state.jurisdictionTag = null;
-        state.selectedMetros = [];
-        state.selectedExternalPaths = [];
+    function finishGeo(geo, forcedTag, recenter, requestId) {
+      if (requestId !== locationRequestId) return;
+      state.lat = Number(geo.lat);
+      state.lon = Number(geo.lon);
+      state.name = geo.name || (state.lat.toFixed(4) + ", " + state.lon.toFixed(4));
+      state.forcedTag = forcedTag || geo.tag || null;
+      state.jurisdictionTag = state.forcedTag
+        ? provinceTagFor(data, state.forcedTag)
+        : jurisdictionTagFromGeo(geo);
+      if (!isCanada(geo)) {
         state.canGenerate = false;
         state.resolution = null;
-        state.detailTag = null;
-        place(state.lat, state.lon);
-        setStatus(els.status, "Choose a mapped point in Canada.", "warning");
-        refreshTool(data, els, state, updateBoundaryHighlight);
-        if (recenter) map.setView([state.lat, state.lon], Math.max(map.getZoom(), 8));
+        setStatus(els.status, "This location is outside Canada.", "warning");
+        renderTextResult();
+        return;
       }
-
-      function verifyAndUseGeo(lat, lon, name, recenter, forcedTag) {
-        var boundary = boundaryFeatureAt(data, Number(lat), Number(lon), forcedTag, null);
-        if (!boundary) {
-          rejectUnverifiedPoint(lat, lon, name, recenter);
-          return Promise.resolve();
-        }
-        var tag = String(boundary.properties.tag).toLowerCase();
-        useGeo({
-          lat: Number(lat),
-          lon: Number(lon),
-          name: name || labelFor(data, tag),
-          countryCode: "ca",
-          tag: tag
-        }, recenter, tag);
-        return Promise.resolve();
+      state.resolution = resolveLocation(data, state.lat, state.lon, state.forcedTag, state.jurisdictionTag);
+      state.canGenerate = state.resolution.hasMatch;
+      state.detailTag = state.canGenerate ? state.resolution.primary.seed.tag : null;
+      if (!state.canGenerate) {
+        setStatus(els.status, "No Canadian region contains that point. Browse the list instead.", "warning");
+      } else {
+        var path = labelledPath(data, ancestryFor(data, state.detailTag));
+        setStatus(els.status, "Text result: " + esc(path) + ".", "info");
+        renderRegionBrowser(state.detailTag, false);
       }
+      renderTextResult();
+      updateMapVisuals(recenter);
+    }
 
-      function locate() {
-        var query = els.input.value.trim();
-        if (!query) {
-          setStatus(els.status, "Enter a city, airport code, or postal code.", "error");
-          return;
-        }
-        els.locate.disabled = true;
-        els.locate.textContent = "Finding";
-        geocode(data, query).then(function (geo) {
-          useGeo(geo, true);
-        }).catch(function (err) {
-          setStatus(els.status, esc(err.message || "Location lookup failed"), "error");
+    function useGeo(geo, recenter, forcedTag) {
+      var requestId = ++locationRequestId;
+      setStatus(els.status, "Checking the Canadian region data…", "info");
+      return ensureResolverData(data).then(function () {
+        finishGeo(geo, forcedTag, recenter, requestId);
+      }).catch(function (error) {
+        if (requestId !== locationRequestId) return;
+        setStatus(els.status, esc(error.message || "Unable to load the Canadian location data."), "error");
+      });
+    }
+
+    function chooseRegionNode(tag) {
+      var children = childrenFor(data, tag);
+      renderRegionBrowser(tag, true);
+      if (!children.length) {
+        var seed = seedForTag(data, tag);
+        if (seed) useGeo({ lat: seed.lat, lon: seed.lon, name: labelFor(data, tag), countryCode: "ca", tag: tag }, true, tag);
+      }
+    }
+
+    function locate() {
+      var query = els.input.value.trim();
+      if (!query) {
+        setStatus(els.status, "Enter a city, airport code, postal code, or region name.", "error");
+        return;
+      }
+      if (activeGeocodeController) activeGeocodeController.abort();
+      activeGeocodeController = typeof AbortController !== "undefined" ? new AbortController() : null;
+      var thisController = activeGeocodeController;
+      els.locate.disabled = true;
+      els.locate.textContent = "Finding";
+      geocode(data, query, Boolean(els.onlineConsent.checked), thisController && thisController.signal)
+        .then(function (geo) { return useGeo(geo, true, geo.tag); })
+        .catch(function (error) {
+          if (error && error.name === "AbortError") return;
+          setStatus(els.status, esc(error.message || "Location lookup failed"), "error");
         }).finally(function () {
+          if (activeGeocodeController !== thisController) return;
           els.locate.disabled = false;
           els.locate.innerHTML = icon("search") + "Find";
           refreshIcons(els.locate);
         });
+    }
+
+    function useCoordinates() {
+      var coordinates = configuratorSupport.parseCoordinates
+        ? configuratorSupport.parseCoordinates(els.latitude.value, els.longitude.value)
+        : null;
+      if (!coordinates) {
+        setStatus(els.status, "Enter a latitude from -90 to 90 and a longitude from -180 to 180.", "error");
+        return;
       }
+      useGeo({
+        lat: coordinates.lat,
+        lon: coordinates.lon,
+        name: coordinates.lat.toFixed(4) + ", " + coordinates.lon.toFixed(4),
+        countryCode: "ca"
+      }, true, null);
+    }
 
-      els.locate.addEventListener("click", locate);
-      els.input.addEventListener("keydown", function (event) { if (event.key === "Enter") locate(); });
-      map.on("click", function (event) {
-        var lat = event.latlng.lat;
-        var lon = event.latlng.lng;
-        verifyAndUseGeo(lat, lon, lat.toFixed(4) + ", " + lon.toFixed(4), false);
-      });
-
-      var initialLatRaw = mapParams.get("lat");
-      var initialLonRaw = mapParams.get("lon");
-      var initialLat = initialLatRaw === null || initialLatRaw.trim() === "" ? NaN : Number(initialLatRaw);
-      var initialLon = initialLonRaw === null || initialLonRaw.trim() === "" ? NaN : Number(initialLonRaw);
-      var hasInitialLocation = Number.isFinite(initialLat) && Number.isFinite(initialLon);
-      if (hasInitialLocation) {
-        var initialName = mapParams.get("name") || (initialLat.toFixed(4) + ", " + initialLon.toFixed(4));
-        els.input.value = initialName;
-        verifyAndUseGeo(initialLat, initialLon, initialName, true, mapParams.get("tag")).then(function () {
-          if (!requestedLargeCoverage || !state.canGenerate) return;
-          state.type = "high-site";
-          state.selectedMetros = requestedCanadianRegions;
-          state.selectedExternalPaths = requestedExternalPaths;
-          refreshTool(data, els, state, updateBoundaryHighlight);
-          if (selectedLayer.getBounds().isValid()) {
-            map.fitBounds(selectedLayer.getBounds(), { padding: [28, 28], maxZoom: 8 });
+    function loadInteractiveMap() {
+      if (!els.tileConsent.checked) {
+        els.mapLoadStatus.textContent = "Allow OpenStreetMap tiles before loading the interactive map.";
+        els.tileConsent.focus();
+        return;
+      }
+      els.loadMap.disabled = true;
+      els.mapLoadStatus.textContent = "Loading Canadian boundaries and map tools…";
+      Promise.all([loadDisplayPartition(), loadLeaflet()]).then(function (loaded) {
+        applyGeneratedPartition(data, loaded[0], null);
+        var L = loaded[1];
+        els.mapConsent.hidden = true;
+        els.mapArea.hidden = false;
+        map = L.map(els.canvas, { minZoom: 3, maxZoom: 13 });
+        activeMaps.push({ container: el, map: map });
+        map.fitBounds(data.meta.map.bounds || [[41.5, -141.5], [83.5, -52]], { padding: [24, 24], maxZoom: 4 });
+        L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          maxZoom: 19,
+          attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" rel="noopener noreferrer">OpenStreetMap</a> contributors'
+        }).addTo(map);
+        L.geoJSON(data.partitionRegions, {
+          style: function (feature) {
+            return { color: "#aeb8ff", opacity: 0.8, weight: 1, fillColor: colorForTag(feature.properties.tag), fillOpacity: 0.2 };
+          },
+          onEachFeature: function (feature, layer) {
+            layer.bindTooltip('<strong>' + esc(feature.properties.tag.toUpperCase()) + '</strong> - ' + esc(feature.properties.label));
+            layer.on("click", function (event) {
+              if (event.originalEvent) L.DomEvent.stopPropagation(event.originalEvent);
+              useGeo({ lat: event.latlng.lat, lon: event.latlng.lng, name: feature.properties.label, countryCode: "ca", tag: feature.properties.tag }, false, feature.properties.tag);
+            });
           }
+        }).addTo(map);
+        browseLayer = L.geoJSON(null, { interactive: false, style: { color: "#ffd166", opacity: 1, weight: 3, fillOpacity: 0 } }).addTo(map);
+        selectedLayer = L.geoJSON(null, { interactive: false, style: { color: "#ffffff", opacity: 1, weight: 4, dashArray: "8 5", fillColor: "#4287ff", fillOpacity: 0.34 } }).addTo(map);
+        map.on("click", function (event) {
+          useGeo({
+            lat: event.latlng.lat,
+            lon: event.latlng.lng,
+            name: event.latlng.lat.toFixed(4) + ", " + event.latlng.lng.toFixed(4),
+            countryCode: "ca"
+          }, false, null);
         });
-      } else {
-        fitCanada();
-      }
-      window.setTimeout(function () {
-        map.invalidateSize();
-        if (!hasInitialLocation) fitCanada();
-      }, 250);
-    }).catch(function (err) {
-      setStatus(els.status, esc(err.message), "error");
-    });
-
-    el.querySelectorAll("input[name='mcc-map-type']").forEach(function (input) {
-      input.addEventListener("change", function () {
-        state.type = input.value;
-        state.selectedMetros = [];
-        state.selectedExternalPaths = [];
-        refreshTool(data, els, state, afterMapRefresh);
+        renderRegionBrowser(state.browseTag, false);
+        updateMapVisuals(Boolean(state.canGenerate));
+        els.mapLoadStatus.textContent = "";
+        window.setTimeout(function () { map.invalidateSize(); }, 0);
+      }).catch(function (error) {
+        els.loadMap.disabled = false;
+        els.mapLoadStatus.textContent = error.message || "The map could not load. Search and the region list still work.";
       });
+    }
+
+    el.querySelectorAll("[data-map-mode]").forEach(function (button) {
+      button.addEventListener("click", function () { setMapMode(button.getAttribute("data-map-mode")); });
     });
-    el.querySelector("[data-role='map-firmware']").addEventListener("change", function (event) {
-      state.firmware = event.target.value;
-      renderResult(data, els.result, state);
-      renderRegionDetail(data, els.detailSection, els.detail, state, state.detailTag);
+    els.breadcrumbs.addEventListener("click", function (event) {
+      var button = event.target.closest("[data-region-node]");
+      if (button) chooseRegionNode(button.getAttribute("data-region-node"));
     });
-    el.querySelector("[data-action='map-baseline']").addEventListener("change", function (event) {
-      state.includeBaseline = event.target.checked;
-      renderResult(data, els.result, state);
-      renderRegionDetail(data, els.detailSection, els.detail, state, state.detailTag);
+    els.children.addEventListener("click", function (event) {
+      var button = event.target.closest("[data-region-node]");
+      if (button) chooseRegionNode(button.getAttribute("data-region-node"));
     });
+    els.locate.addEventListener("click", locate);
+    els.input.addEventListener("keydown", function (event) { if (event.key === "Enter") locate(); });
+    els.coordinates.addEventListener("click", useCoordinates);
+    els.loadMap.addEventListener("click", loadInteractiveMap);
+    renderRegionBrowser(state.browseTag, false);
+    renderRegionTable(els.table, data, function (tag) { chooseRegionNode(tag); });
+
+    var initialLat = Number(mapParams.get("lat"));
+    var initialLon = Number(mapParams.get("lon"));
+    var hasInitialLocation = mapParams.has("lat") && mapParams.has("lon") &&
+      Number.isFinite(initialLat) && Number.isFinite(initialLon) &&
+      initialLat >= -90 && initialLat <= 90 && initialLon >= -180 && initialLon <= 180;
+    if (hasInitialLocation) {
+      var requestedTag = slug(mapParams.get("tag"));
+      if (!data.hierarchy[requestedTag] || !seedForTag(data, requestedTag)) requestedTag = null;
+      var initialName = String(mapParams.get("name") || "").slice(0, 160) ||
+        initialLat.toFixed(4) + ", " + initialLon.toFixed(4);
+      els.input.value = initialName;
+      useGeo({ lat: initialLat, lon: initialLon, name: initialName, countryCode: "ca", tag: requestedTag }, false, requestedTag);
+    }
+    setMapMode(mapParams.get("view") === "audit" ? "audit" : "explore");
   }
 
   function regionRows(data) {

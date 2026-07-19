@@ -1,0 +1,18 @@
+{% include "partials/tags.html" %}
+{% include "partials/actions.html" %}
+
+{% if "\u003ch1" not in page.content %}
+  <h1>{{ page.title | d(config.site_name, true) }}</h1>
+  {% include "partials/page-lifecycle.html" %}
+  {{ page.content }}
+{% else %}
+  {% set content_parts = page.content.split("</h1>", 1) %}
+  {{ content_parts[0] }}</h1>
+  {% include "partials/page-lifecycle.html" %}
+  {{ content_parts[1] }}
+{% endif %}
+
+{% include "partials/source-file.html" %}
+{% include "partials/page-feedback.html" %}
+{% include "partials/feedback.html" %}
+{% include "partials/comments.html" %}

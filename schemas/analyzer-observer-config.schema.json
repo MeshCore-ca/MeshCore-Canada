@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://meshcore.ca/schemas/analyzer-observer-config.schema.json",
+  "title": "MeshCore Canada observer configuration",
+  "type": "object",
+  "required": ["schema_version", "version", "last_reviewed", "network", "brokers", "topics", "verification", "location_codes"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "version": {"type": "string", "pattern": "^[0-9]{4}\\.[0-9]{2}$"},
+    "last_reviewed": {"type": "string", "format": "date"},
+    "network": {
+      "type": "object",
+      "required": ["preset", "frequency_mhz", "bandwidth_khz", "spreading_factor", "coding_rate", "path_hash_mode", "path_hash_bytes"],
+      "additionalProperties": false
+    },
+    "brokers": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "host", "port", "transport", "tls", "verify_tls", "authentication", "token_audience"],
+        "properties": {
+          "id": {"enum": ["primary", "backup"]},
+          "host": {"type": "string", "pattern": "^mqtt[12]\\.meshcore\\.ca$"},
+          "port": {"const": 443},
+          "transport": {"const": "websockets"},
+          "tls": {"const": true},
+          "verify_tls": {"const": true},
+          "token_audience": {"type": "string"}
+        },
+        "additionalProperties": true
+      }
+    },
+    "topics": {
+      "type": "object",
+      "required": ["packets", "status"],
+      "additionalProperties": false
+    },
+    "verification": {
+      "type": "object",
+      "required": ["observers", "packets", "map"],
+      "additionalProperties": false
+    },
+    "location_codes": {"const": "location-codes.json"}
+  },
+  "additionalProperties": false
+}

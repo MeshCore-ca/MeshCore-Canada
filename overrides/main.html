@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block extrahead %}
+  {{ super() }}
+  {% if page and page.meta %}
+    {% if page.meta.status in ["draft", "experimental", "legacy", "archived"] %}
+      <meta name="robots" content="noindex, nofollow">
+    {% endif %}
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="{{ config.site_name }}">
+    <meta property="og:title" content="{{ page.meta.title or page.title }}">
+    <meta property="og:description" content="{{ page.meta.description or config.site_description }}">
+    <meta property="og:url" content="{{ page.canonical_url }}">
+    <meta property="og:image" content="{{ config.site_url }}/assets/MeshCore-Canada-Logo.png">
+    <meta name="twitter:card" content="summary">
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": {{ (page.meta.title or page.title) | tojson }},
+        "description": {{ (page.meta.description or config.site_description) | tojson }},
+        "url": {{ page.canonical_url | tojson }},
+        "isPartOf": {
+          "@type": "WebSite",
+          "name": "MeshCore Canada",
+          "url": {{ config.site_url | tojson }}
+        }
+      }
+    </script>
+    {% for stylesheet in page.meta.page_styles or [] %}
+      <link rel="stylesheet" href="{{ stylesheet | url }}">
+    {% endfor %}
+  {% endif %}
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  {% if page and page.meta %}
+    {% for script in page.meta.page_scripts or [] %}
+      <script src="{{ script | url }}"></script>
+    {% endfor %}
+    {% for module in page.meta.page_modules or [] %}
+      <script type="module" src="{{ module | url }}"></script>
+    {% endfor %}
+  {% endif %}
+{% endblock %}

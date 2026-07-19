@@ -1,5 +1,18 @@
 ---
 title: Region definition and authority
+description: The public rules, sources, authority, and change process for Canadian MeshCore regions.
+audience:
+  - repeater-operator
+  - region-maintainer
+task: understand-region-standard
+scope: canada-baseline
+status: verified
+owner: region-maintainers
+last_reviewed: 2026-07-19
+review_by: 2026-10-19
+tested_with:
+  region_schema: meshcore-canada-regions-v2
+difficulty: advanced
 ---
 
 # MeshCore Canada region definition and authority

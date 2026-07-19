@@ -1,5 +1,21 @@
 import { validateProposal } from "./validate.js";
 import {
+  PROPOSAL_TYPE_BOUNDARY,
+  PROPOSAL_TYPE_NEW_REGION,
+  PROPOSAL_SCHEMA_V1,
+  PROPOSAL_SCHEMA_V2,
+  buildEditorProposal,
+  hierarchyPath,
+  isEditableTarget,
+  schemaForProposalType
+} from "./domain/proposal-types.js";
+import {
+  hasStaleDraft,
+  loadDraft,
+  removeDraft,
+  saveDraft
+} from "./infrastructure/draft-store.js";
+import {
   configuredSubmissionEndpoint,
   fetchSubmissionConfig,
   loadTurnstile,
@@ -105,26 +121,49 @@ import {
   };
 
   var elements = {
+    proposalTypes: Array.from(document.querySelectorAll('input[name="proposal-type"]')),
+    areaPanel: document.getElementById("area-panel"),
+    buildPanel: document.getElementById("build-panel"),
     province: document.getElementById("province-select"),
     target: document.getElementById("target-select"),
+    existingTargetFields: document.querySelector("#existing-target-fields"),
     newRegionFields: document.getElementById("new-region-fields"),
     newRegionName: document.getElementById("new-region-name"),
     newRegionTag: document.getElementById("new-region-tag"),
+    newRegionNameError: document.getElementById("new-region-name-error"),
+    newRegionTagError: document.getElementById("new-region-tag-error"),
+    tagSuggestionRow: document.getElementById("tag-suggestion-row"),
+    tagSuggestion: document.getElementById("tag-suggestion"),
+    useTagSuggestion: document.getElementById("use-tag-suggestion"),
+    derivedParent: document.getElementById("derived-parent"),
+    hierarchyPath: document.getElementById("hierarchy-path"),
+    anchorControls: document.getElementById("anchor-controls"),
+    anchorSelect: document.getElementById("anchor-select"),
     anchor: document.getElementById("anchor-button"),
     anchorStatus: document.getElementById("anchor-status"),
     sharedAreaNote: document.getElementById("shared-area-note"),
     loadStatus: document.getElementById("load-status"),
+    draftStatus: document.getElementById("draft-status"),
+    discardDraft: document.getElementById("discard-draft-button"),
     mapHeading: document.getElementById("map-heading"),
     panMode: document.getElementById("pan-mode"),
+    inspectMode: document.getElementById("inspect-mode"),
     paintMode: document.getElementById("paint-mode"),
+    paintAcknowledgement: document.getElementById("advanced-paint-ack"),
     cellDetails: document.getElementById("cell-details"),
     municipality: document.getElementById("municipality-button"),
+    municipalitySelect: document.getElementById("municipality-select"),
+    moveMunicipality: document.getElementById("move-municipality-button"),
     undo: document.getElementById("undo-button"),
     redo: document.getElementById("redo-button"),
     clear: document.getElementById("clear-button"),
     before: document.getElementById("before-view"),
     after: document.getElementById("after-view"),
     changeCount: document.getElementById("change-count"),
+    textSummary: document.getElementById("text-summary"),
+    changesTableBody: document.getElementById("changes-table-body"),
+    changesTableNote: document.getElementById("changes-table-note"),
+    readinessList: document.getElementById("readiness-list"),
     submittedBy: document.getElementById("submitted-by"),
     reason: document.getElementById("reason"),
     website: document.getElementById("website"),
@@ -134,7 +173,13 @@ import {
     submissionResult: document.getElementById("submission-result"),
     validation: document.getElementById("validation-message"),
     submit: document.getElementById("submit-button"),
-    export: document.getElementById("export-button")
+    export: document.getElementById("export-button"),
+    discardDialog: document.getElementById("discard-dialog"),
+    discardDialogTitle: document.getElementById("discard-dialog-title"),
+    discardDialogMessage: document.getElementById("discard-dialog-message"),
+    discardDialogContext: document.getElementById("discard-dialog-context"),
+    discardDialogCancel: document.getElementById("discard-dialog-cancel"),
+    discardDialogConfirm: document.getElementById("discard-dialog-confirm")
   };
 
   var state = {
@@ -150,11 +195,12 @@ import {
     redoStack: [],
     selectedId: "",
     target: "",
+    proposalType: "",
     province: "",
     creatingNewRegion: false,
     newRegionAnchor: "",
     newRegionTagTouched: false,
-    mode: "pan",
+    mode: "inspect",
     view: "after",
     painting: false,
     paintAction: null,
@@ -166,7 +212,12 @@ import {
     turnstile: null,
     turnstileWidgetId: null,
     turnstileToken: "",
-    turnstileResetTimer: null
+    turnstileResetTimer: null,
+    draftSaveTimer: null,
+    draftStatusTimer: null,
+    restoringDraft: false,
+    dialogResolver: null,
+    dialogPreviousFocus: null
   };
 
   var map = L.map("editor-map", {
@@ -202,6 +253,84 @@ import {
     elements.validation.className = "validation-message" + (kind ? " " + kind : "");
   }
 
+  function setDraftStatus(message, kind) {
+    elements.draftStatus.textContent = message;
+    elements.draftStatus.className = "draft-status" + (kind ? " " + kind : "");
+  }
+
+  function draftStorage() {
+    try {
+      return window.localStorage;
+    } catch (_error) {
+      return null;
+    }
+  }
+
+  function currentSchema() {
+    return schemaForProposalType(state.proposalType);
+  }
+
+  function draftSnapshot() {
+    var schema = currentSchema();
+    var draft = {
+      schema: schema,
+      baseMembershipSha256: state.baseMembershipSha256,
+      province: state.province,
+      target: state.target,
+      reason: elements.reason.value,
+      changes: Array.from(state.proposed.entries()).map(function (entry) {
+        return { DGUID: entry[0], to: entry[1] };
+      }).sort(function (left, right) { return left.DGUID.localeCompare(right.DGUID); }),
+      savedAt: Date.now()
+    };
+    if (schema === PROPOSAL_SCHEMA_V2) {
+      draft.newRegion = {
+        label: elements.newRegionName.value,
+        tag: elements.newRegionTag.value,
+        anchorDguid: state.newRegionAnchor
+      };
+    }
+    return draft;
+  }
+
+  function draftHasContent() {
+    return Boolean(
+      state.proposed.size ||
+      elements.reason.value.trim() ||
+      state.target ||
+      (state.creatingNewRegion && (elements.newRegionName.value.trim() || elements.newRegionTag.value.trim()))
+    );
+  }
+
+  function flushDraftSave() {
+    if (state.draftSaveTimer) {
+      window.clearTimeout(state.draftSaveTimer);
+      state.draftSaveTimer = null;
+    }
+    if (state.restoringDraft || !currentSchema() || !state.baseMembershipSha256 || !state.province) return;
+    var storage = draftStorage();
+    if (!storage) {
+      setDraftStatus("Local draft storage is unavailable. Download before leaving.", "error");
+      return;
+    }
+    if (!draftHasContent()) {
+      removeDraft(storage, currentSchema(), state.baseMembershipSha256, state.province);
+      elements.discardDraft.hidden = true;
+      setDraftStatus("No saved draft.", "");
+      return;
+    }
+    var result = saveDraft(storage, draftSnapshot());
+    elements.discardDraft.hidden = !result.ok;
+    setDraftStatus(result.ok ? "Saved locally." : "Draft could not be saved locally. Download before leaving.", result.ok ? "saved" : "error");
+  }
+
+  function scheduleDraftSave() {
+    if (state.restoringDraft || !currentSchema()) return;
+    setDraftStatus("Unsaved changes…", "");
+    if (state.draftSaveTimer) window.clearTimeout(state.draftSaveTimer);
+    state.draftSaveTimer = window.setTimeout(flushDraftSave, 250);
+  }
+
   function setAntiSpamStatus(message, kind) {
     elements.antiSpamStatus.textContent = message;
     elements.antiSpamStatus.className = "anti-spam-status" + (kind ? " " + kind : "");
@@ -214,18 +343,38 @@ import {
   function markProposalChanged() {
     state.proposalRevision += 1;
     clearSubmissionResult();
+    scheduleDraftSave();
   }
 
-  function showSubmissionResult(result, changedWhileSubmitting) {
-    var prefix = document.createTextNode(changedWhileSubmitting
-      ? "Earlier version submitted: "
-      : (result.duplicate ? "Already submitted: " : "Review created: "));
+  function showSubmissionResult(result, changedWhileSubmitting, submittedSchema) {
+    var heading = document.createElement("strong");
+    heading.textContent = changedWhileSubmitting
+      ? "An earlier draft was submitted"
+      : (result.duplicate ? "This proposal was already submitted" : "Public review created");
+    var issueLine = document.createElement("p");
     var link = document.createElement("a");
     link.href = result.issueUrl;
     link.target = "_blank";
     link.rel = "noopener noreferrer";
     link.textContent = "GitHub issue #" + result.issueNumber;
-    elements.submissionResult.replaceChildren(prefix, link);
+    issueLine.append("Open ", link);
+    var details = document.createElement("dl");
+    [
+      ["Schema", submittedSchema],
+      ["Proposal hash", result.submissionSha256],
+      ["Submitted version", String(state.proposalRevision)]
+    ].forEach(function (entry) {
+      var row = document.createElement("div");
+      var term = document.createElement("dt");
+      var value = document.createElement("dd");
+      term.textContent = entry[0];
+      value.textContent = entry[1];
+      row.append(term, value);
+      details.appendChild(row);
+    });
+    var next = document.createElement("p");
+    next.textContent = "Next: community review, maintainer approval, then independent repository validation. Submission alone does not change the map.";
+    elements.submissionResult.replaceChildren(heading, issueLine, details, next);
   }
 
   function leafLabel(tag) {
@@ -249,6 +398,66 @@ import {
     return normalizedRegionLabel(value).replace(/ /g, "-").slice(0, 29);
   }
 
+  function authorityNameAndTagIndex() {
+    var catalog = state.catalog || {};
+    var hierarchy = catalog.hierarchy || {};
+    var tags = new Set(Object.keys(hierarchy));
+    var names = new Set();
+    function rememberName(value) {
+      var normalized = normalizedRegionLabel(value);
+      if (normalized) names.add(normalized);
+      var possibleTag = String(value || "").trim().toLowerCase();
+      if (/^[a-z0-9][a-z0-9-]{0,28}$/.test(possibleTag)) tags.add(possibleTag);
+    }
+    Object.keys(hierarchy).forEach(function (tag) { rememberName(hierarchy[tag] && hierarchy[tag].label); });
+    var retired = catalog.retiredCanonicalTags || {};
+    (Array.isArray(retired) ? retired : Object.keys(retired)).forEach(function (tag) { tags.add(String(tag)); });
+    Object.values(catalog.aliases || {}).forEach(function (values) {
+      (Array.isArray(values) ? values : []).forEach(rememberName);
+    });
+    Object.entries(catalog.searchGroups || {}).forEach(function (entry) {
+      tags.add(String(entry[0]));
+      rememberName(entry[1] && entry[1].label);
+    });
+    Object.values(catalog.externalRegionPaths || {}).forEach(function (entry) {
+      (entry.path || []).forEach(function (tag) { tags.add(String(tag)); });
+      rememberName(entry.label);
+      Object.values(entry.tagLabels || {}).forEach(rememberName);
+    });
+    return { names: names, tags: tags };
+  }
+
+  function updateNewRegionFieldFeedback() {
+    if (!state.creatingNewRegion) return { nameOk: true, tagOk: true };
+    var name = elements.newRegionName.value.trim();
+    var tag = elements.newRegionTag.value.trim();
+    var index = authorityNameAndTagIndex();
+    var normalizedName = normalizedRegionLabel(name);
+    var nameMessage = "";
+    var tagMessage = "";
+    if (name && index.names.has(normalizedName)) {
+      nameMessage = "That public region name is already used or reserved.";
+    }
+    if (tag && !/^[a-z0-9][a-z0-9-]{0,28}$/.test(tag)) {
+      tagMessage = "Use lowercase letters, numbers and single hyphens; do not start with a hyphen.";
+    } else if (tag && index.tags.has(tag)) {
+      tagMessage = "That canonical tag is already used or reserved.";
+    }
+    elements.newRegionNameError.textContent = nameMessage;
+    elements.newRegionNameError.className = "field-message" + (nameMessage ? " error" : "");
+    elements.newRegionName.setAttribute("aria-invalid", String(Boolean(nameMessage)));
+    elements.newRegionTagError.textContent = tagMessage;
+    elements.newRegionTagError.className = "field-message" + (tagMessage ? " error" : "");
+    elements.newRegionTag.setAttribute("aria-invalid", String(Boolean(tagMessage)));
+    var suggestion = regionTag(name);
+    elements.tagSuggestion.textContent = suggestion;
+    elements.tagSuggestionRow.hidden = !suggestion || suggestion === tag;
+    return {
+      nameOk: Boolean(name) && !nameMessage,
+      tagOk: Boolean(tag) && !tagMessage
+    };
+  }
+
   function newRegionParent() {
     var hierarchy = state.catalog && state.catalog.hierarchy || {};
     var sources = Array.from(new Set(Array.from(state.proposed.keys()).map(originalLeaf)));
@@ -269,21 +478,79 @@ import {
     }) || provinceTags[state.province] || "";
   }
 
+  function parentChainLabels(parentTag) {
+    var hierarchy = state.catalog && state.catalog.hierarchy || {};
+    var labels = [];
+    var seen = new Set();
+    var current = parentTag;
+    while (current && current !== "can" && !seen.has(current) && hierarchy[current]) {
+      labels.unshift(hierarchy[current].label || current);
+      seen.add(current);
+      current = hierarchy[current].parent;
+    }
+    return labels;
+  }
+
+  function updateHierarchyUi() {
+    if (!state.creatingNewRegion) return;
+    var parent = newRegionParent();
+    var parentLabel = leafLabel(parent) || parent || "Not derived yet";
+    var label = elements.newRegionName.value.trim() || "Proposed region";
+    elements.derivedParent.textContent = state.proposed.size
+      ? "Derived parent: " + parentLabel + " (" + parent + ")"
+      : "Add cells to derive the parent.";
+    elements.hierarchyPath.textContent = hierarchyPath({
+      jurisdictionLabel: provinceNames[state.province] || "Province or territory",
+      parentLabels: parentChainLabels(parent),
+      leafLabel: label
+    }).join(" › ");
+  }
+
   function updateAnchorUi() {
     var active = state.creatingNewRegion;
-    elements.anchor.hidden = !active;
-    elements.anchorStatus.hidden = !active;
+    elements.anchorControls.hidden = !active;
     if (!active) return;
-    var selected = state.featureById.get(state.selectedId);
-    var selectedSeed = selected && String(selected.properties.seed_tag || "");
-    elements.anchor.disabled = !state.selectedId || !state.proposed.has(state.selectedId) || Boolean(selectedSeed);
+    if (
+      state.newRegionAnchor &&
+      (!state.proposed.has(state.newRegionAnchor) || state.proposed.get(state.newRegionAnchor) !== state.target)
+    ) {
+      state.newRegionAnchor = "";
+    }
+    var priorChoice = elements.anchorSelect.value;
+    var candidates = Array.from(state.proposed.keys()).filter(function (dguid) {
+      var feature = state.featureById.get(dguid);
+      return state.proposed.get(dguid) === state.target && feature && !feature.properties.seed_tag;
+    }).sort(function (left, right) {
+      var leftFeature = state.featureById.get(left);
+      var rightFeature = state.featureById.get(right);
+      var leftName = leftFeature.properties.CSDNAME || leftFeature.properties.CDNAME || left;
+      var rightName = rightFeature.properties.CSDNAME || rightFeature.properties.CDNAME || right;
+      return leftName.localeCompare(rightName) || left.localeCompare(right);
+    });
+    elements.anchorSelect.replaceChildren();
+    var blank = document.createElement("option");
+    blank.value = "";
+    blank.textContent = candidates.length ? "Choose a changed cell" : "Add cells before choosing an anchor";
+    elements.anchorSelect.appendChild(blank);
+    candidates.forEach(function (dguid) {
+      var feature = state.featureById.get(dguid);
+      var option = document.createElement("option");
+      option.value = dguid;
+      option.textContent = (feature.properties.CSDNAME || feature.properties.CDNAME || "Census area") + " — " + dguid;
+      elements.anchorSelect.appendChild(option);
+    });
+    var suggested = candidates.includes(state.selectedId) ? state.selectedId : "";
+    elements.anchorSelect.value = candidates.includes(priorChoice) ? priorChoice : suggested;
+    elements.anchorSelect.disabled = candidates.length === 0;
+    elements.anchor.disabled = !elements.anchorSelect.value || elements.anchorSelect.value === state.newRegionAnchor;
     if (state.newRegionAnchor) {
       var feature = state.featureById.get(state.newRegionAnchor);
       var name = feature && (feature.properties.CSDNAME || feature.properties.CDNAME);
-      elements.anchorStatus.textContent = "Anchor: " + (name || state.newRegionAnchor);
+      elements.anchorStatus.textContent = "Confirmed anchor: " + (name || "Census area") + " — " + state.newRegionAnchor;
     } else {
-      elements.anchorStatus.textContent = "Choose one changed cell near the centre of the new region.";
+      elements.anchorStatus.textContent = "Choose a changed cell near the centre, then confirm it. No anchor is selected automatically.";
     }
+    updateHierarchyUi();
   }
 
   function sharedRepeaterAreaForTag(tag) {
@@ -381,6 +648,7 @@ import {
       sticky: true
     });
     layer.on("click", function () {
+      if (state.mode === "pan") return;
       selectCell(dguid);
       if (state.mode === "paint" && state.target) {
         applyTransaction([dguid], state.target);
@@ -483,13 +751,6 @@ import {
     changes.forEach(function (change) {
       setEffective(change.DGUID, change.after);
     });
-    if (state.creatingNewRegion && !state.newRegionAnchor) {
-      var anchorChange = changes.find(function (change) {
-        var feature = state.featureById.get(change.DGUID);
-        return change.after === state.target && feature && !feature.properties.seed_tag;
-      });
-      if (anchorChange) state.newRegionAnchor = anchorChange.DGUID;
-    }
     updateAnchorUi();
     markProposalChanged();
     state.undoStack.push(changes);
@@ -592,40 +853,164 @@ import {
     commitAction(changes);
   }
 
+  function changeRecords() {
+    return Array.from(state.proposed.keys()).sort().map(function (dguid) {
+      var feature = state.featureById.get(dguid);
+      var properties = feature && feature.properties || {};
+      return {
+        DGUID: dguid,
+        DAUID: properties.DAUID || dguid,
+        CSDUID: properties.CSDUID || "",
+        municipality: properties.CSDNAME || properties.CDNAME || "Unnamed census area",
+        from: originalLeaf(dguid),
+        to: state.proposed.get(dguid)
+      };
+    });
+  }
+
+  function updateChangesTable(records) {
+    elements.changesTableBody.replaceChildren();
+    if (!records.length) {
+      var emptyRow = document.createElement("tr");
+      var emptyCell = document.createElement("td");
+      emptyCell.colSpan = 4;
+      emptyCell.textContent = "No proposed changes.";
+      emptyRow.appendChild(emptyCell);
+      elements.changesTableBody.appendChild(emptyRow);
+      elements.changesTableNote.textContent = "";
+      return;
+    }
+    records.slice(0, 200).forEach(function (record) {
+      var row = document.createElement("tr");
+      var area = document.createElement("td");
+      area.textContent = record.municipality + " — " + record.DAUID;
+      var before = document.createElement("td");
+      before.textContent = leafLabel(record.from) + " (" + record.from + ")";
+      var after = document.createElement("td");
+      after.textContent = leafLabel(record.to) + " (" + record.to + ")";
+      var action = document.createElement("td");
+      var remove = document.createElement("button");
+      remove.type = "button";
+      remove.className = "table-action";
+      remove.dataset.revertDguid = record.DGUID;
+      remove.textContent = "Remove";
+      remove.setAttribute("aria-label", "Remove proposed change for " + record.municipality + " " + record.DAUID);
+      action.appendChild(remove);
+      row.append(area, before, after, action);
+      elements.changesTableBody.appendChild(row);
+    });
+    elements.changesTableNote.textContent = records.length > 200
+      ? "Showing 200 of " + records.length.toLocaleString() + " changes. The downloaded proposal contains all changes."
+      : "";
+  }
+
+  function updateTextSummary(records) {
+    var heading = document.createElement("h3");
+    heading.textContent = "Proposal summary";
+    if (!state.proposalType) {
+      var empty = document.createElement("p");
+      empty.textContent = "Choose a proposal type and geography to build a text review.";
+      elements.textSummary.replaceChildren(heading, empty);
+      return;
+    }
+    var csds = new Map();
+    var sources = new Map();
+    records.forEach(function (record) {
+      var csdKey = record.CSDUID || record.DGUID;
+      if (!csds.has(csdKey)) csds.set(csdKey, record.municipality);
+      sources.set(record.from, (sources.get(record.from) || 0) + 1);
+    });
+    var parent = state.creatingNewRegion ? newRegionParent() : "";
+    var path = state.creatingNewRegion ? hierarchyPath({
+      jurisdictionLabel: provinceNames[state.province] || "Province or territory",
+      parentLabels: parentChainLabels(parent),
+      leafLabel: elements.newRegionName.value.trim() || "Proposed region"
+    }).join(" › ") : "Canada › " + (provinceNames[state.province] || "Province or territory") + " › " + (leafLabel(state.target) || "Target region");
+    var anchorFeature = state.featureById.get(state.newRegionAnchor);
+    var anchorName = anchorFeature && (anchorFeature.properties.CSDNAME || anchorFeature.properties.CDNAME);
+    var items = [
+      ["Proposal type", state.creatingNewRegion ? "New region/subregion (v2)" : "Existing boundary adjustment (v1)"],
+      ["Jurisdiction and hierarchy", path],
+      ["Destination", (leafLabel(state.target) || "Not chosen") + (state.target ? " (" + state.target + ")" : "")],
+      ["Official geography", records.length.toLocaleString() + " census cells across " + csds.size.toLocaleString() + " municipalities/CSDs"],
+      ["Sources", Array.from(sources.entries()).map(function (entry) { return leafLabel(entry[0]) + " (" + entry[0] + "): " + entry[1]; }).join("; ") || "None yet"],
+      ["Anchor", state.creatingNewRegion ? (state.newRegionAnchor ? (anchorName || "Census area") + " — " + state.newRegionAnchor + " (confirmed)" : "Not confirmed") : "Existing fixed anchors remain protected"],
+      ["Authority base", state.baseMembershipSha256 ? state.baseMembershipSha256.slice(0, 16) + "…" : "Loading"],
+      ["Validation", "Client checks run before export. The gateway and repository independently revalidate every authority rule."],
+      ["Lifecycle", "Public review → maintainer approval → national validation → publication"]
+    ];
+    var list = document.createElement("dl");
+    list.className = "details-list summary-list";
+    items.forEach(function (item) {
+      var row = document.createElement("div");
+      var term = document.createElement("dt");
+      var value = document.createElement("dd");
+      term.textContent = item[0];
+      value.textContent = item[1];
+      row.append(term, value);
+      list.appendChild(row);
+    });
+    elements.textSummary.replaceChildren(heading, list);
+  }
+
+  function setReadiness(name, ready, hidden) {
+    var item = elements.readinessList.querySelector('[data-check="' + name + '"]');
+    if (!item) return;
+    item.classList.toggle("ready", ready);
+    item.hidden = Boolean(hidden);
+  }
+
   function updateReview(announce) {
     var count = state.proposed.size;
     elements.changeCount.textContent = count + (count === 1 ? " change" : " changes");
     elements.undo.disabled = state.undoStack.length === 0;
     elements.redo.disabled = state.redoStack.length === 0;
     elements.clear.disabled = count === 0;
-    var newRegionReady = !state.creatingNewRegion || Boolean(
-      state.target &&
-      elements.newRegionName.value.trim() &&
+    var fieldValidity = updateNewRegionFieldFeedback();
+    var typeReady = Boolean(state.proposalType);
+    var areaReady = typeReady && Boolean(state.province && state.membership.size);
+    var targetReady = state.creatingNewRegion
+      ? Boolean(state.target && fieldValidity.nameOk && fieldValidity.tagOk)
+      : Boolean(state.target);
+    var changesReady = count > 0;
+    var anchorReady = !state.creatingNewRegion || Boolean(
       state.newRegionAnchor &&
       state.proposed.get(state.newRegionAnchor) === state.target
     );
-    elements.submit.disabled = count === 0 ||
-      !newRegionReady ||
-      !state.baseMembershipSha256 ||
-      !state.submissionConfig ||
-      !state.turnstileToken ||
-      state.submitting;
-    elements.export.disabled = count === 0 || !newRegionReady || !state.baseMembershipSha256;
+    var reasonReady = Boolean(elements.reason.value.trim());
+    var antiSpamReady = Boolean(state.submissionConfig && state.turnstileToken);
+    setReadiness("type", typeReady);
+    setReadiness("area", areaReady);
+    setReadiness("target", targetReady);
+    setReadiness("changes", changesReady);
+    setReadiness("anchor", anchorReady, !state.creatingNewRegion);
+    setReadiness("reason", reasonReady);
+    setReadiness("anti-spam", antiSpamReady);
+    var exportReady = typeReady && areaReady && targetReady && changesReady && anchorReady && reasonReady && Boolean(state.baseMembershipSha256);
+    elements.submit.disabled = !exportReady || !antiSpamReady || state.submitting;
+    elements.export.disabled = !exportReady;
+    var records = changeRecords();
+    updateAnchorUi();
+    updateChangesTable(records);
+    updateTextSummary(records);
     if (announce === false) {
       return;
     }
     if (count) {
-      setValidation(count + (count === 1 ? " cell ready." : " cells ready."), "");
+      setValidation(exportReady ? "Client checks are ready." : "Complete the readiness checklist.", exportReady ? "success" : "");
     } else {
       setValidation("", "");
     }
   }
 
   function setMode(mode) {
+    if (mode === "paint" && !elements.paintAcknowledgement.checked) return;
     state.mode = mode;
     elements.panMode.classList.toggle("active", mode === "pan");
+    elements.inspectMode.classList.toggle("active", mode === "inspect");
     elements.paintMode.classList.toggle("active", mode === "paint");
     elements.panMode.setAttribute("aria-pressed", String(mode === "pan"));
+    elements.inspectMode.setAttribute("aria-pressed", String(mode === "inspect"));
     elements.paintMode.setAttribute("aria-pressed", String(mode === "paint"));
     if (mode === "paint") {
       map.dragging.disable();
@@ -703,18 +1088,40 @@ import {
       option.textContent = leafLabel(tag) + " (" + tag + ")";
       elements.target.appendChild(option);
     });
-    var create = document.createElement("option");
-    create.value = "__new__";
-    create.textContent = "Create a new region…";
-    elements.target.appendChild(create);
-    elements.target.disabled = tags.size === 0;
-    if (state.creatingNewRegion) {
-      elements.target.value = "__new__";
-    } else if (tags.has(previous)) {
+    elements.target.disabled = state.proposalType !== PROPOSAL_TYPE_BOUNDARY || tags.size === 0;
+    if (tags.has(previous)) {
       elements.target.value = previous;
     } else {
       state.target = "";
     }
+  }
+
+  function populateMunicipalityOptions() {
+    var municipalities = new Map();
+    state.features.forEach(function (feature) {
+      var properties = feature.properties || {};
+      var id = String(properties.CSDUID || "");
+      if (!id) return;
+      if (!municipalities.has(id)) {
+        municipalities.set(id, { name: properties.CSDNAME || properties.CDNAME || "Unnamed municipality", count: 0 });
+      }
+      municipalities.get(id).count += 1;
+    });
+    elements.municipalitySelect.replaceChildren();
+    var blank = document.createElement("option");
+    blank.value = "";
+    blank.textContent = "Choose a municipality";
+    elements.municipalitySelect.appendChild(blank);
+    Array.from(municipalities.entries()).sort(function (left, right) {
+      return left[1].name.localeCompare(right[1].name) || left[0].localeCompare(right[0]);
+    }).forEach(function (entry) {
+      var option = document.createElement("option");
+      option.value = entry[0];
+      option.textContent = entry[1].name + " — " + entry[1].count + (entry[1].count === 1 ? " cell" : " cells");
+      elements.municipalitySelect.appendChild(option);
+    });
+    elements.municipalitySelect.disabled = !state.proposalType || municipalities.size === 0;
+    elements.moveMunicipality.disabled = true;
   }
 
   function decodeArc(topology, arcIndex, cache) {
@@ -787,8 +1194,8 @@ import {
     });
   }
 
-  function resetEdits() {
-    markProposalChanged();
+  function resetEdits(silent) {
+    if (!silent) markProposalChanged();
     state.proposed.clear();
     state.undoStack = [];
     state.redoStack = [];
@@ -807,6 +1214,58 @@ import {
     updateSharedAreaNote();
   }
 
+  function restoreCurrentDraft() {
+    var schema = currentSchema();
+    if (!schema) {
+      state.restoringDraft = false;
+      setDraftStatus("Choose a proposal type to begin.", "");
+      return false;
+    }
+    var storage = draftStorage();
+    var draft = loadDraft(storage, schema, state.baseMembershipSha256, state.province);
+    if (!draft) {
+      var stale = hasStaleDraft(storage, schema, state.baseMembershipSha256, state.province);
+      state.restoringDraft = false;
+      elements.discardDraft.hidden = true;
+      setDraftStatus(
+        stale
+          ? "A draft from older map data remains stored but was not restored."
+          : "No saved draft.",
+        stale ? "error" : ""
+      );
+      updateReview(false);
+      return false;
+    }
+    state.proposed.clear();
+    draft.changes.forEach(function (change) {
+      if (state.membership.has(change.DGUID)) state.proposed.set(change.DGUID, change.to);
+    });
+    state.undoStack = [];
+    state.redoStack = [];
+    state.selectedId = "";
+    state.target = draft.target;
+    elements.reason.value = draft.reason;
+    if (schema === PROPOSAL_SCHEMA_V2) {
+      elements.newRegionName.value = draft.newRegion && draft.newRegion.label || "";
+      elements.newRegionTag.value = draft.newRegion && draft.newRegion.tag || "";
+      state.target = elements.newRegionTag.value;
+      state.newRegionAnchor = draft.newRegion && draft.newRegion.anchorDguid || "";
+      state.newRegionTagTouched = Boolean(elements.newRegionTag.value);
+    } else {
+      elements.target.value = state.target;
+      state.newRegionAnchor = "";
+    }
+    state.restoringDraft = false;
+    refreshAllStyles();
+    updateReview(false);
+    elements.discardDraft.hidden = false;
+    setDraftStatus(
+      "Draft restored from " + new Date(draft.savedAt).toLocaleString() + ". Contributor identity was not stored.",
+      "saved"
+    );
+    return true;
+  }
+
   async function loadProvince(pruid) {
     if (!pruid) {
       return;
@@ -818,14 +1277,14 @@ import {
     var signal = state.loadController.signal;
     setStatus("Loading " + provinceNames[pruid] + "…", "");
     elements.target.disabled = true;
-    state.creatingNewRegion = false;
+    state.restoringDraft = true;
     state.target = "";
     state.newRegionAnchor = "";
     state.newRegionTagTouched = false;
-    elements.newRegionFields.hidden = true;
     elements.newRegionName.value = "";
     elements.newRegionTag.value = "";
-    resetEdits();
+    elements.reason.value = "";
+    resetEdits(true);
     try {
       var topology = await (await fetchOk("cells/cells-" + pruid + ".topo.json", { signal: signal })).json();
       state.membership = new Map();
@@ -850,6 +1309,8 @@ import {
       cellLayer.clearLayers();
       cellLayer.addData({ type: "FeatureCollection", features: state.features });
       populateTargets();
+      populateMunicipalityOptions();
+      restoreCurrentDraft();
       elements.mapHeading.textContent = provinceNames[pruid];
       if (cellLayer.getBounds().isValid()) {
         map.fitBounds(cellLayer.getBounds(), { padding: [18, 18] });
@@ -861,6 +1322,7 @@ import {
       );
     } catch (error) {
       if (error.name === "AbortError") {
+        state.restoringDraft = false;
         return;
       }
       state.membership.clear();
@@ -868,6 +1330,7 @@ import {
       state.featureById.clear();
       state.layerById.clear();
       cellLayer.clearLayers();
+      state.restoringDraft = false;
       setStatus(error.message, "error");
     }
   }
@@ -885,34 +1348,33 @@ import {
     });
   }
 
+  function municipalityCellsById(csduid) {
+    return state.features.filter(function (feature) {
+      return String(feature.properties.CSDUID || "") === String(csduid || "");
+    }).map(function (feature) {
+      return String(feature.properties.DGUID);
+    });
+  }
+
   function localProposal() {
     var changes = Array.from(state.proposed.entries()).map(function (entry) {
       return { DGUID: entry[0], from: originalLeaf(entry[0]), to: entry[1] };
     }).sort(function (left, right) {
       return left.DGUID.localeCompare(right.DGUID);
     });
-    var proposal = {
-      schema: state.creatingNewRegion
-        ? "mcc-region-editor-proposal/v2"
-        : "mcc-region-editor-proposal/v1",
+    return buildEditorProposal({
+      schema: currentSchema(),
       baseMembershipSha256: state.baseMembershipSha256,
-      changes: changes
-    };
-    if (state.creatingNewRegion) {
-      proposal.newRegion = {
+      changes: changes,
+      newRegion: {
         tag: state.target,
         label: elements.newRegionName.value.trim(),
         parent: newRegionParent(),
         anchorDguid: state.newRegionAnchor
-      };
-    }
-    var submittedBy = elements.submittedBy.value.trim();
-    var reason = elements.reason.value.trim();
-    if (submittedBy) {
-      proposal.submittedBy = submittedBy;
-    }
-    proposal.reason = reason;
-    return proposal;
+      },
+      submittedBy: elements.submittedBy.value,
+      reason: elements.reason.value
+    });
   }
 
   function validatedProposal() {
@@ -1087,6 +1549,7 @@ import {
   }
 
   async function submitProposal() {
+    flushDraftSave();
     var canonical = validatedProposal();
     if (!canonical) return;
     if (!state.submissionConfig || !state.turnstileToken || state.submitting) {
@@ -1110,7 +1573,7 @@ import {
         website: elements.website.value
       });
       var changedWhileSubmitting = state.proposalRevision !== submittedRevision;
-      showSubmissionResult(result, changedWhileSubmitting);
+      showSubmissionResult(result, changedWhileSubmitting, canonical.schema);
       setValidation(
         changedWhileSubmitting
           ? "Submitted, but later edits were not included. Submit again to include them."
@@ -1138,6 +1601,105 @@ import {
     }
   }
 
+  function closeDecisionDialog(confirmed) {
+    if (!state.dialogResolver) return;
+    var resolve = state.dialogResolver;
+    var priorFocus = state.dialogPreviousFocus;
+    state.dialogResolver = null;
+    state.dialogPreviousFocus = null;
+    elements.discardDialog.hidden = true;
+    resolve(Boolean(confirmed));
+    if (priorFocus && typeof priorFocus.focus === "function") priorFocus.focus();
+  }
+
+  function decisionDialog(options) {
+    if (state.dialogResolver) return Promise.resolve(false);
+    state.dialogPreviousFocus = document.activeElement;
+    elements.discardDialogTitle.textContent = options.title;
+    elements.discardDialogMessage.textContent = options.message;
+    elements.discardDialogContext.textContent = options.context;
+    elements.discardDialogConfirm.textContent = options.confirmLabel;
+    elements.discardDialog.hidden = false;
+    window.setTimeout(function () { elements.discardDialogCancel.focus(); }, 0);
+    return new Promise(function (resolve) { state.dialogResolver = resolve; });
+  }
+
+  function draftContext() {
+    return (currentSchema() || "No schema") + " · " +
+      (provinceNames[state.province] || "No province selected") + " · " +
+      state.proposed.size + (state.proposed.size === 1 ? " changed cell" : " changed cells");
+  }
+
+  function setProposalType(type, restore) {
+    state.proposalType = type;
+    state.creatingNewRegion = type === PROPOSAL_TYPE_NEW_REGION;
+    elements.proposalTypes.forEach(function (input) { input.checked = input.value === type; });
+    elements.areaPanel.setAttribute("aria-disabled", "false");
+    elements.buildPanel.setAttribute("aria-disabled", "false");
+    elements.province.disabled = false;
+    elements.existingTargetFields.hidden = state.creatingNewRegion;
+    elements.newRegionFields.hidden = !state.creatingNewRegion;
+    elements.anchorControls.hidden = !state.creatingNewRegion;
+    if (state.creatingNewRegion) {
+      state.target = elements.newRegionTag.value.trim();
+      elements.target.disabled = true;
+    } else {
+      state.newRegionAnchor = "";
+      populateTargets();
+      state.target = elements.target.value;
+    }
+    populateMunicipalityOptions();
+    if (restore !== false) restoreCurrentDraft();
+    updateAnchorUi();
+    updateSharedAreaNote();
+    updateReview(false);
+  }
+
+  async function changeProposalType(nextType) {
+    var previousType = state.proposalType;
+    if (nextType === previousType) return;
+    flushDraftSave();
+    if (previousType && draftHasContent()) {
+      var proceed = await decisionDialog({
+        title: "Switch proposal type?",
+        message: "The current on-screen draft will be put away. Its local saved copy will remain under the current schema.",
+        context: draftContext(),
+        confirmLabel: "Switch type"
+      });
+      if (!proceed) {
+        elements.proposalTypes.forEach(function (input) { input.checked = input.value === previousType; });
+        return;
+      }
+    }
+    state.restoringDraft = true;
+    resetEdits(true);
+    elements.reason.value = "";
+    elements.newRegionName.value = "";
+    elements.newRegionTag.value = "";
+    state.target = "";
+    state.newRegionAnchor = "";
+    state.restoringDraft = false;
+    setProposalType(nextType, true);
+  }
+
+  async function changeProvince(nextProvince) {
+    if (nextProvince === state.province) return;
+    flushDraftSave();
+    if (draftHasContent()) {
+      var proceed = await decisionDialog({
+        title: "Switch province or territory?",
+        message: "The current on-screen draft will be put away. Its local saved copy will remain under this province and schema.",
+        context: draftContext(),
+        confirmLabel: "Switch area"
+      });
+      if (!proceed) {
+        elements.province.value = state.province;
+        return;
+      }
+    }
+    await loadProvince(nextProvince);
+  }
+
   async function initialise() {
     setStatus("Loading editor…", "");
     try {
@@ -1157,49 +1719,24 @@ import {
     }
   }
 
+  elements.proposalTypes.forEach(function (input) {
+    input.addEventListener("change", function () {
+      if (input.checked) changeProposalType(input.value);
+    });
+  });
   elements.province.addEventListener("change", function () {
-    if (state.proposed.size && !window.confirm("Discard this draft and load another area?")) {
-      elements.province.value = state.province;
-      return;
-    }
-    loadProvince(elements.province.value);
+    changeProvince(elements.province.value);
   });
   elements.target.addEventListener("change", function () {
-    var wantsNewRegion = elements.target.value === "__new__";
-    if (state.proposed.size && wantsNewRegion !== state.creatingNewRegion) {
-      if (!window.confirm("Discard these edits and change the proposal type?")) {
-        elements.target.value = state.creatingNewRegion ? "__new__" : state.target;
-        return;
-      }
-      state.creatingNewRegion = wantsNewRegion;
-      resetEdits();
-    } else {
-      state.creatingNewRegion = wantsNewRegion;
-    }
-    elements.newRegionFields.hidden = !wantsNewRegion;
-    if (wantsNewRegion) {
-      state.target = regionTag(elements.newRegionTag.value);
-      elements.newRegionTag.value = state.target;
-    } else {
-      state.target = elements.target.value;
-      state.newRegionAnchor = "";
-    }
+    state.target = elements.target.value;
+    markProposalChanged();
     elements.municipality.disabled = !state.selectedId || !state.target;
+    elements.moveMunicipality.disabled = !elements.municipalitySelect.value || !state.target;
     updateAnchorUi();
     updateSharedAreaNote();
     updateReview(false);
   });
   elements.newRegionName.addEventListener("input", function () {
-    if (!state.newRegionTagTouched) {
-      var prior = state.target;
-      state.target = regionTag(elements.newRegionName.value);
-      elements.newRegionTag.value = state.target;
-      if (prior && prior !== state.target) {
-        state.proposed.forEach(function (tag, dguid) {
-          if (tag === prior) state.proposed.set(dguid, state.target);
-        });
-      }
-    }
     markProposalChanged();
     refreshAllStyles();
     updateReview(false);
@@ -1207,56 +1744,121 @@ import {
   elements.newRegionTag.addEventListener("input", function () {
     state.newRegionTagTouched = true;
     var prior = state.target;
-    var next = regionTag(elements.newRegionTag.value);
-    elements.newRegionTag.value = next;
+    var next = elements.newRegionTag.value.trim();
     state.target = next;
     if (prior !== next) {
       state.proposed.forEach(function (tag, dguid) {
         if (tag === prior) state.proposed.set(dguid, next);
       });
-      markProposalChanged();
       refreshAllStyles();
     }
+    markProposalChanged();
     elements.municipality.disabled = !state.selectedId || !state.target;
+    elements.moveMunicipality.disabled = !elements.municipalitySelect.value || !state.target;
     updateReview(false);
+  });
+  elements.useTagSuggestion.addEventListener("click", function () {
+    var suggestion = elements.tagSuggestion.textContent;
+    if (!suggestion) return;
+    var prior = state.target;
+    elements.newRegionTag.value = suggestion;
+    state.newRegionTagTouched = true;
+    state.target = suggestion;
+    state.proposed.forEach(function (tag, dguid) {
+      if (tag === prior) state.proposed.set(dguid, suggestion);
+    });
+    markProposalChanged();
+    refreshAllStyles();
+    updateReview(false);
+    elements.newRegionTag.focus();
+  });
+  elements.anchorSelect.addEventListener("change", function () {
+    elements.anchor.disabled = !elements.anchorSelect.value || elements.anchorSelect.value === state.newRegionAnchor;
   });
   elements.anchor.addEventListener("click", function () {
     if (elements.anchor.disabled) return;
-    state.newRegionAnchor = state.selectedId;
+    state.newRegionAnchor = elements.anchorSelect.value;
     markProposalChanged();
     updateAnchorUi();
     updateReview(false);
   });
   elements.panMode.addEventListener("click", function () { setMode("pan"); });
+  elements.inspectMode.addEventListener("click", function () { setMode("inspect"); });
   elements.paintMode.addEventListener("click", function () { setMode("paint"); });
+  elements.paintAcknowledgement.addEventListener("change", function () {
+    elements.paintMode.disabled = !elements.paintAcknowledgement.checked;
+    if (!elements.paintAcknowledgement.checked && state.mode === "paint") setMode("inspect");
+  });
   elements.before.addEventListener("click", function () { setView("before"); });
   elements.after.addEventListener("click", function () { setView("after"); });
   elements.undo.addEventListener("click", undo);
   elements.redo.addEventListener("click", redo);
   elements.clear.addEventListener("click", clearChanges);
+  elements.municipalitySelect.addEventListener("change", function () {
+    elements.moveMunicipality.disabled = !elements.municipalitySelect.value || !state.target;
+  });
+  elements.moveMunicipality.addEventListener("click", function () {
+    if (!state.target) {
+      setValidation("Choose or define the destination region first.", "error");
+      return;
+    }
+    applyTransaction(municipalityCellsById(elements.municipalitySelect.value), state.target);
+  });
   elements.municipality.addEventListener("click", function () {
     if (!state.target) {
-      setValidation("Choose a target region first.", "error");
+      setValidation("Choose or define the destination region first.", "error");
       return;
     }
     applyTransaction(municipalityCells(), state.target);
   });
+  elements.changesTableBody.addEventListener("click", function (event) {
+    var button = event.target.closest("[data-revert-dguid]");
+    if (!button) return;
+    var dguid = button.dataset.revertDguid;
+    commitAction(buildAction([dguid], originalLeaf(dguid)));
+  });
   elements.submit.addEventListener("click", submitProposal);
   elements.export.addEventListener("click", exportProposal);
   elements.antiSpamRetry.addEventListener("click", initialiseSubmission);
-  elements.submittedBy.addEventListener("input", markProposalChanged);
-  elements.reason.addEventListener("input", markProposalChanged);
+  elements.submittedBy.addEventListener("input", function () {
+    markProposalChanged();
+    updateReview(false);
+  });
+  elements.reason.addEventListener("input", function () {
+    markProposalChanged();
+    updateReview(false);
+  });
+  elements.discardDialogCancel.addEventListener("click", function () { closeDecisionDialog(false); });
+  elements.discardDialogConfirm.addEventListener("click", function () { closeDecisionDialog(true); });
+  elements.discardDialog.addEventListener("click", function (event) {
+    if (event.target === elements.discardDialog) closeDecisionDialog(false);
+  });
+  elements.discardDraft.addEventListener("click", async function () {
+    var proceed = await decisionDialog({
+      title: "Discard the saved copy?",
+      message: "This removes the local saved copy for this schema and province. The current on-screen proposal stays open until it changes or you leave.",
+      context: draftContext(),
+      confirmLabel: "Discard saved copy"
+    });
+    if (!proceed) return;
+    removeDraft(draftStorage(), currentSchema(), state.baseMembershipSha256, state.province);
+    elements.discardDraft.hidden = true;
+    setDraftStatus("Saved copy discarded. Current on-screen work is unchanged.", "");
+  });
   document.addEventListener("mouseup", endPaint);
   document.addEventListener("keydown", function (event) {
-    if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "z") {
+    if (event.key === "Escape" && state.dialogResolver) {
       event.preventDefault();
-      if (event.shiftKey) {
-        redo();
-      } else {
-        undo();
-      }
+      closeDecisionDialog(false);
+      return;
     }
+    if (!(event.ctrlKey || event.metaKey) || isEditableTarget(event.target)) return;
+    var key = event.key.toLowerCase();
+    if (key !== "z" && key !== "y") return;
+    event.preventDefault();
+    if (key === "y" || event.shiftKey) redo(); else undo();
   });
+  window.addEventListener("beforeunload", flushDraftSave);
 
   initialise();
   initialiseSubmission();

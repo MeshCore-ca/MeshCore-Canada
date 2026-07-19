@@ -2,4 +2,10 @@
 *.swp
 __pycache__/
 *.pyc
+site/
 docs/assets/regions/*.raw.geojson
+node_modules/
+.tmp/
+playwright-report/
+test-results/
+lighthouse-report/

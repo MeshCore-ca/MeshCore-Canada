@@ -89,11 +89,18 @@ test("keeps preview and bounded manual GitHub fallbacks", () => {
   assert.doesNotMatch(fallback.url, /need=/);
 });
 
-test("MkDocs loads the configurator and submission scripts together", async () => {
-  const config = await readFile(new URL("../../mkdocs.yml", import.meta.url), "utf8");
+test("MkDocs keeps tool scripts route scoped", async () => {
+  const [config, submitPage, configPage] = await Promise.all([
+    readFile(new URL("../../mkdocs.yml", import.meta.url), "utf8"),
+    readFile(new URL("../../docs/submit-idea.md", import.meta.url), "utf8"),
+    readFile(new URL("../../docs/config/index.md", import.meta.url), "utf8")
+  ]);
   assert.equal((config.match(/^extra_javascript:/gm) || []).length, 1);
-  assert.match(config, /^\s+- assets\/regions\/regions\.js$/m);
-  assert.match(config, /^\s+- javascripts\/submission-form\.js$/m);
+  assert.match(config, /^\s+- assets\/javascripts\/bootstrap\.js$/m);
+  assert.doesNotMatch(config, /^\s+- assets\/regions\/regions\.js$/m);
+  assert.doesNotMatch(config, /^\s+- javascripts\/submission-form\.js$/m);
+  assert.match(submitPage, /^\s+- javascripts\/submission-form\.js$/m);
+  assert.match(configPage, /^\s+- assets\/regions\/regions\.js$/m);
 });
 
 test("page exposes anonymous submission, anti-spam, result, and manual fallback controls", async () => {
@@ -112,7 +119,12 @@ test("page exposes anonymous submission, anti-spam, result, and manual fallback 
     "submission-result",
     "submission-website",
     "open-github-submission",
-    "copy-submission"
+    "copy-submission",
+    "submission-error-summary",
+    "save-submission-draft",
+    "clear-submission-draft",
+    "review-submission-again",
+    "submission-preview-note"
   ]) {
     assert.ok(html.includes(`id="${id}"`), `missing ${id}`);
   }
@@ -120,7 +132,13 @@ test("page exposes anonymous submission, anti-spam, result, and manual fallback 
   assert.match(html, /name="source_page" value="https:\/\/meshcore\.ca\/submit-idea\/"/);
   assert.match(html, /<details class="submission-optional">/);
   assert.match(html, /id="submission-final-actions" class="submission-actions" hidden/);
-  assert.match(controller, /elements\.finalActions\.hidden = !current/);
+  assert.equal((html.match(/data-submission-stage=/g) || []).length, 3);
+  assert.match(controller, /elements\.finalActions\.hidden = !hasPreview/);
+  assert.match(controller, /showValidationErrors/);
+  assert.match(controller, /initialiseCharacterCounters/);
+  assert.match(controller, /meshcore-canada:community-idea-draft:v1/);
+  assert.doesNotMatch(controller, /DRAFT_FIELD_IDS\s*=\s*\[[^\]]*submission-website/s);
+  assert.doesNotMatch(controller, /DRAFT_FIELD_IDS\s*=\s*\[[^\]]*turnstile/s);
   assert.match(controller, /void initialiseSubmission\(\)/);
   assert.doesNotMatch(controller, /\n  initialiseSubmission\(\);\n/);
   assert.match(controller, /import\(transportModuleUrl\)/);

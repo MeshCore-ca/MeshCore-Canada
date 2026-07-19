@@ -31,6 +31,8 @@ function Prompt-YesNo {
     }
 }
 
+# Keep this quick-list snapshot aligned with ../location-codes.json. The
+# analyzer content test fails when the published JSON and helper drift.
 $KnownIataCodes = @(
     "YYZ","YTZ","YOW","YHM","YKF","YXU","YOO","YKZ","YAM","YQT","YSB","YTS","YQG","YYB","YGK","YPQ","YTR","YHD","YPL","YND",
     "YUL","YMX","YQB","YBG","YVO","YHU","YRJ","YGL","YSC","YTQ","YUY","YZV","YGP","YRQ",
@@ -53,8 +55,11 @@ function Resolve-Iata {
         $candidate = Read-Host "Enter 3-letter IATA airport code"
         $candidate = $candidate.Trim().ToUpperInvariant()
     }
-    if ($candidate -eq "XXX") {
-        throw "XXX is a placeholder. Use the real 3-letter IATA airport code nearest to you."
+    if ($candidate -in @("XXX", "HOME")) {
+        throw "$candidate is a placeholder. Use the real 3-letter IATA airport code nearest to you."
+    }
+    if ($candidate -eq "CAN") {
+        throw "CAN is Guangzhou's airport code, not shorthand for Canada. Use the real code nearest to you."
     }
     if ($candidate -notmatch '^[A-Z]{3}$') {
         throw "IATA code must be exactly 3 letters."

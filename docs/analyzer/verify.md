@@ -1,64 +1,88 @@
-# Check Your Observer
+---
+title: Check your observer
+description: Prove that the radio hears traffic, the observer sends it, and MeshCore Canada's live tools receive it.
+audience:
+  - observer-operators
+task: verify-observer
+scope: canada-baseline
+status: draft
+owner: meshcore-canada
+last_reviewed: 2026-07-19
+review_by: 2026-10-19
+difficulty: beginner
+estimated_time: 10 minutes
+destructive: false
+page_styles:
+  - assets/styles/analyzer.css
+---
 
-After setting up your observer using any supported path ([MQTT Firmware](builds/mqtt-firmware.md), [MCtoMQTT](builds/mctomqtt.md), [PyMC](builds/pymc.md), [Home Assistant](builds/meshcore-ha.md), or [RemoteTerm](remoteterm.md)), use the links below to confirm it's online and reporting.
+# Check your observer
 
-<div class="grid cards" markdown>
+A broker connection proves only that the internet link works. An observer is healthy when a real radio packet reaches the live packet view.
 
--   :material-eye:{ .lg .middle } **CoreScope Observers**
+## Verify all four stages
 
-    ---
+<ol class="mc-steps">
+  <li>
+    <strong>Radio:</strong> confirm the device is on the local mesh settings and can hear nearby activity.
+    <br><strong>Expected:</strong> a packet counter, log, or connected application changes when a nearby node transmits.
+  </li>
+  <li>
+    <strong>Observer:</strong> check the method's service, integration, or device status.
+    <br><strong>Expected:</strong> it reports an encrypted connection to at least the primary endpoint without repeating authentication errors.
+  </li>
+  <li>
+    <strong>Observer view:</strong> open <a href="https://live.meshcore.ca/#/observers">CoreScope Observers</a>.
+    <br><strong>Expected:</strong> the observer name and three-letter location code appear with a recent timestamp.
+  </li>
+  <li>
+    <strong>Packet view:</strong> create nearby MeshCore activity, then open <a href="https://live.meshcore.ca/#/packets">CoreScope Packets</a>.
+    <br><strong>Expected:</strong> a recent packet attributed to the observer appears within a few minutes.
+  </li>
+</ol>
 
-    See all connected observers and their current status.
+Do not generate unnecessary traffic on a busy mesh. A normal advert or existing nearby activity is enough.
 
-    [:octicons-arrow-right-24: View Observers](https://live.meshcore.ca/#/observers)
-
--   :material-swap-horizontal:{ .lg .middle } **CoreScope Packets**
-
-    ---
-
-    Watch live packet traffic flowing through observers in real time.
-
-    [:octicons-arrow-right-24: View Packets](https://live.meshcore.ca/#/packets)
-
--   :material-map-marker:{ .lg .middle } **MeshCore Map**
-
-    ---
-
-    See observers and nodes plotted on the map.
-
-    [:octicons-arrow-right-24: View Map](https://live.meshcore.ca/#/map)
-
--   :material-wrench:{ .lg .middle } **Troubleshooting**
-
-    ---
-
-    Not showing up? Path-specific diagnostics for all observer types.
-
-    [:octicons-arrow-right-24: Troubleshooting](troubleshooting.md)
-
-</div>
-
-Your observer should appear within a few minutes of coming online.
-
-## Healthy Observer Checklist
+## Healthy result
 
 | Check | Expected result |
-|-------|-----------------|
-| Observer name | Clear node name such as `YOW-Repeater-01` |
-| Region | Nearest real IATA code, not `CAN`, `XXX`, or `HOME` |
-| Broker coverage | Primary and backup broker configured where the path supports both |
-| Packet activity | Recent packet timestamps on CoreScope after nearby mesh activity |
-| Radio settings | `USA/Canada (Recommended)` and 3-byte path hashes unless your local page differs |
+|---|---|
+| Name | A clear service name such as `YOW-Repeater-01`, without a home address |
+| Location | The nearest real three-letter airport code, not `CAN`, `XXX`, or `HOME` |
+| Primary path | Connected to `mqtt1.meshcore.ca` with TLS certificate verification |
+| Backup path | Connected to `mqtt2.meshcore.ca` where the method supports two entries |
+| Packet mode | Packet publishing is enabled, not status-only |
+| Packet time | A recent packet appears after the radio hears nearby traffic |
+| Radio | Local settings are used; the Canada baseline applies only when no local override exists |
 
-## First Checks
+## Record the check
 
-If it does not appear, start with the checks that match the symptom:
+Keep a small private maintenance note:
 
-| Symptom | First check |
-|---------|-------------|
-| No observer entry | MQTT is connected and the IATA code is a real airport code |
-| Observer appears, but no packets | Packet publishing is enabled: firmware `mqtt.packets`, HA **Payload Mode** = `packet`, or pyMC `format: letsmesh` |
-| Backup broker does not connect | The token audience matches the broker host (`mqtt2.meshcore.ca` for broker 2) |
-| Observer appears under the wrong city | Every broker/integration entry uses the nearest real IATA code; do not use `CAN` for Canada |
+```text
+Observer:
+Method and version:
+Location code:
+Checked at (include time zone):
+Radio heard a packet: yes / no
+Primary connected: yes / no
+Backup connected: yes / no / not supported
+Observer visible: yes / no
+Packet visible: yes / no
+```
 
-For path-specific commands and Home Assistant settings, use [Troubleshooting](troubleshooting.md).
+Do not include credentials, private keys, Wi-Fi names, or Wi-Fi passwords.
+
+## If a stage fails
+
+Start with the first failed stage:
+
+| First failure | Next page |
+|---|---|
+| Radio does not hear activity | [Observer appears but no packets](troubleshooting.md#observer-appears-but-no-packets-arrive) |
+| Observer cannot connect | [Observer never appears](troubleshooting.md#observer-never-appears) |
+| Observer is visible but packet view stays empty | [Observer appears but no packets](troubleshooting.md#observer-appears-but-no-packets-arrive) |
+| Backup alone fails | [Only the backup connection fails](troubleshooting.md#only-the-backup-connection-fails) |
+| Place or name is wrong | [Observer appears in the wrong place](troubleshooting.md#observer-appears-in-the-wrong-place) |
+
+Use [Troubleshooting](troubleshooting.md) for copy-safe checks and a redacted support bundle.

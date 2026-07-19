@@ -1,66 +1,121 @@
-# Glossary
+---
+title: MeshCore glossary
+description: Find plain-language definitions for MeshCore devices, radio settings, paths, and network data terms.
+audience:
+  - newcomer
+  - meshcore-user
+task: define-meshcore-term
+scope: canada-baseline
+status: verified
+owner: docs-ux
+last_reviewed: 2026-07-19
+review_by: 2027-01-19
+evidence: Existing MeshCore Canada documentation terminology
+difficulty: beginner
+estimated_time: 2-10 minutes
+destructive: false
+---
 
-A quick reference for common terms used across the MeshCore community.
+# MeshCore glossary
+
+Use your browser's **Find** command to jump to a term. Definitions are short;
+the linked guides explain how to use each setting or device.
+
+## A-D
 
 **Advert**
-:   A MeshCore announcement packet that helps nearby nodes learn about a device and route.
+:   A MeshCore announcement packet that helps nearby nodes learn about a device
+    and its path.
 
 **Bandwidth**
-:   A LoRa radio setting. MeshCore Canada baseline raw settings use `62.5 kHz`.
+:   A LoRa radio setting that affects how much radio spectrum a transmission
+    uses. Use the value from your local settings or the configurator.
 
 **Broker**
-:   An MQTT server. MeshCore.ca uses `mqtt1.meshcore.ca` and `mqtt2.meshcore.ca` for redundant observer publishing.
+:   A service that receives and distributes messages for Message Queuing
+    Telemetry Transport (MQTT).
 
-**Coding Rate (CR)**
-:   A LoRa error-correction setting. MeshCore Canada baseline raw settings use `CR5`.
+**Coding rate (CR)**
+:   A LoRa error-correction setting. Use the value from your local settings or
+    the configurator.
 
 **Companion**
-:   A portable MeshCore device used with a phone, tablet, desktop app, web app, or serial client to send and receive messages.
+:   A personal MeshCore device used to send and receive messages. It often
+    connects to an app and does not relay mesh traffic.
 
 **CoreScope**
-:   The MeshCore.ca live tools for checking observers, packet flow, and map data.
+:   MeshCore Canada's public tools for viewing observers, packets, nodes, and
+    map data.
 
-**IATA Code**
-:   A real 3-letter airport code used by MeshCore.ca observers to tag their region, such as `YOW`, `YYZ`, or `YVR`.
+## F-M
 
-**ISM Band**
-:   Industrial, Scientific, and Medical radio spectrum used by many low-power devices. You are responsible for legal operation in your location.
+**Firmware**
+:   Software installed on a device. MeshCore firmware is built for a specific
+    board and role.
 
-**JWT**
-:   JSON Web Token. MeshCore.ca MQTT paths use token authentication instead of a static username/password.
+**Industrial, scientific, and medical (ISM) band**
+:   Radio spectrum used by many low-power devices. Legal use still depends on
+    location, equipment, and operating conditions.
+
+**JSON Web Token (JWT)**
+:   A time-limited credential used by supported MeshCore Canada data services.
+    Treat it as sensitive.
+
+**Location code**
+:   A short code that groups observer data by area. Some observer guides call
+    this an IATA code because they use three-letter airport codes.
 
 **LoRa**
-:   Long Range radio modulation used by MeshCore devices.
+:   The long-range, low-power radio modulation used by MeshCore devices.
 
-**Mesh Network**
-:   A network where devices can relay traffic for each other instead of depending on one central access point.
+**Mesh network**
+:   A network in which supported devices can relay traffic instead of relying
+    on one central radio.
 
-**MQTT**
-:   A lightweight publish/subscribe messaging protocol used by MeshCore.ca observers to publish packet telemetry.
+**Message Queuing Telemetry Transport (MQTT)**
+:   A publish-and-subscribe protocol used by observers to send network data to
+    public tools.
+
+## N-R
 
 **Node**
 :   Any MeshCore device on the network.
 
 **Observer**
-:   A MeshCore radio or host service that publishes mesh packet telemetry to MQTT for live tools.
+:   A radio or host service that listens for MeshCore traffic and sends network
+    data to public tools. It does not relay mesh traffic.
 
-**Path Hash Mode**
-:   The MeshCore setting that controls advert path identifier size. MeshCore Canada recommends **3-byte**, which is `set path.hash.mode 2` in the CLI.
+**Path hash mode**
+:   The MeshCore setting that controls the size of identifiers in advert paths.
+    Use the value from the current local or Canadian configuration.
 
 **Preset**
-:   A named group of radio settings. MeshCore Canada generally uses `USA/Canada (Recommended)`.
+:   A named group of radio settings.
 
 **Repeater**
-:   A fixed device that relays packets to extend mesh coverage.
+:   A normally fixed MeshCore device that relays packets to extend network
+    coverage.
 
-**Room Server**
-:   A MeshCore node that hosts group chat rooms. It may also repeat or observe traffic depending on its configuration.
+**Room server**
+:   A MeshCore device that keeps a shared room available to companions. Its
+    main job is hosting the room, not extending coverage.
 
-**SNR**
-:   Signal-to-noise ratio, a measure of received signal quality.
+## S-W
 
-**Spreading Factor (SF)**
-:   A LoRa setting that affects range, airtime, and data rate. MeshCore Canada baseline raw settings use `SF7`.
+**Signal-to-noise ratio (SNR)**
+:   A measurement comparing a received signal with background noise.
 
-**WebSockets**
-:   A transport used by the MeshCore.ca MQTT brokers on port `443`, which is often easier to pass through normal internet connections.
+**Spreading factor (SF)**
+:   A LoRa setting that affects airtime, data rate, and reception. Use the value
+    from your local settings or the configurator.
+
+**WebSocket**
+:   A long-lived web connection. Some MQTT clients use WebSockets to reach a
+    broker through normal web network paths.
+
+## Related pages
+
+- [Compare MeshCore roles](../meshcore/general-meshcore-roles.md)
+- [Read common questions](../meshcore/general-faq.md)
+- [Open the region standard](../config/standard.md)
+- [Choose an observer method](../analyzer/intro.md)

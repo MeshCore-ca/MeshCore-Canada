@@ -1,50 +1,87 @@
-# Broker Reference
+---
+title: Advanced observer endpoint reference
+description: Inspect the canonical MeshCore Canada endpoint, transport, authentication, topic, and packet-mode values.
+audience:
+  - observer-operators
+  - service-operators
+task: reference-observer-endpoints
+scope: canada-baseline
+status: draft
+owner: meshcore-canada
+last_reviewed: 2026-07-19
+review_by: 2026-10-19
+difficulty: advanced
+estimated_time: 8 minutes
+destructive: false
+page_styles:
+  - assets/styles/analyzer.css
+page_scripts:
+  - assets/javascripts/analyzer-broker-reference.js
+---
 
-All MeshCore.ca observer paths publish to the same redundant broker pair.
+# Advanced observer endpoint reference
 
-| Broker | Host | Port | Transport | TLS | Token audience |
-|--------|------|------|-----------|-----|----------------|
-| Primary | `mqtt1.meshcore.ca` | `443` | WebSockets | Enabled + verified | `mqtt1.meshcore.ca` |
-| Backup | `mqtt2.meshcore.ca` | `443` | WebSockets | Enabled + verified | `mqtt2.meshcore.ca` |
+This page is for operators who already chose an [observer method](intro.md). Beginners should follow the method guide instead of copying values from this page.
 
-Use JWT token authentication where the setup tool exposes it. Do not set a static MQTT password unless a path-specific guide tells you to.
+## Generated endpoint table
 
-## Topic Pattern
+The table is loaded from the [canonical observer configuration](observer-config.json).
 
-Most observer paths publish packet telemetry under this pattern:
+<div class="mc-generated-reference" id="broker-reference" data-source="../observer-config.json">
+  <div class="mc-location-table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Use</th>
+          <th scope="col">Host</th>
+          <th scope="col">Port</th>
+          <th scope="col">Transport</th>
+          <th scope="col">TLS</th>
+          <th scope="col">Token audience</th>
+        </tr>
+      </thead>
+      <tbody id="broker-reference-body"></tbody>
+    </table>
+  </div>
+  <p class="mc-location-status" id="broker-reference-status" role="status">Loading canonical endpoint values…</p>
+</div>
+
+Without JavaScript, open [observer-config.json](observer-config.json) directly.
+
+## Topic templates
 
 ```text
 meshcore/{IATA}/{PUBLIC_KEY}/packets
-```
-
-Status topics generally use:
-
-```text
 meshcore/{IATA}/{PUBLIC_KEY}/status
 ```
 
-`{IATA}` must be a real 3-letter airport code nearest to the observer. `{PUBLIC_KEY}` is supplied by the MeshCore node or integration.
+`{IATA}` is the observer's real three-letter location code. `{PUBLIC_KEY}` is supplied by the radio or integration. Never substitute a private key.
 
-## Payload Mode
+## Authentication and transport
 
-MeshCore.ca packet visibility needs packet payload publishing, not only status publishing.
+- Use WebSockets on port `443`.
+- Require TLS and verify certificates.
+- Use the MeshCore JWT token option where available.
+- Match each token audience to its endpoint host.
+- Do not put a token or password into a URL, screenshot, issue, or diagnostic bundle.
 
-| Path | Required packet setting |
-|------|-------------------------|
-| MQTT firmware | `set mqtt.packets on`, `set bridge.enabled on`, `set mqtt.rx on`, `set mqtt.tx advert` |
-| MCtoMQTT | Broker config created by the MeshCore.ca helper |
-| Companion capture | `PACKETCAPTURE_MQTT*_TOPIC_PACKETS` configured |
+## Packet mode by method
+
+| Method | Required packet setting |
+|---|---|
+| MQTT firmware | `mqtt.packets on`, `bridge.enabled on`, and `mqtt.rx on` |
+| MCtoMQTT / companion capture | Configure the `/packets` topic |
 | PyMC | `format: letsmesh` |
 | Home Assistant | **Payload Mode** = `packet`, or older **Packets (Lets Mesh)** enabled |
-| RemoteTerm | Community MQTT packet topic template enabled |
+| RemoteTerm | Enable the Community MQTT packet topic |
 
-## Common Broker Mistakes
+## Interpret status correctly
 
-| Symptom | Likely cause |
-|---------|--------------|
-| Primary connects, backup fails | Backup token audience still set to `mqtt1.meshcore.ca` |
-| Observer appears under the wrong city | IATA field is wrong or inconsistent between broker entries |
-| Broker connects but no packets appear | Status is publishing, but packet payload mode is not enabled |
-| Nothing appears | Radio is off the local mesh, IATA code is invalid, or outbound WSS is blocked |
+| State | What it proves |
+|---|---|
+| DNS or port reachable | The host can reach the endpoint |
+| Broker connected | Transport and authentication succeeded |
+| Observer visible | Status reached the live service |
+| Recent packet visible | The radio-to-viewer path works end to end |
 
-For path-specific commands, use [Troubleshooting](troubleshooting.md).
+Only the last state completes [observer verification](verify.md).

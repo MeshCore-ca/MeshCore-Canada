@@ -122,7 +122,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          node scripts/validate-regions.js
+          node scripts/validate-regions.cjs
           python scripts/verify-region-geometry.py
           python scripts/verify-region-geometry.py \
             --partition docs/assets/regions/canada-region-partition-digital.geojson

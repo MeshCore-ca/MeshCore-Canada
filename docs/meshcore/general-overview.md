@@ -1,4 +1,28 @@
-# MeshCore Overview
+---
+title: MeshCore roles and Canadian onboarding
+description: Understand MeshCore device roles, separate Canadian baseline guidance from local practice, and choose a safe next step.
+audience:
+  - newcomer
+  - meshcore-operator
+task: understand-meshcore-roles
+scope: canada-baseline
+status: draft
+owner: docs-ux
+last_reviewed: 2026-07-19
+review_by: 2026-10-17
+difficulty: beginner
+estimated_time: 5-10 minutes
+destructive: false
+page_styles:
+  - assets/styles/devices-builds.css
+---
+# MeshCore Roles and Canadian Onboarding
+
+<div class="mc-guide-status" data-status="draft" markdown>
+
+**Orientation page.** MeshCore Canada explains community onboarding and Canadian practices; the official MeshCore project remains authoritative for firmware, protocol, releases, and supported targets.
+
+</div>
 
 !!! important "MeshCore project split, use the official links"
     Due to recent events in the MeshCore development team, the project has split. To stay on the official track, please only use:
@@ -9,50 +33,47 @@
 
     Read more about the split: [The Split, blog.meshcore.io](https://blog.meshcore.io/2026/04/23/the-split).
 
-MeshCore is a **repeater-driven long-range mesh network** built on top of LoRa radios. This section of the wiki explains the basics of how MeshCore works in the Ottawa region, how the different device roles fit together, and walks through the most common tasks you will perform as a new user.
+MeshCore is a repeater-driven mesh network built on LoRa radios. A device's firmware determines whether it acts as a companion, repeater, room server, or another supported role.
 
-If you are brand new to MeshCore, start here and work your way through the pages below in order.
+- **Scope:** MeshCore basics and MeshCore Canada onboarding
+- **Status:** Overview; use local community pages for local operating practices
 
----
+MeshCore Canada documents the Canadian network and community practices. It does not replace the official MeshCore firmware, protocol, or upstream documentation.
 
-## What's in This Section
+## Choose a Role
 
-### [MeshCore Roles](general-meshcore-roles.md)
-Explains the three device roles (**Companion Nodes**, **Repeaters**, and **Room Servers**), what each one does, and how they interact on the mesh. A single piece of hardware can play any of these roles depending on the firmware you flash, so understanding this section helps you pick the right firmware for your device.
+- A **companion** connects a person and their app to the mesh.
+- A **repeater** forwards mesh traffic and supports network coverage.
+- A **room server** hosts persistent room messages for its users.
 
-### [MeshCore FAQ](general-faq.md)
-Covers the most common questions about how MeshCore behaves on the Ottawa network, including:
+Read [MeshCore Roles](general-meshcore-roles.md) before choosing firmware.
 
-- How adverts work and the Ottawa advert schedule
-- Routing behaviour and repeater neighbours
-- The public channel and how "Heard Repeats" is displayed in the app
+## Canada and Local Settings
 
-### [MeshCore How-To](general-howto.md)
-Step-by-step walkthroughs for day-to-day tasks in the MeshCore mobile app, such as sharing your contact URL, importing contacts, and tracing routes. Each guide is visual and suitable for both new and experienced users.
+MeshCore Canada publishes a national onboarding baseline. A province, territory, or local community may document an override for its network. Check the [Mesh Directory](../provinces/index.md) before configuring a device, and follow a documented local override when one exists.
 
-### [Repeater Configurator](../config/index.md)
-An interactive tool that finds the right Canadian region for a repeater and produces the exact commands to configure it — radio settings, region path, and verification steps. Also includes the [region map](../config/map.md) and the [region standard](../config/standard.md).
+Ottawa-specific schedules and field experience are local practice, not proof of a Canada-wide standard.
 
-### Firmware Guides
-Everything you need to get firmware onto a device:
+## Start Here
 
-- [Flashing a Companion](flash-companion.md)
+1. Read [MeshCore Roles](general-meshcore-roles.md).
+2. Choose a [recommended companion](../hardware/recommended-companions.md).
+3. Follow [Flashing a Companion](flash-companion.md).
+4. Find your local community in the [Mesh Directory](../provinces/index.md).
+5. Use the [MeshCore How-To](general-howto.md) guides to share contacts and send messages.
+
+## Operator and Reference Guides
+
+- [MeshCore FAQ](general-faq.md)
 - [Flashing a Repeater](flash-repeater.md)
-- [Updating a Repeater (OTA)](update-repeater-ota.md)
-- [Generating a Repeater ID](generate-repeater-id.md)
 - [Flashing a Room Server](flash-room-server.md)
-- [RAK4631 Custom Display Firmware](firmware-rak-custom-display.md)
-- [Heltec V3 Wi-Fi Firmware](firmware-heltec-v3-wifi.md)
+- [Repeater Configurator](../config/index.md)
+- [Region map](../config/map.md)
+- [Region standard](../config/standard.md)
 
----
+Experimental and legacy firmware pages are retained for review but are not part of this beginner path.
 
-## New to MeshCore?
 
-If you are just getting started, we recommend this path:
+## Next step
 
-1. Read **[MeshCore Roles](general-meshcore-roles.md)** to understand what a companion node, repeater, and room server each do.
-2. Pick a **[Recommended Companion](../hardware/recommended-companions.md)** and flash it using the **[Flashing a Companion](flash-companion.md)** guide.
-3. Skim the **[MeshCore FAQ](general-faq.md)** so you know what to expect from the network.
-4. Use the **[MeshCore How-To](general-howto.md)** walkthroughs to share contacts and start messaging.
-
-When you are ready to contribute to the network backbone, move on to **[Flashing a Repeater](flash-repeater.md)** and the **[Hardware](../hardware/recommended-repeaters.md)** section.
+If you are new, [choose your role](../start/choose-a-goal.md). If you already know the role, continue to the matching flashing guide and verify success before using advanced tools.

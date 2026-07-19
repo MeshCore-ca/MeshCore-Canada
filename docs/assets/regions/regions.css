@@ -24,7 +24,7 @@ body:has([data-mcc-regions]) .md-typeset h3 {
   color: #ffffff;
 }
 
-body:has([data-mcc-regions]) .md-typeset a {
+body:has([data-mcc-regions]) .md-main .md-typeset a {
   color: var(--md-typeset-a-color, #5488e8);
 }
 
@@ -321,7 +321,8 @@ body:has([data-mcc-regions]) .md-typeset a {
 }
 
 .mcc-choice small {
-  color: var(--mcc-muted);
+  color: var(--mcc-text);
+  opacity: 1;
 }
 
 .mcc-chip-list {
@@ -910,8 +911,10 @@ body:has([data-mcc-regions]) .md-typeset a {
 }
 
 .mcc-region-child small {
-  color: var(--mcc-muted);
+  color: var(--mcc-text);
   font-size: 0.72rem;
+  font-weight: 600;
+  opacity: 1;
 }
 
 .mcc-panel-header {
@@ -1590,7 +1593,7 @@ body:has([data-mcc-regions]) .md-typeset a {
 }
 
 .mcc-region-table td {
-  color: var(--mcc-text);
+  color: #eaf3f1;
   background: #101d26;
   font-size: 0.76rem;
 }

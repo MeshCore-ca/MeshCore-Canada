@@ -1,98 +1,176 @@
 ---
+title: MeshCore Canada
+description: Join, build, operate, and coordinate a local MeshCore network in Canada.
+audience:
+  - newcomer
+  - meshcore-operator
+task: choose-a-goal
+scope: canada-baseline
+status: verified
+owner: docs-ux
+last_reviewed: 2026-07-19
+review_by: 2027-07-19
+tested_with:
+  content_baseline: f608cfe
+difficulty: beginner
+estimated_time: 1-2 minutes
+destructive: false
 hide:
   - toc
 ---
+
 # MeshCore Canada
 
-!!! warning "Community Project"
-    **meshcore.ca** is an independent community site. We're not affiliated with, endorsed by, or officially connected to the MeshCore or MeshOS projects. We're just a group of Canadians helping other Canadians organize their local meshes and build useful tools for the community.
+MeshCore Canada helps Canadians join, build, operate, and coordinate local
+MeshCore networks.
 
-Canada's community hub for MeshCore, a long-range, low-power mesh protocol built on LoRa radios.
+[:octicons-arrow-right-24: **Brand new? Start here**](start/index.md){ .md-button .md-button--primary }
 
-Whether you're brand new to mesh networking or looking to deploy repeaters across your region, you'll find guides, hardware recommendations, and your local community here.
-
-<div class="grid cards" markdown>
-
--   :fontawesome-brands-discord:{ .lg .middle } **Discord**
-
-    ---
-
-    Join the MeshCore Canada Discord to chat with the community, ask questions, and stay up to date.
-
-    [:octicons-arrow-right-24: Join Discord](https://discord.gg/BESFVMt7yk){ target="_blank" rel="noopener" }
-
--   :fontawesome-solid-comments:{ .lg .middle } **Forum**
-
-    ---
-
-    Browse discussions, share builds, and find answers on the MeshCore Canada community forum.
-
-    [:octicons-arrow-right-24: Visit Forum](https://forum.meshcore.ca){ target="_blank" rel="noopener" }
-
-</div>
-
----
-
-## Explore the Site
+## What are you trying to do?
 
 <div class="grid cards" markdown>
 
--   :material-access-point-network:{ .lg .middle } **MeshCore**
+-   :material-message-text:{ .lg .middle } **Start using MeshCore**
 
     ---
 
-    Learn what MeshCore is, browse the FAQ, and find recommended hardware for companions, repeaters, and antennas.
+    Choose a role and follow a clear path from preparation to a working check.
 
-    [:octicons-arrow-right-24: Introduction](meshcore/general-overview.md)
+    [:octicons-arrow-right-24: Start](start/index.md)
 
--   :material-chart-timeline-variant:{ .lg .middle } **Analyzer & MQTT**
-
-    ---
-
-    Set up packet analysis and MQTT bridging with guides for MCtoMQTT, MeshCore-HA, MQTT Firmware, and PyMC.
-
-    [:octicons-arrow-right-24: Overview](analyzer/intro.md)
-
--   :material-map-search:{ .lg .middle } **Canadian Regions**
+-   :material-map-marker-radius:{ .lg .middle } **Find a community**
 
     ---
 
-    Find the right region for a repeater, follow the setup guide, or explore the map.
+    Find local contacts and check whether your area publishes different
+    settings.
 
-    [:octicons-arrow-right-24: Open Config](config/index.md)
+    [:octicons-arrow-right-24: Find a community](provinces/index.md)
 
--   :material-map-marker-radius:{ .lg .middle } **Mesh Directory**
-
-    ---
-
-    Find a MeshCore community near you. Browse by province to discover local networks, frequencies, and contacts.
-
-    [:octicons-arrow-right-24: Find Your Province](provinces/index.md)
-
--   :material-bookshelf:{ .lg .middle } **Resources**
+-   :material-access-point-network:{ .lg .middle } **Set up or operate a node**
 
     ---
 
-    New here? Start with the Getting Started guide, browse useful links, or check the glossary.
+    Go directly to the companion, repeater, room-server, or observer path.
 
-    [:octicons-arrow-right-24: Getting Started](resources/getting-started.md)
+    [:octicons-arrow-right-24: Choose a node role](start/choose-a-goal.md)
 
 </div>
 
----
+## Choose a role
 
-## Who We Are
+<div class="grid cards" markdown>
 
-We are a group of Canadian meshes across the country from British Columbia, Alberta, Ontario, and Quebec (hopefully more soon) that are working together to bring services and standards across Canada for all MeshCore users. We host MQTT servers and a packet analyzer at this site for all Canadians to use.
+-   :material-cellphone-link:{ .lg .middle } **Personal companion**
 
-The servers and services are currently managed by [**Mr. Alderson**](https://github.com/MrAlders0n), [**Ded**](https://github.com/446564), [**n30nex**](https://github.com/n30nex), and [**Kranic**](https://forum.meshcore.ca/u/djkranic).
+    Send and receive messages.
 
-The documentation on this site is open to all to contribute to and is backed by markdown files in GitHub at [MeshCore-ca/MeshCore-Canada](https://github.com/MeshCore-ca/MeshCore-Canada).
+    [:octicons-arrow-right-24: Set up a companion](start/companion.md)
 
----
+-   :material-radio-tower:{ .lg .middle } **Repeater**
 
-## Want to Contribute?
+    Improve local coverage.
 
-This site is community-driven. You do not need to know Git, have a GitHub account, or understand MeshCore terminology to help. Use the [Share an Idea](submit-idea.md) page to describe what you noticed or what would make the project better. After you review it, the page can create a public review issue automatically. Forum, Discord, copy, and manual GitHub options remain available.
+    [:octicons-arrow-right-24: Set up a repeater](start/repeater.md)
 
-Experienced contributors can still use the [Contributing](contributing.md) page for issue templates and pull requests.
+-   :material-forum:{ .lg .middle } **Room server**
+
+    Host a persistent room.
+
+    [:octicons-arrow-right-24: Set up a room server](start/room-server.md)
+
+-   :material-chart-timeline-variant:{ .lg .middle } **Observer**
+
+    Send network data to the public tools.
+
+    [:octicons-arrow-right-24: Set up an observer](start/observer.md)
+
+</div>
+
+Not sure which one fits? [Compare the roles](start/choose-a-goal.md).
+
+## Canada baseline
+
+Use these settings when a local community has not published an override.
+
+| Setting | Canada baseline |
+|---|---|
+| Radio preset | **USA/Canada (Recommended)** |
+| Raw radio values | `910.525 MHz / 62.5 kHz / SF7 / CR5` |
+| Path setting | **3-byte** |
+| Command-line path setting | `set path.hash.mode 2` |
+
+!!! warning "Check your local community first"
+    Nearby devices must use matching settings. If your local community page
+    publishes an override, use its settings instead of the Canada baseline.
+
+## Find your region
+
+Search by city, airport code, postal code, or region name.
+
+<form class="mc-place-search" action="config/" method="get" role="search">
+  <label for="mc-home-place">City, airport code, postal code, or region</label>
+  <div>
+    <input id="mc-home-place" name="q" type="search" autocomplete="address-level2" required>
+    <button type="submit">Find my region</button>
+  </div>
+  <label>
+    <input name="lookup" type="checkbox" value="online" required>
+    Allow online place lookup
+  </label>
+  <small>Your search is sent to OpenStreetMap Nominatim or geocoder.ca.</small>
+</form>
+
+Or [browse the region map](config/map.md).
+
+Looking for people nearby? [Browse communities](provinces/index.md), ask on the
+[MeshCore Canada forum](https://forum.meshcore.ca/) or
+[Discord](https://discord.gg/BESFVMt7yk). These are support options; you can
+start the setup guide without joining either service.
+
+## Use network tools
+
+<div class="grid cards" markdown>
+
+-   **Configure a repeater**
+
+    Find the regional settings and commands for a repeater.
+
+    [:octicons-arrow-right-24: Open the configurator](config/index.md)
+
+-   **Explore regions**
+
+    Search and inspect the Canadian region map.
+
+    [:octicons-arrow-right-24: Open the region map](config/map.md)
+
+-   **Check the live network**
+
+    View public nodes, observers, and packet activity in CoreScope.
+
+    [:octicons-link-external-24: Open CoreScope](https://live.meshcore.ca/)
+
+-   **Set up an observer**
+
+    Choose how to send network data to the public tools.
+
+    [:octicons-arrow-right-24: Choose an observer method](analyzer/intro.md)
+
+</div>
+
+## Improve MeshCore Canada
+
+Found missing, confusing, or outdated information?
+[Share an idea](submit-idea.md) or [update a community
+listing](contributing.md).
+
+## About this project
+
+MeshCore Canada is an independent community project. It is not affiliated
+with, endorsed by, or officially connected to the MeshCore or MeshOS
+projects.
+
+The documentation is maintained in the
+[MeshCore Canada repository](https://github.com/MeshCore-ca/MeshCore-Canada).
+See [how to contribute](contributing.md) for maintainers and contribution
+options.

@@ -1,4 +1,22 @@
 ---
+title: Share an idea
+description: Send a public idea or problem to MeshCore Canada without needing a GitHub account.
+audience:
+  - community-member
+task: share-an-idea
+scope: canada-baseline
+status: verified
+owner: maintainers-gateway
+last_reviewed: 2026-07-19
+review_by: 2026-10-19
+tested_with:
+  submission_gateway: v1
+difficulty: beginner
+estimated_time: 3-5 minutes
+page_styles:
+  - stylesheets/extra.css
+page_scripts:
+  - javascripts/submission-form.js
 hide:
   - toc
 ---
@@ -9,6 +27,18 @@ hide:
   <p class="submission-privacy"><strong>Public form.</strong> Do not include passwords, keys, addresses, or private coordinates.</p>
 </div>
 
+<ol class="submission-stepper" aria-label="Submission progress">
+  <li data-submission-stage="review" aria-current="step">
+    <span>1</span><strong>Review</strong><small>Check what will be public</small>
+  </li>
+  <li data-submission-stage="verify">
+    <span>2</span><strong>Verify</strong><small>Complete the anti-spam check</small>
+  </li>
+  <li data-submission-stage="submit">
+    <span>3</span><strong>Submit</strong><small>Create the public issue</small>
+  </li>
+</ol>
+
 <form id="community-submission-form" class="submission-form" action="https://github.com/MeshCore-ca/MeshCore-Canada/issues/new" method="get" target="_blank" rel="noopener">
   <input type="hidden" name="template" value="community_idea.yml">
   <input type="hidden" name="source_page" value="https://meshcore.ca/submit-idea/">
@@ -17,6 +47,10 @@ hide:
       <strong>JavaScript is off.</strong> Continue on GitHub (account required).
     </div>
   </noscript>
+  <div id="submission-error-summary" class="submission-error-summary" role="alert" tabindex="-1" hidden>
+    <h2>Fix these fields</h2>
+    <ul></ul>
+  </div>
 
   <div class="submission-form__header">
     <h2>Describe your idea</h2>
@@ -95,6 +129,12 @@ hide:
     <span>This can be posted publicly and contains no private information.</span>
   </label>
 
+  <div class="submission-draft-actions">
+    <button id="save-submission-draft" class="md-button" type="button" disabled>Save draft on this device</button>
+    <button id="clear-submission-draft" class="md-button" type="button" hidden>Clear saved draft</button>
+    <p id="submission-draft-status" role="status" aria-live="polite">Confirm the public-content statement before saving a draft.</p>
+  </div>
+
   <div class="submission-trap" aria-hidden="true">
     <label for="submission-website">Website</label>
     <input id="submission-website" type="text" maxlength="200" tabindex="-1" autocomplete="off">
@@ -106,6 +146,7 @@ hide:
   </div>
 
   <pre id="submission-preview" class="submission-preview" tabindex="-1" hidden aria-label="Prepared submission preview"></pre>
+  <p id="submission-preview-note" class="submission-preview-note" hidden><strong>Preview only.</strong> Nothing has been submitted yet.</p>
 
   <div id="submission-verification" class="submission-verification" hidden>
     <div id="submission-turnstile" class="submission-turnstile" aria-label="Anti-spam check"></div>
@@ -114,13 +155,15 @@ hide:
   </div>
 
   <div id="submission-final-actions" class="submission-actions" hidden>
+    <div class="submission-public-summary" role="note"><strong>This creates a public GitHub issue.</strong> Maintainers and community members can read it.</div>
+    <button id="review-submission-again" class="md-button md-button--primary" type="button" hidden>Review changes again</button>
     <button id="submit-community-idea" class="md-button md-button--primary" type="button" disabled>Submit idea</button>
     <button id="copy-submission" class="md-button" type="button" disabled>Copy text</button>
     <a id="open-github-submission" class="md-button is-disabled" href="#" aria-disabled="true" target="_blank" rel="noopener">Use GitHub instead</a>
   </div>
 
   <p id="submission-github-note" class="submission-github-note" role="note" hidden></p>
-  <div id="submission-result" class="submission-result" role="status" aria-live="polite"></div>
+  <div id="submission-result" class="submission-result" role="status" aria-live="polite" tabindex="-1"></div>
 </form>
 
 <details class="submission-alternatives">

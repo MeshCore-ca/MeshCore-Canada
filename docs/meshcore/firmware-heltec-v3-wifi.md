@@ -1,132 +1,59 @@
-# Compiling MeshCore Firmware with Wi-Fi Enabled
-
-**Device:** Heltec V3  
-**OS:** Red Hat 9.6  
-
-**Note:**  
-Wi-Fi support in MeshCore is experimental.  
-Your SSID and password are embedded at compile time, so do **not** share compiled binaries that contain your real credentials.
-
 ---
-
-## Install PlatformIO
-
-1. Change to your home directory:
-
-    ```bash
-    cd ~
-    ```
-
-2. Download the PlatformIO installer:
-
-    ```bash
-    curl -fsSL -o get-platformio.py https://raw.githubusercontent.com/platformio/platformio-core-installer/master/get-platformio.py
-    ```
-
-3. Run the installer:
-
-    ```bash
-    python3 get-platformio.py
-    ```
-
-4. Add PlatformIO to your PATH (adjust the path if your username is different):
-
-    ```bash
-    export PATH=$PATH:/home/linuxuser/.platformio/penv/bin
-    ```
-
-## Clone the MeshCore Repository
-
-1. Clone the MeshCore repo:
-
-    ```bash
-    git clone https://github.com/ripplebiz/MeshCore.git
-    ```
-
-2. Change into the project directory:
-
-    ```bash
-    cd MeshCore/
-    ```
-
+title: Heltec V3 Wi-Fi firmware experimental archive
+description: Understand why the former Heltec V3 Wi-Fi build recipe is archived and what evidence is needed to restore it.
+audience:
+  - firmware-maintainer
+  - advanced-builder
+task: review-heltec-wifi-archive
+scope: experimental
+status: archived
+owner: docs-firmware
+last_reviewed: 2026-07-19
+review_by: 2027-01-19
+difficulty: advanced
+estimated_time: 3-5 minutes
+destructive: false
+page_styles:
+  - assets/styles/devices-builds.css
 ---
+# Heltec V3 Wi-Fi Firmware (Experimental Archive)
 
-## Configure Wi-Fi Credentials
+<div class="mc-guide-status" data-status="archived" markdown>
 
-1. Open the PlatformIO configuration for the Heltec V3 Wi-Fi build:
+**Archived route.** It contains no supported build or flash recipe. The unsafe-to-trust historical steps remain removed while a reproducible, secret-safe current build awaits review.
 
-    ```bash
-    vi variants/heltec_v3/platformio.ini
-    ```
+</div>
 
-2. Locate the `env:Heltec_v3_companion_radio_wifi` section and update it with your SSID and password:
+!!! danger "Experimental and unverified — do not deploy"
+    The former recipe referenced an old repository path, embedded Wi-Fi credentials in compiled firmware, and used version examples that were not tied to a reviewed build. Those steps were removed from the operational guide.
 
-```ini
-[env:Heltec_v3_companion_radio_wifi]
-extends = Heltec_lora32_v3
-build_flags =
-    ${Heltec_lora32_v3.build_flags}
-    -D MAX_CONTACTS=100
-    -D MAX_GROUP_CHANNELS=8
-    -D DISPLAY_CLASS=SSD1306Display
-    -D WIFI_DEBUG_LOGGING=1
-    -D WIFI_SSID="<<SSID>>"
-    -D WIFI_PWD="<<WIFI-PASS>>"
-```
+- **Scope:** Historical Heltec V3 experiment
+- **Status:** Archived pending reproducible build and security review
 
-3. Save and exit the editor.
+This URL is retained for existing links. It does not currently provide a supported MeshCore Canada firmware build.
 
-## Compile and Prepare Firmware
+## Why the old recipe was quarantined
 
-1. Set the firmware version environment variable:
+- Its source and version were not pinned to a reviewed commit.
+- Network credentials were compiled into the binary, making shared artifacts unsafe.
+- It lacked artifact checksums, a tested-device matrix, expected logs, and a recovery procedure.
+- Experimental firmware appeared beside ordinary beginner flashing guides without a clear support boundary.
 
-    ```bash
-    set FIRMWARE_VERSION=1.7.3
-    ```
+## Current safe path
 
-    *(Or use `export FIRMWARE_VERSION=1.7.3` if you are using a pure Linux shell and not a mixed environment.)*
+Use the [official MeshCore source repository](https://github.com/meshcore-dev/MeshCore) and the [official MeshCore web flasher](https://meshcore.io/flasher) for supported targets. Do not treat a Wi-Fi target as supported unless it appears in the current upstream project and has been reviewed for your exact board and role.
 
-2. Build the Wi-Fi firmware target:
+## Historical references retained for review
 
-    ```bash
-    ./build.sh build-firmware Heltec_v3_companion_radio_wifi
-    ```
+- [Official MeshCore source repository](https://github.com/meshcore-dev/MeshCore)
+- [Historical upstream repository URL used by the old guide](https://github.com/ripplebiz/MeshCore.git)
+- [PlatformIO Core installer source](https://raw.githubusercontent.com/platformio/platformio-core-installer/master/get-platformio.py)
 
-3. Change into the build output directory:
+## Human review required
 
-    ```bash
-    cd .pio/build/Heltec_v3_companion_radio_wifi/
-    ```
+Reinstating this guide requires a named source commit, supported board/role target, secret-safe configuration method, reproducible build commands, artifact checksums, expected serial output, bench verification, limitations, and recovery instructions.
 
-4. Rename the output binaries:
 
-    ```bash
-    mv firmware-merged.bin Heltec_v3_companion_radio_wifi_1.7.3-merged.bin
-    mv firmware.bin Heltec_v3_companion_radio_wifi_1.7.3.bin
-    ```
+## Next step
 
-5. Move the generated firmware files to a convenient location (example):
-
-    ```bash
-    mv Heltec_v3_companion_radio_wifi* /home/linuxuser/
-    ```
-
----
-
-## Next Steps
-
-1. Flash one of the compiled firmware files onto your Heltec V3:
-
-    - `Heltec_v3_companion_radio_wifi_1.7.3.bin`  
-    - or `Heltec_v3_companion_radio_wifi_1.7.3-merged.bin`
-
-2. Connect to the device over serial and monitor logs to confirm:
-
-    - Wi-Fi is enabled  
-    - The device is attempting to associate with your SSID  
-
-3. Remember that Wi-Fi support in MeshCore is experimental:
-
-    - Expect instability  
-    - Features may be incomplete  
-    - Do not deploy this build as a critical node on the mesh  
+For an ordinary supported device, use the [official MeshCore web flasher](https://meshcore.io/flasher) and the matching [companion](flash-companion.md) or [repeater](flash-repeater.md) safety flow.

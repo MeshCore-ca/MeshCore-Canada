@@ -1,0 +1,79 @@
+:root {
+  color-scheme: light;
+  --mc-color-bg: #f6f8fb;
+  --mc-color-surface: #ffffff;
+  --mc-color-surface-raised: #eef3f8;
+  --mc-color-text: #172033;
+  --mc-color-text-muted: #526174;
+  --mc-color-border: #c6d1df;
+  --mc-color-action: #1458b0;
+  --mc-color-action-hover: #0d4388;
+  --mc-color-focus: #005fcc;
+  --mc-color-success: #146c43;
+  --mc-color-warning: #805000;
+  --mc-color-danger: #b42318;
+  --mc-color-info: #1458b0;
+  --mc-color-brand: #c52233;
+
+  --mc-space-1: 0.25rem;
+  --mc-space-2: 0.5rem;
+  --mc-space-3: 0.75rem;
+  --mc-space-4: 1rem;
+  --mc-space-6: 1.5rem;
+  --mc-space-8: 2rem;
+  --mc-space-12: 3rem;
+
+  --mc-radius-sm: 0.35rem;
+  --mc-radius-md: 0.65rem;
+  --mc-radius-lg: 1rem;
+  --mc-shadow-1: 0 1px 2px rgb(23 32 51 / 10%), 0 5px 16px rgb(23 32 51 / 6%);
+  --mc-shadow-2: 0 12px 30px rgb(23 32 51 / 14%);
+
+  --mc-content-narrow: 42rem;
+  --mc-content-default: 58rem;
+  --mc-content-wide: 86rem;
+  --mc-font-text: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --mc-font-code: ui-monospace, "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+  --mc-target-size: 2.75rem;
+
+  --md-default-bg-color: var(--mc-color-bg);
+  --md-default-fg-color: var(--mc-color-text);
+  --md-primary-fg-color: #172033;
+  --md-accent-fg-color: var(--mc-color-action);
+  --md-typeset-a-color: var(--mc-color-action);
+  --md-text-font: var(--mc-font-text);
+  --md-code-font: var(--mc-font-code);
+}
+
+[data-md-color-scheme="slate"] {
+  color-scheme: dark;
+  --mc-color-bg: #0f1623;
+  --mc-color-surface: #182234;
+  --mc-color-surface-raised: #202c40;
+  --mc-color-text: #f3f6fb;
+  --mc-color-text-muted: #b6c0ce;
+  --mc-color-border: #425067;
+  --mc-color-action: #7db7ff;
+  --mc-color-action-hover: #acd1ff;
+  --mc-color-focus: #ffd166;
+  --mc-color-success: #78dfa7;
+  --mc-color-warning: #ffd166;
+  --mc-color-danger: #ffaaa3;
+  --mc-color-info: #8ec1ff;
+  --mc-color-brand: #ff7b88;
+  --mc-shadow-1: 0 1px 2px rgb(0 0 0 / 35%), 0 5px 18px rgb(0 0 0 / 18%);
+  --mc-shadow-2: 0 14px 34px rgb(0 0 0 / 38%);
+
+  --md-default-bg-color: var(--mc-color-bg);
+  --md-default-fg-color: var(--mc-color-text);
+  --md-primary-fg-color: #101827;
+  --md-accent-fg-color: var(--mc-color-action);
+  --md-typeset-a-color: var(--mc-color-action);
+}
+
+@media (forced-colors: active) {
+  :root {
+    --mc-color-border: CanvasText;
+    --mc-color-focus: Highlight;
+  }
+}

@@ -107,6 +107,8 @@ upper_iata() {
   printf '%s' "$1" | tr '[:lower:]' '[:upper:]'
 }
 
+# Keep this quick-list snapshot aligned with ../location-codes.json. The
+# analyzer content test fails when the published JSON and helper drift.
 IATA_CHOICES="$(cat <<'EOF'
 Ontario|YYZ|Toronto (Pearson)
 Ontario|YTZ|Toronto (Billy Bishop)
@@ -142,6 +144,7 @@ Quebec|YUY|Rouyn-Noranda
 Quebec|YZV|Sept-Iles
 Quebec|YGP|Gaspe
 Quebec|YRQ|Trois-Rivieres
+Quebec|YBC|Baie-Comeau
 British Columbia|YVR|Vancouver
 British Columbia|YYJ|Victoria
 British Columbia|YXX|Abbotsford / Fraser Valley
@@ -158,7 +161,6 @@ British Columbia|YYF|Penticton
 British Columbia|YCG|Castlegar
 British Columbia|YKA|Kamloops
 British Columbia|YXC|Cranbrook
-British Columbia|YBC|Baie-Comeau
 Alberta|YYC|Calgary
 Alberta|YEG|Edmonton
 Alberta|YMM|Fort McMurray
@@ -273,8 +275,12 @@ EOF
       exit 1
     fi
     IATA="$(upper_iata "$IATA" | tr -d '[:space:]')"
-    if [ "$IATA" = "XXX" ]; then
-      echo "XXX is a placeholder. Use the real 3-letter IATA airport code nearest to you." >&2
+    if [ "$IATA" = "XXX" ] || [ "$IATA" = "HOME" ]; then
+      echo "$IATA is a placeholder. Use the real 3-letter IATA airport code nearest to you." >&2
+      exit 1
+    fi
+    if [ "$IATA" = "CAN" ]; then
+      echo "CAN is Guangzhou's airport code, not shorthand for Canada. Use the real code nearest to you." >&2
       exit 1
     fi
     if ! printf '%s' "$IATA" | grep -Eq '^[A-Z]{3}$'; then

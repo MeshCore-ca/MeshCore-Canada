@@ -1,177 +1,186 @@
-# MeshCore How To
-
-The MeshCore How-To section provides simple, step-by-step guides for the most common tasks you’ll perform on the Ottawa MeshCore network.
-Whether you’re sharing your contact URL, importing someone else’s, or tracing multi-hop routes across the mesh, each walkthrough is designed to be clear, visual, and easy to follow.
-
-These instructions use the MeshCore mobile app and apply to both new and experienced users. More guides will be added as the platform grows and as the community discovers useful workflows.
-
-## How to Share Your Contact URL
-
-1. Open the MeshCore app and connect to your node.
-
-2. Tap the **Signal** icon.  
-
-      ![](images/MeshCore_GetContactID1.png){ width="300" }
-
-3. Tap **Advert → To Clipboard**.  
-
-      ![](images/MeshCore_GetContactID2.png){ width="300" }
-
-4. Paste your contact URL anywhere you want to share it.
-
+---
+title: Use common MeshCore app tools
+description: Share a contact, import a contact, trace a path, and inspect heard repeats in the MeshCore app.
+audience:
+  - companion-user
+  - meshcore-user
+task: use-meshcore-app-tools
+scope: upstream-meshcore
+status: draft
+owner: docs-app
+last_reviewed: 2026-07-19
+review_by: 2026-10-19
+difficulty: beginner
+estimated_time: 5-15 minutes
+destructive: false
 ---
 
-## How to Import a Contact URL
+# Use common MeshCore app tools
 
-1. Open the app and connect to your node.
+Choose the task you need. These screenshots show one MeshCore mobile app
+layout; names and positions may move in another app version.
 
-2. Tap the **three dots**.  
+- [Share your contact link](#share-your-contact-link)
+- [Import a contact link](#import-a-contact-link)
+- [Trace a path](#trace-a-path)
+- [Check heard repeats](#check-heard-repeats)
 
-      ![](images/MeshCore_AddContactMan1.png){ width="300" }
+<div class="mc-preflight" markdown>
 
-3. Tap **Add Contact**.  
+**Before you start**
 
-      ![](images/MeshCore_AddContactMan2.png){ width="300" }
+- Connect the app to your companion.
+- Confirm the companion can send and receive locally.
+- Do not post private keys, passwords, or precise private locations in a shared
+  screenshot.
 
-4. Tap **Import from Clipboard Link**.  
+</div>
 
-      ![](images/MeshCore_AddContactMan3.png){ width="300" }
+## Share your contact link
 
-5. After a few seconds you will see:  
+Use this when another person needs to add you as a contact.
 
-      **"Success - contact has been imported"**  
+1. Open the MeshCore app and connect to your companion.
 
-      ![](images/MeshCore_AddContactMan5.png){ width="300" }
+2. Open the **Signal** screen.
 
-6. A second popup appears:  
+    ![Signal control in the MeshCore app](images/MeshCore_GetContactID1.png){ loading=lazy width="300" }
 
-      **"New Contact Discovered \<NAME\>"**  
+3. Select **Advert**, then **To Clipboard**.
 
-7. The contact is now added.
+    ![Advert menu with the To Clipboard action](images/MeshCore_GetContactID2.png){ loading=lazy width="300" }
 
----
+4. Paste the contact link into the conversation where you intend to share it.
 
-## How to Trace Route to a Node (1 Hop)
+<div class="mc-result" data-state="success" markdown>
 
-1. Open the app and connect.
+**Expected result:** the clipboard contains a contact link that another
+MeshCore user can import.
 
-2. Tap the **three dots**.  
+</div>
 
-      ![](images/MeshCore_TraceRoute1.png){ width="300" }
+## Import a contact link
 
-3. Tap **Tools**.  
+Use this after another person sends you their MeshCore contact link.
 
-      ![](images/MeshCore_TraceRoute2.png){ width="300" }
+1. Copy only the contact link, then connect the app to your companion.
 
-4. Tap **Trace Path - Manual**.  
+2. Open the **three-dot** menu.
 
-      ![](images/MeshCore_TraceRoute3.png){ width="300" }
+    ![Three-dot menu in the MeshCore app](images/MeshCore_AddContactMan1.png){ loading=lazy width="300" }
 
-5. Tap the **plus button**.  
+3. Select **Add Contact**.
 
-      ![](images/MeshCore_TraceRoute4.png){ width="300" }
+    ![Add Contact action](images/MeshCore_AddContactMan2.png){ loading=lazy width="300" }
 
-6. Select a repeater and confirm.  
+4. Select **Import from Clipboard Link**.
 
-      ![](images/MeshCore_TraceRoute1Hop1.png){ width="300" }
+    ![Import from Clipboard Link action](images/MeshCore_AddContactMan3.png){ loading=lazy width="300" }
 
-7. You will see one repeater ID; this indicates a **1-hop trace**.  
+5. Wait for the success message and the new-contact notice.
 
-      ![](images/MeshCore_TraceRoute1Hop2.png){ width="300" }
+    ![Successful contact import message](images/MeshCore_AddContactMan5.png){ loading=lazy width="300" }
 
-8. Tap **Trace Path**.
+<div class="mc-result" data-state="success" markdown>
 
----
+**Expected result:** the named contact appears in your contact list.
 
-## How to Trace Route to a Node (2+ Hops)
+</div>
 
-1. Open the app and connect.
+If the import fails, copy the original link again without extra words or
+punctuation. Ask the sender for a new link if it still fails.
 
-2. Tap the **three dots**.
+## Trace a path
 
-       ![](./images/MeshCore_TraceRoute1.png){ width="300" }
+A manual trace tests the repeater sequence you select. It does not guarantee
+that later messages will use the same path.
 
-3. Tap **Tools**.
+### Open the trace tool
 
-       ![](./images/MeshCore_TraceRoute2.png){ width="300" }
+1. Connect the app to your companion.
+2. Open the **three-dot** menu.
 
-4. Tap **Trace Path - Manual**.
+    ![Three-dot menu in the MeshCore app](images/MeshCore_TraceRoute1.png){ loading=lazy width="300" }
 
-       ![](./images/MeshCore_TraceRoute3.png){ width="300" }
+3. Select **Tools**.
 
-5. Tap the **plus button**.
+    ![Tools action in the MeshCore app](images/MeshCore_TraceRoute2.png){ loading=lazy width="300" }
 
-       ![](./images/MeshCore_TraceRoute4.png){ width="300" }
+4. Select **Trace Path - Manual**.
 
-6. Select repeaters **in order**:
-    - Choose the **forward path**
-    - Confirm
-    - Re-open the add menu and choose the **return path**
-    - Or manually enter IDs:  
-    - Example: `d3, f3, d3`
+    ![Manual trace-path action](images/MeshCore_TraceRoute3.png){ loading=lazy width="300" }
 
-       ![](./images/MeshCore_TraceRoute2Hop1.png){ width="300" }
+5. Select the **plus** button to add a repeater.
 
-7. Confirm both forward and return paths, then tap **Trace**.
+    ![Add-repeater button in the manual trace tool](images/MeshCore_TraceRoute4.png){ loading=lazy width="300" }
 
-       ![](./images/MeshCore_TraceRoute2Hop2.png){ width="300" }
+### Trace one hop
 
-8. View the results.
+1. Add one repeater and confirm it.
 
-       ![](./images/MeshCore_TraceRoute2Hop3.png){ width="300" }
+    ![One repeater selected for a trace](images/MeshCore_TraceRoute1Hop1.png){ loading=lazy width="300" }
 
----
+2. Confirm that one repeater identifier is shown.
 
-## Heard Repeats
+    ![One-hop path ready to trace](images/MeshCore_TraceRoute1Hop2.png){ loading=lazy width="300" }
 
-In the MeshCore app you can generally see if a repeater heard your message you sent in a channel.
+3. Select **Trace Path**.
 
-When you send a message out, the packet travels through the airwaves, hits a nearby repeater and it then repeats your packet out. If your companion is within receiving range and receives the repeated packet, it will be counted as a "heard repeat". There are cases where your companion could miss the heard repeat. Examples of this are:
+### Trace more than one hop
 
-- Your packet makes it to the repeater, but the repeated packet dosn't make it back to your companion.
+1. Add the repeaters in the forward order required by the path.
+2. Add the return sequence shown by your local path plan.
 
-- If you're using a 1w companion, and the repeater that hears you is a 0.3w. You can send further than it - so while your packet may make it to the repeater, when it repeats your packet it's possible you're too far away to receive it.
+    ![Multiple repeaters selected for a trace](images/MeshCore_TraceRoute2Hop1.png){ loading=lazy width="300" }
 
-## How to Check Heard Repeats
+3. Review the complete sequence, then select **Trace**.
 
-1. Send a message in the public channel.
+    ![Multi-hop path ready to trace](images/MeshCore_TraceRoute2Hop2.png){ loading=lazy width="300" }
 
-2. When the app shows **Heard X repeats** under your message, press and hold the message.
+4. Read the result.
 
-      ![](images/MeshCore_HeardRepeats_Step1.png){ width="300" }
+    ![Multi-hop trace result](images/MeshCore_TraceRoute2Hop3.png){ loading=lazy width="300" }
 
-3. Tap **Heard Repeats**.
+If you do not know the forward and return sequence, ask the local community
+instead of guessing repeater identifiers.
 
-      ![](images/MeshCore_HeardRepeats_Step2.png){ width="300" }
+## Check heard repeats
 
-4. You’ll see a list of every repeater your companion heard repeating that packet.
+A heard repeat means your companion received a repeated copy of a packet it
+sent. A missing repeat does not by itself show where the packet failed: the
+repeater may not have heard the packet, or your companion may not have heard
+the repeated copy.
 
-      ![](images/MeshCore_HeardRepeats_Step3.png){ width="300" }
+1. Send a message in the intended channel.
+2. When **Heard _n_ repeats** appears below the message, press and hold the
+   message.
 
-5. Tap a repeater in the list to view the path the repeated packet took to get back to you. See Below for the types of repeats you will see.
+    ![Message showing a heard-repeat count](images/MeshCore_HeardRepeats_Step1.png){ loading=lazy width="300" }
 
-**Notes**
+3. Select **Heard Repeats**.
 
-- A repeater may show up as a **direct hop** if it is close to you.  
-- You may also see a **distant repeater** listed. This happens when that repeater hears your packet shortly after another one and your companion hears both repeats.  
-- Your companion must hear the repeater *directly* for it to appear in this list.
+    ![Heard Repeats action](images/MeshCore_HeardRepeats_Step2.png){ loading=lazy width="300" }
 
----
+4. Review the repeaters your companion heard for that packet.
 
-### Direct Heard Packet
+    ![List of repeaters heard by the companion](images/MeshCore_HeardRepeats_Step3.png){ loading=lazy width="300" }
 
-Below is an example of what a direct heard packet looks like:
+5. Select a repeater to inspect the reported path.
 
-   ![Diagram Explanation](images/MeshCore_HeardRepeats_Direct.png){ width="300" }
+### Example: direct repeat
 
-   ![Companion View](images/MeshCore_HeardRepeats_Step4_1Repeat.png){ width="300" }
+![Diagram of a direct heard repeat](images/MeshCore_HeardRepeats_Direct.png){ loading=lazy width="300" }
 
----
+![App view of a direct heard repeat](images/MeshCore_HeardRepeats_Step4_1Repeat.png){ loading=lazy width="300" }
 
-### Multi Hop Heard Packet
+### Example: multi-hop repeat
 
-Below is an example of what it looks like when one repeater hears your message, repeats it, and then your companion hears a second repeater’s repeat of that same packet:
+![Diagram of a multi-hop heard repeat](images/MeshCore_HeardRepeats_MultiHop.png){ loading=lazy width="300" }
 
-   ![Diagram Explanation](images/MeshCore_HeardRepeats_MultiHop.png){ width="300" }
+![App view of a multi-hop heard repeat](images/MeshCore_HeardRepeats_Step4_2Repeat.png){ loading=lazy width="300" }
 
-   ![Companion View](images/MeshCore_HeardRepeats_Step4_2Repeat.png){ width="300" }
+## Next step
+
+If a result is missing or unclear, compare one known-good nearby node and then
+use [Get help](../start/get-help.md). Include the task and step where you
+stopped, but remove sensitive values before sharing a screenshot.

@@ -1,0 +1,6 @@
+{% if page and page.meta and not page.meta.hide_feedback %}
+  <aside class="mc-page-feedback" aria-label="Page feedback">
+    <p>Was this page useful?</p>
+    <a class="md-button" href="{{ 'submit-idea/' | url }}">Suggest a change</a>
+  </aside>
+{% endif %}

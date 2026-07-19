@@ -1,61 +1,81 @@
-# Useful Links
+---
+title: MeshCore links and services
+description: Open reviewed MeshCore Canada, official MeshCore, network-tool, and Canadian radio reference links.
+audience:
+  - meshcore-user
+  - mesh-operator
+  - documentation-contributor
+task: find-meshcore-resource
+scope: canada-baseline
+status: verified
+owner: docs-ux
+last_reviewed: 2026-07-19
+review_by: 2026-10-19
+evidence: External destinations opened successfully on 2026-07-19
+link_checked: 2026-07-19
+difficulty: beginner
+estimated_time: 2-5 minutes
+destructive: false
+---
 
-This page collects common MeshCore, MeshCore Canada, and supporting radio resources.
+# MeshCore links and services
+
+Use this page when a guide sends you to another site. External links are
+labelled and open in a new tab.
+
+<div class="mc-callout" data-kind="info" markdown>
+
+**Before opening an external service:** you are leaving this documentation
+site. Check that service's privacy terms before entering account details,
+device data, or a location.
+
+</div>
 
 ## MeshCore Canada
 
-| Resource | Link |
-|----------|------|
-| MeshCore Canada site | <https://meshcore.ca/> |
-| MeshCore Canada forum | <https://forum.meshcore.ca/> |
-| Live CoreScope tools | <https://live.meshcore.ca/> |
-| MeshCore Canada GitHub | <https://github.com/MeshCore-ca/MeshCore-Canada> |
-| Add or update a community | [Contributing](../contributing.md) |
-| Mesh Directory | [Browse provinces and territories](../provinces/index.md) |
+| Service | Use | Link |
+|---|---|---|
+| MeshCore Canada forum | Search public discussions or ask for help. | [Open the forum (external)](https://forum.meshcore.ca/){ target="_blank" rel="noopener" } |
+| CoreScope | View public observer, packet, node, and map data. | [Open CoreScope (external)](https://live.meshcore.ca/){ target="_blank" rel="noopener" } |
+| GitHub repository | Review source, issues, and site changes. A GitHub account may be needed to contribute there. | [Open the repository (external)](https://github.com/MeshCore-ca/MeshCore-Canada){ target="_blank" rel="noopener" } |
+
+These destinations were checked on **2026-07-19**.
 
 ## Official MeshCore
 
-| Resource | Link |
-|----------|------|
-| MeshCore website | <https://meshcore.io/> |
-| MeshCore docs | <https://docs.meshcore.io/> |
-| MeshCore source | <https://github.com/meshcore-dev/MeshCore> |
-| MeshCore GitHub organization | <https://github.com/meshcore-dev> |
-| MeshCore Flasher | <https://flasher.meshcore.io/> |
-| Repeater / room-server USB config | <https://config.meshcore.io/> |
-| MeshCore web app | <https://app.meshcore.nz/> |
+| Service | Use | Link |
+|---|---|---|
+| MeshCore website | Read the official project introduction and current project links. | [Open MeshCore.io (external)](https://meshcore.io/){ target="_blank" rel="noopener" } |
+| MeshCore documentation | Read upstream device, app, and protocol guidance. | [Open official docs (external)](https://docs.meshcore.io/){ target="_blank" rel="noopener" } |
+| MeshCore source | Review the official firmware source and releases. | [Open MeshCore source (external)](https://github.com/meshcore-dev/MeshCore){ target="_blank" rel="noopener" } |
+| MeshCore Flasher | Flash supported devices in a compatible browser. Read the relevant setup guide first. | [Open the flasher (external)](https://flasher.meshcore.io/){ target="_blank" rel="noopener" } |
+| USB configuration tool | Configure a supported repeater or room server over USB. | [Open USB configuration (external)](https://config.meshcore.io/){ target="_blank" rel="noopener" } |
+| MeshCore web app | Use the official web application with a supported companion. | [Open the web app (external)](https://app.meshcore.nz/){ target="_blank" rel="noopener" } |
 
-## MeshCore.ca Analyzer
+These destinations were checked on **2026-07-19**. Hardware support and
+tool behaviour can change; follow the matching MeshCore Canada setup guide
+before flashing or configuring a device.
 
-| Resource | Link |
-|----------|------|
-| Observer setup overview | [Analyzer & MQTT](../analyzer/intro.md) |
-| MQTT data collection and access | [Data Collection & Access](../analyzer/data-collection-access.md) |
-| Direct MQTT firmware | [MQTT Firmware](../analyzer/builds/mqtt-firmware.md) |
-| MCtoMQTT host bridge | [MCtoMQTT](../analyzer/builds/mctomqtt.md) |
-| Home Assistant integration setup | [MeshCore-HA](../analyzer/builds/meshcore-ha.md) |
-| PyMC setup | [PyMC](../analyzer/builds/pymc.md) |
-| RemoteTerm setup | [RemoteTerm](../analyzer/remoteterm.md) |
-| IATA code reference | [IATA Region Codes](../analyzer/iata-codes.md) |
+## MeshCore Canada guides  - [Start with MeshCore](../start/index.md) - [Find a community](../provinces/index.md) - [Use the repeater configurator](../config/index.md) - [Contribute a correction or idea](../contributing.md)  ## Observer guides  | Task | Guide | |---|---| | Choose an observer method | [Observer setup](../analyzer/intro.md) | | Understand what data is collected | [Data collection and access](../analyzer/data-collection-access.md) | | Install direct observer firmware | [MQTT firmware](../analyzer/builds/mqtt-firmware.md) | | Bridge a radio through a host | [MCtoMQTT](../analyzer/builds/mctomqtt.md) | | Connect Home Assistant | [MeshCore-HA](../analyzer/builds/meshcore-ha.md) | | Run a Python-based observer | [PyMC](../analyzer/builds/pymc.md) | | Manage a radio remotely | [RemoteTerm](../analyzer/remoteterm.md) | | Choose an observer location code | [Location-code reference](../analyzer/iata-codes.md) | | Check the final result | [Check your observer](../analyzer/verify.md) |
 
-## Radio And Regulatory References
+## Radio and regulatory references
 
-| Resource | Link |
-|----------|------|
-| Innovation, Science and Economic Development Canada | <https://ised-isde.canada.ca/> |
-| Radio Amateurs of Canada | <https://www.rac.ca/> |
+| Organization | Use | Link |
+|---|---|---|
+| Innovation, Science and Economic Development Canada (ISED) | Find current Government of Canada spectrum and equipment information. | [Open ISED (external)](https://ised-isde.canada.ca/){ target="_blank" rel="noopener" } |
+| Radio Amateurs of Canada | Find Canadian amateur-radio information. | [Open RAC (external)](https://www.rac.ca/){ target="_blank" rel="noopener" } |
 
-!!! note "Regulatory links"
-    MeshCore Canada docs are not legal advice. Check current ISED rules and any licence conditions that apply to your station before changing power, antenna gain, frequency, or duty cycle.
+These destinations were checked on **2026-07-19**.
 
-## Tools
+<div class="mc-callout" data-kind="warning" markdown>
 
-| Tool | Use |
-|------|-----|
-| MeshCore Flasher | Flash supported MeshCore firmware and custom binaries |
-| MeshCore USB config | Configure repeaters and room servers over serial |
-| RemoteTerm | Manage radios and optionally publish packets through Community MQTT |
-| CoreScope | Check observers, packets, and map visibility |
-| MQTT clients | Advanced broker diagnostics when troubleshooting observer paths |
+MeshCore Canada documentation is not legal advice. Check current ISED rules
+and any licence conditions that apply before changing frequency, power,
+antenna gain, or duty cycle.
 
-When in doubt, start with [Getting Started](getting-started.md), then move to the hardware or observer guide that matches your device role.
+</div>
+
+## Next step
+
+If you are new, go to [Start with MeshCore](../start/index.md). If a destination
+is broken or misleading, [suggest a change](../submit-idea.md).

@@ -1,124 +1,91 @@
-# Analyzer & MQTT Packet Broker
+---
+title: Set up a network observer
+description: Choose a simple, supported way to send nearby MeshCore radio activity to the Canadian live network tools.
+audience:
+  - observer-operators
+task: choose-observer-method
+scope: canada-baseline
+status: draft
+owner: meshcore-canada
+last_reviewed: 2026-07-19
+review_by: 2026-10-19
+difficulty: beginner
+estimated_time: 5 minutes
+destructive: false
+page_styles:
+  - assets/styles/analyzer.css
+page_scripts:
+  - assets/javascripts/analyzer-method-chooser.js
+---
 
-MeshCore observers capture mesh traffic and publish packet telemetry to MQTT brokers, feeding CoreScope dashboards, maps, and packet inspectors. Pick the observer path that matches your hardware and host setup.
+# Set up a network observer
 
-!!! tip "Observer setup checklist"
-    Every observer path needs the same basics: a MeshCore radio already on the MeshCore Canada network settings, a real 3-letter IATA airport code, the MeshCore.ca broker pair, JWT token authentication, TLS on port `443`, and packet publishing enabled. If the setup screen has two broker entries, use the same IATA code on both entries.
+An observer listens for nearby MeshCore radio packets and sends a copy to MeshCore Canada's live tools. It does not read private messages, and it does not need to repeat traffic.
 
-    MeshCore Canada network settings are **USA/Canada (Recommended)**, or raw radio values `910.525 MHz / 62.5 kHz / SF7 / CR5`, with 3-byte path hashes. Standalone observer firmware from the observer flasher includes selectable MeshCore Canada broker presets; set `meshcore-ca-1` and `meshcore-ca-2`, then set `set path.hash.mode 2`, IATA, WiFi, and packet publishing during onboarding. On retained preferences or generic CLI devices, also run `set radio 910.525,62.5,7,5`.
+## How the pieces fit
 
-## Choose Your Observer Path
+<ol class="mc-analyzer-flow">
+  <li><strong>Radio</strong><span>hears nearby MeshCore packets</span></li>
+  <li><strong>Observer</strong><span>passes those packets to the internet</span></li>
+  <li><strong>MeshCore Canada</strong><span>receives them through two shared endpoints</span></li>
+  <li><strong>Live tools</strong><span>show observer and packet health</span></li>
+</ol>
 
-<div class="grid cards" markdown>
+The shared endpoints use MQTT, a delivery protocol. You do not need to learn MQTT before choosing a method.
 
--   :material-chip:{ .lg .middle } **MQTT Firmware**
+!!! warning "Radio traffic may become public"
+    Observer telemetry and heard radio packets can appear in public tools. Do not transmit sensitive information. Read [Data, access, and privacy](data-collection-access.md) before operating an observer.
 
-    ---
+## Pick what you already use
 
-    Flash observer firmware directly onto a WiFi-capable LoRa board. No host computer required after setup.
+Choose the closest match. The result links to one focused guide.
 
-    Best for: Heltec V3, Heltec V4 OLED, and other published direct MQTT targets.
-
-    [:octicons-arrow-right-24: MQTT Firmware Guide](builds/mqtt-firmware.md)
-
--   :material-usb:{ .lg .middle } **MCtoMQTT**
-
-    ---
-
-    Bridge a USB-connected MeshCore node to MQTT via a Linux or macOS host.
-
-    Best for: fixed repeaters and room servers with a nearby host machine.
-
-    [:octicons-arrow-right-24: MCtoMQTT Guide](builds/mctomqtt.md)
-
--   :material-language-python:{ .lg .middle } **PyMC**
-
-    ---
-
-    Add the MeshCore.ca broker pair to an existing pyMC repeater installation.
-
-    Best for: Python-based repeater setups.
-
-    [:octicons-arrow-right-24: PyMC Guide](builds/pymc.md)
-
--   :material-home-assistant:{ .lg .middle } **Home Assistant**
-
-    ---
-
-    Add MeshCore.ca brokers to the Home Assistant MeshCore integration.
-
-    Best for: Home Assistant users with a connected MeshCore node.
-
-    [:octicons-arrow-right-24: MeshCore-HA Guide](builds/meshcore-ha.md)
-
--   :octicons-terminal-24:{ .lg .middle } **RemoteTerm**
-
-    ---
-
-    Use RemoteTerm's Community MQTT fanout to report packets from a managed radio.
-
-    Best for: RemoteTerm users already connected over serial, TCP, or BLE.
-
-    [:octicons-arrow-right-24: RemoteTerm Setup](remoteterm.md)
-
+<div class="mc-method-chooser" id="observer-method-chooser">
+  <label for="observer-method">
+    <strong>What is already part of this setup?</strong>
+    <select id="observer-method">
+      <option value="">Choose one</option>
+      <option value="remote-term">RemoteTerm manages the radio</option>
+      <option value="home-assistant">Home Assistant has the MeshCore integration</option>
+      <option value="pymc">A PyMC repeater service is already running</option>
+      <option value="usb-host">A Linux or macOS computer stays beside a USB radio</option>
+      <option value="wifi-board">A supported Wi-Fi LoRa board can be dedicated to observing</option>
+    </select>
+  </label>
+  <div class="mc-method-result" id="observer-method-result" role="status" tabindex="-1" hidden></div>
 </div>
 
-## Shared References
+No JavaScript? Use the same comparison below.
 
-<div class="grid cards" markdown>
+| Your current setup | Recommended method | Host that must stay on |
+|---|---|---|
+| RemoteTerm already manages the radio | [RemoteTerm](remoteterm.md) | The RemoteTerm host |
+| Home Assistant already has MeshCore | [Home Assistant](builds/meshcore-ha.md) | Home Assistant |
+| PyMC already manages a repeater | [PyMC](builds/pymc.md) | The PyMC host |
+| A Linux or macOS host is connected by USB | [MCtoMQTT](builds/mctomqtt.md) | The USB host |
+| A supported Wi-Fi LoRa board can be dedicated | [Standalone MQTT firmware](builds/mqtt-firmware.md) | No separate host |
 
--   :material-check-circle:{ .lg .middle } **Check Your Observer**
+If none fit, ask in the [MeshCore Canada forum](https://forum.meshcore.ca/) before installing more software.
 
-    ---
+## Shared setup values
 
-    Confirm your observer is online and reporting to CoreScope.
+Every method uses:
 
-    [:octicons-arrow-right-24: Check Your Observer](verify.md)
+- a radio already set for the local mesh;
+- a real three-letter [location code](iata-codes.md);
+- the MeshCore Canada primary and backup endpoints;
+- encrypted connections with certificate checks; and
+- packet publishing, not status-only publishing.
 
--   :material-wrench:{ .lg .middle } **Troubleshooting**
+The Canadian onboarding baseline is **USA/Canada (Recommended)**, `910.525 MHz / 62.5 kHz / SF7 / CR5`, with 3-byte path hashes. A published local setting takes priority.
 
-    ---
+Advanced operators can inspect the [canonical observer configuration](observer-config.json) or [broker reference](broker-reference.md).
 
-    Path-specific diagnostics for firmware, host bridges, PyMC, Home Assistant, and RemoteTerm.
+## What success looks like
 
-    [:octicons-arrow-right-24: Troubleshooting](troubleshooting.md)
+Setup is not finished when a screen says “connected.” Finish when both are true:
 
--   :material-server-network:{ .lg .middle } **Broker Reference**
+1. your observer appears in [CoreScope Observers](https://live.meshcore.ca/#/observers); and
+2. a packet heard by your radio appears in [CoreScope Packets](https://live.meshcore.ca/#/packets).
 
-    ---
-
-    Broker hosts, ports, TLS, JWT audience, and topic conventions.
-
-    [:octicons-arrow-right-24: Broker Details](broker-reference.md)
-
--   :material-eye:{ .lg .middle } **Data Collection & Access**
-
-    ---
-
-    Learn what observer data is collected, where it is stored, and who administers MQTT access.
-
-    [:octicons-arrow-right-24: Data Collection & Access](data-collection-access.md)
-
--   :material-airplane:{ .lg .middle } **IATA Codes**
-
-    ---
-
-    Canadian quick-list codes and guidance for choosing a real region code.
-
-    [:octicons-arrow-right-24: IATA Region Codes](iata-codes.md)
-
-</div>
-
-## Fast Path
-
-If you are unsure which path to choose:
-
-| Situation | Start here |
-|-----------|------------|
-| You have a WiFi-capable LoRa board and want a standalone observer | [MQTT Firmware](builds/mqtt-firmware.md) |
-| You have a repeater connected to a Linux/macOS host over USB | [MCtoMQTT](builds/mctomqtt.md) |
-| You already run pyMC | [PyMC](builds/pymc.md) |
-| You already use Home Assistant for MeshCore | [MeshCore-HA](builds/meshcore-ha.md) |
-| You already manage the radio with RemoteTerm | [RemoteTerm](remoteterm.md) |
-
-After setup, use [Check Your Observer](verify.md). If it does not appear within a few minutes, use [Troubleshooting](troubleshooting.md).
+Follow [Check your observer](verify.md) at the end of the method you choose. If a check fails, use [symptom-first troubleshooting](troubleshooting.md).
