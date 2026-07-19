@@ -1,10 +1,7 @@
-site_name: Alberta MeshCore
-site_description: Regional MeshCore documentation, configuration, monitoring and community resources for Alberta, Canada.
-site_url: https://albertamesh.ca
-
-repo_name: wykweb/MeshCore-Alberta
-repo_url: https://github.com/wykweb/MeshCore-Alberta
-edit_uri: edit/main/docs/
+site_name: MeshCore Canada
+site_url: https://meshcore.ca
+repo_name: MeshCore Canada
+repo_url: https://github.com/MeshCore-ca/MeshCore-Canada
 
 theme:
   name: material

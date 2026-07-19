@@ -1,98 +1,70 @@
+# Alberta MeshCore
+
+## Building Alberta’s community-operated off-grid LoRa mesh network
+
+Alberta MeshCore is a community-supported project helping people across
+Calgary and Alberta build resilient, long-range text communication networks
+using affordable LoRa radio hardware.
+
+[Get Started](getting-started/index.md){ .md-button .md-button--primary }
+[Calgary Network](calgary/index.md){ .md-button }
+[Alberta Network](network/index.md){ .md-button }
+
 ---
-hide:
-  - toc
----
-# MeshCore Canada
 
-!!! warning "Community Project"
-    **meshcore.ca** is an independent community site. We're not affiliated with, endorsed by, or officially connected to the MeshCore or MeshOS projects. We're just a group of Canadians helping other Canadians organize their local meshes and build useful tools for the community.
-
-Canada's community hub for MeshCore, a long-range, low-power mesh protocol built on LoRa radios.
-
-Whether you're brand new to mesh networking or looking to deploy repeaters across your region, you'll find guides, hardware recommendations, and your local community here.
+## Start here
 
 <div class="grid cards" markdown>
 
--   :fontawesome-brands-discord:{ .lg .middle } **Discord**
+-   :material-radio-tower:{ .lg .middle } **Join the Alberta network**
 
     ---
 
-    Join the MeshCore Canada Discord to chat with the community, ask questions, and stay up to date.
+    Learn what equipment you need and how to configure your first MeshCore
+    companion node.
 
-    [:octicons-arrow-right-24: Join Discord](https://discord.gg/BESFVMt7yk){ target="_blank" rel="noopener" }
+    [Get started](getting-started/index.md)
 
--   :fontawesome-solid-comments:{ .lg .middle } **Forum**
+-   :material-city:{ .lg .middle } **Calgary MeshCore**
 
     ---
 
-    Browse discussions, share builds, and find answers on the MeshCore Canada community forum.
+    Find Calgary-specific configuration, infrastructure, observer and
+    community information.
 
-    [:octicons-arrow-right-24: Visit Forum](https://forum.meshcore.ca){ target="_blank" rel="noopener" }
+    [Calgary region](calgary/index.md)
+
+-   :material-access-point-network:{ .lg .middle } **Build a repeater**
+
+    ---
+
+    Learn how repeaters extend regional coverage and how to choose an
+    appropriate installation location.
+
+    [Repeater information](nodes/repeaters.md)
+
+-   :material-chart-line:{ .lg .middle } **Monitor the network**
+
+    ---
+
+    Learn about MQTT observers, MeshCore Analyzer and regional network
+    monitoring.
+
+    [Monitoring](monitoring/index.md)
 
 </div>
 
 ---
 
-## Explore the Site
+## Alberta-first and community supported
 
-<div class="grid cards" markdown>
+The initial focus of Alberta MeshCore is Calgary and the surrounding region.
+Documentation will expand as additional Alberta communities organize local
+nodes, repeaters and observer stations.
 
--   :material-access-point-network:{ .lg .middle } **MeshCore**
+Information on this website will identify whether it represents:
 
-    ---
-
-    Learn what MeshCore is, browse the FAQ, and find recommended hardware for companions, repeaters, and antennas.
-
-    [:octicons-arrow-right-24: Introduction](meshcore/general-overview.md)
-
--   :material-chart-timeline-variant:{ .lg .middle } **Analyzer & MQTT**
-
-    ---
-
-    Set up packet analysis and MQTT bridging with guides for MCtoMQTT, MeshCore-HA, MQTT Firmware, and PyMC.
-
-    [:octicons-arrow-right-24: Overview](analyzer/intro.md)
-
--   :material-map-search:{ .lg .middle } **Canadian Regions**
-
-    ---
-
-    Find the right region for a repeater, follow the setup guide, or explore the map.
-
-    [:octicons-arrow-right-24: Open Config](config/index.md)
-
--   :material-map-marker-radius:{ .lg .middle } **Mesh Directory**
-
-    ---
-
-    Find a MeshCore community near you. Browse by province to discover local networks, frequencies, and contacts.
-
-    [:octicons-arrow-right-24: Find Your Province](provinces/index.md)
-
--   :material-bookshelf:{ .lg .middle } **Resources**
-
-    ---
-
-    New here? Start with the Getting Started guide, browse useful links, or check the glossary.
-
-    [:octicons-arrow-right-24: Getting Started](resources/getting-started.md)
-
-</div>
-
----
-
-## Who We Are
-
-We are a group of Canadian meshes across the country from British Columbia, Alberta, Ontario, and Quebec (hopefully more soon) that are working together to bring services and standards across Canada for all MeshCore users. We host MQTT servers and a packet analyzer at this site for all Canadians to use.
-
-The servers and services are currently managed by [**Mr. Alderson**](https://github.com/MrAlders0n), [**Ded**](https://github.com/446564), [**n30nex**](https://github.com/n30nex), and [**Kranic**](https://forum.meshcore.ca/u/djkranic).
-
-The documentation on this site is open to all to contribute to and is backed by markdown files in GitHub at [MeshCore-ca/MeshCore-Canada](https://github.com/MeshCore-ca/MeshCore-Canada).
-
----
-
-## Want to Contribute?
-
-This site is community-driven. You do not need to know Git, have a GitHub account, or understand MeshCore terminology to help. Use the [Share an Idea](submit-idea.md) page to describe what you noticed or what would make the project better. After you review it, the page can create a public review issue automatically. Forum, Discord, copy, and manual GitHub options remain available.
-
-Experienced contributors can still use the [Contributing](contributing.md) page for issue templates and pull requests.
+- an official MeshCore requirement;
+- a MeshCore Canada recommendation;
+- an Alberta community standard; or
+- a Calgary-specific implementation.
