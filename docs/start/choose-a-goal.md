@@ -39,9 +39,9 @@ Choose by outcome, not by product name.
 
 ## Still not sure?
 
-Start by reading the [companion path](companion.md) if your goal is personal
-messaging. A companion is the role used to take part in conversations; the
-other roles operate services for a mesh.
+Start with the [companion path](companion.md) if your goal is personal
+messaging. A companion is for conversations; other roles run network
+services.
 
 If you already use MeshCore and want to improve the network, choose by the
 result:

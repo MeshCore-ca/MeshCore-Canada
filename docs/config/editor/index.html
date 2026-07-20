@@ -34,9 +34,10 @@
   <main class="editor-layout">
     <aside class="editor-sidebar" aria-label="Boundary editing controls">
       <section class="panel intro-panel">
-        <p class="step-label">Advanced proposal tool</p>
+        <p class="step-label">Proposal tool</p>
         <h2>Propose a region change</h2>
-        <p>Nothing changes when you submit. Maintainers and the community review every proposal before repository checks can publish it.</p>
+        <p>Submitting does not change the map. Every proposal is reviewed before it
+        can be published.</p>
         <ol class="lifecycle-list" aria-label="Proposal lifecycle">
           <li>Draft and check</li>
           <li>Public review</li>
@@ -56,7 +57,7 @@
           </label>
           <label class="choice-card advanced-choice">
             <input type="radio" name="proposal-type" value="new-region">
-            <span><strong>Advanced: propose a new region/subregion</strong><small>Beta workflow. Define a new public name, tag, cells and anchor for review.</small></span>
+            <span><strong>Advanced: propose a new region/subregion</strong><small>Define a new public name, tag, cells, and anchor for review.</small></span>
           </label>
         </fieldset>
       </section>
@@ -99,17 +100,17 @@
           <label for="municipality-select">Municipality or census subdivision</label>
           <select id="municipality-select" disabled><option value="">Choose a municipality</option></select>
           <button id="move-municipality-button" class="button primary full" type="button" disabled>Add whole municipality</button>
-          <p class="hint">Whole municipalities are the normal path. You can complete a proposal without using the map.</p>
+          <p class="hint">Whole municipalities are the normal path. You can submit a full proposal without the map.</p>
         </div>
         <div id="shared-area-note" class="shared-area-note">
           <strong>Repeater paths</strong>
-          <span>This editor changes Canadian map cells only. Choose cross-province and U.S. paths in the configurator.</span>
+          <span>This editor changes Canadian map cells only. Set cross-province and U.S. paths in the configurator.</span>
           <a href="../standard/#cross-province-repeater-areas">Read the rule</a>
         </div>
         <details class="advanced-map-controls">
           <summary>Advanced: split a municipality by census cell</summary>
-          <p class="hint">Use individual cells only when a whole municipality does not fit the proposed boundary.</p>
-          <label class="acknowledgement"><input id="advanced-paint-ack" type="checkbox"><span>I understand this creates a more detailed boundary for reviewers.</span></label>
+          <p class="hint">Use individual cells only when a full municipality does not fit the boundary.</p>
+          <label class="acknowledgement"><input id="advanced-paint-ack" type="checkbox"><span>This creates a finer boundary for review.</span></label>
           <div class="segmented three-way" aria-label="Map editing mode">
             <button id="pan-mode" class="segment" type="button" aria-pressed="false">Pan</button>
             <button id="inspect-mode" class="segment active" type="button" aria-pressed="true">Inspect</button>
@@ -195,10 +196,10 @@
     <section class="map-shell" aria-label="Region map editor">
       <div class="map-toolbar">
         <span id="map-heading">Canada</span>
-        <span class="map-help">Inspect cells or use the municipality list · yellow means changed</span>
+        <span class="map-help">Inspect cells or use the municipality list; yellow means changed</span>
       </div>
       <div id="editor-map" role="region" aria-label="Optional interactive region boundary map" aria-describedby="map-instructions"></div>
-      <p id="map-instructions" class="visually-hidden">The map is optional. Use the municipality list in step three for a complete non-map path. In Inspect mode, select a cell to read its details. Enable the Advanced acknowledgement before painting individual cells.</p>
+      <p id="map-instructions" class="visually-hidden">The map is optional. Use the municipality list in step three for a full non-map flow. In Inspect mode, select a cell to read its details. Enable the advanced acknowledgement before painting individual cells.</p>
       <div class="map-legend" aria-hidden="true">
         <span><i class="legend-swatch current"></i> Current region</span>
         <span><i class="legend-swatch changed"></i> Proposed change</span>

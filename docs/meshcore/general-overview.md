@@ -25,7 +25,7 @@ page_styles:
 </div>
 
 !!! important "MeshCore project split, use the official links"
-    Due to recent events in the MeshCore development team, the project has split. To stay on the official track, please only use:
+    The project has split. Use only official links:
 
     - **Flashing tool and blog:** [meshcore.io](https://meshcore.io/)
     - **Source code:** [github.com/meshcore-dev/MeshCore](https://github.com/meshcore-dev/MeshCore)

@@ -19,7 +19,8 @@ estimated_time: 2-15 minutes
 
 # Contribute to MeshCore Canada
 
-Choose what you want to improve. You do not need to know Git or GitHub for the common paths.
+Choose what you want to improve. You can use the common paths without Git or
+GitHub knowledge.
 
 <div class="grid cards" markdown>
 
@@ -50,7 +51,8 @@ Choose what you want to improve. You do not need to know Git or GitHub for the c
 
 -   **Write or improve a guide**
 
-    Start with a public request so maintainers can confirm scope, evidence, and the right owner before a large edit.
+    Start with a request so maintainers can confirm scope, evidence, and the right
+    owner before a big edit.
 
     [:octicons-arrow-right-24: Open a documentation request](https://github.com/MeshCore-ca/MeshCore-Canada/issues/new?template=general_request.yml)
 

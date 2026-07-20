@@ -61,14 +61,17 @@ Changing the radio preset changes what the observer can hear. Public and private
 | Optional owner details | Help an operator identify a service | Integration-dependent status data | May reach infrastructure and approved tools | Not publicly specified |
 | Broker credentials | Authenticate the observer | Should remain only in the local integration | Local operator and authentication service | Never include in public diagnostics |
 
-MeshCore Canada does not offer general direct broker subscriptions. Access is limited to approved tools, local mesh administrators, and people approved by the infrastructure administrators.
+MeshCore Canada does not offer general direct broker subscriptions. Access is
+limited to approved tools, local mesh administrators, and people approved by the
+infrastructure administrators.
 
 ## Public tools
 
 - [CoreScope](https://live.meshcore.ca/) shows observer, packet, and map information.
 - Other approved MeshCore Canada tools may consume the same feed.
 
-The existence of access controls on the broker does not make data private once an approved public viewer displays it.
+Broker access controls do not make data private once it appears in an approved
+public viewer.
 
 ## Before you operate an observer
 

@@ -57,7 +57,7 @@ This group is forming. Contact it to learn what is working and where help is nee
 
 ## Add or update a listing
 
-[Send a community update](../submit-idea.md). No GitHub account is needed.
+[Send a community update](../submit-idea.md). No GitHub account required.
 
 The directory does not guess exact locations, languages, owners, or link health.
 Fields remain marked unverified until a community steward reviews them.

@@ -22,14 +22,14 @@ requires:
 
 # Start with an observer
 
-Outcome: an observer that sends received network data to MeshCore Canada's
-public tools and appears in the health view.
+Outcome: an observer that sends network data to MeshCore Canada's public tools
+and appears in the health view.
 
 ## Understand the role
 
 An observer listens through a MeshCore radio and sends network data to public
-services. It does not route mesh traffic. Some methods run on radio firmware;
-others use an always-on computer or home-automation system.
+services. It does not route mesh traffic. It may run on radio firmware, an
+always-on computer, or a home-automation host.
 
 Read [what the service collects and who can access
 it](../analyzer/data-collection-access.md) before enabling an observer.
@@ -45,8 +45,8 @@ it](../analyzer/data-collection-access.md) before enabling an observer.
 ## What this path changes
 
 Depending on the method, setup may replace radio firmware, install a host
-service, or add a home-automation integration. It also enables public network
-data publishing.
+service, or add a home-automation integration. It also enables public
+network data publishing.
 
 <section class="mc-start-progress" data-mc-progress-page="observer" aria-labelledby="observer-progress-title">
   <h2 id="observer-progress-title">Your setup path</h2>

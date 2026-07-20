@@ -121,12 +121,12 @@ Search by city, airport code, postal code, or region name.
   <small>Your search is sent to OpenStreetMap Nominatim or geocoder.ca.</small>
 </form>
 
-Or [browse the region map](config/map.md).
+Or browse the [region map](config/map.md).
 
 Looking for people nearby? [Browse communities](provinces/index.md), ask on the
 [MeshCore Canada forum](https://forum.meshcore.ca/) or
-[Discord](https://discord.gg/BESFVMt7yk). These are support options; you can
-start the setup guide without joining either service.
+[Discord](https://discord.gg/BESFVMt7yk). You can start the setup guide even
+before joining either service.
 
 ## Use network tools
 

@@ -18,7 +18,8 @@ page_styles:
 
 # Check your observer
 
-A broker connection proves only that the internet link works. An observer is healthy when a real radio packet reaches the live packet view.
+A broker connection proves only internet access. An observer is healthy when real
+radio packets reach the live packet view.
 
 ## Verify all four stages
 

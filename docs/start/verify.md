@@ -19,8 +19,8 @@ destructive: false
 
 # Verify your setup
 
-Do not call setup complete only because a device powers on or a service says
-it connected. Use the check for the role you chose.
+Do not call setup complete just because a device powers on or a service says it
+connected. Use the role check you chose.
 
 Before testing, confirm the device still shows the expected Canada or local
 radio settings.
@@ -51,8 +51,7 @@ If the advert is missing, compare radio and path settings before reflashing.
     The repeater retains its settings and a nearby known-good companion
     receives its advert.
 
-Do not install it in a difficult-to-reach location until the bench check
-passes.
+Keep it off hard-to-reach spots until the bench check passes.
 
 ## Room server
 

@@ -24,7 +24,8 @@ hide:
 ---
 # Set up repeater regions
 
-Choose the forwarding paths for this repeater. Add cross-province or U.S. paths when needed.
+Choose this repeater’s forwarding paths. Add cross-province or U.S. paths only
+if your local network uses them.
 
 <div data-mcc-regions="config" data-mcc-root="./"></div>
 

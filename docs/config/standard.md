@@ -17,7 +17,9 @@ difficulty: advanced
 
 # MeshCore Canada region definition and authority
 
-This standard defines one Canada-wide region system: how every location is assigned, how boundaries are generated, how large regions split, who may approve changes, and which source wins when sources disagree.
+This standard defines one Canada-wide region system: how locations are assigned,
+how boundaries are generated, how regions split, who approves changes, and how
+source conflicts are resolved.
 
 | Standard | Value |
 | --- | --- |
@@ -38,7 +40,10 @@ MeshCore Canada maintains **one geographic partition**. Every part of Canada bel
 
 The published MeshCore Canada registry is the single source of truth. A boundary is not stored as a hand-drawn polygon. It is stored as ownership of official Statistics Canada geographic cells, then regenerated from those cells. Census Subdivisions keep a municipality or municipal equivalent together by default; Dissemination Areas remain the exact geometry used to publish the shared edge.
 
-Only leaves own land. Provinces, territories, and larger region records are grouping nodes derived from their children. Raw MeshMapper polygons, strategy circles, and event areas are never published as regions. A shared repeater area is configuration metadata, not another map layer.
+Only leaves own land. Provinces, territories, and larger region records are
+grouping nodes built from their children. Raw MeshMapper polygons, strategy
+circles, and event areas are not published as regions. A shared repeater area
+is configuration metadata, not another map layer.
 
 ## Canonical model
 
@@ -51,7 +56,10 @@ Only leaves own land. Provinces, territories, and larger region records are grou
 | Region | Stable operating area | Exhaustive within its jurisdiction |
 | Subregion | Optional split of a region | Exhaustive within its parent; never overlaps a sibling |
 
-A region with no children is a geographic leaf. When it is split, all of its cells move to subregions and the former leaf becomes a grouping node. It has no independent fill, resolver ownership, or additional command scope. A location resolves to one and only one leaf.
+A region with no children is a geographic leaf. When split, its cells move to
+subregions and the former leaf becomes a grouping node. It has no independent
+fill, resolver ownership, or extra command scope. A location resolves to one
+leaf.
 
 Every record has separate fields for:
 

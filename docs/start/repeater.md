@@ -22,8 +22,8 @@ requires:
 
 # Start with a repeater
 
-Outcome: a fixed node that extends local mesh coverage and can be checked
-before installation.
+Outcome: a fixed node that extends local coverage and is verified before
+installation.
 
 ## Understand the role
 
@@ -40,9 +40,8 @@ as initial configuration.
 
 ## What this path changes
 
-The linked guide installs repeater firmware and changes radio, identity,
-administration, advert, and regional settings. Test it on the bench before a
-difficult installation.
+The guide installs repeater firmware and sets radio, identity, adverts, and
+regional settings. Test on the bench before a difficult installation.
 
 <section class="mc-start-progress" data-mc-progress-page="repeater" aria-labelledby="repeater-progress-title">
   <h2 id="repeater-progress-title">Your setup path</h2>

@@ -37,7 +37,7 @@ device data, or a location.
 |---|---|---|
 | MeshCore Canada forum | Search public discussions or ask for help. | [Open the forum (external)](https://forum.meshcore.ca/){ target="_blank" rel="noopener" } |
 | CoreScope | View public observer, packet, node, and map data. | [Open CoreScope (external)](https://live.meshcore.ca/){ target="_blank" rel="noopener" } |
-| GitHub repository | Review source, issues, and site changes. A GitHub account may be needed to contribute there. | [Open the repository (external)](https://github.com/MeshCore-ca/MeshCore-Canada){ target="_blank" rel="noopener" } |
+| GitHub repository | Review source, issues, and site changes. | [Open the repository (external)](https://github.com/MeshCore-ca/MeshCore-Canada){ target="_blank" rel="noopener" } |
 
 These destinations were checked on **2026-07-19**.
 
@@ -56,7 +56,26 @@ These destinations were checked on **2026-07-19**. Hardware support and
 tool behaviour can change; follow the matching MeshCore Canada setup guide
 before flashing or configuring a device.
 
-## MeshCore Canada guides  - [Start with MeshCore](../start/index.md) - [Find a community](../provinces/index.md) - [Use the repeater configurator](../config/index.md) - [Contribute a correction or idea](../contributing.md)  ## Observer guides  | Task | Guide | |---|---| | Choose an observer method | [Observer setup](../analyzer/intro.md) | | Understand what data is collected | [Data collection and access](../analyzer/data-collection-access.md) | | Install direct observer firmware | [MQTT firmware](../analyzer/builds/mqtt-firmware.md) | | Bridge a radio through a host | [MCtoMQTT](../analyzer/builds/mctomqtt.md) | | Connect Home Assistant | [MeshCore-HA](../analyzer/builds/meshcore-ha.md) | | Run a Python-based observer | [PyMC](../analyzer/builds/pymc.md) | | Manage a radio remotely | [RemoteTerm](../analyzer/remoteterm.md) | | Choose an observer location code | [Location-code reference](../analyzer/iata-codes.md) | | Check the final result | [Check your observer](../analyzer/verify.md) |
+## MeshCore Canada guides
+
+- [Start with MeshCore](../start/index.md)
+- [Find a community](../provinces/index.md)
+- [Use the repeater configurator](../config/index.md)
+- [Contribute a correction or idea](../contributing.md)
+
+## Observer guides
+
+| Task | Guide |
+|---|---|
+| Choose an observer method | [Observer setup](../analyzer/intro.md) |
+| Understand what data is collected | [Data collection and access](../analyzer/data-collection-access.md) |
+| Install direct observer firmware | [MQTT firmware](../analyzer/builds/mqtt-firmware.md) |
+| Bridge a radio through a host | [MCtoMQTT](../analyzer/builds/mctomqtt.md) |
+| Connect Home Assistant | [MeshCore-HA](../analyzer/builds/meshcore-ha.md) |
+| Run a Python-based observer | [PyMC](../analyzer/builds/pymc.md) |
+| Manage a radio remotely | [RemoteTerm](../analyzer/remoteterm.md) |
+| Choose an observer location code | [Location-code reference](../analyzer/iata-codes.md) |
+| Check the final result | [Check your observer](../analyzer/verify.md) |
 
 ## Radio and regulatory references
 

@@ -22,14 +22,14 @@ requires:
 
 # Start with a companion
 
-Outcome: a personal device that can send an advert and exchange messages on
-your local mesh.
+Outcome: a personal device that can send an advert and message on your local
+mesh.
 
 ## Understand the role
 
-A companion is the personal messaging role. It does not route traffic for
-other users. Most companions pair with an app; some supported devices include
-their own screen and controls.
+A companion is for personal messaging. It does not route traffic for other users.
+Most companions pair with an app; some supported devices include their own
+screen and controls.
 
 ## Before you start
 

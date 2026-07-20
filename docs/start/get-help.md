@@ -19,8 +19,8 @@ destructive: false
 
 # Get help
 
-Start with the symptom. Do not post passwords, private keys, precise private
-locations, or unredacted command output.
+Start with the symptom. Do not post passwords, private keys, precise locations,
+or unredacted command output.
 
 | What is wrong? | Start here |
 |---|---|

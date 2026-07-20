@@ -21,8 +21,8 @@ requires:
 
 # Start with a room server
 
-Outcome: a persistent room that a companion can discover and enter with the
-guest credentials.
+Outcome: a persistent room that any companion can discover and join with guest
+credentials.
 
 ## Understand the role
 
@@ -38,8 +38,8 @@ repeater; use a repeater when the goal is routing and coverage.
 
 ## What this path changes
 
-The linked guide replaces the device firmware and sets the room-server
-identity, access credentials, and radio settings.
+The linked guide replaces the firmware and sets room-server identity, access
+credentials, and radio settings.
 
 <section class="mc-start-progress" data-mc-progress-page="room-server" aria-labelledby="room-server-progress-title">
   <h2 id="room-server-progress-title">Your setup path</h2>

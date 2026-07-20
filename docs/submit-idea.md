@@ -23,7 +23,7 @@ hide:
 # Share an idea
 
 <div class="submission-intro">
-  <p>Share an idea or report a problem. <strong>No GitHub account needed.</strong></p>
+  <p>Share an idea or report a problem. <strong>No GitHub account required.</strong></p>
   <p class="submission-privacy"><strong>Public form.</strong> Do not include passwords, keys, addresses, or private coordinates.</p>
 </div>
 
@@ -54,14 +54,14 @@ hide:
 
   <div class="submission-form__header">
     <h2>Describe your idea</h2>
-    <p>Five fields are required.</p>
+    <p>Fill five required fields.</p>
   </div>
 
   <div class="submission-form__grid">
     <div class="submission-field">
       <label for="submission-category">Type of idea</label>
       <select id="submission-category" name="category" required>
-        <option value="">Choose the closest match</option>
+        <option value="">Choose the best match</option>
         <option>Newcomer or accessibility improvement</option>
         <option>Documentation correction</option>
         <option>Hardware or build-guide idea</option>
@@ -92,13 +92,13 @@ hide:
 
   <div class="submission-form__grid submission-form__grid--ideas">
     <div class="submission-field">
-      <label for="submission-need">What is difficult now?</label>
-      <textarea id="submission-need" name="need" maxlength="2000" rows="5" placeholder="What happened?" required></textarea>
+      <label for="submission-need">What is hard right now?</label>
+      <textarea id="submission-need" name="need" maxlength="2000" rows="5" placeholder="Tell us what blocked you." required></textarea>
     </div>
 
     <div class="submission-field">
-      <label for="submission-idea">What would help?</label>
-      <textarea id="submission-idea" name="idea" maxlength="2000" rows="5" placeholder="What should change?" required></textarea>
+      <label for="submission-idea">What should improve?</label>
+      <textarea id="submission-idea" name="idea" maxlength="2000" rows="5" placeholder="Tell us the one change that would help." required></textarea>
     </div>
   </div>
 
@@ -126,13 +126,13 @@ hide:
 
   <label class="submission-consent" for="submission-public">
     <input id="submission-public" name="public" type="checkbox" required>
-    <span>This can be posted publicly and contains no private information.</span>
+    <span>This is public. Do not include private information.</span>
   </label>
 
   <div class="submission-draft-actions">
     <button id="save-submission-draft" class="md-button" type="button" disabled>Save draft on this device</button>
     <button id="clear-submission-draft" class="md-button" type="button" hidden>Clear saved draft</button>
-    <p id="submission-draft-status" role="status" aria-live="polite">Confirm the public-content statement before saving a draft.</p>
+    <p id="submission-draft-status" role="status" aria-live="polite">Check the public-content statement before saving a draft.</p>
   </div>
 
   <div class="submission-trap" aria-hidden="true">

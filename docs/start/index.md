@@ -19,8 +19,7 @@ destructive: false
 
 # Start with MeshCore
 
-Choose what you want the device to do. Each path takes you from preparation
-to a clear success check.
+Choose a role and follow a short setup path to a clear success check.
 
 ## What do you want to do?
 
@@ -79,8 +78,8 @@ Start here when your local community does not publish an override.
 1. Understand the role.
 2. Choose compatible hardware.
 3. Back up and prepare.
-4. Follow the role-specific flashing guide.
-5. Apply Canada or local settings.
+4. Follow the role-specific setup guide.
+5. Apply Canada and local settings.
 6. Verify the device nearby.
 7. Verify it with your community or the public network tool.
 8. Learn how to maintain it and where to get help.

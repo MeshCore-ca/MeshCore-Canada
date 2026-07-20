@@ -16,8 +16,8 @@ destructive: false
 
 # Getting Started has moved
 
-The current beginner guide is now **Start**. It keeps role choice, Canada
-settings, verification, and help in one journey.
+**Start** is now the beginner guide. It covers role choice, Canada settings,
+verification, and help in one path.
 
 [:octicons-arrow-right-24: **Open Start**](../start/index.md){ .md-button .md-button--primary }
 
@@ -29,8 +29,7 @@ settings, verification, and help in one journey.
 - [Send network data to public tools with an observer](../start/observer.md)
 - [Compare roles if you are not sure](../start/choose-a-goal.md)
 
-This page remains available so existing bookmarks and external links do not
-break.
+This page stays to keep old bookmarks and external links working.
 
 ## Next step
 

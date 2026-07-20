@@ -17,8 +17,8 @@ destructive: false
 
 # Privacy at MeshCore Canada
 
-Most pages are static documentation hosted through GitHub Pages. Reading them
-does not require a MeshCore Canada or GitHub account.
+Most pages are static docs on GitHub Pages. You can read them without a
+MeshCore Canada or GitHub account.
 
 ## When data leaves your browser
 
@@ -45,8 +45,8 @@ project has not yet published a retention period, so this page remains marked
 
 ## Browser storage
 
-The site may save non-sensitive journey progress or an idea draft only when the
-page explains the feature and you choose to use it. Passwords, private keys,
+The site may save non-sensitive journey progress or an idea draft only when
+you choose and the feature is shown on the page. Passwords, private keys,
 anti-spam tokens, and exact location searches are excluded.
 
 You can clear saved site data through your browser settings. The idea form also

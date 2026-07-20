@@ -369,7 +369,7 @@ Use these settings only when your local community has not published an override.
 ## Add or update a listing
 
 Found missing or outdated information?
-[Send a community update](../submit-idea.md). No GitHub account is needed.
+[Send a community update](../submit-idea.md). No GitHub account required.
 
 Directory contacts are community-provided external links. **Not yet verified**
 means the directory stewards have preserved the listing but have not recorded a

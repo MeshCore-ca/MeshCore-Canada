@@ -31,7 +31,8 @@ An observer listens for nearby MeshCore radio packets and sends a copy to MeshCo
   <li><strong>Live tools</strong><span>show observer and packet health</span></li>
 </ol>
 
-The shared endpoints use MQTT, a delivery protocol. You do not need to learn MQTT before choosing a method.
+The shared endpoints use MQTT. You do not need to learn it before choosing a
+method.
 
 !!! warning "Radio traffic may become public"
     Observer telemetry and heard radio packets can appear in public tools. Do not transmit sensitive information. Read [Data, access, and privacy](data-collection-access.md) before operating an observer.
