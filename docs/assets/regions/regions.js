@@ -1702,6 +1702,11 @@
         renderResult(data, els.result, state);
       });
     });
+    var initialQuery = new URLSearchParams(window.location.search).get("q");
+    if (initialQuery) {
+      els.input.value = initialQuery.trim();
+      setTimeout(locate, 0);
+    }
     showStep(1);
   }
 
