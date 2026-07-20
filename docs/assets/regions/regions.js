@@ -1990,14 +1990,9 @@
     if (initialQuery) {
       state.maxStep = 2;
       els.input.value = initialQuery;
-      var allowInitialLookup = initialParams.get("lookup") === "online";
-      if (els.onlineConsent) els.onlineConsent.checked = allowInitialLookup;
+      if (els.onlineConsent) els.onlineConsent.checked = true;
       showStep(2);
-      if (allowInitialLookup) {
-        locate();
-      } else {
-        setStatus(els.status, "Allow online place lookup, then select Find.", "info");
-      }
+      setTimeout(locate, 0);
     } else {
       showStep(1);
     }
