@@ -106,19 +106,15 @@ Use these settings when a local community has not published an override.
 
 ## Find your region
 
-Search by city, airport code, postal code, or region name.
+Search by city, airport code, or region.
 
 <form class="mc-place-search" action="config/" method="get" role="search">
-  <label for="mc-home-place">City, airport code, postal code, or region</label>
+  <label for="mc-home-place">City, airport code, or region</label>
   <div>
     <input id="mc-home-place" name="q" type="search" autocomplete="address-level2" required>
     <button type="submit">Find my region</button>
   </div>
-  <label>
-    <input name="lookup" type="checkbox" value="online" required>
-    Allow online place lookup
-  </label>
-  <small>Your search is sent to OpenStreetMap Nominatim or geocoder.ca.</small>
+  <input type="hidden" name="lookup" value="online">
 </form>
 
 Or browse the [region map](config/map.md).
