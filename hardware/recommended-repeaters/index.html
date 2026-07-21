@@ -949,6 +949,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Pre-Built Repeater Options">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#choose-one-cable-path" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Choose one cable path
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
       </ul>
@@ -2326,6 +2343,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Pre-Built Repeater Options">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#choose-one-cable-path" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Choose one cable path
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
         
       </ul>
@@ -2411,8 +2445,8 @@ Without this fix, if an OTA update fails over BLE, the repeater will enter an un
 <p>These options come fully assembled; simply flash MeshCore and mount them in a high location to expand the mesh.</p>
 <h3 id="pre-built-repeater-options">Pre-Built Repeater Options<a class="headerlink" href="#pre-built-repeater-options" title="Permanent link">&para;</a></h3>
 <div class="admonition warning">
-<p class="admonition-title">SenseCAP Solar Node P1 Notes</p>
-<p>To build out a SenseCAP Solar Node P1, you need to purchase the <strong>4 items below</strong>: the node itself, batteries, an upgraded antenna, and the correct pigtail cable.</p>
+<p class="admonition-title">SenseCAP Solar Node P1 cable choice</p>
+<p>Buy the three base items below, then choose <strong>one complete cable path</strong>. The P1 has a factory RP-SMA antenna connection. SMA and RP-SMA are not interchangeable, so do not mix parts from the two paths. See <a href="https://wiki.seeedstudio.com/lora_antenna_selection_guide/">Seeed's LoRa antenna guide</a>.</p>
 </div>
 <table>
 <thead>
@@ -2438,10 +2472,32 @@ Without this fix, if an OTA update fails over BLE, the repeater will enter an un
 <td>External antenna for the node.</td>
 <td><a href="https://www.amazon.ca/dp/B08H8J6ZV6?ref=ppx_yo2ov_dt_b_fed_asin_title">Amazon.ca</a></td>
 </tr>
+</tbody>
+</table>
+<h4 id="choose-one-cable-path">Choose one cable path<a class="headerlink" href="#choose-one-cable-path" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
 <tr>
-<td><strong>RP-SMA to N-Type Cable (Type 2, 30 cm) for SenseCAP Solar Node P1</strong></td>
-<td>Pigtail cable for connecting the node to an external antenna. Make sure to select <strong>Type 2 (RP-SMA)</strong> and <strong>30 cm</strong> when ordering.</td>
-<td><a href="https://www.aliexpress.com/item/1005004652556159.html">AliExpress</a></td>
+<th>Path</th>
+<th>Buy</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Recommended: keep the factory pigtail</strong></td>
+<td><a href="https://www.aliexpress.com/item/1005004652556159.html">RP-SMA to N-Type cable</a></td>
+<td>Select <strong>Type 2 (RP-SMA)</strong> and <strong>30 cm</strong>. This connects the factory RP-SMA port to the N-Type antenna.</td>
+</tr>
+<tr>
+<td><strong>Advanced: replace the factory pigtail</strong></td>
+<td><strong>Both</strong> the <a href="https://www.digikey.ca/en/products/detail/seeed-technology-co-ltd/321990397/15277462">I-PEX MHF1 to SMA bulkhead cable</a> <strong>and</strong> the <a href="https://www.aliexpress.com/item/1005004652556159.html">SMA to N-Type cable</a></td>
+<td>Select <strong>Type 1 (SMA)</strong> and <strong>30 cm</strong> for the second cable. Do not also buy the Type 2 cable. This requires opening the enclosure and restoring its weather seal.</td>
+</tr>
+<tr>
+<td><strong>Direct replacement</strong></td>
+<td>One verified I-PEX MHF1 to N-Type bulkhead pigtail</td>
+<td>This may replace both advanced-path cables. Confirm the connector, gender, length, mounting fit, and weather seal before ordering.</td>
 </tr>
 </tbody>
 </table>
