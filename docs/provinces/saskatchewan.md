@@ -14,5 +14,5 @@ If you know of a community that is missing or needs an update, open an update re
 | Status | Active |
 | Radio preset | `USA/Canada (Recommended)` |
 | Raw radio values | `910.525 MHz / 62.5 kHz / SF7 / CR5` |
-| Path hash mode | `1-byte` |
+| Path hash mode | `3-byte` |
 | Discord | <https://discord.gg/7yGnJuMGkG> |
