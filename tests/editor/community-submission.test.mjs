@@ -98,8 +98,8 @@ test("MkDocs keeps tool scripts route scoped", async () => {
   assert.equal((config.match(/^extra_javascript:/gm) || []).length, 1);
   assert.match(config, /^\s+- assets\/javascripts\/bootstrap\.js(?:\?v=\d{8}-\d+)?$/m);
   assert.doesNotMatch(config, /^\s+- assets\/regions\/regions\.js(?:\?v=\d{8}-\d+)?$/m);
-  assert.doesNotMatch(config, /^\s+- javascripts\/submission-form\.js$/m);
-  assert.match(submitPage, /^\s+- javascripts\/submission-form\.js$/m);
+  assert.doesNotMatch(config, /^\s+- javascripts\/submission-form\.js(?:\?v=\d{8}-\d+)?$/m);
+  assert.match(submitPage, /^\s+- javascripts\/submission-form\.js(?:\?v=\d{8}-\d+)?$/m);
   assert.match(configPage, /^\s+- assets\/regions\/regions\.js(?:\?v=\d{8}-\d+)?$/m);
 });
 
