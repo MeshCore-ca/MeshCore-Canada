@@ -17,7 +17,7 @@ requires:
   - confirmed-radio-band
   - confirmed-device-connector
 page_styles:
-  - assets/styles/devices-builds.css
+  - assets/styles/devices-builds.css?v=20260722-2
 ---
 
 # Compare Antennas and Feed Lines

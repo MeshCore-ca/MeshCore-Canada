@@ -41,16 +41,19 @@ theme:
     - toc.follow
 
 extra_css:
-  - assets/styles/tokens.css
-  - assets/styles/base.css
-  - assets/styles/shell.css
-  - assets/styles/components.css
+  - assets/styles/tokens.css?v=20260722-2
+  - assets/styles/base.css?v=20260722-2
+  - assets/styles/shell.css?v=20260722-2
+  - assets/styles/components.css?v=20260722-2
 
 extra_javascript:
-  - assets/javascripts/bootstrap.js?v=20260719-2
+  - assets/javascripts/bootstrap.js?v=20260722-2
 
 extra:
   social:
+    - icon: fontawesome/brands/discord
+      link: https://discord.gg/BESFVMt7yk
+      name: MeshCore Canada Discord
     - icon: fontawesome/solid/comments
       link: https://forum.meshcore.ca/
       name: MeshCore Canada forum
@@ -129,6 +132,7 @@ nav:
           - Update a repeater over the air: meshcore/update-repeater-ota.md
           - Generate a repeater identity: meshcore/generate-repeater-id.md
   - Network Tools:
+      - Choose a network tool: tools/index.md
       - Configure a repeater: config/index.md
       - Explore the region map: config/map.md
       - Set up an observer: analyzer/intro.md
@@ -153,6 +157,7 @@ nav:
       - Glossary: resources/glossary.md
       - Useful links: resources/links.md
   - Contribute:
+      - About MeshCore Canada: about.md
       - Ways to contribute: contributing.md
       - Share an idea: submit-idea.md
       - Propose a region change: config/map.md

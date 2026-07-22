@@ -14,7 +14,7 @@ difficulty: advanced
 estimated_time: 25 minutes
 destructive: true
 page_styles:
-  - assets/styles/analyzer.css
+  - assets/styles/analyzer.css?v=20260722-2
 ---
 
 # Observe with PyMC

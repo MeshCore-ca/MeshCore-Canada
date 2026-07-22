@@ -1,0 +1,5 @@
+INHERIT: mkdocs.yml
+site_url: https://canadaverse.org/meshcore-canada/
+
+extra:
+  preview: true

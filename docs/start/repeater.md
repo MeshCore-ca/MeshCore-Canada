@@ -90,6 +90,34 @@ Your repeater path is complete when:
 
 Use the [repeater verification checklist](verify.md#repeater).
 
+## Protect the mesh from forwarding loops
+
+Repeater firmware **1.14 or newer** can reject flood packets that appear to be
+circulating through the same repeater. After the local operators agree on the
+change, connect through the repeater CLI and run:
+
+```text
+get loop.detect
+set loop.detect moderate
+get loop.detect
+```
+
+The final command should report `moderate`. This setting drops a packet once
+the repeater's own path ID appears at the moderate threshold; it can prevent a
+malformed packet from becoming a long packet storm. It does not repair a bad
+repeater, replace normal duplicate suppression, or prove that the wider mesh
+is healthy.
+
+!!! warning "Coordinate this shared-network change"
+    Do not change loop detection as an isolated experiment on a community
+    repeater. Confirm the firmware version, record the previous value, agree on
+    the rollout with nearby operators, and watch for lost legitimate traffic.
+    If delivery regresses, restore the recorded value and investigate the
+    repeaters in the observed path.
+
+The options and thresholds are documented in the
+[official MeshCore repeater and room-server CLI reference](https://docs.meshcore.io/cli_commands/#view-or-change-this-nodes-loop-detection){ target="_blank" rel="noopener" }.
+
 ## Operate and maintain
 
 Keep a record of the site, owner, recovery access, settings, and last

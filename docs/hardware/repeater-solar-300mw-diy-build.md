@@ -18,7 +18,7 @@ requires:
   - safe-work-area
   - manufacturer-documentation
 page_styles:
-  - assets/styles/devices-builds.css
+  - assets/styles/devices-builds.css?v=20260722-2
 ---
 
 # Build a 300 mW Solar Repeater

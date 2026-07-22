@@ -152,9 +152,12 @@
           "enum": [
             "discord",
             "facebook",
+            "instagram",
             "meshmapper",
+            "reddit",
             "telegram",
-            "website"
+            "website",
+            "x"
           ]
         },
         "label": {
@@ -254,6 +257,10 @@
           ]
         },
         "service_area": {
+          "type": "string",
+          "minLength": 1
+        },
+        "summary": {
           "type": "string",
           "minLength": 1
         },

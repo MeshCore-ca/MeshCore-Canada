@@ -3,9 +3,33 @@ import { extname, join, relative, resolve, sep } from "node:path";
 import process from "node:process";
 
 const siteRoot = resolve(process.argv[2] || ".tmp/site");
-const publicOrigin = "https://meshcore.ca";
 const attributePattern = /\b(?:href|src)=["']([^"']+)["']/gi;
 const ignoredSchemes = /^(?:data|mailto|tel|javascript|blob):/i;
+
+async function readSiteIdentity() {
+  const manifestPath = join(siteRoot, "site-manifest.json");
+  let manifest;
+  try {
+    manifest = JSON.parse(await readFile(manifestPath, "utf8"));
+  } catch (error) {
+    throw new Error(`Cannot read ${manifestPath}: ${error.message}`);
+  }
+
+  let siteBaseUrl;
+  try {
+    siteBaseUrl = new URL(manifest.siteBaseUrl);
+  } catch (_error) {
+    throw new Error(`${manifestPath} must contain an absolute siteBaseUrl`);
+  }
+  if (siteBaseUrl.search || siteBaseUrl.hash) {
+    throw new Error(`${manifestPath} siteBaseUrl cannot contain a query or fragment`);
+  }
+
+  const basePath = siteBaseUrl.pathname.endsWith("/")
+    ? siteBaseUrl.pathname
+    : `${siteBaseUrl.pathname}/`;
+  return { publicOrigin: siteBaseUrl.origin, basePath };
+}
 
 async function walk(directory) {
   const files = [];
@@ -17,11 +41,11 @@ async function walk(directory) {
   return files;
 }
 
-function pagePath(file) {
+function pagePath(file, basePath) {
   const local = relative(siteRoot, file).split(sep).join("/");
-  if (local === "index.html") return "/";
-  if (local.endsWith("/index.html")) return `/${local.slice(0, -"index.html".length)}`;
-  return `/${local}`;
+  if (local === "index.html") return basePath;
+  if (local.endsWith("/index.html")) return `${basePath}${local.slice(0, -"index.html".length)}`;
+  return `${basePath}${local}`;
 }
 
 function decodeAttribute(value) {
@@ -39,14 +63,23 @@ async function isFile(path) {
   }
 }
 
-async function resolveTarget(pathname) {
+async function resolveTarget(pathname, basePath) {
   let decoded;
   try {
     decoded = decodeURIComponent(pathname);
   } catch (_error) {
     return { error: "invalid URL encoding" };
   }
-  const local = decoded.replace(/^\/+/, "");
+  let decodedBase;
+  try {
+    decodedBase = decodeURIComponent(basePath);
+  } catch (_error) {
+    return { error: "invalid site base URL encoding" };
+  }
+  if (!decoded.startsWith(decodedBase)) {
+    return { error: `target escapes site base path ${basePath}` };
+  }
+  const local = decoded.slice(decodedBase.length);
   const candidates = [];
   if (!local) candidates.push(join(siteRoot, "index.html"));
   else if (decoded.endsWith("/")) candidates.push(join(siteRoot, local, "index.html"));
@@ -87,6 +120,7 @@ function hasAnchor(text, fragment) {
 }
 
 async function main() {
+  const { publicOrigin, basePath } = await readSiteIdentity();
   const files = await walk(siteRoot);
   const htmlFiles = files.filter((file) => file.endsWith(".html"));
   const failures = new Set();
@@ -94,7 +128,7 @@ async function main() {
 
   for (const file of htmlFiles) {
     const html = await readFile(file, "utf8");
-    const base = new URL(pagePath(file), publicOrigin);
+    const base = new URL(pagePath(file, basePath), publicOrigin);
     for (const match of html.matchAll(attributePattern)) {
       const raw = decodeAttribute(match[1].trim());
       if (!raw || raw === "#" || raw.startsWith("//") || ignoredSchemes.test(raw)) continue;
@@ -103,24 +137,24 @@ async function main() {
       try {
         url = new URL(raw, base);
       } catch (_error) {
-        failures.add(`${pagePath(file)} -> ${raw}: invalid URL`);
+        failures.add(`${pagePath(file, basePath)} -> ${raw}: invalid URL`);
         continue;
       }
       if (url.origin !== publicOrigin) continue;
       checked += 1;
-      const target = await resolveTarget(url.pathname);
+      const target = await resolveTarget(url.pathname, basePath);
       if (!target.path) {
-        failures.add(`${pagePath(file)} -> ${raw}: ${target.error}`);
+        failures.add(`${pagePath(file, basePath)} -> ${raw}: ${target.error}`);
         continue;
       }
       if (!(await hasExactCase(target.path))) {
-        failures.add(`${pagePath(file)} -> ${raw}: path casing differs from disk`);
+        failures.add(`${pagePath(file, basePath)} -> ${raw}: path casing differs from disk`);
         continue;
       }
       if (url.hash && [".html", ".svg"].includes(extname(target.path).toLowerCase())) {
         const targetText = target.path === file ? html : await readFile(target.path, "utf8");
         if (!hasAnchor(targetText, url.hash.slice(1))) {
-          failures.add(`${pagePath(file)} -> ${raw}: missing fragment target`);
+          failures.add(`${pagePath(file, basePath)} -> ${raw}: missing fragment target`);
         }
       }
     }

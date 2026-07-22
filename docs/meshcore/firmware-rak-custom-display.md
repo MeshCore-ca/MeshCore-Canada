@@ -14,7 +14,7 @@ difficulty: advanced
 estimated_time: 3-5 minutes
 destructive: false
 page_styles:
-  - assets/styles/devices-builds.css
+  - assets/styles/devices-builds.css?v=20260722-2
 ---
 # RAK4631 Custom Display Firmware (Archived)
 

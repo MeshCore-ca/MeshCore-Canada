@@ -1,7 +1,7 @@
 import {
   PROPOSAL_SCHEMA_V1,
   PROPOSAL_SCHEMA_V2
-} from "../domain/proposal-types.js";
+} from "../domain/proposal-types.js?v=20260722-2";
 
 const DRAFT_PREFIX = "mcc-region-editor-draft";
 const DRAFT_VERSION = 1;

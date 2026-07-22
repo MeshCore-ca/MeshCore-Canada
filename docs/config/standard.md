@@ -418,7 +418,7 @@ A geographic release fails unless all of these are true:
 - shared-area names never enter the on-air tree; the complete member paths fit every firmware and serial-line budget;
 - every neighbouring path is non-geographic, optional, backed by aggregate route evidence, and uses a documented or explicitly provisional external hierarchy;
 - neighbouring paths never own Canadian cells, resolve from a map point, or appear as U.S. boundary geometry;
-- every resolver test point returns exactly one leaf;
+- every resolver test point returns one and only one leaf;
 - every active region is contiguous by shared land edge, or has a documented island/MultiPolygon exception;
 - every active tag is globally unique and within the firmware byte limit;
 - every old tag resolves to an active record, a deprecated record, or a tombstone;

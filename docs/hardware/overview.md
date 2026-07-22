@@ -14,7 +14,7 @@ difficulty: beginner
 estimated_time: 5-10 minutes
 destructive: false
 page_styles:
-  - assets/styles/devices-builds.css
+  - assets/styles/devices-builds.css?v=20260722-2
 ---
 
 # Choose MeshCore Hardware

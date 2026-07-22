@@ -13,9 +13,9 @@ difficulty: advanced
 estimated_time: 35 minutes
 destructive: true
 page_styles:
-  - assets/styles/analyzer.css
+  - assets/styles/analyzer.css?v=20260722-2
 page_scripts:
-  - assets/javascripts/analyzer-command-builder.js
+  - assets/javascripts/analyzer-command-builder.js?v=20260722-2
 ---
 
 # Build a standalone MQTT observer

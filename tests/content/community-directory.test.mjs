@@ -14,15 +14,69 @@ const provinceDir = join(root, "docs", "provinces");
 const expectedCommunities = new Map([
   ["salish-mesh", ["https://salishmesh.net/"]],
   [
-    "calgary-area-meshcore",
-    ["https://t.me/meshtAlta", null],
+    "alberta-meshcore-networks",
+    [
+      "https://albertamesh.ca/",
+      "https://discord.gg/CznDhsRWnJ",
+      "https://albertamesh.ca/airdrie/",
+      "https://albertamesh.ca/calgary/",
+      "https://albertamesh.ca/edmonton/",
+      "https://albertamesh.ca/lethbridge/",
+      "https://albertamesh.ca/why-meshcore/",
+      "https://albertamesh.ca/monitoring-tools/",
+    ],
+  ],
+  [
+    "airdrie-meshcore-network",
+    [
+      "https://albertamesh.ca/airdrie/",
+      "https://albertamesh.ca/airdrie/configuration/",
+      "https://discord.gg/CznDhsRWnJ",
+      "https://yyc.meshmapper.net/?lat=51.28120&lon=-113.99718&zoom=13.43",
+      "https://waev.app/#/live-map/@51.28107,-113.99966,14.47z",
+    ],
+  ],
+  ["calgary-area-meshcore", ["https://t.me/meshtAlta", null]],
+  [
+    "calgary-meshcore-network",
+    [
+      "https://meshcorecalgary.ca/",
+      "https://albertamesh.ca/calgary/",
+      "https://discord.gg/CznDhsRWnJ",
+      "https://yyc.meshmapper.net/?lat=51.01674&lon=-114.00149&zoom=11.00",
+      "https://corescopeyyc.meshmonitoring.com/#/live",
+      "https://albertamesh.ca/calgary/#rx-channels",
+    ],
+  ],
+  [
+    "edmonton-meshcore-network",
+    [
+      "https://albertamesh.ca/edmonton/",
+      "https://albertamesh.ca/edmonton/configuration/",
+      "https://discord.gg/CznDhsRWnJ",
+      "https://yeg.meshmapper.net/?lat=53.45752&lon=-113.58320&zoom=10.03",
+    ],
+  ],
+  [
+    "yegmesh-ca",
+    [
+      "https://yegmesh.ca/p/getting-started",
+      "https://yegmesh.ca/p/meshcore-defaults",
+      "https://discord.gg/CznDhsRWnJ",
+      "https://yeg.meshmapper.net/?lat=53.45752&lon=-113.58320&zoom=10.03",
+    ],
   ],
   [
     "yqlmesh",
     [
-      "https://www.yqlmesh.com",
-      "https://www.facebook.com/groups/839542635605360",
-      "https://discord.gg/89DUBvmvu2",
+      "https://www.yqlmesh.com/",
+      "https://albertamesh.ca/lethbridge/",
+      "https://discord.gg/cFY9GSR37W",
+      "https://yql.meshmapper.net/?lat=49.69091&lon=-112.86356&zoom=12.14",
+      "https://facebook.com/groups/YQLMesh",
+      "https://instagram.com/YQLMesh",
+      "https://x.com/YQLMesh",
+      "https://www.reddit.com/r/YQLMesh",
     ],
   ],
   ["southern-alberta", [null, "https://t.me/meshtAlta"]],
@@ -76,6 +130,7 @@ function searchIndex(community) {
     [
       community.name,
       community.service_area,
+      community.summary ?? "",
       community.province,
       page.title,
       ...page.aliases,
@@ -92,8 +147,8 @@ function idsMatching(query) {
     .map((community) => community.id);
 }
 
-test("all 16 legacy listings and every contact URL are migrated", () => {
-  assert.equal(data.communities.length, 16);
+test("all 21 structured listings and every curated contact URL are preserved", () => {
+  assert.equal(data.communities.length, 21);
   assert.deepEqual(
     new Set(data.communities.map((community) => community.id)),
     new Set(expectedCommunities.keys()),
@@ -129,7 +184,7 @@ test("the generated directory cannot drift from structured data", () => {
       encoding: "utf8",
     },
   );
-  assert.match(output, /Community directory validated: 16 listings/);
+  assert.match(output, /Community directory validated: 21 listings/);
 });
 
 test("search covers reviewed place names and common aliases", () => {
@@ -144,8 +199,26 @@ test("search covers reviewed place names and common aliases", () => {
     "reseau-mesh-saguenay-lac-saint-jean-ytf",
   ]);
   assert.deepEqual(idsMatching("Montréal"), ["montreal-mesh", "reseau-libre"]);
+  assert.deepEqual(idsMatching("Airdrie"), [
+    "alberta-meshcore-networks",
+    "airdrie-meshcore-network",
+  ]);
+  assert.deepEqual(idsMatching("Edmonton"), [
+    "alberta-meshcore-networks",
+    "edmonton-meshcore-network",
+    "yegmesh-ca",
+  ]);
+  assert.deepEqual(idsMatching("AlbertaMesh"), [
+    "alberta-meshcore-networks",
+    "airdrie-meshcore-network",
+    "calgary-meshcore-network",
+    "edmonton-meshcore-network",
+  ]);
   assert.deepEqual(idsMatching("Calgary"), [
+    "alberta-meshcore-networks",
+    "airdrie-meshcore-network",
     "calgary-area-meshcore",
+    "calgary-meshcore-network",
     "yyc-meshcore-discord",
   ]);
 });
@@ -170,8 +243,8 @@ test("overview counts, empty states, and page metadata are generated", () => {
   const forming = data.communities.filter(
     (community) => community.status === "forming",
   ).length;
-  assert.match(index, new RegExp(`<strong>${active}</strong> active`));
-  assert.match(index, new RegExp(`<strong>${forming}</strong> forming`));
+  assert.match(index, new RegExp(`<strong>${active}</strong> listed active`));
+  assert.match(index, new RegExp(`<strong>${forming}</strong> listed forming`));
 
   for (const page of data.directory_pages) {
     const markdown = readFileSync(join(provinceDir, `${page.slug}.md`), "utf8");
@@ -181,7 +254,7 @@ test("overview counts, empty states, and page metadata are generated", () => {
     assert.match(markdown, /\nowner: directory-stewards\n/);
     assert.match(markdown, /\nlast_reviewed: 2026-07-19\n/);
     assert.match(markdown, /\nreview_by: 2027-01-15\n/);
-    assert.match(markdown, /\npage_styles:\n  - assets\/styles\/communities\.css\n/);
+    assert.match(markdown, /\npage_styles:\n  - assets\/styles\/communities\.css(?:\?v=\d{8}-\d+)?\n/);
 
     const communities = data.communities.filter((community) =>
       page.codes.includes(community.province),
@@ -194,28 +267,50 @@ test("overview counts, empty states, and page metadata are generated", () => {
   }
 });
 
-test("Saskatchewan retains the only local one-byte override", () => {
-  const overrides = data.communities.filter(
-    (community) => Object.keys(community.settings.overrides).length > 0,
-  );
+test("all listings inherit the three-byte Canada baseline", () => {
   assert.equal(data.national_defaults.path_hash_mode, "3-byte");
-  assert.deepEqual(
-    overrides.map((community) => [
-      community.id,
-      community.settings.overrides.path_hash_mode,
-    ]),
-    [["stoonmesh", "1-byte"]],
+  assert.equal(
+    data.communities.every(
+      (community) => community.settings.inherit_national === true,
+    ),
+    true,
   );
+
+  const stoonmesh = data.communities.find(
+    (community) => community.id === "stoonmesh",
+  );
+  assert.deepEqual(stoonmesh.settings.overrides, {});
 
   const saskatchewan = readFileSync(
     join(provinceDir, "saskatchewan.md"),
     "utf8",
   );
-  assert.match(saskatchewan, /Local setting differs from the Canada baseline/);
-  assert.match(
+  assert.doesNotMatch(
     saskatchewan,
-    /Path hash mode: <strong>1-byte<\/strong>/,
+    /Local setting differs from the Canada baseline/,
   );
+  assert.doesNotMatch(saskatchewan, /1-byte/);
+  assert.match(saskatchewan, /Uses the Canada baseline/);
+});
+
+test("summaries and added social contact types render from structured data", () => {
+  const yqlmesh = data.communities.find(
+    (community) => community.id === "yqlmesh",
+  );
+  assert.equal(yqlmesh.summary, "Connecting Lethbridge, one node at a time");
+  assert.deepEqual(
+    yqlmesh.contacts.slice(-4).map((contact) => contact.type),
+    ["facebook", "instagram", "x", "reddit"],
+  );
+
+  const alberta = readFileSync(join(provinceDir, "alberta.md"), "utf8");
+  assert.match(
+    alberta,
+    /Building Alberta&#x27;s community-operated off-grid LoRa mesh network/,
+  );
+  assert.match(alberta, /<strong>Instagram:<\/strong>/);
+  assert.match(alberta, /<strong>X:<\/strong>/);
+  assert.match(alberta, /<strong>Reddit:<\/strong>/);
 });
 
 test("detail cards do not duplicate national radio settings", () => {

@@ -76,20 +76,13 @@ test("owned Start pages have required, unique page metadata", () => {
 test("homepage is task-first and exposes the required decisions", () => {
   const homepage = readDoc("index.md");
 
-  assert.match(
-    homepage,
-    /MeshCore Canada helps Canadians join, build, operate, and coordinate local\s+MeshCore networks\./
-  );
-  assert.match(homepage, /What are you trying to do\?/);
-  assert.match(homepage, /Brand new\? Start here/);
-
-  for (const action of [
-    "Start using MeshCore",
-    "Find a community",
-    "Set up or operate a node",
-  ]) {
-    assert.match(homepage, new RegExp(action));
-  }
+  assert.match(homepage, /choose a node, find nearby operators, apply\s+the right regional settings/i);
+  assert.match(homepage, /## Start with your goal/);
+  assert.match(homepage, /## Choose a role/);
+  assert.match(homepage, /Start the guided setup\]\(start\/index\.md\)/);
+  assert.match(homepage, /Find a community\]\(provinces\/index\.md\)/);
+  assert.match(homepage, /name="place"/);
+  assert.match(homepage, /id="mc-home-online-lookup"[^>]+type="checkbox"/);
 
   for (const role of [
     "Personal companion",

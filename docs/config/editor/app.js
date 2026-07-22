@@ -8,13 +8,13 @@ import {
   hierarchyPath,
   isEditableTarget,
   schemaForProposalType
-} from "./domain/proposal-types.js";
+} from "./domain/proposal-types.js?v=20260722-2";
 import {
   hasStaleDraft,
   loadDraft,
   removeDraft,
   saveDraft
-} from "./infrastructure/draft-store.js";
+} from "./infrastructure/draft-store.js?v=20260722-2";
 import {
   configuredSubmissionEndpoint,
   fetchSubmissionConfig,

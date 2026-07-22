@@ -7,6 +7,14 @@
   font-weight: 720;
 }
 
+.md-search__icon[for="__search"] {
+  display: inline-flex;
+  min-width: var(--mc-target-size);
+  min-height: var(--mc-target-size);
+  align-items: center;
+  justify-content: center;
+}
+
 .md-main__inner {
   gap: var(--mc-space-6);
 }

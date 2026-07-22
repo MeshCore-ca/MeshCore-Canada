@@ -1,7 +1,8 @@
 import { defineConfig, devices } from "@playwright/test";
+import { normalizeSiteBaseUrl } from "./tests/browser/site-route.mjs";
 
 const externalBaseUrl = process.env.PLAYWRIGHT_BASE_URL;
-const baseURL = externalBaseUrl || "http://127.0.0.1:4173";
+const baseURL = normalizeSiteBaseUrl(externalBaseUrl || "http://127.0.0.1:4173/");
 
 export default defineConfig({
   testDir: "./tests/browser",

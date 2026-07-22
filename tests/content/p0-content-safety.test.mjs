@@ -87,18 +87,18 @@ test("draft hardware pages are visibly quarantined and mounting Markdown is repa
   assert.match(mounting, /Installation Checklist/);
 });
 
-test("Saskatchewan directory and generated listing agree on the local override", () => {
+test("Saskatchewan directory and generated listing agree on the national baseline", () => {
   const index = read("docs/provinces/index.md");
   const sk = read("docs/provinces/saskatchewan.md");
 
-  assert.match(index, /StoonMesh/);
-  assert.match(index, /Local override — Path hash mode: <strong>1-byte<\/strong>/);
-  assert.match(index, /Path hash mode \| `3-byte`/);
-  assert.match(sk, /Local setting differs from the Canada baseline/);
-  assert.match(sk, /Path hash mode: <strong>1-byte<\/strong>/);
-  assert.match(sk, /Confirm this setting with the community/i);
+  assert.match(
+    index,
+    /id="directory-stoonmesh"[\s\S]*?<strong>Settings:<\/strong> Uses the Canada baseline/
+  );
+  assert.match(index, /<strong>0<\/strong> local override/);
+  assert.match(sk, /<h3>StoonMesh<\/h3>[\s\S]*?<dd>Uses the Canada baseline<\/dd>/);
+  assert.doesNotMatch(sk, /1-byte|Local setting differs/);
 });
-
 test("observer credential fields are empty, masked, revealable, and never persisted", () => {
   const page = read("docs/analyzer/builds/mqtt-firmware.md");
   const script = read("docs/assets/javascripts/analyzer-command-builder.js");

@@ -10,6 +10,7 @@ import sys
 from collections import defaultdict
 from pathlib import Path
 from typing import Any
+from urllib.parse import urlsplit
 
 import yaml
 
@@ -166,10 +167,17 @@ def validate_page(path: Path, docs_root: Path, today: dt.date) -> tuple[dict[str
             errors.append(f"{key} must be a list of relative asset paths")
             continue
         for value in values:
-            if value.startswith(("/", "http://", "https://")) or ".." in Path(value).parts:
+            parsed = urlsplit(value)
+            asset_path = parsed.path
+            if (
+                parsed.scheme
+                or parsed.netloc
+                or asset_path.startswith("/")
+                or ".." in Path(asset_path).parts
+            ):
                 errors.append(f"{key} contains a non-local path: {value}")
                 continue
-            if not (docs_root / value).is_file():
+            if not asset_path or not (docs_root / asset_path).is_file():
                 errors.append(f"{key} asset does not exist: {value}")
 
     return metadata, errors

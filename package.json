@@ -7,7 +7,8 @@
     "node": ">=22"
   },
   "scripts": {
-    "docs:build": "python -m mkdocs build --strict --site-dir .tmp/site && node scripts/postprocess-site.mjs",
+    "docs:build": "python -m mkdocs build --clean --strict --site-dir .tmp/site && node scripts/postprocess-site.mjs",
+    "docs:build:preview": "python -m mkdocs build --clean --strict --config-file mkdocs.preview.yml --site-dir .tmp/preview-site && node scripts/postprocess-site.mjs .tmp/preview-site --noindex-all",
     "check:links": "npm run docs:build && node scripts/check-built-links.mjs",
     "test:content": "node --test tests/content/*.test.mjs",
     "test:editor": "node --test tests/editor/*.test.mjs",

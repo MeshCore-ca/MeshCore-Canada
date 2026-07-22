@@ -18,7 +18,7 @@ requires:
   - trusted-serial-connection
   - secure-key-storage
 page_styles:
-  - assets/styles/devices-builds.css
+  - assets/styles/devices-builds.css?v=20260722-2
 ---
 # Change a Repeater ID for a Legacy 1-Byte Region
 

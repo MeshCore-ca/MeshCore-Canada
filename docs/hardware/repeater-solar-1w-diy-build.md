@@ -19,7 +19,7 @@ requires:
   - fabrication-experience
   - manufacturer-documentation
 page_styles:
-  - assets/styles/devices-builds.css
+  - assets/styles/devices-builds.css?v=20260722-2
 ---
 
 # Review the 1 W Solar Repeater Build

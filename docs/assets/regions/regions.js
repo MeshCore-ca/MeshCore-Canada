@@ -1517,10 +1517,10 @@
       '<div class="mcc-wizard">' +
       '<div class="mcc-visually-hidden" data-mcc-copy-status role="status" aria-live="polite" aria-atomic="true"></div>' +
       '<ol class="mcc-wizard-progress" aria-label="Setup progress">' +
-      '<li><button type="button" data-go-step="1"><span>1</span><strong>Device</strong></button></li>' +
-      '<li><button type="button" data-go-step="2" disabled><span>2</span><strong>Location</strong></button></li>' +
-      '<li><button type="button" data-go-step="3" disabled><span>3</span><strong>Coverage</strong></button></li>' +
-      '<li><button type="button" data-go-step="4" disabled><span>4</span><strong>Apply</strong></button></li>' +
+      '<li><button type="button" data-go-step="1" aria-label="Step 1: Device"><span>1</span><strong>Device</strong></button></li>' +
+      '<li><button type="button" data-go-step="2" aria-label="Step 2: Location" disabled><span>2</span><strong>Location</strong></button></li>' +
+      '<li><button type="button" data-go-step="3" aria-label="Step 3: Coverage" disabled><span>3</span><strong>Coverage</strong></button></li>' +
+      '<li><button type="button" data-go-step="4" aria-label="Step 4: Apply" disabled><span>4</span><strong>Apply</strong></button></li>' +
       '</ol>' +
       '<section class="mcc-card mcc-wizard-step" data-wizard-step="1">' +
       '<p class="mcc-step-label">Step 1 of 4</p>' +
@@ -1986,13 +1986,14 @@
     renderConfigRegionBrowser(state.browseTag);
     updateMapLinks();
     var initialParams = new URLSearchParams(window.location.search);
-    var initialQuery = (initialParams.get("q") || "").trim();
+    var initialQuery = (initialParams.get("place") || "").trim();
+    var onlineLookupApproved = initialParams.get("lookup") === "online";
     if (initialQuery) {
       state.maxStep = 2;
       els.input.value = initialQuery;
-      if (els.onlineConsent) els.onlineConsent.checked = true;
+      if (els.onlineConsent) els.onlineConsent.checked = onlineLookupApproved;
       showStep(2);
-      setTimeout(locate, 0);
+      if (onlineLookupApproved) setTimeout(locate, 0);
     } else {
       showStep(1);
     }
@@ -2507,7 +2508,7 @@
       '<span class="mcc-table-count" data-role="table-count" role="status" aria-live="polite"></span>' +
       '</div>' +
       '<div class="mcc-table-layout">' +
-      '<div class="mcc-region-table-wrap"><table class="mcc-region-table"><thead><tr><th scope="col">Region</th><th scope="col">Area</th><th scope="col">Boundary</th><th scope="col">Basis</th></tr></thead><tbody></tbody></table></div>' +
+      '<div class="mcc-region-table-wrap" role="region" aria-label="Region directory table" tabindex="0"><table class="mcc-region-table"><thead><tr><th scope="col">Region</th><th scope="col">Area</th><th scope="col">Boundary</th><th scope="col">Basis</th></tr></thead><tbody></tbody></table></div>' +
       '</div>' +
       '</div>';
     var input = el.querySelector("[data-role='table-filter']");

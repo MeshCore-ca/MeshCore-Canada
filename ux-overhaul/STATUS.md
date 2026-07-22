@@ -1,96 +1,108 @@
 # MeshCore Canada UI/UX overhaul status
 
-This file tracks the implementation of the July 19, 2026 UI/UX overhaul
-handoff. It records evidence, not intent.
+This file records the durable delivery and review contract for draft PR #66. Live
+candidate evidence belongs in the pull request because the preview runtime can
+change without a source edit.
 
-## Baseline
+## Baseline and scope
 
 - Repository: `MeshCore-ca/MeshCore-Canada`
+- Draft pull request: #66
 - Integration branch: `agent/ui-ux-overhaul`
-- Audited and reconciled base: `f608cfebc0c0dd3b7f5e67a1875a33b63310eb3f`
-- Base relationship: current `origin/main` exactly matches the handoff baseline
-- Production target after review: `https://meshcore.ca/`
-- Staging target: `https://canadaverse.org/meshcore-canada/`
-- Staging host: Pi 5 at `192.168.0.24`
-- Staging service: existing `splashpage` Docker container
+- Reconciled `main` commit: `cbbe9c03b13fa9dc478155fd4116d845893be4e2`
+- Folded community-update source: PR #75 at `a47dfbc`
+- Production target after review and merge: `https://meshcore.ca/`
+- Isolated review target: `https://canadaverse.org/meshcore-canada/`
+- Review host: the existing Pi 5 `splashpage` service
 
-## Delivery decision
+## Delivery posture
 
-The handoff proposes a sequence of small pull requests. The project owner has
-instead requested one consolidated pull request. The work remains split into
-reviewable commits and validation gates inside that one branch. No production
-merge or deployment is part of the staging implementation.
+PR #66 is deliberately consolidated and must remain **draft** while its exact
+candidate is tested on the Pi 5 and the human-review items below remain open.
+Closing superseded PR #75 does not make PR #66 ready to merge. No production
+`meshcore.ca` deployment is authorized by the preview work.
 
-## Current stage
+The preview is a complete no-index build, not a second content source. A preview
+is accepted only when its manifest revision matches the pushed PR head, its
+artifact digest matches the deployed files, and the running container records
+both values. A reachable URL by itself is not deployment proof.
 
-| Stage | Status | Evidence |
-|---|---|---|
-| Handoff read end-to-end | Complete | 3,578-line July 19 handoff reviewed |
-| Latest `main` reconciled | Complete | `origin/main` is `f608cfe` |
-| Clean integration worktree | Complete | `agent/ui-ux-overhaul` from `origin/main` |
-| Current route and P0 audit | Complete | P0 safety/content tests and strict link audit pass |
-| Pi 5 `splashpage` route audit | Complete | Healthy namespaced static route confirmed; 70 GB free |
-| P0 containment | Complete | Unsafe recipes quarantined; destructive-flow tests pass |
-| Shared design system and IA | Complete | Tokens, shell, components, six-category navigation |
-| Journey and directory rebuilds | Complete | Start and 16-listing directory tests pass |
-| Configurator/editor redesign | Complete | 119 Node tests, 46 gateway tests, 17 automation tests, and Chromium journeys pass |
-| Product-quality CI | Complete | Pinned quality, browser, Lighthouse, and reviewed-main deployment workflows |
-| Pi 5 staging deployment | Not started | Awaiting audited mount/route pattern |
-| Consolidated pull request | Not started | Branch is local only |
+## Implemented overhaul
 
-## Protected behavior
+| Area | Result |
+|---|---|
+| Information architecture | Task-oriented Start, About, Tools, community, configuration, hardware, and contribution journeys |
+| Homepage | Two primary goals, role routes, privacy-preserving location lookup, and direct help/community paths |
+| Community directory | 21 validated structured listings; province pages generated from `data/communities.json` |
+| PR #75 | Five Alberta listings, refreshed YQL details, all 26 submitted URLs, and the national 3-byte StoonMesh baseline folded into the structured source |
+| Search and privacy | Local search by default; online geocoding requires explicit consent |
+| Configuration tools | Accessible workbench, clearer editor containment, and preserved command/region semantics |
+| Operations content | Named service credits, repeater loop-detection guidance, and current SenseCAP cable paths restored |
+| Delivery | Separate strict production/preview builds, preview-wide noindex, deterministic artifact manifest, subpath-aware checks, and cache-busted custom assets |
+| Accessibility | Keyboard-operable header/search, mobile labels, footer fallbacks, palette/contrast checks, and automated axe journeys |
+
+## Automated evidence
+
+The latest pre-commit worktree validation produced:
+
+- 63 source pages passing metadata/content validation;
+- 21 community listings (20 active, 1 forming) and 11 generated directory pages;
+- 5 Python content tests, 56 Node content tests, and 65 editor tests passing;
+- 218 region hierarchy nodes and 193 leaf regions passing catalog validation;
+- both 193-region geometry validations passing with zero positive-area overlap;
+- 45 gateway tests passing with one expected Windows-only POSIX skip;
+- 17 automation tests passing;
+- strict 69-page production and preview builds;
+- 7 production no-index pages and 69 of 69 preview pages no-indexed;
+- 7,113 production and 7,112 preview local references passing the built-link audit; and
+- all changed custom CSS and JavaScript references using the staging cache token.
+
+Full browser-matrix, Lighthouse, CI, exact-image, and public-route results are
+recorded on PR #66 for the pushed candidate. They must be rerun when the PR head
+changes.
+
+## Protected behaviour
 
 The overhaul must not change:
 
 - region catalog or membership semantics;
 - command generation, ordering, limits, or path meanings;
 - fixed-anchor, jurisdiction, hierarchy, or geography invariants;
-- proposal v1/v2 schemas or signed canonical payload behavior;
-- gateway permissions, signature domains, idempotency, or approval actors;
+- proposal v1/v2 schemas or signed canonical payload behaviour;
+- gateway permissions, signature domains, idempotency, or approval actors; or
 - deterministic regeneration and fail-closed deployment checks.
 
 Any diff in those outputs is a release blocker unless separately approved by
-the region maintainers.
+the appropriate maintainers.
 
-## Requirement ledger
+## Preview deployment gate
 
-Status values are `not-started`, `in-progress`, `proved`, `human-review`, or
-`blocked`.
+The Pi 5 preview must satisfy every item below before it is reported live:
 
-| Requirement group | Status | Required proof |
-|---|---|---|
-| P0 content and safety containment | proved | Safety tests, 67-page strict build, 6,750-link audit |
-| Generated `site/` removed and ignored | proved | `git ls-files site` is empty; clean build succeeds |
-| Six-category task-oriented navigation | proved | Built nav and Chromium keyboard journey pass |
-| Canonical homepage and Start journeys | proved | Critical-path browser tests pass |
-| Shared semantic tokens and theme shell | human-review | Automated light/dark contrast gates pass; manual forced-colour review remains |
-| Page metadata and lifecycle validation | proved | 61 pages pass schema and lifecycle validation |
-| Structured community directory | proved | 16 listings reconcile from structured data |
-| Hardware/build content system | human-review | Automated safety/structure/link tests pass; factual review remains |
-| Safe firmware/destructive flows | human-review | Backup/preflight/recovery lint passes; domain review remains |
-| Analyzer/MQTT chooser and secure builder | proved | Credential-safety and observer-lifecycle tests pass |
-| Configurator redesign without output drift | proved | Region validator, command fixtures, and browser tests pass |
-| Editor v1/v2 accessible redesign | human-review | Payload parity, gateway, keyboard, and axe gates pass; manual mobile/AT review remains |
-| Trusted text equivalent for boundary PNG | proved | Deterministic preview and text-equivalent tests pass |
-| Search, SEO, privacy, French readiness | human-review | Search/SEO/privacy checks pass; reviewed French content remains |
-| Accessibility and performance gates | human-review | Chromium axe/journeys and desktop Lighthouse budgets pass; manual matrix remains |
-| Pi 5 staging on namespaced route | not-started | Live route smoke tests without Canadaverse regressions |
-| One consolidated PR ready for review | not-started | Remote PR and all required checks green |
+1. Build once from the pushed PR-head commit with that exact revision in
+   `site-manifest.json`.
+2. Confirm all preview pages are no-indexed and the preview sitemap is empty.
+3. Recompute the manifest artifact digest from the deployed files.
+4. Record the Git revision and artifact digest as container-image labels.
+5. Validate Caddy configuration and run a production-equivalent canary first.
+6. Apply subtree-wide `no-store` cache headers and `X-Robots-Tag: noindex,
+   nofollow`.
+7. Prove critical routes, assets, CSP behaviour, manifest identity, and the
+   unrelated Canadaverse root before and after cutover.
+8. Retain the pinned rollback image until public browser validation finishes.
 
 ## Human review register
 
-The implementation may prepare and clearly label these items, but cannot
-silently assert them:
+Automation cannot silently approve:
 
-- hardware, electrical, RF, product, price, and firmware factual verification;
-- whether a local practice is national policy;
-- community listing ownership, status, language, and contact freshness;
-- region naming or authority decisions;
+- hardware, electrical, RF, product, price, and firmware facts;
+- community ownership, status, language, contact freshness, or missing
+  verification dates;
+- region names, boundaries, hierarchy, or authority decisions;
 - reviewed French technical and safety translations;
-- analytics provider and privacy approval;
-- public gateway and preview retention policy;
-- production DNS, firewall, secrets, merge, and rollback approval.
+- analytics and privacy-retention policy;
+- the complete mobile, keyboard, forced-colour, and assistive-technology
+  experience; or
+- the final production merge, DNS, firewall, secrets, and rollback decision.
 
-Editor-specific review still requires maintainers to approve proposed region/subregion names and derived parent authority, and people using keyboard, mobile, and assistive technology to verify the complete browser journey.
-
-Work that does not depend on those decisions continues.
+Those items remain explicit review gates even when CI and the Pi preview pass.

@@ -13,9 +13,9 @@ difficulty: beginner
 estimated_time: 3 minutes
 destructive: false
 page_styles:
-  - assets/styles/analyzer.css
+  - assets/styles/analyzer.css?v=20260722-2
 page_scripts:
-  - assets/javascripts/analyzer-location-codes.js
+  - assets/javascripts/analyzer-location-codes.js?v=20260722-2
 ---
 
 # Find an observer location code

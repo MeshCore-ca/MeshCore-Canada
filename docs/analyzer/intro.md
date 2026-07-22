@@ -13,9 +13,9 @@ difficulty: beginner
 estimated_time: 5 minutes
 destructive: false
 page_styles:
-  - assets/styles/analyzer.css
+  - assets/styles/analyzer.css?v=20260722-2
 page_scripts:
-  - assets/javascripts/analyzer-method-chooser.js
+  - assets/javascripts/analyzer-method-chooser.js?v=20260722-2
 ---
 
 # Set up a network observer

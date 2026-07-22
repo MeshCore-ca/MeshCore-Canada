@@ -14,16 +14,16 @@ tested_with:
 difficulty: beginner
 estimated_time: 3-5 minutes
 page_styles:
-  - stylesheets/extra.css
+  - stylesheets/extra.css?v=20260722-2
 page_scripts:
-  - javascripts/submission-form.js
+  - javascripts/submission-form.js?v=20260722-2
 hide:
   - toc
 ---
 # Share an idea
 
 <div class="submission-intro">
-  <p>Share an idea or report a problem. <strong>No GitHub account required.</strong></p>
+  <p>Share an idea or report a problem. <strong>No GitHub account needed.</strong></p>
   <p class="submission-privacy"><strong>Public form.</strong> Do not include passwords, keys, addresses, or private coordinates.</p>
 </div>
 

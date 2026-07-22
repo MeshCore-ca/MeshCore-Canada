@@ -1,22 +1,58 @@
 import { expect, test } from "@playwright/test";
+import { normalizeSiteBaseUrl, resolveSiteRoute, siteRoute } from "./site-route.mjs";
 
 const criticalRoutes = [
   "/",
   "/start/",
   "/start/companion/",
+  "/about/",
   "/provinces/",
   "/config/",
   "/config/map/",
   "/config/editor/",
+  "/tools/",
   "/analyzer/intro/",
   "/submit-idea/"
 ];
 
+test("site route resolution preserves a configured deployment subtree", () => {
+  expect(resolveSiteRoute(
+    "https://canadaverse.org/meshcore-canada",
+    "/config/?place=Ottawa"
+  )).toBe("https://canadaverse.org/meshcore-canada/config/?place=Ottawa");
+});
+
+test("site manifest identifies the artifact served from the configured subtree", async ({ request }, testInfo) => {
+  const baseURL = testInfo.project.use.baseURL;
+  const manifestUrl = resolveSiteRoute(baseURL, "/site-manifest.json");
+  const response = await request.get(siteRoute("/site-manifest.json"));
+
+  expect(response.ok(), `${manifestUrl} should return a successful response`).toBeTruthy();
+  expect(response.url()).toBe(manifestUrl);
+
+  const manifest = await response.json();
+  expect(manifest.artifactSha256).toMatch(/^[a-f0-9]{64}$/);
+
+  const configuredBaseUrl = normalizeSiteBaseUrl(baseURL);
+  const configuredBase = new URL(configuredBaseUrl);
+  const declaredBase = new URL(manifest.siteBaseUrl);
+  if (process.env.PLAYWRIGHT_BASE_URL) {
+    expect(declaredBase.href).toBe(configuredBaseUrl);
+  } else {
+    expect(declaredBase.pathname).toBe(configuredBase.pathname);
+  }
+
+  if (process.env.EXPECTED_SITE_REVISION) {
+    expect(manifest.revision).toBe(process.env.EXPECTED_SITE_REVISION);
+  }
+});
+
 test.describe("critical routes", () => {
   for (const route of criticalRoutes) {
-    test(`${route} has one visible page heading`, async ({ page }) => {
-      const response = await page.goto(route, { waitUntil: "domcontentloaded" });
+    test(`${route} has one visible page heading`, async ({ page }, testInfo) => {
+      const response = await page.goto(siteRoute(route), { waitUntil: "domcontentloaded" });
       expect(response?.ok(), `${route} should return a successful response`).toBeTruthy();
+      expect(page.url()).toBe(resolveSiteRoute(testInfo.project.use.baseURL, route));
       await expect(page.locator("h1:visible")).toHaveCount(1);
       await expect(page.locator("h1:visible")).not.toHaveText("");
     });
@@ -25,7 +61,7 @@ test.describe("critical routes", () => {
 
 test("desktop navigation exposes the six task categories", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name.startsWith("mobile-"), "Desktop navigation contract");
-  await page.goto("/");
+  await page.goto(siteRoute("/"));
   const labels = await page.locator(".md-tabs__link").allTextContents();
   const normalised = labels.map((value) => value.trim()).filter(Boolean);
   expect(normalised).toEqual([
@@ -55,31 +91,88 @@ test("home place search resolves a city to its region", async ({ page }) => {
       }])
     });
   });
-  await page.goto("/");
+  await page.goto(siteRoute("/"));
   await page.locator("#mc-home-place").fill("Guelph, Ontario");
-  await page.locator("input[name='lookup']").check();
+  await page.locator("#mc-home-online-lookup").check();
   await Promise.all([
     page.waitForURL((url) =>
       url.pathname.endsWith("/config/") &&
-      url.searchParams.get("q") === "Guelph, Ontario" &&
+      url.searchParams.get("place") === "Guelph, Ontario" &&
       url.searchParams.get("lookup") === "online"
     ),
-    page.getByRole("button", { name: "Find my region" }).click()
+    page.getByRole("button", { name: "Continue to region finder" }).click()
   ]);
   await expect(page.locator("#mcc-location-input")).toHaveValue("Guelph, Ontario");
   await expect(page.locator("[data-action='online-search-consent']")).toBeChecked();
   await expect(page.locator("[data-role='status']")).toContainText("Region found.");
 });
 
+test("config place deep links stay local until online lookup is approved", async ({ page }) => {
+  const onlineRequests = [];
+  await page.route(/https:\/\/(?:nominatim\.openstreetmap\.org|geocoder\.ca)\//, async (route) => {
+    onlineRequests.push(route.request().url());
+    await route.abort();
+  });
+
+  await page.goto(siteRoute("/config/?place=Ottawa"), { waitUntil: "domcontentloaded" });
+  await expect(page.locator("#mcc-location-input")).toHaveValue("Ottawa");
+  await expect(page.locator("[data-action='online-search-consent']")).not.toBeChecked();
+  await expect(page.locator("#__search")).not.toBeChecked();
+  await expect(page.locator("[data-mcc-regions='config']")).toBeVisible();
+  await page.waitForTimeout(250);
+
+  expect(onlineRequests).toEqual([]);
+  const url = new URL(page.url());
+  expect(url.searchParams.get("place")).toBe("Ottawa");
+  expect(url.searchParams.has("lookup")).toBeFalsy();
+  expect(url.searchParams.has("q")).toBeFalsy();
+});
+
+test("community directory deep links use their dedicated query parameter", async ({ page }) => {
+  await page.goto(siteRoute("/provinces/?community=Ottawa"));
+  await expect(page.locator("#community-search")).toHaveValue("Ottawa");
+  await expect(page.locator("[data-community-card]:visible")).toHaveCount(1);
+  await expect(page.locator("[data-community-count]")).toHaveText("Showing 1 community");
+  const url = new URL(page.url());
+  expect(url.searchParams.get("community")).toBe("Ottawa");
+  expect(url.searchParams.has("q")).toBeFalsy();
+});
+
+test("region workbench remains readable after switching to the light palette", async ({ page }) => {
+  await page.goto(siteRoute("/config/"));
+  const contrast = await page.evaluate(() => {
+    document.body.setAttribute("data-md-color-scheme", "default");
+    const heading = document.querySelector(".md-content h1");
+    const canvas = document.querySelector(".md-content");
+    const channels = (value) => (value.match(/\d+(?:\.\d+)?/g) || [])
+      .slice(0, 3)
+      .map(Number)
+      .map((part) => {
+        const channel = part / 255;
+        return channel <= 0.03928
+          ? channel / 12.92
+          : ((channel + 0.055) / 1.055) ** 2.4;
+      });
+    const luminance = (value) => {
+      const [red, green, blue] = channels(value);
+      return (0.2126 * red) + (0.7152 * green) + (0.0722 * blue);
+    };
+    const foreground = luminance(getComputedStyle(heading).color);
+    const background = luminance(getComputedStyle(canvas).backgroundColor);
+    return (Math.max(foreground, background) + 0.05) /
+      (Math.min(foreground, background) + 0.05);
+  });
+  expect(contrast).toBeGreaterThanOrEqual(4.5);
+});
 test("site search responds to typed and pasted input", async ({ page }) => {
-  await page.goto("/");
+  await page.goto(siteRoute("/"));
   await page.locator(".md-search__input").fill("repeater");
   await expect(page.locator(".md-search-result__meta")).toContainText("matching document");
   await expect(page.locator(".md-search-result__item")).not.toHaveCount(0);
 });
 
 test("Start progress stores completion markers only", async ({ page }) => {
-  await page.goto("/start/companion/");
+  await page.goto(siteRoute("/start/companion/"));
   const first = page.locator("input[data-mc-progress]").first();
   await expect(first).toBeVisible();
   await first.check();
@@ -105,21 +198,21 @@ test("Start progress stores completion markers only", async ({ page }) => {
 });
 
 test("tool assets remain route scoped", async ({ page }) => {
-  await page.goto("/", { waitUntil: "networkidle" });
+  await page.goto(siteRoute("/"), { waitUntil: "networkidle" });
   const homeAssets = await page.evaluate(() =>
     performance.getEntriesByType("resource").map((entry) => entry.name)
   );
   expect(homeAssets.some((url) => /assets\/regions\/regions\.(?:css|js)/.test(url))).toBeFalsy();
   expect(homeAssets.some((url) => /submission-form\.js/.test(url))).toBeFalsy();
 
-  await page.goto("/config/", { waitUntil: "networkidle" });
+  await page.goto(siteRoute("/config/"), { waitUntil: "networkidle" });
   const configAssets = await page.evaluate(() =>
     performance.getEntriesByType("resource").map((entry) => entry.name)
   );
   expect(configAssets.some((url) => /assets\/regions\/regions\.css/.test(url))).toBeTruthy();
   expect(configAssets.some((url) => /assets\/regions\/regions\.js/.test(url))).toBeTruthy();
 
-  await page.goto("/submit-idea/", { waitUntil: "networkidle" });
+  await page.goto(siteRoute("/submit-idea/"), { waitUntil: "networkidle" });
   const submitAssets = await page.evaluate(() =>
     performance.getEntriesByType("resource").map((entry) => entry.name)
   );
@@ -127,7 +220,7 @@ test("tool assets remain route scoped", async ({ page }) => {
 });
 
 test("boundary editor makes both proposal paths and review lifecycle explicit", async ({ page }) => {
-  await page.goto("/config/editor/");
+  await page.goto(siteRoute("/config/editor/"));
   await expect(page.getByText("Adjust an existing boundary", { exact: true })).toBeVisible();
   await expect(page.getByText(/propose a new region\/subregion/i)).toBeVisible();
   await expect(page.locator(".lifecycle-list li")).toHaveCount(4);
@@ -135,7 +228,7 @@ test("boundary editor makes both proposal paths and review lifecycle explicit", 
 });
 
 test("idea form exposes review, verification, and final submission", async ({ page }) => {
-  await page.goto("/submit-idea/");
+  await page.goto(siteRoute("/submit-idea/"));
   await expect(page.getByRole("button", { name: "Review idea" })).toBeVisible();
   await expect(page.locator("#submission-verification")).toBeHidden();
   await expect(page.locator("#submission-final-actions")).toBeHidden();
@@ -143,10 +236,27 @@ test("idea form exposes review, verification, and final submission", async ({ pa
   await expect(page.getByText(/Do not include passwords, keys, addresses, or private coordinates/i)).toBeVisible();
 });
 
+test("mobile wizard progress buttons have descriptive accessible names", async ({ page }, testInfo) => {
+  test.skip(!testInfo.project.name.startsWith("mobile-"), "Mobile accessibility contract");
+  await page.goto(siteRoute("/config/"));
+
+  const expectedNames = [
+    "Step 1: Device",
+    "Step 2: Location",
+    "Step 3: Coverage",
+    "Step 4: Apply"
+  ];
+  const buttons = page.locator(".mcc-wizard-progress button");
+  await expect(buttons).toHaveCount(expectedNames.length);
+  for (const name of expectedNames) {
+    await expect(page.getByRole("button", { name, exact: true })).toHaveCount(1);
+  }
+});
+
 test("mobile critical pages do not overflow the viewport", async ({ page }, testInfo) => {
   test.skip(!testInfo.project.name.startsWith("mobile-"), "Mobile layout contract");
   for (const route of ["/", "/start/", "/provinces/", "/config/", "/submit-idea/"]) {
-    await page.goto(route, { waitUntil: "domcontentloaded" });
+    await page.goto(siteRoute(route), { waitUntil: "domcontentloaded" });
     const overflow = await page.evaluate(() => ({
       viewport: document.documentElement.clientWidth,
       content: document.documentElement.scrollWidth

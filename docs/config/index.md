@@ -14,10 +14,10 @@ tested_with:
 difficulty: intermediate
 estimated_time: 5-10 minutes
 page_styles:
-  - assets/regions/regions.css
+  - assets/regions/regions.css?v=20260722-2
 page_scripts:
-  - assets/regions/modules/configurator-support.js
-  - assets/regions/regions.js?v=20260719-2
+  - assets/regions/modules/configurator-support.js?v=20260722-2
+  - assets/regions/regions.js?v=20260722-2
 hide:
   - navigation
   - toc

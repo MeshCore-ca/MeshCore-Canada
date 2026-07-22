@@ -14,7 +14,7 @@ difficulty: beginner
 estimated_time: 6 minutes
 destructive: false
 page_styles:
-  - assets/styles/analyzer.css
+  - assets/styles/analyzer.css?v=20260722-2
 ---
 
 # Observer data, access, and privacy

@@ -18,7 +18,7 @@ requires:
   - physical-usb-access
   - data-capable-usb-cable
 page_styles:
-  - assets/styles/devices-builds.css
+  - assets/styles/devices-builds.css?v=20260722-2
 ---
 # Flash, Configure, and Bench-Test a Repeater
 

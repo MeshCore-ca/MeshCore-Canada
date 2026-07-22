@@ -14,9 +14,9 @@ difficulty: advanced
 estimated_time: 8 minutes
 destructive: false
 page_styles:
-  - assets/styles/analyzer.css
+  - assets/styles/analyzer.css?v=20260722-2
 page_scripts:
-  - assets/javascripts/analyzer-broker-reference.js
+  - assets/javascripts/analyzer-broker-reference.js?v=20260722-2
 ---
 
 # Advanced observer endpoint reference

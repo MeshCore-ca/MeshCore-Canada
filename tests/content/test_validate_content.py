@@ -52,6 +52,15 @@ class ContentValidationTests(unittest.TestCase):
         self.write("index.md", VALID)
         self.assertEqual([], MODULE.validate_tree(self.docs, self.today))
 
+    def test_cache_busted_local_asset_passes(self) -> None:
+        self.write("assets/app.js", "console.log('fixture');\n")
+        page = VALID.replace(
+            "evidence: fixture-review",
+            "evidence: fixture-review\npage_scripts:\n  - assets/app.js?v=20260722-2",
+        )
+        self.write("index.md", page)
+        self.assertEqual([], MODULE.validate_tree(self.docs, self.today))
+
     def test_missing_front_matter_fails(self) -> None:
         self.write("index.md", "# Missing metadata\n\nThis page has content but no lifecycle contract.")
         problems = MODULE.validate_tree(self.docs, self.today)

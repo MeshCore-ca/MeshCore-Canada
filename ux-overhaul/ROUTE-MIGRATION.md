@@ -60,21 +60,21 @@ changes navigation and canonical journeys before moving source files.
 | `/resources/links/` | Curated external resources | Preserve and rebuild |
 | `/assets/regions/vendor/` | Technical asset path | Exclude from nav, search, and sitemap |
 
-## New canonical routes
+## Canonical route state
 
-The first migration introduces:
+This branch implements two new task hubs:
 
 - `/start/`
-- `/communities/`
-- `/devices/`
-- `/builds/`
 - `/tools/`
-- `/learn/`
-- `/contribute/`
-- `/policies/privacy/`
 
-Every new canonical route must have a tested old-route path, contextual link, or
-redirect before it replaces an existing destination.
+Existing public routes remain the canonical destinations for communities,
+hardware, builds, learning, contributing, and privacy. The planned aliases
+`/communities/`, `/devices/`, `/builds/`, `/learn/`, `/contribute/`, and
+`/policies/privacy/` are **not implemented** and must not be advertised as live.
+
+A future alias becomes canonical only after its page or redirect exists, old
+bookmarks have an automated route test, and both the production root and the
+Canadaverse subpath build pass the link and browser gates.
 
 ## Staging base path
 

@@ -96,11 +96,11 @@ test("MkDocs keeps tool scripts route scoped", async () => {
     readFile(new URL("../../docs/config/index.md", import.meta.url), "utf8")
   ]);
   assert.equal((config.match(/^extra_javascript:/gm) || []).length, 1);
-  assert.match(config, /^\s+- assets\/javascripts\/bootstrap\.js$/m);
-  assert.doesNotMatch(config, /^\s+- assets\/regions\/regions\.js$/m);
+  assert.match(config, /^\s+- assets\/javascripts\/bootstrap\.js(?:\?v=\d{8}-\d+)?$/m);
+  assert.doesNotMatch(config, /^\s+- assets\/regions\/regions\.js(?:\?v=\d{8}-\d+)?$/m);
   assert.doesNotMatch(config, /^\s+- javascripts\/submission-form\.js$/m);
   assert.match(submitPage, /^\s+- javascripts\/submission-form\.js$/m);
-  assert.match(configPage, /^\s+- assets\/regions\/regions\.js$/m);
+  assert.match(configPage, /^\s+- assets\/regions\/regions\.js(?:\?v=\d{8}-\d+)?$/m);
 });
 
 test("page exposes anonymous submission, anti-spam, result, and manual fallback controls", async () => {

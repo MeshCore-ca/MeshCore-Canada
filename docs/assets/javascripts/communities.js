@@ -38,9 +38,9 @@
       }
       var url = new URL(window.location.href);
       if (query) {
-        url.searchParams.set("q", query);
+        url.searchParams.set("community", query);
       } else {
-        url.searchParams.delete("q");
+        url.searchParams.delete("community");
       }
       window.history.replaceState(null, "", url);
     }
@@ -88,7 +88,7 @@
       button.addEventListener("click", clearFilters);
     });
 
-    var initialQuery = new URL(window.location.href).searchParams.get("q");
+    var initialQuery = new URL(window.location.href).searchParams.get("community");
     if (initialQuery) {
       search.value = initialQuery;
     }

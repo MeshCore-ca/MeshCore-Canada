@@ -3,9 +3,10 @@ import { mkdir, writeFile } from "node:fs/promises";
 import process from "node:process";
 import { launch } from "chrome-launcher";
 import lighthouse, { desktopConfig } from "lighthouse";
+import { normalizeSiteBaseUrl, resolveSiteRoute } from "../tests/browser/site-route.mjs";
 
 const suppliedBaseUrl = process.env.LIGHTHOUSE_BASE_URL;
-const baseUrl = suppliedBaseUrl || "http://127.0.0.1:4174";
+const baseUrl = normalizeSiteBaseUrl(suppliedBaseUrl || "http://127.0.0.1:4174/");
 const routes = [
   ["home", "/"],
   ["start", "/start/"],
@@ -67,7 +68,7 @@ async function run() {
 
   const failures = [];
   for (const [name, route] of routes) {
-    const url = new URL(route, baseUrl).href;
+    const url = resolveSiteRoute(baseUrl, route);
     const html = await (await fetch(url)).text();
     const intentionallyNoIndex = hasNoIndex(html);
     const result = await lighthouse(url, {

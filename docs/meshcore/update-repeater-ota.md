@@ -18,7 +18,7 @@ requires:
   - physical-usb-recovery
   - verified-firmware-zip
 page_styles:
-  - assets/styles/devices-builds.css
+  - assets/styles/devices-builds.css?v=20260722-2
 ---
 # Update a Repeater or Room Server over the Air
 

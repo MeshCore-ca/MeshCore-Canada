@@ -44,12 +44,50 @@
     document.querySelectorAll("a[target='_blank']").forEach(function (link) {
       if (link.dataset.mcExternalReady === "true") return;
       link.dataset.mcExternalReady = "true";
-      var current = link.getAttribute("aria-label");
+      var current = (link.getAttribute("aria-label") || "").trim();
       if (!current) {
-        var text = (link.textContent || "External link").trim();
+        var text = (link.textContent || "").trim();
+        if (!text) text = (link.getAttribute("title") || "External link").trim();
         link.setAttribute("aria-label", text + " (opens in a new tab)");
       }
     });
+  }
+
+  function makeHeaderToggleAccessible(label, checkbox, name, panel) {
+    if (!label || !checkbox || label.dataset.mcToggleReady === "true") return;
+    label.dataset.mcToggleReady = "true";
+    label.setAttribute("role", "button");
+    label.setAttribute("tabindex", "0");
+    if (!label.hasAttribute("aria-label")) label.setAttribute("aria-label", name);
+    if (panel) {
+      if (!panel.id) panel.id = "mc-" + checkbox.id.replace(/^__/, "") + "-panel";
+      label.setAttribute("aria-controls", panel.id);
+    }
+
+    function updateState() {
+      var expanded = checkbox.checked;
+      label.setAttribute("aria-expanded", expanded ? "true" : "false");
+      label.setAttribute("aria-label", expanded ? name.replace(/^Open /, "Close ") : name);
+    }
+
+    var suppressKeyboardClick = false;
+    label.addEventListener("click", function (event) {
+      if (!suppressKeyboardClick) return;
+      event.preventDefault();
+      event.stopPropagation();
+      suppressKeyboardClick = false;
+    });
+    label.addEventListener("keydown", function (event) {
+      if (event.key !== "Enter" && event.key !== " ") return;
+      event.preventDefault();
+      event.stopPropagation();
+      suppressKeyboardClick = true;
+      checkbox.checked = !checkbox.checked;
+      checkbox.dispatchEvent(new Event("change", { bubbles: true }));
+      window.setTimeout(function () { suppressKeyboardClick = false; }, 0);
+    });
+    checkbox.addEventListener("change", updateState);
+    updateState();
   }
 
   function labelThemeControls() {
@@ -57,6 +95,17 @@
     if (search && !search.hasAttribute("aria-label")) {
       search.setAttribute("aria-label", "Site search");
     }
+
+    var drawerToggle = document.getElementById("__drawer");
+    var drawer = document.querySelector(".md-sidebar--primary");
+    document.querySelectorAll("label.md-header__button[for='__drawer']").forEach(function (label) {
+      makeHeaderToggleAccessible(label, drawerToggle, "Open navigation", drawer);
+    });
+
+    var searchToggle = document.getElementById("__search");
+    document.querySelectorAll("label.md-header__button[for='__search'], label.md-search__icon[for='__search']").forEach(function (label) {
+      makeHeaderToggleAccessible(label, searchToggle, "Open site search", search);
+    });
 
     document.querySelectorAll("a[href]").forEach(function (link) {
       if ((link.textContent || "").trim() !== "Start") return;

@@ -38,7 +38,16 @@ VALID_CODES = {
     "YT",
 }
 VALID_STATUSES = {"active", "forming", "testing", "needs-update"}
-VALID_CONTACT_TYPES = {"discord", "facebook", "meshmapper", "telegram", "website"}
+VALID_CONTACT_TYPES = {
+    "discord",
+    "facebook",
+    "instagram",
+    "meshmapper",
+    "reddit",
+    "telegram",
+    "website",
+    "x",
+}
 VALID_CONTACT_HEALTH = {"verified", "needs-review", "expired"}
 ID_PATTERN = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 
@@ -229,6 +238,9 @@ def validate_data(data: dict[str, Any]) -> Validation:
         for field in ("name", "service_area"):
             if not isinstance(community.get(field), str) or not community[field].strip():
                 check.error(f"{label}.{field} must be non-empty")
+        summary = community.get("summary")
+        if summary is not None and (not isinstance(summary, str) or not summary.strip()):
+            check.error(f"{label}.summary must be a non-empty string when provided")
         province = community.get("province")
         if province not in VALID_CODES:
             check.error(f"{label}.province is invalid: {province!r}")
@@ -317,13 +329,12 @@ def validate_data(data: dict[str, Any]) -> Validation:
                 check.error(f"exact duplicate community: {community['name']} ({province})")
             exact_communities.add(exact_key)
 
-    stoonmesh = next((item for item in communities if item.get("id") == "stoonmesh"), None)
-    if not stoonmesh:
-        check.error("StoonMesh listing is missing")
-    elif stoonmesh.get("settings", {}).get("overrides", {}).get("path_hash_mode") != "1-byte":
-        check.error("StoonMesh must retain its reviewed 1-byte path-hash override")
     if defaults.get("path_hash_mode") != "3-byte":
         check.error("the national path-hash baseline must remain 3-byte")
+    for community in communities:
+        settings = community.get("settings", {})
+        if settings.get("inherit_national") is not True:
+            check.error(f"{community.get('name', 'community')} must inherit the Canada baseline")
 
     return check
 
@@ -346,13 +357,13 @@ def front_matter(*, title: str, description: str, task: str, metadata: dict[str,
         "estimated_time: 2-5 minutes",
         "destructive: false",
         "page_styles:",
-        "  - assets/styles/communities.css",
+        "  - assets/styles/communities.css?v=20260722-2",
     ]
     if scripts:
         lines.extend(
             [
                 "page_scripts:",
-                "  - assets/javascripts/communities.js",
+                "  - assets/javascripts/communities.js?v=20260722-2",
             ]
         )
     lines.extend(["---", ""])
@@ -384,7 +395,16 @@ def search_text(community: dict[str, Any], page: dict[str, Any]) -> str:
         *community["places"],
         *community["aliases"],
     ]
+    if community.get("summary"):
+        values.append(community["summary"])
     return " ".join(dict.fromkeys(normalized(value) for value in values))
+
+
+def contact_type_label(contact_type: str) -> str:
+    return {
+        "meshmapper": "MeshMapper",
+        "x": "X",
+    }.get(contact_type, contact_type.title())
 
 
 def render_contacts(community: dict[str, Any], *, indent: str = "") -> list[str]:
@@ -398,7 +418,9 @@ def render_contacts(community: dict[str, Any], *, indent: str = "") -> list[str]
             )
         else:
             value = html.escape(contact["label"])
-        lines.append(f"{indent}<li><strong>{contact['type'].title()}:</strong> {value}</li>")
+        lines.append(
+            f"{indent}<li><strong>{contact_type_label(contact['type'])}:</strong> {value}</li>"
+        )
     return lines
 
 
@@ -439,6 +461,11 @@ def render_directory_card(community: dict[str, Any], page: dict[str, Any]) -> st
         ),
         "</div>",
         f'<p class="mc-community-area">{html.escape(community["service_area"])}</p>',
+    ]
+    if community.get("summary"):
+        lines.append(f'<p class="mc-community-summary">{html.escape(community["summary"])}</p>')
+    lines.extend(
+        [
         (
             f'<p><strong>Province:</strong> <a href="{page["slug"]}/">'
             f'{html.escape(page["title"].title())}</a></p>'
@@ -453,7 +480,8 @@ def render_directory_card(community: dict[str, Any], page: dict[str, Any]) -> st
             "View listing details</a></p>"
         ),
         "</article>",
-    ]
+        ]
+    )
     return "\n".join(lines)
 
 
@@ -465,6 +493,7 @@ def render_index(data: dict[str, Any]) -> str:
     active = sum(item["status"] == "active" for item in communities)
     forming = sum(item["status"] == "forming" for item in communities)
     overrides = sum(bool(item["settings"]["overrides"]) for item in communities)
+    unverified = sum(item["verified_at"] is None for item in communities)
 
     lines = [
         front_matter(
@@ -482,10 +511,15 @@ def render_index(data: dict[str, Any]) -> str:
         "Search by place, province, community name, or a common alias. The full list",
         "works without a map, location permission, or a GitHub account.",
         "",
+        '!!! note "Community-provided status; verification dates are still needed"',
+        f"    {active} listings are described as active and {forming} as forming by their",
+        f"    source communities, but {unverified} of {len(communities)} listings do not yet have a recorded",
+        "    recent contact check. Confirm important settings and contacts before relying on them.",
+        "",
         '<div class="mc-directory-summary" aria-label="Directory summary">',
         f"<span><strong>{len(communities)}</strong> listings</span>",
-        f"<span><strong>{active}</strong> active</span>",
-        f"<span><strong>{forming}</strong> forming</span>",
+        f"<span><strong>{active}</strong> listed active</span>",
+        f"<span><strong>{forming}</strong> listed forming</span>",
         f"<span><strong>{overrides}</strong> local override</span>",
         "</div>",
         "",
@@ -493,7 +527,7 @@ def render_index(data: dict[str, Any]) -> str:
         '  <div class="mc-directory-tools__search">',
         '    <label for="community-search">Place, province, community, or alias</label>',
         (
-            '    <input id="community-search" type="search" name="q" '
+            '    <input id="community-search" type="search" name="community" '
             'autocomplete="address-level2" placeholder="Try Ottawa, YQL, or Quebec">'
         ),
         "  </div>",
@@ -587,7 +621,7 @@ def render_index(data: dict[str, Any]) -> str:
             "## Add or update a listing",
             "",
             "Found missing or outdated information?",
-            f"[Send a community update]({metadata['update_route']}). No GitHub account is needed.",
+            f"[Send a community update]({metadata['update_route']}). No GitHub account needed.",
             "",
             "Directory contacts are community-provided external links. **Not yet verified**",
             "means the directory stewards have preserved the listing but have not recorded a",
@@ -612,13 +646,19 @@ def render_community_card(community: dict[str, Any], metadata: dict[str, Any]) -
         ),
         "</div>",
         f'<p class="mc-community-area">{html.escape(community["service_area"])}</p>',
+    ]
+    if community.get("summary"):
+        lines.append(f'<p class="mc-community-summary">{html.escape(community["summary"])}</p>')
+    lines.extend(
+        [
         "<dl class=\"mc-community-facts\">",
         "<div><dt>Settings</dt>",
         f"<dd>{render_settings(community)}</dd></div>",
         "<div><dt>Last verified</dt>",
         f"<dd>{verification_label(community)}</dd></div>",
         "</dl>",
-    ]
+        ]
+    )
     if community["settings"]["overrides"]:
         lines.extend(
             [
@@ -761,7 +801,7 @@ def render_province_page(data: dict[str, Any], page: dict[str, Any]) -> str:
         [
             "## Add or update a listing",
             "",
-            f"[Send a community update]({metadata['update_route']}). No GitHub account is needed.",
+            f"[Send a community update]({metadata['update_route']}). No GitHub account needed.",
             "",
             "The directory does not guess exact locations, languages, owners, or link health.",
             "Fields remain marked unverified until a community steward reviews them.",

@@ -14,7 +14,7 @@ difficulty: intermediate
 estimated_time: 10-20 minutes
 destructive: false
 page_styles:
-  - assets/styles/devices-builds.css
+  - assets/styles/devices-builds.css?v=20260722-2
 ---
 
 # Choose a Repeater Path
@@ -77,6 +77,24 @@ The previous guide described one SenseCAP Solar Node P1 configuration as **four 
 | Batteries | Four button-top 18650 cells | Chemistry, protection, capacity, temperature, charger compatibility, and vendor instructions | [Motion Power & Witt Supply Co.](https://mpandw.ca/products/button-top-eve-35v-house-made) |
 | Antenna | External 915 MHz lead | Band, connector, mount, and complete feed line | [Amazon Canada](https://www.amazon.ca/dp/B08H8J6ZV6) |
 | Pigtail | RP-SMA to N-type, legacy note says Type 2 / 30 cm | Connector polarity, gender, loss, length, weather seal, and current listing option | [AliExpress](https://www.aliexpress.com/item/1005004652556159.html) |
+
+</div>
+
+### Choose one SenseCAP cable path
+
+!!! warning "SMA and RP-SMA are not interchangeable"
+    The SenseCAP Solar Node P1 has a factory RP-SMA antenna connection. Choose
+    one complete path below and verify the connector, gender, length, mounting
+    fit, loss, and weather seal before ordering. See [Seeed's LoRa antenna
+    guide](https://wiki.seeedstudio.com/lora_antenna_selection_guide/).
+
+<div class="mc-table-wrap" markdown>
+
+| Path | Parts | What to verify |
+|---|---|---|
+| **Keep the factory pigtail (preferred)** | [RP-SMA-to-N cable](https://www.aliexpress.com/item/1005004652556159.html) | Select **Type 2 (RP-SMA)** and **30 cm**. Confirm it mates with both the factory port and chosen antenna. |
+| **Replace the factory pigtail (advanced)** | [I-PEX MHF1-to-SMA bulkhead cable](https://www.digikey.ca/en/products/detail/seeed-technology-co-ltd/321990397/15277462) **and** [SMA-to-N cable](https://www.aliexpress.com/item/1005004652556159.html) | Select **Type 1 (SMA)** and **30 cm** for the second cable. Do not also buy Type 2. Opening the enclosure requires restoring its weather seal. |
+| **Use one direct replacement** | One independently verified I-PEX MHF1-to-N bulkhead pigtail | Confirm the exact I-PEX generation, N connector gender, cable loss, length, bulkhead fit, and seal before treating it as a replacement for both advanced-path cables. |
 
 </div>
 

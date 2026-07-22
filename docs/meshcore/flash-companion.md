@@ -17,7 +17,7 @@ requires:
   - supported-companion
   - data-capable-usb-cable
 page_styles:
-  - assets/styles/devices-builds.css
+  - assets/styles/devices-builds.css?v=20260722-2
 ---
 # Flash and Configure a Companion
 

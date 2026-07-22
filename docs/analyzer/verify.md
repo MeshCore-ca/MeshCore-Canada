@@ -13,7 +13,7 @@ difficulty: beginner
 estimated_time: 10 minutes
 destructive: false
 page_styles:
-  - assets/styles/analyzer.css
+  - assets/styles/analyzer.css?v=20260722-2
 ---
 
 # Check your observer

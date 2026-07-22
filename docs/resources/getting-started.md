@@ -29,7 +29,7 @@ verification, and help in one path.
 - [Send network data to public tools with an observer](../start/observer.md)
 - [Compare roles if you are not sure](../start/choose-a-goal.md)
 
-This page stays to keep old bookmarks and external links working.
+This page stays so old bookmarks and external links do not break.
 
 ## Next step
 

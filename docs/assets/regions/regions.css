@@ -3,15 +3,18 @@ body:has([data-mcc-regions="map"]) [data-mcc-regions="map"] {
 }
 
 body:has([data-mcc-regions]) {
-  background: var(--md-default-bg-color, hsl(232, 15%, 14%));
+  background: var(--md-default-bg-color, #ffffff);
 }
 
+/* Region tools use one deliberate dark workbench in either site palette. This
+   keeps dense maps, command output, and status colours readable after a theme
+   switch while the header, navigation, and surrounding site still follow it. */
 body:has([data-mcc-regions]) .md-main,
 body:has([data-mcc-regions]) .md-main__inner,
 body:has([data-mcc-regions]) .md-content,
 body:has([data-mcc-regions]) .md-content__inner {
-  color: var(--md-typeset-color, rgba(255, 255, 255, 0.82));
-  background: var(--md-default-bg-color, hsl(232, 15%, 14%));
+  color: #dce9e7;
+  background: #0c151c;
 }
 
 body:has([data-mcc-regions="map"]) .md-main__inner {
@@ -77,13 +80,13 @@ body:has([data-mcc-regions]) .md-main .md-typeset a {
   --mcc-blue: #303fa1;
   --mcc-gold: #f4bf5a;
   --mcc-red: #ff7373;
-  --mcc-border: var(--md-default-fg-color--lightest, rgba(255, 255, 255, 0.12));
-  --mcc-soft: var(--md-accent-fg-color--transparent, rgba(66, 135, 255, 0.12));
-  --mcc-panel: var(--md-default-bg-color, hsl(232, 15%, 14%));
-  --mcc-surface: color-mix(in srgb, var(--md-default-bg-color, hsl(232, 15%, 14%)), #ffffff 5%);
-  --mcc-surface-2: color-mix(in srgb, var(--md-default-bg-color, hsl(232, 15%, 14%)), #ffffff 8%);
-  --mcc-text: var(--md-typeset-color, rgba(255, 255, 255, 0.82));
-  --mcc-muted: var(--md-default-fg-color--light, rgba(255, 255, 255, 0.56));
+  --mcc-border: rgba(159, 216, 189, 0.22);
+  --mcc-soft: rgba(66, 135, 255, 0.15);
+  --mcc-panel: #0c151c;
+  --mcc-surface: #101d26;
+  --mcc-surface-2: #172630;
+  --mcc-text: #dce9e7;
+  --mcc-muted: #a7b9bb;
   margin: 1rem 0 2rem;
   color: var(--mcc-text);
 }

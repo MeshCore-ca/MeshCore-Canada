@@ -17,7 +17,7 @@ requires:
   - property-permission
   - site-specific-safety-review
 page_styles:
-  - assets/styles/devices-builds.css
+  - assets/styles/devices-builds.css?v=20260722-2
 ---
 
 # Plan a Repeater Mount

@@ -4,7 +4,7 @@
   "metadata": {
     "owner": "directory-stewards",
     "migrated_at": "2026-07-19",
-    "source_revision": "f608cfe",
+    "source_revision": "a47dfbc",
     "review_by": "2027-01-15",
     "update_route": "../submit-idea.md"
   },
@@ -191,6 +191,164 @@
       "canonical_route": "/provinces/british-columbia/#community-salish-mesh"
     },
     {
+      "id": "alberta-meshcore-networks",
+      "name": "Alberta MeshCore Networks",
+      "province": "AB",
+      "service_area": "Alberta",
+      "summary": "Building Alberta's community-operated off-grid LoRa mesh network",
+      "places": [
+        "Airdrie",
+        "Calgary",
+        "Edmonton",
+        "Lethbridge"
+      ],
+      "aliases": [
+        "AlbertaMesh",
+        "AlbertaMesh.ca",
+        "Alberta MeshCore"
+      ],
+      "status": "active",
+      "languages": [],
+      "location": {
+        "latitude": null,
+        "longitude": null,
+        "precision": "service-area"
+      },
+      "settings": {
+        "inherit_national": true,
+        "overrides": {}
+      },
+      "contacts": [
+        {
+          "type": "website",
+          "label": "AlbertaMesh.ca",
+          "url": "https://albertamesh.ca/",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "discord",
+          "label": "Alberta MeshCore Discord",
+          "url": "https://discord.gg/CznDhsRWnJ",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "website",
+          "label": "Airdrie regional page",
+          "url": "https://albertamesh.ca/airdrie/",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "website",
+          "label": "Calgary regional page",
+          "url": "https://albertamesh.ca/calgary/",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "website",
+          "label": "Edmonton regional page",
+          "url": "https://albertamesh.ca/edmonton/",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "website",
+          "label": "Lethbridge regional page",
+          "url": "https://albertamesh.ca/lethbridge/",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "website",
+          "label": "Why MeshCore?",
+          "url": "https://albertamesh.ca/why-meshcore/",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "website",
+          "label": "Monitoring tools",
+          "url": "https://albertamesh.ca/monitoring-tools/",
+          "health": "needs-review",
+          "last_checked": null
+        }
+      ],
+      "owner": null,
+      "verified_at": null,
+      "verify_by": null,
+      "canonical_route": "/provinces/alberta/#community-alberta-meshcore-networks"
+    },
+    {
+      "id": "airdrie-meshcore-network",
+      "name": "Airdrie MeshCore Network",
+      "province": "AB",
+      "service_area": "Airdrie and Calgary",
+      "summary": "Uses the YYC regional identifier shared with the Calgary regional network",
+      "places": [
+        "Airdrie",
+        "Calgary"
+      ],
+      "aliases": [
+        "AlbertaMesh Airdrie",
+        "YYC"
+      ],
+      "status": "active",
+      "languages": [],
+      "location": {
+        "latitude": 51.2812,
+        "longitude": -113.99718,
+        "precision": "approximate"
+      },
+      "settings": {
+        "inherit_national": true,
+        "overrides": {}
+      },
+      "contacts": [
+        {
+          "type": "website",
+          "label": "Airdrie MeshCore Network",
+          "url": "https://albertamesh.ca/airdrie/",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "website",
+          "label": "Airdrie configuration guide",
+          "url": "https://albertamesh.ca/airdrie/configuration/",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "discord",
+          "label": "Alberta MeshCore Discord",
+          "url": "https://discord.gg/CznDhsRWnJ",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "meshmapper",
+          "label": "Airdrie network map",
+          "url": "https://yyc.meshmapper.net/?lat=51.28120&lon=-113.99718&zoom=13.43",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "website",
+          "label": "WAeV live map",
+          "url": "https://waev.app/#/live-map/@51.28107,-113.99966,14.47z",
+          "health": "needs-review",
+          "last_checked": null
+        }
+      ],
+      "owner": null,
+      "verified_at": null,
+      "verify_by": null,
+      "canonical_route": "/provinces/alberta/#community-airdrie-meshcore-network"
+    },
+    {
       "id": "calgary-area-meshcore",
       "name": "Calgary and Area MeshCore",
       "province": "AB",
@@ -235,10 +393,204 @@
       "canonical_route": "/provinces/alberta/#community-calgary-area-meshcore"
     },
     {
+      "id": "calgary-meshcore-network",
+      "name": "Calgary MeshCore Network",
+      "province": "AB",
+      "service_area": "Calgary",
+      "summary": "Initial AlbertaMesh.ca launch region",
+      "places": [
+        "Calgary"
+      ],
+      "aliases": [
+        "AlbertaMesh Calgary",
+        "YYC",
+        "meshcorecalgary.ca"
+      ],
+      "status": "active",
+      "languages": [],
+      "location": {
+        "latitude": 51.01674,
+        "longitude": -114.00149,
+        "precision": "approximate"
+      },
+      "settings": {
+        "inherit_national": true,
+        "overrides": {}
+      },
+      "contacts": [
+        {
+          "type": "website",
+          "label": "Calgary MeshCore Network",
+          "url": "https://meshcorecalgary.ca/",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "website",
+          "label": "Calgary community guide",
+          "url": "https://albertamesh.ca/calgary/",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "discord",
+          "label": "Alberta MeshCore Discord",
+          "url": "https://discord.gg/CznDhsRWnJ",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "meshmapper",
+          "label": "Calgary network map",
+          "url": "https://yyc.meshmapper.net/?lat=51.01674&lon=-114.00149&zoom=11.00",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "website",
+          "label": "CoreScope YYC",
+          "url": "https://corescopeyyc.meshmonitoring.com/#/live",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "website",
+          "label": "Recommended Calgary RX channels",
+          "url": "https://albertamesh.ca/calgary/#rx-channels",
+          "health": "needs-review",
+          "last_checked": null
+        }
+      ],
+      "owner": null,
+      "verified_at": null,
+      "verify_by": null,
+      "canonical_route": "/provinces/alberta/#community-calgary-meshcore-network"
+    },
+    {
+      "id": "edmonton-meshcore-network",
+      "name": "Edmonton MeshCore Network",
+      "province": "AB",
+      "service_area": "Edmonton",
+      "summary": "Edmonton regional community within Alberta MeshCore",
+      "places": [
+        "Edmonton"
+      ],
+      "aliases": [
+        "AlbertaMesh Edmonton",
+        "YEG"
+      ],
+      "status": "active",
+      "languages": [],
+      "location": {
+        "latitude": 53.45752,
+        "longitude": -113.5832,
+        "precision": "approximate"
+      },
+      "settings": {
+        "inherit_national": true,
+        "overrides": {}
+      },
+      "contacts": [
+        {
+          "type": "website",
+          "label": "Edmonton on AlbertaMesh.ca",
+          "url": "https://albertamesh.ca/edmonton/",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "website",
+          "label": "Edmonton configuration guide",
+          "url": "https://albertamesh.ca/edmonton/configuration/",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "discord",
+          "label": "Alberta MeshCore Discord",
+          "url": "https://discord.gg/CznDhsRWnJ",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "meshmapper",
+          "label": "Edmonton network map",
+          "url": "https://yeg.meshmapper.net/?lat=53.45752&lon=-113.58320&zoom=10.03",
+          "health": "needs-review",
+          "last_checked": null
+        }
+      ],
+      "owner": null,
+      "verified_at": null,
+      "verify_by": null,
+      "canonical_route": "/provinces/alberta/#community-edmonton-meshcore-network"
+    },
+    {
+      "id": "yegmesh-ca",
+      "name": "yegmesh.ca",
+      "province": "AB",
+      "service_area": "Edmonton",
+      "summary": "Edmonton mesh network community focused on MeshCore",
+      "places": [
+        "Edmonton"
+      ],
+      "aliases": [
+        "YEG",
+        "YEG Mesh",
+        "yegmesh"
+      ],
+      "status": "active",
+      "languages": [],
+      "location": {
+        "latitude": 53.45752,
+        "longitude": -113.5832,
+        "precision": "approximate"
+      },
+      "settings": {
+        "inherit_national": true,
+        "overrides": {}
+      },
+      "contacts": [
+        {
+          "type": "website",
+          "label": "Getting started",
+          "url": "https://yegmesh.ca/p/getting-started",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "website",
+          "label": "MeshCore defaults",
+          "url": "https://yegmesh.ca/p/meshcore-defaults",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "discord",
+          "label": "Alberta MeshCore Discord",
+          "url": "https://discord.gg/CznDhsRWnJ",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "meshmapper",
+          "label": "Edmonton network map",
+          "url": "https://yeg.meshmapper.net/?lat=53.45752&lon=-113.58320&zoom=10.03",
+          "health": "needs-review",
+          "last_checked": null
+        }
+      ],
+      "owner": null,
+      "verified_at": null,
+      "verify_by": null,
+      "canonical_route": "/provinces/alberta/#community-yegmesh-ca"
+    },
+    {
       "id": "yqlmesh",
       "name": "YQLMesh",
       "province": "AB",
       "service_area": "Lethbridge",
+      "summary": "Connecting Lethbridge, one node at a time",
       "places": [
         "Lethbridge"
       ],
@@ -248,9 +600,9 @@
       "status": "active",
       "languages": [],
       "location": {
-        "latitude": null,
-        "longitude": null,
-        "precision": "service-area"
+        "latitude": 49.69091,
+        "longitude": -112.86356,
+        "precision": "approximate"
       },
       "settings": {
         "inherit_national": true,
@@ -260,21 +612,56 @@
         {
           "type": "website",
           "label": "YQLMesh website",
-          "url": "https://www.yqlmesh.com",
+          "url": "https://www.yqlmesh.com/",
           "health": "needs-review",
           "last_checked": null
         },
         {
-          "type": "facebook",
-          "label": "YQLMesh Community",
-          "url": "https://www.facebook.com/groups/839542635605360",
+          "type": "website",
+          "label": "Lethbridge regional page",
+          "url": "https://albertamesh.ca/lethbridge/",
           "health": "needs-review",
           "last_checked": null
         },
         {
           "type": "discord",
           "label": "YQLMesh Discord",
-          "url": "https://discord.gg/89DUBvmvu2",
+          "url": "https://discord.gg/cFY9GSR37W",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "meshmapper",
+          "label": "Lethbridge network map",
+          "url": "https://yql.meshmapper.net/?lat=49.69091&lon=-112.86356&zoom=12.14",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "facebook",
+          "label": "YQLMesh Facebook",
+          "url": "https://facebook.com/groups/YQLMesh",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "instagram",
+          "label": "YQLMesh Instagram",
+          "url": "https://instagram.com/YQLMesh",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "x",
+          "label": "YQLMesh on X",
+          "url": "https://x.com/YQLMesh",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "reddit",
+          "label": "YQLMesh subreddit",
+          "url": "https://www.reddit.com/r/YQLMesh",
           "health": "needs-review",
           "last_checked": null
         }
@@ -390,9 +777,7 @@
       },
       "settings": {
         "inherit_national": true,
-        "overrides": {
-          "path_hash_mode": "1-byte"
-        }
+        "overrides": {}
       },
       "contacts": [
         {
