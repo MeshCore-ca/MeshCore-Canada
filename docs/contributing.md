@@ -9,7 +9,7 @@ scope: canada-baseline
 status: verified
 owner: maintainers
 author: MeshCore Canada maintainers
-last_reviewed: 2026-07-19
+last_reviewed: 2026-07-22
 review_by: 2027-01-19
 tested_with:
   issue_forms: f608cfe
@@ -19,20 +19,21 @@ estimated_time: 2-15 minutes
 
 # Contribute to MeshCore Canada
 
-Choose what you want to improve. You can use the common paths without Git or
-GitHub knowledge.
+Choose how you want to help. Most options do not require Git or GitHub
+experience.
 
 <div class="grid cards" markdown>
 
 -   **Share an idea**
 
-    Report something missing, confusing, or difficult. The public form can create the issue without a GitHub account.
+    Report something missing, confusing, or difficult. No GitHub account is
+    needed.
 
     [:octicons-arrow-right-24: Share an idea](submit-idea.md)
 
 -   **Add or update a community**
 
-    Provide a community name, service area, status, contacts, language, and any local settings.
+    Share the community's name, area, contacts, language, and local settings.
 
     [:octicons-arrow-right-24: Add a community](https://github.com/MeshCore-ca/MeshCore-Canada/issues/new?template=add_new_community.yml)
     · [:octicons-arrow-right-24: Update a community](https://github.com/MeshCore-ca/MeshCore-Canada/issues/new?template=update_existing_community.yml)
@@ -45,36 +46,22 @@ GitHub knowledge.
 
 -   **Propose a region change**
 
-    Use the boundary editor to prepare an existing-boundary move or a new-region proposal for public review.
+    Suggest a new region or a boundary change.
 
     [:octicons-arrow-right-24: Open the region editor](config/editor/index.html)
 
--   **Write or improve a guide**
+-   **Contribute on GitHub**
 
-    Start with a request so maintainers can confirm scope, evidence, and the right
-    owner before a big edit.
+    Improve a guide or work on an open issue.
 
-    [:octicons-arrow-right-24: Open a documentation request](https://github.com/MeshCore-ca/MeshCore-Canada/issues/new?template=general_request.yml)
-
--   **Contribute code**
-
-    Work from an issue, keep generated `site/` output out of commits, and include the checks relevant to your change.
-
-    [:octicons-mark-github-24: View the repository](https://github.com/MeshCore-ca/MeshCore-Canada)
+    [:octicons-mark-github-24: Open the repository](https://github.com/MeshCore-ca/MeshCore-Canada)
 
 </div>
 
-## What happens next
-
-Submissions are public. A maintainer checks the scope and evidence, asks questions when needed, and records the outcome on the issue or pull request.
-
 !!! warning "Do not share secrets"
-    Remove passwords, access tokens, private keys, exact private coordinates, private addresses, and unredacted command output before submitting anything.
-
-## If you already use GitHub
-
-Use the repository's [guided issue forms](https://github.com/MeshCore-ca/MeshCore-Canada/issues/new/choose) or edit the relevant source page and open a pull request. Keep each change focused and state how you verified it.
+    Submissions are public. Remove passwords, access tokens, private keys,
+    private addresses, exact private coordinates, and sensitive command output.
 
 ## Need help choosing?
 
-Use [Share an Idea](submit-idea.md). Maintainers can route it to the right workflow.
+Not sure where to start? [Share an idea](submit-idea.md).

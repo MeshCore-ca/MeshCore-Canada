@@ -1,6 +1,6 @@
 ---
-title: Observer data, access, and privacy
-description: Understand what an observer can send, where that data goes, who can see it, and which retention details remain unpublished.
+title: Observer data and privacy
+description: See what an observer sends, where it appears, and how to keep private information out of it.
 audience:
   - observer-operators
   - community-members
@@ -8,7 +8,7 @@ task: understand-observer-data
 scope: canada-baseline
 status: draft
 owner: meshcore-canada
-last_reviewed: 2026-07-19
+last_reviewed: 2026-07-22
 review_by: 2026-10-19
 difficulty: beginner
 estimated_time: 6 minutes
@@ -17,28 +17,25 @@ page_styles:
   - assets/styles/analyzer.css?v=20260722-2
 ---
 
-# Observer data, access, and privacy
+# Observer data and privacy
 
-Treat radio traffic heard by a public observer as public. Do not put private names, locations, credentials, or other sensitive information in MeshCore messages.
+Treat anything heard by an observer as public. An observer does not decrypt private messages, but it can forward packet details and status information. Do not put private names, locations, credentials, or other sensitive information in MeshCore messages.
 
 <div class="mc-method-fit">
-  <div><strong>Collection</strong>An observer can send packets and status it hears on its configured radio settings.</div>
-  <div><strong>Display</strong>Approved public tools can show observer, packet, and map data.</div>
-  <div><strong>Direct access</strong>Broker subscriptions are limited; public viewers may still expose the data.</div>
+  <div><strong>Observer</strong>Sends packet data and status from the radio settings it uses.</div>
+  <div><strong>CoreScope</strong>Can show observer, packet, and map data publicly.</div>
+  <div><strong>Broker</strong>Direct subscriptions are restricted, but data shown in CoreScope is still public.</div>
 </div>
 
 ## Policy summary
 
-| Field | Current statement |
+| Question | Answer |
 |---|---|
-| Status | Draft operational summary |
-| Version | `0.1` |
-| Reviewed | July 19, 2026 |
-| Owner | MeshCore Canada infrastructure administrators |
-| Contact | [MeshCore Canada forum](https://forum.meshcore.ca/) |
-| Retention | A public retention period has not yet been published |
+| Who manages this? | MeshCore Canada infrastructure administrators |
+| Where can I ask questions? | [MeshCore Canada forum](https://forum.meshcore.ca/) |
+| How long is data kept? | A public retention period has not yet been published |
 
-Because a retention period is not published, do not assume data will be deleted after a particular time. Ask the infrastructure team before relying on a deletion timeline.
+Do not assume data will be deleted after a certain time. Ask the infrastructure team if you need a retention or deletion timeline.
 
 ## Data flow
 
@@ -46,7 +43,7 @@ Because a retention period is not published, do not assume data will be deleted 
   <li><strong>Radio packet</strong><span>transmitted on the configured mesh</span></li>
   <li><strong>Observer</strong><span>hears and forwards telemetry</span></li>
   <li><strong>Infrastructure</strong><span>receives and may store it</span></li>
-  <li><strong>Approved viewer</strong><span>may display it publicly</span></li>
+  <li><strong>CoreScope</strong><span>may display it publicly</span></li>
 </ol>
 
 Changing the radio preset changes what the observer can hear. Public and private channel choices do not make the surrounding packet telemetry private.
@@ -55,30 +52,26 @@ Changing the radio preset changes what the observer can hear. Public and private
 
 | Data | Why it is used | Where it may appear | Who can access it | Retention |
 |---|---|---|---|---|
-| Observer status | Show whether an observer is online | CoreScope and approved tools | Public viewers; infrastructure operators | Not publicly specified |
-| Heard packet telemetry | Show mesh activity and diagnose coverage | Packet views, maps, approved tools | Public viewers; approved subscribers; infrastructure operators | Not publicly specified |
+| Observer status | Show whether an observer is online | CoreScope | Public viewers; infrastructure operators | Not publicly specified |
+| Heard packet telemetry | Show mesh activity and help diagnose coverage | CoreScope packet views and maps | Public viewers; approved subscribers; infrastructure operators | Not publicly specified |
 | Location code | Group an observer near a known place | Observer lists, topics, maps | Public viewers and broker users | Follows observer/packet retention |
-| Optional owner details | Help an operator identify a service | Integration-dependent status data | May reach infrastructure and approved tools | Not publicly specified |
+| Optional owner details | Help identify a service | Integration-dependent status data | May reach infrastructure and CoreScope | Not publicly specified |
 | Broker credentials | Authenticate the observer | Should remain only in the local integration | Local operator and authentication service | Never include in public diagnostics |
 
-MeshCore Canada does not offer general direct broker subscriptions. Access is
-limited to approved tools, local mesh administrators, and people approved by the
-infrastructure administrators.
+MeshCore Canada does not offer general direct broker subscriptions. Direct access is limited to CoreScope, local mesh administrators, and people approved by the infrastructure administrators.
 
-## Public tools
+## Where it appears
 
-- [CoreScope](https://live.meshcore.ca/) shows observer, packet, and map information.
-- Other approved MeshCore Canada tools may consume the same feed.
+[CoreScope](https://live.meshcore.ca/) shows observer, packet, and map information. Other approved MeshCore Canada services may use the same feed.
 
-Broker access controls do not make data private once it appears in an approved
-public viewer.
+Broker access controls do not make information private once CoreScope displays it.
 
 ## Before you operate an observer
 
-- [ ] Tell people using the local mesh that public observation is active.
+- [ ] Tell people using the local mesh that an observer is active.
 - [ ] Use a broad observer name, not a home address or person's name.
 - [ ] Leave optional owner email fields blank unless they are operationally needed.
 - [ ] Never paste Wi-Fi passwords, MQTT tokens, private keys, or unredacted logs into support messages.
 - [ ] Read the method's verification and recovery steps before making changes.
 
-Return to [Choose an observer method](intro.md), or review [safe troubleshooting and redaction](troubleshooting.md#build-a-safe-escalation-bundle).
+Return to [Choose an observer setup](intro.md), or see [what to remove before asking for help](troubleshooting.md#what-to-share-when-asking-for-help).

@@ -94,7 +94,7 @@ test("all observer method guides follow one lifecycle and end in live verificati
     "## Before you start",
     "## What this changes",
     "## Set up",
-    "## Expected result",
+    "## What you should see",
     "## Verify in CoreScope",
     "## Recovery",
     "## If verification fails",
@@ -147,7 +147,7 @@ test("troubleshooting starts with symptoms and defines a redacted escalation bun
   ]) {
     assert.match(source, new RegExp(`## ${symptom}`));
   }
-  assert.match(source, /Build a safe escalation bundle/);
+  assert.match(source, /What to share when asking for help/);
   for (const secret of ["Wi-Fi SSID and password", "JWTs", "private keys", "authorization headers"]) {
     assert.match(source, new RegExp(secret, "i"));
   }

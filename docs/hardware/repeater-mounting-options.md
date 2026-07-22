@@ -7,8 +7,9 @@ audience:
 task: plan-repeater-mount
 scope: canada-baseline
 status: draft
+status_notice: false
 owner: docs-hardware
-last_reviewed: 2026-07-19
+last_reviewed: 2026-07-22
 review_by: 2026-10-17
 difficulty: advanced
 estimated_time: site dependent
@@ -20,7 +21,7 @@ page_styles:
   - assets/styles/devices-builds.css?v=20260722-2
 ---
 
-# Plan a Repeater Mount
+# Plan a repeater mount
 
 Use these community examples to discuss a site. They are not engineered plans for a particular building, mast, climate, or property.
 
@@ -38,7 +39,7 @@ Use these community examples to discuss a site. They are not engineered plans fo
 <ul class="mc-checklist">
   <li>The property owner and any required authority approve the location and cable route.</li>
   <li>A qualified person has addressed structure, wind, ice, snow, corrosion, electrical clearance, lightning/grounding context, and safe access.</li>
-  <li>The repeater passed its bench commissioning test and remains recoverable.</li>
+  <li>The repeater passed its bench test and can still be reached by USB.</li>
   <li>The antenna, enclosure, feed line, connectors, strain relief, and drip paths are planned as one system.</li>
   <li>An inspection and removal plan is recorded before installation.</li>
 </ul>
@@ -80,11 +81,12 @@ A gutter is not automatically structural. Inspect the gutter, fascia, fasteners,
 
 ### Vent-pipe extension community example
 
-The legacy note described a 3 ft, 3-inch ABS extension, ABS cement on one side, and self-tapping screws on the house side. Do not reproduce that detail without confirming the existing vent, building, material compatibility, code implications, and added load with a qualified person.
+Do not use a vent-pipe extension until a qualified person confirms the existing
+vent, building materials, code requirements, and added load.
 
 ![A community example of a repeater mounted on an ABS vent-pipe extension](images/VentPipeExtension.jpg){ .mc-build-photo loading=lazy }
 
-## Installation Checklist
+## Installation checklist
 
 <ul class="mc-checklist">
   <li>Permission, safe access, electrical clearance, and site-specific review are documented.</li>
@@ -96,7 +98,7 @@ The legacy note described a 3 ft, 3-inch ABS extension, ABS cement on one side, 
   <li>Removal and physical USB recovery remain practical.</li>
 </ul>
 
-## Expected result and verification
+## Check the finished installation
 
 From a safe position, inspect the complete installation for movement, cable strain, loose hardware, blocked drainage, and water paths. Then confirm the repeater reconnects, retains its settings, sends an advert received locally, and passes the planned message-routing check.
 
@@ -114,6 +116,6 @@ Record each inspection date, inspector, photographs, hardware/cable condition, e
 
 </div>
 
-## Next step
+## Before installing
 
 Return to the [repeater choice](recommended-repeaters.md) or [flash and bench-test the repeater](../meshcore/flash-repeater.md) before installing it.

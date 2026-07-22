@@ -1,13 +1,13 @@
 ---
 title: Set up a network observer
-description: Choose a simple, supported way to send nearby MeshCore radio activity to the Canadian live network tools.
+description: Choose the observer setup that matches what you already run, then check it in CoreScope.
 audience:
   - observer-operators
 task: choose-observer-method
 scope: canada-baseline
 status: draft
 owner: meshcore-canada
-last_reviewed: 2026-07-19
+last_reviewed: 2026-07-22
 review_by: 2026-10-19
 difficulty: beginner
 estimated_time: 5 minutes
@@ -20,26 +20,25 @@ page_scripts:
 
 # Set up a network observer
 
-An observer listens for nearby MeshCore radio packets and sends a copy to MeshCore Canada's live tools. It does not read private messages, and it does not need to repeat traffic.
+An observer forwards nearby MeshCore packet data to CoreScope. It does not decrypt private messages or need to repeat traffic.
 
 ## How the pieces fit
 
 <ol class="mc-analyzer-flow">
   <li><strong>Radio</strong><span>hears nearby MeshCore packets</span></li>
-  <li><strong>Observer</strong><span>passes those packets to the internet</span></li>
-  <li><strong>MeshCore Canada</strong><span>receives them through two shared endpoints</span></li>
-  <li><strong>Live tools</strong><span>show observer and packet health</span></li>
+  <li><strong>Observer</strong><span>forwards the packet data</span></li>
+  <li><strong>MeshCore Canada</strong><span>receives it through two shared endpoints</span></li>
+  <li><strong>Live tools</strong><span>CoreScope shows observers and packets</span></li>
 </ol>
 
-The shared endpoints use MQTT. You do not need to learn it before choosing a
-method.
+The shared endpoints use MQTT, but you do not need to learn MQTT before choosing a setup.
 
-!!! warning "Radio traffic may become public"
-    Observer telemetry and heard radio packets can appear in public tools. Do not transmit sensitive information. Read [Data, access, and privacy](data-collection-access.md) before operating an observer.
+!!! warning "Observers share what they hear"
+    Observer details and heard packet data can appear in CoreScope. Do not transmit sensitive information. Read [Observer data and privacy](data-collection-access.md) before turning one on.
 
-## Pick what you already use
+## Choose your setup
 
-Choose the closest match. The result links to one focused guide.
+Start with what already manages your radio.
 
 <div class="mc-method-chooser" id="observer-method-chooser">
   <label for="observer-method">
@@ -56,7 +55,7 @@ Choose the closest match. The result links to one focused guide.
   <div class="mc-method-result" id="observer-method-result" role="status" tabindex="-1" hidden></div>
 </div>
 
-No JavaScript? Use the same comparison below.
+The same choices are listed here:
 
 | Your current setup | Recommended method | Host that must stay on |
 |---|---|---|
@@ -66,27 +65,28 @@ No JavaScript? Use the same comparison below.
 | A Linux or macOS host is connected by USB | [MCtoMQTT](builds/mctomqtt.md) | The USB host |
 | A supported Wi-Fi LoRa board can be dedicated | [Standalone MQTT firmware](builds/mqtt-firmware.md) | No separate host |
 
-If none fit, ask in the [MeshCore Canada forum](https://forum.meshcore.ca/) before installing more software.
+If none fit, ask in the [MeshCore Canada forum](https://forum.meshcore.ca/) before installing anything new.
 
-## Shared setup values
+## What every setup needs
 
-Every method uses:
+Whichever setup you choose, you need:
 
 - a radio already set for the local mesh;
 - a real three-letter [location code](iata-codes.md);
 - the MeshCore Canada primary and backup endpoints;
-- encrypted connections with certificate checks; and
-- packet publishing, not status-only publishing.
+- encrypted connections with certificate checks;
+- packet publishing, not status-only publishing; and
+- an always-on host or board.
 
 The Canadian onboarding baseline is **USA/Canada (Recommended)**, `910.525 MHz / 62.5 kHz / SF7 / CR5`, with 3-byte path hashes. A published local setting takes priority.
 
-Advanced operators can inspect the [canonical observer configuration](observer-config.json) or [broker reference](broker-reference.md).
+For exact broker fields, use the [observer endpoint reference](broker-reference.md).
 
-## What success looks like
+## Finish the check
 
-Setup is not finished when a screen says “connected.” Finish when both are true:
+Setup is not finished when a screen says “connected.” You are done when:
 
 1. your observer appears in [CoreScope Observers](https://live.meshcore.ca/#/observers); and
 2. a packet heard by your radio appears in [CoreScope Packets](https://live.meshcore.ca/#/packets).
 
-Follow [Check your observer](verify.md) at the end of the method you choose. If a check fails, use [symptom-first troubleshooting](troubleshooting.md).
+Finish with [Check your observer](verify.md). If something fails, go to [Troubleshooting](troubleshooting.md).

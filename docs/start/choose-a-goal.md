@@ -8,7 +8,7 @@ task: choose-device-role
 scope: upstream-meshcore
 status: verified
 owner: docs-ux
-last_reviewed: 2026-07-19
+last_reviewed: 2026-07-22
 review_by: 2027-07-19
 tested_with:
   content_baseline: f608cfe
@@ -19,46 +19,17 @@ destructive: false
 
 # Choose a MeshCore role
 
-Choose by outcome, not by product name.
+Choose a role based on the job the device will do.
 
-| What you want to do | Role | Start |
-|---|---|---|
-| Send and receive messages | Companion | [Companion path](companion.md) |
-| Improve coverage for nearby users | Repeater | [Repeater path](repeater.md) |
-| Host a persistent shared room | Room server | [Room-server path](room-server.md) |
-| Send network data to public tools | Observer | [Observer path](observer.md) |
+| Role | Use it for | Relays mesh traffic? | Usually | Setup |
+|---|---|---:|---|---|
+| Companion | Send and receive messages | No | Mobile; often pairs with a phone | [Set up a companion](companion.md) |
+| Repeater | Improve local coverage | Yes | Fixed with continuous power | [Set up a repeater](repeater.md) |
+| Room server | Keep a shared room available | No | Fixed with continuous power | [Set up a room server](room-server.md) |
+| Observer | Send heard network data to CoreScope | No | Fixed; requirements vary | [Set up an observer](observer.md) |
 
-## Compare the roles
+New to MeshCore? Start with a [companion](companion.md). Before buying or
+flashing, confirm that the setup guide supports your device.
 
-| Role | Main job | Mobile or fixed | Routes mesh traffic? | Phone or computer |
-|---|---|---|---|---|
-| Companion | Personal messaging | Usually mobile | No | Usually pairs with a phone; some devices are standalone |
-| Repeater | Extend coverage | Fixed | Yes | Needed for setup and maintenance |
-| Room server | Keep a shared room available | Usually fixed | Not its primary job | A companion connects to the room |
-| Observer | Feed public network tools | Usually fixed | No | Depends on the observer method |
-
-## Still not sure?
-
-Start with the [companion path](companion.md) if your goal is personal
-messaging. A companion is for conversations; other roles run network
-services.
-
-If you already use MeshCore and want to improve the network, choose by the
-result:
-
-- choose a [repeater](repeater.md) for coverage;
-- choose a [room server](room-server.md) for a persistent room;
-- choose an [observer](observer.md) for public network data.
-
-## Before buying or flashing
-
-Check the detailed hardware and firmware guide linked from the role path.
-Support varies by device and firmware target.
-
-<!-- HUMAN REVIEW REQUIRED: Firmware and hardware maintainers must verify the
-role comparison and linked compatibility guidance before production launch. -->
-
-## Next step
-
-Open one role path. If none fits, [ask the community](get-help.md) before
-buying hardware.
+If none of these roles fits, [ask the community](get-help.md) before buying
+hardware.

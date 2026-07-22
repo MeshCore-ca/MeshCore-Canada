@@ -21,7 +21,7 @@ page_styles:
 
 # MeshCore communities in Manitoba
 
-There is no reviewed community listing here yet.
+We don't have a community listed here yet.
 
 <div class="mc-community-empty mc-community-empty--page">
   <h2>Help add the first listing</h2>
@@ -30,13 +30,12 @@ There is no reviewed community listing here yet.
   <p><a href="../">Browse all Canadian communities</a></p>
 </div>
 
-Until a reviewed local listing publishes an override, start with the
-[Canada baseline](index.md#canada-baseline) and confirm settings with nearby
+Until a reviewed local listing gives different settings, start with the
+[Canada defaults](index.md#canada-baseline) and confirm settings with nearby
 operators before transmitting.
 
 ## Add or update a listing
 
 [Send a community update](../submit-idea.md). No GitHub account needed.
 
-The directory does not guess exact locations, languages, owners, or link health.
-Fields remain marked unverified until a community steward reviews them.
+Listings are community-submitted and may be incomplete or out of date.

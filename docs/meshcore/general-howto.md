@@ -8,7 +8,7 @@ task: use-meshcore-app-tools
 scope: upstream-meshcore
 status: draft
 owner: docs-app
-last_reviewed: 2026-07-19
+last_reviewed: 2026-07-22
 review_by: 2026-10-19
 difficulty: beginner
 estimated_time: 5-15 minutes
@@ -54,8 +54,8 @@ Use this when another person needs to add you as a contact.
 
 <div class="mc-result" data-state="success" markdown>
 
-**Expected result:** the clipboard contains a contact link that another
-MeshCore user can import.
+The clipboard now contains a contact link that another MeshCore user can
+import.
 
 </div>
 
@@ -83,7 +83,7 @@ Use this after another person sends you their MeshCore contact link.
 
 <div class="mc-result" data-state="success" markdown>
 
-**Expected result:** the named contact appears in your contact list.
+The named contact now appears in your contact list.
 
 </div>
 
@@ -179,7 +179,7 @@ the repeated copy.
 
 ![App view of a multi-hop heard repeat](images/MeshCore_HeardRepeats_Step4_2Repeat.png){ loading=lazy width="300" }
 
-## Next step
+## Need help?
 
 If a result is missing or unclear, compare one known-good nearby node and then
 use [Get help](../start/get-help.md). Include the task and step where you

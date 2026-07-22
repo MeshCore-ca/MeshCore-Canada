@@ -72,6 +72,12 @@ plugins:
         regions/setup.md: config/index.md
         regions/map.md: config/map.md
         regions/standard.md: config/standard.md
+        resources/getting-started.md: start/index.md
+        meshcore/firmware-rak-custom-display.md: meshcore/flash-companion.md
+        meshcore/firmware-heltec-v3-wifi.md: meshcore/flash-companion.md
+        hardware/wire-connector-types.md: hardware/recommended-repeaters.md
+        hardware/repeater-solar-batteries.md: hardware/recommended-repeaters.md
+        meshcore/general-meshcore-roles.md: start/choose-a-goal.md
 
 markdown_extensions:
   - admonition
@@ -120,9 +126,8 @@ nav:
       - Companion devices: hardware/recommended-companions.md
       - Repeater devices: hardware/recommended-repeaters.md
       - Antennas: hardware/recommended-antenna.md
-      - Solar repeater builds:
+      - Solar repeater build:
           - Build a 300 mW repeater: hardware/repeater-solar-300mw-diy-build.md
-          - Build a 1 W repeater: hardware/repeater-solar-1w-diy-build.md
       - Install a repeater:
           - Mounting options: hardware/repeater-mounting-options.md
       - Firmware:
@@ -130,7 +135,6 @@ nav:
           - Flash a repeater: meshcore/flash-repeater.md
           - Flash a room server: meshcore/flash-room-server.md
           - Update a repeater over the air: meshcore/update-repeater-ota.md
-          - Generate a repeater identity: meshcore/generate-repeater-id.md
   - Network Tools:
       - Choose a network tool: tools/index.md
       - Configure a repeater: config/index.md
@@ -139,7 +143,7 @@ nav:
       - Check an observer: analyzer/verify.md
       - Troubleshoot network data: analyzer/troubleshooting.md
       - Observer methods:
-          - Compare collection methods: analyzer/data-collection-access.md
+          - Observer data and privacy: analyzer/data-collection-access.md
           - RemoteTerm: analyzer/remoteterm.md
           - MCtoMQTT: analyzer/builds/mctomqtt.md
           - Home Assistant: analyzer/builds/meshcore-ha.md
@@ -150,18 +154,12 @@ nav:
           - Location codes: analyzer/iata-codes.md
   - Learn:
       - What MeshCore is: meshcore/general-overview.md
-      - Node roles: meshcore/general-meshcore-roles.md
       - How to use MeshCore: meshcore/general-howto.md
       - Frequently asked questions: meshcore/general-faq.md
-      - Canadian region standard: config/standard.md
       - Glossary: resources/glossary.md
       - Useful links: resources/links.md
   - Contribute:
       - About MeshCore Canada: about.md
       - Ways to contribute: contributing.md
       - Share an idea: submit-idea.md
-      - Propose a region change: config/map.md
-      - Privacy: privacy.md
-      - Community forum: https://forum.meshcore.ca/
-      - Community Discord: https://discord.gg/BESFVMt7yk
-      - GitHub repository: https://github.com/MeshCore-ca/MeshCore-Canada
+      - Site privacy: privacy.md

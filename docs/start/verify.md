@@ -8,7 +8,7 @@ task: verify-first-success
 scope: canada-baseline
 status: verified
 owner: docs-ux
-last_reviewed: 2026-07-19
+last_reviewed: 2026-07-22
 review_by: 2026-10-19
 tested_with:
   content_baseline: f608cfe
@@ -19,8 +19,8 @@ destructive: false
 
 # Verify your setup
 
-Do not call setup complete just because a device powers on or a service says it
-connected. Use the role check you chose.
+A powered-on device or a connected status does not mean setup is finished. Use
+the check for your device below.
 
 Before testing, confirm the device still shows the expected Canada or local
 radio settings.
@@ -80,8 +80,7 @@ Keep it off hard-to-reach spots until the bench check passes.
 
 An online broker connection alone is not the final check.
 
-## Next step
+## If a check fails
 
-If the role check passes, return to its page and continue to operation and
-maintenance. If it does not pass, use [Get help](get-help.md) and describe
-which expected result was missing.
+If the check passes, you're done. If it does not, [get help](get-help.md) and
+describe what was missing.

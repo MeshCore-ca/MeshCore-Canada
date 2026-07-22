@@ -7,8 +7,9 @@ audience:
 task: change-legacy-repeater-id
 scope: legacy
 status: legacy
+status_notice: false
 owner: docs-firmware
-last_reviewed: 2026-07-19
+last_reviewed: 2026-07-22
 review_by: 2026-10-17
 difficulty: advanced
 estimated_time: 15-30 minutes
@@ -22,17 +23,8 @@ page_styles:
 ---
 # Change a Repeater ID for a Legacy 1-Byte Region
 
-<div class="mc-guide-status" data-status="legacy" markdown>
-
-**Legacy exception.** Do not use this in the Canada 3-byte baseline. Proceed only when the local region operator confirms that the repeater remains in 1-byte mode and coordinates the new ID.
-
-</div>
-
-!!! warning "Legacy exception — do not use by default"
-    MeshCore Canada's onboarding baseline uses 3-byte path hashes. Manually coordinating repeater IDs is only for a local region that still operates in 1-byte mode and has asked you to use this process.
-
-- **Scope:** Local 1-byte compatibility only
-- **Status:** Legacy procedure; local region approval required
+!!! warning "Only for legacy 1-byte regions"
+    Canada uses 3-byte path hashes by default. Continue only if your local region operator has confirmed this repeater must stay in 1-byte mode and approved the new ID.
 
 ## What this will change
 
@@ -72,10 +64,10 @@ If verification fails, restore the backed-up old private key with `set prv.key <
 
 If admin access, the public-key prefix, adverts, region configuration, or routing is wrong, keep the repeater on the bench. Restore the backed-up old private key over the trusted serial connection, reboot, and confirm the complete former state before returning it to service.
 
-## Next step
+## Record the change
 
 Record the locally approved ID, operator approval, old/new public-key prefixes, verification, and rollback location without recording either private key in the public maintenance record.
 
 ## Verification limits
 
-This legacy process has no attached current firmware/version test matrix. A firmware and regional operator review is required before it can be marked verified.
+This procedure has not been tested against current firmware. Have the local region operator review it before use.

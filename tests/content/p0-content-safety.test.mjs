@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
@@ -15,16 +15,12 @@ function countH1(markdown) {
 }
 
 const assignedPages = [
-  "docs/hardware/repeater-solar-batteries.md",
-  "docs/hardware/wire-connector-types.md",
   "docs/hardware/repeater-mounting-options.md",
   "docs/meshcore/flash-companion.md",
   "docs/meshcore/flash-repeater.md",
   "docs/meshcore/flash-room-server.md",
   "docs/meshcore/update-repeater-ota.md",
   "docs/meshcore/generate-repeater-id.md",
-  "docs/meshcore/firmware-rak-custom-display.md",
-  "docs/meshcore/firmware-heltec-v3-wifi.md",
   "docs/meshcore/general-overview.md",
   "docs/provinces/index.md",
   "docs/provinces/saskatchewan.md",
@@ -59,32 +55,23 @@ test("destructive flash actions are gated by backup warnings", () => {
   }
 });
 
-test("unsafe firmware recipes are archived without executable build steps", () => {
-  const rak = read("docs/meshcore/firmware-rak-custom-display.md");
-  const heltec = read("docs/meshcore/firmware-heltec-v3-wifi.md");
-
-  for (const [name, text] of [["RAK", rak], ["Heltec", heltec]]) {
-    assert.match(text, /Archived|archive/i, name);
-    assert.match(text, /unverified|not supported/i, name);
-    assert.doesNotMatch(text, /\.\/build\.sh|\[env:|set FIRMWARE_VERSION/, name);
-    assert.match(text, /https:\/\/github\.com\/meshcore-dev\/MeshCore/, name);
+test("unsafe and incomplete legacy pages are removed from the content tree", () => {
+  for (const path of [
+    "docs/meshcore/firmware-rak-custom-display.md",
+    "docs/meshcore/firmware-heltec-v3-wifi.md",
+    "docs/hardware/repeater-solar-batteries.md",
+    "docs/hardware/wire-connector-types.md",
+  ]) {
+    assert.equal(existsSync(resolve(root, path)), false, `${path} must not remain searchable`);
   }
-  assert.match(rak, /Historical upstream repository URL/);
-  assert.match(heltec, /Historical upstream repository URL/);
 });
 
-test("draft hardware pages are visibly quarantined and mounting Markdown is repaired", () => {
-  const solar = read("docs/hardware/repeater-solar-batteries.md");
-  const connectors = read("docs/hardware/wire-connector-types.md");
+test("mounting Markdown remains repaired", () => {
   const mounting = read("docs/hardware/repeater-mounting-options.md");
 
-  assert.match(solar, /Draft — not reviewed/);
-  assert.match(solar, /Do not use it to choose/i);
-  assert.match(connectors, /Draft reference/);
-  assert.match(connectors, /verify before wiring/i);
   assert.doesNotMatch(mounting, /^\*\* \[/m);
   assert.doesNotMatch(mounting, /!\[\]\(/);
-  assert.match(mounting, /Installation Checklist/);
+  assert.match(mounting, /Installation checklist/);
 });
 
 test("Saskatchewan directory and generated listing agree on the national baseline", () => {
@@ -93,10 +80,10 @@ test("Saskatchewan directory and generated listing agree on the national baselin
 
   assert.match(
     index,
-    /id="directory-stoonmesh"[\s\S]*?<strong>Settings:<\/strong> Uses the Canada baseline/
+    /id="directory-stoonmesh"[\s\S]*?<strong>Settings:<\/strong> Uses the Canada defaults/
   );
-  assert.match(index, /<strong>0<\/strong> local override/);
-  assert.match(sk, /<h3>StoonMesh<\/h3>[\s\S]*?<dd>Uses the Canada baseline<\/dd>/);
+  assert.match(index, /<strong>0<\/strong> with different local settings/);
+  assert.match(sk, /<h3>StoonMesh<\/h3>[\s\S]*?<dd>Uses the Canada defaults<\/dd>/);
   assert.doesNotMatch(sk, /1-byte|Local setting differs/);
 });
 test("observer credential fields are empty, masked, revealable, and never persisted", () => {
@@ -254,8 +241,9 @@ test("Canada baseline and local practice are explicitly separated", () => {
   const overview = read("docs/meshcore/general-overview.md");
   const companion = read("docs/meshcore/flash-companion.md");
 
-  assert.match(overview, /Ottawa-specific.*local practice/i);
-  assert.match(overview, /not proof of a Canada-wide standard/i);
-  assert.match(companion, /Check the Mesh Directory|Check the \[Mesh Directory\]/i);
+  assert.match(overview, /community directory/i);
+  assert.match(overview, /Canada defaults/i);
+  assert.match(overview, /Official MeshCore resources/i);
+  assert.match(companion, /Check the\s+\[community directory\]/i);
   assert.match(companion, /USA\/Canada \(Recommended\)/);
 });

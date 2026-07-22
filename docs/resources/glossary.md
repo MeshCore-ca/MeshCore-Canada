@@ -8,7 +8,7 @@ task: define-meshcore-term
 scope: canada-baseline
 status: verified
 owner: docs-ux
-last_reviewed: 2026-07-19
+last_reviewed: 2026-07-22
 review_by: 2027-01-19
 evidence: Existing MeshCore Canada documentation terminology
 difficulty: beginner
@@ -115,7 +115,7 @@ the linked guides explain how to use each setting or device.
 
 ## Related pages
 
-- [Compare MeshCore roles](../meshcore/general-meshcore-roles.md)
+- [Compare MeshCore roles](../start/choose-a-goal.md)
 - [Read common questions](../meshcore/general-faq.md)
 - [Open the region standard](../config/standard.md)
 - [Choose an observer method](../analyzer/intro.md)

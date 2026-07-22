@@ -9,7 +9,6 @@ const docsRoot = resolve(repoRoot, "docs");
 
 const ownedMarkdown = [
   "index.md",
-  "resources/getting-started.md",
   "start/index.md",
   "start/choose-a-goal.md",
   "start/companion.md",
@@ -76,12 +75,12 @@ test("owned Start pages have required, unique page metadata", () => {
 test("homepage is task-first and exposes the required decisions", () => {
   const homepage = readDoc("index.md");
 
-  assert.match(homepage, /Welcome! We are actively updating our website/);
-  assert.match(homepage, /submit a git issue!/);
+  assert.match(homepage, /Welcome! We're improving this site/);
+  assert.match(homepage, /Open a GitHub issue/);
   assert.match(homepage, /## What are you looking for\? \{ #start-with-your-goal \}/);
   assert.match(homepage, /## What kind of device are you setting up\? \{ #choose-a-role \}/);
   assert.match(homepage, /## Canada Default Radio Settings \{ #canada-baseline \}/);
-  assert.match(homepage, /Newly purchased LoRa radio[\s\S]+local\s+Canadian\s+MeshCore region/);
+  assert.match(homepage, /Set up your LoRa radio and join a Canadian mesh/);
   assert.match(homepage, /Start the guided setup\]\(start\/index\.md\)/);
   assert.match(homepage, /Find a community\]\(provinces\/index\.md\)/);
   assert.match(homepage, /name="place"/);
@@ -98,7 +97,7 @@ test("homepage is task-first and exposes the required decisions", () => {
   }
 });
 
-test("Start offers all roles, an unsure path, and the baseline warning", () => {
+test("Start offers all roles, an unsure path, and the local-settings handoff", () => {
   const start = readDoc("start/index.md");
 
   for (const link of [
@@ -111,32 +110,31 @@ test("Start offers all roles, an unsure path, and the baseline warning", () => {
     assert.match(start, new RegExp(`\\]\\(${link.replace(".", "\\.")}\\)`));
   }
 
-  assert.match(start, /I am not sure/);
-  assert.match(start, /USA\/Canada \(Recommended\)/);
-  assert.match(start, /910\.525 MHz \/ 62\.5 kHz \/ SF7 \/ CR5/);
-  assert.match(start, /Local settings take priority/);
+  assert.match(start, /Not sure which one fits/);
+  assert.match(start, /community directory/);
+  assert.match(start, /Canada defaults/);
+  assert.match(start, /preparation, configuration, and a quick working check/);
 });
 
-test("each role journey reaches verification, support, and a useful next step", () => {
+test("each role guide is direct and reaches verification and support", () => {
   for (const [role, relativePath] of Object.entries(rolePages)) {
     const page = readDoc(relativePath);
 
     for (const heading of [
-      "## Understand the role",
       "## Before you start",
-      "## What this path changes",
-      "## Verify success",
-      "## Operate and maintain",
-      "## Next step",
+      "## Make sure it works",
+      "## What's next",
     ]) {
       assert.ok(page.includes(heading), `${relativePath} is missing ${heading}`);
     }
 
+    assert.doesNotMatch(page, /\bOutcome:|Your setup path|path is complete/);
+    assert.match(page, /<h2[^>]*>Setup checklist<\/h2>/);
     assert.match(page, new RegExp(`data-mc-progress-page="${role}"`));
     assert.match(page, /id="[^"]+" type="checkbox" data-mc-progress/);
     assert.match(page, /\]\(verify\.md#[^)]+\)/);
     assert.match(page, /\]\(get-help\.md\)/);
-    assert.match(page, /local community publishes an override|local community publishes different settings/i);
+    assert.match(page, /community lists different settings|community\s+publishes different settings/i);
   }
 });
 
@@ -146,7 +144,7 @@ test("progress inputs use stable, unique ids and contain no values", () => {
   for (const relativePath of Object.values(rolePages)) {
     const page = readDoc(relativePath);
     const inputs = [...page.matchAll(/<input\s+([^>]*data-mc-progress[^>]*)>/g)];
-    assert.equal(inputs.length, 7, `${relativePath} must expose seven progress checks`);
+    assert.ok(inputs.length >= 6 && inputs.length <= 7, `${relativePath} must expose six or seven useful progress checks`);
 
     for (const [, attributes] of inputs) {
       const id = attributes.match(/\bid="([^"]+)"/)?.[1];
@@ -158,13 +156,19 @@ test("progress inputs use stable, unique ids and contain no values", () => {
   }
 });
 
-test("the legacy Getting Started URL is a useful canonical bridge", () => {
-  const bridge = readDoc("resources/getting-started.md");
+test("retired visitor pages use canonical redirects instead of searchable bridge copy", () => {
+  const config = readFileSync(resolve(repoRoot, "mkdocs.yml"), "utf8");
 
-  assert.match(bridge, /Getting Started has moved/);
-  assert.match(bridge, /\]\(\.\.\/start\/index\.md\)/);
-  assert.match(bridge, /bookmarks and external links do not\s+break/);
-  assert.doesNotMatch(bridge, /http-equiv=["']refresh/i);
+  for (const [oldPath, currentPath] of [
+    ["resources/getting-started.md", "start/index.md"],
+    ["meshcore/firmware-rak-custom-display.md", "meshcore/flash-companion.md"],
+    ["meshcore/firmware-heltec-v3-wifi.md", "meshcore/flash-companion.md"],
+    ["hardware/wire-connector-types.md", "hardware/recommended-repeaters.md"],
+    ["hardware/repeater-solar-batteries.md", "hardware/recommended-repeaters.md"],
+  ]) {
+    assert.match(config, new RegExp(`${oldPath.replaceAll("/", "\\/")}: ${currentPath.replaceAll("/", "\\/")}`));
+    assert.equal(existsSync(resolve(docsRoot, oldPath)), false, `${oldPath} must not remain searchable`);
+  }
 });
 
 test("all relative Markdown links in owned pages resolve to source files", () => {

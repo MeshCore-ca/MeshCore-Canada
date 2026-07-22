@@ -1,13 +1,13 @@
 ---
 title: Troubleshoot an observer
-description: Start from what you see, isolate the failed stage, and prepare a useful support report without exposing secrets.
+description: Find where your observer stopped working and ask for help without exposing secrets.
 audience:
   - observer-operators
 task: troubleshoot-observer
 scope: canada-baseline
 status: draft
 owner: meshcore-canada
-last_reviewed: 2026-07-19
+last_reviewed: 2026-07-22
 review_by: 2026-10-19
 difficulty: intermediate
 estimated_time: 15 minutes
@@ -18,11 +18,11 @@ page_styles:
 
 # Troubleshoot an observer
 
-Start with the symptom. Do not change the radio, bridge, broker, and viewer at the same time.
+Start with what you can see. Change one part at a time so you know what fixed it.
 
 ## Observer never appears
 
-Work from the radio toward the live site:
+Check these in order:
 
 1. **Radio:** confirm it is powered, connected to the observer method, and on the local mesh settings.
 2. **Device or service:** confirm the observer process is running.
@@ -52,7 +52,7 @@ Copy-safe service checks:
     sudo journalctl -u pymc-repeater -n 80 --no-pager
     ```
 
-Review output before sharing it. Redact tokens, passwords, private keys, Wi-Fi details, owner email, exact home location, and full configuration files.
+Before sharing any output, follow [What to share when asking for help](#what-to-share-when-asking-for-help).
 
 For standalone firmware, run only these read commands in the device CLI:
 
@@ -66,7 +66,7 @@ get mqtt2.preset
 get path.hash.mode
 ```
 
-**Expected:** Wi-Fi and at least the primary broker report connected; the location code is three letters; the primary and backup presets are `meshcore-ca-1` and `meshcore-ca-2`.
+You should see Wi-Fi and at least the primary broker connected, a three-letter location code, and the `meshcore-ca-1` and `meshcore-ca-2` presets.
 
 ## Observer appears but no packets arrive
 
@@ -119,13 +119,13 @@ Record the time and time zone of one disconnect. That lets an administrator comp
 
 ## Home Assistant screen does not match the guide
 
-MeshCore integration labels have changed over time. Current screens may show **Payload Mode** and a free-text location field; older screens may show **Packets (Lets Mesh)** and a picker.
+Current screens use **Payload Mode** and a free-text location field. Older screens may use **Packets (Lets Mesh)** and a picker.
 
 Update the integration before substituting a wrong location. If the current screen still differs, record the Home Assistant and MeshCore integration versions and ask for help.
 
-## Build a safe escalation bundle
+## What to share when asking for help
 
-Share a short, redacted report:
+If you need help, share this short report:
 
 ```text
 Observer method:
@@ -152,6 +152,6 @@ Before posting, remove:
 - exact home addresses or coordinates; and
 - unrelated lines from full config files.
 
-Post the bundle in the [MeshCore Canada forum](https://forum.meshcore.ca/) or the support channel used by your local community. Include a small relevant log excerpt, not an unreviewed archive.
+Post it in the [MeshCore Canada forum](https://forum.meshcore.ca/) or your local community's support channel. Include only the small part of the log that shows the problem.
 
 Return to [Check your observer](verify.md) after each fix.

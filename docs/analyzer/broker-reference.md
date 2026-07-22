@@ -1,6 +1,6 @@
 ---
-title: Advanced observer endpoint reference
-description: Inspect the canonical MeshCore Canada endpoint, transport, authentication, topic, and packet-mode values.
+title: Observer endpoint reference
+description: Find the broker, security, topic, and packet settings used by MeshCore Canada observers.
 audience:
   - observer-operators
   - service-operators
@@ -8,7 +8,7 @@ task: reference-observer-endpoints
 scope: canada-baseline
 status: draft
 owner: meshcore-canada
-last_reviewed: 2026-07-19
+last_reviewed: 2026-07-22
 review_by: 2026-10-19
 difficulty: advanced
 estimated_time: 8 minutes
@@ -19,13 +19,13 @@ page_scripts:
   - assets/javascripts/analyzer-broker-reference.js?v=20260722-2
 ---
 
-# Advanced observer endpoint reference
+# Observer endpoint reference
 
-This page is for operators who already chose an [observer method](intro.md). Beginners should follow the method guide instead of copying values from this page.
+Use this reference after you have [chosen an observer setup](intro.md). Follow that setup's guide instead of copying fields from here on their own.
 
-## Generated endpoint table
+## Broker settings
 
-The table is loaded from the [canonical observer configuration](observer-config.json).
+These values come from the shared [observer configuration](observer-config.json).
 
 <div class="mc-generated-reference" id="broker-reference" data-source="../observer-config.json">
   <div class="mc-location-table-wrap">
@@ -46,7 +46,7 @@ The table is loaded from the [canonical observer configuration](observer-config.
   <p class="mc-location-status" id="broker-reference-status" role="status">Loading canonical endpoint values…</p>
 </div>
 
-Without JavaScript, open [observer-config.json](observer-config.json) directly.
+If the table does not load, open [observer-config.json](observer-config.json).
 
 ## Topic templates
 
@@ -72,10 +72,10 @@ meshcore/{IATA}/{PUBLIC_KEY}/status
 | MQTT firmware | `mqtt.packets on`, `bridge.enabled on`, and `mqtt.rx on` |
 | MCtoMQTT / companion capture | Configure the `/packets` topic |
 | PyMC | `format: letsmesh` |
-| Home Assistant | **Payload Mode** = `packet`, or older **Packets (Lets Mesh)** enabled |
+| Home Assistant | **Payload Mode** = `packet` |
 | RemoteTerm | Enable the Community MQTT packet topic |
 
-## Interpret status correctly
+## What each check tells you
 
 | State | What it proves |
 |---|---|
@@ -84,4 +84,4 @@ meshcore/{IATA}/{PUBLIC_KEY}/status
 | Observer visible | Status reached the live service |
 | Recent packet visible | The radio-to-viewer path works end to end |
 
-Only the last state completes [observer verification](verify.md).
+Only a recent packet completes [the observer check](verify.md).

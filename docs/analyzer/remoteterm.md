@@ -1,13 +1,13 @@
 ---
 title: Observe with RemoteTerm
-description: Forward packets from a radio already managed by RemoteTerm, then verify the complete path in CoreScope.
+description: Send packets from a radio already managed by RemoteTerm to CoreScope.
 audience:
   - observer-operators
 task: configure-remoteterm-observer
 scope: canada-baseline
 status: draft
 owner: meshcore-canada
-last_reviewed: 2026-07-19
+last_reviewed: 2026-07-22
 review_by: 2026-10-19
 difficulty: intermediate
 estimated_time: 15 minutes
@@ -18,17 +18,17 @@ page_styles:
 
 # Observe with RemoteTerm
 
-[RemoteTerm for MeshCore](https://github.com/jkingsman/Remote-Terminal-for-MeshCore) can forward raw packets from a radio it already manages. It does not publish decrypted messages.
+[RemoteTerm for MeshCore](https://github.com/jkingsman/Remote-Terminal-for-MeshCore) can forward packet data from a radio it already manages. It does not decrypt private messages.
 
 ## Is this method right for you?
 
 <div class="mc-method-fit">
-  <div><strong>Choose it when</strong>RemoteTerm already connects to the radio over serial, TCP, or BLE.</div>
-  <div><strong>Choose another method when</strong>You would install RemoteTerm only for observing; compare the simpler host or standalone paths first.</div>
-  <div><strong>Stays online</strong>The RemoteTerm host, its radio connection, and internet access.</div>
+  <div><strong>Use RemoteTerm if</strong>It already connects to the radio over serial, TCP, or BLE.</div>
+  <div><strong>Use something else if</strong>You would install RemoteTerm only for observing.</div>
+  <div><strong>Keep online</strong>The RemoteTerm host, radio connection, and internet access.</div>
 </div>
 
-This guide follows RemoteTerm's rolling interface and is not pinned to a tested release. If labels differ, record the RemoteTerm version and check the upstream instructions before saving.
+RemoteTerm changes quickly. If the labels do not match, check the upstream instructions for your installed version before saving.
 
 ## Before you start
 
@@ -40,7 +40,7 @@ This guide follows RemoteTerm's rolling interface and is not pinned to a tested 
 
 ## What this changes
 
-RemoteTerm gains one primary and one backup Community MQTT entry. Each entry sends packet telemetry through an encrypted WebSocket connection. It does not change radio firmware.
+You will add a primary and backup Community MQTT entry. They send packet data over encrypted WebSocket connections and do not change the radio firmware.
 
 ## Set up
 
@@ -77,9 +77,9 @@ Use the same location code in both entries.
 !!! note "Windows MQTT fanout"
     If RemoteTerm's current upstream instructions require Uvicorn `--loop none` for Windows MQTT fanout, use that documented launch option. Confirm against the installed RemoteTerm version.
 
-## Expected result
+## What you should see
 
-Both entries remain enabled without repeated TLS or token errors. Normal nearby radio activity increments packet handling in RemoteTerm.
+Both entries stay enabled without repeated TLS or token errors, and RemoteTerm's packet count changes when it hears nearby activity.
 
 ## Verify in CoreScope
 
@@ -87,7 +87,7 @@ Both entries remain enabled without repeated TLS or token errors. Normal nearby 
 2. Create or wait for normal nearby activity.
 3. Open [CoreScope Packets](https://live.meshcore.ca/#/packets) and confirm a recent packet appears.
 
-Continue through the complete [observer verification checklist](verify.md). A connected entry without a recent packet is not complete.
+Finish with [Check your observer](verify.md). A connected entry without a recent packet is not proof that the whole path works.
 
 ## Recovery
 
@@ -95,4 +95,4 @@ Disable or remove only the two Community MQTT entries you added. Do not remove u
 
 ## If verification fails
 
-Use [symptom-first troubleshooting](troubleshooting.md). For a missing backup only, compare its host and token audience; both must be `mqtt2.meshcore.ca`.
+Use [Troubleshooting](troubleshooting.md). If only the backup fails, check that its host and token audience are both `mqtt2.meshcore.ca`.

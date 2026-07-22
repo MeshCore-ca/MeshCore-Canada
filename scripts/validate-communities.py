@@ -427,7 +427,7 @@ def render_contacts(community: dict[str, Any], *, indent: str = "") -> list[str]
 def render_settings(community: dict[str, Any], *, compact: bool = False) -> str:
     overrides = community["settings"]["overrides"]
     if not overrides:
-        return "Uses the Canada baseline"
+        return "Uses the Canada defaults"
     values = []
     if "radio_preset" in overrides:
         values.append(
@@ -437,7 +437,7 @@ def render_settings(community: dict[str, Any], *, compact: bool = False) -> str:
         values.append(
             f"Path hash mode: <strong>{html.escape(overrides['path_hash_mode'])}</strong>"
         )  # Cards use raw HTML, so override values must be escaped markup.
-    prefix = "Local override — " if compact else ""
+    prefix = "Different local settings — " if compact else ""
     return prefix + "; ".join(values)
 
 
@@ -511,16 +511,15 @@ def render_index(data: dict[str, Any]) -> str:
         "Search by place, province, community name, or a common alias. The full list",
         "works without a map, location permission, or a GitHub account.",
         "",
-        '!!! note "Community-provided status; verification dates are still needed"',
-        f"    {active} listings are described as active and {forming} as forming by their",
-        f"    source communities, but {unverified} of {len(communities)} listings do not yet have a recorded",
-        "    recent contact check. Confirm important settings and contacts before relying on them.",
+        '!!! note "Community information can change"',
+        f"    {unverified} of {len(communities)} listings do not have a recent contact check.",
+        "    Confirm important settings and contacts before relying on them.",
         "",
         '<div class="mc-directory-summary" aria-label="Directory summary">',
         f"<span><strong>{len(communities)}</strong> listings</span>",
         f"<span><strong>{active}</strong> listed active</span>",
         f"<span><strong>{forming}</strong> listed forming</span>",
-        f"<span><strong>{overrides}</strong> local override</span>",
+        f"<span><strong>{overrides}</strong> with different local settings</span>",
         "</div>",
         "",
         '<div class="mc-directory-tools" data-community-directory>',
@@ -566,11 +565,11 @@ def render_index(data: dict[str, Any]) -> str:
         [
             "</div>",
             "",
-            "## Canada baseline",
+            "## Canada defaults { #canada-baseline }",
             "",
-            "Use these settings only when your local community has not published an override.",
+            "Use these settings unless your local community lists different ones.",
             "",
-            "| Setting | Canada baseline |",
+            "| Setting | Canada default |",
             "|---|---|",
             f'| Radio preset | `{data["national_defaults"]["radio_preset"]}` |',
             (
@@ -584,8 +583,8 @@ def render_index(data: dict[str, Any]) -> str:
             f'| Command-line path setting | `{data["national_defaults"]["cli_path_setting"]}` |',
             "",
             "!!! warning \"Check local settings first\"",
-            "    Nearby devices need matching settings. A card marked **Local override**",
-            "    takes precedence over the Canada baseline after you confirm it with the",
+            "    Nearby devices need matching settings. A card marked **Different local settings**",
+            "    takes precedence over the Canada defaults after you confirm it with the",
             "    listed community.",
             "",
             "## Browse by province or territory",
@@ -609,7 +608,7 @@ def render_index(data: dict[str, Any]) -> str:
         lines.extend(
             [
                 '<article class="mc-province-card">',
-                f'<h3><a href="{page["slug"]}/">{html.escape(page["title"].title())}</a></h3>',
+                f'<h3><a href="{page["slug"]}/">{html.escape(page["title"])}</a></h3>',
                 f"<p>{', '.join(labels)}</p>",
                 "</article>",
             ]
@@ -622,10 +621,6 @@ def render_index(data: dict[str, Any]) -> str:
             "",
             "Found missing or outdated information?",
             f"[Send a community update]({metadata['update_route']}). No GitHub account needed.",
-            "",
-            "Directory contacts are community-provided external links. **Not yet verified**",
-            "means the directory stewards have preserved the listing but have not recorded a",
-            "recent contact check. Use the update action if a link has expired.",
             "",
         ]
     )
@@ -724,25 +719,34 @@ def render_province_page(data: dict[str, Any], page: dict[str, Any]) -> str:
         "",
     ]
     if communities:
-        summary_parts = []
-        if active:
-            summary_parts.append(f"{active} active")
-        if forming:
-            summary_parts.append(f"{forming} forming")
+        if active and not forming:
+            summary = (
+                f"{title_display} has **{active} active community listing"
+                f"{'' if active == 1 else 's'}**."
+            )
+        elif forming and not active:
+            summary = (
+                f"{title_display} has **{forming} forming community listing"
+                f"{'' if forming == 1 else 's'}**."
+            )
+        else:
+            summary = (
+                f"{title_display} has **{len(communities)} community listings** "
+                f"({active} active, {forming} forming)."
+            )
         lines.extend(
             [
-                f"This directory currently has **{len(communities)}** listing"
-                f"{'' if len(communities) == 1 else 's'}: {', '.join(summary_parts)}.",
+                summary,
                 "",
-                "All listings inherit the [Canada baseline](index.md#canada-baseline) unless a",
-                "card shows a local override.",
+                "All listings use the [Canada defaults](index.md#canada-baseline) unless a",
+                "card lists different local settings.",
                 "",
             ]
         )
     else:
         lines.extend(
             [
-                "There is no reviewed community listing here yet.",
+                "We don't have a community listed here yet.",
                 "",
                 '<div class="mc-community-empty mc-community-empty--page">',
                 "  <h2>Help add the first listing</h2>",
@@ -752,8 +756,8 @@ def render_province_page(data: dict[str, Any], page: dict[str, Any]) -> str:
                 '  <p><a href="../">Browse all Canadian communities</a></p>',
                 "</div>",
                 "",
-                "Until a reviewed local listing publishes an override, start with the",
-                "[Canada baseline](index.md#canada-baseline) and confirm settings with nearby",
+                "Until a reviewed local listing gives different settings, start with the",
+                "[Canada defaults](index.md#canada-baseline) and confirm settings with nearby",
                 "operators before transmitting.",
                 "",
             ]
@@ -765,8 +769,8 @@ def render_province_page(data: dict[str, Any], page: dict[str, Any]) -> str:
     if override_communities:
         lines.extend(
             [
-                "!!! warning \"Local setting differs from the Canada baseline\"",
-                "    One community on this page publishes a local setting override. Confirm",
+                "!!! warning \"This community uses different settings\"",
+                "    One community on this page lists different local settings. Confirm",
                 "    the current setting with its contact before configuring or changing a node.",
                 "",
             ]
@@ -803,8 +807,7 @@ def render_province_page(data: dict[str, Any], page: dict[str, Any]) -> str:
             "",
             f"[Send a community update]({metadata['update_route']}). No GitHub account needed.",
             "",
-            "The directory does not guess exact locations, languages, owners, or link health.",
-            "Fields remain marked unverified until a community steward reviews them.",
+            "Listings are community-submitted and may be incomplete or out of date.",
             "",
         ]
     )

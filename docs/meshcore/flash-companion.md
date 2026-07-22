@@ -8,7 +8,7 @@ task: flash-companion
 scope: canada-baseline
 status: draft
 owner: docs-firmware
-last_reviewed: 2026-07-19
+last_reviewed: 2026-07-22
 review_by: 2026-10-17
 difficulty: beginner
 estimated_time: 20-30 minutes
@@ -19,22 +19,13 @@ requires:
 page_styles:
   - assets/styles/devices-builds.css?v=20260722-2
 ---
-# Flash and Configure a Companion
+# Flash and configure a companion
 
-<div class="mc-guide-status" data-status="draft" markdown>
+Confirm that the official flasher supports your exact board as a companion,
+then use this guide to back it up, flash it, and join your local mesh. Check the
+[community directory](../provinces/index.md) for different local settings.
 
-**Safety-flow reviewed; device compatibility not yet verified.** Confirm the exact board and current companion target in the official flasher. No tested board/firmware matrix is attached to this page.
-
-</div>
-
-Flash a supported device with companion firmware, then connect it to the Canadian mesh.
-
-- **Scope:** MeshCore Canada onboarding baseline
-- **Status:** Operational guide; confirm the exact board and current firmware in the flasher
-
-Local communities may publish different radio settings. Check the [Mesh Directory](../provinces/index.md) before applying the national baseline.
-
-## Before You Erase
+## Before you erase
 
 !!! danger "Erase Flash deletes the device's stored data"
     Erasing can remove the node identity/private key, name, contacts, channels, radio settings, and other saved configuration. An erased identity cannot be recovered unless you backed it up.
@@ -48,7 +39,7 @@ If this is not a brand-new device:
 
 If you cannot back up an identity or configuration that matters, **stop before Erase Flash** and ask your local community for help.
 
-## Prerequisites and preflight
+## Before you start
 
 - [ ] I selected the exact hardware model printed on or reported by the board.
 - [ ] I backed up everything I need from an existing device.
@@ -59,7 +50,7 @@ If you cannot back up an identity or configuration that matters, **stop before E
 !!! warning "USB serial drivers"
     Some boards require a USB serial driver before the browser can connect.
 
-## What this will change
+## What flashing changes
 
 Flashing replaces the installed firmware and, when **Erase Flash** is selected, deletes stored identity and configuration. The later setup writes the device name and local radio settings.
 
@@ -80,7 +71,7 @@ Use the official [MeshCore Web Flasher](https://meshcore.io/flasher). The flashe
 
 Do not keep erasing. Leave the device connected, refresh the flasher, return the board to DFU mode, reselect the exact board and companion firmware, and retry **Flash**. If the board no longer appears, follow its documented bootloader recovery method or ask for help before trying another target.
 
-## Expected result after flashing
+## Check the flash
 
 The flasher reports completion, the board restarts as a companion, and the supported app can discover it. If any part is missing, use the recovery path before changing another setting.
 
@@ -88,8 +79,8 @@ The flasher reports completion, the board restarts as a companion, and the suppo
 
 1. Pair the node with the supported MeshCore app on your phone or computer.
 2. Give it a descriptive name that does not reveal a private location.
-3. Check your local community page for an override.
-4. If no override is documented, apply the MeshCore Canada baseline: **USA/Canada (Recommended)** (`910.525 MHz / 62.5 kHz / SF7 / CR5`).
+3. Check your local community page for different settings.
+4. If none are listed, use the Canada defaults: **USA/Canada (Recommended)** (`910.525 MHz / 62.5 kHz / SF7 / CR5`).
 5. Save the settings and reconnect after the device restarts.
 
 The optional **Message Settings → Auto Reset Path** preference affects how the app manages changing paths. Leave it at its default unless your local testing process calls for a different setting.
@@ -103,13 +94,11 @@ The optional **Message Settings → Auto Reset Path** preference affects how the
 Do not consider the setup complete until the saved settings survive a reboot and a local test succeeds.
 
 
-## Next step
+## After flashing
 
 After the companion passes the reboot and local message check, [find your community](../provinces/index.md) and keep the board-specific USB recovery method with the device record.
 
-## Sources and verification limits
+## Sources
 
 - [Official MeshCore web flasher](https://meshcore.io/flasher)
 - [Official MeshCore source and releases](https://github.com/meshcore-dev/MeshCore)
-
-A firmware maintainer must attach a dated tested-board/version matrix before this guide can be marked verified.

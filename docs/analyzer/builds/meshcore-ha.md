@@ -1,6 +1,6 @@
 ---
 title: Observe with Home Assistant
-description: Add MeshCore Canada packet publishing to an existing Home Assistant MeshCore integration and verify it end to end.
+description: Send packets from an existing Home Assistant MeshCore integration to CoreScope.
 audience:
   - observer-operators
   - home-assistant-users
@@ -8,7 +8,7 @@ task: configure-home-assistant-observer
 scope: canada-baseline
 status: draft
 owner: meshcore-canada
-last_reviewed: 2026-07-19
+last_reviewed: 2026-07-22
 review_by: 2026-10-19
 difficulty: intermediate
 estimated_time: 15 minutes
@@ -24,21 +24,20 @@ Use the MeshCore integration you already run in Home Assistant to publish packet
 ## Is this method right for you?
 
 <div class="mc-method-fit">
-  <div><strong>Choose it when</strong>Home Assistant already has a working MeshCore integration and connected radio.</div>
-  <div><strong>Choose another method when</strong>You would install Home Assistant only for observing.</div>
-  <div><strong>Stays online</strong>Home Assistant, the radio connection, and internet access.</div>
+  <div><strong>Use Home Assistant if</strong>It already has a working MeshCore integration and connected radio.</div>
+  <div><strong>Use something else if</strong>You would install Home Assistant only for observing.</div>
+  <div><strong>Keep online</strong>Home Assistant, the radio connection, and internet access.</div>
 </div>
 
-## Version and screen check
+## Check your screen
 
-This guide is not pinned to a tested integration release. Identify the interface before changing it:
+Current MeshCore integrations use these fields:
 
-| Interface you see | Packet control | Location control |
-|---|---|---|
-| Current-style screen | **Payload Mode** = `packet` | Free-text **Broker IATA Code** |
-| Older screen | **Packets (Lets Mesh)** enabled | May use a limited picker |
+| Packet control | Location control |
+|---|---|
+| **Payload Mode** = `packet` | Free-text **Broker IATA Code** |
 
-If your screen does not accept the correct location code, update the MeshCore integration. Do not substitute a wrong nearby code.
+If your screen looks different, see [Home Assistant screen does not match the guide](../troubleshooting.md#home-assistant-screen-does-not-match-the-guide). Update the integration if it cannot accept the correct location code; do not substitute a nearby code.
 
 ## Before you start
 
@@ -50,7 +49,7 @@ If your screen does not accept the correct location code, update the MeshCore in
 
 ## What this changes
 
-You add two MQTT broker entries inside the MeshCore integration and enable packet payloads. No Wi-Fi password or static MQTT password belongs in these entries.
+You will add two MQTT broker entries and enable packet payloads. Do not enter a Wi-Fi password or static MQTT password.
 
 ## Set up
 
@@ -85,9 +84,9 @@ Add the backup entry with the same settings, changing only:
 
 Leave optional owner fields blank unless they are needed. Save both entries.
 
-## Expected result
+## What you should see
 
-Both entries show connected. Normal nearby radio activity produces packet activity in the integration. A connected broker without packet activity usually means packet mode is off or the radio hears nothing.
+Both entries show connected and nearby radio activity changes the packet count. If the brokers connect but no packets appear, packet mode may be off or the radio may hear nothing.
 
 ## Verify in CoreScope
 
@@ -95,7 +94,7 @@ Both entries show connected. Normal nearby radio activity produces packet activi
 2. Wait for normal nearby MeshCore activity.
 3. Confirm a recent packet in [CoreScope Packets](https://live.meshcore.ca/#/packets).
 
-Complete [Check your observer](../verify.md). Do not treat Home Assistant's connected badge as final proof.
+Finish with [Check your observer](../verify.md). Home Assistant's connected badge is not proof that packets reached CoreScope.
 
 ## Recovery
 
@@ -103,4 +102,4 @@ Disable or remove only the two MeshCore Canada broker entries you added. Keep un
 
 ## If verification fails
 
-Use [symptom-first troubleshooting](../troubleshooting.md). Record the Home Assistant version, MeshCore integration version, first failed stage, and a redacted error—never a full diagnostics archive without review.
+Use [Troubleshooting](../troubleshooting.md). Include the Home Assistant version, MeshCore integration version, first failed stage, and a redacted error. Review any diagnostics archive before sharing it.

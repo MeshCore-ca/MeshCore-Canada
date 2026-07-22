@@ -21,10 +21,10 @@ page_styles:
 
 # MeshCore communities in Ontario
 
-This directory currently has **3** listings: 3 active.
+Ontario has **3 active community listings**.
 
-All listings inherit the [Canada baseline](index.md#canada-baseline) unless a
-card shows a local override.
+All listings use the [Canada defaults](index.md#canada-baseline) unless a
+card lists different local settings.
 
 ## Community listings
 
@@ -37,7 +37,7 @@ card shows a local override.
 <p class="mc-community-area">Eastern Ontario and Western Quebec</p>
 <dl class="mc-community-facts">
 <div><dt>Settings</dt>
-<dd>Uses the Canada baseline</dd></div>
+<dd>Uses the Canada defaults</dd></div>
 <div><dt>Last verified</dt>
 <dd>Not yet verified</dd></div>
 </dl>
@@ -59,7 +59,7 @@ card shows a local override.
 <p class="mc-community-area">Southern Ontario</p>
 <dl class="mc-community-facts">
 <div><dt>Settings</dt>
-<dd>Uses the Canada baseline</dd></div>
+<dd>Uses the Canada defaults</dd></div>
 <div><dt>Last verified</dt>
 <dd>Not yet verified</dd></div>
 </dl>
@@ -80,7 +80,7 @@ card shows a local override.
 <p class="mc-community-area">Quinte Region, including Belleville, Trenton, Prince Edward County, and nearby areas</p>
 <dl class="mc-community-facts">
 <div><dt>Settings</dt>
-<dd>Uses the Canada baseline</dd></div>
+<dd>Uses the Canada defaults</dd></div>
 <div><dt>Last verified</dt>
 <dd>Not yet verified</dd></div>
 </dl>
@@ -100,5 +100,4 @@ card shows a local override.
 
 [Send a community update](../submit-idea.md). No GitHub account needed.
 
-The directory does not guess exact locations, languages, owners, or link health.
-Fields remain marked unverified until a community steward reviews them.
+Listings are community-submitted and may be incomplete or out of date.

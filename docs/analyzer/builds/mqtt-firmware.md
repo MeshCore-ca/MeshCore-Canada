@@ -1,13 +1,13 @@
 ---
 title: Build a standalone MQTT observer
-description: Flash a supported Wi-Fi LoRa board, build safe local CLI commands, recover if needed, and verify packets in CoreScope.
+description: Turn a supported Wi-Fi LoRa board into a dedicated CoreScope observer.
 audience:
   - observer-operators
 task: configure-standalone-observer
 scope: experimental
 status: draft
 owner: meshcore-canada
-last_reviewed: 2026-07-19
+last_reviewed: 2026-07-22
 review_by: 2026-10-19
 difficulty: advanced
 estimated_time: 35 minutes
@@ -25,23 +25,23 @@ Dedicated observer firmware lets a supported Wi-Fi LoRa board send nearby packet
 ## Is this method right for you?
 
 <div class="mc-method-fit">
-  <div><strong>Choose it when</strong>A supported Wi-Fi LoRa board can be dedicated to observing.</div>
-  <div><strong>Choose another method when</strong>The radio is already managed by RemoteTerm, Home Assistant, PyMC, or a nearby USB host.</div>
-  <div><strong>Stays online</strong>The board, stable power, 2.4 GHz Wi-Fi, and internet access.</div>
+  <div><strong>Use this firmware if</strong>A supported Wi-Fi LoRa board can be dedicated to observing.</div>
+  <div><strong>Use something else if</strong>RemoteTerm, Home Assistant, PyMC, or a nearby USB host already manages the radio.</div>
+  <div><strong>Keep online</strong>The board, stable power, 2.4 GHz Wi-Fi, and internet access.</div>
 </div>
 
-This is a third-party firmware path. Confirm the board and displayed build before flashing.
+This uses third-party firmware. Confirm the board and build shown by the flasher before continuing.
 
-## Version and source check
+## Check the build
 
-| Item | Recorded reference |
+| Item | Reference |
 |---|---|
 | Flasher | [observer.gessaman.com](https://observer.gessaman.com/) |
 | Recorded source branch | `mqtt-bridge-implementation-flex` |
 | Recorded source commit | `c0c845f5` |
 | Expected presets | `meshcore-ca-1` and `meshcore-ca-2` |
 
-The recorded commit is provenance, not proof that the live flasher still serves it. Stop if the flasher identifies a different board, source, or build that you have not reviewed.
+The commit records the source used when this guide was reviewed; it does not prove the live flasher still uses that build. Stop if the flasher shows a board, source, or build you have not checked.
 
 ## Before you start
 
@@ -57,7 +57,7 @@ The recorded commit is provenance, not proof that the live flasher still serves 
 
 ## What this changes
 
-Flashing replaces the board firmware. Setup then changes the name, radio values, path-hash mode, location label, Wi-Fi credentials, broker presets, packet mode, and repeat behaviour.
+Flashing replaces the board firmware. Setup then changes its name, radio values, path-hash mode, location code, Wi-Fi credentials, broker presets, packet mode, and repeat behaviour.
 
 The command builder runs locally in this browser. It does not store Wi-Fi fields, place them in the URL, or include them in the default preview.
 
@@ -72,7 +72,7 @@ The command builder runs locally in this browser. It does not store Wi-Fi fields
 5. Flash the merged image.
 6. When flashing finishes, prefer **Configure via USB**. Use **Console** only for settings the setup screen does not expose.
 
-**Expected:** the flasher reports completion and the board reconnects on USB.
+The flasher should report completion and the board should reconnect over USB.
 
 ### 2. Enter the shared settings
 
@@ -149,7 +149,7 @@ The CLI has no documented general quoting contract. The builder rejects spaces, 
   <pre aria-label="Observer command preview"><code id="observer-command-output">Complete the required fields to build commands.</code></pre>
 </div>
 
-Review the non-sensitive summary and redacted preview. Reveal and copy only on a trusted computer. The clipboard then contains Wi-Fi credentials; clear it after use.
+Check the non-sensitive summary and redacted preview. Reveal and copy commands only on a trusted computer. The clipboard will contain Wi-Fi credentials, so clear it after use.
 
 ### Manual CLI path
 
@@ -189,7 +189,7 @@ reboot
 
 Do not paste completed credential lines into chat, issues, screenshots, logs, or saved notes. Do not add generic shell quotes to a device CLI value.
 
-## Expected result
+## What you should see
 
 After reboot, run:
 
@@ -205,7 +205,7 @@ get bridge.enabled
 get path.hash.mode
 ```
 
-Expected:
+Check that:
 
 - Wi-Fi and MQTT report connected;
 - the location code is correct;
@@ -219,7 +219,7 @@ Expected:
 2. Wait for normal nearby radio activity.
 3. Confirm a recent packet in [CoreScope Packets](https://live.meshcore.ca/#/packets).
 
-Complete [Check your observer](../verify.md). Connected Wi-Fi and MQTT are not end-to-end proof.
+Finish with [Check your observer](../verify.md). Connected Wi-Fi and MQTT are not proof that packets reached CoreScope.
 
 ## Recovery
 
@@ -235,4 +235,4 @@ If the firmware runs but observing fails, restore the recorded prior settings or
 
 ## If verification fails
 
-Use [symptom-first troubleshooting](../troubleshooting.md). Share only read-command output after redacting private details; never share Wi-Fi commands or a private key.
+Use [Troubleshooting](../troubleshooting.md). Share only read-command output after removing private details. Never share Wi-Fi commands or a private key.

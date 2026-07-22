@@ -1,6 +1,6 @@
 ---
 title: Observe with PyMC
-description: Add the Canadian endpoint pair to an existing PyMC repeater with a config backup, service check, rollback, and live proof.
+description: Send packets from an existing PyMC repeater service to CoreScope.
 audience:
   - observer-operators
   - service-operators
@@ -8,7 +8,7 @@ task: configure-pymc-observer
 scope: canada-baseline
 status: draft
 owner: meshcore-canada
-last_reviewed: 2026-07-19
+last_reviewed: 2026-07-22
 review_by: 2026-10-19
 difficulty: advanced
 estimated_time: 25 minutes
@@ -24,21 +24,14 @@ Add MeshCore Canada's primary and backup endpoints to a PyMC repeater service yo
 ## Is this method right for you?
 
 <div class="mc-method-fit">
-  <div><strong>Choose it when</strong>A working PyMC repeater service already manages the radio.</div>
-  <div><strong>Choose another method when</strong>You would install Python and PyMC only to observe traffic.</div>
-  <div><strong>Stays online</strong>The PyMC host, service, radio connection, and internet access.</div>
+  <div><strong>Use PyMC if</strong>A working PyMC repeater service already manages the radio.</div>
+  <div><strong>Use something else if</strong>You would install Python and PyMC only to observe traffic.</div>
+  <div><strong>Keep online</strong>The PyMC host, service, radio connection, and internet access.</div>
 </div>
 
-## Supported environment
+## Check your installation
 
-This guide assumes a Linux service named `pymc-repeater` and config at `/etc/pymc_repeater/config.yaml`. MeshCore Canada has not published a pinned PyMC/Python support matrix for this page. Confirm the installed version, service name, config path, and upstream format before editing.
-
-| Environment | Coverage in this guide |
-|---|---|
-| Linux with systemd and the default paths | Documented path; still confirm the installed PyMC release |
-| Linux with a different service or config path | Adapt only after checking the local unit and upstream documentation |
-| macOS or Windows | Not covered by this service procedure |
-| PyMC and Python versions | Use the versions supported by the installed upstream PyMC release; no version pair is verified here |
+This procedure is for a Linux systemd service named `pymc-repeater` with config at `/etc/pymc_repeater/config.yaml`. Confirm the version, service name, path, and config format before editing. For different paths, macOS, or Windows, follow the installed PyMC version's documentation.
 
 ## Before you start
 
@@ -57,7 +50,7 @@ sudo cp -- /etc/pymc_repeater/config.yaml /etc/pymc_repeater/config.yaml.pre-mes
 
 ## What this changes
 
-You edit PyMC's YAML config and restart its service. The change adds a location code and two encrypted, token-authenticated broker entries. It does not change radio firmware.
+You will edit PyMC's YAML config and restart the service. The change adds a location code and two encrypted, token-authenticated broker entries; it does not change the radio firmware.
 
 ## Set up
 
@@ -116,11 +109,11 @@ If the service fails, inspect a short local excerpt:
 sudo journalctl -u pymc-repeater -n 80 --no-pager
 ```
 
-Review and redact output before sharing it.
+Review any output before sharing it. Follow the [redaction checklist](../troubleshooting.md#what-to-share-when-asking-for-help).
 
-## Expected result
+## What you should see
 
-The service remains active without YAML, TLS, or token errors. Its packet counter or logs change when the connected radio hears nearby traffic.
+The service stays active without YAML, TLS, or token errors, and its packet count changes when the radio hears nearby traffic.
 
 ## Verify in CoreScope
 
@@ -128,7 +121,7 @@ The service remains active without YAML, TLS, or token errors. Its packet counte
 2. Wait for normal nearby activity.
 3. Confirm a recent packet in [CoreScope Packets](https://live.meshcore.ca/#/packets).
 
-Complete [Check your observer](../verify.md). A healthy systemd service is not end-to-end proof.
+Finish with [Check your observer](../verify.md). A healthy systemd service is not proof that packets reached CoreScope.
 
 ## Recovery
 
@@ -140,8 +133,8 @@ sudo systemctl restart pymc-repeater
 sudo systemctl status pymc-repeater --no-pager
 ```
 
-Keep the failed edited file privately if it is useful for diagnosis, but do not post it without redacting secrets and personal fields.
+Keep the failed file privately if it helps with diagnosis. Do not post it without removing secrets and personal details.
 
 ## If verification fails
 
-Use [symptom-first troubleshooting](../troubleshooting.md). Include the PyMC version, service name, first failed stage, and a short redacted log excerpt.
+Use [Troubleshooting](../troubleshooting.md). Include the PyMC version, service name, first failed stage, and a short redacted log excerpt.

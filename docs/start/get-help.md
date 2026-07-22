@@ -1,6 +1,6 @@
 ---
 title: Get help with a MeshCore setup
-description: Choose the shortest support path for a MeshCore device, local settings, observer, or documentation problem.
+description: Get help with a MeshCore device, local settings, observer, or documentation problem.
 audience:
   - first-time-user
   - meshcore-operator
@@ -8,7 +8,7 @@ task: get-setup-help
 scope: canada-baseline
 status: verified
 owner: docs-ux
-last_reviewed: 2026-07-19
+last_reviewed: 2026-07-22
 review_by: 2027-07-19
 tested_with:
   content_baseline: f608cfe
@@ -54,7 +54,7 @@ Include:
 - you would lose the only way to reach a remote node;
 - a local operator says the proposed settings conflict with the mesh.
 
-## Next step
+## Try one change at a time
 
 Return to [Verify your setup](verify.md) after making one change. Testing one
 change at a time makes the result easier to understand.

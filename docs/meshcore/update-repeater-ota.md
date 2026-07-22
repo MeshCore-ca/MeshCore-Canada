@@ -5,10 +5,10 @@ audience:
   - advanced-repeater-operator
   - room-server-operator
 task: update-repeater-ota
-scope: ottawa-field-practice
+scope: community-practice
 status: experimental
 owner: docs-firmware
-last_reviewed: 2026-07-19
+last_reviewed: 2026-07-22
 review_by: 2026-10-17
 difficulty: advanced
 estimated_time: 30-60 minutes
@@ -20,23 +20,17 @@ requires:
 page_styles:
   - assets/styles/devices-builds.css?v=20260722-2
 ---
-# Update a Repeater or Room Server over the Air
+# Update a repeater or room server over the air
 
-<div class="mc-guide-status" data-status="experimental" markdown>
-
-**Advanced Ottawa field practice.** USB remains the primary update method. Exact board, bootloader, current version, target artifact, phone/app behaviour, and recovery have not been reproduced as a current matrix on this page.
-
-</div>
-
-OTA updating is an advanced fallback for supported nRF52 devices. USB flashing remains the recommended method.
-
-- **Scope:** MeshCore Canada field practice
-- **Status:** Advanced and high risk; upstream support and exact board/version must be confirmed
+Use USB when you can. An over-the-air update is a higher-risk fallback for
+supported nRF52 devices, and a failed update may still need USB recovery.
+Confirm the exact board, bootloader, installed version, and firmware file
+before continuing.
 
 !!! danger "Bootloader prerequisite"
     Proceed only after confirming that the exact board has the OTAFIX bootloader described in [Flashing a Repeater](flash-repeater.md#nrf52-bootloader-decision). A failed OTA update can require physical USB recovery.
 
-!!! warning "Android is the MeshCore Canada field-tested path"
+!!! warning "Android is the method tested by the community"
     The community has observed failed OTA attempts from iOS and currently recommends Android for this workflow. This is a local risk-control recommendation, not a claim that upstream iOS support does not exist.
 
 ## Prerequisites: decide whether to stop
@@ -53,7 +47,7 @@ Use USB instead if any answer below is **no**:
 !!! danger "No physical recovery means no OTA"
     Do not start an OTA update on a roof, tower, winter site, or other inaccessible installation when a failed update cannot be recovered promptly by USB.
 
-## What this will change
+## What the update changes
 
 OTA places the device into firmware-update mode and replaces its firmware over Bluetooth. A failed transfer can leave the device needing physical USB recovery, while a wrong artifact can target the wrong board or role.
 
@@ -87,7 +81,7 @@ You may also issue `start ota` from a standalone management device that supports
 
 Install Nordic's **nRF Device Firmware Update** app from the official app store for the phone.
 
-For the MeshCore Canada Android-tested path, use:
+For the Android method tested by the community, use:
 
 - **Packet receipts notification:** on
 - **Number of packets:** `8`
@@ -104,11 +98,11 @@ Then:
 
 If the app reports failure but a generic name such as `AdaDFU` or `RAK4631_DFU` appears, select that device and retry the same verified ZIP once. Do not switch to another board's file.
 
-## Expected result
+## Check the transfer
 
 The DFU app reports completion, the device restarts, remote administration reconnects, and the device reports the intended firmware version. Anything less is a failed or incomplete update.
 
-## 4. Verify the update
+## 4. Make sure the update worked
 
 1. Log out and reconnect after the device restarts.
 2. Run `ver` and confirm the exact intended firmware version.
@@ -125,10 +119,11 @@ For upstream context, see the [official MeshCore OTA instructions](https://blog.
 
 If the same verified ZIP cannot complete against the expected DFU device, stop remote attempts and recover the exact board/role by USB. Restore the backed-up identity and settings where supported, then repeat the complete verification. Never try a different board artifact as a recovery guess.
 
-## Next step
+## After the update
 
 Record the old and new versions, artifact filename/source, device identity, result, settings check, radio test, and recovery status in the repeater maintenance record.
 
-## Verification limits
+## What has been tested
 
-The Android recommendation and DFU settings are community field practice, not a current cross-platform test matrix. A firmware maintainer must reproduce the exact board/version/app combinations before this page can be marked verified.
+The Android recommendation and DFU settings come from community testing. They
+are not a complete test matrix for every board, firmware version, phone, or app.

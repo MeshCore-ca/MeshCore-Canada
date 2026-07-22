@@ -21,10 +21,10 @@ page_styles:
 
 # MeshCore communities in New Brunswick
 
-This directory currently has **1** listing: 1 forming.
+New Brunswick has **1 forming community listing**.
 
-All listings inherit the [Canada baseline](index.md#canada-baseline) unless a
-card shows a local override.
+All listings use the [Canada defaults](index.md#canada-baseline) unless a
+card lists different local settings.
 
 ## Community listings
 
@@ -37,7 +37,7 @@ card shows a local override.
 <p class="mc-community-area">Fredericton, Saint John, Moncton, and nearby areas</p>
 <dl class="mc-community-facts">
 <div><dt>Settings</dt>
-<dd>Uses the Canada baseline</dd></div>
+<dd>Uses the Canada defaults</dd></div>
 <div><dt>Last verified</dt>
 <dd>Not yet verified</dd></div>
 </dl>
@@ -59,5 +59,4 @@ This group is forming. Contact it to learn what is working and where help is nee
 
 [Send a community update](../submit-idea.md). No GitHub account needed.
 
-The directory does not guess exact locations, languages, owners, or link health.
-Fields remain marked unverified until a community steward reviews them.
+Listings are community-submitted and may be incomplete or out of date.

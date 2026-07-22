@@ -19,8 +19,7 @@ destructive: false
 
 # Network tools
 
-Start with the outcome you need. Configuration tools help you plan a change;
-live tools help you observe what the network is currently reporting.
+Choose the tool that matches your task.
 
 <div class="grid cards" markdown>
 
@@ -28,8 +27,8 @@ live tools help you observe what the network is currently reporting.
 
     ---
 
-    Find the Canadian region for a location, review the hierarchy, and generate
-    region commands. Review every command before applying it.
+    Find a location's Canadian region and generate repeater commands. Review
+    the commands before applying them.
 
     [:octicons-arrow-right-24: Open the repeater configurator](../config/index.md)
 
@@ -37,8 +36,7 @@ live tools help you observe what the network is currently reporting.
 
     ---
 
-    Search the same region data on a national map, inspect neighbouring paths,
-    or continue without the map.
+    Find Canadian regions and neighbouring paths on a map.
 
     [:octicons-arrow-right-24: Open the region map](../config/map.md)
 
@@ -46,8 +44,7 @@ live tools help you observe what the network is currently reporting.
 
     ---
 
-    Use CoreScope to inspect public observers, packets, nodes, and map data.
-    This is an external MeshCore Canada service.
+    View public observers, packets, nodes, and map data in CoreScope.
 
     [:octicons-arrow-right-24: Open CoreScope (external)](https://live.meshcore.ca/){ target="_blank" rel="noopener" }
 
@@ -55,29 +52,16 @@ live tools help you observe what the network is currently reporting.
 
     ---
 
-    Choose an observer method for hardware or software you already use, then
-    verify that packets reach the public tools.
+    Choose an observer method, then check that packets appear in CoreScope.
 
     [:octicons-arrow-right-24: Choose an observer method](../analyzer/intro.md)
 
 </div>
 
-## Choose by task
+## Before setting up an observer
 
-| Goal | Start here | Finish with |
-|---|---|---|
-| Configure a Canadian repeater region | [Repeater configurator](../config/index.md) | [Repeater verification](../start/verify.md#repeater) |
-| Understand or review a boundary | [Region map](../config/map.md) | [Region standard](../config/standard.md) |
-| Add network visibility from a radio | [Observer method chooser](../analyzer/intro.md) | [Observer verification](../analyzer/verify.md) |
-| Diagnose missing or stale observer data | [Network-data troubleshooting](../analyzer/troubleshooting.md) | [Broker reference](../analyzer/broker-reference.md) |
-| Find a public network service or upstream tool | [Links and services](../resources/links.md) | The guide for that service |
+Observers publish heard packet data. Read [what is collected and who can access
+it](../analyzer/data-collection-access.md) before setting one up.
 
-## Before sending data
-
-Observer telemetry and heard radio packets can appear in public tools. Read
-[data collection and access](../analyzer/data-collection-access.md) and the
-[site privacy guide](../privacy.md) before operating an observer or searching
-for a place.
-
-If you are unsure which tool fits, [ask for help](../start/get-help.md) before
-changing a shared repeater or installing another service.
+Need help? See [observer troubleshooting](../analyzer/troubleshooting.md) or
+[ask the community](../start/get-help.md).

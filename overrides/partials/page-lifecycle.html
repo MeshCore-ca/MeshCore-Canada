@@ -1,12 +1,11 @@
 {% if page and page.meta %}
   {% set status = page.meta.status %}
-  {% if status in ["draft", "experimental", "legacy", "archived"] %}
+  {% if status in ["draft", "experimental", "legacy", "archived"] and page.meta.status_notice is not false %}
     <aside class="mc-page-status" data-status="{{ status }}" role="note">
-      <strong>{{ status | capitalize }} page.</strong>
-      {% if status == "draft" %}This guidance is incomplete and should not be treated as verified instructions.{% endif %}
-      {% if status == "experimental" %}Use this only if you understand the limits and have a recovery path.{% endif %}
-      {% if status == "legacy" %}This page is kept for older setups. Prefer the current guidance when possible.{% endif %}
-      {% if status == "archived" %}This page is retained for reference and is no longer maintained.{% endif %}
+      {% if status == "draft" %}We're still reviewing this guide. Double-check important details before relying on it.{% endif %}
+      {% if status == "experimental" %}This guide covers an experimental setup. Understand the limits and keep a recovery plan.{% endif %}
+      {% if status == "legacy" %}Use this only for an older setup that still needs it.{% endif %}
+      {% if status == "archived" %}This page is no longer maintained.{% endif %}
     </aside>
   {% endif %}
 

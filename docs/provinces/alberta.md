@@ -21,10 +21,10 @@ page_styles:
 
 # MeshCore communities in Alberta
 
-This directory currently has **9** listings: 9 active.
+Alberta has **9 active community listings**.
 
-All listings inherit the [Canada baseline](index.md#canada-baseline) unless a
-card shows a local override.
+All listings use the [Canada defaults](index.md#canada-baseline) unless a
+card lists different local settings.
 
 ## Community listings
 
@@ -38,7 +38,7 @@ card shows a local override.
 <p class="mc-community-summary">Building Alberta&#x27;s community-operated off-grid LoRa mesh network</p>
 <dl class="mc-community-facts">
 <div><dt>Settings</dt>
-<dd>Uses the Canada baseline</dd></div>
+<dd>Uses the Canada defaults</dd></div>
 <div><dt>Last verified</dt>
 <dd>Not yet verified</dd></div>
 </dl>
@@ -67,7 +67,7 @@ card shows a local override.
 <p class="mc-community-summary">Uses the YYC regional identifier shared with the Calgary regional network</p>
 <dl class="mc-community-facts">
 <div><dt>Settings</dt>
-<dd>Uses the Canada baseline</dd></div>
+<dd>Uses the Canada defaults</dd></div>
 <div><dt>Last verified</dt>
 <dd>Not yet verified</dd></div>
 </dl>
@@ -92,7 +92,7 @@ card shows a local override.
 <p class="mc-community-area">Calgary and area</p>
 <dl class="mc-community-facts">
 <div><dt>Settings</dt>
-<dd>Uses the Canada baseline</dd></div>
+<dd>Uses the Canada defaults</dd></div>
 <div><dt>Last verified</dt>
 <dd>Not yet verified</dd></div>
 </dl>
@@ -115,7 +115,7 @@ card shows a local override.
 <p class="mc-community-summary">Initial AlbertaMesh.ca launch region</p>
 <dl class="mc-community-facts">
 <div><dt>Settings</dt>
-<dd>Uses the Canada baseline</dd></div>
+<dd>Uses the Canada defaults</dd></div>
 <div><dt>Last verified</dt>
 <dd>Not yet verified</dd></div>
 </dl>
@@ -142,7 +142,7 @@ card shows a local override.
 <p class="mc-community-summary">Edmonton regional community within Alberta MeshCore</p>
 <dl class="mc-community-facts">
 <div><dt>Settings</dt>
-<dd>Uses the Canada baseline</dd></div>
+<dd>Uses the Canada defaults</dd></div>
 <div><dt>Last verified</dt>
 <dd>Not yet verified</dd></div>
 </dl>
@@ -167,7 +167,7 @@ card shows a local override.
 <p class="mc-community-summary">Edmonton mesh network community focused on MeshCore</p>
 <dl class="mc-community-facts">
 <div><dt>Settings</dt>
-<dd>Uses the Canada baseline</dd></div>
+<dd>Uses the Canada defaults</dd></div>
 <div><dt>Last verified</dt>
 <dd>Not yet verified</dd></div>
 </dl>
@@ -192,7 +192,7 @@ card shows a local override.
 <p class="mc-community-summary">Connecting Lethbridge, one node at a time</p>
 <dl class="mc-community-facts">
 <div><dt>Settings</dt>
-<dd>Uses the Canada baseline</dd></div>
+<dd>Uses the Canada defaults</dd></div>
 <div><dt>Last verified</dt>
 <dd>Not yet verified</dd></div>
 </dl>
@@ -220,7 +220,7 @@ card shows a local override.
 <p class="mc-community-area">Southern Alberta, including Cardston, Magrath, Raymond, and nearby areas</p>
 <dl class="mc-community-facts">
 <div><dt>Settings</dt>
-<dd>Uses the Canada baseline</dd></div>
+<dd>Uses the Canada defaults</dd></div>
 <div><dt>Last verified</dt>
 <dd>Not yet verified</dd></div>
 </dl>
@@ -242,7 +242,7 @@ card shows a local override.
 <p class="mc-community-area">Calgary</p>
 <dl class="mc-community-facts">
 <div><dt>Settings</dt>
-<dd>Uses the Canada baseline</dd></div>
+<dd>Uses the Canada defaults</dd></div>
 <div><dt>Last verified</dt>
 <dd>Not yet verified</dd></div>
 </dl>
@@ -269,5 +269,4 @@ card shows a local override.
 
 [Send a community update](../submit-idea.md). No GitHub account needed.
 
-The directory does not guess exact locations, languages, owners, or link health.
-Fields remain marked unverified until a community steward reviews them.
+Listings are community-submitted and may be incomplete or out of date.

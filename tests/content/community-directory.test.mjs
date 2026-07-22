@@ -287,10 +287,10 @@ test("all listings inherit the three-byte Canada baseline", () => {
   );
   assert.doesNotMatch(
     saskatchewan,
-    /Local setting differs from the Canada baseline/,
+    /This community uses different settings/,
   );
   assert.doesNotMatch(saskatchewan, /1-byte/);
-  assert.match(saskatchewan, /Uses the Canada baseline/);
+  assert.match(saskatchewan, /Uses the Canada defaults/);
 });
 
 test("summaries and added social contact types render from structured data", () => {

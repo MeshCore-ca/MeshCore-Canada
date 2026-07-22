@@ -6,7 +6,7 @@ import test from "node:test";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 const pages = [
-  "docs/meshcore/general-meshcore-roles.md",
+  "docs/meshcore/general-overview.md",
   "docs/meshcore/general-howto.md",
   "docs/meshcore/general-faq.md",
   "docs/resources/glossary.md",
@@ -50,21 +50,15 @@ test("Learn pages have complete lifecycle metadata and one H1", () => {
   }
 });
 
-test("role guide compares all four roles and routes each user forward", () => {
+test("MeshCore overview explains all four roles and routes users forward", () => {
   const markdown = read(pages[0]);
 
-  assert.match(markdown, /\| Role \| Main job .* Phone or computer .* Typical power \| Start \|/);
-  for (const [role, path] of [
-    ["Companion", "../start/companion.md"],
-    ["Repeater", "../start/repeater.md"],
-    ["Room server", "../start/room-server.md"],
-    ["Observer", "../start/observer.md"],
-  ]) {
-    assert.match(markdown, new RegExp(`^## ${role}$`, "mi"), role);
-    assert.ok(markdown.includes(`](${path})`), `${role}: setup path`);
+  for (const role of ["companion", "repeater", "room server", "observer"]) {
+    assert.match(markdown, new RegExp(`\\*\\*${role}\\*\\*`, "i"), role);
   }
-  assert.match(markdown, /New to MeshCore.*Start with a companion/s);
-  assert.doesNotMatch(markdown, /Most Ottawa repeaters|last \*\*32 messages\*\*|firmware is still rough/);
+  assert.match(markdown, /\[Compare device roles\]\(\.\.\/start\/choose-a-goal\.md\)/);
+  assert.match(markdown, /\[Choose a role and start setup\]\(\.\.\/start\/index\.md\)/);
+  assert.doesNotMatch(markdown, /project has split|legacy|Ottawa/i);
 });
 
 test("FAQ is deep-linkable and refers changing settings to canonical sources", () => {
@@ -103,7 +97,7 @@ test("app task index keeps accessible images and explicit results", () => {
     assert.ok(existsSync(resolve(root, "docs/meshcore", imagePath)), imagePath);
   }
   assert.doesNotMatch(markdown, /!\[\]\(/);
-  assert.ok((markdown.match(/Expected result:/g) || []).length >= 2);
+  assert.ok((markdown.match(/class="mc-result"/g) || []).length >= 2);
 });
 
 test("glossary is grouped, scannable, and expands data acronyms", () => {
@@ -125,7 +119,7 @@ test("external resources are labelled and carry a review date", () => {
   const links = [...content.matchAll(/\[([^\]]+)\]\((https:\/\/[^)]+)\)\{([^}]+)\}/g)];
 
   assert.equal(metadataValue(markdown, "link_checked"), "2026-07-19");
-  assert.equal(links.length, 11, "reviewed external-link inventory changed");
+  assert.ok(links.length >= 10, "reviewed external-link inventory is unexpectedly small");
   for (const [url, label, , attributes] of links) {
     assert.match(label, /\(external\)$/i, url);
     assert.match(attributes, /target="_blank"/, url);

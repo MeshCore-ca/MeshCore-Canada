@@ -15,8 +15,8 @@ test("proposal type is explicit before geography and new-region eligibility is v
   assert.ok(typePosition >= 0);
   assert.ok(typePosition < provincePosition);
   assert.match(html, /Advanced: propose a new region\/subregion/);
-  assert.match(html, /Beta workflow/);
-  assert.match(html, /Nothing changes when you submit/);
+  assert.match(html, /Region proposal/);
+  assert.match(html, /does not change\s+the map/);
 });
 
 test("editor exposes a complete structured alternative to the optional map", async () => {

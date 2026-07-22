@@ -9,11 +9,11 @@ task: answer-meshcore-question
 scope: canada-baseline
 status: verified
 owner: docs-ux
-last_reviewed: 2026-07-19
+last_reviewed: 2026-07-22
 review_by: 2026-10-19
 evidence:
   - Existing MeshCore Canada FAQ
-  - Current configurator and setup journeys
+  - Current configurator and setup guides
 difficulty: beginner
 estimated_time: 2-10 minutes
 destructive: false
@@ -71,8 +71,8 @@ assuming the device or firmware is faulty.
 Use a device listed by the official MeshCore Flasher or by a MeshCore Canada
 guide for the role you need. Support depends on the board and firmware target.
 
-[Compare device roles](general-meshcore-roles.md), then open the hardware guide
-from the matching setup path.
+[Compare device roles](../start/choose-a-goal.md), then open the hardware guide
+from the matching setup guide.
 
 ### Can I reuse a device that currently runs Meshtastic?
 
@@ -95,7 +95,7 @@ and maintainability matter more than screen features.
 1. [Find the local community](../provinces/index.md).
 2. Follow its published settings or use the Canadian baseline when no override
    is listed.
-3. Complete the setup path for your [device role](general-meshcore-roles.md).
+3. Follow the setup guide for your [device role](../start/choose-a-goal.md).
 4. Send an advert and ask a nearby user to confirm it.
 
 ### How do I start a mesh where none is listed?
@@ -104,7 +104,7 @@ Begin with companions so people can test locally. Add fixed infrastructure only
 after checking placement, power, local coordination, and the region standard.
 
 When the group is ready, [add the community](../contributing.md) so others can
-find its status, contact path, and any reviewed local settings.
+find its status, contact information, and any reviewed local settings.
 
 ## Observers and troubleshooting
 

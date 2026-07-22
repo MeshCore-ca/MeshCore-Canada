@@ -21,8 +21,8 @@ hide:
 
 # MeshCore Canada
 
-Welcome! We are actively updating our website, please let us know where we can
-improve, [submit a git issue!](https://github.com/MeshCore-ca/MeshCore-Canada/issues/new/choose)
+Welcome! We're improving this site. Found something unclear or outdated?
+[Open a GitHub issue](https://github.com/MeshCore-ca/MeshCore-Canada/issues/new/choose).
 
 ## What are you looking for? { #start-with-your-goal }
 
@@ -32,9 +32,7 @@ improve, [submit a git issue!](https://github.com/MeshCore-ca/MeshCore-Canada/is
 
     ---
 
-    Just starting out? Newly purchased LoRa radio and don't know where to begin?
-    Let's see if we can help get your device set up to join your local Canadian
-    MeshCore region.
+    Set up your LoRa radio and join a Canadian mesh.
 
     [:octicons-arrow-right-24: Start the guided setup](start/index.md)
 
@@ -42,8 +40,7 @@ improve, [submit a git issue!](https://github.com/MeshCore-ca/MeshCore-Canada/is
 
     ---
 
-    Search community-provided contacts and check whether your area publishes
-    different settings.
+    Find nearby communities, contacts, and local radio settings.
 
     [:octicons-arrow-right-24: Find a community](provinces/index.md)
 
@@ -73,7 +70,7 @@ improve, [submit a git issue!](https://github.com/MeshCore-ca/MeshCore-Canada/is
 
 -   :material-chart-timeline-variant:{ .lg .middle } **Observer**
 
-    Send network data to the public tools.
+    Send network data to CoreScope.
 
     [:octicons-arrow-right-24: Set up an observer](start/observer.md){ .mc-observer-link }
 
@@ -87,18 +84,14 @@ ask on the [community forum](https://forum.meshcore.ca/), or check the
 
 ## Canada Default Radio Settings { #canada-baseline }
 
-Use these settings when a local community has not published an override.
+Use these defaults unless your local community lists different settings.
 
-| Setting | Canada baseline |
+| Setting | Canada default |
 |---|---|
 | Radio preset | **USA/Canada (Recommended)** |
 | Raw radio values | `910.525 MHz / 62.5 kHz / SF7 / CR5` |
 | Path setting | **3-byte** |
 | Command-line path setting | `set path.hash.mode 2` |
-
-!!! warning "Check your local community first"
-    Nearby devices must use matching settings. If your local community page
-    publishes an override, use its settings instead of the Canada baseline.
 
 ## Find your region
 
@@ -108,38 +101,29 @@ Search by city, airport code, or region.
   <label for="mc-home-place">City, airport code, or region</label>
   <div>
     <input id="mc-home-place" name="place" type="search" autocomplete="address-level2" required>
-    <button type="submit">Continue to region finder</button>
+    <button type="submit">Find my region</button>
   </div>
 </form>
 
 Or browse the [region map](config/map.md).
 
-Looking for people nearby? [Browse communities](provinces/index.md), ask on the
-[MeshCore Canada forum](https://forum.meshcore.ca/) or
-[Discord](https://discord.gg/BESFVMt7yk). You can start the setup guide even
-before joining either service.
+Need local help? [Browse communities](provinces/index.md), ask on the
+[MeshCore Canada forum](https://forum.meshcore.ca/), or join
+[Discord](https://discord.gg/BESFVMt7yk).
 
 ## Use network tools
 
-The [Network Tools hub](tools/index.md) puts the repeater configurator, Canadian
-region map, live network view, observer setup, and verification guidance in one
-place.
+Configure a repeater, explore Canadian regions, view CoreScope, or set up an
+observer.
 
 [:octicons-arrow-right-24: **Choose a network tool**](tools/index.md){ .md-button }
 
 ## Improve MeshCore Canada
 
-Found missing, confusing, or outdated information?
-[Share an idea](submit-idea.md) or [update a community
-listing](contributing.md).
+Found something missing or confusing? [Share an idea](submit-idea.md) or
+[update a community listing](contributing.md).
 
 ## About this project
 
-MeshCore Canada is an independent community project. It is not affiliated
-with, endorsed by, or officially connected to the MeshCore or MeshOS
-projects.
-
-The documentation is maintained in the
-[MeshCore Canada repository](https://github.com/MeshCore-ca/MeshCore-Canada).
-Read [about the project and service stewardship](about.md), or see
-[how to contribute](contributing.md) for maintainers and contribution options.
+MeshCore Canada is an independent, community-run project.
+[Learn more](about.md) or [contribute](contributing.md).

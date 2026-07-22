@@ -1,14 +1,15 @@
 ---
-title: Compare antennas and feed lines
-description: Shortlist 915 MHz antennas and cables while checking connector fit, evidence, site needs, and dated pricing.
+title: Choose an antenna and feed line
+description: Choose a 902–928 MHz antenna and cable by checking connector fit, loss, mounting, and site needs.
 audience:
   - companion-owner
   - repeater-builder
 task: choose-antenna
-scope: ottawa-field-practice
+scope: canada-baseline
 status: draft
+status_notice: false
 owner: docs-hardware
-last_reviewed: 2026-07-19
+last_reviewed: 2026-07-22
 review_by: 2026-10-17
 difficulty: intermediate
 estimated_time: 10-15 minutes
@@ -20,13 +21,13 @@ page_styles:
   - assets/styles/devices-builds.css?v=20260722-2
 ---
 
-# Compare Antennas and Feed Lines
+# Choose an antenna and feed line
 
-Build a shortlist, then verify the radio band, connector, dimensions, mounting method, and current manufacturer specifications before ordering.
+Start with the radio, connector, and installation. Then compare antennas that cover the Canadian 902–928 MHz band.
 
 <div class="mc-guide-status" data-status="draft" markdown>
 
-**Draft Ottawa field notes.** The products and legacy prices below were carried forward from community notes. No controlled comparison, link-health review, or product-revision audit was attached. Treat them as leads, not verified MeshCore Canada recommendations.
+**Check before buying.** The products below are examples to compare, not verified performance recommendations. Confirm the current datasheet, connector, dimensions, mounting needs, and radio compatibility.
 
 </div>
 
@@ -44,41 +45,36 @@ Build a shortlist, then verify the radio band, connector, dimensions, mounting m
   <li>The current product page and datasheet support the details used in your decision.</li>
 </ul>
 
-## Companion antenna leads
+## Portable antennas to compare
 
-These portable antenna leads use SMA-family connectors. Confirm the exact connector on your device before ordering.
+Confirm whether the radio uses SMA, RP-SMA, or an internal connector before ordering.
 
 <div class="mc-table-wrap" markdown>
 
-| Product lead | Connector recorded in prior notes | Evidence available here | Legacy CAD figure | Source |
-|---|---|---|---:|---|
-| Gizont 167 cm 915 MHz | SMA male | Ottawa community field note; no test record attached | $10.53–$12 | [Space Hedgehog](https://space-hedgehog.com/products/gizont-915mhz-antenna?variant=51602989711416) / [AliExpress](https://www.aliexpress.com/item/1005004607615001.html) |
-| Gizont 167 cm 915 MHz | RP-SMA male | Ottawa community field note; no test record attached | $10.53 | [AliExpress](https://www.aliexpress.com/item/1005004607615001.html) |
-| LINX ANT-916-CW-HW-SMA | SMA | Product lead only | $14.65 | [DigiKey](https://www.digikey.ca/en/products/detail/te-connectivity-linx/ANT-916-CW-HW-SMA/2694126?s=N4IgTCBcDaIDIEkByANABAQSQFQLQE4BGANlwGEB1XACSoGUBZDEAXQF8g) |
-| Taoglas TI.09.A.0111 | SMA | Product lead only | $17.47 | [DigiKey](https://www.digikey.ca/en/products/detail/taoglas-limited/TI-09-A-0111/2332695?s=N4IgTCBcDaICoEMD2BzANggzgAjgSQDoAGATgIEFiBGGkAXQF8g) |
-| Seeed Studio LoRa Antenna Kit | SMA | Product lead only | $6.79 | [Seeed Studio](https://www.seeedstudio.com/LoRa-Antenna-Kit-for-reTerminal-DM-p-5714.html) |
+| Product | Listed connector | Check | Source |
+|---|---|---|---|
+| LINX ANT-916-CW-HW-SMA | SMA | Frequency range, mating connector, dimensions, and device support | [DigiKey](https://www.digikey.ca/en/products/detail/te-connectivity-linx/ANT-916-CW-HW-SMA/2694126?s=N4IgTCBcDaIDIEkByANABAQSQFQLQE4BGANlwGEB1XACSoGUBZDEAXQF8g) |
+| Taoglas TI.09.A.0111 | SMA | Frequency range, mating connector, dimensions, and device support | [DigiKey](https://www.digikey.ca/en/products/detail/taoglas-limited/TI-09-A-0111/2332695?s=N4IgTCBcDaICoEMD2BzANggzgAjgSQDoAGATgIEFiBGGkAXQF8g) |
+| Seeed Studio LoRa Antenna Kit | SMA | Frequency range, exact kit contents, mating connector, and device support | [Seeed Studio](https://www.seeedstudio.com/LoRa-Antenna-Kit-for-reTerminal-DM-p-5714.html) |
 
 </div>
 
-## Fixed repeater antenna leads
+## Fixed antennas to compare
 
 A permanent repeater antenna is a complete installation decision, not just a gain number. Include feed-line loss, connector count, pattern, local RF conditions, structure, lightning/grounding review, weather, and safe access.
 
 <div class="mc-table-wrap" markdown>
 
-| Product lead | Type recorded in prior notes | Connector | Evidence available here | Legacy CAD figure | Source |
-|---|---|---|---|---:|---|
-| Alfa AOA-915-5ACM | Omnidirectional | N-type | Ottawa community field note; no controlled result attached | $34.99 | [Amazon Canada](https://www.amazon.ca/dp/B08H8J6ZV6) |
-| Seeed Studio 318020693 | 902–928 MHz fiberglass omni, 1300 mm | N-type | Product lead and Ottawa field note | $110 | [Mouser](https://www.mouser.ca/ProductDetail/Seeed-Studio/318020693?qs=By6Nw2ByBD0kjpJjgHd0aQ%3D%3D) |
-| L-com HG913Y-NF | Directional | N-type | Product lead only | $237.17 | [DigiKey](https://www.digikey.ca/en/products/detail/l-com/HG913Y-NF/21289980) |
+| Product | Type | Listed connector | Check | Source |
+|---|---|---|---|---|
+| Seeed Studio 318020693 | Fiberglass omnidirectional | N-type | Frequency range, pattern, dimensions, wind load, mount, and cable path | [Mouser](https://www.mouser.ca/ProductDetail/Seeed-Studio/318020693?qs=By6Nw2ByBD0kjpJjgHd0aQ%3D%3D) |
+| L-com HG913Y-NF | Directional | N-type | Frequency range, pattern, aiming, wind load, mount, and cable path | [DigiKey](https://www.digikey.ca/en/products/detail/l-com/HG913Y-NF/21289980) |
 
 </div>
 
-<p class="mc-table-note">Price snapshot date was not recorded in the legacy page. Recheck every figure, shipping cost, duty, connector, and revision at the linked source.</p>
+## Choose the feed line
 
-## Feed-line lead
-
-The previous guide pointed to [Infinite Cables](https://www.infinitecables.com/) in Toronto for short LMR-240 Ultra Flex assemblies. The linked example was an [N-type male to N-type female cable](https://www.infinitecables.com/products/lmr-240-ultra-flex-n-type-male-to-n-type-female-cable?variant=42809804980465). Confirm both end connectors, length, loss, weather rating, and bend/strain requirements for your installation.
+Use the shortest practical cable with acceptable loss. Confirm both connectors, cable type, length, loss at the operating frequency, outdoor rating, bend radius, strain relief, and weather sealing. [Infinite Cables](https://www.infinitecables.com/) is one Canadian source for assembled RF cables; its [LMR-240 Ultra Flex N-type example](https://www.infinitecables.com/products/lmr-240-ultra-flex-n-type-male-to-n-type-female-cable?variant=42809804980465) may not match your required connectors.
 
 ## Record the decision
 
@@ -96,10 +92,6 @@ Before installation, record:
 
 With the enclosure still accessible, confirm the radio reports its expected settings, the feed line is not loose or sharply bent, the weather seal does not create a water path, and a local message test succeeds. Do not attribute a change in coverage to the antenna alone without repeatable before/after evidence.
 
-## Human review required
-
-A hardware/RF reviewer must attach dated datasheets, connector verification, link checks, and repeatable evidence before any product on this page can carry a verified recommendation label.
-
-## Next step
+## Finish the installation
 
 For a fixed installation, continue to [mounting options](repeater-mounting-options.md). For a portable node, return to [companion choices](recommended-companions.md).

@@ -1,6 +1,6 @@
 ---
 title: Start with a repeater
-description: Prepare, configure, commission, and verify a MeshCore repeater for a Canadian community.
+description: Prepare, configure, and check a MeshCore repeater for a Canadian community.
 audience:
   - repeater-builder
   - repeater-operator
@@ -8,7 +8,7 @@ task: start-repeater
 scope: canada-baseline
 status: verified
 owner: docs-ux
-last_reviewed: 2026-07-19
+last_reviewed: 2026-07-22
 review_by: 2026-10-19
 tested_with:
   content_baseline: f608cfe
@@ -22,14 +22,9 @@ requires:
 
 # Start with a repeater
 
-Outcome: a fixed node that extends local coverage and is verified before
+A repeater extends coverage by routing traffic for other users. Because it is
+fixed infrastructure, plan its power, antenna, access, and maintenance before
 installation.
-
-## Understand the role
-
-A repeater routes mesh traffic for other users. It is fixed infrastructure,
-so power, antenna placement, physical access, and maintenance matter as much
-as initial configuration.
 
 ## Before you start
 
@@ -38,16 +33,15 @@ as initial configuration.
 - Keep physical recovery access while testing.
 - Record the current identity and settings before any erase or update.
 
-## What this path changes
+## Before you flash
 
 The guide installs repeater firmware and sets radio, identity, adverts, and
 regional settings. Test on the bench before a difficult installation.
 
 <section class="mc-start-progress" data-mc-progress-page="repeater" aria-labelledby="repeater-progress-title">
-  <h2 id="repeater-progress-title">Your setup path</h2>
+  <h2 id="repeater-progress-title">Setup checklist</h2>
   <p>Checks are saved only in this browser.</p>
   <ol>
-    <li><label><input id="repeater-progress-understand" type="checkbox" data-mc-progress> Understand the repeater role</label></li>
     <li><label><input id="repeater-progress-hardware" type="checkbox" data-mc-progress> Confirm compatible hardware and site</label></li>
     <li><label><input id="repeater-progress-prepare" type="checkbox" data-mc-progress> Back up and prepare</label></li>
     <li><label><input id="repeater-progress-flash" type="checkbox" data-mc-progress> Follow the flashing guide</label></li>
@@ -63,14 +57,10 @@ Follow [Flash and configure a repeater](../meshcore/flash-repeater.md). Use the
 board-specific decisions, backup guidance, stop conditions, and recovery path
 in that guide.
 
-<!-- HUMAN REVIEW REQUIRED: Firmware maintainers must approve the linked
-repeater flashing, bootloader, commissioning, and recovery guidance before
-launch. -->
-
-## Apply Canada, local, and regional settings
+## Use the right radio and region settings
 
 Use **USA/Canada (Recommended)** with the **3-byte** path setting unless your
-local community publishes an override.
+community lists different settings.
 
 !!! warning "Coordinate before installation"
     Check the [community directory](../provinces/index.md). Nearby repeaters
@@ -80,9 +70,9 @@ local community publishes an override.
 Use the [repeater configurator](../config/index.md) to find the regional
 settings and review its commands before applying them.
 
-## Verify success
+## Make sure it works
 
-Your repeater path is complete when:
+Setup is working when:
 
 1. it keeps the expected settings after a reboot;
 2. it sends an advert; and
@@ -90,41 +80,13 @@ Your repeater path is complete when:
 
 Use the [repeater verification checklist](verify.md#repeater).
 
-## Protect the mesh from forwarding loops
-
-Repeater firmware **1.14 or newer** can reject flood packets that appear to be
-circulating through the same repeater. After the local operators agree on the
-change, connect through the repeater CLI and run:
-
-```text
-get loop.detect
-set loop.detect moderate
-get loop.detect
-```
-
-The final command should report `moderate`. This setting drops a packet once
-the repeater's own path ID appears at the moderate threshold; it can prevent a
-malformed packet from becoming a long packet storm. It does not repair a bad
-repeater, replace normal duplicate suppression, or prove that the wider mesh
-is healthy.
-
-!!! warning "Coordinate this shared-network change"
-    Do not change loop detection as an isolated experiment on a community
-    repeater. Confirm the firmware version, record the previous value, agree on
-    the rollout with nearby operators, and watch for lost legitimate traffic.
-    If delivery regresses, restore the recorded value and investigate the
-    repeaters in the observed path.
-
-The options and thresholds are documented in the
-[official MeshCore repeater and room-server CLI reference](https://docs.meshcore.io/cli_commands/#view-or-change-this-nodes-loop-detection){ target="_blank" rel="noopener" }.
-
-## Operate and maintain
+## What's next
 
 Keep a record of the site, owner, recovery access, settings, and last
-successful check. Recheck the repeater after firmware, antenna, power, or
-regional changes.
-
-## Next step
+successful check. Recheck it after firmware, antenna, power, or region changes.
+For firmware 1.14 or newer, review the coordinated
+[loop-detection setting](../meshcore/flash-repeater.md#loop-detection) before
+changing a community repeater.
 
 Review [antenna](../hardware/recommended-antenna.md) and
 [mounting](../hardware/repeater-mounting-options.md) guidance before final

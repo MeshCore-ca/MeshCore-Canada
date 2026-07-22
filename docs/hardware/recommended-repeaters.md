@@ -1,14 +1,15 @@
 ---
-title: Choose a repeater path
-description: Compare a pre-built repeater with the 300 mW and 1 W community build paths as complete systems.
+title: Plan a repeater
+description: Choose a repeater approach and verify the complete radio, power, antenna, enclosure, and recovery system.
 audience:
   - repeater-builder
   - network-operator
 task: choose-repeater
 scope: canada-baseline
 status: draft
+status_notice: false
 owner: docs-hardware
-last_reviewed: 2026-07-19
+last_reviewed: 2026-07-22
 review_by: 2026-10-17
 difficulty: intermediate
 estimated_time: 10-20 minutes
@@ -17,88 +18,57 @@ page_styles:
   - assets/styles/devices-builds.css?v=20260722-2
 ---
 
-# Choose a Repeater Path
+# Plan a repeater
 
-Plan a complete, recoverable repeater system. The radio board alone is not a deployable repeater.
+A repeater is more than a radio board. Plan its power, antenna, enclosure,
+mount, and a way to reach it if something goes wrong.
 
 <div class="mc-guide-status" data-status="draft" markdown>
 
-**Draft product and build guidance.** These paths were migrated from Ottawa community notes. Exact hardware revisions, electrical limits, firmware targets, prices, climate suitability, and performance have not all been independently reverified.
+**Check the complete system.** Product revisions and firmware support change. Confirm the exact radio, power system, antenna path, enclosure, mount, and recovery method before buying or building.
 
 </div>
 
-## Choose a repeater path
+## Choose an approach
 
 <div class="mc-decision-grid">
   <section class="mc-decision-card">
-    <h3>Pre-built solar enclosure</h3>
-    <p>Less mechanical assembly, but the listing may omit batteries, pigtail, or antenna.</p>
-    <p><strong>Best fit:</strong> an operator who will verify every included part and keep USB recovery access.</p>
-    <a class="md-button" href="#pre-built-system-lead">Review the system lead</a>
+    <h3>Packaged outdoor system</h3>
+    <p>Reduces fabrication, but batteries, antenna cables, mounting hardware, or the radio may still be separate.</p>
+    <p><strong>Check:</strong> exact contents, radio band, firmware target, connector path, weather rating, and USB access.</p>
+    <a class="md-button" href="#outdoor-system-to-compare">Review an example</a>
   </section>
   <section class="mc-decision-card">
-    <h3>300 mW community build</h3>
-    <p>The simpler of the two documented DIY paths, using a RAK Unify enclosure and RAK WisBlock notes.</p>
-    <p><strong>Best fit:</strong> an experienced builder willing to review the draft BOM and electrical path.</p>
-    <a class="md-button" href="../repeater-solar-300mw-diy-build/">Open the draft build</a>
-  </section>
-  <section class="mc-decision-card">
-    <h3>1 W experimental build</h3>
-    <p>A specialized Ottawa backbone experiment with more parts, power, filtering, fabrication, and unverified optional telemetry.</p>
-    <p><strong>Best fit:</strong> a reviewed network need and a builder able to validate every electrical and firmware detail.</p>
-    <a class="md-button" href="../repeater-solar-1w-diy-build/">Review the experimental build</a>
+    <h3>Custom build</h3>
+    <p>Lets you choose each part, but you become responsible for electrical compatibility, weather sealing, mounting, and service access.</p>
+    <p><strong>Check:</strong> manufacturer limits, polarity, protection, wiring, thermal conditions, and safe recovery.</p>
+    <a class="md-button" href="#community-build-reference">Review the requirements</a>
   </section>
 </div>
 
 !!! tip "Start with the network need, not transmit power"
     Site, height, antenna system, feed-line loss, local noise, neighbouring regions, power budget, and maintenance access all affect a repeater. Coordinate with the local community before selecting a high-power or long-reach path.
 
-## Compare the complete systems
+## Outdoor system to compare
+
+The SenseCAP Solar Node P1 is one packaged enclosure to evaluate. It is not a complete recommendation: confirm every selected option and accessory against current manufacturer documentation.
 
 <div class="mc-table-wrap" markdown>
 
-| Path | Power system | Enclosure / mount | Antenna path | Remote management | Skill | Evidence here |
-|---|---|---|---|---|---|---|
-| SenseCAP Solar Node P1 lead | Listing-specific solar and battery bundle; verify exact contents | Vendor enclosure; verify revision, weather claim, and mount | Prior notes call for an external antenna and RP-SMA-to-N pigtail | Depends on exact supported board/firmware | Intermediate | Product and community leads only |
-| 300 mW community build | Solar enclosure and protected battery notes | RAK Unify enclosure plus site-specific mount | External 915 MHz antenna and pigtail | Confirm current repeater firmware and access path | Intermediate | Legacy Ottawa build dated 2026-01-01; no attached test record |
-| 1 W experimental build | Separate panel, manager, battery protection, and high-power radio notes | Fabricated junction-box system | External antenna, feed line, and filter notes | Confirm current repeater firmware and recovery | Advanced | Ottawa experiment dated 2026-01-01; optional telemetry unverified |
+| System item | What to verify | Source |
+|---|---|---|
+| SenseCAP Solar Node P1 | Exact Canadian-band model, supported board and repeater target, enclosure rating, included power parts, mount, and USB access | [RobotShop Canada](https://ca.robotshop.com/products/sensecap-solar-node-p1-meshtastic-w-o-gps-battery) |
+| Battery system | Chemistry, protection, capacity, temperature range, charger compatibility, and installation instructions | Product manufacturer documentation |
+| Antenna and cable | 902–928 MHz band, factory connector, cable loss, connector gender and polarity, mount, and weather sealing | [Seeed LoRa antenna guide](https://wiki.seeedstudio.com/lora_antenna_selection_guide/) |
 
 </div>
-
-## Pre-built system lead
-
-The previous guide described one SenseCAP Solar Node P1 configuration as **four separate purchases**. Treat them as a system checklist, not four independent repeater recommendations.
-
-<div class="mc-table-wrap" markdown>
-
-| Required system item | Legacy product lead | Detail to verify | Source |
-|---|---|---|---|
-| Solar node | SenseCAP Solar Node P1 without GPS and battery | Exact Canadian-band revision, board, firmware target, enclosure rating, and included accessories | [RobotShop Canada](https://ca.robotshop.com/products/sensecap-solar-node-p1-meshtastic-w-o-gps-battery) |
-| Batteries | Four button-top 18650 cells | Chemistry, protection, capacity, temperature, charger compatibility, and vendor instructions | [Motion Power & Witt Supply Co.](https://mpandw.ca/products/button-top-eve-35v-house-made) |
-| Antenna | External 915 MHz lead | Band, connector, mount, and complete feed line | [Amazon Canada](https://www.amazon.ca/dp/B08H8J6ZV6) |
-| Pigtail | RP-SMA to N-type, legacy note says Type 2 / 30 cm | Connector polarity, gender, loss, length, weather seal, and current listing option | [AliExpress](https://www.aliexpress.com/item/1005004652556159.html) |
-
-</div>
-
-### Choose one SenseCAP cable path
 
 !!! warning "SMA and RP-SMA are not interchangeable"
-    The SenseCAP Solar Node P1 has a factory RP-SMA antenna connection. Choose
-    one complete path below and verify the connector, gender, length, mounting
-    fit, loss, and weather seal before ordering. See [Seeed's LoRa antenna
-    guide](https://wiki.seeedstudio.com/lora_antenna_selection_guide/).
+    Confirm the factory connector, gender, polarity, cable length and loss, antenna connector, and weather seal as one complete path. Do not order by connector appearance alone.
 
-<div class="mc-table-wrap" markdown>
+## Community build reference
 
-| Path | Parts | What to verify |
-|---|---|---|
-| **Keep the factory pigtail (preferred)** | [RP-SMA-to-N cable](https://www.aliexpress.com/item/1005004652556159.html) | Select **Type 2 (RP-SMA)** and **30 cm**. Confirm it mates with both the factory port and chosen antenna. |
-| **Replace the factory pigtail (advanced)** | [I-PEX MHF1-to-SMA bulkhead cable](https://www.digikey.ca/en/products/detail/seeed-technology-co-ltd/321990397/15277462) **and** [SMA-to-N cable](https://www.aliexpress.com/item/1005004652556159.html) | Select **Type 1 (SMA)** and **30 cm** for the second cable. Do not also buy Type 2. Opening the enclosure requires restoring its weather seal. |
-| **Use one direct replacement** | One independently verified I-PEX MHF1-to-N bulkhead pigtail | Confirm the exact I-PEX generation, N connector gender, cable loss, length, bulkhead fit, and seal before treating it as a replacement for both advanced-path cables. |
-
-</div>
-
-<p class="mc-table-note">No price snapshot is shown because the legacy page did not record a complete-system price date. Recalculate the full system from current sources.</p>
+The [300 mW solar repeater notes](repeater-solar-300mw-diy-build.md) document one custom approach for experienced builders. They are not a verified bill of materials or a substitute for current product documentation and electrical review.
 
 ## Before building or buying
 
@@ -110,23 +80,15 @@ The previous guide described one SenseCAP Solar Node P1 configuration as **four 
   <li>Property permission, structural review, weather loads, cable routing, and electrical hazards are addressed.</li>
   <li>The repeater can be recovered by USB after installation.</li>
   <li>The local region and settings are confirmed in the repeater configurator.</li>
-  <li>A bench commissioning record and maintenance interval will be stored with the site record.</li>
+  <li>A bench test and maintenance plan are ready before installation.</li>
 </ul>
 
-## Firmware and bootloader gate
-
-If the chosen board is nRF52-based, read the board-specific [bootloader decision and USB flashing guide](../meshcore/flash-repeater.md#nrf52-bootloader-decision) before relying on over-the-air recovery. Do not copy a bootloader file from another board example.
-
-## Commission before mounting
+## Test it on the bench first
 
 A completed repeater should remain on the bench until it survives a reboot, retains its settings, sends an advert received by a nearby companion, passes a local routing test, and can still be recovered over USB. Then use the [mounting safety checklist](repeater-mounting-options.md).
 
-## Human review required
+## Continue setup
 
-A hardware maintainer must attach dated product specifications, electrical review, firmware compatibility, and repeatable commissioning evidence before these paths can be labelled verified.
-
-## Next step
-
-- [Review the 300 mW draft build](repeater-solar-300mw-diy-build.md)
-- [Review the experimental 1 W build](repeater-solar-1w-diy-build.md)
 - [Flash and bench-test a repeater](../meshcore/flash-repeater.md)
+- [Choose an antenna and feed line](recommended-antenna.md)
+- [Plan a safe mount](repeater-mounting-options.md)

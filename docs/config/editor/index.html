@@ -26,7 +26,7 @@
     <nav class="utility-nav" aria-label="Editor">
       <a href="../../">Home</a>
       <a href="../standard/">Standard</a>
-      <a href="../../resources/getting-started/">Help</a>
+      <a href="../../start/">Help</a>
       <a href="../">Exit editor</a>
     </nav>
   </header>
@@ -34,17 +34,11 @@
   <main class="editor-layout">
     <aside class="editor-sidebar" aria-label="Boundary editing controls">
       <section class="panel intro-panel">
-        <p class="step-label">Beta workflow · Proposal tool</p>
-        <h2>Propose a region change</h2>
-        <p>Nothing changes when you submit. Every proposal is reviewed before it
-        can be published.</p>
-        <ol class="lifecycle-list" aria-label="Proposal lifecycle">
-          <li>Draft and check</li>
-          <li>Public review</li>
-          <li>Maintainer approval</li>
-          <li>Automated validation and publication</li>
-        </ol>
-        <p class="hint compact"><a href="../standard/">Read the region standard and change process</a></p>
+        <p class="step-label">Region proposal</p>
+        <h2>Suggest a region change</h2>
+        <p>Submitting creates a public proposal for review; it does not change
+        the map.</p>
+        <p class="hint compact"><a href="../standard/">Read the region rules</a></p>
       </section>
 
       <section class="panel" id="proposal-type-panel">
@@ -100,7 +94,7 @@
           <label for="municipality-select">Municipality or census subdivision</label>
           <select id="municipality-select" disabled><option value="">Choose a municipality</option></select>
           <button id="move-municipality-button" class="button primary full" type="button" disabled>Add whole municipality</button>
-          <p class="hint">Whole municipalities are the normal path. You can submit a full proposal without the map.</p>
+          <p class="hint">Start with a whole municipality. You do not need the map to submit a proposal.</p>
         </div>
         <div id="shared-area-note" class="shared-area-note">
           <strong>Repeater paths</strong>

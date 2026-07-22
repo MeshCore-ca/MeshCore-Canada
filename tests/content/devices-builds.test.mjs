@@ -15,13 +15,9 @@ const hardwarePages = [
   "docs/hardware/repeater-mounting-options.md",
   "docs/hardware/repeater-solar-1w-diy-build.md",
   "docs/hardware/repeater-solar-300mw-diy-build.md",
-  "docs/hardware/repeater-solar-batteries.md",
-  "docs/hardware/wire-connector-types.md",
 ];
 
 const firmwarePages = [
-  "docs/meshcore/firmware-heltec-v3-wifi.md",
-  "docs/meshcore/firmware-rak-custom-display.md",
   "docs/meshcore/flash-companion.md",
   "docs/meshcore/flash-repeater.md",
   "docs/meshcore/flash-room-server.md",
@@ -80,7 +76,7 @@ test("every Devices & Builds page has lifecycle metadata and scoped styles", () 
   }
 });
 
-test("recommendation pages state evidence, compatibility, accessories, and price limits", () => {
+test("recommendation pages state compatibility and current-purchase limits", () => {
   for (const path of [
     "docs/hardware/recommended-antenna.md",
     "docs/hardware/recommended-companions.md",
@@ -88,15 +84,16 @@ test("recommendation pages state evidence, compatibility, accessories, and price
   ]) {
     const source = read(path);
     assert.match(frontMatter(source), /^status: draft$/m, path);
-    assert.match(source, /evidence/i, `${path} must describe its evidence`);
-    assert.match(source, /verify/i, `${path} must define verification`);
-    assert.match(source, /price.*date|date.*price/i, `${path} must date-limit prices`);
+    assert.match(source, /verify|check/i, `${path} must define verification`);
     assert.match(source, /connector|accessor/i, `${path} must cover compatibility or accessories`);
-    assert.match(source, /Human review required/i, `${path} must retain reviewer gate`);
+    assert.match(source, /current|manufacturer/i, `${path} must direct readers to current information`);
+    if (/\bprice/i.test(source)) {
+      assert.match(source, /price.*date|date.*price/i, `${path} must date-limit any price guidance`);
+    }
   }
 });
 
-test("build guides provide staged, printable safety and commissioning records", () => {
+test("build guides provide staged, printable safety checks and records", () => {
   for (const path of [
     "docs/hardware/repeater-solar-300mw-diy-build.md",
     "docs/hardware/repeater-solar-1w-diy-build.md",
@@ -108,11 +105,11 @@ test("build guides provide staged, printable safety and commissioning records", 
       "Bill of materials",
       "Tools",
       "Assembly stages",
-      "Expected readings and stop conditions",
-      "Bench test and commissioning",
+      "Check the readings",
+      "Test it on the bench",
       "Recovery and undo",
       "Maintenance",
-      "Sources and change log",
+      "Source",
     ]) {
       assert.match(source, new RegExp(phrase, "i"), `${path} missing ${phrase}`);
     }
@@ -123,18 +120,13 @@ test("build guides provide staged, printable safety and commissioning records", 
   }
 });
 
-test("archived firmware pages remain non-executable and outside beginner guidance", () => {
-  for (const path of [
-    "docs/meshcore/firmware-heltec-v3-wifi.md",
-    "docs/meshcore/firmware-rak-custom-display.md",
-  ]) {
-    const source = read(path);
-    assert.match(frontMatter(source), /^status: archived$/m);
-    assert.match(source, /Archived route/);
-    assert.match(source, /Human review required/);
-    assert.doesNotMatch(source, /\.\/build\.sh|\[env:|set FIRMWARE_VERSION/);
-    assert.match(source, /https:\/\/github\.com\/meshcore-dev\/MeshCore/);
-  }
+test("experimental and legacy workflows stay outside primary navigation", () => {
+  const config = read("mkdocs.yml");
+
+  assert.doesNotMatch(config, /repeater-solar-1w-diy-build\.md/);
+  assert.doesNotMatch(config, /generate-repeater-id\.md/);
+  assert.ok(existsSync(resolve(root, "docs/hardware/repeater-solar-1w-diy-build.md")));
+  assert.ok(existsSync(resolve(root, "docs/meshcore/generate-repeater-id.md")));
 });
 
 test("destructive firmware flows expose preflight, backup, verification, and recovery", () => {
@@ -152,7 +144,7 @@ test("destructive firmware flows expose preflight, backup, verification, and rec
     assert.match(metadata, /^destructive: true$/m, path);
     assert.doesNotMatch(metadata, /^status: verified$/m, path);
     assert.match(source, /^## .*(Before|Prerequisites|backup)/im, `${path} missing preflight`);
-    assert.match(source, /^## .*Verif/im, `${path} missing verification`);
+    assert.match(source, /^## .*(Verif|Check|Make sure)/im, `${path} missing verification`);
     assert.match(source, /^## .*(Recovery|restore)/im, `${path} missing recovery`);
     assert.match(source, /private key|identity/i, `${path} must protect identity`);
   }

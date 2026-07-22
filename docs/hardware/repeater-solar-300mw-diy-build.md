@@ -1,14 +1,15 @@
 ---
-title: Build a 300 mW solar repeater
-description: Review the staged RAK Unify community build with explicit hazards, verification gaps, bench checks, and maintenance records.
+title: 300 mW solar repeater build
+description: Review and bench-test a draft RAK-based solar repeater build before deployment.
 audience:
   - repeater-builder
   - hardware-reviewer
 task: build-300mw-solar-repeater
-scope: ottawa-field-practice
+scope: community-build
 status: draft
+status_notice: false
 owner: docs-hardware
-last_reviewed: 2026-07-19
+last_reviewed: 2026-07-22
 review_by: 2026-10-17
 difficulty: intermediate
 estimated_time: one day plus sealant cure time
@@ -21,23 +22,20 @@ page_styles:
   - assets/styles/devices-builds.css?v=20260722-2
 ---
 
-# Build a 300 mW Solar Repeater
-
-This staged version preserves MrAlders0n's Ottawa RAK Unify community build notes, originally dated January 1, 2026.
+# 300 mW Solar Repeater Build
 
 <div class="mc-guide-status" data-status="draft" markdown>
 
-**Draft — factual and electrical review required.** The content migration did not independently verify the bill of materials, prices, battery/charger limits, connector polarity, weather rating, firmware target, expected measurements, or deployment lifetime. Do not energize or deploy the build until those details are checked for the exact revisions in hand.
+**Draft.** Verify the exact parts, electrical limits, connector polarity,
+firmware target, and weatherproofing before powering or deploying this build.
 
 </div>
 
 <dl class="mc-guide-facts">
-  <div><dt>Original author</dt><dd>MrAlders0n, Ottawa</dd></div>
-  <div><dt>Source date</dt><dd>January 1, 2026</dd></div>
-  <div><dt>Hardware note</dt><dd>RAK19003 / RAK4631 Type 6</dd></div>
-  <div><dt>Firmware target</dt><dd>Current supported repeater target; not pinned here</dd></div>
-  <div><dt>Weather target</dt><dd>Not independently verified</dd></div>
-  <div><dt>Maintenance interval</dt><dd>Must be set for the site</dd></div>
+  <div><dt>Radio</dt><dd>RAK19003 / RAK4631 Type 6</dd></div>
+  <div><dt>Firmware</dt><dd>Confirm the current repeater target</dd></div>
+  <div><dt>Weather rating</dt><dd>Verify after every enclosure modification</dd></div>
+  <div><dt>Maintenance</dt><dd>Set an inspection schedule for the site</dd></div>
 </dl>
 
 ## Before you start
@@ -53,7 +51,7 @@ This build cuts an enclosure, assembles an RF path, and connects a lithium batte
   <li>The antenna is for the Canadian 902–928 MHz band and its complete connector path is confirmed.</li>
   <li>The battery and solar power path have documented protection and compatible limits.</li>
   <li>You have a multimeter, eye protection, suitable drilling/cutting tools, and a safe work area.</li>
-  <li>You have a USB recovery cable and will keep the unit on the bench until commissioning passes.</li>
+  <li>You have a USB recovery cable and will keep the unit on the bench until its checks pass.</li>
 </ul>
 
 ## What this build changes
@@ -64,21 +62,21 @@ The procedure drills enclosure openings, installs an external antenna connector 
 
 <div class="mc-table-wrap" markdown>
 
-| System part | Legacy product lead | Quantity | Legacy CAD figure | What to verify | Source |
-|---|---|---:|---:|---|---|
-| Enclosure | WisMesh Unify Enclosure 910422 | 1 | $72.50 | Exact revision, panel/charger limits, seals, venting, included hardware | [AliExpress](https://aliexpress.com/item/1005008369061766.html) |
-| LoRa board | RAK WisBlock RAK19003 / RAK4631, Type 6 | 1 | $36.38 | Exact board, Canadian band, firmware target, connectors | [AliExpress](https://aliexpress.com/item/1005008285698839.html) |
-| Antenna | Alfa AOA-915-5ACM | 1 | $34.99 | Band, connector, mount, weather exposure | [Amazon Canada](https://www.amazon.ca/dp/B08H8J6ZV6) |
-| Antenna pigtail | N female to IPEX | 1 | $6.79 | IPEX generation, connector gender/polarity, length, loss | [AliExpress](https://aliexpress.com/item/1005001920963497.html) |
-| Battery option | MakerFocus 3000 mAh Li-ion pack | 1 | $34.10 per legacy pack | Chemistry, dimensions, connector, polarity, protection, charger limits | [MakerFocus](https://www.makerfocus.com/products/makerfocus-3-7v-3000mah-lithium-rechargeable-battery-1s-3c-lipo-battery-pack-of-4) |
-| Battery option | Legacy Amazon US 3000 mAh pack | 1 | $40.92 per legacy pack | Same checks; shipping/import restrictions | [Amazon US](https://www.amazon.com/3000mAh-Rechargable-Protection-Insulated-Development/dp/B08T6GT7DV) |
-| Battery option | Space Hedgehog 3000 mAh battery | 1 | $11 | Same checks; current stock and revision | [Space Hedgehog](https://space-hedgehog.com/products/3000mah-battery) |
-| Additional protection lead | Li-ion PCM | 1 | $6 | Whether required/compatible, current/voltage/temperature limits, wiring | [Space Hedgehog](https://space-hedgehog.com/products/battery-protection-with-low-voltage-cut-off?variant=51646910660664) |
-| Vent | M12×1.5 waterproof vent plug | 1 | $6.12 | Thread, sealing method, airflow, enclosure compatibility | [AliExpress](https://aliexpress.com/item/1005006370919409.html) |
+| System part | Example | Qty | What to verify | Source |
+|---|---|---:|---|---|
+| Enclosure | WisMesh Unify Enclosure 910422 | 1 | Revision, panel and charger limits, seals, venting, included hardware | [AliExpress](https://aliexpress.com/item/1005008369061766.html) |
+| LoRa board | RAK19003 / RAK4631, Type 6 | 1 | Exact board, Canadian band, firmware target, connectors | [AliExpress](https://aliexpress.com/item/1005008285698839.html) |
+| Antenna | Alfa AOA-915-5ACM | 1 | Band, connector, mount, weather exposure | [Amazon Canada](https://www.amazon.ca/dp/B08H8J6ZV6) |
+| Antenna pigtail | N female to IPEX | 1 | IPEX generation, connector gender and polarity, length, loss | [AliExpress](https://aliexpress.com/item/1005001920963497.html) |
+| Battery option | MakerFocus 3000 mAh Li-ion pack | 1 | Chemistry, dimensions, connector, polarity, protection, charger limits | [MakerFocus](https://www.makerfocus.com/products/makerfocus-3-7v-3000mah-lithium-rechargeable-battery-1s-3c-lipo-battery-pack-of-4) |
+| Battery option | 3000 mAh Li-ion pack | 1 | The same checks, plus Canadian shipping restrictions | [Amazon US](https://www.amazon.com/3000mAh-Rechargable-Protection-Insulated-Development/dp/B08T6GT7DV) |
+| Battery option | Space Hedgehog 3000 mAh battery | 1 | The same checks, plus current stock and revision | [Space Hedgehog](https://space-hedgehog.com/products/3000mah-battery) |
+| Battery protection | Li-ion PCM | 1 | Whether it is required and compatible; current, voltage, temperature, and wiring limits | [Space Hedgehog](https://space-hedgehog.com/products/battery-protection-with-low-voltage-cut-off?variant=51646910660664) |
+| Vent | M12×1.5 waterproof vent plug | 1 | Thread, seal, airflow, enclosure compatibility | [AliExpress](https://aliexpress.com/item/1005006370919409.html) |
 
 </div>
 
-<p class="mc-table-note">The original guide estimated about $180 CAD. That source was dated January 1, 2026; the prices and bundle contents were not rechecked during this migration and exclude some mounting/shipping costs.</p>
+<p class="mc-table-note">These are parts to investigate, not verified recommendations. Check current specifications, stock, shipping, and total cost before buying.</p>
 
 ## Tools and consumables
 
@@ -119,7 +117,7 @@ The procedure drills enclosure openings, installs an external antenna connector 
     </ol>
     <figure>
       <img class="mc-build-photo" src="../images/BuildRepeater1_MountedAll.jpeg" alt="RAK board and antenna cables dry-fitted on the enclosure backplate" loading="lazy">
-      <figcaption>Legacy community dry-fit example; verify the exact board and cable routing in hand.</figcaption>
+      <figcaption>Example dry fit. Check the exact board and cable routing in hand.</figcaption>
     </figure>
   </section>
   <section class="mc-build-stage" data-stage="stop">
@@ -131,15 +129,15 @@ The procedure drills enclosure openings, installs an external antenna connector 
       <li>Insulate and mechanically secure the protection board and battery without crushing, heating, puncturing, or trapping them against sharp edges.</li>
     </ol>
     <figure>
-      <img class="mc-build-photo" src="../images/RAK19003-Layout.png" alt="Legacy RAK19003 connector layout used as a visual orientation note" loading="lazy">
-      <figcaption>Legacy orientation image; the current hardware documentation is authoritative.</figcaption>
+      <img class="mc-build-photo" src="../images/RAK19003-Layout.png" alt="RAK19003 connector layout used as a visual orientation note" loading="lazy">
+      <figcaption>Orientation only. Follow the documentation for your exact board.</figcaption>
     </figure>
     <figure>
-      <img class="mc-build-photo" src="../images/VoltaicEnclosures_Layout.png" alt="Legacy protection-board connection example from an earlier enclosure build" loading="lazy">
-      <figcaption>Conceptual legacy example only; do not infer terminal labels or limits for another protection board.</figcaption>
+      <img class="mc-build-photo" src="../images/VoltaicEnclosures_Layout.png" alt="Example protection-board connection layout" loading="lazy">
+      <figcaption>Concept only. Do not infer terminal labels or limits for another protection board.</figcaption>
     </figure>
     <figure>
-      <img class="mc-build-photo" src="../images/RAK19003-LayoutSolar.jpg" alt="Legacy solar enclosure power-layout example showing battery and protection wiring" loading="lazy">
+      <img class="mc-build-photo" src="../images/RAK19003-LayoutSolar.jpg" alt="Solar enclosure layout showing battery and protection wiring" loading="lazy">
       <figcaption>Confirm polarity and every electrical limit before reproducing the path.</figcaption>
     </figure>
   </section>
@@ -152,21 +150,21 @@ The procedure drills enclosure openings, installs an external antenna connector 
       <li>Apply the reviewed outdoor weather-sealing method to the exposed antenna connection without blocking drainage or venting.</li>
     </ol>
     <figure>
-      <img class="mc-build-photo" src="../images/BuildRepeater1_Finished.jpeg" alt="Legacy completed RAK Unify repeater interior before the enclosure is closed" loading="lazy">
-      <figcaption>Legacy completed interior example; part revisions and routing may differ.</figcaption>
+      <img class="mc-build-photo" src="../images/BuildRepeater1_Finished.jpeg" alt="Completed RAK Unify repeater interior before the enclosure is closed" loading="lazy">
+      <figcaption>Example interior. Part revisions and routing may differ.</figcaption>
     </figure>
     <figure>
-      <img class="mc-build-photo" src="../images/BuildRepeater1_SelfFuseTape.jpeg" alt="Legacy example of self-fusing tape around an outdoor antenna connector" loading="lazy">
+      <img class="mc-build-photo" src="../images/BuildRepeater1_SelfFuseTape.jpeg" alt="Self-fusing tape around an outdoor antenna connector" loading="lazy">
       <figcaption>One community weather-sealing example, not a universal installation method.</figcaption>
     </figure>
     <figure>
-      <img class="mc-build-photo" src="../images/BuildRepeater1_Heatshrink.jpg" alt="Legacy example of heat-shrink used around an outdoor antenna connection" loading="lazy">
+      <img class="mc-build-photo" src="../images/BuildRepeater1_Heatshrink.jpg" alt="Heat-shrink around an outdoor antenna connection" loading="lazy">
       <figcaption>Confirm that the chosen method is compatible, inspectable, and does not trap water.</figcaption>
     </figure>
   </section>
 </div>
 
-## Expected readings and stop conditions
+## Check the readings
 
 No numeric electrical acceptance range has been peer-reviewed for this page. Use the current manufacturer limits for the exact battery, charger, protection device, radio board, and panel.
 
@@ -182,7 +180,7 @@ No numeric electrical acceptance range has been peer-reviewed for this page. Use
 
 </div>
 
-## Bench test and commissioning
+## Test it on the bench
 
 <ul class="mc-checklist">
   <li>Photograph and record the exact parts, revisions, wiring, polarity checks, and measured values.</li>
@@ -206,11 +204,10 @@ Mechanical holes and adhesive/sealant work may not be reversible; replace damage
 
 No Canada-wide interval is approved. Before deployment, record a site-specific inspection schedule covering mount movement, water entry, seals, corrosion, cable strain, battery condition, charging behaviour, measured values, firmware/configuration, radio verification, and physical recovery.
 
-## Sources and change log
+## Source
 
-- Original community guide: MrAlders0n (Ottawa), January 1, 2026.
-- July 19, 2026: restructured as a draft staged guide; added evidence limits, safety gates, accessible captions, bench commissioning, recovery, and maintenance record requirements. No hardware compatibility claim was upgraded to verified.
+Based on community build notes contributed by MrAlders0n in 2026. The parts and
+instructions still require hardware review.
 
-## Next step
-
-After hardware review and bench commissioning, use the [mounting plan](repeater-mounting-options.md). Use the [repeater configurator](../config/index.md) before the final region setup.
+After the bench test, complete the [mounting plan](repeater-mounting-options.md)
+and set the repeater's region with the [configurator](../config/index.md).

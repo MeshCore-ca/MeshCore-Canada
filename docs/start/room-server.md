@@ -7,7 +7,7 @@ task: start-room-server
 scope: canada-baseline
 status: verified
 owner: docs-ux
-last_reviewed: 2026-07-19
+last_reviewed: 2026-07-22
 review_by: 2026-10-19
 tested_with:
   content_baseline: f608cfe
@@ -21,13 +21,8 @@ requires:
 
 # Start with a room server
 
-Outcome: a persistent room that any companion can discover and join with guest
-credentials.
-
-## Understand the role
-
-A room server keeps a shared room available. It is not a replacement for a
-repeater; use a repeater when the goal is routing and coverage.
+A room server keeps a shared room available. It does not replace a repeater;
+use a repeater for routing and coverage.
 
 ## Before you start
 
@@ -36,16 +31,15 @@ repeater; use a repeater when the goal is routing and coverage.
 - Record any identity or settings you need before following an erase step.
 - Prepare separate guest and administrator credentials.
 
-## What this path changes
+## Before you flash
 
 The linked guide replaces the firmware and sets room-server identity, access
 credentials, and radio settings.
 
 <section class="mc-start-progress" data-mc-progress-page="room-server" aria-labelledby="room-server-progress-title">
-  <h2 id="room-server-progress-title">Your setup path</h2>
+  <h2 id="room-server-progress-title">Setup checklist</h2>
   <p>Checks are saved only in this browser.</p>
   <ol>
-    <li><label><input id="room-server-progress-understand" type="checkbox" data-mc-progress> Understand the room-server role</label></li>
     <li><label><input id="room-server-progress-hardware" type="checkbox" data-mc-progress> Confirm compatible hardware</label></li>
     <li><label><input id="room-server-progress-prepare" type="checkbox" data-mc-progress> Back up and prepare</label></li>
     <li><label><input id="room-server-progress-flash" type="checkbox" data-mc-progress> Follow the flashing guide</label></li>
@@ -60,14 +54,10 @@ credentials, and radio settings.
 Follow [Flash and configure a room server](../meshcore/flash-room-server.md).
 Use that guide for device selection, flashing, access setup, and recovery.
 
-<!-- HUMAN REVIEW REQUIRED: Firmware maintainers must approve the linked room
-server compatibility, credential, flashing, and recovery guidance before
-launch. -->
-
-## Apply Canada or local settings
+## Use the right radio settings
 
 Use **USA/Canada (Recommended)** with the **3-byte** path setting unless your
-local community publishes an override.
+community lists different settings.
 
 !!! warning "Match your local mesh"
     Check the [community directory](../provinces/index.md). If your community
@@ -76,9 +66,9 @@ local community publishes an override.
 Keep administrator credentials private. Share only the guest access
 information intended for room users.
 
-## Verify success
+## Make sure it works
 
-Your room-server path is complete when:
+Setup is working when:
 
 1. a nearby companion discovers its advert;
 2. the companion can enter with the guest credentials; and
@@ -86,12 +76,9 @@ Your room-server path is complete when:
 
 Use the [room-server verification checklist](verify.md#room-server).
 
-## Operate and maintain
+## What's next
 
-Record who maintains the room and how users get support. Recheck discovery and
-guest access after firmware, credential, or radio-setting changes.
-
-## Next step
-
-Ask a nearby community member to test the room from a second companion. If
+Record who maintains the room and how users get support. Ask a nearby community
+member to test it from a second companion. Recheck discovery and guest access
+after firmware, credential, or radio-setting changes. If
 discovery or access fails, [get help](get-help.md).

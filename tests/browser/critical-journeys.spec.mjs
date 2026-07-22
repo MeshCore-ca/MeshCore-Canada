@@ -99,7 +99,7 @@ test("home place search resolves a city to its region", async ({ page }) => {
       url.searchParams.get("place") === "Guelph, Ontario" &&
       !url.searchParams.has("lookup")
     ),
-    page.getByRole("button", { name: "Continue to region finder" }).click()
+    page.getByRole("button", { name: "Find my region" }).click()
   ]);
   await expect(page.locator("#mcc-location-input")).toHaveValue("Guelph, Ontario");
   await expect(page.locator("[data-action='online-search-consent']")).toHaveCount(0);
@@ -270,12 +270,12 @@ test("tool assets remain route scoped", async ({ page }) => {
   expect(submitAssets.some((url) => /submission-form\.js/.test(url))).toBeTruthy();
 });
 
-test("boundary editor makes both proposal paths and review lifecycle explicit", async ({ page }) => {
+test("boundary editor makes both proposal paths and review-only behavior explicit", async ({ page }) => {
   await page.goto(siteRoute("/config/editor/"));
   await expect(page.getByText("Adjust an existing boundary", { exact: true })).toBeVisible();
   await expect(page.getByText(/propose a new region\/subregion/i)).toBeVisible();
-  await expect(page.locator(".lifecycle-list li")).toHaveCount(4);
-  await expect(page.getByText(/Nothing changes when you submit/i)).toBeVisible();
+  await expect(page.getByText(/Submitting creates a public proposal for review/i)).toBeVisible();
+  await expect(page.getByText(/does not change the map/i)).toBeVisible();
 });
 
 test("idea form exposes review, verification, and final submission", async ({ page }) => {
