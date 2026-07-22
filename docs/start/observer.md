@@ -52,8 +52,8 @@ network data publishing.
     <li><label><input id="observer-progress-prepare" type="checkbox" data-mc-progress> Back up and prepare</label></li>
     <li><label><input id="observer-progress-install" type="checkbox" data-mc-progress> Follow the selected setup guide</label></li>
     <li><label><input id="observer-progress-configure" type="checkbox" data-mc-progress> Apply local radio and service settings</label></li>
-    <li><label><input id="observer-progress-verify-local" type="checkbox" data-mc-progress> Confirm the radio can hear nearby activity</label></li>
-    <li><label><input id="observer-progress-verify-network" type="checkbox" data-mc-progress> Confirm the observer in CoreScope</label></li>
+    <li><label><input id="observer-progress-verify-local" type="checkbox" data-mc-progress> Check that the radio hears nearby activity</label></li>
+    <li><label><input id="observer-progress-verify-network" type="checkbox" data-mc-progress> Find the observer in CoreScope</label></li>
   </ol>
 </section>
 
@@ -75,7 +75,7 @@ community lists different settings.
 
 ## Make sure it works
 
-Setup is working when:
+The observer is working when:
 
 1. its radio hears known nearby mesh activity;
 2. it appears in [CoreScope Observers](https://live.meshcore.ca/#/observers);

@@ -1,5 +1,5 @@
 ---
-title: Use common MeshCore app tools
+title: Do common tasks in the MeshCore app
 description: Share a contact, import a contact, trace a path, and inspect heard repeats in the MeshCore app.
 audience:
   - companion-user
@@ -15,7 +15,7 @@ estimated_time: 5-15 minutes
 destructive: false
 ---
 
-# Use common MeshCore app tools
+# Do common tasks in the MeshCore app
 
 Choose the task you need. These screenshots show one MeshCore mobile app
 layout; names and positions may move in another app version.
@@ -114,19 +114,17 @@ that later messages will use the same path.
 
     ![Add-repeater button in the manual trace tool](images/MeshCore_TraceRoute4.png){ loading=lazy width="300" }
 
-### Trace one hop
+### Trace one repeater
 
-1. Add one repeater and confirm it.
+1. Add one repeater and make sure its identifier is correct.
 
     ![One repeater selected for a trace](images/MeshCore_TraceRoute1Hop1.png){ loading=lazy width="300" }
 
-2. Confirm that one repeater identifier is shown.
-
     ![One-hop path ready to trace](images/MeshCore_TraceRoute1Hop2.png){ loading=lazy width="300" }
 
-3. Select **Trace Path**.
+2. Select **Trace Path**.
 
-### Trace more than one hop
+### Trace through several repeaters
 
 1. Add the repeaters in the forward order required by the path.
 2. Add the return sequence shown by your local path plan.

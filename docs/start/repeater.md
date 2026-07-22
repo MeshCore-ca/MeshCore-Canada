@@ -33,7 +33,7 @@ installation.
 - Keep physical recovery access while testing.
 - Record the current identity and settings before any erase or update.
 
-## Before you flash
+## Know what flashing changes
 
 The guide installs repeater firmware and sets radio, identity, adverts, and
 regional settings. Test on the bench before a difficult installation.
@@ -47,7 +47,7 @@ regional settings. Test on the bench before a difficult installation.
     <li><label><input id="repeater-progress-flash" type="checkbox" data-mc-progress> Follow the flashing guide</label></li>
     <li><label><input id="repeater-progress-configure" type="checkbox" data-mc-progress> Apply local and regional settings</label></li>
     <li><label><input id="repeater-progress-verify-local" type="checkbox" data-mc-progress> Bench-check the repeater</label></li>
-    <li><label><input id="repeater-progress-verify-community" type="checkbox" data-mc-progress> Verify with a nearby companion</label></li>
+    <li><label><input id="repeater-progress-verify-community" type="checkbox" data-mc-progress> Test with a nearby companion</label></li>
   </ol>
 </section>
 
@@ -72,9 +72,9 @@ settings and review its commands before applying them.
 
 ## Make sure it works
 
-Setup is working when:
+The repeater is ready to install when:
 
-1. it keeps the expected settings after a reboot;
+1. it keeps the intended settings after a reboot;
 2. it sends an advert; and
 3. a nearby known-good companion receives that advert.
 

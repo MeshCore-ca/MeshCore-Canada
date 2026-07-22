@@ -80,6 +80,30 @@ class ContentValidationTests(unittest.TestCase):
         self.assertTrue(any("verification" in item for item in problems))
         self.assertTrue(any("recovery" in item for item in problems))
 
+    def test_destructive_page_accepts_plain_language_verification_headings(self) -> None:
+        for heading in ("Check the flash", "Make sure the update worked"):
+            with self.subTest(heading=heading):
+                page = VALID.replace(
+                    "evidence: fixture-review",
+                    "evidence: fixture-review\ndestructive: true",
+                )
+                page += f"""
+
+## Before you begin
+
+Back up the current settings and prepare the exact recovery file before changing the device.
+
+## {heading}
+
+Confirm that the device starts, reports the intended version, and keeps its saved settings.
+
+## Recovery
+
+Restore the saved settings or reflash the exact device target if the check does not pass.
+"""
+                self.write("flash.md", page)
+                self.assertEqual([], MODULE.validate_tree(self.docs, self.today))
+
 
 if __name__ == "__main__":
     unittest.main()

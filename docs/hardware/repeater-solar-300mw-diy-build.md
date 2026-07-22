@@ -1,11 +1,11 @@
 ---
-title: 300 mW solar repeater build
-description: Review and bench-test a draft RAK-based solar repeater build before deployment.
+title: Build a 300 mW solar repeater
+description: Review and bench-test this RAK-based solar repeater before installing it.
 audience:
   - repeater-builder
   - hardware-reviewer
 task: build-300mw-solar-repeater
-scope: community-build
+scope: experimental
 status: draft
 status_notice: false
 owner: docs-hardware
@@ -22,12 +22,12 @@ page_styles:
   - assets/styles/devices-builds.css?v=20260722-2
 ---
 
-# 300 mW Solar Repeater Build
+# Build a 300 mW solar repeater
 
 <div class="mc-guide-status" data-status="draft" markdown>
 
-**Draft.** Verify the exact parts, electrical limits, connector polarity,
-firmware target, and weatherproofing before powering or deploying this build.
+**Check every part before building.** Confirm the electrical limits, connector
+polarity, firmware target, and weatherproofing before applying power or installing it.
 
 </div>
 

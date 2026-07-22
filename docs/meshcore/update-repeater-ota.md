@@ -5,7 +5,7 @@ audience:
   - advanced-repeater-operator
   - room-server-operator
 task: update-repeater-ota
-scope: community-practice
+scope: experimental
 status: experimental
 owner: docs-firmware
 last_reviewed: 2026-07-22

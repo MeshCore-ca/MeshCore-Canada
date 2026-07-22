@@ -88,9 +88,9 @@ Before installation, record:
 - source links and the date checked; and
 - the local test you will use after installation.
 
-## Verify after installation
+## Check after installation
 
-With the enclosure still accessible, confirm the radio reports its expected settings, the feed line is not loose or sharply bent, the weather seal does not create a water path, and a local message test succeeds. Do not attribute a change in coverage to the antenna alone without repeatable before/after evidence.
+With the enclosure still accessible, confirm the radio reports the intended settings, the feed line is not loose or sharply bent, the weather seal does not create a water path, and a local message test succeeds. Do not attribute a change in coverage to the antenna alone without repeatable before/after evidence.
 
 ## Finish the installation
 

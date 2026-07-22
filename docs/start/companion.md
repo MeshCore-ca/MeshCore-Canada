@@ -32,7 +32,7 @@ other users. Most pair with an app; some have their own screen and controls.
 - Use a data-capable USB cable and a supported browser.
 - Record any identity or settings you need before following an erase step.
 
-## Before you flash
+## Know what flashing changes
 
 The linked flashing guide replaces the device firmware and configures it as a
 companion. Stop before erasing if you cannot recover information you need.
@@ -45,8 +45,8 @@ companion. Stop before erasing if you cannot recover information you need.
     <li><label><input id="companion-progress-prepare" type="checkbox" data-mc-progress> Back up and prepare</label></li>
     <li><label><input id="companion-progress-flash" type="checkbox" data-mc-progress> Follow the flashing guide</label></li>
     <li><label><input id="companion-progress-configure" type="checkbox" data-mc-progress> Apply Canada or local settings</label></li>
-    <li><label><input id="companion-progress-verify-local" type="checkbox" data-mc-progress> Verify the device nearby</label></li>
-    <li><label><input id="companion-progress-verify-community" type="checkbox" data-mc-progress> Verify with another mesh user</label></li>
+    <li><label><input id="companion-progress-verify-local" type="checkbox" data-mc-progress> Check the device nearby</label></li>
+    <li><label><input id="companion-progress-verify-community" type="checkbox" data-mc-progress> Test with another mesh user</label></li>
   </ol>
 </section>
 
@@ -69,9 +69,9 @@ Reboot after changing the radio settings, then send an advert.
 
 ## Make sure it works
 
-Setup is working when:
+The companion is ready when:
 
-1. the device shows the expected Canada or local settings; and
+1. the device shows the Canada settings or your community's settings; and
 2. a nearby known-good device or community member can see its advert.
 
 Use the [companion verification checklist](verify.md#companion).
@@ -81,4 +81,4 @@ Use the [companion verification checklist](verify.md#companion).
 Keep the local settings recorded and check them again after firmware changes.
 Use [MeshCore how-to guides](../meshcore/general-howto.md) for common messaging
 tasks. [Find your community](../provinces/index.md), then exchange a test message
-with a nearby user. If the advert is not seen, [get help](get-help.md).
+with a nearby user. If nobody can see the advert, [get help](get-help.md).

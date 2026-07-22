@@ -18,9 +18,10 @@ page_styles:
 
 # Check your observer
 
-A broker connection proves only internet access. Your observer is working when a real radio packet reaches CoreScope.
+A broker connection proves only internet access. Your observer is working when
+a real radio packet reaches CoreScope.
 
-## Verify all four stages
+## Follow a packet through four stages
 
 <ol class="mc-steps">
   <li>
@@ -43,7 +44,7 @@ A broker connection proves only internet access. Your observer is working when a
 
 Do not generate unnecessary traffic on a busy mesh. A normal advert or existing nearby activity is enough.
 
-## What to look for
+## Check the details
 
 | Check | What you should see |
 |---|---|
@@ -55,7 +56,7 @@ Do not generate unnecessary traffic on a busy mesh. A normal advert or existing 
 | Packet time | A recent packet appears after the radio hears nearby traffic |
 | Radio | Local settings are used; the Canada defaults apply only when no local override exists |
 
-## Record the check
+## Keep a maintenance note
 
 Keep a short private maintenance note:
 
@@ -73,11 +74,11 @@ Packet visible: yes / no
 
 Do not include credentials, private keys, Wi-Fi names, or Wi-Fi passwords.
 
-## If a stage fails
+## Start with the first thing that failed
 
-Start with the first failed stage:
+Use the matching guide for the first thing that failed:
 
-| First failure | Next page |
+| What failed first | Where to start |
 |---|---|
 | Radio does not hear activity | [Observer appears but no packets](troubleshooting.md#observer-appears-but-no-packets-arrive) |
 | Observer cannot connect | [Observer never appears](troubleshooting.md#observer-never-appears) |

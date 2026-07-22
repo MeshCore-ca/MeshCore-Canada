@@ -56,5 +56,5 @@ Include:
 
 ## Try one change at a time
 
-Return to [Verify your setup](verify.md) after making one change. Testing one
+Return to [Check your setup](verify.md) after making one change. Testing one
 change at a time makes the result easier to understand.

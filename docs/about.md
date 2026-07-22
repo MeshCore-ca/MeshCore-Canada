@@ -11,6 +11,7 @@ status: verified
 owner: site-maintainers
 last_reviewed: 2026-07-22
 review_by: 2026-10-22
+evidence: Project scope and contribution routes reviewed on 2026-07-22
 difficulty: beginner
 estimated_time: 3 minutes
 destructive: false

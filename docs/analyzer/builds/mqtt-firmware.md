@@ -25,21 +25,21 @@ Dedicated observer firmware lets a supported Wi-Fi LoRa board send nearby packet
 ## Is this method right for you?
 
 <div class="mc-method-fit">
-  <div><strong>Use this firmware if</strong>A supported Wi-Fi LoRa board can be dedicated to observing.</div>
-  <div><strong>Use something else if</strong>RemoteTerm, Home Assistant, PyMC, or a nearby USB host already manages the radio.</div>
-  <div><strong>Keep online</strong>The board, stable power, 2.4 GHz Wi-Fi, and internet access.</div>
+  <div><strong>Good fit</strong>You can dedicate a supported Wi-Fi LoRa board to observing.</div>
+  <div><strong>Choose another method</strong>RemoteTerm, Home Assistant, PyMC, or a nearby USB host already manages the radio.</div>
+  <div><strong>What stays online</strong>The board, stable power, 2.4 GHz Wi-Fi, and internet access.</div>
 </div>
 
 This uses third-party firmware. Confirm the board and build shown by the flasher before continuing.
 
-## Check the build
+## Confirm the firmware source
 
 | Item | Reference |
 |---|---|
 | Flasher | [observer.gessaman.com](https://observer.gessaman.com/) |
 | Recorded source branch | `mqtt-bridge-implementation-flex` |
 | Recorded source commit | `c0c845f5` |
-| Expected presets | `meshcore-ca-1` and `meshcore-ca-2` |
+| Broker presets | `meshcore-ca-1` and `meshcore-ca-2` |
 
 The commit records the source used when this guide was reviewed; it does not prove the live flasher still uses that build. Stop if the flasher shows a board, source, or build you have not checked.
 
@@ -53,7 +53,6 @@ The commit records the source used when this guide was reviewed; it does not pro
 - [ ] Back up the existing identity and settings.
 - [ ] Keep a known-good data USB cable and the board's recovery method nearby.
 - [ ] Choose a real [location code](../iata-codes.md).
-- [ ] Plan to test on the bench before deployment.
 
 ## What this changes
 
@@ -87,7 +86,7 @@ Use the local mesh settings. When no community override exists, the Canadian onb
 | Backup preset | `meshcore-ca-2` |
 | Wi-Fi | A 2.4 GHz network |
 
-### 3. Build a reviewed CLI block
+### 3. Build the commands
 
 The CLI has no documented general quoting contract. The builder rejects spaces, quotes, backslashes, control characters, and other ambiguous Wi-Fi values. Use **Configure via USB** for a network it cannot represent safely.
 
@@ -151,7 +150,7 @@ The CLI has no documented general quoting contract. The builder rejects spaces, 
 
 Check the non-sensitive summary and redacted preview. Reveal and copy commands only on a trusted computer. The clipboard will contain Wi-Fi credentials, so clear it after use.
 
-### Manual CLI path
+### Enter commands by hand
 
 If you prefer manual entry, set the non-sensitive values first:
 
@@ -205,7 +204,7 @@ get bridge.enabled
 get path.hash.mode
 ```
 
-Check that:
+The board is configured correctly when:
 
 - Wi-Fi and MQTT report connected;
 - the location code is correct;

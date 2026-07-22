@@ -152,7 +152,7 @@ def validate_page(path: Path, docs_root: Path, today: dt.date) -> tuple[dict[str
         section_names = [value.casefold() for value in HEADING.findall(body)]
         required_sections = {
             "preflight or backup": ("before", "preflight", "backup"),
-            "verification": ("verify", "verification"),
+            "verification": ("verify", "verification", "check", "make sure"),
             "recovery": ("recovery", "undo", "restore"),
         }
         for label, words in required_sections.items():

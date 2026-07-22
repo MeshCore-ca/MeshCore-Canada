@@ -31,7 +31,7 @@ use a repeater for routing and coverage.
 - Record any identity or settings you need before following an erase step.
 - Prepare separate guest and administrator credentials.
 
-## Before you flash
+## Know what flashing changes
 
 The linked guide replaces the firmware and sets room-server identity, access
 credentials, and radio settings.
@@ -44,8 +44,8 @@ credentials, and radio settings.
     <li><label><input id="room-server-progress-prepare" type="checkbox" data-mc-progress> Back up and prepare</label></li>
     <li><label><input id="room-server-progress-flash" type="checkbox" data-mc-progress> Follow the flashing guide</label></li>
     <li><label><input id="room-server-progress-configure" type="checkbox" data-mc-progress> Apply access and local settings</label></li>
-    <li><label><input id="room-server-progress-verify-local" type="checkbox" data-mc-progress> Verify the room server nearby</label></li>
-    <li><label><input id="room-server-progress-verify-community" type="checkbox" data-mc-progress> Verify discovery and guest access</label></li>
+    <li><label><input id="room-server-progress-verify-local" type="checkbox" data-mc-progress> Check the room server nearby</label></li>
+    <li><label><input id="room-server-progress-verify-community" type="checkbox" data-mc-progress> Test discovery and guest access</label></li>
   </ol>
 </section>
 
@@ -68,7 +68,7 @@ information intended for room users.
 
 ## Make sure it works
 
-Setup is working when:
+The room server is ready when:
 
 1. a nearby companion discovers its advert;
 2. the companion can enter with the guest credentials; and

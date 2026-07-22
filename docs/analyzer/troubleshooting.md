@@ -29,7 +29,7 @@ Check these in order:
 3. **Broker:** confirm the primary endpoint reports connected with TLS verification.
 4. **Viewer:** wait a few minutes, refresh [CoreScope Observers](https://live.meshcore.ca/#/observers), and search the exact observer name.
 
-Copy-safe service checks:
+These commands only read service status:
 
 === "MCtoMQTT"
 
@@ -52,7 +52,8 @@ Copy-safe service checks:
     sudo journalctl -u pymc-repeater -n 80 --no-pager
     ```
 
-Before sharing any output, follow [What to share when asking for help](#what-to-share-when-asking-for-help).
+Before sharing any output, follow [What to share when asking for
+help](#what-to-share-when-asking-for-help).
 
 For standalone firmware, run only these read commands in the device CLI:
 
@@ -125,7 +126,7 @@ Update the integration before substituting a wrong location. If the current scre
 
 ## What to share when asking for help
 
-If you need help, share this short report:
+Copy this template and fill in what you know:
 
 ```text
 Observer method:
@@ -134,7 +135,7 @@ Operating system / Home Assistant version:
 Observer app, integration, or firmware version:
 Location code:
 Time checked (with time zone):
-First failed stage: radio / observer / broker / viewer
+First thing that failed: radio / observer / broker / viewer
 Primary connected: yes / no / unknown
 Backup connected: yes / no / not supported
 Observer visible: yes / no

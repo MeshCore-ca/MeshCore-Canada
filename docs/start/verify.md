@@ -1,5 +1,5 @@
 ---
-title: Verify a MeshCore setup
+title: Check a MeshCore setup
 description: Check whether a companion, repeater, room server, or observer completed its first working task.
 audience:
   - first-time-user
@@ -17,13 +17,13 @@ estimated_time: 5-10 minutes
 destructive: false
 ---
 
-# Verify your setup
+# Check your setup
 
 A powered-on device or a connected status does not mean setup is finished. Use
 the check for your device below.
 
-Before testing, confirm the device still shows the expected Canada or local
-radio settings.
+Before testing, confirm the device still shows the Canada settings or your
+community's settings.
 
 ## Companion
 
@@ -33,9 +33,9 @@ radio settings.
    appears.
 4. Exchange a test message when another user is available.
 
-!!! success "Companion success"
+!!! success "The companion is ready"
     A nearby known-good device sees the advert, and the two devices can
-    exchange the expected test traffic.
+    exchange a test message.
 
 If the advert is missing, compare radio and path settings before reflashing.
 
@@ -47,7 +47,7 @@ If the advert is missing, compare radio and path settings before reflashing.
 4. Confirm a nearby known-good companion receives it.
 5. Repeat the check after any antenna, power, or installation change.
 
-!!! success "Repeater success"
+!!! success "The repeater is ready"
     The repeater retains its settings and a nearby known-good companion
     receives its advert.
 
@@ -61,7 +61,7 @@ Keep it off hard-to-reach spots until the bench check passes.
 4. Enter using the guest credentials.
 5. Confirm the administrator still has maintenance access.
 
-!!! success "Room-server success"
+!!! success "The room server is ready"
     A companion discovers the room and guest access works without exposing the
     administrator credentials.
 
@@ -70,12 +70,12 @@ Keep it off hard-to-reach spots until the bench check passes.
 1. Create nearby mesh activity with a known-good device.
 2. Confirm the observer radio is using matching settings.
 3. Open [CoreScope Observers](https://live.meshcore.ca/#/observers).
-4. Find the expected observer and check for recent activity.
+4. Find your observer and check for recent activity.
 5. Use [Check your observer](../analyzer/verify.md) for the full health
    checklist.
 
-!!! success "Observer success"
-    The expected observer appears in CoreScope and shows recent activity after
+!!! success "The observer is working"
+    Your observer appears in CoreScope and shows recent activity after
     a nearby transmission.
 
 An online broker connection alone is not the final check.

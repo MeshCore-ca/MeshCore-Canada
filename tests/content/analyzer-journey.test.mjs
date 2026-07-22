@@ -129,14 +129,14 @@ test("privacy page states ownership, access, and the unknown retention boundary"
 test("verification distinguishes connectivity from an observed packet", () => {
   const source = read("docs/analyzer/verify.md");
   assert.match(source, /broker connection proves only/i);
-  assert.match(source, /Verify all four stages/);
+  assert.match(source, /Follow a packet through four stages/);
   for (const stage of ["Radio:", "Observer:", "Observer view:", "Packet view:"]) {
     assert.match(source, new RegExp(stage));
   }
-  assert.match(source, /first failed stage/i);
+  assert.match(source, /first thing that failed/i);
 });
 
-test("troubleshooting starts with symptoms and defines a redacted escalation bundle", () => {
+test("troubleshooting starts with symptoms and defines a safe support note", () => {
   const source = read("docs/analyzer/troubleshooting.md");
   for (const symptom of [
     "Observer never appears",

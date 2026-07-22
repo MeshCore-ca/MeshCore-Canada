@@ -103,7 +103,7 @@ nav:
       - Room server: start/room-server.md
       - Observer: start/observer.md
       - Finish and support:
-          - Verify your setup: start/verify.md
+          - Check your setup: start/verify.md
           - Get help: start/get-help.md
   - Communities:
       - Find a community: provinces/index.md
