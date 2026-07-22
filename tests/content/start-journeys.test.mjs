@@ -76,13 +76,17 @@ test("owned Start pages have required, unique page metadata", () => {
 test("homepage is task-first and exposes the required decisions", () => {
   const homepage = readDoc("index.md");
 
-  assert.match(homepage, /choose a node, find nearby operators, apply\s+the right regional settings/i);
-  assert.match(homepage, /## Start with your goal/);
-  assert.match(homepage, /## Choose a role/);
+  assert.match(homepage, /Welcome! We are actively updating our website/);
+  assert.match(homepage, /submit a git issue!/);
+  assert.match(homepage, /## What are you looking for\? \{ #start-with-your-goal \}/);
+  assert.match(homepage, /## What kind of device are you setting up\? \{ #choose-a-role \}/);
+  assert.match(homepage, /## Canada Default Radio Settings \{ #canada-baseline \}/);
+  assert.match(homepage, /Newly purchased LoRa radio[\s\S]+local\s+Canadian\s+MeshCore region/);
   assert.match(homepage, /Start the guided setup\]\(start\/index\.md\)/);
   assert.match(homepage, /Find a community\]\(provinces\/index\.md\)/);
   assert.match(homepage, /name="place"/);
-  assert.match(homepage, /id="mc-home-online-lookup"[^>]+type="checkbox"/);
+  assert.doesNotMatch(homepage, /name="lookup"|mc-home-online-lookup|Look this place up online/);
+  assert.match(homepage, /Set up an observer\]\(start\/observer\.md\)\{ \.mc-observer-link \}/);
 
   for (const role of [
     "Personal companion",

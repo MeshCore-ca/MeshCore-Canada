@@ -21,10 +21,10 @@ hide:
 
 # MeshCore Canada
 
-MeshCore Canada helps Canadians choose a node, find nearby operators, apply
-the right regional settings, and verify that a local mesh is working.
+Welcome! We are actively updating our website, please let us know where we can
+improve, [submit a git issue!](https://github.com/MeshCore-ca/MeshCore-Canada/issues/new/choose)
 
-## Start with your goal
+## What are you looking for? { #start-with-your-goal }
 
 <div class="grid cards" markdown>
 
@@ -32,7 +32,9 @@ the right regional settings, and verify that a local mesh is working.
 
     ---
 
-    Choose a role and follow a clear path from preparation to a working check.
+    Just starting out? Newly purchased LoRa radio and don't know where to begin?
+    Let's see if we can help get your device set up to join your local Canadian
+    MeshCore region.
 
     [:octicons-arrow-right-24: Start the guided setup](start/index.md)
 
@@ -47,7 +49,7 @@ the right regional settings, and verify that a local mesh is working.
 
 </div>
 
-## Choose a role
+## What kind of device are you setting up? { #choose-a-role }
 
 <div class="grid cards" markdown>
 
@@ -73,7 +75,7 @@ the right regional settings, and verify that a local mesh is working.
 
     Send network data to the public tools.
 
-    [:octicons-arrow-right-24: Set up an observer](start/observer.md)
+    [:octicons-arrow-right-24: Set up an observer](start/observer.md){ .mc-observer-link }
 
 </div>
 
@@ -83,7 +85,7 @@ Need help from a person? Join the [national Discord](https://discord.gg/BESFVMt7
 ask on the [community forum](https://forum.meshcore.ca/), or check the
 [live Canadian network](https://live.meshcore.ca/).
 
-## Canada baseline
+## Canada Default Radio Settings { #canada-baseline }
 
 Use these settings when a local community has not published an override.
 
@@ -108,13 +110,6 @@ Search by city, airport code, or region.
     <input id="mc-home-place" name="place" type="search" autocomplete="address-level2" required>
     <button type="submit">Continue to region finder</button>
   </div>
-  <label class="mc-place-search__consent" for="mc-home-online-lookup">
-    <input id="mc-home-online-lookup" name="lookup" type="checkbox" value="online">
-    Look this place up online after I continue.
-  </label>
-  <small>If selected, the search text is sent to Nominatim or geocoder.ca.
-  Leave it clear to review the query and consent inside the configurator. See the
-  <a href="privacy/">privacy guide</a>.</small>
 </form>
 
 Or browse the [region map](config/map.md).

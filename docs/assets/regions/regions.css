@@ -31,6 +31,18 @@ body:has([data-mcc-regions]) .md-main .md-typeset a {
   color: var(--md-typeset-a-color, #5488e8);
 }
 
+.mcc-visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
 .mcc-region-hero {
   margin: 1.2rem 0 1.5rem;
   padding: 1rem 1.1rem;
@@ -841,6 +853,59 @@ body:has([data-mcc-regions]) .md-main .md-typeset a {
   background: var(--mcc-panel);
 }
 
+.mcc-map-experience {
+  display: grid;
+  gap: 1rem;
+}
+
+.mcc-map-product-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.mcc-map-product-header h2,
+.mcc-map-product-header p {
+  margin-block: 0;
+}
+
+.mcc-map-product-header h2 + p {
+  margin-top: 0.5rem;
+}
+
+.mcc-map-mode-switch {
+  display: inline-flex;
+  width: fit-content;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  border: 1px solid var(--mcc-border);
+  border-radius: 0.5rem;
+  background: var(--mcc-panel);
+}
+
+.mcc-map-mode-switch button {
+  padding: 0.45rem 0.75rem;
+  border: 0;
+  border-radius: 0.32rem;
+  color: var(--mcc-text);
+  background: transparent;
+  font: inherit;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.mcc-map-mode-switch button:hover,
+.mcc-map-mode-switch button:focus-visible {
+  background: var(--mcc-soft);
+}
+
+.mcc-map-mode-switch button[aria-pressed="true"] {
+  color: #ffffff;
+  background: var(--mcc-green);
+}
+
 .mcc-map-panel {
   display: grid;
   align-content: start;
@@ -848,6 +913,61 @@ body:has([data-mcc-regions]) .md-main .md-typeset a {
   padding: 1rem;
   background: var(--mcc-panel);
   overflow: auto;
+}
+
+.mcc-map-stage {
+  position: relative;
+  min-width: 0;
+  min-height: 30rem;
+}
+
+.mcc-skip-map {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  z-index: 1001;
+  padding: 0.45rem 0.65rem;
+  border-radius: 0.3rem;
+  color: #ffffff;
+  background: var(--mcc-green-dark);
+  transform: translateY(calc(-100% - 1rem));
+}
+
+.mcc-skip-map:focus {
+  transform: none;
+}
+
+.mcc-map-loading {
+  display: grid;
+  position: absolute;
+  inset: 0;
+  z-index: 1000;
+  height: 100%;
+  place-items: center;
+  padding: 2rem;
+  color: var(--mcc-text);
+  background:
+    radial-gradient(circle at center, color-mix(in srgb, var(--mcc-green), transparent 86%), transparent 55%),
+    var(--mcc-panel);
+  text-align: center;
+}
+
+.mcc-map-loading > div {
+  display: grid;
+  max-width: 28rem;
+  justify-items: center;
+  gap: 0.65rem;
+}
+
+.mcc-map-loading svg {
+  width: 2.5rem;
+  height: 2.5rem;
+  color: var(--mcc-green);
+}
+
+.mcc-map-loading h3,
+.mcc-map-loading p {
+  margin: 0;
 }
 
 .mcc-region-breadcrumbs {
@@ -960,6 +1080,7 @@ body:has([data-mcc-regions]) .md-main .md-typeset a {
 
 .mcc-map-area {
   position: relative;
+  height: 100%;
   min-height: 0;
   background: var(--mcc-panel);
 }
@@ -1625,6 +1746,14 @@ body:has([data-mcc-regions]) .md-main .md-typeset a {
 
   .mcc-map-area {
     height: 32rem;
+    min-height: 32rem;
+  }
+
+  .mcc-map-loading {
+    height: 32rem;
+  }
+
+  .mcc-map-stage {
     min-height: 32rem;
   }
 

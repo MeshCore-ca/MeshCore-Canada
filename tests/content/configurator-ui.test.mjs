@@ -51,10 +51,13 @@ test("commissioning records omit sensitive and exact location fields", () => {
   assert.doesNotMatch(record, /must-not-appear|45\.4215|-75\.6972/);
 });
 
-test("external searches and map tiles require explicit consent", () => {
-  assert.match(regionsSource, /allowExternal/);
-  assert.match(regionsSource, /online-search-consent/);
-  assert.match(regionsSource, /tile-consent/);
-  assert.match(regionsSource, /Allow OpenStreetMap tiles before loading/);
+test("place searches and map tiles load automatically", () => {
+  assert.doesNotMatch(regionsSource, /allowExternal/);
+  assert.doesNotMatch(regionsSource, /online-search-consent|map-online-search-consent/);
+  assert.match(regionsSource, /setTimeout\(locate, 0\)/);
+  assert.match(regionsSource, /geocode\(data, query, thisController && thisController\.signal\)/);
+  assert.doesNotMatch(regionsSource, /tile-consent|Allow OpenStreetMap tiles before loading/);
+  assert.match(regionsSource, /window\.setTimeout\(loadInteractiveMap, 0\)/);
+  assert.match(regionsSource, /tile\.openstreetmap\.org/);
   assert.match(regionsSource, /Browse regions without search or a map/);
 });

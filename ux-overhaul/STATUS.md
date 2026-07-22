@@ -32,10 +32,10 @@ both values. A reachable URL by itself is not deployment proof.
 | Area | Result |
 |---|---|
 | Information architecture | Task-oriented Start, About, Tools, community, configuration, hardware, and contribution journeys |
-| Homepage | Two primary goals, role routes, privacy-preserving location lookup, and direct help/community paths |
+| Homepage | Two primary goals, role routes, automatic local-first place lookup, and direct help/community paths |
 | Community directory | 21 validated structured listings; province pages generated from `data/communities.json` |
 | PR #75 | Five Alberta listings, refreshed YQL details, all 26 submitted URLs, and the national 3-byte StoonMesh baseline folded into the structured source |
-| Search and privacy | Local search by default; online geocoding requires explicit consent |
+| Search and privacy | Place searches use local region data first, then external geocoders when needed; the region map loads OpenStreetMap tiles automatically and documents the request in the privacy guide |
 | Configuration tools | Accessible workbench, clearer editor containment, and preserved command/region semantics |
 | Operations content | Named service credits, repeater loop-detection guidance, and current SenseCAP cable paths restored |
 | Delivery | Separate strict production/preview builds, preview-wide noindex, deterministic artifact manifest, subpath-aware checks, and cache-busted custom assets |

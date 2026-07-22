@@ -967,18 +967,12 @@
     });
   }
 
-  function geocode(data, query, allowExternal, signal) {
+  function geocode(data, query, signal) {
     var localMatch = localGeocode(data, query);
     if (localMatch && localMatch.ambiguous) {
       return Promise.reject(new Error("That name matches more than one region (" + localMatch.choices.join("; ") + "). Add a province or postal code."));
     }
     if (localMatch && localMatch.exactLocalMatch) return Promise.resolve(localMatch);
-    if (!allowExternal) {
-      if (localMatch) return Promise.resolve(localMatch);
-      return Promise.reject(new Error(
-        "No local region matched. Allow online place lookup, enter coordinates, or browse the region list."
-      ));
-    }
     var postal = parseCanadianPostalCode(query);
     var primaryLookup = postal
       ? geocodeCanadianPostal(postal, signal)
@@ -1543,7 +1537,6 @@
       '<input class="mcc-input" id="mcc-location-input" type="text" autocomplete="off" spellcheck="false" placeholder="Ottawa, YOW, K1A 0B1">' +
       '<button class="mcc-button" type="button" data-action="locate">' + icon("search") + 'Find</button>' +
       '</div>' +
-      '<label class="mcc-consent-choice"><input type="checkbox" data-action="online-search-consent"><span><strong>Allow online place lookup</strong><small>If a local region name is not enough, the search text is sent to OpenStreetMap Nominatim and geocoder.ca.</small></span></label>' +
       '</div>' +
       '<div class="mcc-location-options">' +
       '<section class="mcc-location-method">' +
@@ -1637,7 +1630,6 @@
     var els = {
       input: el.querySelector("#mcc-location-input"),
       locate: el.querySelector("[data-action='locate']"),
-      onlineConsent: el.querySelector("[data-action='online-search-consent']"),
       latitude: el.querySelector("[data-role='latitude']"),
       longitude: el.querySelector("[data-role='longitude']"),
       coordinates: el.querySelector("[data-action='use-coordinates']"),
@@ -1866,8 +1858,7 @@
       var thisController = activeGeocodeController;
       els.locate.disabled = true;
       els.locate.textContent = "Finding";
-      geocode(data, query, Boolean(els.onlineConsent && els.onlineConsent.checked),
-        thisController && thisController.signal).then(function (geo) {
+      geocode(data, query, thisController && thisController.signal).then(function (geo) {
         geo.source = "search";
         return useGeo(geo);
       }).catch(function (err) {
@@ -1987,13 +1978,11 @@
     updateMapLinks();
     var initialParams = new URLSearchParams(window.location.search);
     var initialQuery = (initialParams.get("place") || "").trim();
-    var onlineLookupApproved = initialParams.get("lookup") === "online";
     if (initialQuery) {
       state.maxStep = 2;
       els.input.value = initialQuery;
-      if (els.onlineConsent) els.onlineConsent.checked = onlineLookupApproved;
       showStep(2);
-      if (onlineLookupApproved) setTimeout(locate, 0);
+      setTimeout(locate, 0);
     } else {
       showStep(1);
     }
@@ -2026,7 +2015,7 @@
       '<div class="mcc-visually-hidden" data-mcc-copy-status role="status" aria-live="polite" aria-atomic="true"></div>' +
       '<header class="mcc-map-product-header">' +
       '<div><p class="mcc-eyebrow">MeshCore Canada regions</p><h2>Explore or audit the region release</h2>' +
-      '<p>Find a home region without loading a map, or inspect the published release evidence.</p></div>' +
+      '<p>Find a home region on the interactive map, or inspect the published release evidence.</p></div>' +
       '<a class="mcc-button" href="' + esc(regionPageHref("config")) + '">' + icon("list-checks") + 'Set up a repeater</a>' +
       '</header>' +
       '<div class="mcc-map-mode-switch" role="group" aria-label="Region map mode">' +
@@ -2043,7 +2032,6 @@
       '<input class="mcc-input" id="mcc-map-location-input" data-role="map-input" type="text" autocomplete="off" spellcheck="false" placeholder="Ottawa, YOW, K1A 0B1">' +
       '<button class="mcc-button" type="button" data-action="map-locate">' + icon("search") + 'Find</button>' +
       '</div>' +
-      '<label class="mcc-consent-choice"><input type="checkbox" data-action="map-online-search-consent"><span><strong>Allow online place lookup</strong><small>If local region names are not enough, the search text is sent to OpenStreetMap Nominatim and geocoder.ca.</small></span></label>' +
       '<details class="mcc-coordinate-entry"><summary>Enter coordinates instead</summary>' +
       '<div class="mcc-coordinate-grid">' +
       '<label><span>Latitude</span><input class="mcc-input" data-role="map-latitude" inputmode="decimal" autocomplete="off" placeholder="45.4215"></label>' +
@@ -2062,11 +2050,11 @@
       '</aside>' +
       '<div class="mcc-map-stage">' +
       '<a class="mcc-skip-map" href="#mcc-region-list">Skip the interactive map</a>' +
-      '<div class="mcc-map-consent" data-role="map-consent">' +
-      '<div><h3>Interactive map is off</h3><p>The region list below works without map tiles. Loading the map contacts OpenStreetMap and shares normal request data such as your IP address.</p></div>' +
-      '<label class="mcc-consent-choice"><input type="checkbox" data-action="tile-consent"><span><strong>Allow OpenStreetMap tiles for this visit</strong><small>The Canadian boundary file and Leaflet library are served by MeshCore Canada.</small></span></label>' +
-      '<button class="mcc-button" type="button" data-action="load-map">' + icon("map") + 'Load interactive map</button>' +
-      '<div data-role="map-load-status" aria-live="polite"></div>' +
+      '<div class="mcc-visually-hidden" data-role="map-ready-status" role="status" aria-live="polite" aria-atomic="true"></div>' +
+      '<div class="mcc-map-loading" data-role="map-loading">' +
+      '<div>' + icon("map") + '<h3>Loading interactive map…</h3>' +
+      '<p data-role="map-load-status" role="status" aria-live="polite">Loading Canadian boundaries and OpenStreetMap tiles.</p>' +
+      '<button class="mcc-button" type="button" data-action="load-map" hidden>Retry map</button></div>' +
       '</div>' +
       '<div class="mcc-map-area" data-role="map-area" hidden>' +
       '<div class="mcc-map-canvas" data-role="map-canvas" role="region" aria-label="Interactive Canadian region map" tabindex="0"></div>' +
@@ -2075,7 +2063,7 @@
       '</div>' +
       '</div>' +
       '<section class="mcc-card mcc-map-list-card" id="mcc-region-list">' +
-      '<div class="mcc-section-head"><div><p class="mcc-eyebrow">List alternative</p><h3>All regions</h3><p>Search and select a region without map tiles.</p></div></div>' +
+      '<div class="mcc-section-head"><div><p class="mcc-eyebrow">List alternative</p><h3>All regions</h3><p>If the map is unavailable, search and select a region from this list.</p></div></div>' +
       '<div data-role="map-region-table"></div>' +
       '</section>' +
       '</section>' +
@@ -2117,7 +2105,6 @@
     var els = {
       input: el.querySelector("[data-role='map-input']"),
       locate: el.querySelector("[data-action='map-locate']"),
-      onlineConsent: el.querySelector("[data-action='map-online-search-consent']"),
       latitude: el.querySelector("[data-role='map-latitude']"),
       longitude: el.querySelector("[data-role='map-longitude']"),
       coordinates: el.querySelector("[data-action='map-use-coordinates']"),
@@ -2127,10 +2114,11 @@
       resultSection: el.querySelector("[data-role='map-result-section']"),
       textResult: el.querySelector("[data-role='map-text-result']"),
       table: el.querySelector("[data-role='map-region-table']"),
-      tileConsent: el.querySelector("[data-action='tile-consent']"),
       loadMap: el.querySelector("[data-action='load-map']"),
-      mapConsent: el.querySelector("[data-role='map-consent']"),
+      mapStage: el.querySelector(".mcc-map-stage"),
+      mapLoading: el.querySelector("[data-role='map-loading']"),
       mapLoadStatus: el.querySelector("[data-role='map-load-status']"),
+      mapReadyStatus: el.querySelector("[data-role='map-ready-status']"),
       mapArea: el.querySelector("[data-role='map-area']"),
       canvas: el.querySelector("[data-role='map-canvas']"),
       auditStatus: el.querySelector("[data-role='audit-status']"),
@@ -2143,6 +2131,7 @@
     var activeGeocodeController = null;
     var locationRequestId = 0;
     var auditLoaded = false;
+    var mapIsLoading = false;
 
     function setMapMode(mode) {
       var next = mode === "audit" ? "audit" : "explore";
@@ -2354,7 +2343,7 @@
       var thisController = activeGeocodeController;
       els.locate.disabled = true;
       els.locate.textContent = "Finding";
-      geocode(data, query, Boolean(els.onlineConsent.checked), thisController && thisController.signal)
+      geocode(data, query, thisController && thisController.signal)
         .then(function (geo) { return useGeo(geo, true, geo.tag); })
         .catch(function (error) {
           if (error && error.name === "AbortError") return;
@@ -2384,22 +2373,20 @@
     }
 
     function loadInteractiveMap() {
-      if (!els.tileConsent.checked) {
-        els.mapLoadStatus.textContent = "Allow OpenStreetMap tiles before loading the interactive map.";
-        els.tileConsent.focus();
-        return;
-      }
-      els.loadMap.disabled = true;
+      if (map || mapIsLoading) return;
+      mapIsLoading = true;
+      els.loadMap.hidden = true;
+      els.mapStage.setAttribute("aria-busy", "true");
       els.mapLoadStatus.textContent = "Loading Canadian boundaries and map tools…";
+      els.mapReadyStatus.textContent = "Loading the interactive region map.";
       Promise.all([loadDisplayPartition(), loadLeaflet()]).then(function (loaded) {
         applyGeneratedPartition(data, loaded[0], null);
         var L = loaded[1];
-        els.mapConsent.hidden = true;
         els.mapArea.hidden = false;
         map = L.map(els.canvas, { minZoom: 3, maxZoom: 13 });
         activeMaps.push({ container: el, map: map });
         map.fitBounds(data.meta.map.bounds || [[41.5, -141.5], [83.5, -52]], { padding: [24, 24], maxZoom: 4 });
-        L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        var tileLayer = L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
           maxZoom: 19,
           attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" rel="noopener noreferrer">OpenStreetMap</a> contributors'
         }).addTo(map);
@@ -2427,11 +2414,47 @@
         });
         renderRegionBrowser(state.browseTag, false);
         updateMapVisuals(Boolean(state.canGenerate));
-        els.mapLoadStatus.textContent = "";
         window.setTimeout(function () { map.invalidateSize(); }, 0);
+        return new Promise(function (resolve, reject) {
+          var settled = false;
+          var timeout = window.setTimeout(function () {
+            if (settled) return;
+            settled = true;
+            reject(new Error("OpenStreetMap tiles did not load. Search and the region list still work."));
+          }, 10000);
+          tileLayer.once("tileload", function () {
+            if (settled) return;
+            settled = true;
+            window.clearTimeout(timeout);
+            resolve();
+          });
+          tileLayer.once("load", function () {
+            if (settled) return;
+            settled = true;
+            window.clearTimeout(timeout);
+            reject(new Error("OpenStreetMap tiles could not load. Search and the region list still work."));
+          });
+        });
+      }).then(function () {
+        els.mapLoading.hidden = true;
+        els.mapLoadStatus.textContent = "";
+        els.mapStage.setAttribute("aria-busy", "false");
+        els.mapReadyStatus.textContent = "Interactive region map loaded.";
+        mapIsLoading = false;
       }).catch(function (error) {
-        els.loadMap.disabled = false;
+        if (map) {
+          var failedMap = map;
+          try { map.remove(); } catch (cleanupError) { /* Leaflet may have failed during setup. */ }
+          activeMaps = activeMaps.filter(function (entry) { return entry.map !== failedMap; });
+          map = null;
+        }
+        els.mapArea.hidden = true;
+        els.mapLoading.hidden = false;
+        els.loadMap.hidden = false;
+        mapIsLoading = false;
         els.mapLoadStatus.textContent = error.message || "The map could not load. Search and the region list still work.";
+        els.mapStage.setAttribute("aria-busy", "false");
+        els.mapReadyStatus.textContent = els.mapLoadStatus.textContent;
       });
     }
 
@@ -2452,6 +2475,7 @@
     els.loadMap.addEventListener("click", loadInteractiveMap);
     renderRegionBrowser(state.browseTag, false);
     renderRegionTable(els.table, data, function (tag) { chooseRegionNode(tag); });
+    window.setTimeout(loadInteractiveMap, 0);
 
     var initialLat = Number(mapParams.get("lat"));
     var initialLon = Number(mapParams.get("lon"));

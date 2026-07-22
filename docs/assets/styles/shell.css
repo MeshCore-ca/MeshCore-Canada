@@ -9,8 +9,8 @@
 
 .md-search__icon[for="__search"] {
   display: inline-flex;
-  min-width: var(--mc-target-size);
-  min-height: var(--mc-target-size);
+  width: 1.5rem;
+  height: 1.5rem;
   align-items: center;
   justify-content: center;
 }

@@ -114,9 +114,9 @@ summary {
 }
 
 .md-button,
-button,
+button:not(.md-search__icon),
 select,
-input:not([type="checkbox"]):not([type="radio"]) {
+input:not([type="checkbox"]):not([type="radio"]):not(.md-search__input) {
   min-height: var(--mc-target-size);
 }
 

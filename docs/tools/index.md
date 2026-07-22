@@ -76,8 +76,8 @@ live tools help you observe what the network is currently reporting.
 
 Observer telemetry and heard radio packets can appear in public tools. Read
 [data collection and access](../analyzer/data-collection-access.md) and the
-[site privacy guide](../privacy.md) before operating an observer or entering a
-location into an online lookup.
+[site privacy guide](../privacy.md) before operating an observer or searching
+for a place.
 
 If you are unsure which tool fits, [ask for help](../start/get-help.md) before
 changing a shared repeater or installing another service.

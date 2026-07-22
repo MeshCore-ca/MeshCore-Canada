@@ -42,9 +42,9 @@ theme:
 
 extra_css:
   - assets/styles/tokens.css?v=20260722-2
-  - assets/styles/base.css?v=20260722-2
-  - assets/styles/shell.css?v=20260722-2
-  - assets/styles/components.css?v=20260722-2
+  - assets/styles/base.css?v=20260722-3
+  - assets/styles/shell.css?v=20260722-3
+  - assets/styles/components.css?v=20260722-3
 
 extra_javascript:
   - assets/javascripts/bootstrap.js?v=20260722-2

@@ -8,7 +8,7 @@ task: understand-site-privacy
 scope: canada-baseline
 status: draft
 owner: site-maintainers
-last_reviewed: 2026-07-19
+last_reviewed: 2026-07-22
 review_by: 2027-01-15
 difficulty: beginner
 estimated_time: 3 minutes
@@ -25,8 +25,8 @@ MeshCore Canada or GitHub account.
 | Action | What is sent | Where it goes |
 |---|---|---|
 | Search this documentation | Your search words stay in the browser | Nowhere |
-| Search for a place in the region tools | The place, airport code, or postal code you enter | OpenStreetMap Nominatim or geocoder.ca, after you agree |
-| Load street-map tiles | Your IP address and the visible map area | OpenStreetMap, after you agree |
+| Search for a place in the region tools | The place, airport code, or postal code you submit | The local region catalog first; OpenStreetMap Nominatim or geocoder.ca only when no local exact match is available |
+| Open the interactive region map | Your IP address and the visible map area | OpenStreetMap, loaded automatically with the map |
 | Open an external link | Normal web request information | The named external service |
 | Submit an idea or region proposal | The text and proposal details shown at review, plus anti-spam verification | MeshCore Canada’s submission service, Cloudflare Turnstile, and a public GitHub issue |
 

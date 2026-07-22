@@ -93,21 +93,20 @@ test("home place search resolves a city to its region", async ({ page }) => {
   });
   await page.goto(siteRoute("/"));
   await page.locator("#mc-home-place").fill("Guelph, Ontario");
-  await page.locator("#mc-home-online-lookup").check();
   await Promise.all([
     page.waitForURL((url) =>
       url.pathname.endsWith("/config/") &&
       url.searchParams.get("place") === "Guelph, Ontario" &&
-      url.searchParams.get("lookup") === "online"
+      !url.searchParams.has("lookup")
     ),
     page.getByRole("button", { name: "Continue to region finder" }).click()
   ]);
   await expect(page.locator("#mcc-location-input")).toHaveValue("Guelph, Ontario");
-  await expect(page.locator("[data-action='online-search-consent']")).toBeChecked();
+  await expect(page.locator("[data-action='online-search-consent']")).toHaveCount(0);
   await expect(page.locator("[data-role='status']")).toContainText("Region found.");
 });
 
-test("config place deep links stay local until online lookup is approved", async ({ page }) => {
+test("known config place deep links resolve locally without an external request", async ({ page }) => {
   const onlineRequests = [];
   await page.route(/https:\/\/(?:nominatim\.openstreetmap\.org|geocoder\.ca)\//, async (route) => {
     onlineRequests.push(route.request().url());
@@ -116,16 +115,68 @@ test("config place deep links stay local until online lookup is approved", async
 
   await page.goto(siteRoute("/config/?place=Ottawa"), { waitUntil: "domcontentloaded" });
   await expect(page.locator("#mcc-location-input")).toHaveValue("Ottawa");
-  await expect(page.locator("[data-action='online-search-consent']")).not.toBeChecked();
+  await expect(page.locator("[data-action='online-search-consent']")).toHaveCount(0);
   await expect(page.locator("#__search")).not.toBeChecked();
   await expect(page.locator("[data-mcc-regions='config']")).toBeVisible();
-  await page.waitForTimeout(250);
+  await expect(page.locator("[data-role='status']")).toContainText("Region found.");
 
   expect(onlineRequests).toEqual([]);
   const url = new URL(page.url());
   expect(url.searchParams.get("place")).toBe("Ottawa");
   expect(url.searchParams.has("lookup")).toBeFalsy();
   expect(url.searchParams.has("q")).toBeFalsy();
+});
+
+test("region map loads OpenStreetMap tiles without a consent gate", async ({ page }) => {
+  const tileRequests = [];
+  await page.route("https://tile.openstreetmap.org/**", async (route) => {
+    tileRequests.push(route.request().url());
+    await route.fulfill({
+      status: 200,
+      contentType: "image/png",
+      body: Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=", "base64")
+    });
+  });
+
+  await page.goto(siteRoute("/config/map/"), { waitUntil: "domcontentloaded" });
+  await expect(page.locator("[data-action='tile-consent']")).toHaveCount(0);
+  await expect(page.getByText(/Allow OpenStreetMap tiles/i)).toHaveCount(0);
+  await expect(page.locator("[data-role='map-area']")).toBeVisible();
+  await expect(page.locator("[data-role='map-loading']")).toBeHidden();
+  await expect(page.locator(".leaflet-tile-loaded").first()).toBeVisible();
+  await expect(page.locator("[data-role='map-ready-status']")).toHaveText("Interactive region map loaded.");
+  await expect.poll(() => tileRequests.length).toBeGreaterThan(0);
+});
+
+test("header search stays aligned inside the desktop header", async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name.startsWith("mobile-"), "Desktop header geometry contract");
+  await page.setViewportSize({ width: 1091, height: 930 });
+  await page.goto(siteRoute("/"));
+  const geometry = await page.evaluate(() => {
+    const box = (selector) => {
+      const rect = document.querySelector(selector).getBoundingClientRect();
+      return {
+        top: rect.top,
+        right: rect.right,
+        bottom: rect.bottom,
+        left: rect.left,
+        width: rect.width,
+        height: rect.height
+      };
+    };
+    return {
+      header: box(".md-header__inner"),
+      form: box(".md-search__form"),
+      input: box(".md-search__input"),
+      icon: box(".md-search__icon[for='__search']")
+    };
+  });
+  expect(Math.abs(geometry.input.height - geometry.form.height)).toBeLessThan(1);
+  expect(geometry.input.top).toBeGreaterThanOrEqual(geometry.header.top);
+  expect(geometry.input.bottom).toBeLessThanOrEqual(geometry.header.bottom + 1);
+  expect(geometry.icon.height).toBeLessThanOrEqual(geometry.form.height + 1);
+  expect(geometry.icon.width).toBeGreaterThanOrEqual(24);
+  expect(geometry.icon.height).toBeGreaterThanOrEqual(24);
 });
 
 test("community directory deep links use their dedicated query parameter", async ({ page }) => {
