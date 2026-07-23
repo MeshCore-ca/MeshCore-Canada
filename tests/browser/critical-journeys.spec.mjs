@@ -6,6 +6,7 @@ const criticalRoutes = [
   "/start/",
   "/start/companion/",
   "/about/",
+  "/hardware/",
   "/provinces/",
   "/config/",
   "/config/map/",
@@ -72,6 +73,18 @@ test("desktop navigation exposes the six task categories", async ({ page }, test
     "Learn",
     "Contribute"
   ]);
+});
+
+test("hardware landing links directly to the experimental 1 W build", async ({ page }, testInfo) => {
+  await page.goto(siteRoute("/hardware/"));
+  const link = page.getByRole("link", { name: "Review the experimental 1 W build" });
+  await expect(link).toBeVisible();
+  await expect(link).toHaveAttribute("href", "repeater-solar-1w-diy-build/");
+  await link.click();
+  await expect(page).toHaveURL(
+    resolveSiteRoute(testInfo.project.use.baseURL, "/hardware/repeater-solar-1w-diy-build/"),
+  );
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("Experimental 1 W Solar Repeater");
 });
 
 test("home place search resolves a city to its region", async ({ page }) => {

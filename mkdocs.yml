@@ -77,6 +77,7 @@ plugins:
         meshcore/firmware-heltec-v3-wifi.md: meshcore/flash-companion.md
         hardware/wire-connector-types.md: hardware/recommended-repeaters.md
         hardware/repeater-solar-batteries.md: hardware/recommended-repeaters.md
+        hardware/overview.md: hardware/index.md
         meshcore/general-meshcore-roles.md: start/choose-a-goal.md
 
 markdown_extensions:
@@ -122,7 +123,7 @@ nav:
           - Newfoundland and Labrador: provinces/newfoundland-and-labrador.md
       - Territories: provinces/territories.md
   - Devices & Builds:
-      - Choose hardware: hardware/overview.md
+      - Choose hardware: hardware/index.md
       - Companion devices: hardware/recommended-companions.md
       - Repeater devices: hardware/recommended-repeaters.md
       - Antennas: hardware/recommended-antenna.md

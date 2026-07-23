@@ -59,6 +59,11 @@
   padding: var(--mc-space-6);
 }
 
+.mc-decision-card[data-status="draft"],
+.mc-decision-card[data-status="experimental"] {
+  border-left: 0.35rem solid var(--mc-color-warning);
+}
+
 .mc-decision-card > :first-child {
   margin-top: 0;
 }

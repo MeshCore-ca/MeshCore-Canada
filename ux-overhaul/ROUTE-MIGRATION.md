@@ -23,7 +23,8 @@ changes navigation and canonical journeys before moving source files.
 | `/provinces/prince-edward-island/` | Generated PEI directory | Preserve |
 | `/provinces/newfoundland-and-labrador/` | Generated NL directory | Preserve |
 | `/provinces/territories/` | Generated territories directory | Preserve |
-| `/hardware/overview/` | Devices and builds chooser | Preserve; canonical hub later |
+| `/hardware/` | Devices and builds chooser | Canonical hub |
+| `/hardware/overview/` | Previous chooser URL | Redirect to `/hardware/` |
 | `/hardware/recommended-companions/` | Companion recommendations | Preserve |
 | `/hardware/recommended-repeaters/` | Repeater recommendations | Preserve |
 | `/hardware/recommended-antenna/` | Antenna recommendations | Preserve |

@@ -34,22 +34,41 @@ Choose what the device will do, then confirm the exact board and firmware target
   <section class="mc-decision-card">
     <h3>Personal companion</h3>
     <p>Use this to send and receive messages. Most companions pair with a phone; some have their own screen and controls.</p>
-    <a class="md-button md-button--primary" href="../recommended-companions/">Choose a companion</a>
+    <a class="md-button md-button--primary" href="recommended-companions/">Choose a companion</a>
   </section>
   <section class="mc-decision-card">
     <h3>Repeater</h3>
     <p>Use this to improve coverage. Plan the radio, power, antenna, enclosure, mount, and recovery as one system.</p>
-    <a class="md-button" href="../recommended-repeaters/">Plan a repeater</a>
+    <a class="md-button" href="recommended-repeaters/">Plan a repeater</a>
   </section>
   <section class="mc-decision-card">
     <h3>Antenna and cable</h3>
     <p>Match the radio band and connector before ordering. SMA and RP-SMA can look similar and are not interchangeable.</p>
-    <a class="md-button" href="../recommended-antenna/">Choose an antenna</a>
+    <a class="md-button" href="recommended-antenna/">Choose an antenna</a>
   </section>
   <section class="mc-decision-card">
     <h3>Room server</h3>
     <p>Use this to host a persistent room. Choose a supported board, continuous power, and a secure administration plan.</p>
-    <a class="md-button" href="../../meshcore/flash-room-server/">Set up a room server</a>
+    <a class="md-button" href="../meshcore/flash-room-server/">Set up a room server</a>
+  </section>
+</div>
+
+## Community build guides
+
+These community-contributed designs are detailed build references, not default
+product recommendations. Read each guide's review status and safety notes before
+buying parts or starting work.
+
+<div class="mc-decision-grid">
+  <section class="mc-decision-card" data-status="draft">
+    <h3>300 mW solar repeater</h3>
+    <p>A draft RAK-based build for experienced builders, with a parts list, assembly stages, bench checks, and maintenance notes.</p>
+    <a class="md-button" href="repeater-solar-300mw-diy-build/">Review the 300 mW build</a>
+  </section>
+  <section class="mc-decision-card" data-status="experimental">
+    <h3>Experimental 1 W solar repeater</h3>
+    <p>An unverified high-power design contributed by MrAlders0n. Use it only after electrical, RF, and site review confirms a real network need.</p>
+    <a class="md-button" href="repeater-solar-1w-diy-build/">Review the experimental 1 W build</a>
   </section>
 </div>
 

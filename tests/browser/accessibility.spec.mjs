@@ -5,6 +5,7 @@ import { siteRoute } from "./site-route.mjs";
 const routes = [
   "/",
   "/start/",
+  "/hardware/",
   "/provinces/",
   "/config/",
   "/config/map/",

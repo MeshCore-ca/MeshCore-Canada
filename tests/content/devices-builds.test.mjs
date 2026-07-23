@@ -8,7 +8,7 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 const read = (path) => readFileSync(resolve(root, path), "utf8");
 
 const hardwarePages = [
-  "docs/hardware/overview.md",
+  "docs/hardware/index.md",
   "docs/hardware/recommended-antenna.md",
   "docs/hardware/recommended-companions.md",
   "docs/hardware/recommended-repeaters.md",
@@ -127,6 +127,18 @@ test("experimental and legacy workflows stay outside primary navigation", () => 
   assert.doesNotMatch(config, /generate-repeater-id\.md/);
   assert.ok(existsSync(resolve(root, "docs/hardware/repeater-solar-1w-diy-build.md")));
   assert.ok(existsSync(resolve(root, "docs/meshcore/generate-repeater-id.md")));
+});
+
+test("hardware landing makes both solar build guides easy to find", () => {
+  const overview = read("docs/hardware/index.md");
+  const repeaters = read("docs/hardware/recommended-repeaters.md");
+
+  for (const source of [overview, repeaters]) {
+    assert.match(source, /repeater-solar-300mw-diy-build\//);
+    assert.match(source, /repeater-solar-1w-diy-build\//);
+    assert.match(source, /Experimental 1 W solar repeater/);
+    assert.match(source, /electrical, RF, and site review/i);
+  }
 });
 
 test("destructive firmware flows expose preflight, backup, verification, and recovery", () => {

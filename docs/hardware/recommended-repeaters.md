@@ -42,7 +42,7 @@ mount, and a way to reach it if something goes wrong.
     <h3>Custom build</h3>
     <p>Lets you choose each part, but you become responsible for electrical compatibility, weather sealing, mounting, and service access.</p>
     <p><strong>Check:</strong> manufacturer limits, polarity, protection, wiring, thermal conditions, and safe recovery.</p>
-    <a class="md-button" href="#community-build-reference">Review the requirements</a>
+    <a class="md-button" href="#community-build-guides">See community build guides</a>
   </section>
 </div>
 
@@ -66,9 +66,23 @@ The SenseCAP Solar Node P1 is one packaged enclosure to evaluate. It is not a co
 !!! warning "SMA and RP-SMA are not interchangeable"
     Confirm the factory connector, gender, polarity, cable length and loss, antenna connector, and weather seal as one complete path. Do not order by connector appearance alone.
 
-## Community build reference
+## Community build guides
 
-The [300 mW solar repeater notes](repeater-solar-300mw-diy-build.md) document one custom approach for experienced builders. They are not a verified bill of materials or a substitute for current product documentation and electrical review.
+<div class="mc-decision-grid">
+  <section class="mc-decision-card" data-status="draft">
+    <h3>300 mW solar repeater</h3>
+    <p>A draft RAK-based build with a parts list, assembly stages, bench checks, and maintenance notes.</p>
+    <a class="md-button" href="../repeater-solar-300mw-diy-build/">Review the 300 mW build</a>
+  </section>
+  <section class="mc-decision-card" data-status="experimental">
+    <h3>Experimental 1 W solar repeater</h3>
+    <p>An unverified high-power design for a measured network need. It requires electrical, RF, and site review before anyone buys parts or starts work.</p>
+    <a class="md-button" href="../repeater-solar-1w-diy-build/">Review the experimental 1 W build</a>
+  </section>
+</div>
+
+These guides are community references, not verified bills of materials or a
+substitute for current manufacturer documentation and qualified review.
 
 ## Before building or buying
 
