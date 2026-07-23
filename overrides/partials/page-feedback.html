@@ -1,6 +1,12 @@
 {% if page and page.meta and not page.meta.hide_feedback %}
-  <aside class="mc-page-feedback" aria-label="Page feedback">
-    <p>Was this page useful?</p>
-    <a class="md-button" href="{{ 'submit-idea/' | url }}">Suggest a change</a>
+  {% set page_locale = i18n_page_locale | default(config.theme.language, true) %}
+  <aside class="mc-page-feedback" aria-label="{% if page_locale == 'fr' %}Commentaires sur la page{% else %}Page feedback{% endif %}">
+    {% if page_locale == "fr" %}
+      <p>Cette première version française vous semble-t-elle claire et naturelle?</p>
+      <a class="md-button" href="{{ 'fr/submit-idea/' | url }}">Signaler une amélioration</a>
+    {% else %}
+      <p>Was this page useful?</p>
+      <a class="md-button" href="{{ 'submit-idea/' | url }}">Suggest a change</a>
+    {% endif %}
   </aside>
 {% endif %}

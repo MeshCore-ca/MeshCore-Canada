@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { DEFAULT_SUBMISSION_ENDPOINT } from "../../docs/config/editor/issue.js";
 import {
+  COMMUNITY_FRENCH_SOURCE_PAGE,
   COMMUNITY_IDEA_SCHEMA,
   COMMUNITY_SOURCE_PAGE,
   COMMUNITY_SUBMISSION_ENDPOINT,
@@ -75,6 +76,13 @@ test("keeps preview and bounded manual GitHub fallbacks", () => {
   const manual = buildManualGithubLink(proposal);
   assert.equal(manual.fullyPrefilled, true);
   assert.equal(new URL(manual.url).searchParams.get("source_page"), COMMUNITY_SOURCE_PAGE);
+
+  const frenchManual = buildManualGithubLink(proposal, COMMUNITY_FRENCH_SOURCE_PAGE);
+  assert.equal(
+    new URL(frenchManual.url).searchParams.get("source_page"),
+    COMMUNITY_FRENCH_SOURCE_PAGE,
+  );
+  assert.throws(() => buildManualGithubLink(proposal, "https://example.com/"), /valid source page/);
 
   const long = buildCommunityIdea({
     ...validData,

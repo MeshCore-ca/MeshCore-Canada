@@ -1,30 +1,53 @@
 (function () {
   "use strict";
 
+  var isFrench = /^fr(?:-|$)/i.test(
+    document.documentElement ? document.documentElement.lang || "" : ""
+  );
+
+  function tr(english, french) {
+    return isFrench ? french : english;
+  }
+
   var methods = {
     "remote-term": {
-      title: "Use RemoteTerm",
-      description: "Keep using the radio connection and management screen you already have.",
+      title: tr("Use RemoteTerm", "Utiliser RemoteTerm"),
+      description: tr(
+        "Keep using the radio connection and management screen you already have.",
+        "Continuez d’utiliser la connexion radio et l’écran de gestion dont vous disposez déjà."
+      ),
       href: "../remoteterm/"
     },
     "home-assistant": {
-      title: "Use Home Assistant",
-      description: "Add the MeshCore Canada broker pair inside your existing MeshCore integration.",
+      title: tr("Use Home Assistant", "Utiliser Home Assistant"),
+      description: tr(
+        "Add the MeshCore Canada broker pair inside your existing MeshCore integration.",
+        "Ajoutez les deux serveurs MQTT de MeshCore Canada à votre intégration MeshCore existante."
+      ),
       href: "../builds/meshcore-ha/"
     },
     "pymc": {
-      title: "Use PyMC",
-      description: "Add the broker pair to the PyMC service you already operate.",
+      title: tr("Use PyMC", "Utiliser PyMC"),
+      description: tr(
+        "Add the broker pair to the PyMC service you already operate.",
+        "Ajoutez les deux serveurs MQTT au service PyMC que vous exploitez déjà."
+      ),
       href: "../builds/pymc/"
     },
     "usb-host": {
-      title: "Use MCtoMQTT",
-      description: "Run a small bridge on the Linux or macOS computer connected to the radio by USB.",
+      title: tr("Use MCtoMQTT", "Utiliser MCtoMQTT"),
+      description: tr(
+        "Run a small bridge on the Linux or macOS computer connected to the radio by USB.",
+        "Exécutez une petite passerelle sur l’ordinateur Linux ou macOS relié à la radio par USB."
+      ),
       href: "../builds/mctomqtt/"
     },
     "wifi-board": {
-      title: "Use standalone MQTT firmware",
-      description: "A supported Wi-Fi LoRa board can listen and publish without a separate computer.",
+      title: tr("Use standalone MQTT firmware", "Utiliser un micrologiciel MQTT autonome"),
+      description: tr(
+        "A supported Wi-Fi LoRa board can listen and publish without a separate computer.",
+        "Une carte LoRa Wi-Fi compatible peut écouter et publier sans ordinateur distinct."
+      ),
       href: "../builds/mqtt-firmware/"
     }
   };
@@ -52,7 +75,7 @@
       detail.textContent = method.description + " ";
       var link = document.createElement("a");
       link.href = method.href;
-      link.textContent = "Open this setup guide";
+      link.textContent = tr("Open this setup guide", "Ouvrir ce guide de configuration");
       detail.appendChild(link);
       result.replaceChildren(heading, detail);
       result.hidden = false;

@@ -151,9 +151,13 @@ def validate_page(path: Path, docs_root: Path, today: dt.date) -> tuple[dict[str
     if metadata.get("destructive") is True:
         section_names = [value.casefold() for value in HEADING.findall(body)]
         required_sections = {
-            "preflight or backup": ("before", "preflight", "backup"),
-            "verification": ("verify", "verification", "check", "make sure"),
-            "recovery": ("recovery", "undo", "restore"),
+            "preflight or backup": (
+                "before", "preflight", "backup", "avant", "préalable", "sauvegarde"
+            ),
+            "verification": (
+                "verify", "verification", "check", "make sure", "vérif", "confirmer", "s’assurer"
+            ),
+            "recovery": ("recovery", "undo", "restore", "récupération", "restaurer", "retour"),
         }
         for label, words in required_sections.items():
             if not any(any(word in section for word in words) for section in section_names):
@@ -183,26 +187,59 @@ def validate_page(path: Path, docs_root: Path, today: dt.date) -> tuple[dict[str
     return metadata, errors
 
 
-def validate_tree(docs_root: Path, today: dt.date) -> list[str]:
+def locale_for_page(path: Path) -> str:
+    return "fr" if path.name.endswith(".fr.md") else "en"
+
+
+def canonical_page_path(path: Path, docs_root: Path) -> str:
+    relative = path.relative_to(docs_root).as_posix()
+    return relative.removesuffix(".fr.md") + ".md" if relative.endswith(".fr.md") else relative
+
+
+def validate_tree(
+    docs_root: Path,
+    today: dt.date,
+    *,
+    require_french_parity: bool = False,
+) -> list[str]:
     problems: list[str] = []
-    titles: dict[str, list[Path]] = defaultdict(list)
-    descriptions: dict[str, list[Path]] = defaultdict(list)
+    titles: dict[tuple[str, str], list[Path]] = defaultdict(list)
+    descriptions: dict[tuple[str, str], list[Path]] = defaultdict(list)
     pages = sorted(path for path in docs_root.rglob("*.md") if "assets" not in path.relative_to(docs_root).parts)
 
     for path in pages:
         metadata, errors = validate_page(path, docs_root, today)
         relative = path.relative_to(docs_root).as_posix()
+        locale = locale_for_page(path)
         problems.extend(f"{relative}: {error}" for error in errors)
         if isinstance(metadata.get("title"), str):
-            titles[metadata["title"].strip().casefold()].append(path)
+            titles[(locale, metadata["title"].strip().casefold())].append(path)
         if isinstance(metadata.get("description"), str):
-            descriptions[metadata["description"].strip().casefold()].append(path)
+            descriptions[(locale, metadata["description"].strip().casefold())].append(path)
 
     for label, values in (("title", titles), ("description", descriptions)):
-        for duplicate, paths in values.items():
+        for (locale, duplicate), paths in values.items():
             if duplicate and len(paths) > 1:
                 joined = ", ".join(path.relative_to(docs_root).as_posix() for path in paths)
-                problems.append(f"duplicate {label}: {joined}")
+                problems.append(f"duplicate {locale} {label}: {joined}")
+
+    if require_french_parity:
+        english = {
+            canonical_page_path(path, docs_root)
+            for path in pages
+            if locale_for_page(path) == "en"
+        }
+        french = {
+            canonical_page_path(path, docs_root)
+            for path in pages
+            if locale_for_page(path) == "fr"
+        }
+        for relative in sorted(english - french):
+            problems.append(
+                f"missing French translation: {relative.removesuffix('.md')}.fr.md"
+            )
+        for relative in sorted(french - english):
+            problems.append(f"French translation has no English source: {relative}")
 
     if not pages:
         problems.append("no Markdown pages found")
@@ -216,15 +253,23 @@ def main() -> int:
     args = parser.parse_args()
 
     docs_root = args.docs.resolve()
-    problems = validate_tree(docs_root, args.today)
+    problems = validate_tree(docs_root, args.today, require_french_parity=True)
     if problems:
         print(f"Content validation failed with {len(problems)} problem(s):", file=sys.stderr)
         for problem in problems:
             print(f"- {problem}", file=sys.stderr)
         return 1
 
-    page_count = sum(1 for path in docs_root.rglob("*.md") if "assets" not in path.relative_to(docs_root).parts)
-    print(f"Content validation passed for {page_count} pages.")
+    pages = [
+        path for path in docs_root.rglob("*.md")
+        if "assets" not in path.relative_to(docs_root).parts
+    ]
+    english_count = sum(locale_for_page(path) == "en" for path in pages)
+    french_count = sum(locale_for_page(path) == "fr" for path in pages)
+    print(
+        f"Content validation passed for {len(pages)} pages "
+        f"({english_count} English, {french_count} French)."
+    )
     return 0
 
 

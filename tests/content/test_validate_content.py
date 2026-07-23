@@ -70,8 +70,8 @@ class ContentValidationTests(unittest.TestCase):
         self.write("one.md", VALID)
         self.write("two.md", VALID)
         problems = MODULE.validate_tree(self.docs, self.today)
-        self.assertTrue(any("duplicate title" in item for item in problems))
-        self.assertTrue(any("duplicate description" in item for item in problems))
+        self.assertTrue(any("duplicate en title" in item for item in problems))
+        self.assertTrue(any("duplicate en description" in item for item in problems))
 
     def test_destructive_page_requires_recovery_sections(self) -> None:
         self.write("flash.md", VALID.replace("evidence: fixture-review", "evidence: fixture-review\ndestructive: true"))
@@ -103,6 +103,34 @@ Restore the saved settings or reflash the exact device target if the check does 
 """
                 self.write("flash.md", page)
                 self.assertEqual([], MODULE.validate_tree(self.docs, self.today))
+
+
+    def test_destructive_page_accepts_french_safety_headings(self) -> None:
+        page = VALID.replace(
+            "evidence: fixture-review",
+            "evidence: fixture-review\ndestructive: true",
+        )
+        page += """
+
+## Avant de commencer
+
+Sauvegardez les réglages actuels et préparez le fichier de récupération avant de modifier l’appareil.
+
+## Vérifier le résultat
+
+Confirmez que l’appareil démarre, affiche la bonne version et conserve ses réglages.
+
+## Récupération
+
+Restaurez les réglages sauvegardés ou réinstallez le micrologiciel exact si la vérification échoue.
+"""
+        self.write("flash.fr.md", page)
+        self.assertEqual([], MODULE.validate_tree(self.docs, self.today))
+
+    def test_same_title_and_description_are_allowed_across_locales(self) -> None:
+        self.write("index.md", VALID)
+        self.write("index.fr.md", VALID)
+        self.assertEqual([], MODULE.validate_tree(self.docs, self.today))
 
 
 if __name__ == "__main__":

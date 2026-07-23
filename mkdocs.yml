@@ -47,6 +47,7 @@ extra_css:
   - assets/styles/components.css?v=20260722-3
 
 extra_javascript:
+  - assets/javascripts/i18n-runtime.js?v=20260723-1
   - assets/javascripts/bootstrap.js?v=20260722-2
 
 extra:
@@ -66,6 +67,110 @@ extra:
 
 plugins:
   - search
+  - i18n:
+      docs_structure: suffix
+      fallback_to_default: true
+      reconfigure_material: true
+      reconfigure_search: true
+      languages:
+        - locale: en
+          name: English
+          default: true
+          build: true
+        - locale: fr
+          name: Français
+          build: true
+          site_description: Des guides pratiques, relus par la communauté, pour rejoindre et exploiter les réseaux MeshCore au Canada.
+          copyright: Documentation communautaire pour les utilisateurs de MeshCore au Canada. Sans affiliation avec le projet MeshCore principal.
+          theme:
+            palette:
+              - scheme: slate
+                primary: custom
+                accent: custom
+                toggle:
+                  icon: material/brightness-7
+                  name: Utiliser le thème clair
+              - scheme: default
+                primary: custom
+                accent: custom
+                toggle:
+                  icon: material/brightness-4
+                  name: Utiliser le thème sombre
+          nav_translations:
+            Start: Commencer
+            Welcome: Bienvenue
+            Start here: Commencer
+            Choose a role: Choisir un type d'appareil
+            Companion: Appareil compagnon
+            Repeater: Répéteur
+            Room server: Serveur de salon
+            Observer: Observateur
+            Finish and support: Terminer et obtenir de l'aide
+            Check your setup: Vérifier votre configuration
+            Get help: Obtenir de l'aide
+            Communities: Communautés
+            Find a community: Trouver une communauté
+            Western Canada: Ouest canadien
+            British Columbia: Colombie-Britannique
+            Central Canada: Centre du Canada
+            Quebec: Québec
+            Atlantic Canada: Canada atlantique
+            New Brunswick: Nouveau-Brunswick
+            Nova Scotia: Nouvelle-Écosse
+            Prince Edward Island: Île-du-Prince-Édouard
+            Newfoundland and Labrador: Terre-Neuve-et-Labrador
+            Territories: Territoires
+            "Devices & Builds": Appareils et projets
+            Choose hardware: Choisir du matériel
+            Companion devices: Appareils compagnons
+            Repeater devices: Répéteurs
+            Antennas: Antennes
+            Solar repeater build: Répéteur solaire
+            Build a 300 mW repeater: Monter un répéteur de 300 mW
+            Install a repeater: Installer un répéteur
+            Mounting options: Options de montage
+            Firmware: Micrologiciel
+            Flash a companion: Installer le micrologiciel d'un compagnon
+            Flash a repeater: Installer le micrologiciel d'un répéteur
+            Flash a room server: Installer le micrologiciel d'un serveur de salon
+            Update a repeater over the air: Mettre un répéteur à jour à distance
+            Network Tools: Outils réseau
+            Choose a network tool: Choisir un outil réseau
+            Configure a repeater: Configurer un répéteur
+            Explore the region map: Explorer la carte des régions
+            Set up an observer: Configurer un observateur
+            Check an observer: Vérifier un observateur
+            Troubleshoot network data: Dépanner les données du réseau
+            Observer methods: Méthodes d'observation
+            Observer data and privacy: Données d'observation et confidentialité
+            MQTT firmware: Micrologiciel MQTT
+            References: Références
+            Broker reference: Référence des serveurs MQTT
+            Location codes: Codes d'emplacement
+            Learn: Comprendre MeshCore
+            What MeshCore is: Comprendre MeshCore
+            How to use MeshCore: Utiliser MeshCore
+            Frequently asked questions: Foire aux questions
+            Glossary: Glossaire
+            Useful links: Liens utiles
+            Contribute: Contribuer
+            About MeshCore Canada: À propos de MeshCore Canada
+            Ways to contribute: Façons de contribuer
+            Share an idea: Proposer une idée
+            Site privacy: Confidentialité du site
+          admonition_translations:
+            note: Remarque
+            abstract: Résumé
+            info: Information
+            tip: Conseil
+            success: Réussite
+            question: Question
+            warning: Attention
+            failure: Échec
+            danger: Danger
+            bug: Problème
+            example: Exemple
+            quote: Citation
   - redirects:
       redirect_maps:
         regions/index.md: config/index.md
@@ -97,6 +202,7 @@ markdown_extensions:
 
 nav:
   - Start:
+      - Welcome: index.md
       - Start here: start/index.md
       - Choose a role: start/choose-a-goal.md
       - Companion: start/companion.md

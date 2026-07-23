@@ -14,6 +14,463 @@
   var LUCIDE_SRC = new URL("vendor/lucide.js", assetBase).href;
   var configuratorSupport = window.MeshCoreRegionConfiguratorSupport || {};
   var REQUEST_TIMEOUT_MS = 12000;
+  var frenchRuntime = /^fr(?:-|$)/i.test(
+    document.documentElement ? document.documentElement.lang || "" : ""
+  );
+
+  var FRENCH_RUNTIME_TEXT = {
+    "Unable to load MeshCore Canada region data": "Impossible de charger les données régionales de MeshCore Canada",
+    "Unable to load the Canadian map layer": "Impossible de charger la couche cartographique canadienne",
+    "Unable to load the Canadian location layer": "Impossible de charger la couche canadienne de localisation",
+    "The Canadian region catalog contains an invalid or duplicate local region": "Le catalogue des régions canadiennes contient une région locale invalide ou en double",
+    "The Canadian region catalog contains an invalid shared repeater area": "Le catalogue des régions canadiennes contient une zone partagée de répéteurs invalide",
+    "A shared repeater area must cross a province or territory": "Une zone partagée de répéteurs doit traverser une province ou un territoire",
+    "The region catalog contains an invalid neighbouring network path": "Le catalogue des régions contient un chemin de réseau voisin invalide",
+    "A neighbouring network tag collides with the Canadian hierarchy": "Un identifiant de réseau voisin entre en conflit avec la hiérarchie canadienne",
+    "A neighbouring network tag has no label": "Un identifiant de réseau voisin n’a pas de libellé",
+    "A neighbouring network tag has conflicting parents": "Un identifiant de réseau voisin a des parents incompatibles",
+    "A neighbouring network tag has conflicting labels": "Un identifiant de réseau voisin a des libellés incompatibles",
+    "Canadian map layer is invalid": "La couche cartographique canadienne est invalide",
+    "Canadian map layer contains an invalid or duplicate region": "La couche cartographique canadienne contient une région invalide ou en double",
+    "Canadian map layer does not match the region catalog": "La couche cartographique canadienne ne correspond pas au catalogue des régions",
+    "Canadian location layer is invalid": "La couche canadienne de localisation est invalide",
+    "Canadian location layer contains an invalid or duplicate region": "La couche canadienne de localisation contient une région invalide ou en double",
+    "Canadian location layer does not match the region catalog": "La couche canadienne de localisation ne correspond pas au catalogue des régions",
+    "Geocoding service error": "Erreur du service de géocodage",
+    "No matching Canadian postal code found": "Aucun code postal canadien correspondant n’a été trouvé",
+    "Online place lookup is unavailable. Enter coordinates or browse the region list.": "La recherche de lieux en ligne est indisponible. Entrez des coordonnées ou parcourez la liste des régions.",
+    "Copy": "Copier",
+    "Copied": "Copié",
+    "Copy failed": "Échec de la copie",
+    "Copied to clipboard.": "Copié dans le presse-papiers.",
+    "Copy failed. Select and copy the command manually.": "La copie a échoué. Sélectionnez et copiez la commande manuellement.",
+    "Needs review": "À vérifier",
+    "Draft": "Brouillon",
+    "Reviewed": "Vérifié",
+    "Active": "Actif",
+    "Deprecated": "Obsolète",
+    "Unreviewed": "Non vérifié",
+    "No seed": "Aucun point de départ",
+    "Country": "Pays",
+    "Province / Territory": "Province ou territoire",
+    "Local Region": "Région locale",
+    "Region": "Région",
+    "Area Group": "Groupe de zones",
+    "Shared repeater area": "Zone partagée de répéteurs",
+    "community path": "chemin communautaire",
+    "confirm locally": "à confirmer localement",
+    "Add only the paths this repeater should forward. Different repeaters can carry different paths to spread traffic.": "Ajoutez seulement les chemins que ce répéteur doit relayer. Différents répéteurs peuvent transporter différents chemins pour répartir le trafic.",
+    "Canadian regions": "Régions canadiennes",
+    "Provinces and territories may be mixed.": "Vous pouvez combiner des provinces et des territoires.",
+    "required": "obligatoire",
+    "Add any Canadian region": "Ajouter une région canadienne",
+    "Choose a region": "Choisissez une région",
+    "Neighbouring network paths": "Chemins des réseaux voisins",
+    "Add one only when this repeater should forward traffic for that area. Nothing outside Canada is added to the boundary map.": "Ajoutez-en un seulement si ce répéteur doit relayer le trafic de cette zone. Rien à l’extérieur du Canada n’est ajouté à la carte des limites.",
+    "No region yet": "Aucune région pour l’instant",
+    "Choose a location first.": "Choisissez d’abord un emplacement.",
+    "Too many regions selected": "Trop de régions sélectionnées",
+    "Cross-province repeater setup": "Configuration de répéteur interprovinciale",
+    "Connect to the repeater CLI": "Se connecter à l’interface en ligne de commande du répéteur",
+    "Use USB at the repeater or remote management over LoRa.": "Utilisez l’USB sur place ou la gestion à distance par LoRa.",
+    "USB serial": "Connexion série USB",
+    "At the repeater": "Sur place",
+    "Connect the repeater to a computer with a data-capable USB cable.": "Branchez le répéteur à un ordinateur avec un câble USB qui transmet les données.",
+    "In desktop Chrome or Edge, open the": "Dans Chrome ou Edge sur un ordinateur, ouvrez",
+    ". For Gessaman's MQTT Observer firmware, use the": ". Pour le micrologiciel MQTT Observer de Gessaman, utilisez le",
+    "For Gessaman's MQTT Observer firmware, use the": "Pour le micrologiciel MQTT Observer de Gessaman, utilisez le",
+    "instead.": "plutôt.",
+    "Choose": "Choisissez",
+    ", then approve the repeater's serial or COM port when the browser asks.": ", puis autorisez le port série ou COM du répéteur lorsque le navigateur le demande.",
+    "then approve the repeater's serial or COM port when the browser asks.": "puis autorisez le port série ou COM du répéteur lorsque le navigateur le demande.",
+    "Remote over LoRa": "À distance par LoRa",
+    "Through a companion radio": "Par une radio compagnon",
+    "On a phone or computer, connect the": "Sur un téléphone ou un ordinateur, connectez l’",
+    "official MeshCore app": "application MeshCore officielle",
+    "to your companion radio.": "à votre radio compagnon.",
+    "Open": "Ouvrez",
+    ", select the repeater, then choose": ", sélectionnez le répéteur, puis choisissez",
+    "select the repeater, then choose": "sélectionnez le répéteur, puis choisissez",
+    "from its menu.": "dans son menu.",
+    "Enter the repeater admin password, tap": "Entrez le mot de passe administrateur du répéteur, touchez",
+    ", then open": ", puis ouvrez",
+    "then open": "puis ouvrez",
+    "If the repeater is missing, open Tools → Discover Nearby Nodes. If a wait timer appears, let it finish before logging in.": "Si le répéteur est absent, ouvrez Tools → Discover Nearby Nodes. Si une minuterie apparaît, attendez qu’elle se termine avant de vous connecter.",
+    "Confirm the command line": "Confirmer l’interface en ligne de commande",
+    "Run": "Exécutez",
+    "and check the version.": "et vérifiez la version.",
+    "Apply the settings": "Appliquer les paramètres",
+    "Run each line in order. Wait for a reply.": "Exécutez chaque ligne dans l’ordre. Attendez une réponse.",
+    "Stop on": "Arrêtez-vous en cas de",
+    ". Existing regions are not cleared.": ". Les régions existantes ne sont pas effacées.",
+    "Existing regions are not cleared.": "Les régions existantes ne sont pas effacées.",
+    "Check and save": "Vérifier et enregistrer",
+    "and confirm each path:": "et confirmez chaque chemin :",
+    "Save:": "Enregistrez :",
+    "Restart the device, reconnect, then run these final checks:": "Redémarrez l’appareil, reconnectez-vous, puis effectuez ces dernières vérifications :",
+    "Run this once more to confirm the saved region:": "Exécutez cette commande une dernière fois pour confirmer la région enregistrée :",
+    "MeshCore command help": "Aide sur les commandes MeshCore",
+    "Commands": "Commandes",
+    "Canada-wide region boundary": "Limite régionale pancanadienne",
+    "Boundary unavailable": "Limite indisponible",
+    "Region tags": "Identifiants de région",
+    "Firmware": "Micrologiciel",
+    "Region budget": "Budget régional",
+    "Advanced details": "Détails avancés",
+    "Repeater regions:": "Régions du répéteur :",
+    "Your region:": "Votre région :",
+    "Copy commands": "Copier les commandes",
+    "Commissioning record": "Fiche de mise en service",
+    "Download or print a summary without exact coordinates, credentials, or device identifiers.": "Téléchargez ou imprimez un résumé sans coordonnées exactes, identifiants de connexion ni identifiants d’appareil.",
+    "Download": "Télécharger",
+    "Print": "Imprimer",
+    "Commissioning summary downloaded. Exact coordinates and credentials were omitted.": "La fiche de mise en service a été téléchargée. Les coordonnées exactes et les identifiants de connexion ont été omis.",
+    "The print window was blocked. Download the summary instead.": "La fenêtre d’impression a été bloquée. Téléchargez plutôt le résumé.",
+    "MeshCore Canada commissioning summary": "Fiche de mise en service de MeshCore Canada",
+    "MeshCore Canada repeater commissioning summary": "Fiche de mise en service du répéteur MeshCore Canada",
+    "Generated": "Générée",
+    "Location label": "Libellé de l’emplacement",
+    "Not recorded": "Non indiqué",
+    "Forwarding paths:": "Chemins relayés :",
+    "Commands:": "Commandes :",
+    "Verification:": "Vérification :",
+    "1. Run region before saving and compare every path above.": "1. Exécutez region avant d’enregistrer et comparez chaque chemin ci-dessus.",
+    "2. Run region save only after the paths and flood permissions are correct.": "2. Exécutez region save seulement lorsque les chemins et les autorisations de diffusion sont corrects.",
+    "3. Run region again after saving.": "3. Exécutez region de nouveau après l’enregistrement.",
+    "This summary omits exact coordinates, passwords, private keys, and device identifiers.": "Cette fiche omet les coordonnées exactes, les mots de passe, les clés privées et les identifiants d’appareil.",
+    "Commissioning summary opened for printing. Exact coordinates and credentials were omitted.": "La fiche de mise en service est ouverte pour l’impression. Les coordonnées exactes et les identifiants de connexion ont été omis.",
+    "Review": "Vérifier",
+    "Source": "Source",
+    "Seed": "Point de départ",
+    "No seed point": "Aucun point de départ",
+    "Repeater area": "Zone du répéteur",
+    "Source note": "Note sur la source",
+    "BC coastal seed follows the PNW reference data": "Le point de départ côtier de la C.-B. suit les données de référence du PNW",
+    "Strategy draft v1.1.1 region": "Région de l’ébauche de stratégie v1.1.1",
+    "Copy tag": "Copier l’identifiant",
+    "Open source": "Ouvrir la source",
+    "Setup progress": "Progression de la configuration",
+    "Step 1: Device": "Étape 1 : appareil",
+    "Step 2: Location": "Étape 2 : emplacement",
+    "Step 3: Coverage": "Étape 3 : couverture",
+    "Step 4: Apply": "Étape 4 : appliquer",
+    "Device": "Appareil",
+    "Location": "Emplacement",
+    "Coverage": "Couverture",
+    "Apply": "Appliquer",
+    "Step 1 of 4": "Étape 1 sur 4",
+    "What are you configuring?": "Quel appareil configurez-vous?",
+    "We will recommend forwarding paths, then show how to apply them.": "Nous recommanderons les chemins à relayer, puis nous vous montrerons comment les appliquer.",
+    "Device and experience": "Appareil et niveau d’expérience",
+    "Repeater": "Répéteur",
+    "Recommended for most operators": "Recommandé pour la plupart des exploitants",
+    "Room server with repeating": "Serveur de salon avec relais",
+    "Uses the same region paths": "Utilise les mêmes chemins régionaux",
+    "Advanced operator": "Exploitant expérimenté",
+    "Review wide and cross-border paths": "Examine les chemins étendus et transfrontaliers",
+    "Next": "Suivant",
+    "Step 2 of 4": "Étape 2 sur 4",
+    "Step 4 of 4": "Étape 4 sur 4",
+    "Where is the node?": "Où se trouve le nœud?",
+    "Search a place": "Rechercher un lieu",
+    "City, airport code, postal code, or region name": "Ville, code d’aéroport, code postal ou nom de région",
+    "Find": "Rechercher",
+    "Enter coordinates": "Entrer des coordonnées",
+    "Latitude": "Latitude",
+    "Longitude": "Longitude",
+    "Use coordinates": "Utiliser les coordonnées",
+    "Coordinates are checked against the Canadian region data in this page.": "Les coordonnées sont comparées aux données régionales canadiennes de cette page.",
+    "Use this device": "Utiliser cet appareil",
+    "Use my location": "Utiliser ma position",
+    "Your browser asks first. MeshCore Canada does not receive or store your coordinates.": "Votre navigateur demande d’abord votre permission. MeshCore Canada ne reçoit ni ne conserve vos coordonnées.",
+    "Browse regions without search or a map": "Parcourir les régions sans recherche ni carte",
+    "Back": "Retour",
+    "Explore regions": "Explorer les régions",
+    "Step 3 of 4": "Étape 3 sur 4",
+    "What should this node serve?": "Quelles zones ce nœud doit-il desservir?",
+    "Repeater forwarding coverage": "Couverture de relais du répéteur",
+    "Recommended local area": "Zone locale recommandée",
+    "Use the home region and any registered shared area": "Utilise la région d’attache et toute zone partagée enregistrée",
+    "Add nearby or cross-border paths": "Ajouter des chemins voisins ou transfrontaliers",
+    "For bridge, wide-coverage, mountain, or water-path repeaters": "Pour les répéteurs qui font un pont, couvrent une grande zone, une montagne ou un parcours au-dessus de l’eau",
+    "Radio and firmware options": "Options radio et de micrologiciel",
+    "Recommended radio settings": "Paramètres radio recommandés",
+    "Include recommended radio defaults": "Inclure les paramètres radio recommandés",
+    "For a new setup": "Pour une nouvelle installation",
+    "Keep current radio settings": "Conserver les paramètres radio actuels",
+    "For an existing coordinated network": "Pour un réseau coordonné existant",
+    "Firmware version": "Version du micrologiciel",
+    "Review and apply": "Vérifier et appliquer",
+    "Choose setup instructions": "Choisir les instructions de configuration",
+    "Guide me": "Me guider",
+    "Connect, apply, verify, then save": "Se connecter, appliquer, vérifier, puis enregistrer",
+    "Technical operator flow": "Parcours pour exploitant technique",
+    "Selection": "Sélection",
+    "Node": "Nœud",
+    "Place": "Lieu",
+    "Home region": "Région d’attache",
+    "Budget": "Budget",
+    "Forwarding paths": "Chemins relayés",
+    "Neighbouring paths are included only on this repeater. Confirm provisional paths with the neighbouring operators.": "Les chemins voisins sont inclus uniquement sur ce répéteur. Confirmez les chemins provisoires auprès des exploitants voisins.",
+    "Choose a location or browse to a region first.": "Choisissez d’abord un emplacement ou parcourez les régions.",
+    "Your home region": "Votre région d’attache",
+    "Select this region to use it as the home region.": "Sélectionnez cette région comme région d’attache.",
+    "Region found.": "Région trouvée.",
+    "Checking the Canadian region data…": "Vérification des données régionales canadiennes…",
+    "Unable to load the Canadian location data.": "Impossible de charger les données canadiennes de localisation.",
+    "Enter a city, airport code, postal code, or region name.": "Entrez une ville, un code d’aéroport, un code postal ou un nom de région.",
+    "Finding": "Recherche en cours",
+    "Location lookup failed": "La recherche du lieu a échoué",
+    "Enter a latitude from -90 to 90 and a longitude from -180 to 180.": "Entrez une latitude de -90 à 90 et une longitude de -180 à 180.",
+    "This browser does not provide location access. Enter coordinates or browse regions.": "Ce navigateur ne donne pas accès à la position. Entrez des coordonnées ou parcourez les régions.",
+    "Waiting for browser location permission…": "En attente de l’autorisation de localisation du navigateur…",
+    "Current browser location": "Position actuelle du navigateur",
+    "Location was not available. Enter coordinates or browse regions.": "La position n’était pas disponible. Entrez des coordonnées ou parcourez les régions.",
+    "Leaflet failed to load": "Leaflet n’a pas pu se charger",
+    "MeshCore Canada regions": "Régions de MeshCore Canada",
+    "Explore or audit the region release": "Explorer ou vérifier la publication des régions",
+    "Find a home region on the interactive map, or inspect the published release evidence.": "Trouvez une région d’attache sur la carte interactive ou examinez les preuves de la publication.",
+    "Set up a repeater": "Configurer un répéteur",
+    "Region map mode": "Mode de la carte des régions",
+    "Audit the release": "Vérifier la publication",
+    "Region search and details": "Recherche et détails des régions",
+    "Find a place": "Trouver un lieu",
+    "Enter coordinates instead": "Entrer plutôt des coordonnées",
+    "Browse the hierarchy": "Parcourir la hiérarchie",
+    "Selected region": "Région sélectionnée",
+    "Skip the interactive map": "Passer la carte interactive",
+    "Loading interactive map…": "Chargement de la carte interactive…",
+    "Loading Canadian boundaries and OpenStreetMap tiles.": "Chargement des limites canadiennes et des tuiles OpenStreetMap.",
+    "Retry map": "Réessayer la carte",
+    "Interactive Canadian region map": "Carte interactive des régions canadiennes",
+    "Map legend": "Légende de la carte",
+    "Selected boundary": "Limite sélectionnée",
+    "Browsed group outline": "Contour du groupe parcouru",
+    "List alternative": "Option sous forme de liste",
+    "All regions": "Toutes les régions",
+    "If the map is unavailable, search and select a region from this list.": "Si la carte est indisponible, recherchez et sélectionnez une région dans cette liste.",
+    "Audit data loads when this view is opened.": "Les données de vérification se chargent à l’ouverture de cette vue.",
+    "Unable to load release QA": "Impossible de charger les contrôles de qualité de la publication",
+    "Unable to load the source lock": "Impossible de charger le verrouillage des sources",
+    "Release": "Publication",
+    "Status": "État",
+    "Standard": "Norme",
+    "Connectivity": "Connectivité",
+    "Online": "En ligne",
+    "Offline; showing cached static data when available": "Hors ligne; affichage des données statiques en cache lorsqu’elles sont disponibles",
+    "Digital census cells": "Cellules numériques du recensement",
+    "Census subdivisions": "Subdivisions de recensement",
+    "Positive-area overlaps": "Chevauchements de superficie positive",
+    "Quality checks": "Contrôles de qualité",
+    "Release artifacts": "Artéfacts de publication",
+    "Public partition SHA-256": "SHA-256 de la partition publique",
+    "Resolver partition SHA-256": "SHA-256 de la partition de résolution",
+    "Membership SHA-256": "SHA-256 des appartenances",
+    "Unavailable": "Indisponible",
+    "Download QA JSON": "Télécharger le JSON de contrôle",
+    "Download catalog": "Télécharger le catalogue",
+    "Open standard and change process": "Ouvrir la norme et le processus de modification",
+    "Try again": "Réessayer",
+    "Loading release evidence…": "Chargement des preuves de publication…",
+    "Select this leaf to see its full path.": "Sélectionnez cette région terminale pour voir son chemin complet.",
+    "Province or territory": "Province ou territoire",
+    "resolves to": "correspond à",
+    "Aliases": "Alias",
+    "None recorded": "Aucun",
+    "Planned paths": "Chemins prévus",
+    "Configure this region": "Configurer cette région",
+    "Copy link": "Copier le lien",
+    "This location is outside Canada.": "Cet emplacement se trouve à l’extérieur du Canada.",
+    "No Canadian region contains that point. Browse the region list instead.": "Aucune région canadienne ne contient ce point. Parcourez plutôt la liste des régions.",
+    "No Canadian region contains that point. Browse the list instead.": "Aucune région canadienne ne contient ce point. Parcourez plutôt la liste.",
+    "Loading Canadian boundaries and map tools…": "Chargement des limites canadiennes et des outils cartographiques…",
+    "Loading the interactive region map.": "Chargement de la carte interactive des régions.",
+    "OpenStreetMap tiles did not load. Search and the region list still work.": "Les tuiles OpenStreetMap ne se sont pas chargées. La recherche et la liste des régions fonctionnent toujours.",
+    "OpenStreetMap tiles could not load. Search and the region list still work.": "Impossible de charger les tuiles OpenStreetMap. La recherche et la liste des régions fonctionnent toujours.",
+    "Interactive region map loaded.": "La carte interactive des régions est chargée.",
+    "The map could not load. Search and the region list still work.": "La carte n’a pas pu se charger. La recherche et la liste des régions fonctionnent toujours.",
+    "Search regions": "Rechercher des régions",
+    "Filter by area": "Filtrer par zone",
+    "All areas": "Toutes les zones",
+    "Region directory table": "Tableau du répertoire des régions",
+    "Area": "Zone",
+    "Boundary": "Limite",
+    "Basis": "Fondement",
+    "Canada-wide": "Pancanadienne",
+    "Established": "Établie",
+    "Proposed": "Proposée",
+    "Setup": "Configuration",
+    "Map": "Carte",
+    "Regions": "Régions",
+    "Local regions": "Régions locales",
+    "Provinces & territories": "Provinces et territoires",
+    "Region status summary": "Résumé de l’état des régions",
+    "Loading Canadian regions…": "Chargement des régions canadiennes…",
+    "Newfoundland and Labrador": "Terre-Neuve-et-Labrador",
+    "Prince Edward Island": "Île-du-Prince-Édouard",
+    "Nova Scotia": "Nouvelle-Écosse",
+    "New Brunswick": "Nouveau-Brunswick",
+    "Quebec": "Québec",
+    "British Columbia": "Colombie-Britannique",
+    "Northwest Territories": "Territoires du Nord-Ouest",
+    "Atlantic": "Atlantique",
+    "Prairies": "Prairies",
+    "Northern Canada": "Nord canadien",
+    "Zoom in": "Zoom avant",
+    "Zoom out": "Zoom arrière",
+    "Marker": "Marqueur",
+    "contributors": "contributeurs",
+    "Close popup": "Fermer la fenêtre",
+    "A JavaScript library for interactive maps": "Une bibliothèque JavaScript pour les cartes interactives"
+  };
+
+  var FRENCH_RUNTIME_PATTERNS = [
+    [/^(.+) \(request timed out\)$/, function (match, message) {
+      return translateRuntimeText(message) + " (délai de la requête dépassé)";
+    }],
+    [/^(.+): ([^:]+)$/, function (match, prefix, value) {
+      var translatedPrefix = FRENCH_RUNTIME_TEXT[prefix];
+      return translatedPrefix ? translatedPrefix + " : " + translateRuntimeText(value) : match;
+    }],
+    [/^(\d+) \/ 32 tags, (\d+) \/ 172 bytes$/, function (match, tags, bytes) {
+      return tags + " / 32 identifiants, " + bytes + " / 172 octets";
+    }],
+    [/^That name matches more than one region \((.+)\)\. Add a province or postal code\.$/, function (match, choices) {
+      return "Ce nom correspond à plusieurs régions (" + choices + "). Ajoutez une province ou un code postal.";
+    }],
+    [/^Confirm (.+) tags with neighbouring operators before applying them\.$/, function (match, label) {
+      return "Confirmez les identifiants de " + label + " auprès des exploitants voisins avant de les appliquer.";
+    }],
+    [/^Check locally before using: (.+)\.$/, function (match, tags) {
+      return "Vérifiez localement avant d’utiliser : " + tags + ".";
+    }],
+    [/^Do not use: (.+)\.$/, function (match, tags) {
+      return "N’utilisez pas : " + tags + ".";
+    }],
+    [/^Too many regions: (\d+) tags exceeds the 32-tag limit\.$/, function (match, count) {
+      return "Trop de régions : " + count + " identifiants dépassent la limite de 32.";
+    }],
+    [/^Region names use (\d+) bytes, above the 172-byte response limit\.$/, function (match, bytes) {
+      return "Les noms de régions utilisent " + bytes + " octets, au-delà de la limite de réponse de 172 octets.";
+    }],
+    [/^(.+) keeps (.+) in one repeater configuration\.$/, function (match, area, members) {
+      return area + " regroupe " + members.replace(/ and /g, " et ") + " dans une seule configuration de répéteur.";
+    }],
+    [/^This selection uses (\d+) tags and (\d+) bytes\. Remove regions until it fits the 32-tag and 172-byte limits\.$/, function (match, tags, bytes) {
+      return "Cette sélection utilise " + tags + " identifiants et " + bytes + " octets. Retirez des régions jusqu’à respecter les limites de 32 identifiants et de 172 octets.";
+    }],
+    [/^(.+) combines (.+) in one repeater setup\. All map boundaries remain separate\.$/, function (match, area, members) {
+      return area + " regroupe " + members.replace(/ and /g, " et ") + " dans une seule configuration de répéteur. Toutes les limites cartographiques demeurent distinctes.";
+    }],
+    [/^(.+)\. Each map region keeps its own boundary\.$/, function (match, jurisdictions) {
+      return jurisdictions + ". Chaque région cartographique conserve sa propre limite.";
+    }],
+    [/^(.+) is added to this repeater only\. MeshCore Canada does not own or draw those boundaries\.$/, function (match, paths) {
+      return paths + " est ajouté uniquement à ce répéteur. MeshCore Canada ne possède ni ne trace ces limites.";
+    }],
+    [/^Shared repeater area: (.+)$/, function (match, area) {
+      return "Zone partagée de répéteurs : " + area;
+    }],
+    [/^(\d+) subregions$/, function (match, count) {
+      return count + " sous-régions";
+    }],
+    [/^([A-Z0-9-]+) · region$/, function (match, tag) {
+      return tag + " · région";
+    }],
+    [/^(.+) resolves to (.+)$/, function (match, place, region) {
+      return place + " correspond à " + region;
+    }],
+    [/^Text result: (.+)\.$/, function (match, path) {
+      return "Résultat textuel : " + path + ".";
+    }],
+    [/^(\d+) leaf regions$/, function (match, count) {
+      return count + " régions terminales";
+    }],
+    [/^(\d+) of (\d+) reported invariants pass$/, function (match, passed, total) {
+      return passed + " invariants sur " + total + " sont respectés";
+    }],
+    [/^Source lock: (.+) census vintage · (\d+) locked sources\.$/, function (match, vintage, count) {
+      return "Verrouillage des sources : recensement de " + vintage + " · " + count + " sources verrouillées.";
+    }],
+    [/^(\d+) of (\d+) regions$/, function (match, shown, total) {
+      return shown + " régions sur " + total;
+    }],
+    [/^(\d+) regions$/, function (match, count) {
+      return count + " régions";
+    }],
+    [/^(\d+) \/ 32 tags · (\d+) \/ 172 bytes$/, function (match, tags, bytes) {
+      return tags + " / 32 identifiants · " + bytes + " / 172 octets";
+    }],
+    [/^(.+) region$/, function (match, label) {
+      return "Région de " + label;
+    }]
+  ];
+
+  function translateRuntimeText(value) {
+    var source = String(value == null ? "" : value);
+    if (!frenchRuntime || !source) return source;
+    var leading = (source.match(/^\s*/) || [""])[0];
+    var trailing = (source.match(/\s*$/) || [""])[0];
+    var text = source.slice(leading.length, source.length - trailing.length || source.length);
+    if (!text) return source;
+    if (Object.prototype.hasOwnProperty.call(FRENCH_RUNTIME_TEXT, text)) {
+      var direct = FRENCH_RUNTIME_TEXT[text];
+      var directTrailing = /[’']$/.test(direct) ? "" : trailing;
+      return leading + direct + directTrailing;
+    }
+    for (var index = 0; index < FRENCH_RUNTIME_PATTERNS.length; index += 1) {
+      if (FRENCH_RUNTIME_PATTERNS[index][0].test(text)) {
+        return leading + text.replace(FRENCH_RUNTIME_PATTERNS[index][0], FRENCH_RUNTIME_PATTERNS[index][1]) + trailing;
+      }
+    }
+    return source;
+  }
+
+  function localizeRuntimeNode(node) {
+    if (!frenchRuntime || !node) return;
+    if (node.nodeType === 3) {
+      var parentName = node.parentElement && node.parentElement.tagName;
+      var original = node.nodeValue;
+      var trimmed = String(original || "").trim();
+      if (parentName === "SCRIPT" || parentName === "STYLE" || parentName === "PRE") return;
+      if (parentName === "CODE" && trimmed !== "Unavailable") return;
+      var translated = parentName === "DT" && trimmed === "Review"
+        ? original.replace("Review", "Vérification")
+        : translateRuntimeText(original);
+      if (translated !== node.nodeValue) node.nodeValue = translated;
+      return;
+    }
+    if (node.nodeType !== 1) return;
+    ["aria-label", "placeholder", "title"].forEach(function (attribute) {
+      if (!node.hasAttribute(attribute)) return;
+      var current = node.getAttribute(attribute);
+      var translated = translateRuntimeText(current);
+      if (translated !== current) node.setAttribute(attribute, translated);
+    });
+    Array.prototype.slice.call(node.childNodes || []).forEach(localizeRuntimeNode);
+  }
+
+  function enableRuntimeLocalization(root) {
+    if (!frenchRuntime || !root || root.dataset.mccLocaleReady === "1") return;
+    root.dataset.mccLocaleReady = "1";
+    localizeRuntimeNode(root);
+    if (typeof MutationObserver === "undefined") return;
+    var observer = new MutationObserver(function (records) {
+      records.forEach(function (record) {
+        if (record.type === "characterData") localizeRuntimeNode(record.target);
+        if (record.type === "attributes") localizeRuntimeNode(record.target);
+        Array.prototype.slice.call(record.addedNodes || []).forEach(localizeRuntimeNode);
+      });
+    });
+    observer.observe(root, {
+      subtree: true,
+      childList: true,
+      characterData: true,
+      attributes: true,
+      attributeFilter: ["aria-label", "placeholder", "title"]
+    });
+    root.__mccLocaleObserver = observer;
+  }
 
   function fetchWithTimeout(url, options, timeoutMs) {
     var requestOptions = Object.assign({}, options || {});
@@ -378,9 +835,10 @@
   }
 
   function labelFor(data, tag) {
-    if (data.hierarchy[tag]) return data.hierarchy[tag].label;
-    if (data.externalTagLabels && data.externalTagLabels[tag]) return data.externalTagLabels[tag];
-    return tag;
+    var label = tag;
+    if (data.hierarchy[tag]) label = data.hierarchy[tag].label;
+    else if (data.externalTagLabels && data.externalTagLabels[tag]) label = data.externalTagLabels[tag];
+    return translateRuntimeText(label);
   }
 
   function scopeExists(data, tag) {
@@ -931,7 +1389,7 @@
       addressdetails: "1"
     }, params));
     return fetchWithTimeout(url, {
-      headers: { "Accept-Language": "en-CA,en" },
+      headers: { "Accept-Language": frenchRuntime ? "fr-CA,fr,en" : "en-CA,en" },
       signal: signal
     }, REQUEST_TIMEOUT_MS)
       .then(function (res) {
@@ -1348,7 +1806,7 @@
     var commands = currentCommands(data, state);
     if (!rec || !commands) return null;
     var homeTag = state.resolution.primary.seed.tag;
-    return configuratorSupport.commissioningRecord({
+    var summary = configuratorSupport.commissioningRecord({
       generatedAt: new Date().toISOString(),
       locationLabel: labelFor(data, homeTag),
       homeRegion: labelledPath(data, ancestryFor(data, homeTag)),
@@ -1357,6 +1815,9 @@
       paths: rec.paths.map(function (path) { return labelledPath(data, path); }),
       commands: commands
     });
+    return frenchRuntime
+      ? summary.split("\n").map(translateRuntimeText).join("\n")
+      : summary;
   }
 
   function announceAction(button, message) {
@@ -1395,9 +1856,9 @@
       return;
     }
     popup.opener = null;
-    popup.document.title = "MeshCore Canada commissioning summary";
+    popup.document.title = translateRuntimeText("MeshCore Canada commissioning summary");
     var heading = popup.document.createElement("h1");
-    heading.textContent = "MeshCore Canada commissioning summary";
+    heading.textContent = translateRuntimeText("MeshCore Canada commissioning summary");
     var pre = popup.document.createElement("pre");
     pre.textContent = summary;
     popup.document.body.appendChild(heading);
@@ -2603,6 +3064,7 @@
       if (!node.isConnected || node.dataset.mccReady === "1" || node.dataset.mccLoading === "1") return;
       var mode = node.getAttribute("data-mcc-regions");
       node.dataset.mccLoading = "1";
+      enableRuntimeLocalization(node);
       node.innerHTML = '<div class="mcc-status mcc-status-info" role="status">Loading Canadian regions…</div>';
       loadData(mode).then(function (data) {
         if (!node.isConnected) return;

@@ -26,7 +26,10 @@ import {
 (function () {
   "use strict";
 
-  var ASSETS = new URL("../../assets/regions/", window.location.href);
+  var assetPrefix = /\/fr\/config\/editor(?:\/|$)/.test(window.location.pathname)
+    ? "../../../assets/regions/"
+    : "../../assets/regions/";
+  var ASSETS = new URL(assetPrefix, window.location.href);
 
   function assetUrl(name) {
     return new URL(name, ASSETS).href;

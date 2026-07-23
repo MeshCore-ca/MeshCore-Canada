@@ -1,6 +1,14 @@
 (function () {
   "use strict";
 
+  var isFrench = /^fr(?:-|$)/i.test(
+    document.documentElement ? document.documentElement.lang || "" : ""
+  );
+
+  function tr(english, french) {
+    return isFrench ? french : english;
+  }
+
   function utf8Length(text) {
     if (window.TextEncoder) return new TextEncoder().encode(text).length;
     return unescape(encodeURIComponent(text)).length;
@@ -18,8 +26,12 @@
 
   function redactedCommands(commands) {
     return commands.map(function (line) {
-      if (line.indexOf("set wifi.ssid ") === 0) return "set wifi.ssid [hidden]";
-      if (line.indexOf("set wifi.pwd ") === 0) return "set wifi.pwd [hidden]";
+      if (line.indexOf("set wifi.ssid ") === 0) {
+        return isFrench ? "set wifi.ssid [masqué]" : "set wifi.ssid [hidden]";
+      }
+      if (line.indexOf("set wifi.pwd ") === 0) {
+        return isFrench ? "set wifi.pwd [masqué]" : "set wifi.pwd [hidden]";
+      }
       return line;
     });
   }
@@ -43,9 +55,15 @@
         fragment.appendChild(option);
       });
       datalist.replaceChildren(fragment);
-      status.textContent = payload.locations.length + " Canadian quick-list codes loaded.";
+      status.textContent = payload.locations.length + tr(
+        " Canadian quick-list codes loaded.",
+        " codes canadiens chargés dans la liste de suggestions."
+      );
     } catch (_error) {
-      status.textContent = "Location suggestions are unavailable. You can still enter a real 3-letter airport code.";
+      status.textContent = tr(
+        "Location suggestions are unavailable. You can still enter a real 3-letter airport code.",
+        "Les suggestions d’emplacement ne sont pas disponibles. Vous pouvez tout de même entrer un vrai code d’aéroport à 3 lettres."
+      );
     }
   }
 
@@ -86,7 +104,10 @@
 
     function hideExactCommands() {
       commandsRevealed = false;
-      revealCommandsButton.textContent = "Reveal sensitive commands";
+      revealCommandsButton.textContent = tr(
+        "Reveal sensitive commands",
+        "Afficher les commandes sensibles"
+      );
       revealCommandsButton.setAttribute("aria-pressed", "false");
       copyButton.disabled = true;
     }
@@ -94,18 +115,23 @@
     function showCurrentCommands() {
       output.textContent = (commandsRevealed ? exactCommands : redactedCommands(exactCommands)).join("\n");
       revealCommandsButton.textContent = commandsRevealed
-        ? "Hide sensitive commands"
-        : "Reveal sensitive commands";
+        ? tr("Hide sensitive commands", "Masquer les commandes sensibles")
+        : tr("Reveal sensitive commands", "Afficher les commandes sensibles");
       revealCommandsButton.setAttribute("aria-pressed", commandsRevealed ? "true" : "false");
       copyButton.disabled = !commandsRevealed || !exactCommands.length;
     }
 
     function renderSummary(board, iata, nodeName, repeat) {
       var values = [
-        ["Board", fields.board.options[fields.board.selectedIndex].text],
-        ["Location", iata || "Not set"],
-        ["Node name", nodeName || "Not set"],
-        ["Mesh traffic", repeat === "on" ? "Observe and repeat" : "Observe only"]
+        [tr("Board", "Carte"), fields.board.options[fields.board.selectedIndex].text],
+        [tr("Location", "Emplacement"), iata || tr("Not set", "Non défini")],
+        [tr("Node name", "Nom du nœud"), nodeName || tr("Not set", "Non défini")],
+        [
+          tr("Mesh traffic", "Trafic du réseau maillé"),
+          repeat === "on"
+            ? tr("Observe and repeat", "Observer et relayer")
+            : tr("Observe only", "Observer seulement")
+        ]
       ];
       var fragment = document.createDocumentFragment();
       values.forEach(function (entry) {
@@ -138,23 +164,38 @@
       });
 
       if (!/^[A-Z]{3}$/.test(iata) || iata === "XXX" || iata === "CAN") {
-        messages.push("Enter a real 3-letter airport code; do not use XXX or CAN.");
+        messages.push(tr(
+          "Enter a real 3-letter airport code; do not use XXX or CAN.",
+          "Entrez un vrai code d’aéroport à 3 lettres; n’utilisez pas XXX ni CAN."
+        ));
         markInvalid(fields.iata, true);
       }
       if (!/^[A-Za-z0-9][A-Za-z0-9_-]{0,15}$/.test(number)) {
-        messages.push("Node number must use 1–16 letters, numbers, underscores, or hyphens.");
+        messages.push(tr(
+          "Node number must use 1–16 letters, numbers, underscores, or hyphens.",
+          "Le numéro du nœud doit comporter de 1 à 16 lettres, chiffres, traits de soulignement ou traits d’union."
+        ));
         markInvalid(fields.number, true);
       }
       if (nodeName && utf8Length(nodeName) > 24) {
-        messages.push("The generated node name is over 24 bytes; shorten the node number.");
+        messages.push(tr(
+          "The generated node name is over 24 bytes; shorten the node number.",
+          "Le nom de nœud généré dépasse 24 octets; raccourcissez le numéro du nœud."
+        ));
         markInvalid(fields.number, true);
       }
       if (!ssid || utf8Length(ssid) > 32 || !safeCliToken(ssid)) {
-        messages.push("Enter a 1–32 byte SSID without spaces, quotes, backslashes, semicolons, pipes, control characters, or non-ASCII text. Use Configure via USB for other SSIDs.");
+        messages.push(tr(
+          "Enter a 1–32 byte SSID without spaces, quotes, backslashes, semicolons, pipes, control characters, or non-ASCII text. Use Configure via USB for other SSIDs.",
+          "Entrez un SSID de 1 à 32 octets, sans espaces, guillemets, barres obliques inverses, points-virgules, barres verticales, caractères de contrôle ni texte non ASCII. Utilisez Configure via USB pour les autres SSID."
+        ));
         markInvalid(fields.ssid, true);
       }
       if (!password || utf8Length(password) > 64 || !safeCliToken(password)) {
-        messages.push("Enter a 1–64 byte password using the safe CLI character set, or use Configure via USB for this network.");
+        messages.push(tr(
+          "Enter a 1–64 byte password using the safe CLI character set, or use Configure via USB for this network.",
+          "Entrez un mot de passe de 1 à 64 octets avec les caractères permis par l’interface de commande, ou utilisez Configure via USB pour ce réseau."
+        ));
         markInvalid(fields.password, true);
       }
 
@@ -165,7 +206,10 @@
       if (messages.length) {
         exactCommands = [];
         revealCommandsButton.disabled = true;
-        output.textContent = "Complete the required fields to build commands.";
+        output.textContent = tr(
+          "Complete the required fields to build commands.",
+          "Remplissez les champs obligatoires pour générer les commandes."
+        );
         return;
       }
 
@@ -201,11 +245,11 @@
       fields.ssid.value = "";
       fields.password.value = "";
       fields.password.type = "password";
-      togglePasswordButton.textContent = "Show";
+      togglePasswordButton.textContent = tr("Show", "Afficher");
       togglePasswordButton.setAttribute("aria-pressed", "false");
       exactCommands = [];
       hideExactCommands();
-      output.textContent = "Wi-Fi fields cleared.";
+      output.textContent = tr("Wi-Fi fields cleared.", "Champs Wi-Fi effacés.");
       errors.textContent = "";
       fields.ssid.focus();
     }
@@ -215,7 +259,9 @@
     togglePasswordButton.addEventListener("click", function () {
       var showing = fields.password.type === "text";
       fields.password.type = showing ? "password" : "text";
-      togglePasswordButton.textContent = showing ? "Show" : "Hide";
+      togglePasswordButton.textContent = showing
+        ? tr("Show", "Afficher")
+        : tr("Hide", "Masquer");
       togglePasswordButton.setAttribute("aria-pressed", showing ? "false" : "true");
       fields.password.focus();
     });
@@ -227,13 +273,22 @@
     copyButton.addEventListener("click", function () {
       if (!commandsRevealed || !exactCommands.length) return;
       if (!navigator.clipboard || !navigator.clipboard.writeText) {
-        status.textContent = "Clipboard unavailable. Copy the revealed commands manually.";
+        status.textContent = tr(
+          "Clipboard unavailable. Copy the revealed commands manually.",
+          "Le presse-papiers n’est pas disponible. Copiez manuellement les commandes affichées."
+        );
         return;
       }
       navigator.clipboard.writeText(exactCommands.join("\n")).then(function () {
-        status.textContent = "Copied. Your clipboard now contains Wi-Fi credentials.";
+        status.textContent = tr(
+          "Copied. Your clipboard now contains Wi-Fi credentials.",
+          "Copié. Votre presse-papiers contient maintenant vos identifiants Wi-Fi."
+        );
       }, function () {
-        status.textContent = "Copy failed. Copy the revealed commands manually.";
+        status.textContent = tr(
+          "Copy failed. Copy the revealed commands manually.",
+          "Échec de la copie. Copiez manuellement les commandes affichées."
+        );
       });
     });
     clearButton.addEventListener("click", clearSecrets);

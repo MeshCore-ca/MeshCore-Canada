@@ -11,7 +11,12 @@ const routes = [
   "/config/map/",
   "/config/editor/",
   "/analyzer/intro/",
-  "/submit-idea/"
+  "/submit-idea/",
+  "/fr/",
+  "/fr/hardware/",
+  "/fr/config/",
+  "/fr/config/editor/",
+  "/fr/submit-idea/"
 ];
 
 for (const route of routes) {

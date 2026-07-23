@@ -1,22 +1,26 @@
 {% extends "main.html" %}
 
 {% block content %}
-  <p class="mc-eyebrow">That link did not land</p>
-  <h1>Page not found</h1>
-  <p class="mc-lede">The page may have moved. Choose a useful next step.</p>
+  <p class="mc-eyebrow">Ce lien ne mène nulle part / That link did not land</p>
+  <h1>Page introuvable / Page not found</h1>
+  <p class="mc-lede">La page a peut-être été déplacée. Choisissez la langue et une prochaine étape.</p>
+  <p class="mc-lede" lang="en">The page may have moved. Choose a language and a useful next step.</p>
   <div class="mc-grid">
-    <a class="mc-card" href="{{ 'start/' | url }}">
-      <span class="mc-card__title">Start using MeshCore</span>
-      <span>Choose a role and follow a guided setup.</span>
-    </a>
-    <a class="mc-card" href="{{ 'provinces/' | url }}">
-      <span class="mc-card__title">Find a community</span>
-      <span>Browse local groups and support across Canada.</span>
-    </a>
-    <a class="mc-card" href="{{ 'start/get-help/' | url }}">
-      <span class="mc-card__title">Get help</span>
-      <span>Use the forum, Discord, or a troubleshooting guide.</span>
-    </a>
+    <section class="mc-card">
+      <span class="mc-card__title">Configuration guidée / Guided setup</span>
+      <span>Choisir un appareil et suivre les étapes de configuration.</span>
+      <p><a href="{{ 'fr/start/' | url }}" lang="fr">Commencer en français</a> · <a href="{{ 'start/' | url }}" lang="en">Start in English</a></p>
+    </section>
+    <section class="mc-card">
+      <span class="mc-card__title">Communautés / Communities</span>
+      <span>Parcourir les groupes et l’aide locale au Canada.</span>
+      <p><a href="{{ 'fr/provinces/' | url }}" lang="fr">Communautés en français</a> · <a href="{{ 'provinces/' | url }}" lang="en">Communities in English</a></p>
+    </section>
+    <section class="mc-card">
+      <span class="mc-card__title">Aide / Help</span>
+      <span>Consulter le forum, Discord ou un guide de dépannage.</span>
+      <p><a href="{{ 'fr/start/get-help/' | url }}" lang="fr">Aide en français</a> · <a href="{{ 'start/get-help/' | url }}" lang="en">Help in English</a></p>
+    </section>
   </div>
-  <p><label class="md-button md-button--primary" for="__search">Search this site</label></p>
+  <p><label class="md-button md-button--primary" for="__search">Rechercher / Search</label></p>
 {% endblock %}

@@ -13,7 +13,14 @@ const criticalRoutes = [
   "/config/editor/",
   "/tools/",
   "/analyzer/intro/",
-  "/submit-idea/"
+  "/submit-idea/",
+  "/fr/",
+  "/fr/start/",
+  "/fr/hardware/",
+  "/fr/provinces/",
+  "/fr/config/",
+  "/fr/config/editor/",
+  "/fr/submit-idea/"
 ];
 
 test("site route resolution preserves a configured deployment subtree", () => {
@@ -58,6 +65,59 @@ test.describe("critical routes", () => {
       await expect(page.locator("h1:visible")).not.toHaveText("");
     });
   }
+});
+
+test("language switcher keeps visitors on the same page", async ({ page }, testInfo) => {
+  await page.goto(siteRoute("/hardware/"));
+  const languageMenu = page.locator(".md-select").filter({
+    has: page.locator(".md-select__link[hreflang='fr']")
+  });
+  await languageMenu.hover();
+  await languageMenu.locator(".md-select__link[hreflang='fr']").click();
+  await expect(page).toHaveURL(
+    resolveSiteRoute(testInfo.project.use.baseURL, "/fr/hardware/"),
+  );
+  await expect(page.locator("html")).toHaveAttribute("lang", /^fr/);
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("matériel");
+
+  const englishMenu = page.locator(".md-select").filter({
+    has: page.locator(".md-select__link[hreflang='en']")
+  });
+  await englishMenu.hover();
+  await englishMenu.locator(".md-select__link[hreflang='en']").click();
+  await expect(page).toHaveURL(
+    resolveSiteRoute(testInfo.project.use.baseURL, "/hardware/"),
+  );
+  await expect(page.locator("html")).toHaveAttribute("lang", "en");
+});
+
+test("French search returns French routes", async ({ page }) => {
+  await page.goto(siteRoute("/fr/"));
+  await page.locator(".md-search__input").fill("répéteur");
+  await expect(page.locator(".md-search-result__item").first()).toBeVisible();
+  const resultLinks = await page.locator(".md-search-result__link").evaluateAll((links) =>
+    links.map((link) => link.href)
+  );
+  expect(resultLinks.some((href) => /(?:^|\/)fr\//.test(href))).toBeTruthy();
+});
+
+test("French boundary editor has localized controls and its own switcher", async ({ page }, testInfo) => {
+  await page.goto(siteRoute("/fr/config/editor/"));
+  await expect(page.locator("html")).toHaveAttribute("lang", "fr");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Éditeur des limites régionales");
+  await expect(page.getByText("Modifier une limite existante", { exact: true })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Français", exact: true })).toHaveAttribute("aria-current", "page");
+  await page.getByRole("link", { name: "English", exact: true }).click();
+  await expect(page).toHaveURL(
+    resolveSiteRoute(testInfo.project.use.baseURL, "/config/editor/"),
+  );
+});
+
+test("French idea form keeps its dynamic review copy in French", async ({ page }) => {
+  await page.goto(siteRoute("/fr/submit-idea/"));
+  await expect(page.getByRole("button", { name: "Relire l’idée" })).toBeVisible();
+  await expect(page.getByText(/Aucun compte GitHub n’est nécessaire/i)).toBeVisible();
+  await expect(page.locator("html")).toHaveAttribute("lang", /^fr/);
 });
 
 test("desktop navigation exposes the six task categories", async ({ page }, testInfo) => {
@@ -319,7 +379,7 @@ test("mobile wizard progress buttons have descriptive accessible names", async (
 
 test("mobile critical pages do not overflow the viewport", async ({ page }, testInfo) => {
   test.skip(!testInfo.project.name.startsWith("mobile-"), "Mobile layout contract");
-  for (const route of ["/", "/start/", "/provinces/", "/config/", "/submit-idea/"]) {
+  for (const route of ["/", "/start/", "/provinces/", "/config/", "/submit-idea/", "/fr/", "/fr/config/editor/"]) {
     await page.goto(siteRoute(route), { waitUntil: "domcontentloaded" });
     const overflow = await page.evaluate(() => ({
       viewport: document.documentElement.clientWidth,

@@ -457,12 +457,20 @@
     try {
       const loaded = await loadModules();
       preparedProposal = loaded.community.buildCommunityIdea(values());
-      preparedText = loaded.community.buildSubmissionText(preparedProposal);
+      const frenchPage = document.documentElement.lang.toLowerCase().startsWith("fr");
+      preparedText = frenchPage
+        ? loaded.community.buildFrenchSubmissionText(preparedProposal)
+        : loaded.community.buildSubmissionText(preparedProposal);
       preparedRevision = revision;
       elements.preview.textContent = preparedText;
       clearResult();
 
-      const manual = loaded.community.buildManualGithubLink(preparedProposal);
+      const manual = loaded.community.buildManualGithubLink(
+        preparedProposal,
+        frenchPage
+          ? loaded.community.COMMUNITY_FRENCH_SOURCE_PAGE
+          : loaded.community.COMMUNITY_SOURCE_PAGE,
+      );
       elements.github.href = manual.url;
       elements.github.classList.remove("is-disabled");
       elements.github.setAttribute("aria-disabled", "false");

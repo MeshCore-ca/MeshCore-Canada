@@ -18,10 +18,12 @@ from urllib.parse import urlparse
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA_PATH = ROOT / "data" / "communities.json"
+FR_DATA_PATH = ROOT / "data" / "communities.fr.json"
 SCHEMA_PATH = ROOT / "schemas" / "community-directory.schema.json"
 PROVINCES_DIR = ROOT / "docs" / "provinces"
 
 SCHEMA_VERSION = "meshcore-canada-communities/v1"
+FR_SCHEMA_VERSION = "meshcore-canada-communities-fr/v1"
 VALID_CODES = {
     "AB",
     "BC",
@@ -66,6 +68,10 @@ class Validation:
 
 def load_data() -> dict[str, Any]:
     return json.loads(DATA_PATH.read_text(encoding="utf-8"))
+
+def load_french_data() -> dict[str, Any]:
+    return json.loads(FR_DATA_PATH.read_text(encoding="utf-8"))
+
 
 
 def parse_date(value: Any, field: str, check: Validation, *, nullable: bool = False) -> date | None:
@@ -337,6 +343,111 @@ def validate_data(data: dict[str, Any]) -> Validation:
             check.error(f"{community.get('name', 'community')} must inherit the Canada baseline")
 
     return check
+
+def validate_french_data(
+    data: dict[str, Any], french: dict[str, Any], check: Validation
+) -> None:
+    """Validate the French display catalog against the canonical directory data."""
+    if not isinstance(french, dict):
+        check.error("French community catalog must be an object")
+        return
+
+    expected_top = {"schema", "locale", "directory_pages", "communities"}
+    unexpected_top = sorted(french.keys() - expected_top)
+    missing_top = sorted(expected_top - french.keys())
+    if unexpected_top:
+        check.error(
+            "French community catalog has unsupported fields: "
+            + ", ".join(unexpected_top)
+        )
+    if missing_top:
+        check.error(
+            "French community catalog is missing: " + ", ".join(missing_top)
+        )
+    if french.get("schema") != FR_SCHEMA_VERSION:
+        check.error(f"French catalog schema must be {FR_SCHEMA_VERSION!r}")
+    if french.get("locale") != "fr-CA":
+        check.error("French catalog locale must be 'fr-CA'")
+
+    translated_pages = french.get("directory_pages")
+    if not isinstance(translated_pages, dict):
+        check.error("French catalog directory_pages must be an object")
+        translated_pages = {}
+    canonical_pages = {
+        page["slug"]: page for page in data.get("directory_pages", [])
+        if isinstance(page, dict) and isinstance(page.get("slug"), str)
+    }
+    missing_pages = sorted(canonical_pages.keys() - translated_pages.keys())
+    extra_pages = sorted(translated_pages.keys() - canonical_pages.keys())
+    if missing_pages:
+        check.error(
+            "French catalog is missing directory pages: " + ", ".join(missing_pages)
+        )
+    if extra_pages:
+        check.error(
+            "French catalog has unknown directory pages: " + ", ".join(extra_pages)
+        )
+    for slug, translation in translated_pages.items():
+        label = f"French directory page {slug!r}"
+        if not isinstance(translation, dict):
+            check.error(f"{label} must be an object")
+            continue
+        expected = {"title", "location_phrase"}
+        missing = sorted(expected - translation.keys())
+        unexpected = sorted(translation.keys() - expected)
+        if missing:
+            check.error(f"{label} is missing: {', '.join(missing)}")
+        if unexpected:
+            check.error(f"{label} has unsupported fields: {', '.join(unexpected)}")
+        for field in expected:
+            value = translation.get(field)
+            if not isinstance(value, str) or not value.strip():
+                check.error(f"{label}.{field} must be non-empty")
+
+    translated_communities = french.get("communities")
+    if not isinstance(translated_communities, dict):
+        check.error("French catalog communities must be an object")
+        translated_communities = {}
+    canonical_communities = {
+        community["id"]: community for community in data.get("communities", [])
+        if isinstance(community, dict) and isinstance(community.get("id"), str)
+    }
+    missing_communities = sorted(
+        canonical_communities.keys() - translated_communities.keys()
+    )
+    extra_communities = sorted(
+        translated_communities.keys() - canonical_communities.keys()
+    )
+    if missing_communities:
+        check.error(
+            "French catalog is missing communities: " + ", ".join(missing_communities)
+        )
+    if extra_communities:
+        check.error(
+            "French catalog has unknown communities: " + ", ".join(extra_communities)
+        )
+    for community_id, translation in translated_communities.items():
+        canonical = canonical_communities.get(community_id)
+        if canonical is None:
+            continue
+        label = f"French community {community_id!r}"
+        if not isinstance(translation, dict):
+            check.error(f"{label} must be an object")
+            continue
+        expected = {"service_area"}
+        if canonical.get("summary"):
+            expected.add("summary")
+        missing = sorted(expected - translation.keys())
+        unexpected = sorted(translation.keys() - expected)
+        if missing:
+            check.error(f"{label} is missing: {', '.join(missing)}")
+        if unexpected:
+            check.error(f"{label} has unsupported fields: {', '.join(unexpected)}")
+        for field in expected:
+            value = translation.get(field)
+            if not isinstance(value, str) or not value.strip():
+                check.error(f"{label}.{field} must be non-empty")
+
 
 
 def front_matter(*, title: str, description: str, task: str, metadata: dict[str, Any], scripts: bool) -> str:
@@ -814,20 +925,609 @@ def render_province_page(data: dict[str, Any], page: dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
-def generated_pages(data: dict[str, Any]) -> dict[Path, str]:
+def french_page_translation(french: dict[str, Any], page: dict[str, Any]) -> dict[str, str]:
+    return french["directory_pages"][page["slug"]]
+
+
+def french_community_translation(
+    french: dict[str, Any], community: dict[str, Any]
+) -> dict[str, str]:
+    return french["communities"][community["id"]]
+
+
+def status_label_fr(status: str) -> str:
+    return {
+        "active": "Active",
+        "forming": "En formation",
+        "testing": "En essai",
+        "needs-update": "À mettre à jour",
+    }[status]
+
+
+def verification_label_fr(community: dict[str, Any]) -> str:
+    if community["verified_at"] is None:
+        return "Pas encore vérifiée"
+    return community["verified_at"]
+
+
+def contact_type_label_fr(contact_type: str) -> str:
+    return {
+        "discord": "Discord",
+        "facebook": "Facebook",
+        "instagram": "Instagram",
+        "meshmapper": "MeshMapper",
+        "reddit": "Reddit",
+        "telegram": "Telegram",
+        "website": "Site Web",
+        "x": "X",
+    }[contact_type]
+
+
+def contact_label_fr(label: str) -> str:
+    """Return a visitor-facing French label while preserving names and URLs."""
+    return {
+        "Salish Mesh website": "Site Web de Salish Mesh",
+        "Alberta MeshCore Discord": "Discord d’Alberta MeshCore",
+        "Airdrie regional page": "Page régionale d’Airdrie",
+        "Calgary regional page": "Page régionale de Calgary",
+        "Edmonton regional page": "Page régionale d’Edmonton",
+        "Lethbridge regional page": "Page régionale de Lethbridge",
+        "Why MeshCore?": "Pourquoi MeshCore?",
+        "Monitoring tools": "Outils de surveillance",
+        "Airdrie MeshCore Network": "Réseau MeshCore d’Airdrie",
+        "Airdrie configuration guide": "Guide de configuration d’Airdrie",
+        "Airdrie network map": "Carte du réseau d’Airdrie",
+        "WAeV live map": "Carte en direct de WAeV",
+        "Calgary topic in Mesh Alberta": "Sujet sur Calgary dans Mesh Alberta",
+        "Canada - Calgary, Alberta & Area regional channel in the MeshCore Discord": "Canal régional Canada — Calgary, Alberta et environs sur le Discord de MeshCore",
+        "Calgary MeshCore Network": "Réseau MeshCore de Calgary",
+        "Calgary community guide": "Guide de la communauté de Calgary",
+        "Calgary network map": "Carte du réseau de Calgary",
+        "Recommended Calgary RX channels": "Canaux RX recommandés à Calgary",
+        "Edmonton on AlbertaMesh.ca": "Edmonton sur AlbertaMesh.ca",
+        "Edmonton configuration guide": "Guide de configuration d’Edmonton",
+        "Edmonton network map": "Carte du réseau d’Edmonton",
+        "Getting started": "Bien démarrer",
+        "MeshCore defaults": "Réglages par défaut de MeshCore",
+        "YQLMesh website": "Site Web de YQLMesh",
+        "Lethbridge network map": "Carte du réseau de Lethbridge",
+        "YQLMesh on X": "YQLMesh sur X",
+        "YQLMesh subreddit": "Communauté Reddit de YQLMesh",
+        "Canada - Southern Alberta regional channel in the MeshCore Discord": "Canal régional Canada — Sud de l’Alberta sur le Discord de MeshCore",
+        "Cardston topic in Mesh Alberta": "Sujet sur Cardston dans Mesh Alberta",
+        "YYC MeshCore Discord": "Discord de YYC MeshCore",
+        "StoonMesh Discord": "Discord de StoonMesh",
+        "Greater Ottawa Mesh Enthusiasts Discord": "Discord de Greater Ottawa Mesh Enthusiasts",
+        "Ottawa Mesh website": "Site Web d’Ottawa Mesh",
+        "GTA+-Lora-Meshes Discord": "Discord de GTA+-Lora-Meshes",
+        "Quinte Mesh Network Discord": "Discord de Quinte Mesh Network",
+        "Quinte Mesh Network website": "Site Web de Quinte Mesh Network",
+        "Mesh Quebec website": "Site Web de Mesh Québec",
+        "Montreal Mesh website": "Site Web de Montreal Mesh",
+        "Réseau Mesh de la Capitale YQB Discord": "Discord du Réseau Mesh de la Capitale YQB",
+        "Réseau Mesh du Saguenay Lac st-Jean YTF Discord": "Discord du Réseau Mesh du Saguenay–Lac-Saint-Jean YTF",
+        "Réseau Mesh du Saguenay Lac st-Jean YTF Facebook": "Facebook du Réseau Mesh du Saguenay–Lac-Saint-Jean YTF",
+        "Réseau Mesh du Saguenay Lac st-Jean YTF MeshMapper": "Carte MeshMapper du Réseau Mesh du Saguenay–Lac-Saint-Jean YTF",
+        "Réseau Libre website": "Site Web de Réseau Libre",
+        "Lunenburg County Mesh website": "Site Web de Lunenburg County Mesh",
+        "Alberta topic in MeshCore Canada": "Sujet sur l’Alberta dans MeshCore Canada",
+    }.get(label, label)
+
+
+def search_text_fr(
+    community: dict[str, Any],
+    page: dict[str, Any],
+    french: dict[str, Any],
+) -> str:
+    page_translation = french_page_translation(french, page)
+    community_translation = french_community_translation(french, community)
+    values = [
+        community["name"],
+        community["service_area"],
+        community_translation["service_area"],
+        community["province"],
+        page["title"],
+        page_translation["title"],
+        *page["aliases"],
+        *community["places"],
+        *community["aliases"],
+    ]
+    if community.get("summary"):
+        values.extend([community["summary"], community_translation["summary"]])
+    return " ".join(dict.fromkeys(normalized(value) for value in values))
+
+
+def render_contacts_fr(community: dict[str, Any], *, indent: str = "") -> list[str]:
+    lines: list[str] = []
+    for contact in community["contacts"]:
+        if contact["url"]:
+            value = (
+                f'<a href="{html.escape(contact["url"], quote=True)}" rel="noopener">'
+                f'{html.escape(contact_label_fr(contact["label"]))}</a> '
+                '<span class="mc-community-external">(externe)</span>'
+            )
+        else:
+            value = html.escape(contact_label_fr(contact["label"]))
+        lines.append(
+            f"{indent}<li><strong>{contact_type_label_fr(contact['type'])} :</strong> {value}</li>"
+        )
+    return lines
+
+
+def render_settings_fr(community: dict[str, Any], *, compact: bool = False) -> str:
+    overrides = community["settings"]["overrides"]
+    if not overrides:
+        return "Utilise les réglages par défaut du Canada"
+    values = []
+    if "radio_preset" in overrides:
+        values.append(
+            f"Préréglage radio : <code>{html.escape(overrides['radio_preset'])}</code>"
+        )
+    if "path_hash_mode" in overrides:
+        values.append(
+            "Mode de hachage des parcours : "
+            f"<strong>{html.escape(overrides['path_hash_mode'])}</strong>"
+        )
+    prefix = "Réglages locaux différents — " if compact else ""
+    return prefix + "; ".join(values)
+
+
+def render_directory_card_fr(
+    community: dict[str, Any], page: dict[str, Any], french: dict[str, Any]
+) -> str:
+    page_translation = french_page_translation(french, page)
+    community_translation = french_community_translation(french, community)
+    search = html.escape(search_text_fr(community, page, french), quote=True)
+    has_override = str(bool(community["settings"]["overrides"])).lower()
+    lines = [
+        (
+            f'<article class="mc-community-card" id="directory-{community["id"]}" '
+            f'data-community-card data-community-status="{community["status"]}" '
+            f'data-community-override="{has_override}" data-community-search="{search}">'
+        ),
+        '<div class="mc-community-card__header">',
+        (
+            f'<h3><a href="{page["slug"]}/#community-{community["id"]}">'
+            f'{html.escape(community["name"])}</a></h3>'
+        ),
+        (
+            f'<span class="mc-community-status" data-status="{community["status"]}">'
+            f'{status_label_fr(community["status"])}</span>'
+        ),
+        "</div>",
+        f'<p class="mc-community-area">{html.escape(community_translation["service_area"])}</p>',
+    ]
+    if community.get("summary"):
+        lines.append(
+            f'<p class="mc-community-summary">{html.escape(community_translation["summary"])}</p>'
+        )
+    lines.extend(
+        [
+            (
+                f'<p><strong>Province ou territoire :</strong> <a href="{page["slug"]}/">'
+                f'{html.escape(page_translation["title"])}</a></p>'
+            ),
+            f"<p><strong>Réglages :</strong> {render_settings_fr(community, compact=True)}</p>",
+            f"<p><strong>Dernière vérification :</strong> {verification_label_fr(community)}</p>",
+            '<ul class="mc-community-contacts">',
+            *render_contacts_fr(community),
+            "</ul>",
+            (
+                f'<p class="mc-community-card__action"><a href="{page["slug"]}/#community-{community["id"]}">'
+                "Voir les détails de la fiche</a></p>"
+            ),
+            "</article>",
+        ]
+    )
+    return "\n".join(lines)
+
+
+def render_index_fr(data: dict[str, Any], french: dict[str, Any]) -> str:
+    metadata = data["metadata"]
+    pages = data["directory_pages"]
+    communities = data["communities"]
+    code_pages = page_by_code(data)
+    active = sum(item["status"] == "active" for item in communities)
+    forming = sum(item["status"] == "forming" for item in communities)
+    overrides = sum(bool(item["settings"]["overrides"]) for item in communities)
+    unverified = sum(item["verified_at"] is None for item in communities)
+    if unverified == 1:
+        verification_summary = (
+            f"1 fiche sur {len(communities)} n’a pas fait l’objet d’une vérification récente des coordonnées."
+        )
+    else:
+        verification_summary = (
+            f"{unverified} fiches sur {len(communities)} n’ont pas fait l’objet d’une vérification récente des coordonnées."
+        )
+
+    lines = [
+        front_matter(
+            title="Trouver une communauté MeshCore au Canada",
+            description=(
+                "Recherchez des communautés MeshCore canadiennes par lieu, province, "
+                "nom de communauté ou alias courant."
+            ),
+            task="find-community",
+            metadata=metadata,
+            scripts=True,
+        ).rstrip(),
+        "",
+        (
+            "<!-- Généré par scripts/validate-communities.py à partir de "
+            "data/communities.json et data/communities.fr.json. Ne pas modifier à la main. -->"
+        ),
+        "",
+        "# Trouver une communauté MeshCore au Canada",
+        "",
+        "Recherchez par lieu, province, nom de communauté ou alias courant. La liste",
+        "complète fonctionne sans carte, autorisation de localisation ni compte GitHub.",
+        "",
+        '!!! note "Les renseignements sur les communautés peuvent changer"',
+        f"    {verification_summary}",
+        "    Confirmez les réglages et les coordonnées importants avant de vous y fier.",
+        "",
+        '<div class="mc-directory-summary" aria-label="Résumé du répertoire">',
+        f"<span><strong>{len(communities)}</strong> {'fiche' if len(communities) == 1 else 'fiches'}</span>",
+        f"<span><strong>{active}</strong> {'fiche active' if active == 1 else 'fiches actives'}</span>",
+        f"<span><strong>{forming}</strong> {'fiche en formation' if forming == 1 else 'fiches en formation'}</span>",
+        (
+            f"<span><strong>{overrides}</strong> "
+            f"{'fiche avec des réglages locaux différents' if overrides == 1 else 'fiches avec des réglages locaux différents'}</span>"
+        ),
+        "</div>",
+        "",
+        '<div class="mc-directory-tools" data-community-directory data-community-locale="fr">',
+        '  <div class="mc-directory-tools__search">',
+        '    <label for="community-search">Lieu, province, communauté ou alias</label>',
+        (
+            '    <input id="community-search" type="search" name="community" '
+            'autocomplete="address-level2" placeholder="Essayez Ottawa, YQL ou Québec">'
+        ),
+        "  </div>",
+        '  <div class="mc-directory-tools__filter">',
+        '    <label for="community-status">État</label>',
+        '    <select id="community-status">',
+        '      <option value="">Tous les états</option>',
+        '      <option value="active">Active</option>',
+        '      <option value="forming">En formation</option>',
+        "    </select>",
+        "  </div>",
+        '  <label class="mc-directory-tools__check">',
+        '    <input id="community-override" type="checkbox">',
+        "    Possède des réglages locaux différents",
+        "  </label>",
+        '  <button class="md-button" type="button" data-community-clear>Effacer</button>',
+        '  <output class="mc-directory-tools__count" data-community-count aria-live="polite">',
+        f"    Affichage de {len(communities)} communautés",
+        "  </output>",
+        "</div>",
+        "",
+        '<div class="mc-community-empty" data-community-empty hidden>',
+        "  <h2>Aucune communauté correspondante</h2>",
+        "  <p>Essayez une ville voisine, une province, un code comme YQL, ou effacez les filtres.</p>",
+        '  <button class="md-button" type="button" data-community-clear>Effacer la recherche</button>',
+        '  <p><a href="../submit-idea/">Ajouter une communauté manquante</a></p>',
+        "</div>",
+        "",
+        "## Communautés",
+        "",
+        '<div class="mc-community-grid" data-community-results>',
+    ]
+    for community in communities:
+        lines.append(
+            render_directory_card_fr(
+                community, code_pages[community["province"]], french
+            )
+        )
+    lines.extend(
+        [
+            "</div>",
+            "",
+            "## Réglages par défaut du Canada { #canada-baseline }",
+            "",
+            "Utilisez ces réglages sauf si votre communauté locale en indique d’autres.",
+            "",
+            "| Réglage | Valeur par défaut au Canada |",
+            "|---|---|",
+            f'| Préréglage radio | `{data["national_defaults"]["radio_preset"]}` |',
+            (
+                "| Valeurs radio brutes | "
+                f'`{data["national_defaults"]["raw_radio"]["frequency_mhz"]} MHz / '
+                f'{data["national_defaults"]["raw_radio"]["bandwidth_khz"]} kHz / '
+                f'SF{data["national_defaults"]["raw_radio"]["spreading_factor"]} / '
+                f'CR{data["national_defaults"]["raw_radio"]["coding_rate"]}` |'
+            ),
+            f'| Mode de hachage des parcours | `{data["national_defaults"]["path_hash_mode"]}` |',
+            (
+                "| Réglage du parcours en ligne de commande | "
+                f'`{data["national_defaults"]["cli_path_setting"]}` |'
+            ),
+            "",
+            '!!! warning "Vérifiez d’abord les réglages locaux"',
+            "    Les appareils à proximité doivent utiliser les mêmes réglages. Une fiche marquée",
+            "    **Réglages locaux différents** l’emporte sur les réglages par défaut du Canada",
+            "    après confirmation auprès de la communauté indiquée.",
+            "",
+            "## Parcourir par province ou territoire",
+            "",
+            '<div class="mc-province-grid">',
+        ]
+    )
+    for page in pages:
+        page_translation = french_page_translation(french, page)
+        page_communities = [
+            item for item in communities if item["province"] in page["codes"]
+        ]
+        page_active = sum(item["status"] == "active" for item in page_communities)
+        page_forming = sum(item["status"] == "forming" for item in page_communities)
+        labels = []
+        if page_active:
+            labels.append(
+                f"{page_active} {'active' if page_active == 1 else 'actives'}"
+            )
+        if page_forming:
+            labels.append(f"{page_forming} en formation")
+        if not labels:
+            labels.append("Aucune fiche")
+        lines.extend(
+            [
+                '<article class="mc-province-card">',
+                (
+                    f'<h3><a href="{page["slug"]}/">'
+                    f'{html.escape(page_translation["title"])}</a></h3>'
+                ),
+                f"<p>{', '.join(labels)}</p>",
+                "</article>",
+            ]
+        )
+    lines.extend(
+        [
+            "</div>",
+            "",
+            "## Ajouter ou mettre à jour une fiche",
+            "",
+            "Vous avez trouvé des renseignements manquants ou périmés?",
+            (
+                f"[Envoyer une mise à jour de la communauté]({metadata['update_route']}). "
+                "Aucun compte GitHub requis."
+            ),
+            "",
+        ]
+    )
+    return "\n".join(lines)
+
+
+def render_community_card_fr(
+    community: dict[str, Any], metadata: dict[str, Any], french: dict[str, Any]
+) -> str:
+    community_translation = french_community_translation(french, community)
+    lines = [
+        (
+            f'<article class="mc-community-card mc-community-card--detail" '
+            f'id="community-{community["id"]}">'
+        ),
+        '<div class="mc-community-card__header">',
+        f"<h3>{html.escape(community['name'])}</h3>",
+        (
+            f'<span class="mc-community-status" data-status="{community["status"]}">'
+            f'{status_label_fr(community["status"])}</span>'
+        ),
+        "</div>",
+        f'<p class="mc-community-area">{html.escape(community_translation["service_area"])}</p>',
+    ]
+    if community.get("summary"):
+        lines.append(
+            f'<p class="mc-community-summary">{html.escape(community_translation["summary"])}</p>'
+        )
+    lines.extend(
+        [
+            '<dl class="mc-community-facts">',
+            "<div><dt>Réglages</dt>",
+            f"<dd>{render_settings_fr(community)}</dd></div>",
+            "<div><dt>Dernière vérification</dt>",
+            f"<dd>{verification_label_fr(community)}</dd></div>",
+            "</dl>",
+        ]
+    )
+    if community["settings"]["overrides"]:
+        lines.extend(
+            [
+                '<div class="mc-community-override" role="note">',
+                "<strong>Réglages locaux différents</strong>",
+                "<p>Confirmez ces réglages auprès de la communauté avant de modifier un nœud.</p>",
+                "</div>",
+            ]
+        )
+    if community["status"] == "forming":
+        lines.extend(
+            [
+                '<p class="mc-community-forming">',
+                (
+                    "Ce groupe est en formation. Communiquez avec lui pour savoir ce qui "
+                    "fonctionne et où votre aide serait utile."
+                ),
+                "</p>",
+            ]
+        )
+    lines.extend(
+        [
+            "<h4>Coordonnées</h4>",
+            '<ul class="mc-community-contacts">',
+            *render_contacts_fr(community),
+            "</ul>",
+            '<p class="mc-community-contact-health">',
+            "<strong>Vérification du contact :</strong> Pas encore vérifié",
+            "</p>",
+            (
+                '<p class="mc-community-card__action"><a href="../../submit-idea/">'
+                "Mettre cette fiche à jour</a></p>"
+            ),
+            "</article>",
+        ]
+    )
+    return "\n".join(lines)
+
+
+def render_province_page_fr(
+    data: dict[str, Any], page: dict[str, Any], french: dict[str, Any]
+) -> str:
+    metadata = data["metadata"]
+    communities = [
+        item for item in data["communities"] if item["province"] in page["codes"]
+    ]
+    province_contacts = [
+        item for item in data["province_contacts"] if item["province"] in page["codes"]
+    ]
+    active = sum(item["status"] == "active" for item in communities)
+    forming = sum(item["status"] == "forming" for item in communities)
+    page_translation = french_page_translation(french, page)
+    location_phrase = page_translation["location_phrase"]
+    description = (
+        "Trouvez les coordonnées, les zones desservies et les réglages locaux des "
+        f"communautés MeshCore {location_phrase}."
+    )
+    lines = [
+        front_matter(
+            title=f"Communautés MeshCore {location_phrase}",
+            description=description,
+            task="browse-community-directory",
+            metadata=metadata,
+            scripts=False,
+        ).rstrip(),
+        "",
+        (
+            "<!-- Généré par scripts/validate-communities.py à partir de "
+            "data/communities.json et data/communities.fr.json. Ne pas modifier à la main. -->"
+        ),
+        "",
+        f"# Communautés MeshCore {location_phrase}",
+        "",
+    ]
+    if communities:
+        if active and not forming:
+            listing = "fiche de communauté active" if active == 1 else "fiches de communauté actives"
+            summary = f"Il y a **{active} {listing}** {location_phrase}."
+        elif forming and not active:
+            listing = "fiche de communauté" if forming == 1 else "fiches de communauté"
+            summary = f"Il y a **{forming} {listing} en formation** {location_phrase}."
+        else:
+            summary = (
+                f"Il y a **{len(communities)} fiches de communauté** {location_phrase} "
+                f"({active} actives et {forming} en formation)."
+            )
+        lines.extend(
+            [
+                summary,
+                "",
+                "Toutes les fiches utilisent les [réglages par défaut du Canada](index.md#canada-baseline),",
+                "sauf si une fiche indique des réglages locaux différents.",
+                "",
+            ]
+        )
+    else:
+        lines.extend(
+            [
+                f"Aucune communauté n’est encore répertoriée {location_phrase}.",
+                "",
+                '<div class="mc-community-empty mc-community-empty--page">',
+                "  <h2>Aidez-nous à ajouter la première fiche</h2>",
+                (
+                    "  <p>Indiquez le nom de la communauté, la zone desservie, "
+                    "son état et un lien de contact public.</p>"
+                ),
+                '  <p><a class="md-button md-button--primary" href="../../submit-idea/">'
+                "Ajouter une communauté</a></p>",
+                '  <p><a href="../">Parcourir toutes les communautés canadiennes</a></p>',
+                "</div>",
+                "",
+                "Tant qu’aucune fiche locale examinée n’indique d’autres réglages, commencez avec",
+                "les [réglages par défaut du Canada](index.md#canada-baseline) et confirmez-les",
+                "auprès des personnes à proximité avant de transmettre.",
+                "",
+            ]
+        )
+
+    override_communities = [
+        item for item in communities if item["settings"]["overrides"]
+    ]
+    if override_communities:
+        lines.extend(
+            [
+                '!!! warning "Cette communauté utilise des réglages différents"',
+                "    Au moins une communauté sur cette page indique des réglages locaux différents.",
+                "    Confirmez les réglages actuels auprès de son contact avant de configurer",
+                "    ou de modifier un nœud.",
+                "",
+            ]
+        )
+
+    if communities:
+        lines.extend(["## Fiches des communautés", "", '<div class="mc-community-grid">'])
+        for community in communities:
+            lines.append(render_community_card_fr(community, metadata, french))
+        lines.extend(["</div>", ""])
+
+    if province_contacts:
+        lines.extend(
+            [
+                "## Coordonnées pour toute la province ou le territoire",
+                "",
+                '<div class="mc-community-card">',
+            ]
+        )
+        for contact in province_contacts:
+            if contact["url"]:
+                rendered = (
+                    f'<a href="{html.escape(contact["url"], quote=True)}" rel="noopener">'
+                    f'{html.escape(contact_label_fr(contact["label"]))}</a> '
+                    '<span class="mc-community-external">(externe)</span>'
+                )
+            else:
+                rendered = html.escape(contact_label_fr(contact["label"]))
+            lines.extend(
+                [
+                    f"<p><strong>{contact_type_label_fr(contact['type'])} :</strong> {rendered}</p>",
+                    "<p><strong>Vérification du contact :</strong> Pas encore vérifié</p>",
+                ]
+            )
+        lines.extend(["</div>", ""])
+
+    lines.extend(
+        [
+            "## Ajouter ou mettre à jour une fiche",
+            "",
+            (
+                f"[Envoyer une mise à jour de la communauté]({metadata['update_route']}). "
+                "Aucun compte GitHub requis."
+            ),
+            "",
+            "Les fiches sont soumises par la communauté et peuvent être incomplètes ou périmées.",
+            "",
+        ]
+    )
+    return "\n".join(lines)
+
+
+def generated_pages(data: dict[str, Any], french: dict[str, Any]) -> dict[Path, str]:
     pages = {PROVINCES_DIR / "index.md": render_index(data)}
     for page in data["directory_pages"]:
         pages[PROVINCES_DIR / f"{page['slug']}.md"] = render_province_page(data, page)
+    pages[PROVINCES_DIR / "index.fr.md"] = render_index_fr(data, french)
+    for page in data["directory_pages"]:
+        pages[PROVINCES_DIR / f"{page['slug']}.fr.md"] = render_province_page_fr(
+            data, page, french
+        )
     return pages
 
 
 def check_or_write_generated(
     data: dict[str, Any],
+    french: dict[str, Any],
     check: Validation,
     *,
     write: bool,
 ) -> None:
-    for path, expected in generated_pages(data).items():
+    for path, expected in generated_pages(data, french).items():
         expected = expected.rstrip() + "\n"
         if write:
             path.parent.mkdir(parents=True, exist_ok=True)
@@ -859,9 +1559,18 @@ def main() -> int:
         print(f"ERROR: cannot read {DATA_PATH.relative_to(ROOT)}: {exc}", file=sys.stderr)
         return 1
 
+    try:
+        french = load_french_data()
+    except (OSError, json.JSONDecodeError) as exc:
+        print(f"ERROR: cannot read {FR_DATA_PATH.relative_to(ROOT)}: {exc}", file=sys.stderr)
+        return 1
+
+
     check = validate_data(data)
     if not check.errors:
-        check_or_write_generated(data, check, write=args.write)
+        validate_french_data(data, french, check)
+    if not check.errors:
+        check_or_write_generated(data, french, check, write=args.write)
 
     for warning in check.warnings:
         print(f"WARNING: {warning}")

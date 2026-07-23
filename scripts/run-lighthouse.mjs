@@ -12,7 +12,9 @@ const routes = [
   ["start", "/start/"],
   ["communities", "/provinces/"],
   ["config", "/config/"],
-  ["submit-idea", "/submit-idea/"]
+  ["submit-idea", "/submit-idea/"],
+  ["fr-home", "/fr/"],
+  ["fr-config", "/fr/config/"]
 ];
 const budgets = {
   performance: 0.8,

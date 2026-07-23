@@ -251,3 +251,108 @@ test("relative Markdown links in Analyzer pages resolve to source files", () => 
     }
   }
 });
+
+test("French location finder localizes display labels without changing canonical values", async () => {
+  const script = read("docs/assets/javascripts/analyzer-location-codes.js");
+  const payload = {
+    schema_version: 1,
+    locations: [
+      {code: "YUL", name: "Montreal Trudeau", province: "Quebec", province_code: "QC"},
+      {code: "YVR", name: "Vancouver", province: "British Columbia", province_code: "BC"},
+    ],
+  };
+  const originalPayload = JSON.parse(JSON.stringify(payload));
+
+  class FakeElement {
+    constructor(value = "") {
+      this.value = value;
+      this.textContent = "";
+      this.dataset = {};
+      this.children = [];
+      this.listeners = new Map();
+      this.isFragment = false;
+    }
+    addEventListener(type, listener) {
+      this.listeners.set(type, listener);
+    }
+    appendChild(child) {
+      this.children.push(child);
+      return child;
+    }
+    replaceChildren(...children) {
+      this.children = children.flatMap((child) => child.isFragment ? child.children : [child]);
+    }
+    dispatch(type) {
+      this.listeners.get(type)?.({type});
+    }
+  }
+
+  const elements = new Map([
+    ["location-code-tool", new FakeElement()],
+    ["location-code-search", new FakeElement()],
+    ["location-code-province", new FakeElement()],
+    ["location-code-results", new FakeElement()],
+    ["location-code-status", new FakeElement()],
+  ]);
+  elements.get("location-code-tool").dataset.source = "../location-codes.json";
+
+  const document = {
+    documentElement: {lang: "fr"},
+    readyState: "complete",
+    getElementById: (id) => elements.get(id) || null,
+    createElement: () => new FakeElement(),
+    createDocumentFragment: () => {
+      const fragment = new FakeElement();
+      fragment.isFragment = true;
+      return fragment;
+    },
+  };
+  const fetch = async () => ({
+    ok: true,
+    json: async () => payload,
+  });
+
+  new Function("document", "fetch", script)(document, fetch);
+  await new Promise((resolve) => setImmediate(resolve));
+  await new Promise((resolve) => setImmediate(resolve));
+
+  const provinceOptions = elements.get("location-code-province").children;
+  const quebec = provinceOptions.find((option) => option.value === "Quebec");
+  assert.ok(quebec, "the canonical province value must remain available");
+  assert.equal(quebec.textContent, "Québec");
+
+  const search = elements.get("location-code-search");
+  const results = elements.get("location-code-results");
+  search.value = "Montréal";
+  search.dispatch("input");
+  assert.equal(results.children.length, 1);
+  assert.deepEqual(
+    results.children[0].children.map((cell) => cell.textContent),
+    ["YUL", "Montréal-Trudeau", "Québec"],
+  );
+
+  search.value = "Montreal Trudeau";
+  search.dispatch("input");
+  assert.equal(results.children.length, 1, "the canonical English alias must remain searchable");
+  assert.deepEqual(payload, originalPayload, "localization must not alter shared source data");
+});
+
+test("French analyzer terminology and map controls use natural location wording", () => {
+  const [page, standard, runtime, config] = [
+    read("docs/analyzer/iata-codes.fr.md"),
+    read("docs/config/standard.fr.md"),
+    read("docs/assets/javascripts/i18n-runtime.js"),
+    read("mkdocs.yml"),
+  ];
+
+  assert.match(page, /code d’emplacement/);
+  assert.match(page, /code de l’aéroport le plus proche/);
+  assert.doesNotMatch(page, /code pertinent le plus près|nom convivial du lieu/);
+  assert.match(config, /Location codes: Codes d'emplacement/);
+  assert.doesNotMatch(config, /Location codes: Codes de localisation/);
+  assert.match(runtime, /"Zoom in": "Zoom avant"/);
+  assert.match(runtime, /"Zoom out": "Zoom arrière"/);
+  assert.match(standard, /aire de diffusion \(AD\)/);
+  assert.match(standard, /subdivision de recensement \(SDR\)/);
+  assert.match(standard, /clés anglaises \x60DA\x60, \x60CSD\x60, \x60CD\x60 et \x60ER\x60/);
+});

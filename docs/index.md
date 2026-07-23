@@ -126,4 +126,4 @@ Found something missing or confusing? [Share an idea](submit-idea.md) or
 ## About this project
 
 MeshCore Canada is an independent, community-run project.
-[Learn more](about.md) or [contribute](contributing.md).
+[Learn more about MeshCore Canada](about.md) or [contribute](contributing.md).

@@ -646,6 +646,25 @@ textarea {
   font-weight: 750;
 }
 
+
+.utility-nav .language-link {
+  border: 1px solid var(--border-bright);
+  border-radius: 999px;
+  padding: 0.25rem 0.55rem;
+  text-decoration: none;
+}
+
+.utility-nav .language-link[aria-current="page"] {
+  background: var(--accent-soft);
+  border-color: var(--accent-strong);
+  color: var(--text);
+}
+
+.utility-nav__divider {
+  border-left: 1px solid var(--border-bright);
+  height: 1.4rem;
+}
+
 .lifecycle-list {
   display: grid;
   font-size: 0.78rem;

@@ -1,6 +1,14 @@
 (function () {
   "use strict";
 
+  var isFrench = /^fr(?:-|$)/i.test(
+    document.documentElement ? document.documentElement.lang || "" : ""
+  );
+
+  function tr(english, french) {
+    return isFrench ? french : english;
+  }
+
   function cell(row, value) {
     var item = document.createElement("td");
     item.textContent = String(value);
@@ -39,19 +47,30 @@
       var fragment = document.createDocumentFragment();
       config.brokers.forEach(function (broker) {
         var row = document.createElement("tr");
-        cell(row, broker.id === "primary" ? "Primary" : "Backup");
+        cell(row, broker.id === "primary"
+          ? tr("Primary", "Principal")
+          : tr("Backup", "Secours"));
         cell(row, broker.host);
         cell(row, broker.port);
         cell(row, "WebSockets");
-        cell(row, "Required; verify certificates");
+        cell(row, tr(
+          "Required; verify certificates",
+          "Requis; vérifier les certificats"
+        ));
         cell(row, broker.token_audience);
         fragment.appendChild(row);
       });
       body.replaceChildren(fragment);
-      status.textContent = "Observer configuration " + config.version +
-        ", reviewed " + config.last_reviewed + ".";
+      status.textContent = isFrench
+        ? "Configuration de l’observateur " + config.version +
+          ", vérifiée le " + config.last_reviewed + "."
+        : "Observer configuration " + config.version +
+          ", reviewed " + config.last_reviewed + ".";
     } catch (_error) {
-      status.textContent = "The generated broker table could not be loaded. Open the canonical JSON below.";
+      status.textContent = tr(
+        "The generated broker table could not be loaded. Open the canonical JSON below.",
+        "Impossible de charger le tableau des serveurs MQTT. Ouvrez le fichier JSON de référence ci-dessous."
+      );
     }
   }
 
