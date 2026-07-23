@@ -1,67 +1,108 @@
-# Repeaters
-
-Repeaters form the stable backbone of the Ottawa MeshCore network.  
-You can choose between **pre-built repeaters** or **DIY builds**, and both are great options.  
-
-Pre-built units have improved a lot in reliability and price, while DIY builds remain popular for those who like full control over their hardware.
-
-!!! warning "Upgrade the repeater antenna"
-    The included antenna performs poorly on all of these models. Plan to replace it, and upgrade to at least the ALFA 5.8 dBi.
-    See: [Recommended Antennas](recommended-antenna.md)
-    
+---
+title: Plan a repeater
+description: Choose a repeater approach and verify the complete radio, power, antenna, enclosure, and recovery system.
+audience:
+  - repeater-builder
+  - network-operator
+task: choose-repeater
+scope: canada-baseline
+status: draft
+status_notice: false
+owner: docs-hardware
+last_reviewed: 2026-07-22
+review_by: 2026-10-17
+difficulty: intermediate
+estimated_time: 10-20 minutes
+destructive: false
+page_styles:
+  - assets/styles/devices-builds.css?v=20260722-2
 ---
 
-## Important Note for nRF52-Based Repeaters
+# Plan a repeater
 
-If you plan to use a **nRF52** board for a repeater, you must update it to the **OTAFIX bootloader firmware**.  
-Without this fix, if an OTA update fails over BLE, the repeater will enter an unusable state and require physical access to recover.
+A repeater is more than a radio board. Plan its power, antenna, enclosure,
+mount, and a way to reach it if something goes wrong.
 
-See more infomation [in the repeater flashing instructions page](../meshcore/flash-repeater.md).
+<div class="mc-guide-status" data-status="draft" markdown>
 
----
+**Check the complete system.** Product revisions and firmware support change. Confirm the exact radio, power system, antenna path, enclosure, mount, and recovery method before buying or building.
 
-## Pre-Built
+</div>
 
-These options come fully assembled; simply flash MeshCore and mount them in a high location to expand the mesh.
+## Choose an approach
 
-### Pre-Built Repeater Options
+<div class="mc-decision-grid">
+  <section class="mc-decision-card">
+    <h3>Packaged outdoor system</h3>
+    <p>Reduces fabrication, but batteries, antenna cables, mounting hardware, or the radio may still be separate.</p>
+    <p><strong>Check:</strong> exact contents, radio band, firmware target, connector path, weather rating, and USB access.</p>
+    <a class="md-button" href="#outdoor-system-to-compare">Review an example</a>
+  </section>
+  <section class="mc-decision-card">
+    <h3>Custom build</h3>
+    <p>Lets you choose each part, but you become responsible for electrical compatibility, weather sealing, mounting, and service access.</p>
+    <p><strong>Check:</strong> manufacturer limits, polarity, protection, wiring, thermal conditions, and safe recovery.</p>
+    <a class="md-button" href="#community-build-guides">See community build guides</a>
+  </section>
+</div>
 
-!!! warning "SenseCAP Solar Node P1 cable choice"
-    Buy the three base items below, then choose **one complete cable path**. The P1 has a factory RP-SMA antenna connection. SMA and RP-SMA are not interchangeable, so do not mix parts from the two paths. See [Seeed's LoRa antenna guide](https://wiki.seeedstudio.com/lora_antenna_selection_guide/).
+!!! tip "Start with the network need, not transmit power"
+    Site, height, antenna system, feed-line loss, local noise, neighbouring regions, power budget, and maintenance access all affect a repeater. Coordinate with the local community before selecting a high-power or long-reach path.
 
-| Product | Notes | Link |
-|---------|-------|------|
-| **SenseCAP Solar Node P1 w/o GPS & Battery** | Solar-powered communication node using the XIAO nRF52840 Plus + Wio-SX1262 LoRa module. Includes a 5W solar panel, IPX5 waterproofing. | [RobotShop (Canadian Store)](https://ca.robotshop.com/products/sensecap-solar-node-p1-meshtastic-w-o-gps-battery) |
-| **Batteries for SenseCAP Solar Node P1 (Local Store)** | Four button-top 18650 cells, required if you purchase the P1 model without GPS & Battery. | [Motion Power & Witt Supply Co.](https://mpandw.ca/products/button-top-eve-35v-house-made) |
-| **LoRa Antenna for SenseCAP Solar Node P1** | External antenna for the node. | [Amazon.ca](https://www.amazon.ca/dp/B08H8J6ZV6?ref=ppx_yo2ov_dt_b_fed_asin_title) |
+## Outdoor system to compare
 
-#### Choose one cable path
+The SenseCAP Solar Node P1 is one packaged enclosure to evaluate. It is not a complete recommendation: confirm every selected option and accessory against current manufacturer documentation.
 
-| Path | Buy | Notes |
-|------|-----|-------|
-| **Recommended: keep the factory pigtail** | [RP-SMA to N-Type cable](https://www.aliexpress.com/item/1005004652556159.html) | Select **Type 2 (RP-SMA)** and **30 cm**. This connects the factory RP-SMA port to the N-Type antenna. |
-| **Advanced: replace the factory pigtail** | **Both** the [I-PEX MHF1 to SMA bulkhead cable](https://www.digikey.ca/en/products/detail/seeed-technology-co-ltd/321990397/15277462) **and** the [SMA to N-Type cable](https://www.aliexpress.com/item/1005004652556159.html) | Select **Type 1 (SMA)** and **30 cm** for the second cable. Do not also buy the Type 2 cable. This requires opening the enclosure and restoring its weather seal. |
-| **Direct replacement** | One verified I-PEX MHF1 to N-Type bulkhead pigtail | This may replace both advanced-path cables. Confirm the connector, gender, length, mounting fit, and weather seal before ordering. |
+<div class="mc-table-wrap" markdown>
 
----
+| System item | What to verify | Source |
+|---|---|---|
+| SenseCAP Solar Node P1 | Exact Canadian-band model, supported board and repeater target, enclosure rating, included power parts, mount, and USB access | [RobotShop Canada](https://ca.robotshop.com/products/sensecap-solar-node-p1-meshtastic-w-o-gps-battery) |
+| Battery system | Chemistry, protection, capacity, temperature range, charger compatibility, and installation instructions | Product manufacturer documentation |
+| Antenna and cable | 902–928 MHz band, factory connector, cable loss, connector gender and polarity, mount, and weather sealing | [Seeed LoRa antenna guide](https://wiki.seeedstudio.com/lora_antenna_selection_guide/) |
 
-## Build Your Own
+</div>
 
-We have two DIY solar repeater builds. Choose based on the role the repeater will fill in the mesh.
+!!! warning "SMA and RP-SMA are not interchangeable"
+    Confirm the factory connector, gender, polarity, cable length and loss, antenna connector, and weather seal as one complete path. Do not order by connector appearance alone.
 
-### 300mW Solar Repeater (default)
+## Community build guides
 
-Use this for the vast majority of deployments. It is cheaper, simpler to assemble, and fully sufficient for most rooftop, gutter, and pole-mounted locations across the city.
+<div class="mc-decision-grid">
+  <section class="mc-decision-card" data-status="draft">
+    <h3>300 mW solar repeater</h3>
+    <p>A draft RAK-based build with a parts list, assembly stages, bench checks, and maintenance notes.</p>
+    <a class="md-button" href="../repeater-solar-300mw-diy-build/">Review the 300 mW build</a>
+  </section>
+  <section class="mc-decision-card" data-status="experimental">
+    <h3>Experimental 1 W solar repeater</h3>
+    <p>An unverified high-power design for a measured network need. It requires electrical, RF, and site review before anyone buys parts or starts work.</p>
+    <a class="md-button" href="../repeater-solar-1w-diy-build/">Review the experimental 1 W build</a>
+  </section>
+</div>
 
-[300mW Solar Repeater Build Guide](./repeater-solar-300mw-diy-build.md)
+These guides are community references, not verified bills of materials or a
+substitute for current manufacturer documentation and qualified review.
 
-### 1W Solar Repeater (backbone / long-reach)
+## Before building or buying
 
-Only build a 1W repeater when you have a specific reason to. Good reasons include backbone links between repeaters, and locations that have been proven through testing to need the extra output to reach far enough to connect to the rest of the mesh. Higher transmit power increases noise floor and battery draw.
+<ul class="mc-checklist">
+  <li>The exact radio board appears in the current official MeshCore flasher for the repeater role.</li>
+  <li>The radio and antenna are for the Canadian 902–928 MHz band.</li>
+  <li>The full power chain follows manufacturer limits and uses documented protection.</li>
+  <li>The antenna is attached before the radio can transmit.</li>
+  <li>Property permission, structural review, weather loads, cable routing, and electrical hazards are addressed.</li>
+  <li>The repeater can be recovered by USB after installation.</li>
+  <li>The local region and settings are confirmed in the repeater configurator.</li>
+  <li>A bench test and maintenance plan are ready before installation.</li>
+</ul>
 
-[1W Solar Repeater Build Guide](./repeater-solar-1w-diy-build.md)
+## Test it on the bench first
 
-!!! tip "Not sure which to build?"
-    Start with the **300mW** build. Reach out to the community first if you think you need a 1W, since location and antenna choice usually matter more than transmit power.
+A completed repeater should remain on the bench until it survives a reboot, retains its settings, sends an advert received by a nearby companion, passes a local routing test, and can still be recovered over USB. Then use the [mounting safety checklist](repeater-mounting-options.md).
 
----
+## Continue setup
+
+- [Flash and bench-test a repeater](../meshcore/flash-repeater.md)
+- [Choose an antenna and feed line](recommended-antenna.md)
+- [Plan a safe mount](repeater-mounting-options.md)

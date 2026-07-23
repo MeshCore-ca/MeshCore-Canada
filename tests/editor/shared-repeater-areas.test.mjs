@@ -153,7 +153,7 @@ test("configurator and editor expose generic cross-province behavior without mer
   assert.match(regionsScript, /Add any Canadian region/);
   assert.match(regionsScript, /All map boundaries remain separate\./);
   assert.match(editorHtml, /This editor changes Canadian map cells only\./);
-  assert.match(editorHtml, /Choose cross-province and U\.S\. paths in the configurator\./);
+  assert.match(editorHtml, /(?:Choose|Set) cross-province and U\.S\. paths in the configurator\./);
 });
 
 test("only traffic-evidenced neighbouring paths are offered and none is automatic geography", () => {

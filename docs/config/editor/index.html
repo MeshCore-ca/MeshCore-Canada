@@ -9,11 +9,13 @@
   <link rel="icon" href="../../assets/images/favicon.png">
   <title>Region boundary editor · MeshCore Canada</title>
   <link rel="stylesheet" href="../../assets/regions/vendor/leaflet/leaflet.css">
-  <link rel="stylesheet" href="./editor.css">
+  <link rel="stylesheet" href="./editor.css?v=20260722-2">
   <script defer src="../../assets/regions/vendor/leaflet/leaflet.js"></script>
-  <script type="module" src="./app.js"></script>
+  <script defer src="../../assets/javascripts/i18n-runtime.js?v=20260723-1"></script>
+  <script type="module" src="./app.js?v=20260722-2"></script>
 </head>
 <body class="editor-page">
+  <a class="skip-link" href="#geography-list">Skip the map and choose a municipality</a>
   <header class="app-header">
     <div class="brand-lockup">
       <div class="brand-mark small" aria-hidden="true">MC</div>
@@ -22,50 +24,101 @@
         <h1>Region boundary editor</h1>
       </div>
     </div>
+    <nav class="utility-nav" aria-label="Editor">
+      <a class="language-link" data-editor-language="en" href="./" lang="en" hreflang="en">English</a>
+      <a class="language-link" data-editor-language="fr" href="../../fr/config/editor/" lang="fr" hreflang="fr">Français</a>
+      <span class="utility-nav__divider" aria-hidden="true"></span>
+      <a href="../../">Home</a>
+      <a href="../standard/">Standard</a>
+      <a href="../../start/">Help</a>
+      <a href="../">Exit editor</a>
+    </nav>
   </header>
 
   <main class="editor-layout">
     <aside class="editor-sidebar" aria-label="Boundary editing controls">
       <section class="panel intro-panel">
-        <p class="step-label">Draft</p>
-        <h2>Adjust region boundaries</h2>
-        <p class="muted compact">Submit a boundary change for review. Nothing changes until merged.</p>
+        <p class="step-label">Region proposal</p>
+        <h2>Suggest a region change</h2>
+        <p>Submitting creates a public proposal for review; it does not change
+        the map.</p>
+        <p class="hint compact"><a href="../standard/">Read the region rules</a></p>
       </section>
 
-      <section class="panel">
-        <h2>1. Choose an area</h2>
+      <section class="panel" id="proposal-type-panel">
+        <h2>1. Choose proposal type</h2>
+        <fieldset class="proposal-type-options">
+          <legend class="visually-hidden">Proposal type</legend>
+          <label class="choice-card">
+            <input type="radio" name="proposal-type" value="boundary">
+            <span><strong>Adjust an existing boundary</strong><small>Move official census areas to an existing region.</small></span>
+          </label>
+          <label class="choice-card advanced-choice">
+            <input type="radio" name="proposal-type" value="new-region">
+            <span><strong>Advanced: propose a new region/subregion</strong><small>Define a new public name, tag, cells, and anchor for review.</small></span>
+          </label>
+        </fieldset>
+      </section>
+
+      <section class="panel" id="area-panel" aria-disabled="true">
+        <h2>2. Choose an area</h2>
         <label for="province-select">Province or territory</label>
-        <select id="province-select"></select>
+        <select id="province-select" disabled></select>
         <p id="load-status" class="status-line" role="status" aria-live="polite">Loading editor…</p>
+        <p id="draft-status" class="draft-status" role="status" aria-live="polite">Choose a proposal type to begin.</p>
+        <button id="discard-draft-button" class="inline-retry" type="button" hidden>Discard saved draft</button>
       </section>
 
-      <section class="panel">
-        <h2>2. Choose a region</h2>
-        <label for="target-select">Move selected cells to</label>
-        <select id="target-select" disabled>
-          <option value="">Choose a target region</option>
-        </select>
+      <section class="panel" id="build-panel" aria-disabled="true">
+        <h2>3. Build the proposal</h2>
+        <div id="existing-target-fields" hidden>
+          <label for="target-select">Move selected areas to</label>
+          <select id="target-select" disabled><option value="">Choose a target region</option></select>
+        </div>
         <div id="new-region-fields" class="new-region-fields" hidden>
           <label for="new-region-name">New region name</label>
-          <input id="new-region-name" maxlength="80" placeholder="Laval">
+          <input id="new-region-name" maxlength="80" placeholder="Laval" aria-describedby="new-region-name-error">
+          <p id="new-region-name-error" class="field-message" aria-live="polite"></p>
           <label for="new-region-tag">Short tag</label>
-          <input id="new-region-tag" maxlength="29" inputmode="latin" spellcheck="false" placeholder="laval">
-          <p class="hint">Use a short, unique tag. Select the cells below, then choose an anchor.</p>
+          <input id="new-region-tag" maxlength="29" inputmode="latin" spellcheck="false" placeholder="laval" aria-describedby="new-region-tag-hint new-region-tag-error">
+          <p id="new-region-tag-hint" class="hint">Lowercase letters, numbers and hyphens; up to 29 characters.</p>
+          <p id="new-region-tag-error" class="field-message" aria-live="polite"></p>
+          <div id="tag-suggestion-row" class="suggestion-row" hidden>
+            <span>Suggested tag: <code id="tag-suggestion"></code></span>
+            <button id="use-tag-suggestion" class="inline-retry" type="button">Use suggestion</button>
+          </div>
+          <div class="hierarchy-card">
+            <strong>Proposed hierarchy</strong>
+            <p id="derived-parent">Add cells to derive the parent.</p>
+            <p id="hierarchy-path" class="hierarchy-path">Canada › Province or territory › Proposed region</p>
+            <p class="hint">The parent comes from the shared ancestry of the selected cells and is verified by the server.</p>
+          </div>
+        </div>
+        <div id="geography-list" class="geography-list" tabindex="-1">
+          <label for="municipality-select">Municipality or census subdivision</label>
+          <select id="municipality-select" disabled><option value="">Choose a municipality</option></select>
+          <button id="move-municipality-button" class="button primary full" type="button" disabled>Add whole municipality</button>
+          <p class="hint">Start with a whole municipality. You do not need the map to submit a proposal.</p>
         </div>
         <div id="shared-area-note" class="shared-area-note">
           <strong>Repeater paths</strong>
-          <span>This editor changes Canadian map cells only. Choose cross-province and U.S. paths in the configurator.</span>
+          <span>This editor changes Canadian map cells only. Set cross-province and U.S. paths in the configurator.</span>
           <a href="../standard/#cross-province-repeater-areas">Read the rule</a>
         </div>
-        <div class="segmented" aria-label="Editing mode">
-          <button id="pan-mode" class="segment active" type="button" aria-pressed="true">Pan map</button>
-          <button id="paint-mode" class="segment" type="button" aria-pressed="false">Paint cells</button>
-        </div>
-        <p class="hint">Click a cell, or choose Paint and drag.</p>
+        <details class="advanced-map-controls">
+          <summary>Advanced: split a municipality by census cell</summary>
+          <p class="hint">Use individual cells only when a full municipality does not fit the boundary.</p>
+          <label class="acknowledgement"><input id="advanced-paint-ack" type="checkbox"><span>This creates a finer boundary for review.</span></label>
+          <div class="segmented three-way" aria-label="Map editing mode">
+            <button id="pan-mode" class="segment" type="button" aria-pressed="false">Pan</button>
+            <button id="inspect-mode" class="segment active" type="button" aria-pressed="true">Inspect</button>
+            <button id="paint-mode" class="segment" type="button" aria-pressed="false" disabled>Paint</button>
+          </div>
+        </details>
       </section>
 
       <section class="panel selected-panel">
-        <h2>Selected cell</h2>
+        <h2>Map inspection</h2>
         <dl id="cell-details" class="details-list">
           <div><dt>Area</dt><dd>Select a cell on the map</dd></div>
           <div><dt>Municipality</dt><dd>—</dd></div>
@@ -73,13 +126,17 @@
           <div><dt>Region anchor</dt><dd>—</dd></div>
         </dl>
         <button id="municipality-button" class="button secondary full" type="button" disabled>Move entire municipality</button>
-        <button id="anchor-button" class="button secondary full anchor-button" type="button" hidden disabled>Use selected cell as anchor</button>
-        <p id="anchor-status" class="hint" hidden>Choose one changed cell near the centre of the new region.</p>
+        <div id="anchor-controls" hidden>
+          <label for="anchor-select">New region anchor</label>
+          <select id="anchor-select" disabled><option value="">Choose a changed cell</option></select>
+          <button id="anchor-button" class="button secondary full anchor-button" type="button" disabled>Confirm this anchor</button>
+          <p id="anchor-status" class="hint">Choose a changed cell near the centre, then confirm it. Existing fixed anchors cannot be used.</p>
+        </div>
       </section>
 
       <section class="panel">
         <div class="panel-title-row">
-          <h2>3. Review</h2>
+          <h2>4. Review</h2>
           <span id="change-count" class="count-badge">0 changes</span>
         </div>
         <div class="button-row">
@@ -91,15 +148,37 @@
           <button id="before-view" class="segment" type="button" aria-pressed="false">Before</button>
           <button id="after-view" class="segment active" type="button" aria-pressed="true">After</button>
         </div>
+        <div id="text-summary" class="text-summary"><h3>Proposal summary</h3><p>Choose a proposal type and geography to build a text review.</p></div>
+        <div class="changes-table-shell" tabindex="0" aria-label="Proposed ownership changes">
+          <table class="changes-table">
+            <caption>Before and after by official census area</caption>
+            <thead><tr><th scope="col">Municipality / area</th><th scope="col">Before</th><th scope="col">After</th><th scope="col">Action</th></tr></thead>
+            <tbody id="changes-table-body"><tr><td colspan="4">No proposed changes.</td></tr></tbody>
+          </table>
+        </div>
+        <p id="changes-table-note" class="hint"></p>
         <label for="submitted-by">Submitted by <span class="optional">optional</span></label>
-        <input id="submitted-by" maxlength="80" autocomplete="name">
+        <input id="submitted-by" maxlength="80" autocomplete="name" aria-describedby="identity-note">
+        <p id="identity-note" class="hint">This field is never stored in the local draft.</p>
         <label for="reason">Reason</label>
         <textarea id="reason" maxlength="1000" rows="3" placeholder="Why should this cell move?" required></textarea>
+        <div class="readiness-card">
+          <h3>Ready to submit?</h3>
+          <ul id="readiness-list" class="readiness-list">
+            <li data-check="type">Choose a proposal type</li>
+            <li data-check="area">Choose a province or territory</li>
+            <li data-check="target">Choose or define the destination region</li>
+            <li data-check="changes">Add at least one official census cell</li>
+            <li data-check="anchor">Confirm an anchor for a new region</li>
+            <li data-check="reason">Explain the reason</li>
+            <li data-check="anti-spam">Complete the anti-spam check</li>
+          </ul>
+        </div>
         <div class="submission-trap" aria-hidden="true">
           <label for="website">Website</label>
           <input id="website" name="website" tabindex="-1" autocomplete="off">
         </div>
-        <div id="turnstile-container" class="turnstile-container" aria-label="Anti-spam check"></div>
+        <div id="turnstile-container" class="turnstile-container" role="group" aria-label="Anti-spam check"></div>
         <p id="anti-spam-status" class="anti-spam-status" role="status" aria-live="polite">Loading check…</p>
         <button id="anti-spam-retry" class="inline-retry" type="button" hidden>Retry check</button>
         <div id="validation-message" class="validation-message" role="status" aria-live="polite"></div>
@@ -108,21 +187,33 @@
           <button id="submit-button" class="button primary full" type="button" disabled>Submit for review</button>
           <button id="export-button" class="button secondary full" type="button" disabled>Download proposal</button>
         </div>
-        <p class="hint">No account needed. Changes require review.</p>
+        <p class="hint">No account needed. Submission starts public review; it does not change the map.</p>
       </section>
     </aside>
 
     <section class="map-shell" aria-label="Region map editor">
       <div class="map-toolbar">
         <span id="map-heading">Canada</span>
-        <span class="map-help">Census cells · yellow means changed</span>
+        <span class="map-help">Inspect cells or use the municipality list; yellow means changed</span>
       </div>
-      <div id="editor-map" role="application" aria-label="Interactive region boundary map"></div>
+      <div id="editor-map" role="region" aria-label="Optional interactive region boundary map" aria-describedby="map-instructions"></div>
+      <p id="map-instructions" class="visually-hidden">The map is optional. Use the municipality list in step three for a full non-map flow. In Inspect mode, select a cell to read its details. Enable the advanced acknowledgement before painting individual cells.</p>
       <div class="map-legend" aria-hidden="true">
         <span><i class="legend-swatch current"></i> Current region</span>
         <span><i class="legend-swatch changed"></i> Proposed change</span>
       </div>
     </section>
   </main>
+  <div id="discard-dialog" class="dialog-backdrop" hidden>
+    <section class="discard-dialog" role="dialog" aria-modal="true" aria-labelledby="discard-dialog-title" aria-describedby="discard-dialog-message">
+      <h2 id="discard-dialog-title">Discard this draft?</h2>
+      <p id="discard-dialog-message"></p>
+      <p id="discard-dialog-context" class="hint"></p>
+      <div class="dialog-actions">
+        <button id="discard-dialog-cancel" class="button secondary" type="button">Keep editing</button>
+        <button id="discard-dialog-confirm" class="button danger" type="button">Discard draft</button>
+      </div>
+    </section>
+  </div>
 </body>
 </html>

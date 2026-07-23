@@ -1,10 +1,25 @@
 ---
 title: Region definition and authority
+description: The public rules, sources, authority, and change process for Canadian MeshCore regions.
+audience:
+  - repeater-operator
+  - region-maintainer
+task: understand-region-standard
+scope: canada-baseline
+status: verified
+owner: region-maintainers
+last_reviewed: 2026-07-19
+review_by: 2026-10-19
+tested_with:
+  region_schema: meshcore-canada-regions-v2
+difficulty: advanced
 ---
 
 # MeshCore Canada region definition and authority
 
-This standard defines one Canada-wide region system: how every location is assigned, how boundaries are generated, how large regions split, who may approve changes, and which source wins when sources disagree.
+This standard defines one Canada-wide region system: how locations are assigned,
+how boundaries are generated, how regions split, who approves changes, and how
+source conflicts are resolved.
 
 | Standard | Value |
 | --- | --- |
@@ -25,7 +40,10 @@ MeshCore Canada maintains **one geographic partition**. Every part of Canada bel
 
 The published MeshCore Canada registry is the single source of truth. A boundary is not stored as a hand-drawn polygon. It is stored as ownership of official Statistics Canada geographic cells, then regenerated from those cells. Census Subdivisions keep a municipality or municipal equivalent together by default; Dissemination Areas remain the exact geometry used to publish the shared edge.
 
-Only leaves own land. Provinces, territories, and larger region records are grouping nodes derived from their children. Raw MeshMapper polygons, strategy circles, and event areas are never published as regions. A shared repeater area is configuration metadata, not another map layer.
+Only leaves own land. Provinces, territories, and larger region records are
+grouping nodes built from their children. Raw MeshMapper polygons, strategy
+circles, and event areas are not published as regions. A shared repeater area
+is configuration metadata, not another map layer.
 
 ## Canonical model
 
@@ -38,7 +56,10 @@ Only leaves own land. Provinces, territories, and larger region records are grou
 | Region | Stable operating area | Exhaustive within its jurisdiction |
 | Subregion | Optional split of a region | Exhaustive within its parent; never overlaps a sibling |
 
-A region with no children is a geographic leaf. When it is split, all of its cells move to subregions and the former leaf becomes a grouping node. It has no independent fill, resolver ownership, or additional command scope. A location resolves to one and only one leaf.
+A region with no children is a geographic leaf. When split, its cells move to
+subregions and the former leaf becomes a grouping node. It has no independent
+fill, resolver ownership, or extra command scope. A location resolves to one
+leaf.
 
 Every record has separate fields for:
 
@@ -397,7 +418,7 @@ A geographic release fails unless all of these are true:
 - shared-area names never enter the on-air tree; the complete member paths fit every firmware and serial-line budget;
 - every neighbouring path is non-geographic, optional, backed by aggregate route evidence, and uses a documented or explicitly provisional external hierarchy;
 - neighbouring paths never own Canadian cells, resolve from a map point, or appear as U.S. boundary geometry;
-- every resolver test point returns exactly one leaf;
+- every resolver test point returns one and only one leaf;
 - every active region is contiguous by shared land edge, or has a documented island/MultiPolygon exception;
 - every active tag is globally unique and within the firmware byte limit;
 - every old tag resolves to an active record, a deprecated record, or a tombstone;

@@ -1,75 +1,67 @@
-# How to Request Changes to MeshCore.ca
-
-Anyone can contribute an idea, correction, local observation, build note, or documentation request. You do not need to know how the website is built.
-
-## Easiest option: use the submission helper
-
-The [Share an Idea](submit-idea.md) page asks plain-language questions and prepares a structured submission for you. Review the result, complete the anti-spam check, and submit it directly without a GitHub account. You can also:
-
-- copy it into the MeshCore Canada forum;
-- paste it into the community Discord; or
-- open the prepared form manually if you already use GitHub.
-
-The direct submission creates a public GitHub issue for maintainer review. No code, Git commands, radio settings, GitHub account, or perfect terminology are required.
-
+---
+title: Contribute to MeshCore Canada
+description: Choose the simplest way to share an idea, update a community, correct a page, or contribute code.
+audience:
+  - community-member
+  - documentation-contributor
+task: choose-contribution
+scope: canada-baseline
+status: verified
+owner: maintainers
+author: MeshCore Canada maintainers
+last_reviewed: 2026-07-22
+review_by: 2027-01-19
+tested_with:
+  issue_forms: f608cfe
+difficulty: beginner
+estimated_time: 2-15 minutes
 ---
 
-## GitHub issue templates
+# Contribute to MeshCore Canada
 
-If you are comfortable signing in to GitHub, use one of the repository's guided issue forms.
+Choose how you want to help. Most options do not require Git or GitHub
+experience.
 
-You do not need to know Git, GitHub, or how to edit the website. Just follow the steps below.
+<div class="grid cards" markdown>
 
----
+-   **Share an idea**
 
-### 1. Go to the Issues page
+    Report something missing, confusing, or difficult. No GitHub account is
+    needed.
 
-Visit the MeshCore Canada GitHub repository and click **Issues**.
+    [:octicons-arrow-right-24: Share an idea](submit-idea.md)
 
-Link: <https://github.com/MeshCore-ca/MeshCore-Canada/issues>
+-   **Add or update a community**
 
----
+    Share the community's name, area, contacts, language, and local settings.
 
-### 2. Click "New Issue"
+    [:octicons-arrow-right-24: Add a community](https://github.com/MeshCore-ca/MeshCore-Canada/issues/new?template=add_new_community.yml)
+    · [:octicons-arrow-right-24: Update a community](https://github.com/MeshCore-ca/MeshCore-Canada/issues/new?template=update_existing_community.yml)
 
-Choose the template that matches what you want to do:
+-   **Correct a page**
 
-- **Add a New Community**
-- **Update Existing Community**
-- **Fix a Mistake / Small Correction**
-- **Share a Community Idea**
-- **General Request**
+    Report a factual error, broken link, typo, or unclear instruction.
 
----
+    [:octicons-arrow-right-24: Report a correction](https://github.com/MeshCore-ca/MeshCore-Canada/issues/new?template=fix_correction.yml)
 
-### 3. Fill out the form
+-   **Propose a region change**
 
-Provide as much detail as possible.
+    Suggest a new region or a boundary change.
 
----
+    [:octicons-arrow-right-24: Open the region editor](config/editor/index.html)
 
-### 4. Submit the issue
+-   **Contribute on GitHub**
 
-A maintainer will:
+    Improve a guide or work on an open issue.
 
-1. Review the request  
-2. Make the change  
-3. Close the issue when complete  
+    [:octicons-mark-github-24: Open the repository](https://github.com/MeshCore-ca/MeshCore-Canada)
 
-If we need more information, we’ll comment on the ticket.
+</div>
 
----
+!!! warning "Do not share secrets"
+    Submissions are public. Remove passwords, access tokens, private keys,
+    private addresses, exact private coordinates, and sensitive command output.
 
-## Advanced contributions
+## Need help choosing?
 
-If you know GitHub and want to edit the markdown files directly:
-
-1. Fork the repo  
-2. Edit the relevant file in `docs/provinces/`  
-3. Open a pull request  
-
----
-
-## Thank you
-
-MeshCore.ca is a community-maintained directory, and contributions from all regions help keep the network growing across Canada.
+Not sure where to start? [Share an idea](submit-idea.md).

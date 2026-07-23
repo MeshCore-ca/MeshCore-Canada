@@ -1,47 +1,77 @@
-# MQTT Data Collection & Access
+---
+title: Observer data and privacy
+description: See what an observer sends, where it appears, and how to keep private information out of it.
+audience:
+  - observer-operators
+  - community-members
+task: understand-observer-data
+scope: canada-baseline
+status: draft
+owner: meshcore-canada
+last_reviewed: 2026-07-22
+review_by: 2026-10-19
+difficulty: beginner
+estimated_time: 6 minutes
+destructive: false
+page_styles:
+  - assets/styles/analyzer.css?v=20260722-2
+---
 
-!!! warning "Treat MeshCore RF traffic as public data"
-    MeshCore traffic is intended for shared mesh use, and different networks may use different presets or frequencies (including non-default settings). All channels that use a shared public key (and private keys) should be considered inherently insecure. Any node transmitting MeshCore packets over matching settings can be heard by observers on that mesh, not just one published default profile. Traffic forwarded over MQTT through this path should be treated as potentially public. Do not transmit names, locations, notes, or other personal information unless you are comfortable with that information being stored and viewable publicly. Assume that even with encryption on a private channel / setting can potentially be collected and decrypted by anyone with the means and know-how to do so.
+# Observer data and privacy
 
-## What We Collect
+Treat anything heard by an observer as public. An observer does not decrypt private messages, but it can forward packet details and status information. Do not put private names, locations, credentials, or other sensitive information in MeshCore messages.
 
-MeshCore Canada MQTT receives packet data from observer nodes that capture MeshCore packets and forward telemetry from matched channels.
+<div class="mc-method-fit">
+  <div><strong>Observer</strong>Sends packet data and status from the radio settings it uses.</div>
+  <div><strong>CoreScope</strong>Can show observer, packet, and map data publicly.</div>
+  <div><strong>Broker</strong>Direct subscriptions are restricted, but data shown in CoreScope is still public.</div>
+</div>
 
-Observers listen for all MeshCore traffic they can hear on the channels and presets they are configured for. If a packet is heard by an observer and that observer has packet publishing enabled, that traffic can be sent to the MeshCore Canada MQTT brokers.
+## Policy summary
 
-## Where Data Goes
+| Question | Answer |
+|---|---|
+| Who manages this? | MeshCore Canada infrastructure administrators |
+| Where can I ask questions? | [MeshCore Canada forum](https://forum.meshcore.ca/) |
+| How long is data kept? | A public retention period has not yet been published |
 
-| Step | What happens |
-|------|--------------|
-| Radio traffic | Nodes transmit MeshCore packets on the frequencies and settings configured for their local mesh and presets. |
-| Observer capture | MeshCore Canada observers and other authorized observers listen to all traffic they can hear on their configured channels. |
-| MQTT publish | Observer paths publish packet data to MeshCore Canada MQTT infrastructure. |
-| Storage and display | Data is stored on MeshCore Canada infrastructure and may be displayed by Beacon, CoreScope, and other public websites operated by MeshCore Canada or approved third-party operators. |
+Do not assume data will be deleted after a certain time. Ask the infrastructure team if you need a retention or deletion timeline.
 
-## MQTT Subscription Access
+## Data flow
 
-Direct MQTT subscription access is not handed out to everyone. It is limited to local mesh administrators, approved tools, and people approved by MeshCore Canada administration.
+<ol class="mc-analyzer-flow">
+  <li><strong>Radio packet</strong><span>transmitted on the configured mesh</span></li>
+  <li><strong>Observer</strong><span>hears and forwards telemetry</span></li>
+  <li><strong>Infrastructure</strong><span>receives and may store it</span></li>
+  <li><strong>CoreScope</strong><span>may display it publicly</span></li>
+</ol>
 
-Even when direct broker subscription access is limited, the data can still be viewable by everyone through Beacon, CoreScope, and other public websites that consume the MQTT feed using approved MQTT read accounts.
+Changing the radio preset changes what the observer can hear. Public and private channel choices do not make the surrounding packet telemetry private.
 
-## MQTT Read Access
+## Collection, access, and retention
 
-| Tool or service | Operator | Purpose |
-|-----------------|----------|---------|
-| Beacon | MeshCore Canada operators | Public viewer for MeshCore packet data. |
-| CoreScope (`live.meshcore.ca`) | MeshCore Canada operators | Public observer, packet, and map tools. |
+| Data | Why it is used | Where it may appear | Who can access it | Retention |
+|---|---|---|---|---|
+| Observer status | Show whether an observer is online | CoreScope | Public viewers; infrastructure operators | Not publicly specified |
+| Heard packet telemetry | Show mesh activity and help diagnose coverage | CoreScope packet views and maps | Public viewers; approved subscribers; infrastructure operators | Not publicly specified |
+| Location code | Group an observer near a known place | Observer lists, topics, maps | Public viewers and broker users | Follows observer/packet retention |
+| Optional owner details | Help identify a service | Integration-dependent status data | May reach infrastructure and CoreScope | Not publicly specified |
+| Broker credentials | Authenticate the observer | Should remain only in the local integration | Local operator and authentication service | Never include in public diagnostics |
 
-## Infrastructure Administrators
+MeshCore Canada does not offer general direct broker subscriptions. Direct access is limited to CoreScope, local mesh administrators, and people approved by the infrastructure administrators.
 
-The MeshCore Canada infrastructure administrators control the MQTT brokers and related infrastructure.
+## Where it appears
 
-| Administrator | Profile |
-|---------------|---------|
-| Mr. Alderson | [github.com/MrAlders0n](https://github.com/MrAlders0n) |
-| Ded | [github.com/446564](https://github.com/446564) |
-| n30nex | [github.com/n30nex](https://github.com/n30nex) |
-| Kranic | [forum.meshcore.ca/u/djkranic](https://forum.meshcore.ca/u/djkranic) |
+[CoreScope](https://live.meshcore.ca/) shows observer, packet, and map information. Other approved MeshCore Canada services may use the same feed.
 
-Questions about privacy, MQTT access, or the MeshCore Canada project should be directed to these administrators.
+Broker access controls do not make information private once CoreScope displays it.
 
-General discussion and support is also available on the forum at [https://forum.meshcore.ca/](https://forum.meshcore.ca/).
+## Before you operate an observer
+
+- [ ] Tell people using the local mesh that an observer is active.
+- [ ] Use a broad observer name, not a home address or person's name.
+- [ ] Leave optional owner email fields blank unless they are operationally needed.
+- [ ] Never paste Wi-Fi passwords, MQTT tokens, private keys, or unredacted logs into support messages.
+- [ ] Read the method's verification and recovery steps before making changes.
+
+Return to [Choose an observer setup](intro.md), or see [what to remove before asking for help](troubleshooting.md#what-to-share-when-asking-for-help).

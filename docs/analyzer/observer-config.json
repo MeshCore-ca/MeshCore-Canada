@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "version": "2026.07",
+  "last_reviewed": "2026-07-19",
+  "network": {
+    "preset": "USA/Canada (Recommended)",
+    "frequency_mhz": 910.525,
+    "bandwidth_khz": 62.5,
+    "spreading_factor": 7,
+    "coding_rate": 5,
+    "path_hash_mode": 2,
+    "path_hash_bytes": 3
+  },
+  "brokers": [
+    {
+      "id": "primary",
+      "name": "MeshCore Canada primary",
+      "host": "mqtt1.meshcore.ca",
+      "port": 443,
+      "transport": "websockets",
+      "tls": true,
+      "verify_tls": true,
+      "authentication": "MeshCore JWT token",
+      "token_audience": "mqtt1.meshcore.ca"
+    },
+    {
+      "id": "backup",
+      "name": "MeshCore Canada backup",
+      "host": "mqtt2.meshcore.ca",
+      "port": 443,
+      "transport": "websockets",
+      "tls": true,
+      "verify_tls": true,
+      "authentication": "MeshCore JWT token",
+      "token_audience": "mqtt2.meshcore.ca"
+    }
+  ],
+  "topics": {
+    "packets": "meshcore/{IATA}/{PUBLIC_KEY}/packets",
+    "status": "meshcore/{IATA}/{PUBLIC_KEY}/status"
+  },
+  "verification": {
+    "observers": "https://live.meshcore.ca/#/observers",
+    "packets": "https://live.meshcore.ca/#/packets",
+    "map": "https://live.meshcore.ca/#/map"
+  },
+  "location_codes": "location-codes.json"
+}

@@ -1,0 +1,1189 @@
+{
+  "$schema": "../schemas/community-directory.schema.json",
+  "schema": "meshcore-canada-communities/v1",
+  "metadata": {
+    "owner": "directory-stewards",
+    "migrated_at": "2026-07-19",
+    "source_revision": "a47dfbc",
+    "review_by": "2027-01-15",
+    "update_route": "../submit-idea.md"
+  },
+  "national_defaults": {
+    "radio_preset": "USA/Canada (Recommended)",
+    "raw_radio": {
+      "frequency_mhz": 910.525,
+      "bandwidth_khz": 62.5,
+      "spreading_factor": 7,
+      "coding_rate": 5
+    },
+    "path_hash_mode": "3-byte",
+    "cli_path_setting": "set path.hash.mode 2"
+  },
+  "directory_pages": [
+    {
+      "slug": "british-columbia",
+      "title": "British Columbia",
+      "codes": [
+        "BC"
+      ],
+      "aliases": [
+        "BC"
+      ]
+    },
+    {
+      "slug": "alberta",
+      "title": "Alberta",
+      "codes": [
+        "AB"
+      ],
+      "aliases": [
+        "AB"
+      ]
+    },
+    {
+      "slug": "saskatchewan",
+      "title": "Saskatchewan",
+      "codes": [
+        "SK"
+      ],
+      "aliases": [
+        "SK"
+      ]
+    },
+    {
+      "slug": "manitoba",
+      "title": "Manitoba",
+      "codes": [
+        "MB"
+      ],
+      "aliases": [
+        "MB"
+      ]
+    },
+    {
+      "slug": "ontario",
+      "title": "Ontario",
+      "codes": [
+        "ON"
+      ],
+      "aliases": [
+        "ON"
+      ]
+    },
+    {
+      "slug": "quebec",
+      "title": "Quebec",
+      "codes": [
+        "QC"
+      ],
+      "aliases": [
+        "Québec",
+        "QC"
+      ]
+    },
+    {
+      "slug": "new-brunswick",
+      "title": "New Brunswick",
+      "codes": [
+        "NB"
+      ],
+      "aliases": [
+        "NB"
+      ]
+    },
+    {
+      "slug": "nova-scotia",
+      "title": "Nova Scotia",
+      "codes": [
+        "NS"
+      ],
+      "aliases": [
+        "NS"
+      ]
+    },
+    {
+      "slug": "prince-edward-island",
+      "title": "Prince Edward Island",
+      "codes": [
+        "PE"
+      ],
+      "aliases": [
+        "PEI",
+        "PE"
+      ]
+    },
+    {
+      "slug": "newfoundland-and-labrador",
+      "title": "Newfoundland and Labrador",
+      "codes": [
+        "NL"
+      ],
+      "aliases": [
+        "Newfoundland",
+        "Labrador",
+        "NL"
+      ]
+    },
+    {
+      "slug": "territories",
+      "title": "the territories",
+      "codes": [
+        "YT",
+        "NT",
+        "NU"
+      ],
+      "aliases": [
+        "Yukon",
+        "Northwest Territories",
+        "Nunavut",
+        "YT",
+        "NT",
+        "NU"
+      ]
+    }
+  ],
+  "province_contacts": [
+    {
+      "id": "alberta-meshcore-canada-telegram",
+      "province": "AB",
+      "type": "telegram",
+      "label": "Alberta topic in MeshCore Canada",
+      "url": "https://t.me/MeshCoreCAN",
+      "health": "needs-review",
+      "last_checked": null
+    }
+  ],
+  "communities": [
+    {
+      "id": "salish-mesh",
+      "name": "Salish Mesh",
+      "province": "BC",
+      "service_area": "Salish Sea and surrounding area",
+      "places": [
+        "Salish Sea"
+      ],
+      "aliases": [
+        "Salish Mesh"
+      ],
+      "status": "active",
+      "languages": [],
+      "location": {
+        "latitude": null,
+        "longitude": null,
+        "precision": "service-area"
+      },
+      "settings": {
+        "inherit_national": true,
+        "overrides": {}
+      },
+      "contacts": [
+        {
+          "type": "website",
+          "label": "Salish Mesh website",
+          "url": "https://salishmesh.net/",
+          "health": "needs-review",
+          "last_checked": null
+        }
+      ],
+      "owner": null,
+      "verified_at": null,
+      "verify_by": null,
+      "canonical_route": "/provinces/british-columbia/#community-salish-mesh"
+    },
+    {
+      "id": "alberta-meshcore-networks",
+      "name": "Alberta MeshCore Networks",
+      "province": "AB",
+      "service_area": "Alberta",
+      "summary": "Building Alberta's community-operated off-grid LoRa mesh network",
+      "places": [
+        "Airdrie",
+        "Calgary",
+        "Edmonton",
+        "Lethbridge"
+      ],
+      "aliases": [
+        "AlbertaMesh",
+        "AlbertaMesh.ca",
+        "Alberta MeshCore"
+      ],
+      "status": "active",
+      "languages": [],
+      "location": {
+        "latitude": null,
+        "longitude": null,
+        "precision": "service-area"
+      },
+      "settings": {
+        "inherit_national": true,
+        "overrides": {}
+      },
+      "contacts": [
+        {
+          "type": "website",
+          "label": "AlbertaMesh.ca",
+          "url": "https://albertamesh.ca/",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "discord",
+          "label": "Alberta MeshCore Discord",
+          "url": "https://discord.gg/CznDhsRWnJ",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "website",
+          "label": "Airdrie regional page",
+          "url": "https://albertamesh.ca/airdrie/",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "website",
+          "label": "Calgary regional page",
+          "url": "https://albertamesh.ca/calgary/",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "website",
+          "label": "Edmonton regional page",
+          "url": "https://albertamesh.ca/edmonton/",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "website",
+          "label": "Lethbridge regional page",
+          "url": "https://albertamesh.ca/lethbridge/",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "website",
+          "label": "Why MeshCore?",
+          "url": "https://albertamesh.ca/why-meshcore/",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "website",
+          "label": "Monitoring tools",
+          "url": "https://albertamesh.ca/monitoring-tools/",
+          "health": "needs-review",
+          "last_checked": null
+        }
+      ],
+      "owner": null,
+      "verified_at": null,
+      "verify_by": null,
+      "canonical_route": "/provinces/alberta/#community-alberta-meshcore-networks"
+    },
+    {
+      "id": "airdrie-meshcore-network",
+      "name": "Airdrie MeshCore Network",
+      "province": "AB",
+      "service_area": "Airdrie and Calgary",
+      "summary": "Uses the YYC regional identifier shared with the Calgary regional network",
+      "places": [
+        "Airdrie",
+        "Calgary"
+      ],
+      "aliases": [
+        "AlbertaMesh Airdrie",
+        "YYC"
+      ],
+      "status": "active",
+      "languages": [],
+      "location": {
+        "latitude": 51.2812,
+        "longitude": -113.99718,
+        "precision": "approximate"
+      },
+      "settings": {
+        "inherit_national": true,
+        "overrides": {}
+      },
+      "contacts": [
+        {
+          "type": "website",
+          "label": "Airdrie MeshCore Network",
+          "url": "https://albertamesh.ca/airdrie/",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "website",
+          "label": "Airdrie configuration guide",
+          "url": "https://albertamesh.ca/airdrie/configuration/",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "discord",
+          "label": "Alberta MeshCore Discord",
+          "url": "https://discord.gg/CznDhsRWnJ",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "meshmapper",
+          "label": "Airdrie network map",
+          "url": "https://yyc.meshmapper.net/?lat=51.28120&lon=-113.99718&zoom=13.43",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "website",
+          "label": "WAeV live map",
+          "url": "https://waev.app/#/live-map/@51.28107,-113.99966,14.47z",
+          "health": "needs-review",
+          "last_checked": null
+        }
+      ],
+      "owner": null,
+      "verified_at": null,
+      "verify_by": null,
+      "canonical_route": "/provinces/alberta/#community-airdrie-meshcore-network"
+    },
+    {
+      "id": "calgary-area-meshcore",
+      "name": "Calgary and Area MeshCore",
+      "province": "AB",
+      "service_area": "Calgary and area",
+      "places": [
+        "Calgary"
+      ],
+      "aliases": [
+        "Calgary and area",
+        "YYC"
+      ],
+      "status": "active",
+      "languages": [],
+      "location": {
+        "latitude": null,
+        "longitude": null,
+        "precision": "service-area"
+      },
+      "settings": {
+        "inherit_national": true,
+        "overrides": {}
+      },
+      "contacts": [
+        {
+          "type": "telegram",
+          "label": "Calgary topic in Mesh Alberta",
+          "url": "https://t.me/meshtAlta",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "discord",
+          "label": "Canada - Calgary, Alberta & Area regional channel in the MeshCore Discord",
+          "url": null,
+          "health": "needs-review",
+          "last_checked": null
+        }
+      ],
+      "owner": null,
+      "verified_at": null,
+      "verify_by": null,
+      "canonical_route": "/provinces/alberta/#community-calgary-area-meshcore"
+    },
+    {
+      "id": "calgary-meshcore-network",
+      "name": "Calgary MeshCore Network",
+      "province": "AB",
+      "service_area": "Calgary",
+      "summary": "Initial AlbertaMesh.ca launch region",
+      "places": [
+        "Calgary"
+      ],
+      "aliases": [
+        "AlbertaMesh Calgary",
+        "YYC",
+        "meshcorecalgary.ca"
+      ],
+      "status": "active",
+      "languages": [],
+      "location": {
+        "latitude": 51.01674,
+        "longitude": -114.00149,
+        "precision": "approximate"
+      },
+      "settings": {
+        "inherit_national": true,
+        "overrides": {}
+      },
+      "contacts": [
+        {
+          "type": "website",
+          "label": "Calgary MeshCore Network",
+          "url": "https://meshcorecalgary.ca/",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "website",
+          "label": "Calgary community guide",
+          "url": "https://albertamesh.ca/calgary/",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "discord",
+          "label": "Alberta MeshCore Discord",
+          "url": "https://discord.gg/CznDhsRWnJ",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "meshmapper",
+          "label": "Calgary network map",
+          "url": "https://yyc.meshmapper.net/?lat=51.01674&lon=-114.00149&zoom=11.00",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "website",
+          "label": "CoreScope YYC",
+          "url": "https://corescopeyyc.meshmonitoring.com/#/live",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "website",
+          "label": "Recommended Calgary RX channels",
+          "url": "https://albertamesh.ca/calgary/#rx-channels",
+          "health": "needs-review",
+          "last_checked": null
+        }
+      ],
+      "owner": null,
+      "verified_at": null,
+      "verify_by": null,
+      "canonical_route": "/provinces/alberta/#community-calgary-meshcore-network"
+    },
+    {
+      "id": "edmonton-meshcore-network",
+      "name": "Edmonton MeshCore Network",
+      "province": "AB",
+      "service_area": "Edmonton",
+      "summary": "Edmonton regional community within Alberta MeshCore",
+      "places": [
+        "Edmonton"
+      ],
+      "aliases": [
+        "AlbertaMesh Edmonton",
+        "YEG"
+      ],
+      "status": "active",
+      "languages": [],
+      "location": {
+        "latitude": 53.45752,
+        "longitude": -113.5832,
+        "precision": "approximate"
+      },
+      "settings": {
+        "inherit_national": true,
+        "overrides": {}
+      },
+      "contacts": [
+        {
+          "type": "website",
+          "label": "Edmonton on AlbertaMesh.ca",
+          "url": "https://albertamesh.ca/edmonton/",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "website",
+          "label": "Edmonton configuration guide",
+          "url": "https://albertamesh.ca/edmonton/configuration/",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "discord",
+          "label": "Alberta MeshCore Discord",
+          "url": "https://discord.gg/CznDhsRWnJ",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "meshmapper",
+          "label": "Edmonton network map",
+          "url": "https://yeg.meshmapper.net/?lat=53.45752&lon=-113.58320&zoom=10.03",
+          "health": "needs-review",
+          "last_checked": null
+        }
+      ],
+      "owner": null,
+      "verified_at": null,
+      "verify_by": null,
+      "canonical_route": "/provinces/alberta/#community-edmonton-meshcore-network"
+    },
+    {
+      "id": "yegmesh-ca",
+      "name": "yegmesh.ca",
+      "province": "AB",
+      "service_area": "Edmonton",
+      "summary": "Edmonton mesh network community focused on MeshCore",
+      "places": [
+        "Edmonton"
+      ],
+      "aliases": [
+        "YEG",
+        "YEG Mesh",
+        "yegmesh"
+      ],
+      "status": "active",
+      "languages": [],
+      "location": {
+        "latitude": 53.45752,
+        "longitude": -113.5832,
+        "precision": "approximate"
+      },
+      "settings": {
+        "inherit_national": true,
+        "overrides": {}
+      },
+      "contacts": [
+        {
+          "type": "website",
+          "label": "Getting started",
+          "url": "https://yegmesh.ca/p/getting-started",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "website",
+          "label": "MeshCore defaults",
+          "url": "https://yegmesh.ca/p/meshcore-defaults",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "discord",
+          "label": "Alberta MeshCore Discord",
+          "url": "https://discord.gg/CznDhsRWnJ",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "meshmapper",
+          "label": "Edmonton network map",
+          "url": "https://yeg.meshmapper.net/?lat=53.45752&lon=-113.58320&zoom=10.03",
+          "health": "needs-review",
+          "last_checked": null
+        }
+      ],
+      "owner": null,
+      "verified_at": null,
+      "verify_by": null,
+      "canonical_route": "/provinces/alberta/#community-yegmesh-ca"
+    },
+    {
+      "id": "yqlmesh",
+      "name": "YQLMesh",
+      "province": "AB",
+      "service_area": "Lethbridge",
+      "summary": "Connecting Lethbridge, one node at a time",
+      "places": [
+        "Lethbridge"
+      ],
+      "aliases": [
+        "YQL"
+      ],
+      "status": "active",
+      "languages": [],
+      "location": {
+        "latitude": 49.69091,
+        "longitude": -112.86356,
+        "precision": "approximate"
+      },
+      "settings": {
+        "inherit_national": true,
+        "overrides": {}
+      },
+      "contacts": [
+        {
+          "type": "website",
+          "label": "YQLMesh website",
+          "url": "https://www.yqlmesh.com/",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "website",
+          "label": "Lethbridge regional page",
+          "url": "https://albertamesh.ca/lethbridge/",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "discord",
+          "label": "YQLMesh Discord",
+          "url": "https://discord.gg/cFY9GSR37W",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "meshmapper",
+          "label": "Lethbridge network map",
+          "url": "https://yql.meshmapper.net/?lat=49.69091&lon=-112.86356&zoom=12.14",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "facebook",
+          "label": "YQLMesh Facebook",
+          "url": "https://facebook.com/groups/YQLMesh",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "instagram",
+          "label": "YQLMesh Instagram",
+          "url": "https://instagram.com/YQLMesh",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "x",
+          "label": "YQLMesh on X",
+          "url": "https://x.com/YQLMesh",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "reddit",
+          "label": "YQLMesh subreddit",
+          "url": "https://www.reddit.com/r/YQLMesh",
+          "health": "needs-review",
+          "last_checked": null
+        }
+      ],
+      "owner": null,
+      "verified_at": null,
+      "verify_by": null,
+      "canonical_route": "/provinces/alberta/#community-yqlmesh"
+    },
+    {
+      "id": "southern-alberta",
+      "name": "Southern Alberta",
+      "province": "AB",
+      "service_area": "Southern Alberta, including Cardston, Magrath, Raymond, and nearby areas",
+      "places": [
+        "Cardston",
+        "Magrath",
+        "Raymond"
+      ],
+      "aliases": [
+        "Southern Alberta"
+      ],
+      "status": "active",
+      "languages": [],
+      "location": {
+        "latitude": null,
+        "longitude": null,
+        "precision": "service-area"
+      },
+      "settings": {
+        "inherit_national": true,
+        "overrides": {}
+      },
+      "contacts": [
+        {
+          "type": "discord",
+          "label": "Canada - Southern Alberta regional channel in the MeshCore Discord",
+          "url": null,
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "telegram",
+          "label": "Cardston topic in Mesh Alberta",
+          "url": "https://t.me/meshtAlta",
+          "health": "needs-review",
+          "last_checked": null
+        }
+      ],
+      "owner": null,
+      "verified_at": null,
+      "verify_by": null,
+      "canonical_route": "/provinces/alberta/#community-southern-alberta"
+    },
+    {
+      "id": "yyc-meshcore-discord",
+      "name": "YYC MeshCore Discord Group",
+      "province": "AB",
+      "service_area": "Calgary",
+      "places": [
+        "Calgary"
+      ],
+      "aliases": [
+        "YYC"
+      ],
+      "status": "active",
+      "languages": [],
+      "location": {
+        "latitude": null,
+        "longitude": null,
+        "precision": "service-area"
+      },
+      "settings": {
+        "inherit_national": true,
+        "overrides": {}
+      },
+      "contacts": [
+        {
+          "type": "discord",
+          "label": "YYC MeshCore Discord",
+          "url": "https://discord.gg/CznDhsRWnJ",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "website",
+          "label": "MeshMonitoring",
+          "url": "https://meshmonitoring.com/",
+          "health": "needs-review",
+          "last_checked": null
+        }
+      ],
+      "owner": null,
+      "verified_at": null,
+      "verify_by": null,
+      "canonical_route": "/provinces/alberta/#community-yyc-meshcore-discord"
+    },
+    {
+      "id": "stoonmesh",
+      "name": "StoonMesh",
+      "province": "SK",
+      "service_area": "Central Saskatchewan",
+      "places": [],
+      "aliases": [
+        "Central Saskatchewan"
+      ],
+      "status": "active",
+      "languages": [],
+      "location": {
+        "latitude": null,
+        "longitude": null,
+        "precision": "service-area"
+      },
+      "settings": {
+        "inherit_national": true,
+        "overrides": {}
+      },
+      "contacts": [
+        {
+          "type": "discord",
+          "label": "StoonMesh Discord",
+          "url": "https://discord.gg/7yGnJuMGkG",
+          "health": "needs-review",
+          "last_checked": null
+        }
+      ],
+      "owner": null,
+      "verified_at": null,
+      "verify_by": null,
+      "canonical_route": "/provinces/saskatchewan/#community-stoonmesh"
+    },
+    {
+      "id": "greater-ottawa-mesh-enthusiasts",
+      "name": "Greater Ottawa Mesh Enthusiasts",
+      "province": "ON",
+      "service_area": "Eastern Ontario and Western Quebec",
+      "places": [
+        "Ottawa"
+      ],
+      "aliases": [
+        "Eastern Ontario",
+        "Western Quebec"
+      ],
+      "status": "active",
+      "languages": [],
+      "location": {
+        "latitude": null,
+        "longitude": null,
+        "precision": "service-area"
+      },
+      "settings": {
+        "inherit_national": true,
+        "overrides": {}
+      },
+      "contacts": [
+        {
+          "type": "discord",
+          "label": "Greater Ottawa Mesh Enthusiasts Discord",
+          "url": "https://discord.gg/WSyNd8SfNr",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "website",
+          "label": "Ottawa Mesh website",
+          "url": "https://ottawamesh.ca/",
+          "health": "needs-review",
+          "last_checked": null
+        }
+      ],
+      "owner": null,
+      "verified_at": null,
+      "verify_by": null,
+      "canonical_route": "/provinces/ontario/#community-greater-ottawa-mesh-enthusiasts"
+    },
+    {
+      "id": "gta-lora-meshes",
+      "name": "GTA+-Lora-Meshes",
+      "province": "ON",
+      "service_area": "Southern Ontario",
+      "places": [],
+      "aliases": [
+        "GTA",
+        "Southern Ontario"
+      ],
+      "status": "active",
+      "languages": [],
+      "location": {
+        "latitude": null,
+        "longitude": null,
+        "precision": "service-area"
+      },
+      "settings": {
+        "inherit_national": true,
+        "overrides": {}
+      },
+      "contacts": [
+        {
+          "type": "discord",
+          "label": "GTA+-Lora-Meshes Discord",
+          "url": "https://discord.gg/wSHbeb86r4",
+          "health": "needs-review",
+          "last_checked": null
+        }
+      ],
+      "owner": null,
+      "verified_at": null,
+      "verify_by": null,
+      "canonical_route": "/provinces/ontario/#community-gta-lora-meshes"
+    },
+    {
+      "id": "quinte-mesh-network",
+      "name": "Quinte Mesh Network",
+      "province": "ON",
+      "service_area": "Quinte Region, including Belleville, Trenton, Prince Edward County, and nearby areas",
+      "places": [
+        "Belleville",
+        "Trenton",
+        "Prince Edward County"
+      ],
+      "aliases": [
+        "Quinte Region"
+      ],
+      "status": "active",
+      "languages": [],
+      "location": {
+        "latitude": null,
+        "longitude": null,
+        "precision": "service-area"
+      },
+      "settings": {
+        "inherit_national": true,
+        "overrides": {}
+      },
+      "contacts": [
+        {
+          "type": "discord",
+          "label": "Quinte Mesh Network Discord",
+          "url": "https://discord.gg/V5esJEP67X",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "website",
+          "label": "Quinte Mesh Network website",
+          "url": "https://quintemesh.ca/",
+          "health": "needs-review",
+          "last_checked": null
+        }
+      ],
+      "owner": null,
+      "verified_at": null,
+      "verify_by": null,
+      "canonical_route": "/provinces/ontario/#community-quinte-mesh-network"
+    },
+    {
+      "id": "mesh-quebec",
+      "name": "Mesh Quebec",
+      "province": "QC",
+      "service_area": "Quebec",
+      "places": [],
+      "aliases": [
+        "Québec"
+      ],
+      "status": "active",
+      "languages": [],
+      "location": {
+        "latitude": null,
+        "longitude": null,
+        "precision": "service-area"
+      },
+      "settings": {
+        "inherit_national": true,
+        "overrides": {}
+      },
+      "contacts": [
+        {
+          "type": "website",
+          "label": "Mesh Quebec website",
+          "url": "https://qcmesh.net",
+          "health": "needs-review",
+          "last_checked": null
+        }
+      ],
+      "owner": null,
+      "verified_at": null,
+      "verify_by": null,
+      "canonical_route": "/provinces/quebec/#community-mesh-quebec"
+    },
+    {
+      "id": "montreal-mesh",
+      "name": "Montreal Mesh",
+      "province": "QC",
+      "service_area": "Greater Montreal",
+      "places": [
+        "Montreal"
+      ],
+      "aliases": [
+        "Greater Montreal",
+        "Montréal"
+      ],
+      "status": "active",
+      "languages": [],
+      "location": {
+        "latitude": null,
+        "longitude": null,
+        "precision": "service-area"
+      },
+      "settings": {
+        "inherit_national": true,
+        "overrides": {}
+      },
+      "contacts": [
+        {
+          "type": "website",
+          "label": "Montreal Mesh website",
+          "url": "https://www.montrealmesh.ca",
+          "health": "needs-review",
+          "last_checked": null
+        }
+      ],
+      "owner": null,
+      "verified_at": null,
+      "verify_by": null,
+      "canonical_route": "/provinces/quebec/#community-montreal-mesh"
+    },
+    {
+      "id": "reseau-mesh-capitale-yqb",
+      "name": "Réseau Mesh de la Capitale YQB",
+      "province": "QC",
+      "service_area": "Quebec City",
+      "places": [
+        "Quebec City"
+      ],
+      "aliases": [
+        "YQB",
+        "Capitale"
+      ],
+      "status": "active",
+      "languages": [],
+      "location": {
+        "latitude": null,
+        "longitude": null,
+        "precision": "service-area"
+      },
+      "settings": {
+        "inherit_national": true,
+        "overrides": {}
+      },
+      "contacts": [
+        {
+          "type": "discord",
+          "label": "Réseau Mesh de la Capitale YQB Discord",
+          "url": "https://discord.gg/UhGjTF2MfA",
+          "health": "needs-review",
+          "last_checked": null
+        }
+      ],
+      "owner": null,
+      "verified_at": null,
+      "verify_by": null,
+      "canonical_route": "/provinces/quebec/#community-reseau-mesh-capitale-yqb"
+    },
+    {
+      "id": "reseau-mesh-saguenay-lac-saint-jean-ytf",
+      "name": "Réseau Mesh du Saguenay Lac st-Jean YTF",
+      "province": "QC",
+      "service_area": "Saguenay–Lac-Saint-Jean (YTF)",
+      "places": [
+        "Saguenay",
+        "Lac-Saint-Jean"
+      ],
+      "aliases": [
+        "YTF",
+        "Saguenay Lac st-Jean"
+      ],
+      "status": "active",
+      "languages": [],
+      "location": {
+        "latitude": null,
+        "longitude": null,
+        "precision": "service-area"
+      },
+      "settings": {
+        "inherit_national": true,
+        "overrides": {}
+      },
+      "contacts": [
+        {
+          "type": "discord",
+          "label": "Réseau Mesh du Saguenay Lac st-Jean YTF Discord",
+          "url": "https://discord.gg/wUR394yXt",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "facebook",
+          "label": "Réseau Mesh du Saguenay Lac st-Jean YTF Facebook",
+          "url": "https://www.facebook.com/share/g/1GjkHAyZAM/",
+          "health": "needs-review",
+          "last_checked": null
+        },
+        {
+          "type": "meshmapper",
+          "label": "Réseau Mesh du Saguenay Lac st-Jean YTF MeshMapper",
+          "url": "https://ytf.meshmapper.net/",
+          "health": "needs-review",
+          "last_checked": null
+        }
+      ],
+      "owner": null,
+      "verified_at": null,
+      "verify_by": null,
+      "canonical_route": "/provinces/quebec/#community-reseau-mesh-saguenay-lac-saint-jean-ytf"
+    },
+    {
+      "id": "reseau-libre",
+      "name": "Réseau Libre",
+      "province": "QC",
+      "service_area": "Montreal",
+      "places": [
+        "Montreal"
+      ],
+      "aliases": [
+        "Montréal"
+      ],
+      "status": "active",
+      "languages": [],
+      "location": {
+        "latitude": null,
+        "longitude": null,
+        "precision": "service-area"
+      },
+      "settings": {
+        "inherit_national": true,
+        "overrides": {}
+      },
+      "contacts": [
+        {
+          "type": "website",
+          "label": "Réseau Libre website",
+          "url": "https://lora.reseaulibre.ca/",
+          "health": "needs-review",
+          "last_checked": null
+        }
+      ],
+      "owner": null,
+      "verified_at": null,
+      "verify_by": null,
+      "canonical_route": "/provinces/quebec/#community-reseau-libre"
+    },
+    {
+      "id": "southern-new-brunswick",
+      "name": "Southern New Brunswick",
+      "province": "NB",
+      "service_area": "Fredericton, Saint John, Moncton, and nearby areas",
+      "places": [
+        "Fredericton",
+        "Saint John",
+        "Moncton"
+      ],
+      "aliases": [
+        "Southern New Brunswick"
+      ],
+      "status": "forming",
+      "languages": [],
+      "location": {
+        "latitude": null,
+        "longitude": null,
+        "precision": "service-area"
+      },
+      "settings": {
+        "inherit_national": true,
+        "overrides": {}
+      },
+      "contacts": [
+        {
+          "type": "facebook",
+          "label": "MESHCORE Saint John, N.B.",
+          "url": "https://www.facebook.com/groups/613466831163684",
+          "health": "needs-review",
+          "last_checked": null
+        }
+      ],
+      "owner": null,
+      "verified_at": null,
+      "verify_by": null,
+      "canonical_route": "/provinces/new-brunswick/#community-southern-new-brunswick"
+    },
+    {
+      "id": "lunenburg-county-mesh",
+      "name": "Lunenburg County Mesh",
+      "province": "NS",
+      "service_area": "Lunenburg County",
+      "places": [
+        "Lunenburg County"
+      ],
+      "aliases": [],
+      "status": "active",
+      "languages": [],
+      "location": {
+        "latitude": null,
+        "longitude": null,
+        "precision": "service-area"
+      },
+      "settings": {
+        "inherit_national": true,
+        "overrides": {}
+      },
+      "contacts": [
+        {
+          "type": "website",
+          "label": "Lunenburg County Mesh website",
+          "url": "http://www.lunenburgcountymesh.ca",
+          "health": "needs-review",
+          "last_checked": null
+        }
+      ],
+      "owner": null,
+      "verified_at": null,
+      "verify_by": null,
+      "canonical_route": "/provinces/nova-scotia/#community-lunenburg-county-mesh"
+    }
+  ]
+}

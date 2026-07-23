@@ -1,119 +1,158 @@
-# Troubleshooting
+---
+title: Troubleshoot an observer
+description: Find where your observer stopped working and ask for help without exposing secrets.
+audience:
+  - observer-operators
+task: troubleshoot-observer
+scope: canada-baseline
+status: draft
+owner: meshcore-canada
+last_reviewed: 2026-07-22
+review_by: 2026-10-19
+difficulty: intermediate
+estimated_time: 15 minutes
+destructive: false
+page_styles:
+  - assets/styles/analyzer.css?v=20260722-2
+---
 
-If your observer doesn't show up on [CoreScope](https://live.meshcore.ca/#/observers), work through these checks based on your setup path.
+# Troubleshoot an observer
 
-## MQTT Firmware
+Start with what you can see. Change one part at a time so you know what fixed it.
 
-Run these in the device's admin CLI:
+## Observer never appears
 
-| Command | What to check |
-|---------|---------------|
-| `get wifi.status` | Should show connected to your 2.4 GHz network |
-| `get mqtt.status` | Should show an active broker connection |
-| `get mqtt.iata` | Should return your real 3-letter IATA airport code |
-| `get mqtt.packets` | Should be `on` for packet publishing |
-| `get bridge.enabled` | Should be `on` for bridge publishing |
-| `get mqtt.rx` / `get mqtt.tx` | Should match the firmware guide setup |
-| `get mqtt1.preset` | Should show `meshcore-ca-1` |
-| `get mqtt2.preset` | Should show `meshcore-ca-2` |
-| `get name` | Should return the node name you set |
+Check these in order:
 
-??? note "Full verify command block"
+1. **Radio:** confirm it is powered, connected to the observer method, and on the local mesh settings.
+2. **Device or service:** confirm the observer process is running.
+3. **Broker:** confirm the primary endpoint reports connected with TLS verification.
+4. **Viewer:** wait a few minutes, refresh [CoreScope Observers](https://live.meshcore.ca/#/observers), and search the exact observer name.
 
-    ```text
-    get name
-    get mqtt.origin
-    get mqtt.iata
-    get wifi.status
-    get mqtt.packets
-    get bridge.enabled
-    get mqtt.rx
-    get mqtt.tx
-    get mqtt.status
-    get mqtt1.preset
-    get mqtt2.preset
-    get mqtt3.preset
+These commands only read service status:
+
+=== "MCtoMQTT"
+
+    ```bash
+    sudo systemctl status mctomqtt --no-pager
+    sudo journalctl -u mctomqtt -n 80 --no-pager
     ```
 
-## MCtoMQTT / Companion (USB Host)
+=== "Companion capture"
 
-Check that the systemd service is running:
+    ```bash
+    sudo systemctl status meshcore-capture --no-pager
+    sudo journalctl -u meshcore-capture -n 80 --no-pager
+    ```
 
-```bash
-# Serial host
-sudo systemctl status mctomqtt
+=== "PyMC"
 
-# Companion
-sudo systemctl status meshcore-capture
+    ```bash
+    sudo systemctl status pymc-repeater --no-pager
+    sudo journalctl -u pymc-repeater -n 80 --no-pager
+    ```
+
+Before sharing any output, follow [What to share when asking for
+help](#what-to-share-when-asking-for-help).
+
+For standalone firmware, run only these read commands in the device CLI:
+
+```text
+get name
+get wifi.status
+get mqtt.iata
+get mqtt.status
+get mqtt1.preset
+get mqtt2.preset
+get path.hash.mode
 ```
 
-If the service is running but nothing appears, check the config drop-in:
+You should see Wi-Fi and at least the primary broker connected, a three-letter location code, and the `meshcore-ca-1` and `meshcore-ca-2` presets.
 
-```bash
-# Serial host
-cat /etc/mctomqtt/config.d/20-meshcore-ca.toml
+## Observer appears but no packets arrive
 
-# Companion
-cat ~/.meshcore-packet-capture/.env.local
+A connected broker is not packet proof.
+
+1. Confirm the radio can hear normal nearby mesh activity.
+2. Confirm packet publishing is enabled for the selected method.
+3. Confirm the location code and packet topic agree.
+4. Check [CoreScope Packets](https://live.meshcore.ca/#/packets) after nearby activity.
+
+| Method | Packet setting |
+|---|---|
+| MQTT firmware | `get mqtt.packets` is `on`, `get bridge.enabled` is `on`, and `get mqtt.rx` is `on` |
+| MCtoMQTT / companion capture | Packet topic ends in `/packets`, not only `/status` |
+| PyMC | Broker `format` is `letsmesh` |
+| Home Assistant | **Payload Mode** is `packet`, or older **Packets (Lets Mesh)** is enabled |
+| RemoteTerm | Community MQTT packet topic is enabled |
+
+If the radio hears nothing, resolve the radio preset, antenna, connection, or local activity before changing broker values.
+
+## Only the backup connection fails
+
+Compare the two entries. The backup host and token audience must both be `mqtt2.meshcore.ca`. A token for the primary host cannot authenticate to the backup.
+
+Do not disable TLS verification to make the connection succeed.
+
+## Observer appears in the wrong place
+
+Check every configured location field. Use the same real three-letter [location code](iata-codes.md) in both broker entries and in the observer method.
+
+Do not use:
+
+- `CAN` as shorthand for Canada;
+- `XXX` or `HOME`; or
+- a neighbouring code merely because an older picker does not list the correct code.
+
+Update the integration if it cannot accept the correct code.
+
+## Observer connects and disconnects repeatedly
+
+Check in this order:
+
+1. stable power and USB connection;
+2. host sleep or service restarts;
+3. internet and DNS stability;
+4. system clock accuracy;
+5. repeated token, TLS, or WebSocket errors in local logs.
+
+Record the time and time zone of one disconnect. That lets an administrator compare your report with infrastructure logs without exposing credentials.
+
+## Home Assistant screen does not match the guide
+
+Current screens use **Payload Mode** and a free-text location field. Older screens may use **Packets (Lets Mesh)** and a picker.
+
+Update the integration before substituting a wrong location. If the current screen still differs, record the Home Assistant and MeshCore integration versions and ask for help.
+
+## What to share when asking for help
+
+Copy this template and fill in what you know:
+
+```text
+Observer method:
+Device or board:
+Operating system / Home Assistant version:
+Observer app, integration, or firmware version:
+Location code:
+Time checked (with time zone):
+First thing that failed: radio / observer / broker / viewer
+Primary connected: yes / no / unknown
+Backup connected: yes / no / not supported
+Observer visible: yes / no
+Recent packet visible: yes / no
+Exact error after redaction:
+Steps already tried:
 ```
 
-Confirm the broker hosts are `mqtt1.meshcore.ca` and `mqtt2.meshcore.ca`.
+Before posting, remove:
 
-Also confirm the observer path is publishing packet payloads, not only status. For companion capture, `PACKETCAPTURE_MQTT1_TOPIC_PACKETS` and `PACKETCAPTURE_MQTT2_TOPIC_PACKETS` should use `meshcore/{IATA}/{PUBLIC_KEY}/packets`.
+- Wi-Fi SSID and password;
+- MQTT passwords, JWTs, tokens, cookies, and authorization headers;
+- MeshCore private keys;
+- owner email and personal contact details;
+- exact home addresses or coordinates; and
+- unrelated lines from full config files.
 
-## IATA Code Problems
+Post it in the [MeshCore Canada forum](https://forum.meshcore.ca/) or your local community's support channel. Include only the small part of the log that shows the problem.
 
-Use a real 3-letter IATA airport code such as `YOW`, `YKF`, or `YYZ`. The firmware may accept any text, but the public broker rejects placeholders and made-up region names such as `XXX` or `HOME`. Do not use `CAN` as shorthand for Canada; it is a real airport code for Guangzhou and will tag your observer to the wrong region.
-
-If your code is not on the quick list, that does not automatically mean it is unsupported. It can still work if it is a real IATA airport code. Make sure every component uses the same code:
-
-| Component | Where to check |
-|-----------|----------------|
-| MQTT firmware | `get mqtt.iata` |
-| MCtoMQTT | `/etc/mctomqtt/config.d/20-meshcore-ca.toml` |
-| Companion capture | `PACKETCAPTURE_IATA` in `~/.meshcore-packet-capture/.env.local` |
-| Home Assistant | MeshCore integration region/IATA field |
-| RemoteTerm | Community MQTT region/IATA field |
-
-## PyMC
-
-```bash
-sudo systemctl status pymc-repeater
-```
-
-Check that your `mqtt.iata_code` is set and the broker block is present in `/etc/pymc_repeater/config.yaml`.
-
-## Home Assistant
-
-Go to **Settings** > **Devices & Services** > **MeshCore** > **Configure** > **Manage MQTT Brokers** and confirm both brokers show as connected. Make sure your IATA code is set in the integration.
-
-If the brokers connect but packets never appear, check the packet payload setting. Some Home Assistant MeshCore versions label this as **Packets (Lets Mesh)**; newer versions expose it as **Payload Mode**. It must be enabled/set to `packet` for MeshCore.ca packet visibility.
-
-If a code such as `YTR` is missing from a picker, update the MeshCore Home Assistant integration and type the code into **Broker IATA Code**. Using a nearby code such as `YGK` can make data visible, but it tags the observer to the wrong region.
-
-| HA symptom | Check |
-|------------|-------|
-| Broker connected, no packets | **Packets (Lets Mesh)** enabled or **Payload Mode** = `packet` |
-| Cannot enter a real IATA code | Update MeshCore-HA; current versions use free text |
-| Backup broker fails | `Token Audience` must match the broker host (`mqtt2.meshcore.ca`) |
-| Observer appears under the wrong city | Both broker entries use the same nearest real IATA code |
-
-## RemoteTerm
-
-Open **Settings** -> **MQTT & Automation** and confirm each Community MQTT entry:
-
-| Field | Expected value |
-|-------|----------------|
-| Broker Host | `mqtt1.meshcore.ca` or `mqtt2.meshcore.ca` |
-| Broker Port | `443` |
-| Transport | `WebSockets` |
-| Authentication | `Token` |
-| TLS | Enabled and verified |
-| Region Code | Your nearest real IATA code |
-| Packet Topic Template | `meshcore/{IATA}/{PUBLIC_KEY}/packets` |
-
-If the primary entry works and the backup does not, check the second entry's token audience. It must be `mqtt2.meshcore.ca`.
-
-## Still Not Working?
-
-If everything looks correct but your observer still doesn't appear, double check that your device has internet access and can reach `mqtt1.meshcore.ca` on port 443. Firewalls or network restrictions on outbound WebSocket connections are the most common blocker.
+Return to [Check your observer](verify.md) after each fix.

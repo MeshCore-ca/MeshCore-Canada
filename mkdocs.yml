@@ -1,36 +1,189 @@
 site_name: MeshCore Canada
 site_url: https://meshcore.ca
+site_description: Practical, community-reviewed guidance for joining and operating MeshCore networks in Canada.
 repo_name: MeshCore Canada
 repo_url: https://github.com/MeshCore-ca/MeshCore-Canada
+edit_uri: edit/main/docs/
+use_directory_urls: true
+copyright: Community-run documentation for MeshCore users in Canada. Not affiliated with the upstream MeshCore project.
 
 theme:
   name: material
-  favicon: assets/MeshCore-Canada-Favicon.png       # optional
-  logo: assets/MeshCore-Canada-Favicon.png             # optional
+  custom_dir: overrides
+  language: en
+  favicon: assets/MeshCore-Canada-Favicon.png
+  logo: assets/MeshCore-Canada-Favicon.png
+  font: false
   palette:
-      scheme: slate
-      primary: indigo
-      accent: blue
+    - scheme: slate
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/brightness-7
+        name: Use light theme
+    - scheme: default
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/brightness-4
+        name: Use dark theme
   features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.path
+    - navigation.footer
     - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.action.edit
     - toc.follow
 
 extra_css:
-  - stylesheets/extra.css
-  - assets/regions/regions.css
+  - assets/styles/tokens.css?v=20260722-2
+  - assets/styles/base.css?v=20260722-3
+  - assets/styles/shell.css?v=20260722-3
+  - assets/styles/components.css?v=20260722-3
 
 extra_javascript:
-  - assets/regions/regions.js
-  - javascripts/submission-form.js
+  - assets/javascripts/i18n-runtime.js?v=20260723-1
+  - assets/javascripts/bootstrap.js?v=20260722-2
+
+extra:
+  social:
+    - icon: fontawesome/brands/discord
+      link: https://discord.gg/BESFVMt7yk
+      name: MeshCore Canada Discord
+    - icon: fontawesome/solid/comments
+      link: https://forum.meshcore.ca/
+      name: MeshCore Canada forum
+    - icon: material/access-point-network
+      link: https://live.meshcore.ca/
+      name: Live MeshCore Canada network tools
+    - icon: fontawesome/brands/github
+      link: https://github.com/MeshCore-ca/MeshCore-Canada
+      name: MeshCore Canada on GitHub
 
 plugins:
   - search
+  - i18n:
+      docs_structure: suffix
+      fallback_to_default: true
+      reconfigure_material: true
+      reconfigure_search: true
+      languages:
+        - locale: en
+          name: English
+          default: true
+          build: true
+        - locale: fr
+          name: Français
+          build: true
+          site_description: Des guides pratiques, relus par la communauté, pour rejoindre et exploiter les réseaux MeshCore au Canada.
+          copyright: Documentation communautaire pour les utilisateurs de MeshCore au Canada. Sans affiliation avec le projet MeshCore principal.
+          theme:
+            palette:
+              - scheme: slate
+                primary: custom
+                accent: custom
+                toggle:
+                  icon: material/brightness-7
+                  name: Utiliser le thème clair
+              - scheme: default
+                primary: custom
+                accent: custom
+                toggle:
+                  icon: material/brightness-4
+                  name: Utiliser le thème sombre
+          nav_translations:
+            Start: Commencer
+            Welcome: Bienvenue
+            Start here: Commencer
+            Choose a role: Choisir un type d'appareil
+            Companion: Appareil compagnon
+            Repeater: Répéteur
+            Room server: Serveur de salon
+            Observer: Observateur
+            Finish and support: Terminer et obtenir de l'aide
+            Check your setup: Vérifier votre configuration
+            Get help: Obtenir de l'aide
+            Communities: Communautés
+            Find a community: Trouver une communauté
+            Western Canada: Ouest canadien
+            British Columbia: Colombie-Britannique
+            Central Canada: Centre du Canada
+            Quebec: Québec
+            Atlantic Canada: Canada atlantique
+            New Brunswick: Nouveau-Brunswick
+            Nova Scotia: Nouvelle-Écosse
+            Prince Edward Island: Île-du-Prince-Édouard
+            Newfoundland and Labrador: Terre-Neuve-et-Labrador
+            Territories: Territoires
+            "Devices & Builds": Appareils et projets
+            Choose hardware: Choisir du matériel
+            Companion devices: Appareils compagnons
+            Repeater devices: Répéteurs
+            Antennas: Antennes
+            Solar repeater build: Répéteur solaire
+            Build a 300 mW repeater: Monter un répéteur de 300 mW
+            Install a repeater: Installer un répéteur
+            Mounting options: Options de montage
+            Firmware: Micrologiciel
+            Flash a companion: Installer le micrologiciel d'un compagnon
+            Flash a repeater: Installer le micrologiciel d'un répéteur
+            Flash a room server: Installer le micrologiciel d'un serveur de salon
+            Update a repeater over the air: Mettre un répéteur à jour à distance
+            Network Tools: Outils réseau
+            Choose a network tool: Choisir un outil réseau
+            Configure a repeater: Configurer un répéteur
+            Explore the region map: Explorer la carte des régions
+            Set up an observer: Configurer un observateur
+            Check an observer: Vérifier un observateur
+            Troubleshoot network data: Dépanner les données du réseau
+            Observer methods: Méthodes d'observation
+            Observer data and privacy: Données d'observation et confidentialité
+            MQTT firmware: Micrologiciel MQTT
+            References: Références
+            Broker reference: Référence des serveurs MQTT
+            Location codes: Codes d'emplacement
+            Learn: Comprendre MeshCore
+            What MeshCore is: Comprendre MeshCore
+            How to use MeshCore: Utiliser MeshCore
+            Frequently asked questions: Foire aux questions
+            Glossary: Glossaire
+            Useful links: Liens utiles
+            Contribute: Contribuer
+            About MeshCore Canada: À propos de MeshCore Canada
+            Ways to contribute: Façons de contribuer
+            Share an idea: Proposer une idée
+            Site privacy: Confidentialité du site
+          admonition_translations:
+            note: Remarque
+            abstract: Résumé
+            info: Information
+            tip: Conseil
+            success: Réussite
+            question: Question
+            warning: Attention
+            failure: Échec
+            danger: Danger
+            bug: Problème
+            example: Exemple
+            quote: Citation
   - redirects:
       redirect_maps:
         regions/index.md: config/index.md
         regions/setup.md: config/index.md
         regions/map.md: config/map.md
         regions/standard.md: config/standard.md
+        resources/getting-started.md: start/index.md
+        meshcore/firmware-rak-custom-display.md: meshcore/flash-companion.md
+        meshcore/firmware-heltec-v3-wifi.md: meshcore/flash-companion.md
+        hardware/wire-connector-types.md: hardware/recommended-repeaters.md
+        hardware/repeater-solar-batteries.md: hardware/recommended-repeaters.md
+        hardware/overview.md: hardware/index.md
+        meshcore/general-meshcore-roles.md: start/choose-a-goal.md
 
 markdown_extensions:
   - admonition
@@ -48,65 +201,72 @@ markdown_extensions:
       permalink: true
 
 nav:
-  - Welcome: index.md
-  - Analyzer & MQTT:
-      - Overview: analyzer/intro.md
-      - Data Collection & Access: analyzer/data-collection-access.md
-      - Check Your Observer: analyzer/verify.md
-      - Troubleshooting: analyzer/troubleshooting.md
-      - Broker Reference: analyzer/broker-reference.md
-      - IATA Region Codes: analyzer/iata-codes.md
-      - RemoteTerm: analyzer/remoteterm.md
-      - Build Guides:
-          - MCtoMQTT Script: analyzer/builds/mctomqtt.md
-          - MeshCore-HA: analyzer/builds/meshcore-ha.md
-          - MQTT Firmware: analyzer/builds/mqtt-firmware.md
+  - Start:
+      - Welcome: index.md
+      - Start here: start/index.md
+      - Choose a role: start/choose-a-goal.md
+      - Companion: start/companion.md
+      - Repeater: start/repeater.md
+      - Room server: start/room-server.md
+      - Observer: start/observer.md
+      - Finish and support:
+          - Check your setup: start/verify.md
+          - Get help: start/get-help.md
+  - Communities:
+      - Find a community: provinces/index.md
+      - Western Canada:
+          - British Columbia: provinces/british-columbia.md
+          - Alberta: provinces/alberta.md
+          - Saskatchewan: provinces/saskatchewan.md
+          - Manitoba: provinces/manitoba.md
+      - Central Canada:
+          - Ontario: provinces/ontario.md
+          - Quebec: provinces/quebec.md
+      - Atlantic Canada:
+          - New Brunswick: provinces/new-brunswick.md
+          - Nova Scotia: provinces/nova-scotia.md
+          - Prince Edward Island: provinces/prince-edward-island.md
+          - Newfoundland and Labrador: provinces/newfoundland-and-labrador.md
+      - Territories: provinces/territories.md
+  - Devices & Builds:
+      - Choose hardware: hardware/index.md
+      - Companion devices: hardware/recommended-companions.md
+      - Repeater devices: hardware/recommended-repeaters.md
+      - Antennas: hardware/recommended-antenna.md
+      - Solar repeater build:
+          - Build a 300 mW repeater: hardware/repeater-solar-300mw-diy-build.md
+      - Install a repeater:
+          - Mounting options: hardware/repeater-mounting-options.md
+      - Firmware:
+          - Flash a companion: meshcore/flash-companion.md
+          - Flash a repeater: meshcore/flash-repeater.md
+          - Flash a room server: meshcore/flash-room-server.md
+          - Update a repeater over the air: meshcore/update-repeater-ota.md
+  - Network Tools:
+      - Choose a network tool: tools/index.md
+      - Configure a repeater: config/index.md
+      - Explore the region map: config/map.md
+      - Set up an observer: analyzer/intro.md
+      - Check an observer: analyzer/verify.md
+      - Troubleshoot network data: analyzer/troubleshooting.md
+      - Observer methods:
+          - Observer data and privacy: analyzer/data-collection-access.md
+          - RemoteTerm: analyzer/remoteterm.md
+          - MCtoMQTT: analyzer/builds/mctomqtt.md
+          - Home Assistant: analyzer/builds/meshcore-ha.md
+          - MQTT firmware: analyzer/builds/mqtt-firmware.md
           - PyMC: analyzer/builds/pymc.md
-  - Hardware: 
-      - Overview: hardware/overview.md
-      - Antenna: hardware/recommended-antenna.md
-      - Companion Nodes: hardware/recommended-companions.md
-      - Repeater Nodes:
-          - Repeater Nodes:  hardware/recommended-repeaters.md
-          - Repeater Mounting Options: hardware/repeater-mounting-options.md
-          - Repeater Solar Batteries: hardware/repeater-solar-batteries.md
-          - 300mW Solar Repeater Build Guide: hardware/repeater-solar-300mw-diy-build.md
-          - 1W Solar Repeater Build Guide: hardware/repeater-solar-1w-diy-build.md
-      - Wire Connector Types: hardware/wire-connector-types.md
-  
-  - MeshCore:
-      - General:
-          - Overview: meshcore/general-overview.md
-          - MeshCore FAQ: meshcore/general-faq.md
-          - MeshCore How-To: meshcore/general-howto.md
-          - MeshCore Roles: meshcore/general-meshcore-roles.md
-          - Repeater Configurator: /config/
-      - Firmware Guides:
-          - Flashing a Companion:  meshcore/flash-companion.md
-          - Flashing a Repeater: meshcore/flash-repeater.md
-          - Updating a Repeater (OTA): meshcore/update-repeater-ota.md
-          - Generating a Repeater ID: meshcore/generate-repeater-id.md
-          - Flashing a Room Server: meshcore/flash-room-server.md
-          - RAK4631 Custom Display Firmware: meshcore/firmware-rak-custom-display.md
-          - Heltec V3 Wi-Fi Firmware:  meshcore/firmware-heltec-v3-wifi.md
-
-  - Mesh Directory:
-      - Overview: provinces/index.md
-      - British Columbia: provinces/british-columbia.md
-      - Alberta: provinces/alberta.md
-      - Saskatchewan: provinces/saskatchewan.md
-      - Manitoba: provinces/manitoba.md
-      - Ontario: provinces/ontario.md
-      - Quebec: provinces/quebec.md
-      - New Brunswick: provinces/new-brunswick.md
-      - Nova Scotia: provinces/nova-scotia.md
-      - Prince Edward Island: provinces/prince-edward-island.md
-      - Newfoundland and Labrador: provinces/newfoundland-and-labrador.md
-      - Territories (YT / NT / NU): provinces/territories.md
-  - Resources:
-      - Getting Started: resources/getting-started.md
-      - Useful Links: resources/links.md
+      - References:
+          - Broker reference: analyzer/broker-reference.md
+          - Location codes: analyzer/iata-codes.md
+  - Learn:
+      - What MeshCore is: meshcore/general-overview.md
+      - How to use MeshCore: meshcore/general-howto.md
+      - Frequently asked questions: meshcore/general-faq.md
       - Glossary: resources/glossary.md
-  - Share an Idea: submit-idea.md
-  - Forum: https://forum.meshcore.ca/
-  - Contributing: contributing.md
+      - Useful links: resources/links.md
+  - Contribute:
+      - About MeshCore Canada: about.md
+      - Ways to contribute: contributing.md
+      - Share an idea: submit-idea.md
+      - Site privacy: privacy.md

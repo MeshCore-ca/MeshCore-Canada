@@ -1,0 +1,27 @@
+{% if page and page.meta %}
+  {% set page_locale = i18n_page_locale | default(config.theme.language, true) %}
+  {% set file_locale = i18n_file_locale | default(page_locale, true) %}
+  {% set status = page.meta.status %}
+
+  {% if page_locale == "fr" and file_locale != "fr" %}
+    <aside class="mc-page-status" data-status="draft" role="note" lang="fr">
+      Cette page n'a pas encore été traduite. Le contenu anglais reste disponible pendant la révision de la version française.
+    </aside>
+  {% endif %}
+
+  {% if status in ["draft", "experimental", "legacy", "archived"] and page.meta.status_notice is not false %}
+    <aside class="mc-page-status" data-status="{{ status }}" role="note">
+      {% if page_locale == "fr" %}
+        {% if status == "draft" %}Nous révisons encore ce guide. Confirmez les détails importants avant de vous y fier.{% endif %}
+        {% if status == "experimental" %}Ce guide présente une configuration expérimentale. Comprenez ses limites et gardez une méthode de récupération.{% endif %}
+        {% if status == "legacy" %}Utilisez cette page seulement pour une ancienne configuration qui en a encore besoin.{% endif %}
+        {% if status == "archived" %}Cette page n'est plus tenue à jour.{% endif %}
+      {% else %}
+        {% if status == "draft" %}We're still reviewing this guide. Double-check important details before relying on it.{% endif %}
+        {% if status == "experimental" %}This guide covers an experimental setup. Understand the limits and keep a recovery plan.{% endif %}
+        {% if status == "legacy" %}Use this only for an older setup that still needs it.{% endif %}
+        {% if status == "archived" %}This page is no longer maintained.{% endif %}
+      {% endif %}
+    </aside>
+  {% endif %}
+{% endif %}

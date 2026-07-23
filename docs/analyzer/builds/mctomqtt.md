@@ -1,157 +1,198 @@
-# MCtoMQTT (USB Serial Host)
+---
+title: Observe with MCtoMQTT
+description: Send packets from a USB radio through an always-on Linux or macOS computer.
+audience:
+  - observer-operators
+  - service-operators
+task: configure-mctomqtt-observer
+scope: canada-baseline
+status: draft
+owner: meshcore-canada
+last_reviewed: 2026-07-22
+review_by: 2026-10-19
+difficulty: advanced
+estimated_time: 30 minutes
+destructive: true
+page_styles:
+  - assets/styles/analyzer.css?v=20260722-2
+---
 
-Bridge a USB-connected MeshCore node to MQTT brokers using `meshcoretomqtt`. This runs on a Linux or macOS host with the device connected over USB serial.
+# Observe with MCtoMQTT
 
-!!! info "What it does"
-    The MCtoMQTT service reads packets from a MeshCore device over its serial port and publishes them to one or more MQTT brokers. A config drop-in file tells it where to send the data.
+MCtoMQTT reads packets from a USB-connected MeshCore radio and publishes them from an always-on Linux or macOS host.
 
-## Prerequisites
+## Is this method right for you?
 
-| Requirement | Details |
-|-------------|---------|
-| Device | MeshCore node with packet logging enabled, connected via USB serial |
-| Host | Linux or macOS |
-| Tools | `curl` installed |
-| IATA Code | Your real 3-letter IATA airport code (e.g. `YOW` for Ottawa) |
-| Mesh Settings | Connected radio uses `USA/Canada (Recommended)` and 3-byte path hashes |
+<div class="mc-method-fit">
+  <div><strong>Use MCtoMQTT if</strong>A Linux or macOS computer stays beside a packet-log radio connected over USB.</div>
+  <div><strong>Use something else if</strong>RemoteTerm, Home Assistant, or PyMC already manages the radio.</div>
+  <div><strong>Keep online</strong>The radio, USB connection, host service, and internet connection.</div>
+</div>
 
-## Quick Setup
+The helper can also configure `meshcore-packet-capture` for a companion connected by BLE, serial, or TCP.
 
-If `meshcoretomqtt` is already installed, run the one-liner to add the MeshCore.ca brokers:
+## Before you start
+
+| Requirement | Check |
+|---|---|
+| Radio | Packet logging works over USB and the local mesh settings are correct |
+| Host | Linux or macOS for `meshcoretomqtt`; Windows is supported only for companion capture |
+| Access | You can read the current config and restart the service |
+| Location | A real three-letter [location code](../iata-codes.md) |
+| Tools | `curl`, a text viewer, and `systemctl` on Linux |
+
+!!! warning "Review before running"
+    These helpers are not pinned to a release or checksum. Download and inspect them before running. `--no-restart` still writes files; it is not a dry run.
+
+Files to review:
+
+- [Bash helper source](https://github.com/MeshCore-ca/MeshCore-Canada/blob/main/docs/analyzer/scripts/add-meshcore-ca-broker.sh)
+- [Published Bash helper](https://meshcore.ca/analyzer/scripts/add-meshcore-ca-broker.sh)
+- [PowerShell companion helper source](https://github.com/MeshCore-ca/MeshCore-Canada/blob/main/docs/analyzer/scripts/add-meshcore-ca-packetcapture-broker.ps1)
+
+## What this changes
+
+On a serial host, the helper:
+
+- writes `/etc/mctomqtt/config.d/20-meshcore-ca.toml`;
+- makes a timestamped `.bak.<timestamp>` copy when that file exists;
+- adds the primary and backup MeshCore Canada endpoints and location code; and
+- restarts `mctomqtt` unless `--no-restart` is used.
+
+For companion capture, it updates `~/.meshcore-packet-capture/.env.local`, makes a timestamped backup, configures slots 1 and 2, disables slots 3–6, and may restart the capture service.
+
+Install flags download and run separate upstream installers. Do not use them until you have reviewed the named upstream installer too.
+
+## Set up
+
+### 1. Download and inspect the helper
 
 ```bash
-bash <(curl -fsSL https://meshcore.ca/analyzer/scripts/add-meshcore-ca-broker.sh) --device serial-host
+workdir="$(mktemp -d)"
+curl -fsSLo "$workdir/add-meshcore-ca-broker.sh" https://meshcore.ca/analyzer/scripts/add-meshcore-ca-broker.sh
+less "$workdir/add-meshcore-ca-broker.sh"
 ```
 
-This creates a config drop-in at `/etc/mctomqtt/config.d/20-meshcore-ca.toml` pointing at the MeshCore.ca broker pair, then restarts the service.
+Check the source URL, changed paths, endpoint hosts, backup behaviour, and restart behaviour. Keep the file for the rest of this setup.
 
-### Fresh Install
+### 2. Write without restarting
 
-If `meshcoretomqtt` is not yet installed, add `--install-mctomqtt` and the script will run the upstream installer first:
+Replace `YOW` with the real location code nearest the observer:
 
 ```bash
-bash <(curl -fsSL https://meshcore.ca/analyzer/scripts/add-meshcore-ca-broker.sh) --device serial-host --install-mctomqtt
+bash "$workdir/add-meshcore-ca-broker.sh" --device serial-host --iata YOW --no-restart
 ```
 
-!!! tip
-    The upstream installer will walk you through serial port selection.
+The helper validates the code shape, rejects `XXX`, warns on codes outside its quick list, and prints the changed and backup paths.
 
-## Specifying Your Region
+### 3. Review the result
 
-Pass your IATA code via the `--iata` flag or the `MESHCORE_CA_IATA` environment variable. Use the real 3-letter airport code nearest to you:
+```bash
+sudo sed -n '1,220p' /etc/mctomqtt/config.d/20-meshcore-ca.toml
+```
 
-=== "Flag"
+Check that:
 
-    ```bash
-    bash <(curl -fsSL https://meshcore.ca/analyzer/scripts/add-meshcore-ca-broker.sh) --device serial-host --iata YOW
-    ```
+- the location code is correct;
+- primary host and audience are `mqtt1.meshcore.ca`;
+- backup host and audience are `mqtt2.meshcore.ca`;
+- port is `443`, transport is WebSockets, and TLS verification is enabled.
 
-=== "Environment Variable"
+Do not paste the full file into a public issue without reviewing it.
 
-    ```bash
-    MESHCORE_CA_IATA=YOW bash <(curl -fsSL https://meshcore.ca/analyzer/scripts/add-meshcore-ca-broker.sh) --device serial-host
-    ```
+### 4. Restart deliberately
 
-If omitted, the script will prompt interactively.
+```bash
+sudo systemctl restart mctomqtt
+sudo systemctl status mctomqtt --no-pager
+```
 
-!!! warning "Use a real IATA code"
-    The helper shows a Canadian quick list when it prompts. If your nearest real airport code is not shown, you can still type it, but continue only if it is a real IATA airport code. Do not use `CAN` as shorthand for Canada; it is a real airport code for Guangzhou and will tag your observer to the wrong region.
+The service should stay active without repeated TLS or authentication errors.
 
-!!! tip "Check the radio first"
-    MCtoMQTT can publish packets from a connected radio, but it cannot fix a radio that is listening on the wrong mesh settings. Before troubleshooting MQTT, confirm the MeshCore node is on **USA/Canada (Recommended)** or `910.525 MHz / 62.5 kHz / SF7 / CR5`, and that companion-style radios use 3-byte path hashes.
+### Run it directly after review
 
-## What the Script Creates
+After reviewing the current published helper, you can run that same file directly:
 
-The drop-in config at `/etc/mctomqtt/config.d/20-meshcore-ca.toml`:
+```bash
+bash <(curl -fsSL https://meshcore.ca/analyzer/scripts/add-meshcore-ca-broker.sh) --device serial-host --iata YOW
+```
 
-??? note "View full config"
+The downloaded-file method above is easier to review and recover.
 
-    ```toml
-    [general]
-    iata = "YOW"
+### Fresh installation
 
-    [[broker]]
-    name = "meshcore-ca-1"
-    enabled = true
-    server = "mqtt1.meshcore.ca"
-    port = 443
-    transport = "websockets"
-    keepalive = 60
-    qos = 0
-    retain = true
+`--install-mctomqtt` downloads and runs the upstream `meshcoretomqtt` installer. Review that installer first, then add the flag:
 
-    [broker.tls]
-    enabled = true
-    verify = true
+```bash
+bash "$workdir/add-meshcore-ca-broker.sh" --device serial-host --iata YOW --install-mctomqtt
+```
 
-    [broker.auth]
-    method = "token"
-    audience = "mqtt1.meshcore.ca"
+The upstream installer controls serial-port selection and package changes, and it is not pinned or checksummed here.
 
-    [[broker]]
-    name = "meshcore-ca-2"
-    enabled = true
-    server = "mqtt2.meshcore.ca"
-    port = 443
-    transport = "websockets"
-    keepalive = 60
-    qos = 0
-    retain = true
+## Companion capture
 
-    [broker.tls]
-    enabled = true
-    verify = true
+Set the companion radio to the local mesh settings first.
 
-    [broker.auth]
-    method = "token"
-    audience = "mqtt2.meshcore.ca"
-    ```
+=== "Linux or macOS"
 
-## Companion Devices (BLE / Serial / TCP)
-
-For companion radios (not packet-log serial hosts), use the companion path instead:
-
-Before running the companion helper, set the companion to **USA/Canada (Recommended)** and set path hash mode to **3-byte** in the companion app or config tool.
-
-=== "Linux / macOS"
+    Review the same Bash helper, then run:
 
     ```bash
-    bash <(curl -fsSL https://meshcore.ca/analyzer/scripts/add-meshcore-ca-broker.sh) --device companion
+    bash "$workdir/add-meshcore-ca-broker.sh" --device companion --iata YOW --no-restart
     ```
 
-    Add `--install-packetcapture` for a fresh install. The upstream installer will walk you through BLE, serial, or TCP connection setup.
+    Review `~/.meshcore-packet-capture/.env.local`, then restart your capture process.
 
 === "Windows PowerShell"
 
+    Download and inspect the helper before running:
+
     ```powershell
-    powershell -NoProfile -ExecutionPolicy Bypass -Command "iwr https://meshcore.ca/analyzer/scripts/add-meshcore-ca-packetcapture-broker.ps1 -UseBasicParsing | iex"
+    $helper = Join-Path $env:TEMP "add-meshcore-ca-packetcapture-broker.ps1"
+    Invoke-WebRequest https://meshcore.ca/analyzer/scripts/add-meshcore-ca-packetcapture-broker.ps1 -OutFile $helper
+    Get-Content $helper
+    powershell -NoProfile -ExecutionPolicy Bypass -File $helper -Iata YOW
     ```
 
-    Config is stored under `%USERPROFILE%\.meshcore-packet-capture\.env.local`.
+    The PowerShell helper changes `%USERPROFILE%\.meshcore-packet-capture\.env.local` and creates a backup. Its optional install switch executes an upstream installer and must be reviewed first.
 
-!!! warning "Windows and Serial Hosts"
-    There is no upstream `meshcoretomqtt` Windows installer. Keep packet-log serial hosts on Linux or macOS. The Windows PowerShell helper is for companion radios only.
+There is no documented `meshcoretomqtt` Windows installer for the packet-log serial-host path.
 
-## Quick Reference
+## What you should see
 
-| Path | Manager | Connection | Config Location |
-|------|---------|------------|-----------------|
-| Serial Host | meshcoretomqtt | USB serial | `/etc/mctomqtt/config.d/20-meshcore-ca.toml` |
-| Companion | meshcore-packet-capture | BLE, serial, or TCP | `~/.meshcore-packet-capture/.env.local` |
+The service stays active, the primary endpoint connects, and its packet count changes when the radio hears nearby traffic.
 
-## Script Options
+## Verify in CoreScope
 
-| Flag | Description |
-|------|-------------|
-| `--iata CODE` | Real 3-letter IATA airport code |
-| `--list-iata` | Show the Canadian quick-list choices |
-| `--device TYPE` | `serial-host` or `companion` |
-| `--install-mctomqtt` | Install meshcoretomqtt if not present |
-| `--install-packetcapture` | Install meshcore-packet-capture if not present |
-| `--no-restart` | Patch config without restarting the service |
-| `--config-dir PATH` | Override config dir (default: `/etc/mctomqtt`) |
-| `--service NAME` | Override systemd service name (default: `mctomqtt`) |
+1. Confirm the service remains active.
+2. Find the observer in [CoreScope Observers](https://live.meshcore.ca/#/observers).
+3. Wait for normal nearby activity.
+4. Confirm a recent packet in [CoreScope Packets](https://live.meshcore.ca/#/packets).
 
-## Verify
+Finish with [Check your observer](../verify.md). A running service or broker connection is not proof that packets reached CoreScope.
 
-Once your service is running, head to [Check Your Observer](../verify.md) to confirm it's reporting correctly.
+## Recovery
+
+Use the exact backup path printed by the helper.
+
+If a serial-host drop-in existed before:
+
+```bash
+sudo cp -- '/etc/mctomqtt/config.d/20-meshcore-ca.toml.bak.<timestamp>' '/etc/mctomqtt/config.d/20-meshcore-ca.toml'
+sudo systemctl restart mctomqtt
+```
+
+If the helper created a new drop-in and no prior file existed:
+
+```bash
+sudo rm -- '/etc/mctomqtt/config.d/20-meshcore-ca.toml'
+sudo systemctl restart mctomqtt
+```
+
+For companion capture, restore the printed `.env.local.bak.<timestamp>` over `.env.local`, preserve its permissions, and restart the capture process.
+
+The helper does not uninstall software added by an upstream install flag. Use that upstream project's reviewed uninstall process.
+
+## If verification fails
+
+Use [Troubleshooting](../troubleshooting.md). Share only a short redacted service status and the list of changed paths.

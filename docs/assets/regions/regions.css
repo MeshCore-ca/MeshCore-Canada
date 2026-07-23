@@ -3,15 +3,18 @@ body:has([data-mcc-regions="map"]) [data-mcc-regions="map"] {
 }
 
 body:has([data-mcc-regions]) {
-  background: var(--md-default-bg-color, hsl(232, 15%, 14%));
+  background: var(--md-default-bg-color, #ffffff);
 }
 
+/* Region tools use one deliberate dark workbench in either site palette. This
+   keeps dense maps, command output, and status colours readable after a theme
+   switch while the header, navigation, and surrounding site still follow it. */
 body:has([data-mcc-regions]) .md-main,
 body:has([data-mcc-regions]) .md-main__inner,
 body:has([data-mcc-regions]) .md-content,
 body:has([data-mcc-regions]) .md-content__inner {
-  color: var(--md-typeset-color, rgba(255, 255, 255, 0.82));
-  background: var(--md-default-bg-color, hsl(232, 15%, 14%));
+  color: #dce9e7;
+  background: #0c151c;
 }
 
 body:has([data-mcc-regions="map"]) .md-main__inner {
@@ -24,8 +27,20 @@ body:has([data-mcc-regions]) .md-typeset h3 {
   color: #ffffff;
 }
 
-body:has([data-mcc-regions]) .md-typeset a {
+body:has([data-mcc-regions]) .md-main .md-typeset a {
   color: var(--md-typeset-a-color, #5488e8);
+}
+
+.mcc-visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
 }
 
 .mcc-region-hero {
@@ -77,13 +92,13 @@ body:has([data-mcc-regions]) .md-typeset a {
   --mcc-blue: #303fa1;
   --mcc-gold: #f4bf5a;
   --mcc-red: #ff7373;
-  --mcc-border: var(--md-default-fg-color--lightest, rgba(255, 255, 255, 0.12));
-  --mcc-soft: var(--md-accent-fg-color--transparent, rgba(66, 135, 255, 0.12));
-  --mcc-panel: var(--md-default-bg-color, hsl(232, 15%, 14%));
-  --mcc-surface: color-mix(in srgb, var(--md-default-bg-color, hsl(232, 15%, 14%)), #ffffff 5%);
-  --mcc-surface-2: color-mix(in srgb, var(--md-default-bg-color, hsl(232, 15%, 14%)), #ffffff 8%);
-  --mcc-text: var(--md-typeset-color, rgba(255, 255, 255, 0.82));
-  --mcc-muted: var(--md-default-fg-color--light, rgba(255, 255, 255, 0.56));
+  --mcc-border: rgba(159, 216, 189, 0.22);
+  --mcc-soft: rgba(66, 135, 255, 0.15);
+  --mcc-panel: #0c151c;
+  --mcc-surface: #101d26;
+  --mcc-surface-2: #172630;
+  --mcc-text: #dce9e7;
+  --mcc-muted: #a7b9bb;
   margin: 1rem 0 2rem;
   color: var(--mcc-text);
 }
@@ -321,7 +336,8 @@ body:has([data-mcc-regions]) .md-typeset a {
 }
 
 .mcc-choice small {
-  color: var(--mcc-muted);
+  color: var(--mcc-text);
+  opacity: 1;
 }
 
 .mcc-chip-list {
@@ -837,6 +853,59 @@ body:has([data-mcc-regions]) .md-typeset a {
   background: var(--mcc-panel);
 }
 
+.mcc-map-experience {
+  display: grid;
+  gap: 1rem;
+}
+
+.mcc-map-product-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.mcc-map-product-header h2,
+.mcc-map-product-header p {
+  margin-block: 0;
+}
+
+.mcc-map-product-header h2 + p {
+  margin-top: 0.5rem;
+}
+
+.mcc-map-mode-switch {
+  display: inline-flex;
+  width: fit-content;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  border: 1px solid var(--mcc-border);
+  border-radius: 0.5rem;
+  background: var(--mcc-panel);
+}
+
+.mcc-map-mode-switch button {
+  padding: 0.45rem 0.75rem;
+  border: 0;
+  border-radius: 0.32rem;
+  color: var(--mcc-text);
+  background: transparent;
+  font: inherit;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.mcc-map-mode-switch button:hover,
+.mcc-map-mode-switch button:focus-visible {
+  background: var(--mcc-soft);
+}
+
+.mcc-map-mode-switch button[aria-pressed="true"] {
+  color: #ffffff;
+  background: var(--mcc-green);
+}
+
 .mcc-map-panel {
   display: grid;
   align-content: start;
@@ -844,6 +913,61 @@ body:has([data-mcc-regions]) .md-typeset a {
   padding: 1rem;
   background: var(--mcc-panel);
   overflow: auto;
+}
+
+.mcc-map-stage {
+  position: relative;
+  min-width: 0;
+  min-height: 30rem;
+}
+
+.mcc-skip-map {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.5rem;
+  z-index: 1001;
+  padding: 0.45rem 0.65rem;
+  border-radius: 0.3rem;
+  color: #ffffff;
+  background: var(--mcc-green-dark);
+  transform: translateY(calc(-100% - 1rem));
+}
+
+.mcc-skip-map:focus {
+  transform: none;
+}
+
+.mcc-map-loading {
+  display: grid;
+  position: absolute;
+  inset: 0;
+  z-index: 1000;
+  height: 100%;
+  place-items: center;
+  padding: 2rem;
+  color: var(--mcc-text);
+  background:
+    radial-gradient(circle at center, color-mix(in srgb, var(--mcc-green), transparent 86%), transparent 55%),
+    var(--mcc-panel);
+  text-align: center;
+}
+
+.mcc-map-loading > div {
+  display: grid;
+  max-width: 28rem;
+  justify-items: center;
+  gap: 0.65rem;
+}
+
+.mcc-map-loading svg {
+  width: 2.5rem;
+  height: 2.5rem;
+  color: var(--mcc-green);
+}
+
+.mcc-map-loading h3,
+.mcc-map-loading p {
+  margin: 0;
 }
 
 .mcc-region-breadcrumbs {
@@ -910,8 +1034,10 @@ body:has([data-mcc-regions]) .md-typeset a {
 }
 
 .mcc-region-child small {
-  color: var(--mcc-muted);
+  color: var(--mcc-text);
   font-size: 0.72rem;
+  font-weight: 600;
+  opacity: 1;
 }
 
 .mcc-panel-header {
@@ -954,6 +1080,7 @@ body:has([data-mcc-regions]) .md-typeset a {
 
 .mcc-map-area {
   position: relative;
+  height: 100%;
   min-height: 0;
   background: var(--mcc-panel);
 }
@@ -1590,7 +1717,7 @@ body:has([data-mcc-regions]) .md-typeset a {
 }
 
 .mcc-region-table td {
-  color: var(--mcc-text);
+  color: #eaf3f1;
   background: #101d26;
   font-size: 0.76rem;
 }
@@ -1619,6 +1746,14 @@ body:has([data-mcc-regions]) .md-typeset a {
 
   .mcc-map-area {
     height: 32rem;
+    min-height: 32rem;
+  }
+
+  .mcc-map-loading {
+    height: 32rem;
+  }
+
+  .mcc-map-stage {
     min-height: 32rem;
   }
 

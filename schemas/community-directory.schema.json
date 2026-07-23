@@ -1,0 +1,384 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://meshcore.ca/schemas/community-directory.schema.json",
+  "title": "MeshCore Canada community directory",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "metadata",
+    "national_defaults",
+    "directory_pages",
+    "province_contacts",
+    "communities"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schema": {
+      "const": "meshcore-canada-communities/v1"
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "owner",
+        "migrated_at",
+        "source_revision",
+        "review_by",
+        "update_route"
+      ],
+      "properties": {
+        "owner": {
+          "type": "string",
+          "minLength": 1
+        },
+        "migrated_at": {
+          "type": "string",
+          "format": "date"
+        },
+        "source_revision": {
+          "type": "string",
+          "minLength": 7
+        },
+        "review_by": {
+          "type": "string",
+          "format": "date"
+        },
+        "update_route": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "national_defaults": {
+      "type": "object"
+    },
+    "directory_pages": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/directoryPage"
+      }
+    },
+    "province_contacts": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/contactWithIdentity"
+      }
+    },
+    "communities": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/community"
+      }
+    }
+  },
+  "$defs": {
+    "nullableDate": {
+      "oneOf": [
+        {
+          "type": "string",
+          "format": "date"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "directoryPage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "slug",
+        "title",
+        "codes",
+        "aliases"
+      ],
+      "properties": {
+        "slug": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "codes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "AB",
+              "BC",
+              "MB",
+              "NB",
+              "NL",
+              "NS",
+              "NT",
+              "NU",
+              "ON",
+              "PE",
+              "QC",
+              "SK",
+              "YT"
+            ]
+          }
+        },
+        "aliases": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "contact": {
+      "type": "object",
+      "additionalProperties": {},
+      "required": [
+        "type",
+        "label",
+        "url",
+        "health",
+        "last_checked"
+      ],
+      "properties": {
+        "type": {
+          "enum": [
+            "discord",
+            "facebook",
+            "instagram",
+            "meshmapper",
+            "reddit",
+            "telegram",
+            "website",
+            "x"
+          ]
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "url": {
+          "oneOf": [
+            {
+              "type": "string",
+              "format": "uri",
+              "pattern": "^https?://"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "health": {
+          "enum": [
+            "verified",
+            "needs-review",
+            "expired"
+          ]
+        },
+        "last_checked": {
+          "$ref": "#/$defs/nullableDate"
+        }
+      }
+    },
+    "contactWithIdentity": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/contact"
+        },
+        {
+          "type": "object",
+          "required": [
+            "id",
+            "province"
+          ],
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "province": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "community": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "name",
+        "province",
+        "service_area",
+        "places",
+        "aliases",
+        "status",
+        "languages",
+        "location",
+        "settings",
+        "contacts",
+        "owner",
+        "verified_at",
+        "verify_by",
+        "canonical_route"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "province": {
+          "enum": [
+            "AB",
+            "BC",
+            "MB",
+            "NB",
+            "NL",
+            "NS",
+            "NT",
+            "NU",
+            "ON",
+            "PE",
+            "QC",
+            "SK",
+            "YT"
+          ]
+        },
+        "service_area": {
+          "type": "string",
+          "minLength": 1
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "places": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "aliases": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "status": {
+          "enum": [
+            "active",
+            "forming",
+            "testing",
+            "needs-update"
+          ]
+        },
+        "languages": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z]{2}(?:-[A-Z]{2})?$"
+          }
+        },
+        "location": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "latitude",
+            "longitude",
+            "precision"
+          ],
+          "properties": {
+            "latitude": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "minimum": -90,
+              "maximum": 90
+            },
+            "longitude": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "minimum": -180,
+              "maximum": 180
+            },
+            "precision": {
+              "enum": [
+                "exact",
+                "approximate",
+                "service-area"
+              ]
+            }
+          }
+        },
+        "settings": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "inherit_national",
+            "overrides"
+          ],
+          "properties": {
+            "inherit_national": {
+              "type": "boolean"
+            },
+            "overrides": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "radio_preset": {
+                  "type": "string"
+                },
+                "path_hash_mode": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "contacts": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/contact"
+          }
+        },
+        "owner": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "verified_at": {
+          "$ref": "#/$defs/nullableDate"
+        },
+        "verify_by": {
+          "$ref": "#/$defs/nullableDate"
+        },
+        "canonical_route": {
+          "type": "string",
+          "pattern": "^/provinces/[a-z0-9-]+/#community-[a-z0-9-]+$"
+        }
+      }
+    }
+  }
+}

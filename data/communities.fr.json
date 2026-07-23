@@ -1,0 +1,121 @@
+{
+  "schema": "meshcore-canada-communities-fr/v1",
+  "locale": "fr-CA",
+  "directory_pages": {
+    "british-columbia": {
+      "title": "Colombie-Britannique",
+      "location_phrase": "en Colombie-Britannique"
+    },
+    "alberta": {
+      "title": "Alberta",
+      "location_phrase": "en Alberta"
+    },
+    "saskatchewan": {
+      "title": "Saskatchewan",
+      "location_phrase": "en Saskatchewan"
+    },
+    "manitoba": {
+      "title": "Manitoba",
+      "location_phrase": "au Manitoba"
+    },
+    "ontario": {
+      "title": "Ontario",
+      "location_phrase": "en Ontario"
+    },
+    "quebec": {
+      "title": "Québec",
+      "location_phrase": "au Québec"
+    },
+    "new-brunswick": {
+      "title": "Nouveau-Brunswick",
+      "location_phrase": "au Nouveau-Brunswick"
+    },
+    "nova-scotia": {
+      "title": "Nouvelle-Écosse",
+      "location_phrase": "en Nouvelle-Écosse"
+    },
+    "prince-edward-island": {
+      "title": "Île-du-Prince-Édouard",
+      "location_phrase": "à l’Île-du-Prince-Édouard"
+    },
+    "newfoundland-and-labrador": {
+      "title": "Terre-Neuve-et-Labrador",
+      "location_phrase": "à Terre-Neuve-et-Labrador"
+    },
+    "territories": {
+      "title": "Territoires",
+      "location_phrase": "dans les territoires"
+    }
+  },
+  "communities": {
+    "salish-mesh": {
+      "service_area": "Mer des Salish et environs"
+    },
+    "alberta-meshcore-networks": {
+      "service_area": "Alberta",
+      "summary": "Développement du réseau maillé LoRa hors réseau de l’Alberta, exploité par la communauté"
+    },
+    "airdrie-meshcore-network": {
+      "service_area": "Airdrie et Calgary",
+      "summary": "Utilise l’identifiant régional YYC partagé avec le réseau régional de Calgary"
+    },
+    "calgary-area-meshcore": {
+      "service_area": "Calgary et environs"
+    },
+    "calgary-meshcore-network": {
+      "service_area": "Calgary",
+      "summary": "Première région lancée sur AlbertaMesh.ca"
+    },
+    "edmonton-meshcore-network": {
+      "service_area": "Edmonton",
+      "summary": "Communauté régionale d’Edmonton au sein d’Alberta MeshCore"
+    },
+    "yegmesh-ca": {
+      "service_area": "Edmonton",
+      "summary": "Communauté du réseau maillé d’Edmonton axée sur MeshCore"
+    },
+    "yqlmesh": {
+      "service_area": "Lethbridge",
+      "summary": "Relier Lethbridge, un nœud à la fois"
+    },
+    "southern-alberta": {
+      "service_area": "Sud de l’Alberta, y compris Cardston, Magrath, Raymond et les environs"
+    },
+    "yyc-meshcore-discord": {
+      "service_area": "Calgary"
+    },
+    "stoonmesh": {
+      "service_area": "Centre de la Saskatchewan"
+    },
+    "greater-ottawa-mesh-enthusiasts": {
+      "service_area": "Est de l’Ontario et ouest du Québec"
+    },
+    "gta-lora-meshes": {
+      "service_area": "Sud de l’Ontario"
+    },
+    "quinte-mesh-network": {
+      "service_area": "Région de Quinte, y compris Belleville, Trenton, le comté de Prince Edward et les environs"
+    },
+    "mesh-quebec": {
+      "service_area": "Québec"
+    },
+    "montreal-mesh": {
+      "service_area": "Grand Montréal"
+    },
+    "reseau-mesh-capitale-yqb": {
+      "service_area": "Ville de Québec"
+    },
+    "reseau-mesh-saguenay-lac-saint-jean-ytf": {
+      "service_area": "Saguenay–Lac-Saint-Jean (YTF)"
+    },
+    "reseau-libre": {
+      "service_area": "Montréal"
+    },
+    "southern-new-brunswick": {
+      "service_area": "Sud du Nouveau-Brunswick, y compris Fredericton, Saint John, Moncton et les environs"
+    },
+    "lunenburg-county-mesh": {
+      "service_area": "Comté de Lunenburg"
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "name": "meshcore-canada-docs",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "docs:build": "python -m mkdocs build --clean --strict --site-dir .tmp/site && node scripts/postprocess-site.mjs",
+    "docs:build:preview": "python -m mkdocs build --clean --strict --config-file mkdocs.preview.yml --site-dir .tmp/preview-site && node scripts/postprocess-site.mjs .tmp/preview-site --noindex-all",
+    "check:links": "npm run docs:build && node scripts/check-built-links.mjs",
+    "test:content": "node --test tests/content/*.test.mjs",
+    "test:editor": "node --test tests/editor/*.test.mjs",
+    "test:browser": "playwright test",
+    "test:browser:chromium": "playwright test --project=chromium",
+    "test:a11y": "playwright test tests/browser/accessibility.spec.mjs --project=chromium",
+    "audit:lighthouse": "npm run docs:build && node scripts/run-lighthouse.mjs"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.12.1",
+    "@playwright/test": "1.61.1",
+    "chrome-launcher": "1.2.1",
+    "lighthouse": "12.6.1"
+  }
+}

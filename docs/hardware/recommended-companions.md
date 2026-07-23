@@ -1,78 +1,82 @@
-# Companion Nodes
-
-Companion nodes run dedicated companion firmware and operate as user endpoints on the MeshCore/Meshtastic network.  
-Most companion nodes pair with your smartphone over BLE to provide access to the mesh.
-
-There are also standalone companion nodes with built-in screens and input devices. These operate without a smartphone but still function as endpoints.
-
-!!! warning "Upgrade the companion antenna"
-    The included antenna performs poorly on all of these models. Plan to replace it, and upgrade to at least the Gizont on companions that support changing the antenna.
-    See: [Recommended Antennas](recommended-antenna.md)
-
-## Bluetooth Low Energy (BLE) Companions
-
-These devices require a smartphone and the MeshCore or Meshtastic app. They connect to your phone over BLE, and you use the app to interact with the mesh. In this setup, the companion acts only as the radio, linking your phone to the mesh network.
-
-### Pre-Built
-
-The easiest way to get started is to buy a companion node, flash it with MeshCore/Meshtastic, and join the mesh.
-
-The MeshCore/Meshtastic app connects to the node over Bluetooth (BLE) and is used to send and receive messages on the mesh.
-
-!!! warning "Important ThinkNode M1 Note"
-    Make sure to order an **RP-SMA Antenna** with the device.  
-    **Do not accidentally buy SMA — you specifically need RP-SMA.**  
-    ThinkNode uses RP-SMA for the ThinkNode M1 for some reason
-
-The following pre-built companion nodes are popular and widely available:
-
-!!! warning "Aliexpress bundles"
-    Aliexpress usually shows the cheapest items (e.g., only the GPS module) when opening their links. Make sure you select the right bundle when adding to your cart.
-   
-
-| Product            | Notes | Link |
-|--------------------|-------|------|
-| **ThinkNode M1** | Compact device powered by the nRF52840 with a 1.54" screen and GPS support. Designed as a ready-to-use companion node for reliable messaging and tracking. **Note:** Has RP-SMA connector - See SMA vs. RP-SMA warning above. | [Elecrow](https://www.elecrow.com/thinknode-m1-meshtastic-lora-signal-transceiver-powered-by-nrf52840-with-154-screen-support-gps.html) |
-| **LilyGO T-Echo** | Compact device with onboard display and GPS. A solid ready-to-use option with minimal setup required. **Note:** Buy the non-flashed version; it’s cheaper and easy to flash MeshCore/Meshtastic using the web flasher. | [LilyGO Store](https://lilygo.cc/products/t-echo-lilygo) |
-| **SenseCAP T1000-E** | Slim card-style tracker device from SeeedStudio. Portable and IP65-rated. **Note:** Range is more limited due to internal antennas. | [SeeedStudio](https://www.seeedstudio.com/SenseCAP-Card-Tracker-T1000-E-for-Meshtastic-p-5913.html) |
-| **RAK WisMesh Tag** | Rugged device with GPS, integrated antennas, 1000mAh battery, and IP66 enclosure. Pre-flashed firmware for instant use. **Note:** Range is more limited due to internal antennas. | [AliExpress](https://www.aliexpress.com/item/1005009754254701.html) |
-
+---
+title: Choose a companion device
+description: Compare phone-paired and standalone companion devices and check compatibility before buying.
+audience:
+  - newcomer
+  - companion-owner
+task: choose-companion
+scope: canada-baseline
+status: draft
+status_notice: false
+owner: docs-hardware
+last_reviewed: 2026-07-22
+review_by: 2026-10-17
+difficulty: beginner
+estimated_time: 10-15 minutes
+destructive: false
+page_styles:
+  - assets/styles/devices-builds.css?v=20260722-2
 ---
 
-### Build Your Own
+# Choose a companion device
 
-For hobbyists who like to source parts and assemble their own node, here is an Ottawa-friendly example build (antenna not included; see [Recommended Antennas](recommended-antenna.md)).
+A companion is your personal MeshCore messaging device. Choose whether you want to use a phone or built-in controls, then confirm the exact model in the [official MeshCore flasher](https://meshcore.io/flasher).
 
-This is a **companion node** role and requires a smartphone.  
-The MeshCore/Meshtastic app connects to the node over Bluetooth (BLE) and is used to send and receive messages on the mesh.
+<div class="mc-guide-status" data-status="draft" markdown>
 
-### Example DIY Build
+**Check before buying.** These are devices to compare, not a guaranteed compatibility list. Confirm the exact model, Canadian radio band, companion firmware target, connector, and included accessories.
 
-| Item         | Product Name                  | Cost (CAD) | Link |
-|--------------|-------------------------------|------------|------|
-| **LoRa Board** | Heltec T114 (Bundle with screen) | $45.99 | [AliExpress](https://www.aliexpress.com/item/1005007916299029.html)|
-| **Right-angle IPEX to SMA Pigtail Cable** | SMA-KW 2PCS 8cm | $4.67 | [AliExpress](https://www.aliexpress.com/item/1005009270132403.html?)|
-| **Battery**   | Makerfocus 3.7V 3000mAh LiPo - (Pack of 4), Micro JST 1.5 connection with protection board | $34.34     | [MakerFocus](https://www.makerfocus.com/products/makerfocus-3-7v-3000mah-lithium-rechargeable-battery-1s-3c-lipo-battery-pack-of-4?variant=44823607541998) |
-| **Antenna** | Gizont 167CM 915MHz SMA M |$10.68 | [AliExpress](https://www.aliexpress.com/item/1005004607615001.html) (Make sure you select the right antenna when opening the link)
+</div>
 
-*Approximate total cost:* **$95.68 CAD**  
-*Prices will vary and may include shipping costs, so please confirm with links. MakerFocus batteries are shipped from China with no duties.*
+## Choose how you want to use it
 
-!!! warning "Case for Example DIY Build"
-    This DIY build example does not include a case. For 3D-printable cases, check out **[Alley Cat’s models](https://www.printables.com/@AlleyCat/models)** — they are excellent for custom companion node builds. Make sure the case you choose will fit the 3000 mAh battery and the right angle IPEX to SMA connector.
+<div class="mc-decision-grid">
+  <section class="mc-decision-card">
+    <h3>Phone-paired</h3>
+    <p>Your phone provides the main interface and connects to the radio over Bluetooth Low Energy (BLE).</p>
+    <p><strong>Check:</strong> phone compatibility, battery, antenna, and the exact companion target.</p>
+  </section>
+  <section class="mc-decision-card">
+    <h3>Standalone</h3>
+    <p>A display and built-in controls allow normal messaging without a phone.</p>
+    <p><strong>Check:</strong> whether current firmware supports the model and all controls you need.</p>
+  </section>
+  <section class="mc-decision-card">
+    <h3>Build your own</h3>
+    <p>You choose the board, battery, enclosure, cable, and antenna.</p>
+    <p><strong>Check:</strong> board revision, battery polarity and protection, enclosure fit, and every antenna connector.</p>
+  </section>
+</div>
 
-If you are in the Ottawa area, you can also purchase this build fully assembled locally from [Space Hedgehog](https://space-hedgehog.com/).
+## Devices to compare
 
----
+<div class="mc-table-wrap" markdown>
 
-## Standalone Nodes
+| Device | Style | Check before buying | Manufacturer |
+|---|---|---|---|
+| ThinkNode M1 | Phone-paired, display | Exact flasher target, 902–928 MHz model, antenna connector, included battery and accessories | [Elecrow](https://www.elecrow.com/thinknode-m1-meshtastic-lora-signal-transceiver-powered-by-nrf52840-with-154-screen-support-gps.html) |
+| LilyGO T-Echo | Phone-paired, display | Exact hardware revision, flasher target, radio band, connector, and included antenna | [LilyGO](https://lilygo.cc/products/t-echo-lilygo) |
+| SenseCAP T1000-E | Phone-paired, card-style enclosure | Exact flasher target, radio band, internal-antenna limitations, and phone support | [Seeed Studio](https://www.seeedstudio.com/SenseCAP-Card-Tracker-T1000-E-for-Meshtastic-p-5913.html) |
+| LilyGO T-LORA Pager | Standalone controls | Exact hardware revision and current support for the display, keyboard, and intended workflow | [LilyGO](https://lilygo.cc/en-ca/products/t-lora-pager) |
+| LilyGO T-Deck Plus | Standalone controls | Exact hardware revision and current support for the display, keyboard, trackball, and intended workflow | [LilyGO](https://lilygo.cc/products/t-deck-plus-meshtastic) |
 
-There are standalone devices such as the **T-Deck**, but we recommend starting with a companion node instead.  
-Standalone units tend to be more expensive, the UI is not as smooth as the mobile app, and they still have quirks and firmware limitations that can make them challenging for beginners.
+</div>
 
-### Available Standalone Devices
+!!! note "Listings change"
+    A product page can default to another radio band, accessory bundle, or connector. Check the selected option before checkout.
 
-| Product              | Notes | Link |
-|----------------------|-------|------|
-| **LilyGO T-LORA Pager** | A compact standalone LoRa messaging device styled like a classic pager. Useful for simple off-grid communication without needing a smartphone. | [LilyGO Store](https://lilygo.cc/en-ca/products/t-lora-pager) |
-| **LilyGO T-Deck Plus** | Updated version of the T-Deck with improved specs and refinements. Built with Meshtastic/MeshCore/Meshtastic in mind.<br>**However:** the built-in trackball is a major downside and many users dislike it. | [LilyGO Store](https://lilygo.cc/products/t-deck-plus-meshtastic) |
+## Before buying
+
+<ul class="mc-checklist">
+  <li>The exact product revision appears in the current official MeshCore flasher as a companion.</li>
+  <li>The radio is the Canadian 902–928 MHz variant.</li>
+  <li>The phone/app requirement matches how you intend to use it.</li>
+  <li>The battery connector, polarity, protection, dimensions, and charging method are documented.</li>
+  <li>The antenna and every adapter match the device connector.</li>
+  <li>The enclosure leaves the USB recovery path accessible.</li>
+  <li>You checked current stock, shipping, duty, and return terms.</li>
+</ul>
+
+## Continue setup
+
+Once the exact board is confirmed, [flash and configure the companion](../meshcore/flash-companion.md). After flashing, reboot it and complete a local message test.

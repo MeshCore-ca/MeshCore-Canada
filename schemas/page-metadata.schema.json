@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://meshcore.ca/schemas/page-metadata.schema.json",
+  "title": "MeshCore Canada page metadata",
+  "type": "object",
+  "required": [
+    "title",
+    "description",
+    "audience",
+    "task",
+    "scope",
+    "status",
+    "owner",
+    "last_reviewed",
+    "review_by"
+  ],
+  "properties": {
+    "title": { "type": "string", "minLength": 4 },
+    "description": { "type": "string", "minLength": 24, "maxLength": 180 },
+    "audience": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^[a-z0-9-]+$" }
+    },
+    "task": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+    "scope": {
+      "type": "string",
+      "anyOf": [
+        { "enum": [
+          "canada-baseline",
+          "upstream-meshcore",
+          "ottawa-field-practice",
+          "experimental",
+          "legacy",
+          "regulatory-reference"
+        ] },
+        { "pattern": "^province:[a-z]{2}$" },
+        { "pattern": "^community:[a-z0-9-]+$" }
+      ]
+    },
+    "status": {
+      "enum": ["verified", "draft", "experimental", "legacy", "archived"]
+    },
+    "owner": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+    "last_reviewed": { "type": "string", "format": "date" },
+    "review_by": { "type": "string", "format": "date" },
+    "difficulty": { "enum": ["beginner", "intermediate", "advanced"] },
+    "estimated_time": { "type": "string", "minLength": 3 },
+    "destructive": { "type": "boolean" },
+    "tested_with": { "type": "object", "minProperties": 1 },
+    "evidence": {
+      "oneOf": [
+        { "type": "string", "minLength": 3 },
+        { "type": "array", "minItems": 1, "items": { "type": "string" } }
+      ]
+    },
+    "requires": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^[a-z0-9-]+$" }
+    },
+    "aliases": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string" }
+    },
+    "page_styles": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^[^/].*\\.css$" }
+    },
+    "page_scripts": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^[^/].*\\.js$" }
+    },
+    "page_modules": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^[^/].*\\.js$" }
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "status": { "const": "verified" } } },
+      "then": { "anyOf": [{ "required": ["tested_with"] }, { "required": ["evidence"] }] }
+    }
+  ],
+  "additionalProperties": true
+}
