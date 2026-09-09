@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "version": "2026.07",
-  "last_reviewed": "2026-07-19",
+  "version": "2026.09",
+  "last_reviewed": "2026-09-09",
   "network": {
-    "preset": "USA/Canada (Recommended)",
+    "preset": "Canada",
     "frequency_mhz": 910.525,
     "bandwidth_khz": 62.5,
     "spreading_factor": 7,

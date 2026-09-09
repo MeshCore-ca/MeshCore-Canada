@@ -482,10 +482,19 @@ Use these settings unless your local community lists different ones.
 
 | Setting | Canada default |
 |---|---|
-| Radio preset | `USA/Canada (Recommended)` |
+| Radio preset | `Canada` |
 | Raw radio values | `910.525 MHz / 62.5 kHz / SF7 / CR5` |
 | Path hash mode | `3-byte` |
 | Command-line path setting | `set path.hash.mode 2` |
+
+The MeshCore app now has separate **Canada** and **USA** presets. Both use the radio values above,
+but **Canada** also selects **3-byte** paths. **USA** leaves the path-hash setting unchanged.
+You can still change that setting manually. See the
+[September 9 preset update](https://github.com/meshcore-dev/MeshCore/issues/3302#issuecomment-5598886579).
+
+If your app or flasher still shows **USA/Canada (Recommended)**, use it for the same radio values
+and set **3-byte** paths separately. Update repeaters older than firmware **1.14** before relying
+on multi-byte paths; those older versions cannot forward them.
 
 !!! warning "Check local settings first"
     Nearby devices need matching settings. A card marked **Different local settings**

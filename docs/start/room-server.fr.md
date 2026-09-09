@@ -53,8 +53,10 @@ l’appareil en cas de problème.
 
 ## Choisir les bons paramètres radio
 
-Utilisez le préréglage **USA/Canada (Recommended)** et le hachage des chemins
+Utilisez le préréglage **Canada** et le hachage des chemins
 sur **3 octets**, sauf si votre communauté indique d’autres paramètres.
+
+Si Canada n’apparaît pas, suivez les [consignes pour l’ancien préréglage](../provinces/index.md#canada-baseline).
 
 !!! warning "Utilisez les mêmes paramètres que votre communauté"
     Consultez le [répertoire des communautés](../provinces/index.md). Si votre

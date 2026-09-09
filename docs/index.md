@@ -108,14 +108,14 @@ Use these defaults unless your local community lists different settings.
 
 | Setting | Canada default |
 |---|---|
-| Radio preset | **USA/Canada (Recommended)** |
+| Radio preset | **Canada** |
 | Raw radio values | `910.525 MHz / 62.5 kHz / SF7 / CR5` |
 | Path setting | **3-byte** |
 | Command-line path setting | `set path.hash.mode 2` |
 
 </div>
 
-<p class="mc-preset-note">Planned: a separate <strong>Canada</strong> preset with the same radio settings as <strong>USA/Canada</strong> and 3-byte hash mode by default for all device types. <a href="https://github.com/meshcore-dev/MeshCore/issues/3302">Follow the preset discussion</a>.</p>
+<p class="mc-preset-note">The app’s <strong>Canada</strong> preset keeps the former USA/Canada radio settings and selects <strong>3-byte</strong> paths. The separate <strong>USA</strong> preset leaves the path-hash setting unchanged. <a href="provinces/#canada-baseline">Preset details and older apps</a> · <a href="https://github.com/meshcore-dev/MeshCore/issues/3302#issuecomment-5598886579">Upstream update</a>.</p>
 
 ## Improve MeshCore Canada
 

@@ -34,11 +34,15 @@ of repeating values that may change.
 
 ### Which radio settings should I use in Canada?
 
-Use your community’s radio profile. The [repeater configurator](../config/index.md)
-finds region paths, but keeps your radio settings unless you choose a profile.
+Use the radio profile in the [community directory](../provinces/index.md). If none is published, choose **Canada** in the app
+for the Canadian radio settings and **3-byte** paths. See the
+[preset details and older-app guidance](../provinces/index.md#canada-baseline).
 
-For any role, first check the [community directory](../provinces/index.md).
-Follow a published local override when one exists.
+The separate **USA** preset uses the same radio values but leaves the path-hash
+setting unchanged. [Upstream preset update](https://github.com/meshcore-dev/MeshCore/issues/3302#issuecomment-5598886579).
+
+The [repeater configurator](../config/index.md) finds region paths. Its radio and
+advert ID controls remain separate and keep current settings until you choose a change.
 
 ### What is path hash mode?
 
