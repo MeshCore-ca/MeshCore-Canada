@@ -133,7 +133,7 @@ plugins:
             Antennas: Antennes
             Solar repeater build: Répéteur solaire
             Build a 300 mW repeater: Monter un répéteur de 300 mW
-            Build a 1 W repeater (experimental): Monter un répéteur de 1 W (expérimental)
+            Build a 1 W repeater: Monter un répéteur de 1 W
             Wire connector types: Types de connecteurs de fils
             Install a repeater: Installer un répéteur
             Mounting options: Options de montage
@@ -242,7 +242,7 @@ nav:
       - Antennas: hardware/recommended-antenna.md
       - Solar repeater build:
           - Build a 300 mW repeater: hardware/repeater-solar-300mw-diy-build.md
-          - Build a 1 W repeater (experimental): hardware/repeater-solar-1w-diy-build.md
+          - Build a 1 W repeater: hardware/repeater-solar-1w-diy-build.md
           - Wire connector types: hardware/wire-connector-types.md
       - Install a repeater:
           - Mounting options: hardware/repeater-mounting-options.md

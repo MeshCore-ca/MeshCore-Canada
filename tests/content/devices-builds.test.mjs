@@ -93,10 +93,9 @@ test("recommendation pages state compatibility and current-purchase limits", () 
   }
 });
 
-test("build guides provide staged, printable safety checks and records", () => {
+test("the 300 mW draft retains its staged safety checks and records", () => {
   for (const path of [
     "docs/hardware/repeater-solar-300mw-diy-build.md",
-    "docs/hardware/repeater-solar-1w-diy-build.md",
   ]) {
     const source = read(path);
     for (const phrase of [
@@ -125,7 +124,7 @@ test("the 1 W build is listed in navigation while legacy workflows stay outside 
 
   assert.match(
     config,
-    /Build a 1 W repeater \(experimental\): hardware\/repeater-solar-1w-diy-build\.md/,
+    /Build a 1 W repeater: hardware\/repeater-solar-1w-diy-build\.md/,
   );
   assert.match(config, /Wire connector types: hardware\/wire-connector-types\.md/);
   assert.doesNotMatch(config, /generate-repeater-id\.md/);
@@ -140,8 +139,9 @@ test("hardware landing makes both solar build guides easy to find", () => {
   for (const source of [overview, repeaters]) {
     assert.match(source, /repeater-solar-300mw-diy-build\//);
     assert.match(source, /repeater-solar-1w-diy-build\//);
-    assert.match(source, /Experimental 1 W solar repeater/);
-    assert.match(source, /electrical, RF, and site review/i);
+    assert.match(source, /1 W solar repeater — Ikoka Stick/);
+    assert.match(source, /Read the 1 W build guide/);
+    assert.match(source, /assembly photos, wiring, and optional INA3221/);
   }
 });
 

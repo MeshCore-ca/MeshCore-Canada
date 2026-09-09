@@ -74,10 +74,10 @@ The SenseCAP Solar Node P1 is one packaged enclosure to evaluate. It is not a co
     <p>A draft RAK-based build with a parts list, assembly stages, bench checks, and maintenance notes.</p>
     <a class="md-button" href="../repeater-solar-300mw-diy-build/">Review the 300 mW build</a>
   </section>
-  <section class="mc-decision-card" data-status="experimental">
-    <h3>Experimental 1 W solar repeater</h3>
-    <p>An unverified high-power design for a measured network need. It requires electrical, RF, and site review before anyone buys parts or starts work.</p>
-    <a class="md-button" href="../repeater-solar-1w-diy-build/">Review the experimental 1 W build</a>
+  <section class="mc-decision-card" data-status="draft">
+    <h3>1 W solar repeater — Ikoka Stick</h3>
+    <p>MrAlders0n’s build guide, with parts, assembly photos, wiring, and optional INA3221 telemetry.</p>
+    <a class="md-button" href="../repeater-solar-1w-diy-build/">Read the 1 W build guide</a>
   </section>
 </div>
 
