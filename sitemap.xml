@@ -2,770 +2,784 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
     <url>
         <loc>https://meshcore.ca/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/"/>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/about/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/about/"/>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/about/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/contributing/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/contributing/"/>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/contributing/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/privacy/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/privacy/"/>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/privacy/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/submit-idea/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/submit-idea/"/>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/submit-idea/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/analyzer/broker-reference/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/analyzer/broker-reference/"/>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/analyzer/broker-reference/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/analyzer/data-collection-access/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/analyzer/data-collection-access/"/>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/analyzer/data-collection-access/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/analyzer/iata-codes/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/analyzer/iata-codes/"/>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/analyzer/iata-codes/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/analyzer/intro/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/analyzer/intro/"/>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/analyzer/intro/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/analyzer/remoteterm/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/analyzer/remoteterm/"/>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/analyzer/remoteterm/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/analyzer/troubleshooting/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/analyzer/troubleshooting/"/>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/analyzer/troubleshooting/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/analyzer/verify/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/analyzer/verify/"/>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/analyzer/verify/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/analyzer/builds/mctomqtt/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/analyzer/builds/mctomqtt/"/>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/analyzer/builds/mctomqtt/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/analyzer/builds/meshcore-ha/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/analyzer/builds/meshcore-ha/"/>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/analyzer/builds/meshcore-ha/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/analyzer/builds/mqtt-firmware/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/analyzer/builds/mqtt-firmware/"/>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/analyzer/builds/mqtt-firmware/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/analyzer/builds/pymc/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/analyzer/builds/pymc/"/>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/analyzer/builds/pymc/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/config/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/config/"/>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/config/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/config/map/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/config/map/"/>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/config/map/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/config/standard/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/config/standard/"/>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/config/standard/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/hardware/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/hardware/"/>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/hardware/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/hardware/recommended-antenna/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/hardware/recommended-antenna/"/>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/hardware/recommended-antenna/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/hardware/recommended-companions/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/hardware/recommended-companions/"/>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/hardware/recommended-companions/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/hardware/recommended-repeaters/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/hardware/recommended-repeaters/"/>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/hardware/recommended-repeaters/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/hardware/repeater-mounting-options/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/hardware/repeater-mounting-options/"/>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/hardware/repeater-mounting-options/"/>
     </url>
     <url>
+        <loc>https://meshcore.ca/hardware/repeater-solar-1w-diy-build/</loc>
+        <lastmod>2026-09-09</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/hardware/repeater-solar-1w-diy-build/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/hardware/repeater-solar-1w-diy-build/"/>
+    </url>
+    <url>
         <loc>https://meshcore.ca/hardware/repeater-solar-300mw-diy-build/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/hardware/repeater-solar-300mw-diy-build/"/>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/hardware/repeater-solar-300mw-diy-build/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/hardware/wire-connector-types/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/hardware/wire-connector-types/"/>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/hardware/wire-connector-types/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/meshcore/flash-companion/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/meshcore/flash-companion/"/>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/meshcore/flash-companion/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/meshcore/flash-repeater/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/meshcore/flash-repeater/"/>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/meshcore/flash-repeater/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/meshcore/flash-room-server/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/meshcore/flash-room-server/"/>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/meshcore/flash-room-server/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/meshcore/general-faq/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/meshcore/general-faq/"/>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/meshcore/general-faq/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/meshcore/general-howto/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/meshcore/general-howto/"/>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/meshcore/general-howto/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/meshcore/general-overview/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/meshcore/general-overview/"/>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/meshcore/general-overview/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/provinces/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/provinces/"/>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/provinces/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/provinces/alberta/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/provinces/alberta/"/>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/provinces/alberta/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/provinces/british-columbia/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/provinces/british-columbia/"/>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/provinces/british-columbia/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/provinces/manitoba/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/provinces/manitoba/"/>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/provinces/manitoba/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/provinces/new-brunswick/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/provinces/new-brunswick/"/>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/provinces/new-brunswick/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/provinces/newfoundland-and-labrador/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/provinces/newfoundland-and-labrador/"/>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/provinces/newfoundland-and-labrador/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/provinces/nova-scotia/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/provinces/nova-scotia/"/>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/provinces/nova-scotia/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/provinces/ontario/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/provinces/ontario/"/>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/provinces/ontario/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/provinces/prince-edward-island/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/provinces/prince-edward-island/"/>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/provinces/prince-edward-island/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/provinces/quebec/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/provinces/quebec/"/>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/provinces/quebec/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/provinces/saskatchewan/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/provinces/saskatchewan/"/>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/provinces/saskatchewan/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/provinces/territories/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/provinces/territories/"/>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/provinces/territories/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/resources/glossary/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/resources/glossary/"/>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/resources/glossary/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/resources/links/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/resources/links/"/>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/resources/links/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/start/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/start/"/>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/start/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/start/choose-a-goal/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/start/choose-a-goal/"/>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/start/choose-a-goal/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/start/companion/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/start/companion/"/>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/start/companion/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/start/get-help/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/start/get-help/"/>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/start/get-help/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/start/observer/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/start/observer/"/>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/start/observer/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/start/repeater/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/start/repeater/"/>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/start/repeater/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/start/room-server/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/start/room-server/"/>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/start/room-server/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/start/verify/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/start/verify/"/>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/start/verify/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/tools/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/tools/"/>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/tools/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/fr/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/fr/about/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/about/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/about/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/fr/contributing/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/contributing/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/contributing/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/fr/privacy/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/privacy/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/privacy/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/fr/submit-idea/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/submit-idea/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/submit-idea/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/fr/analyzer/broker-reference/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/analyzer/broker-reference/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/analyzer/broker-reference/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/fr/analyzer/data-collection-access/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/analyzer/data-collection-access/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/analyzer/data-collection-access/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/fr/analyzer/iata-codes/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/analyzer/iata-codes/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/analyzer/iata-codes/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/fr/analyzer/intro/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/analyzer/intro/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/analyzer/intro/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/fr/analyzer/remoteterm/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/analyzer/remoteterm/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/analyzer/remoteterm/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/fr/analyzer/troubleshooting/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/analyzer/troubleshooting/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/analyzer/troubleshooting/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/fr/analyzer/verify/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/analyzer/verify/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/analyzer/verify/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/fr/analyzer/builds/mctomqtt/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/analyzer/builds/mctomqtt/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/analyzer/builds/mctomqtt/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/fr/analyzer/builds/meshcore-ha/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/analyzer/builds/meshcore-ha/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/analyzer/builds/meshcore-ha/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/fr/analyzer/builds/mqtt-firmware/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/analyzer/builds/mqtt-firmware/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/analyzer/builds/mqtt-firmware/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/fr/analyzer/builds/pymc/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/analyzer/builds/pymc/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/analyzer/builds/pymc/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/fr/config/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/config/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/config/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/fr/config/map/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/config/map/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/config/map/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/fr/config/standard/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/config/standard/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/config/standard/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/fr/hardware/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/hardware/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/hardware/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/fr/hardware/recommended-antenna/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/hardware/recommended-antenna/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/hardware/recommended-antenna/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/fr/hardware/recommended-companions/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/hardware/recommended-companions/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/hardware/recommended-companions/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/fr/hardware/recommended-repeaters/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/hardware/recommended-repeaters/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/hardware/recommended-repeaters/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/fr/hardware/repeater-mounting-options/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/hardware/repeater-mounting-options/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/hardware/repeater-mounting-options/"/>
     </url>
     <url>
+        <loc>https://meshcore.ca/fr/hardware/repeater-solar-1w-diy-build/</loc>
+        <lastmod>2026-09-09</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/hardware/repeater-solar-1w-diy-build/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/hardware/repeater-solar-1w-diy-build/"/>
+    </url>
+    <url>
         <loc>https://meshcore.ca/fr/hardware/repeater-solar-300mw-diy-build/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/hardware/repeater-solar-300mw-diy-build/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/hardware/repeater-solar-300mw-diy-build/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/fr/hardware/wire-connector-types/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/hardware/wire-connector-types/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/hardware/wire-connector-types/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/fr/meshcore/flash-companion/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/meshcore/flash-companion/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/meshcore/flash-companion/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/fr/meshcore/flash-repeater/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/meshcore/flash-repeater/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/meshcore/flash-repeater/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/fr/meshcore/flash-room-server/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/meshcore/flash-room-server/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/meshcore/flash-room-server/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/fr/meshcore/general-faq/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/meshcore/general-faq/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/meshcore/general-faq/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/fr/meshcore/general-howto/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/meshcore/general-howto/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/meshcore/general-howto/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/fr/meshcore/general-overview/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/meshcore/general-overview/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/meshcore/general-overview/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/fr/provinces/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/provinces/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/provinces/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/fr/provinces/alberta/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/provinces/alberta/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/provinces/alberta/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/fr/provinces/british-columbia/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/provinces/british-columbia/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/provinces/british-columbia/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/fr/provinces/manitoba/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/provinces/manitoba/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/provinces/manitoba/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/fr/provinces/new-brunswick/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/provinces/new-brunswick/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/provinces/new-brunswick/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/fr/provinces/newfoundland-and-labrador/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/provinces/newfoundland-and-labrador/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/provinces/newfoundland-and-labrador/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/fr/provinces/nova-scotia/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/provinces/nova-scotia/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/provinces/nova-scotia/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/fr/provinces/ontario/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/provinces/ontario/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/provinces/ontario/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/fr/provinces/prince-edward-island/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/provinces/prince-edward-island/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/provinces/prince-edward-island/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/fr/provinces/quebec/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/provinces/quebec/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/provinces/quebec/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/fr/provinces/saskatchewan/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/provinces/saskatchewan/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/provinces/saskatchewan/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/fr/provinces/territories/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/provinces/territories/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/provinces/territories/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/fr/resources/glossary/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/resources/glossary/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/resources/glossary/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/fr/resources/links/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/resources/links/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/resources/links/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/fr/start/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/start/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/start/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/fr/start/choose-a-goal/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/start/choose-a-goal/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/start/choose-a-goal/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/fr/start/companion/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/start/companion/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/start/companion/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/fr/start/get-help/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/start/get-help/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/start/get-help/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/fr/start/observer/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/start/observer/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/start/observer/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/fr/start/repeater/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/start/repeater/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/start/repeater/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/fr/start/room-server/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/start/room-server/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/start/room-server/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/fr/start/verify/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/start/verify/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/start/verify/"/>
     </url>
     <url>
         <loc>https://meshcore.ca/fr/tools/</loc>
-        <lastmod>2026-09-08</lastmod>
+        <lastmod>2026-09-09</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="fr" href="https://meshcore.ca/fr/tools/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://meshcore.ca/tools/"/>

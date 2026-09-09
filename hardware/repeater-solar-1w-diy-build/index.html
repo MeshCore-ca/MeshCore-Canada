@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Evaluate an unverified high-power solar repeater design before deciding whether to reproduce it.">
+        <meta name="description" content="Parts, prices, assembly photos, wiring diagram, and optional INA3221 telemetry for MrAlders0n's Ikoka Stick solar repeater build.">
       
       
       
@@ -31,7 +31,7 @@
     
     
       
-        <title>Experimental 1 W solar repeater - MeshCore Canada</title>
+        <title>Build a 1 W solar repeater with the Ikoka Stick - MeshCore Canada</title>
       
     
     
@@ -69,13 +69,11 @@
     
   
   
-    <meta name="robots" content="noindex, nofollow">
-  
   
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="MeshCore Canada">
-    <meta property="og:title" content="Experimental 1 W solar repeater">
-    <meta property="og:description" content="Evaluate an unverified high-power solar repeater design before deciding whether to reproduce it.">
+    <meta property="og:title" content="Build a 1 W solar repeater with the Ikoka Stick">
+    <meta property="og:description" content="Parts, prices, assembly photos, wiring diagram, and optional INA3221 telemetry for MrAlders0n's Ikoka Stick solar repeater build.">
     <meta property="og:url" content="https://meshcore.ca/hardware/repeater-solar-1w-diy-build/">
     <meta property="og:image" content="https://meshcore.ca/assets/MeshCore-Canada-Logo.png">
     <meta name="twitter:card" content="summary">
@@ -83,8 +81,8 @@
       {
         "@context": "https://schema.org",
         "@type": "WebPage",
-        "name": "Experimental 1 W solar repeater",
-        "description": "Evaluate an unverified high-power solar repeater design before deciding whether to reproduce it.",
+        "name": "Build a 1 W solar repeater with the Ikoka Stick",
+        "description": "Parts, prices, assembly photos, wiring diagram, and optional INA3221 telemetry for MrAlders0n\u0027s Ikoka Stick solar repeater build.",
         "url": "https://meshcore.ca/hardware/repeater-solar-1w-diy-build/",
         "isPartOf": {
           "@type": "WebSite",
@@ -94,7 +92,7 @@
       }
     </script>
     
-      <link rel="stylesheet" href="../../assets/styles/devices-builds.css?v=20260728-1">
+      <link rel="stylesheet" href="../../assets/styles/devices-builds.css?v=20260909-1">
     
   
 
@@ -117,7 +115,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#experimental-1-w-solar-repeater" class="md-skip">
+        <a href="#building-a-1-w-solar-repeater-ikoka-stick" class="md-skip">
           Skip to content
         </a>
       
@@ -153,7 +151,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Experimental 1 W solar repeater
+              Build a 1 W solar repeater with the Ikoka Stick
             
           </span>
         </div>
@@ -1919,7 +1917,7 @@
   <span class="md-ellipsis">
     
   
-    Build a 1 W repeater (experimental)
+    Build a 1 W repeater
   
 
     
@@ -1929,7 +1927,7 @@
     
   
   
-    <span class="md-status md-status--experimental"></span>
+    <span class="md-status md-status--draft"></span>
   
 
   
@@ -1944,7 +1942,7 @@
   <span class="md-ellipsis">
     
   
-    Build a 1 W repeater (experimental)
+    Build a 1 W repeater
   
 
     
@@ -1954,7 +1952,7 @@
     
   
   
-    <span class="md-status md-status--experimental"></span>
+    <span class="md-status md-status--draft"></span>
   
 
   
@@ -1977,17 +1975,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#is-this-build-appropriate" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Is this build appropriate?
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#before-you-start" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1999,10 +1986,38 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#what-this-build-changes" class="md-nav__link">
+  <a href="#parts-list" class="md-nav__link">
     <span class="md-ellipsis">
       
-        What this build changes
+        Parts list
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parts list">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#antenna" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Antenna
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tools-required" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tools required
       
     </span>
   </a>
@@ -2010,10 +2025,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#bill-of-materials-to-verify" class="md-nav__link">
+  <a href="#printed-parts-and-downloads" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bill of materials to verify
+        Printed parts and downloads
       
     </span>
   </a>
@@ -2021,21 +2036,143 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#tools-and-downloads" class="md-nav__link">
+  <a href="#assembly-steps" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Tools and downloads
+        Assembly steps
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Assembly steps">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#enclosure-preparation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Enclosure Preparation
       
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#assembly-stages" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#mounting-the-solar-panel" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Assembly stages
+        Mounting the Solar Panel
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mounting-plate-and-filter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mounting Plate and Filter
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#filter-and-radio-preparation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Filter and Radio Preparation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#component-mounting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Component Mounting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#battery-installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Battery Installation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#power-wiring" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Power Wiring
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#final-connections" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Final Connections
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ina3221-wiring-optional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        INA3221 wiring (optional)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="INA3221 wiring (optional)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#firmware-build-flags" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Firmware build flags
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#wiring-diagram" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Wiring diagram
       
     </span>
   </a>
@@ -2046,18 +2183,7 @@
   <a href="#check-the-readings" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Check the readings
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#test-it-on-the-bench" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Test it on the bench
+        Check before powering on
       
     </span>
   </a>
@@ -2068,18 +2194,7 @@
   <a href="#recovery-and-undo" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Recovery and undo
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#maintenance" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Maintenance
+        Troubleshooting and recovery
       
     </span>
   </a>
@@ -3586,17 +3701,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#is-this-build-appropriate" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Is this build appropriate?
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#before-you-start" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3608,10 +3712,38 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#what-this-build-changes" class="md-nav__link">
+  <a href="#parts-list" class="md-nav__link">
     <span class="md-ellipsis">
       
-        What this build changes
+        Parts list
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Parts list">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#antenna" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Antenna
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tools-required" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tools required
       
     </span>
   </a>
@@ -3619,10 +3751,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#bill-of-materials-to-verify" class="md-nav__link">
+  <a href="#printed-parts-and-downloads" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Bill of materials to verify
+        Printed parts and downloads
       
     </span>
   </a>
@@ -3630,21 +3762,143 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#tools-and-downloads" class="md-nav__link">
+  <a href="#assembly-steps" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Tools and downloads
+        Assembly steps
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Assembly steps">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#enclosure-preparation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Enclosure Preparation
       
     </span>
   </a>
   
 </li>
-      
-        <li class="md-nav__item">
-  <a href="#assembly-stages" class="md-nav__link">
+        
+          <li class="md-nav__item">
+  <a href="#mounting-the-solar-panel" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Assembly stages
+        Mounting the Solar Panel
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mounting-plate-and-filter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mounting Plate and Filter
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#filter-and-radio-preparation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Filter and Radio Preparation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#component-mounting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Component Mounting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#battery-installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Battery Installation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#power-wiring" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Power Wiring
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#final-connections" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Final Connections
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ina3221-wiring-optional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        INA3221 wiring (optional)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="INA3221 wiring (optional)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#firmware-build-flags" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Firmware build flags
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#wiring-diagram" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Wiring diagram
       
     </span>
   </a>
@@ -3655,18 +3909,7 @@
   <a href="#check-the-readings" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Check the readings
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#test-it-on-the-bench" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Test it on the bench
+        Check before powering on
       
     </span>
   </a>
@@ -3677,18 +3920,7 @@
   <a href="#recovery-and-undo" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Recovery and undo
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#maintenance" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Maintenance
+        Troubleshooting and recovery
       
     </span>
   </a>
@@ -3799,7 +4031,9 @@
 
 
   
-  <h1 id="experimental-1-w-solar-repeater">Experimental 1 W Solar Repeater<a class="headerlink" href="#experimental-1-w-solar-repeater" title="Permanent link">&para;</a></h1>
+  <p><span id="experimental-1-w-solar-repeater"></span>
+<span id="building-a-1w-solar-repeater-ikoka-stick"></span></p>
+<h1 id="building-a-1-w-solar-repeater-ikoka-stick">Building a 1 W solar repeater — Ikoka Stick<a class="headerlink" href="#building-a-1-w-solar-repeater-ikoka-stick" title="Permanent link">&para;</a></h1>
   
   
   
@@ -3810,313 +4044,445 @@
   
 
   
-<p>This unverified design combines an Ikoka Stick 0.4.0, a solar power manager,
-a filtered RF path, and a fabricated enclosure.</p>
-<div class="mc-guide-status" data-status="experimental">
-<p><strong>Do not build or deploy this design without electrical, RF, and site review.</strong>
-Its firmware target, electrical design, optional telemetry, measurements, and
-climate limits have not been reproduced.</p>
-</div>
-<dl class="mc-guide-facts">
-  <div><dt>Radio</dt><dd>GOME Ikoka Stick 0.4.0</dd></div>
-  <div><dt>Power</dt><dd>Waveshare Solar Power Manager</dd></div>
-  <div><dt>Firmware</dt><dd>Not pinned or reproduced</dd></div>
-  <div><dt>Maintenance</dt><dd>Set during the site review</dd></div>
-</dl>
-
-<h2 id="is-this-build-appropriate">Is this build appropriate?<a class="headerlink" href="#is-this-build-appropriate" title="Permanent link">&para;</a></h2>
-<p>This is a specialized backbone or long-range experiment, not a default
-upgrade. Coordinate with nearby communities and show that the site needs it
-before changing coverage or traffic patterns.</p>
-<p>Use the <a href="../repeater-solar-300mw-diy-build/">300 mW draft build</a> or a reviewed pre-built path unless a network operator and hardware/RF reviewer agree that this experiment addresses a measured need.</p>
+<p>By <strong>MrAlders0n (Ottawa)</strong> · Original guide: <strong>January 1, 2026</strong></p>
+<p>Build a solar-powered MeshCore repeater using a GOME Ikoka Stick, a junction box enclosure, and an epoxied solar panel.</p>
+<p><strong>Board:</strong> GOME Ikoka Stick (HW v0.4.0)<br>
+<strong>Power:</strong> Waveshare Solar Power Manager (standard)<br>
+<strong>Firmware:</strong> MeshCore</p>
 <h2 id="before-you-start">Before you start<a class="headerlink" href="#before-you-start" title="Permanent link">&para;</a></h2>
-<div class="admonition danger">
-<p class="admonition-title">This combines high-power RF, lithium batteries, charging, soldering, cutting, and an outdoor elevated installation</p>
-<p>Verify every component and limit from current manufacturer documentation. Keep an antenna and reviewed RF path attached before any transmit test. Do not energize a battery or charger path when polarity, protection, wiring, temperature, or expected readings are unknown.</p>
+<div class="admonition warning">
+<p class="admonition-title">No warranty</p>
+<p>This community build guide is provided without a warranty. Check continuity and polarity with a multimeter before applying power. Disconnect solar, battery, and USB power before soldering or changing wiring.</p>
 </div>
-<ul class="mc-checklist">
-  <li>The local network need and cross-region effects are documented.</li>
-  <li>The exact Ikoka hardware and repeater firmware target are confirmed and recoverable by USB.</li>
-  <li>A hardware/electrical reviewer approves the battery, charger, panel, wiring, protection, optional telemetry, and enclosure thermal plan.</li>
-  <li>An RF reviewer approves the radio, filter, feed line, antenna, connectors, and site.</li>
-  <li>A structural/site review covers the finished mass, panel area, mount, wind, ice, snow, cable route, and access.</li>
-  <li>The build will remain supervised on the bench until its test record is approved.</li>
-</ul>
-
-<h2 id="what-this-build-changes">What this build changes<a class="headerlink" href="#what-this-build-changes" title="Permanent link">&para;</a></h2>
-<p>The procedure cuts and drills an enclosure, bonds a solar panel with epoxy and sealant, modifies the mounting system, connects a high-power RF path and filter, assembles a lithium power system, and may remove display pins for optional telemetry. Several changes are difficult or impossible to undo without replacing parts.</p>
-<h2 id="bill-of-materials-to-verify">Bill of materials to verify<a class="headerlink" href="#bill-of-materials-to-verify" title="Permanent link">&para;</a></h2>
-<div class="mc-table-wrap">
+<p><span id="is-this-build-appropriate"></span></p>
+<div class="admonition info">
+<p class="admonition-title">When to use a 1 W repeater</p>
+<p>1 W repeaters are useful for backbone links and locations struggling to connect to the mesh. They are not needed at every site; coordinate with your local community.</p>
+</div>
+<div class="admonition danger">
+<p class="admonition-title">Antenna required</p>
+<p><strong>Attach a LoRa antenna before powering the Ikoka Stick. Transmitting without an antenna can permanently damage the radio.</strong> Use the <a href="https://github.com/meshcore-dev/MeshCore/blob/main/docs/faq.md#77-q-i-have-a-station-g2-or-a-heltec-v4-or-an-ikoka-stick-or-a-radio-with-an-ebyte-e22-900m30s-or-an-ebyte-e22-900m33s-module-what-should-their-transmit-power-be-set-to">MeshCore power setting for your exact Ikoka radio module</a>; a 1 W output rating is not an instruction to set TX power to 30 dBm.</p>
+</div>
+<p><span id="bill-of-materials-to-verify"></span></p>
+<h2 id="parts-list">Parts list<a class="headerlink" href="#parts-list" title="Permanent link">&para;</a></h2>
+<p>Prices are from the original guide dated <strong>January 1, 2026</strong>, not current quotes. All amounts are in Canadian dollars; check availability, shipping, and taxes before ordering.</p>
+<div class="mc-table-wrap mc-build-table mc-parts-table">
 <table>
 <thead>
 <tr>
-<th style="text-align: right;">#</th>
+<th>#</th>
 <th>Part</th>
-<th style="text-align: right;">Qty</th>
-<th>Detail to verify</th>
+<th>Qty</th>
+<th>Price</th>
 <th>Source</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: right;">1</td>
-<td>GOME Ikoka Stick 0.4.0</td>
-<td style="text-align: right;">1</td>
-<td>Hardware revision, Canadian band, RF output, firmware target, recovery</td>
-<td><a href="https://github.com/ndoo/ikoka-stick-meshtastic-device">Project page</a></td>
+<td>1</td>
+<td>GOME Ikoka Stick (HW v0.4.0)</td>
+<td>1</td>
+<td>$55</td>
+<td><a href="https://github.com/ndoo/ikoka-stick-meshtastic-device">GitHub</a> (group buy)</td>
 </tr>
 <tr>
-<td style="text-align: right;">2</td>
-<td>Waveshare Solar Power Manager</td>
-<td style="text-align: right;">1</td>
-<td>Exact model, panel, battery and output limits, startup behaviour, temperature</td>
+<td>2</td>
+<td>Waveshare Solar Power Manager (standard)</td>
+<td>1</td>
+<td>$15</td>
 <td><a href="https://www.waveshare.com/wiki/Solar_Power_Manager">Waveshare</a></td>
 </tr>
 <tr>
-<td style="text-align: right;">3</td>
-<td>IP65 junction box, 220×170×110 mm</td>
-<td style="text-align: right;">1</td>
-<td>Material, ingress rating after modification, temperature, vent</td>
+<td>3</td>
+<td>IP65 Junction Box, 220x170x110mm, Gray</td>
+<td>1</td>
+<td>$30</td>
 <td><a href="https://www.aliexpress.com/item/1005007587120013.html">AliExpress</a></td>
 </tr>
 <tr>
-<td style="text-align: right;">4</td>
-<td>10 W / 18 V panel, 250×340 mm</td>
-<td style="text-align: right;">1</td>
-<td>Electrical limits, dimensions, mass, weather and load suitability</td>
+<td>4</td>
+<td>Solar panel, 10W/18V, 250x340mm</td>
+<td>1</td>
+<td>$35</td>
 <td><a href="https://a.co/d/0eJo5GCr">Amazon</a></td>
 </tr>
 <tr>
-<td style="text-align: right;">5</td>
-<td>3P1S or 4P1S 18650 pack</td>
-<td style="text-align: right;">1</td>
-<td>Chemistry, matched cells, protection, construction, charger, temperature</td>
+<td>5</td>
+<td>3P1S 18650 battery pack (or 4P1S)</td>
+<td>1</td>
+<td>$25-35</td>
 <td><a href="https://mpandw.ca/">MP&amp;W Supply</a></td>
 </tr>
 <tr>
-<td style="text-align: right;">6</td>
-<td>Battery protection board</td>
-<td style="text-align: right;">1</td>
-<td>Thresholds, current, temperature, wiring, compatibility</td>
+<td>6</td>
+<td>Battery protection board (high/low voltage cutoff)</td>
+<td>1</td>
+<td>$8</td>
 <td><a href="https://space-hedgehog.com/products/battery-protection-with-low-voltage-cut-off">Space Hedgehog</a></td>
 </tr>
 <tr>
-<td style="text-align: right;">7</td>
-<td>890–960 MHz four-cavity band-pass filter, 50 W</td>
-<td style="text-align: right;">1</td>
-<td>Response at 902–928 MHz, insertion loss, connectors, weather, temperature</td>
+<td>7</td>
+<td>890-960MHz 4-cavity bandpass filter, 50W (recommended)</td>
+<td>1</td>
+<td>$65</td>
 <td><a href="https://www.alibaba.com/product-detail/50W-890-960MHz-4-Cavity-Filter_1601399651944.html">Alibaba</a></td>
 </tr>
 <tr>
-<td style="text-align: right;">8</td>
-<td>10–15 cm SMA right-angle to N-type female bulkhead cable</td>
-<td style="text-align: right;">1</td>
-<td>Connector gender and polarity, loss, bend, seal</td>
+<td>8</td>
+<td>10-15cm SMA right angle to N-Type female O-ring nut cable</td>
+<td>1</td>
+<td>$6</td>
 <td><a href="https://www.aliexpress.com/item/1005008569444661.html">AliExpress</a></td>
 </tr>
 <tr>
-<td style="text-align: right;">9</td>
-<td>7.5 cm SMA male right-angle cable</td>
-<td style="text-align: right;">1</td>
-<td>Connector match, loss, bend, power handling</td>
+<td>9</td>
+<td>7.5cm SMA Male 90° to SMA Male 90° cable</td>
+<td>1</td>
+<td>$7</td>
 <td><a href="https://www.aliexpress.com/item/1005006702037541.html">AliExpress</a></td>
 </tr>
 <tr>
-<td style="text-align: right;">10</td>
-<td>0.5 ft USB-A to USB-C right-angle cable</td>
-<td style="text-align: right;">1</td>
-<td>Data and power needs, current, fit, strain</td>
+<td>10</td>
+<td>0.5ft USB-A to USB-C right angle cable</td>
+<td>1</td>
+<td>$7</td>
 <td><a href="https://a.co/d/045htrEG">Amazon</a></td>
 </tr>
 <tr>
-<td style="text-align: right;">11–12</td>
-<td>M3×35 spacers and M3×5 screws</td>
-<td style="text-align: right;">as needed</td>
-<td>Material, strength, fit, corrosion</td>
-<td>Local source</td>
+<td>11</td>
+<td>M3x35 spacers</td>
+<td>4</td>
+<td></td>
+<td></td>
 </tr>
 <tr>
-<td style="text-align: right;">13</td>
-<td>Gorilla Epoxy, 25 ml</td>
-<td style="text-align: right;">1</td>
-<td>Material compatibility, cure, outdoor and temperature limits</td>
+<td>12</td>
+<td>M3x5 screws</td>
+<td>8</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>13</td>
+<td>Gorilla Epoxy Syringe, 25ml</td>
+<td>1</td>
+<td>$15</td>
 <td><a href="https://www.homedepot.ca/product/gorilla-epoxy-syringe-25ml/1000778451">Home Depot</a></td>
 </tr>
 <tr>
-<td style="text-align: right;">14</td>
-<td>Waterproof vent plug</td>
-<td style="text-align: right;">1</td>
-<td>Thread, airflow, ingress performance after install</td>
+<td>14</td>
+<td>Waterproof vent plug (breather valve)</td>
+<td>1</td>
+<td>$2</td>
 <td><a href="https://www.aliexpress.com/item/1005006370919409.html">AliExpress</a></td>
 </tr>
 <tr>
-<td style="text-align: right;">15</td>
-<td>Clear outdoor silicone sealant</td>
-<td style="text-align: right;">1</td>
-<td>Material compatibility, cure, UV and temperature limits</td>
-<td>Local hardware source</td>
+<td>15</td>
+<td>Outdoor silicone caulk (clear)</td>
+<td>1</td>
+<td>$10</td>
+<td>Any hardware store</td>
 </tr>
 <tr>
-<td style="text-align: right;">16</td>
-<td>Adafruit INA3221, optional</td>
-<td style="text-align: right;">1</td>
-<td>Electrical interface, address, firmware support, isolation, calibration</td>
+<td>16</td>
+<td>Adafruit INA3221 (optional)</td>
+<td>1</td>
+<td>$15-20</td>
 <td><a href="https://www.digikey.ca/en/products/detail/adafruit-industries-llc/6062/25660599">DigiKey</a></td>
 </tr>
 </tbody>
 </table>
 </div>
-<p class="mc-table-note">These parts are unverified leads. Check current specifications, availability, shipping, and total cost before buying.</p>
-
-<h2 id="tools-and-downloads">Tools and downloads<a class="headerlink" href="#tools-and-downloads" title="Permanent link">&para;</a></h2>
-<p>Plan for soldering and wire tools, a multimeter, suitable drills and cutting
-tools, clamps, eye protection, and a safe work area.</p>
-<p>Printable files to verify:</p>
-<ul>
-<li><a href="../files/repeater-solar-1w-diy-build-plate-and-battery-holder.3mf">Mounting plate and battery holder (.3mf)</a></li>
-<li><a href="../files/repeater-solar-1w-diy-build-plate.stl">Mounting plate (.stl)</a></li>
-<li><a href="../files/repeater-solar-1w-diy-build-3x18650-battery-holder.stl">3P1S 18650 battery holder (.stl)</a></li>
-</ul>
-<p>Confirm dimensions, material, temperature performance, fasteners, battery restraint, and print quality before use.</p>
-<h2 id="assembly-stages">Assembly stages<a class="headerlink" href="#assembly-stages" title="Permanent link">&para;</a></h2>
-<div class="mc-stage-list">
-  <section class="mc-build-stage" data-stage="stop">
-    <h3>Stage 1 — Review and dry-fit</h3>
-    <p>Confirm all revisions, dimensions, electrical limits, connector paths, filter orientation, clearances, printed parts, cable bends, vent location, panel location, and service access before cutting or bonding.</p>
-    <p><strong>Checkpoint:</strong> the reviewed schematic, RF path, and mechanical layout agree with the exact parts in hand.</p>
-  </section>
-  <section class="mc-build-stage">
-    <h3>Stage 2 — Prepare the enclosure and panel</h3>
-    <ol>
-      <li>Measure the panel junction box and mark the enclosure cutout from the actual parts.</li>
-      <li>Use an appropriate pilot opening and cutting tool with the enclosure empty and safely supported.</li>
-      <li>Deburr and clean the cutout, then dry-fit the panel and cable route.</li>
-      <li>Bond and clamp only with a reviewed material-compatible process. Let it cure for the full manufacturer time.</li>
-      <li>Apply the reviewed weather seal without blocking drainage or venting.</li>
-    </ol>
-    <figure><img class="mc-build-photo" src="../images/repeater-solar-1w-diy-build-1.jpg" alt="Solar-panel wires routed through the enclosure cutout" loading="lazy"><figcaption>Example only. Measure the actual parts.</figcaption></figure>
-  </section>
-  <section class="mc-build-stage">
-    <h3>Stage 3 — Install the mounting plate, filter, bulkhead, and vent</h3>
-    <ol>
-      <li>Fit the reviewed spacers and mounting plate without stressing the enclosure.</li>
-      <li>Mount the filter with identified input and output ports and adequate cable bend radius.</li>
-      <li>Drill and deburr the bulkhead and vent holes by test-fitting the actual hardware.</li>
-      <li>Install seals, bulkhead, and vent according to their documentation.</li>
-      <li>Leave RF connections unpowered and accessible for inspection.</li>
-    </ol>
-    <figure><img class="mc-build-photo" src="../images/repeater-solar-1w-diy-build-2.jpg" alt="Mounting plate with spacers and RF filter" loading="lazy"><figcaption>Example plate and filter layout.</figcaption></figure>
-    <figure><img class="mc-build-photo" src="../images/repeater-solar-1w-diy-build-3.jpg" alt="Enclosure with filter, RF bulkhead cables, and vent plug" loading="lazy"><figcaption>Check connector direction and every seal.</figcaption></figure>
-  </section>
-  <section class="mc-build-stage" data-stage="stop">
-    <h3>Stage 4 — Review the power-manager startup modification</h3>
-    <p><strong>Do not bridge the power manager's boot-button pads.</strong> That modification has not been reproduced or reviewed.</p>
-    <p>Before considering any change, require the exact schematic, failure modes, warranty impact, soldering method, startup test, and rollback to be approved by a hardware reviewer.</p>
-    <figure><img class="mc-build-photo" src="../images/repeater-solar-1w-diy-build-4.jpg" alt="Unverified wire bridge across solar-manager boot-button pads" loading="lazy"><figcaption>Unverified modification. Do not reproduce it from this photograph.</figcaption></figure>
-  </section>
-  <section class="mc-build-stage" data-stage="stop">
-    <h3>Stage 5 — Mount the radio and decide on optional telemetry</h3>
-    <p>Dry-fit the Ikoka Stick and power manager. The optional INA3221 branch removes the display header and solders to I2C pads, so it must remain separate from the base build.</p>
-    <p>The telemetry pinout, measurement path, calibration, current range, I2C address, and firmware support are not verified.</p>
-    <p><strong>Default:</strong> omit optional telemetry. Do not remove display pins or add firmware flags until the exact hardware and current MeshCore target are reproduced.</p>
-    <figure><img class="mc-build-photo" src="../images/repeater-solar-1w-diy-build-5.jpg" alt="Unverified optional INA3221 connection to the Ikoka display-header area" loading="lazy"><figcaption>Unverified optional telemetry. Do not reproduce it from this photograph.</figcaption></figure>
-  </section>
-  <section class="mc-build-stage" data-stage="stop">
-    <h3>Stage 6 — Assemble the battery and charging path</h3>
-    <ol>
-      <li>Keep solar, battery, USB, and radio disconnected.</li>
-      <li>Confirm the battery pack construction, cell matching, protection, restraint, insulation, and temperature limits.</li>
-      <li>Confirm every power-manager and protection-board terminal from current manufacturer documentation.</li>
-      <li>Measure and record polarity; do not rely on wire colour.</li>
-      <li>Connect one reviewed branch at a time and inspect before proceeding.</li>
-    </ol>
-    <p><strong>Checkpoint:</strong> no unknown terminal, limit, expected value, exposed conductor, or unsupported battery condition remains.</p>
-  </section>
-  <section class="mc-build-stage">
-    <h3>Stage 7 — Complete the RF and USB paths</h3>
-    <ol>
-      <li>Verify filter input/output direction and every SMA/N-type connector.</li>
-      <li>Attach the complete reviewed antenna path before the radio can transmit.</li>
-      <li>Route the USB power cable without sharp bends, abrasion, or strain.</li>
-      <li>Keep the enclosure open for supervised first power and checks.</li>
-    </ol>
-    <figure><img class="mc-build-photo" src="../images/repeater-solar-1w-diy-build-6.jpg" alt="Completed interior with optional INA3221 telemetry" loading="lazy"><figcaption>Unverified optional-telemetry layout.</figcaption></figure>
-    <figure><img class="mc-build-photo" src="../images/repeater-solar-1w-diy-build-7.jpg" alt="Completed interior without optional INA3221 telemetry" loading="lazy"><figcaption>Example base layout.</figcaption></figure>
-    <figure><img class="mc-build-photo" src="../images/repeater-solar-1w-diy-build-8.jpg" alt="Full enclosure interior with radio, filter, power manager, and battery" loading="lazy"><figcaption>Example interior. A photograph is not electrical approval.</figcaption></figure>
-  </section>
-</div>
-
-<h2 id="check-the-readings">Check the readings<a class="headerlink" href="#check-the-readings" title="Permanent link">&para;</a></h2>
-<p>No numeric acceptance range has been peer-reviewed for this page. Do not substitute guessed voltages or currents.</p>
-<div class="mc-table-wrap">
+<p><strong>Estimated total cost:</strong> ~$280-290 without the INA3221, ~$300-310 with it. This does not include the antenna, 3D-printed parts, or mounting hardware (M3 spacers/screws).</p>
+<p><strong>Alternative filter option (minimal):</strong> Callboost 915MHz cavity filter, 26M BW, $82. <a href="https://www.aliexpress.com/item/1005004468960058.html">AliExpress</a></p>
+<h3 id="antenna">Antenna<a class="headerlink" href="#antenna" title="Permanent link">&para;</a></h3>
+<p>An antenna is not included in this parts list as selection will vary by deployment. It is highly recommended to use a higher dBi antenna such as a 6-8 dBi or higher with 1W builds. We have found that the Ikoka Stick does not pair well with the Alfa 5.8 dBi antenna for some reason, with several folks in Ottawa observing noticeably worse signal quality when using them together. This is not a definitive statement, just a pattern observed across multiple deployments.</p>
+<p>For recommended antenna options, see the <a href="../recommended-antenna/#repeater-omni-antennas">GOME Repeater Omni Antennas</a> page.</p>
+<p><span id="tools-and-downloads"></span></p>
+<h2 id="tools-required">Tools required<a class="headerlink" href="#tools-required" title="Permanent link">&para;</a></h2>
+<div class="mc-table-wrap mc-build-table">
 <table>
 <thead>
 <tr>
-<th>Check</th>
-<th>Acceptable result</th>
-<th>Stop condition</th>
+<th>Tool</th>
+<th>Notes</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Disconnected continuity</td>
-<td>No unintended short on the documented supply or RF paths</td>
-<td>Unexpected continuity or uncertain meter setup</td>
+<td>Soldering iron</td>
+<td>Fine tip recommended for I2C wiring</td>
 </tr>
 <tr>
-<td>Connector polarity</td>
-<td>Measurements match the reviewed schematic and manufacturer pinout</td>
-<td>Any disagreement or unknown pin</td>
+<td>Solder + flux</td>
+<td></td>
 </tr>
 <tr>
-<td>Solar, battery, and output values</td>
-<td>Each measured value is within every connected component's current documentation</td>
-<td>Missing limit or out-of-range value</td>
+<td>Multimeter</td>
+<td>For continuity and voltage checks</td>
 </tr>
 <tr>
-<td>First power</td>
-<td>Stable expected startup with no heat, odour, swelling, smoke, noise, or cycling</td>
-<td>Any abnormal physical or electrical behaviour</td>
+<td>Step drill bit</td>
+<td>For drilling clean holes in the junction box</td>
 </tr>
 <tr>
-<td>RF path</td>
-<td>Correct band, filter direction, connections, and attached antenna before transmit</td>
-<td>Missing antenna, loose/forced connector, unknown filter response</td>
+<td>Jigsaw or rotary tool</td>
+<td>For cutting the solar panel opening</td>
 </tr>
 <tr>
-<td>Optional telemetry</td>
-<td>Independently reproduced measurement and firmware behaviour</td>
-<td>Unverified wiring, address, calibration, or build target</td>
+<td>1/8" drill bit</td>
+<td>For opening up mounting holes</td>
+</tr>
+<tr>
+<td>Pencil</td>
+<td>For marking the cutout</td>
+</tr>
+<tr>
+<td>Clamps + flat piece of wood</td>
+<td>For clamping solar panel during epoxy cure</td>
+</tr>
+<tr>
+<td>Wire strippers</td>
+<td></td>
 </tr>
 </tbody>
 </table>
 </div>
-<h2 id="test-it-on-the-bench">Test it on the bench<a class="headerlink" href="#test-it-on-the-bench" title="Permanent link">&para;</a></h2>
-<ul class="mc-checklist">
-  <li>Record exact parts, revisions, source documents, schematic, photographs, polarity, and measured values.</li>
-  <li>Use supervised and current-limited first-power methods appropriate to the reviewed hardware.</li>
-  <li>Confirm the unit starts after each intended power source is applied and after a controlled power interruption.</li>
-  <li>Confirm the repeater's identity, firmware, radio, region, path, advert, and access settings survive reboot.</li>
-  <li>Confirm a nearby companion receives an advert and the planned local routing test succeeds.</li>
-  <li>Measure the RF/power behaviour using the reviewer's approved method; do not infer output from a firmware setting alone.</li>
-  <li>Run a supervised charge/load test that covers the reviewed conditions without exceeding component limits.</li>
-  <li>Inspect cable strain and seals, then complete an enclosure-appropriate water-resistance test.</li>
-  <li>Prove USB recovery and document the removal/access plan.</li>
+<p><span id="prerequisites"></span>
+<span id="downloads"></span></p>
+<h2 id="printed-parts-and-downloads">Printed parts and downloads<a class="headerlink" href="#printed-parts-and-downloads" title="Permanent link">&para;</a></h2>
+<p>Before starting assembly, you will need the following 3D-printed parts. Both are available for download below:</p>
+<ul>
+<li><strong>Mounting plate</strong> for the junction box (holds the filter, Ikoka, and Waveshare board)</li>
+<li>
+<p><strong>3P1S 18650 battery holder</strong> (or sized to match your chosen battery configuration)</p>
+</li>
+<li>
+<p><a href="../files/repeater-solar-1w-diy-build-plate-and-battery-holder.3mf">Mounting plate + 3P1S 18650 battery holder (combined .3mf)</a></p>
+</li>
+<li><a href="../files/repeater-solar-1w-diy-build-plate.stl">Mounting plate (.stl)</a></li>
+<li><a href="../files/repeater-solar-1w-diy-build-3x18650-battery-holder.stl">3P1S 18650 battery holder (.stl)</a></li>
 </ul>
-
-<p>Do not deploy until a hardware/electrical reviewer, RF reviewer, and site owner approve the completed test record.</p>
-<h2 id="recovery-and-undo">Recovery and undo<a class="headerlink" href="#recovery-and-undo" title="Permanent link">&para;</a></h2>
-<p>If a check fails, stop transmitting and disconnect solar, USB, and battery power using the reviewed safe sequence. Move the equipment to a suitable supervised work area. Do not reconnect a warm, swollen, damaged, leaking, or otherwise questionable lithium battery. Restore firmware by USB only after the electrical/RF fault is understood.</p>
-<p>Cutouts, epoxy, removed pins, and solder bridges may be irreversible. Replace uncertain components rather than improvising a repair. The safe rollback from the optional telemetry branch is to omit it before modification, not to assume removed hardware can be restored.</p>
-<h2 id="maintenance">Maintenance<a class="headerlink" href="#maintenance" title="Permanent link">&para;</a></h2>
-<p>No interval is approved. The site record must define inspections for mounting, panel/bond, water entry, vent, seals, corrosion, cables/connectors, filter, battery condition, charge behaviour, measured values, firmware/configuration, radio verification, and physical recovery. Reinspect after any severe event or unexplained behaviour defined by the site reviewer.</p>
+<p><span id="what-this-build-changes"></span>
+<span id="assembly-stages"></span></p>
+<h2 id="assembly-steps">Assembly steps<a class="headerlink" href="#assembly-steps" title="Permanent link">&para;</a></h2>
+<p>Keep the solar panel, battery, and USB disconnected while cutting, soldering, or changing wiring.</p>
+<h3 id="enclosure-preparation">Enclosure Preparation<a class="headerlink" href="#enclosure-preparation" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<p>Flip the solar panel face-down. On the back, locate the black junction box where the red and black power wires exit. Measure this junction box with calipers or a ruler.</p>
+</li>
+<li>
+<p>On the <strong>front face</strong> of the gray junction box, use a pencil to trace a rectangle matching the solar panel junction box dimensions. Center it near the top of the panel.</p>
+</li>
+<li>
+<p>Using a step drill bit, drill a large starter hole in the center of the traced rectangle.</p>
+</li>
+<li>
+<p>Using a jigsaw or rotary tool, cut along the traced lines to remove the rectangular section. Clean up any rough edges.</p>
+</li>
+</ol>
+<h3 id="mounting-the-solar-panel">Mounting the Solar Panel<a class="headerlink" href="#mounting-the-solar-panel" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<p>Mix a batch of Gorilla Epoxy and apply it generously across the entire front face of the junction box, covering the area where the solar panel will sit.</p>
+</li>
+<li>
+<p>Route the solar panel's power cable through the rectangular cutout from the outside into the box.</p>
+<p><a href="../images/repeater-solar-1w-diy-build-1.jpg"><img alt="Solar panel wires routed through junction box" class="mc-build-photo" height="400" loading="lazy" src="../images/repeater-solar-1w-diy-build-1.jpg" width="300" /></a></p>
+</li>
+<li>
+<p>Press the solar panel onto the epoxied face of the junction box. Place a flat piece of wood across the front of the panel and use clamps on all four corners to apply even pressure. Be careful not to over-tighten, as this can crack the panel. Alternatively, lay the assembly flat on the ground with weights on the back of the box.</p>
+</li>
+<li>
+<p>Allow the epoxy to fully cure according to the manufacturer's instructions before removing the clamps.</p>
+</li>
+<li>
+<p>Using clear outdoor silicone caulk, apply a bead around all four edges where the solar panel meets the junction box. Smooth the caulk to create a weatherproof seal.</p>
+</li>
+</ol>
+<h3 id="mounting-plate-and-filter">Mounting Plate and Filter<a class="headerlink" href="#mounting-plate-and-filter" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<p>Attach the four M3x35 spacers to the corners of the junction box mounting plate. You may need to use a 1/8" drill bit to open the holes slightly to fit M3 screws through the plate. Use the 3D-printed mount plate as a reference for hole placement.</p>
+<p><a href="../images/repeater-solar-1w-diy-build-2.jpg"><img alt="Mounting plate with spacers and filter assembled" class="mc-build-photo" height="400" loading="lazy" src="../images/repeater-solar-1w-diy-build-2.jpg" width="300" /></a></p>
+</li>
+<li>
+<p>Mount the RF bandpass filter to the mounting plate, positioning it roughly in the center.</p>
+</li>
+<li>
+<p>Connect the N-Type to SMA cable to the filter's <strong>output</strong> port. This cable will pass through the box wall to the external antenna.</p>
+</li>
+<li>
+<p>Determine where the N-Type connector should exit the junction box. Using a step drill bit, drill the hole, stepping up one size at a time and test-fitting after each step until the connector fits snugly.</p>
+</li>
+<li>
+<p>Feed the N-Type connector through the box wall from the inside out and tighten the O-ring nut to secure it.</p>
+</li>
+<li>
+<p>On the <strong>bottom</strong> of the junction box, drill a hole for the waterproof vent plug using the step drill bit.</p>
+</li>
+<li>
+<p>Install the vent plug and tighten it.</p>
+<p><a href="../images/repeater-solar-1w-diy-build-3.jpg"><img alt="Filter mounted in box with N-Type, SMA cables, and vent plug installed" class="mc-build-photo" height="400" loading="lazy" src="../images/repeater-solar-1w-diy-build-3.jpg" width="300" /></a></p>
+</li>
+</ol>
+<h3 id="filter-and-radio-preparation">Filter and Radio Preparation<a class="headerlink" href="#filter-and-radio-preparation" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<p>Connect the SMA-to-SMA cable to the filter's <strong>input</strong> port. Finger-tighten for now.</p>
+</li>
+<li>
+<p><strong>Waveshare Solar Power Manager prep (standard model):</strong> The original build uses a wire bridge across the BOOT button pads so that output resumes after a power loss without a button press. With all power disconnected, solder a short wire across the pads on the back of the board, as shown below. This modification is specific to the standard model; do not assume the B, C, or D versions use the same circuit. Test power-loss recovery before sealing the enclosure.</p>
+<p><a href="../images/repeater-solar-1w-diy-build-4.jpg"><img alt="Boot button shorted on Waveshare Solar Power Manager" class="mc-build-photo" height="400" loading="lazy" src="../images/repeater-solar-1w-diy-build-4.jpg" width="300" /></a></p>
+</li>
+</ol>
+<h3 id="component-mounting">Component Mounting<a class="headerlink" href="#component-mounting" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<p>Outside the box (for easier access), mount the Ikoka Stick and the Waveshare Solar Power Manager to the 3D-printed mounting plate. If using the optional INA3221, mount it as well.</p>
+</li>
+<li>
+<p><strong>(Optional, Adafruit INA3221)</strong> Using a soldering iron, carefully remove the Ikoka Stick's OLED display header pins. Work slowly and gently to avoid damaging nearby components.</p>
+</li>
+<li>
+<p><strong>(Optional, Adafruit INA3221)</strong> Solder the INA3221 to the Ikoka's I2C bus using the display header pads. See the <a href="#ina3221-wiring-optional">INA3221 Wiring</a> section below for the pin connections.</p>
+<p><a href="../images/repeater-solar-1w-diy-build-5.jpg"><img alt="INA3221 wired to Ikoka Stick I2C with Waveshare Solar Power Manager" class="mc-build-photo" height="400" loading="lazy" src="../images/repeater-solar-1w-diy-build-5.jpg" width="300" /></a></p>
+</li>
+<li>
+<p>Install the mounting plate assembly into the junction box and secure it with M3x5 screws into the M3x35 spacers.</p>
+</li>
+</ol>
+<h3 id="battery-installation">Battery Installation<a class="headerlink" href="#battery-installation" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<p>Attach the 3D-printed battery holder to the inside front of the case, below where the solar panel wires enter. Use double-sided tape or epoxy to secure it.</p>
+</li>
+<li>
+<p>If your 18650 battery pack does not have a built-in PCM (protection circuit module), wire the battery protection board between the battery and the Waveshare. Follow the polarity markings carefully.</p>
+</li>
+</ol>
+<h3 id="power-wiring">Power Wiring<a class="headerlink" href="#power-wiring" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<p><strong>(Optional, Adafruit INA3221) Solar wiring:</strong> Connect the solar panel positive wire to INA3221 <strong>CH3+</strong>. Connect CH3- to the Waveshare solar input positive. Connect the solar panel negative wire directly to the Waveshare solar input negative.</p>
+</li>
+<li>
+<p><strong>(Optional, Adafruit INA3221) Battery wiring:</strong> Connect the battery (or the PCM) positive wire to INA3221 <strong>CH1+</strong>. Connect CH1- to the positive pin on the Waveshare battery JST PH2.0 connector. Connect the battery negative wire directly to the negative pin on the JST PH2.0 connector. Plug the connector into the Waveshare board.</p>
+<p><strong>Note:</strong> If you are not using the INA3221, wire the solar panel and battery directly to the Waveshare board's solar and battery inputs.</p>
+</li>
+</ol>
+<h3 id="final-connections">Final Connections<a class="headerlink" href="#final-connections" title="Permanent link">&para;</a></h3>
+<ol>
+<li>
+<p>Connect the SMA cable from the filter's input to the Ikoka Stick's SMA connector. Snug both ends with a suitable wrench without twisting the cable or overtightening. A loose RF connection will cause signal loss. Attach the external antenna before applying power.</p>
+</li>
+<li>
+<p>Run the USB-A to USB-C cable from the Waveshare Solar Power Manager's USB output to the Ikoka Stick's USB-C input.</p>
+<p><em>If using the Adafruit INA3221, your completed assembly should look similar to this:</em></p>
+<p><a href="../images/repeater-solar-1w-diy-build-6.jpg"><img alt="Completed build with INA3221, Waveshare, and Ikoka Stick" class="mc-build-photo" height="400" loading="lazy" src="../images/repeater-solar-1w-diy-build-6.jpg" width="300" /></a></p>
+<p><em>Without the INA3221:</em></p>
+<p><a href="../images/repeater-solar-1w-diy-build-7.jpg"><img alt="Completed build without INA3221" class="mc-build-photo" height="400" loading="lazy" src="../images/repeater-solar-1w-diy-build-7.jpg" width="300" /></a></p>
+<p><em>Full interior view with INA3221, battery pack, and all wiring complete:</em></p>
+<p><a href="../images/repeater-solar-1w-diy-build-8.jpg"><img alt="Full interior view of completed build with INA3221" class="mc-build-photo" height="225" loading="lazy" src="../images/repeater-solar-1w-diy-build-8.jpg" width="300" /></a></p>
+</li>
+</ol>
+<h2 id="ina3221-wiring-optional">INA3221 wiring (optional)<a class="headerlink" href="#ina3221-wiring-optional" title="Permanent link">&para;</a></h2>
+<p>The Adafruit INA3221 connects to the Ikoka Stick via I2C using the <strong>OLED display header</strong> pads. Remove the display header pins and solder wires directly to the pads.</p>
+<p><strong>I2C connection (Ikoka display header to INA3221):</strong></p>
+<div class="mc-table-wrap mc-build-table">
+<table>
+<thead>
+<tr>
+<th>Ikoka Display Header</th>
+<th>INA3221 Pin</th>
+<th>Wire</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pin 1 - GND</td>
+<td>GND</td>
+<td>Ground</td>
+</tr>
+<tr>
+<td>Pin 2 - VCC (3.3V)</td>
+<td>VCC</td>
+<td>Power</td>
+</tr>
+<tr>
+<td>Pin 3 - SCL</td>
+<td>SCL</td>
+<td>Clock</td>
+</tr>
+<tr>
+<td>Pin 4 - SDA</td>
+<td>SDA</td>
+<td>Data</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>INA3221 channel assignments:</strong></p>
+<div class="mc-table-wrap mc-build-table">
+<table>
+<thead>
+<tr>
+<th>Channel</th>
+<th>Connected To</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CH1</td>
+<td>Battery</td>
+<td>Monitor battery voltage and current draw</td>
+</tr>
+<tr>
+<td>CH2</td>
+<td>(unused)</td>
+<td>Available for future use</td>
+</tr>
+<tr>
+<td>CH3</td>
+<td>Solar</td>
+<td>Monitor solar input voltage and charging current</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Note:</strong> VCC on the INA3221 is the board power pin (3.3V from the Ikoka). VIN1/VIN2/VIN3 are the measurement channel inputs, not the power pin.</p>
+<h3 id="firmware-build-flags">Firmware build flags<a class="headerlink" href="#firmware-build-flags" title="Permanent link">&para;</a></h3>
+<p>MeshCore defaults to address <code>0x42</code>; the Adafruit INA3221 uses <code>0x40</code>. Keep the inherited board flags and add the sensor settings to the 30 dBm repeater environment:</p>
+<div class="highlight"><pre><span></span><code><span class="k">[env:ikoka_stick_nrf_30dbm_repeater]</span>
+<span class="na">build_flags</span><span class="w"> </span><span class="o">=</span>
+<span class="w">  </span><span class="na">${ikoka_stick_nrf_repeater.build_flags}</span>
+<span class="w">  </span><span class="na">${ikoka_stick_nrf_e22_30dbm.build_flags}</span>
+<span class="w">  </span><span class="na">-D TELEM_INA3221_ADDRESS</span><span class="o">=</span><span class="s">0x40</span>
+<span class="w">  </span><span class="na">-UENV_INCLUDE_INA219</span>
+<span class="w">  </span><span class="na">-D TELEM_INA3221_SHUNT_VALUE</span><span class="o">=</span><span class="s">0.05</span>
+</code></pre></div>
+<p>The address and INA219 flags are from the original guide: they select <code>0x40</code> and disable the conflicting INA219 driver. The shunt-value flag matches the Adafruit board's <strong>0.05 Ω</strong> resistors so current readings use the correct scale. See <a href="https://learn.adafruit.com/adafruit-ina3221-breakout/pinouts">Adafruit's pinout</a> and <a href="https://github.com/meshcore-dev/MeshCore/blob/main/src/helpers/sensors/EnvironmentSensorManager.cpp">MeshCore's sensor defaults</a>.</p>
+<h2 id="wiring-diagram">Wiring diagram<a class="headerlink" href="#wiring-diagram" title="Permanent link">&para;</a></h2>
+<p><a href="../images/repeater-solar-1w-diy-build-9.svg"><img alt="Wiring diagram" class="mc-build-photo mc-build-diagram" height="543" loading="lazy" src="../images/repeater-solar-1w-diy-build-9.svg" width="600" /></a></p>
+<p><span id="test-it-on-the-bench"></span></p>
+<h2 id="check-the-readings">Check before powering on<a class="headerlink" href="#check-the-readings" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Check polarity and continuity, then inspect solder joints for shorts.</li>
+<li>Use a protected, matched 1S battery pack and stay within the cells' charging-temperature limits.</li>
+<li>Confirm the antenna, filter, and RF cables are connected.</li>
+<li>Check that the power manager supplies the expected USB voltage before connecting the radio.</li>
+<li>Test that power returns after an interruption. If fitted, compare INA3221 readings with a multimeter.</li>
+<li><a href="../../start/repeater/">Flash and configure the repeater</a>, then check that a nearby companion receives its advert before installing it.</li>
+</ul>
+<h2 id="recovery-and-undo">Troubleshooting and recovery<a class="headerlink" href="#recovery-and-undo" title="Permanent link">&para;</a></h2>
+<p>If the unit does not start, disconnect power and recheck the wiring and BOOT-button modification. Stop using any battery that is hot, swollen, leaking, or damaged. If a firmware change fails, use the <a href="../../meshcore/flash-repeater/#recovery-plan">USB recovery steps</a> after checking the power and RF connections.</p>
+<p><span id="maintenance"></span></p>
+<p>After installation, check the mounting, panel bond, seals, vent, cables, and battery condition regularly and after severe weather.</p>
 <h2 id="source">Source<a class="headerlink" href="#source" title="Permanent link">&para;</a></h2>
-<p>Based on experimental community notes contributed by MrAlders0n in 2026. No
-hardware or firmware claim on this page is verified.</p>
-<p>Prefer a reviewed option from the <a href="../recommended-repeaters/">repeater selection guide</a>.
-If this experiment is approved and commissioned, complete the
-<a href="../repeater-mounting-options/">mounting plan</a> and
-<a href="../../config/">repeater configuration</a>.</p>
+<p>Restored from <a href="https://github.com/MeshCore-ca/MeshCore-Canada/blob/76a4262a354a111d19ddf8cc4abb25b1267fd9db/docs/hardware/repeater-solar-1w-diy-build.md">MrAlders0n's pre-overhaul guide</a>. The original parts, assembly sequence, photos, wiring tables, and downloads are retained. The optional telemetry example also includes the Adafruit shunt value.</p>
+<p>For the standard power manager's limits and connector markings, see the <a href="https://files.waveshare.com/upload/6/6c/Solar_Power_Manager_user_manual_en.pdf">Waveshare manual</a>.</p>
 
 
 
