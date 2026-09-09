@@ -174,16 +174,16 @@ test("English and French homepages link directly to the region finder", async ({
   }
 });
 
-test("hardware landing links directly to the experimental 1 W build", async ({ page }, testInfo) => {
+test("hardware landing links directly to the restored 1 W build", async ({ page }, testInfo) => {
   await page.goto(siteRoute("/hardware/"));
-  const link = page.getByRole("link", { name: "Review the experimental 1 W build" });
+  const link = page.getByRole("link", { name: "Read the 1 W build guide" });
   await expect(link).toBeVisible();
   await expect(link).toHaveAttribute("href", "repeater-solar-1w-diy-build/");
   await link.click();
   await expect(page).toHaveURL(
     resolveSiteRoute(testInfo.project.use.baseURL, "/hardware/repeater-solar-1w-diy-build/"),
   );
-  await expect(page.getByRole("heading", { level: 1 })).toContainText("Experimental 1 W Solar Repeater");
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("Building a 1 W solar repeater — Ikoka Stick");
 });
 
 test("config place deep links resolve an online city search", async ({ page }) => {

@@ -62,10 +62,10 @@ ou de commencer les travaux.
     <p>Un modèle RAK à l’état d’ébauche pour les personnes expérimentées, avec une liste de pièces, des étapes d’assemblage, des vérifications sur l’établi et des notes d’entretien.</p>
     <a class="md-button" href="repeater-solar-300mw-diy-build/">Examiner le modèle de 300 mW</a>
   </section>
-  <section class="mc-decision-card" data-status="experimental">
-    <h3>Répéteur solaire expérimental de 1 W</h3>
-    <p>Un modèle haute puissance non vérifié proposé par MrAlders0n. Utilisez-le seulement après qu’un examen électrique, RF et du site a confirmé un besoin réel du réseau.</p>
-    <a class="md-button" href="repeater-solar-1w-diy-build/">Examiner le modèle expérimental de 1 W</a>
+  <section class="mc-decision-card" data-status="draft">
+    <h3>Répéteur solaire de 1 W — Ikoka Stick</h3>
+    <p>Le guide de MrAlders0n, avec pièces, photos, câblage et télémétrie INA3221 facultative.</p>
+    <a class="md-button" href="repeater-solar-1w-diy-build/">Lire le guide de construction de 1 W</a>
   </section>
 </div>
 
