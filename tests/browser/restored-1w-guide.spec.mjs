@@ -11,6 +11,7 @@ for (const locale of ["", "fr/"]) {
     await expect(parts.locator("tbody tr")).toHaveCount(16);
     await expect(parts).toContainText("M3x35");
     await expect(parts).toContainText("M3x5");
+    expect(await parts.evaluate(table => parseFloat(getComputedStyle(table).fontSize))).toBeGreaterThanOrEqual(16);
     expect(await parts.locator("tbody td").first().evaluate(cell => parseFloat(getComputedStyle(cell).paddingLeft))).toBeGreaterThanOrEqual(8);
     await expect(page.locator('article a[href$=".3mf"]')).toHaveCount(1);
     await expect(page.locator('article a[href$=".stl"]')).toHaveCount(2);
