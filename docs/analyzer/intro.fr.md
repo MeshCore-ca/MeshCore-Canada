@@ -83,9 +83,11 @@ Quelle que soit la méthode choisie, il vous faut :
 - la publication des paquets, et non seulement de l’état;
 - un hôte ou une carte toujours en ligne.
 
-La configuration canadienne de départ est **USA/Canada (Recommended)**,
+La configuration canadienne de départ est **Canada**,
 `910.525 MHz / 62.5 kHz / SF7 / CR5`, avec le hachage des chemins sur
 3 octets. Une configuration locale publiée a priorité.
+
+Consultez les [détails du préréglage Canada et les consignes pour les anciennes applications](../provinces/index.md#canada-baseline).
 
 Pour connaître les champs exacts du courtier, consultez les
 [paramètres de connexion des observateurs](broker-reference.md).

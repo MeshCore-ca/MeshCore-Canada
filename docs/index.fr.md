@@ -110,14 +110,14 @@ Utilisez ces paramètres, sauf si votre communauté en indique d’autres.
 
 | Paramètre | Valeur par défaut au Canada |
 |---|---|
-| Préréglage radio | **USA/Canada (Recommended)** |
+| Préréglage radio | **Canada** |
 | Valeurs radio détaillées | `910.525 MHz / 62.5 kHz / SF7 / CR5` |
 | Hachage des chemins | **3 octets** |
 | Commande correspondante | `set path.hash.mode 2` |
 
 </div>
 
-<p class="mc-preset-note">Prévu : un préréglage <strong>Canada</strong> distinct, avec les mêmes paramètres radio que <strong>USA/Canada</strong> et un hachage de 3 octets par défaut pour tous les types d’appareils. <a href="https://github.com/meshcore-dev/MeshCore/issues/3302">Suivre la discussion</a>.</p>
+<p class="mc-preset-note">Le préréglage <strong>Canada</strong> de l’application conserve les paramètres radio de l’ancien USA/Canada et choisit des parcours de <strong>3 octets</strong>. Le préréglage distinct <strong>USA</strong> ne modifie pas la taille du hachage. <a href="provinces/#canada-baseline">Détails et anciennes applications</a> · <a href="https://github.com/meshcore-dev/MeshCore/issues/3302#issuecomment-5598886579">Annonce du changement</a>.</p>
 
 ## Améliorer MeshCore Canada
 

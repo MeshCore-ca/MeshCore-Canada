@@ -80,12 +80,14 @@ Use the local mesh settings. When no community override exists, the Canadian onb
 
 | Setting | Value |
 |---|---|
-| Radio preset | **USA/Canada (Recommended)** |
+| Radio preset | **Canada** |
 | Raw radio values | `910.525 MHz / 62.5 kHz / SF7 / CR5` |
 | Path hashes | 3 bytes (`set path.hash.mode 2`) |
 | Primary preset | `meshcore-ca-1` |
 | Backup preset | `meshcore-ca-2` |
 | Wi-Fi | A 2.4 GHz network |
+
+If Canada is not listed in the setup tool, follow the [older-preset instructions](../../provinces/index.md#canada-baseline).
 
 ### 3. Build the commands
 

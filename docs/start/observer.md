@@ -55,8 +55,10 @@ guide for the selected method.
 ## Use the right radio settings
 
 The connected radio must use the same settings as the nearby mesh. Start with
-**USA/Canada (Recommended)** and the **3-byte** path setting unless your
+**Canada** and the **3-byte** path setting unless your
 community lists different settings.
+
+If Canada is not listed, follow the [older-preset instructions](../provinces/index.md#canada-baseline).
 
 !!! warning "Match your local mesh"
     Check the [community directory](../provinces/index.md). A connected

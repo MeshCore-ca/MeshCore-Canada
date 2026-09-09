@@ -103,7 +103,7 @@ The flasher reports completion, the board restarts as a repeater, and the setup 
 3. Enter the intended location or use the map. Do not publish an exact private location unless that is appropriate for the site.
 4. Set a descriptive name, such as `Callsign_R1` or `Downtown_R1`.
 5. Set a unique admin password and store it securely.
-6. Confirm the local community has not documented an override. Otherwise apply **USA/Canada (Recommended)** (`910.525 MHz / 62.5 kHz / SF7 / CR5`).
+6. Confirm the local community has not documented an override. Otherwise apply **Canada** (`910.525 MHz / 62.5 kHz / SF7 / CR5`).
 7. Set the current MeshCore Canada default advert values:
    - **Advert Interval:** `60` minutes
    - **Flood Advert Interval:** `24` hours
@@ -111,6 +111,8 @@ The flasher reports completion, the board restarts as a repeater, and the setup 
 8. Use the [Repeater Configurator](../config/index.md) to get the region commands and path-hash mode. The Canada default is 3-byte (`set path.hash.mode 2`); use different local settings when your community lists them.
 9. Add owner information only if it is suitable for public adverts.
 10. Save the settings and reboot.
+
+If Canada is not listed in your app or flasher, follow the [older-preset instructions](../provinces/index.md#canada-baseline).
 
 ### Loop detection
 

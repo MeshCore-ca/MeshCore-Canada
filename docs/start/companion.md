@@ -47,8 +47,10 @@ Follow [Flash and configure a companion](../meshcore/flash-companion.md).
 
 ## Use the right radio settings
 
-Use **USA/Canada (Recommended)** with the **3-byte** path setting unless your
+Use **Canada** with the **3-byte** path setting unless your
 community lists different settings.
+
+If Canada is not listed, follow the [older-preset instructions](../provinces/index.md#canada-baseline).
 
 !!! warning "Match your local mesh"
     Check the [community directory](../provinces/index.md). If your community
