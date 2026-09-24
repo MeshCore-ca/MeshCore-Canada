@@ -821,16 +821,16 @@
       },
       "contacts": [
         {
-          "type": "telegram",
-          "label": "Mesh Saskatchewan Telegram",
-          "url": "https://t.me/MeshtSaska",
+          "type": "discord",
+          "label": "StoonMesh Discord",
+          "url": "https://discord.gg/StFvPY7BZe",
           "health": "verified",
-          "last_checked": "2026-08-29"
+          "last_checked": "2026-09-24"
         }
       ],
       "owner": null,
-      "verified_at": "2026-08-29",
-      "verify_by": "2027-02-28",
+      "verified_at": "2026-09-24",
+      "verify_by": "2027-03-24",
       "canonical_route": "/provinces/saskatchewan/#community-stoonmesh"
     },
     {
@@ -861,6 +861,50 @@
       "verified_at": "2026-08-29",
       "verify_by": "2027-02-28",
       "canonical_route": "/provinces/saskatchewan/#community-yqrmesh"
+    },
+    {
+      "id": "winnipeg-meshcore",
+      "name": "Winnipeg MeshCore",
+      "province": "MB",
+      "service_area": "Winnipeg, Manitoba",
+      "places": [
+        "Winnipeg"
+      ],
+      "aliases": [
+        "WPG",
+        "YWG"
+      ],
+      "status": "forming",
+      "languages": [],
+      "location": {
+        "latitude": null,
+        "longitude": null,
+        "precision": "service-area"
+      },
+      "settings": {
+        "inherit_national": true,
+        "overrides": {}
+      },
+      "contacts": [
+        {
+          "type": "website",
+          "label": "Winnipeg MeshCore website",
+          "url": "https://winnipegmeshcore.neocities.org/",
+          "health": "verified",
+          "last_checked": "2026-09-24"
+        },
+        {
+          "type": "matrix",
+          "label": "Winnipeg MeshCore chat",
+          "url": "https://matrix.to/#/#winnipeg-meshcore:matrix.org",
+          "health": "verified",
+          "last_checked": "2026-09-24"
+        }
+      ],
+      "owner": null,
+      "verified_at": "2026-09-24",
+      "verify_by": "2027-03-24",
+      "canonical_route": "/provinces/manitoba/#community-winnipeg-meshcore"
     },
     {
       "id": "greater-ottawa-mesh-enthusiasts",

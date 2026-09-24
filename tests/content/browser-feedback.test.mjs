@@ -56,7 +56,7 @@ test("Beacon totals distinguish known devices from the overview time window", ()
   assert.throws(() => network.parseStats({ ...overview, windowHours: 0 }, types));
 });
 
-test("all 24 listings have finite geographic search references without changing their source locations", () => {
+test("all listings have finite geographic search references without changing their source locations", () => {
   const directory = JSON.parse(readFileSync("data/communities.json", "utf8"));
   const anchors = JSON.parse(readFileSync("data/community-search-anchors.json", "utf8"));
   assert.deepEqual(Object.keys(anchors.communities).sort(), directory.communities.map(item => item.id).sort());
@@ -64,7 +64,7 @@ test("all 24 listings have finite geographic search references without changing 
     const page = readFileSync(`docs/provinces/${locale}`, "utf8");
     assert.match(page, /status_notice: false/);
     const points = [...page.matchAll(/data-community-points="([^"]+)"/g)];
-    assert.equal(points.length, 24);
+    assert.equal(points.length, directory.communities.length);
     for (const [, encoded] of points) {
       const list = JSON.parse(encoded.replaceAll("&quot;", '"').replaceAll("&#x27;", "'").replaceAll("&amp;", "&"));
       assert.ok(list.length > 0);

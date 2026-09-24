@@ -93,6 +93,9 @@
     "yqrmesh": {
       "service_area": "Regina et sud de la Saskatchewan"
     },
+    "winnipeg-meshcore": {
+      "service_area": "Winnipeg (Manitoba)"
+    },
     "greater-ottawa-mesh-enthusiasts": {
       "service_area": "Est de l’Ontario et ouest du Québec"
     },
