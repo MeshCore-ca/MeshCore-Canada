@@ -62,7 +62,8 @@ There are four levels of scope. Every repeater carries one code from each: its c
 
 - **Repeaters** carry their city, their province, `onqc` and `can`.
 - **Companions** use `onqc` as their default, so direct messages reach anyone.
-- **Local channels** such as `Public` are set to your city, so chatter stays local.
+- **`Public`** uses `onqc`, so everyone in Ontario and Québec can talk.
+- **Test channels and bots** use your city, so they stay local.
 - **Messages with no scope** still work inside each city. Bridge repeaters
   between cities drop them, so they don't flood the next city.
 
@@ -399,11 +400,24 @@ messages with no scope go around it.
 
 ## Companion setup
 
-1. Open the MeshCore app, then **Settings**. Under **Network Settings**, tap
-   **Default Region Scope**, add `onqc` and select it.
-2. Open each local channel, such as `Public`. Use the channel menu, then
-   **Set Region Scope**, and pick your city code, for example `yow`.
-3. For a channel meant to reach further, pick `on`, `qc` or `onqc` instead.
+### Step 1: Set your default scope
+
+In the MeshCore app, open **Settings**. Under **Network Settings**, tap
+**Default Region Scope**, add `onqc` and select it.
+
+### Step 2: Set a scope on each channel
+
+Open the channel, use the channel menu, tap **Set Region Scope**, and pick the
+scope from this table:
+
+| Channel | Scope | Why |
+| --- | --- | --- |
+| `Public` | `onqc` | Everyone in Ontario and Québec can talk |
+| Test channels, such as `#test` | Your city, for example `yow` | Tests stay local |
+| Bot channels | Your city, for example `yow` | Bot replies stay local |
+| Your own channels | Your city, `on`/`qc`, or `onqc` | Pick how far it should reach |
+
+If you run a bot, set that bot's own **Default Region Scope** to your city too.
 
 ## Why the companion default is `onqc`
 
@@ -438,9 +452,10 @@ companion the path comes back using **your contact's** default scope.
 </figure>
 
 <div class="mc-callout" data-kind="warning" markdown>
-**The catch:** a channel with no scope of its own also uses your default. With
-`onqc` as the default, an unscoped `Public` channel would reach all of Ontario and
-Québec. That is why step 2 of the companion setup sets local channels to your city.
+**The catch:** a channel with no scope of its own also uses your default,
+`onqc`, so it reaches all of Ontario and Québec. That is what we want for
+`Public`, but not for test channels and bots. That is why step 2 of the
+companion setup sets those to your city.
 </div>
 
 ## Who hears what
@@ -506,7 +521,7 @@ locally.
 
 <ol class="scp-timeline">
   <li data-phase="Phase 1"><h3>Repeaters</h3><p>Owners clear old regions and add their codes. Normal repeaters keep <code>*</code> allowed; bridge repeaters drop it. Nothing breaks inside any city.</p></li>
-  <li data-phase="Phase 2"><h3>Companions</h3><p>Users set their default to <code>onqc</code> and set local channels to their city.</p></li>
+  <li data-phase="Phase 2"><h3>Companions</h3><p>Users set their default and <code>Public</code> to <code>onqc</code>, and test channels and bots to their city.</p></li>
   <li data-phase="Phase 3"><h3>Only if needed</h3><p>If messages with no scope are still too noisy inside a city, repeaters can also run <code>set flood.max.unscoped 3</code>. Scoped messages still reach 16 hops.</p></li>
 </ol>
 
