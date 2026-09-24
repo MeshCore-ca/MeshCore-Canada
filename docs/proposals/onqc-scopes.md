@@ -430,6 +430,13 @@ scope from this table:
 
 If you run a bot, set that bot's own **Default Region Scope** to your city too.
 
+<div class="mc-callout" markdown>
+**Scoped messages are a little shorter.** Once a channel has a scope, the app
+allows fewer characters per message. In our testing, the limit on `Public`
+dropped from 137 to 127 characters after setting it to `onqc`. The app sets
+the exact limit, and it can vary with your node name and app version.
+</div>
+
 ## Why the companion default is `onqc`
 
 You cannot pick a scope for a single direct message. When a DM has no known
@@ -537,6 +544,8 @@ locally.
 
 ## Things to know
 
+- **Scoped messages are about 10 characters shorter.** The app lowers the
+  message length limit on scoped channels (137 to 127 in our testing).
 - **Repeater adverts stay in their city.** Montréal users will not see Ottawa
   repeaters through flood adverts.
 - **16 hops has to be enough.** `flood.max` applies to `onqc` too. If the
