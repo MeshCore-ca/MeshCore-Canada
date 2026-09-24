@@ -266,68 +266,126 @@ complète.
 
 ## Configuration du répéteur
 
-### Étape 1 : Effacer les anciennes régions
+Entrez ces commandes dans la ligne de commande du répéteur **une à la fois** :
+dans l’application MeshCore, ouvrez le répéteur, connectez-vous comme
+administrateur et utilisez la zone de commande de **Repeater Admin**, ou
+utilisez la console USB. Chaque commande a son propre bouton de copie.
+Attendez `OK` avant d’envoyer la suivante.
+
+### Étape 1 : Vérifier le micrologiciel
+
+```text
+ver
+```
+
+Cette commande affiche la version du micrologiciel. Elle détermine les
+commandes de région à utiliser à l’étape 4 :
+
+- **1.16 ou plus récent :** utilisez `region def`.
+- **1.15 ou plus ancien :** `region def` répond `Err - ??`. Utilisez plutôt les
+  commandes `region put` sous [Micrologiciel plus ancien](#micrologiciel-plus-ancien),
+  ou mettez d’abord le micrologiciel à jour.
+
+### Étape 2 : Effacer les anciennes régions
 
 Beaucoup de répéteurs ont déjà des régions de l’ancienne configuration, comme
-`can`, `on-alg` ou `ott`. `region def` ne supprime jamais rien, alors effacez-les
-d’abord.
+`can`, `on-alg` ou `ott`. Les nouvelles commandes ne suppriment jamais rien,
+alors effacez-les d’abord.
 
-1. Lancez `region` pour voir ce qui s’y trouve.
-2. Retirez chaque nom sauf `*` avec `region remove <nom>`. Commencez par la
-   ligne la plus en retrait et remontez. Si vous voyez `Err - not empty`, un
-   nom est encore en retrait sous celui-ci; retirez-le d’abord.
-3. Lancez `region save`.
+1. Affichez ce qui s’y trouve :
 
-Par exemple, un répéteur configuré avec l’ancien chemin d’Ottawa :
+    ```text
+    region
+    ```
+
+2. Retirez chaque nom sauf `*`, un à la fois, avec `region remove <nom>`.
+   Commencez par la ligne la plus en retrait et remontez. Si vous voyez
+   `Err - not empty`, un autre nom est encore en retrait sous celui-ci;
+   retirez-le d’abord.
+3. Enregistrez :
+
+    ```text
+    region save
+    ```
+
+Par exemple, un répéteur configuré avec l’ancien chemin d’Ottawa lance ces
+commandes, dans l’ordre :
 
 ```text
 region remove ott
+```
+
+```text
 region remove on-alg
+```
+
+```text
 region remove on
+```
+
+```text
 region remove can
+```
+
+```text
 region save
 ```
 
-Retirer `on` et `can` ne pose pas de problème. Les réglages de région de
-l’étape 3 les remettent. Lancez `region` de nouveau : vous ne devriez voir que `* F`.
+Retirer `on` et `can` ne pose pas de problème. L’étape 4 les remet. Lancez
+`region` de nouveau : vous ne devriez voir que `*^ F`.
 
-### Étape 2 : Réglages standard de MeshCore Canada
+### Étape 3 : Réglages standard de MeshCore Canada
 
 ```text
 set path.hash.mode 2
+```
+
+```text
 set advert.interval 240
+```
+
+```text
 set flood.advert.interval 47
+```
+
+```text
 set flood.max 16
 ```
 
 <dl class="scp-explain">
-  <dt>path.hash.mode 2</dt><dd>Utilise des identifiants de répéteur de 3 octets dans les chemins, pour que moins de répéteurs partagent un identifiant.</dd>
+  <dt>path.hash.mode 2</dt><dd>Utilise des identifiants de répéteur de 3 octets dans les chemins, pour que moins de répéteurs partagent un identifiant. Exige le micrologiciel 1.14 ou plus récent.</dd>
   <dt>advert.interval 240</dt><dd>Annonce ce répéteur à ses voisins directs toutes les 4 heures.</dd>
   <dt>flood.advert.interval 47</dt><dd>Annonce ce répéteur dans tout le réseau toutes les 47 heures.</dd>
   <dt>flood.max 16</dt><dd>Aucune diffusion ne fait plus de 16 sauts, avec ou sans portée.</dd>
 </dl>
 
-### Étape 3 : Réglages de région
+Ces réglages s’enregistrent d’eux-mêmes. Pas besoin de `region save`.
+
+### Étape 4 : Réglages de région
 
 Votre code de ville est votre **zone MeshMapper**. Ouvrez
 [MeshMapper](https://meshmapper.net/), trouvez la zone où se trouve votre
 répéteur et utilisez son code. C’est une carte que tout le monde utilise déjà,
 donc rien de nouveau à chercher.
 
-Le modèle est toujours le même :
-
-```text
-region def <ville>|* <on ou qc>|* onqc|* can
-```
-
-Exemples :
+Avec le **micrologiciel 1.16 ou plus récent**, choisissez votre secteur et
+lancez les quatre commandes dans l’ordre :
 
 === "Ottawa et environs"
 
     ```text
     region def yow|* on|* onqc|* can
+    ```
+
+    ```text
     region allowf *
+    ```
+
+    ```text
     region default yow
+    ```
+
+    ```text
     region save
     ```
 
@@ -335,8 +393,17 @@ Exemples :
 
     ```text
     region def yow|* qc|* onqc|* can
+    ```
+
+    ```text
     region allowf *
+    ```
+
+    ```text
     region default yow
+    ```
+
+    ```text
     region save
     ```
 
@@ -344,8 +411,17 @@ Exemples :
 
     ```text
     region def yul|* qc|* onqc|* can
+    ```
+
+    ```text
     region allowf *
+    ```
+
+    ```text
     region default yul
+    ```
+
+    ```text
     region save
     ```
 
@@ -353,8 +429,17 @@ Exemples :
 
     ```text
     region def yqb|* qc|* onqc|* can
+    ```
+
+    ```text
     region allowf *
+    ```
+
+    ```text
     region default yqb
+    ```
+
+    ```text
     region save
     ```
 
@@ -366,31 +451,134 @@ aujourd’hui; il n’y a donc rien de nouveau à apprendre.
   <dt>region def …</dt><dd>Porter votre ville, votre province, <code>onqc</code> et <code>can</code>.</dd>
   <dt>region allowf *</dt><dd>Relayer aussi les messages <strong>sans portée</strong>. C’est déjà le réglage par défaut. On le règle quand même pour que vous le voyiez.</dd>
   <dt>region default &lt;ville&gt;</dt><dd>Les annonces de ce répéteur utilisent la portée de votre ville, pour rester locales.</dd>
-  <dt>region save</dt><dd>Conserve les réglages de région après un redémarrage. Les commandes <code>set</code> s’enregistrent d’elles-mêmes.</dd>
+  <dt>region save</dt><dd>Conserve les réglages de région après un redémarrage.</dd>
 </dl>
 
-Pour vérifier, lancez `region`. Pour Ottawa, vous devriez voir :
+#### Micrologiciel plus ancien
+
+Si `region def` répond `Err - ??`, votre micrologiciel est plus ancien que 1.16.
+Ajoutez plutôt chaque code avec `region put`. Ces exemples sont pour Ottawa.
+Pour un autre secteur, remplacez `yow` par votre code de ville, et `on` par
+`qc` au Québec.
+
+=== "Micrologiciel 1.15"
+
+    ```text
+    region put yow
+    ```
+
+    ```text
+    region put on
+    ```
+
+    ```text
+    region put onqc
+    ```
+
+    ```text
+    region put can
+    ```
+
+    ```text
+    region allowf *
+    ```
+
+    ```text
+    region default yow
+    ```
+
+    ```text
+    region save
+    ```
+
+=== "Micrologiciel 1.10 à 1.14"
+
+    ```text
+    region put yow
+    ```
+
+    ```text
+    region allowf yow
+    ```
+
+    ```text
+    region put on
+    ```
+
+    ```text
+    region allowf on
+    ```
+
+    ```text
+    region put onqc
+    ```
+
+    ```text
+    region allowf onqc
+    ```
+
+    ```text
+    region put can
+    ```
+
+    ```text
+    region allowf can
+    ```
+
+    ```text
+    region allowf *
+    ```
+
+    ```text
+    region save
+    ```
+
+Avec **1.15**, une nouvelle région relaie tout de suite. Avec **1.10 à 1.14**,
+une nouvelle région commence avec la diffusion **désactivée**, donc chacune a
+aussi besoin de `region allowf`. Ces versions n’ont pas non plus de
+`region default`, donc les annonces du répéteur restent sans portée. Une mise
+à jour du micrologiciel vaut la peine.
+
+### Étape 5 : Vérifier le résultat
 
 ```text
-* F
+region
+```
+
+Pour Ottawa, vous devriez voir :
+
+```text
+*^ F
  yow F
  on F
  onqc F
  can F
 ```
 
-`F` veut dire « diffusion permise » : le répéteur relaie ce nom.
+`F` veut dire « diffusion permise » : le répéteur relaie ce nom. Le `^` à côté
+de `*` indique la région d’attache du répéteur; quand aucune n’est réglée, il
+se place sur `*`. Vous pouvez l’ignorer.
 
 ### Répéteurs passerelles
 
 Un répéteur qui relie volontairement deux zones de ville porte **les deux**
 codes de ville. Par exemple, un répéteur à **Rigaud** se trouve dans la zone
-`yow`, du côté québécois, et la relie à la zone de Montréal :
+`yow`, du côté québécois, et la relie à la zone de Montréal. Avec le
+micrologiciel 1.16 ou plus récent, lancez ces commandes dans l’ordre :
 
 ```text
 region def yow|* yul|* qc|* onqc|* can
+```
+
+```text
 region denyf *
+```
+
+```text
 region default yow
+```
+
+```text
 region save
 ```
 

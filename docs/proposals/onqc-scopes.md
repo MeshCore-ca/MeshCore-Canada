@@ -250,66 +250,122 @@ there. Run `region` afterwards to see the full list.
 
 ## Repeater setup
 
-### Step 1: Clear any old regions
+Type these into the repeater's command line **one command at a time**: in the
+MeshCore app, open the repeater, log in as admin and use the command box in
+**Repeater Admin**, or use the USB console. Each command has its own copy
+button. Wait for `OK` before sending the next one.
+
+### Step 1: Check your firmware
+
+```text
+ver
+```
+
+This shows the firmware version. It decides which region commands you use in
+step 4:
+
+- **1.16 or newer:** use `region def`.
+- **1.15 or older:** `region def` answers `Err - ??`. Use the `region put`
+  commands under [Older firmware](#older-firmware) instead, or update the
+  firmware first.
+
+### Step 2: Clear any old regions
 
 Many repeaters already have regions from the older setup, such as `can`,
-`on-alg` or `ott`. `region def` never deletes anything, so clear them first.
+`on-alg` or `ott`. The new commands never delete anything, so clear them first.
 
-1. Run `region` to list what is there.
-2. Remove every name except `*` with `region remove <name>`. Start with the
-   most indented line and work up. If you see `Err - not empty`, a name is
-   still indented under it, so remove that one first.
-3. Run `region save`.
+1. List what is there:
 
-For example, a repeater set up with the old Ottawa path:
+    ```text
+    region
+    ```
+
+2. Remove every name except `*`, one at a time, with `region remove <name>`.
+   Start with the most indented line and work up. If you see
+   `Err - not empty`, another name is still indented under it, so remove that
+   one first.
+3. Save:
+
+    ```text
+    region save
+    ```
+
+For example, a repeater set up with the old Ottawa path runs these, in order:
 
 ```text
 region remove ott
+```
+
+```text
 region remove on-alg
+```
+
+```text
 region remove on
+```
+
+```text
 region remove can
+```
+
+```text
 region save
 ```
 
-Removing `on` and `can` is fine. The region settings in step 3 add them back. Run `region` again, and you
-should only see `* F`.
+Removing `on` and `can` is fine. Step 4 adds them back. Run `region` again,
+and you should only see `*^ F`.
 
-### Step 2: Standard MeshCore Canada settings
+### Step 3: Standard MeshCore Canada settings
 
 ```text
 set path.hash.mode 2
+```
+
+```text
 set advert.interval 240
+```
+
+```text
 set flood.advert.interval 47
+```
+
+```text
 set flood.max 16
 ```
 
 <dl class="scp-explain">
-  <dt>path.hash.mode 2</dt><dd>Uses 3-byte repeater IDs in message paths, so fewer repeaters share an ID.</dd>
+  <dt>path.hash.mode 2</dt><dd>Uses 3-byte repeater IDs in message paths, so fewer repeaters share an ID. Needs firmware 1.14 or newer.</dd>
   <dt>advert.interval 240</dt><dd>Announces this repeater to direct neighbours every 4 hours.</dd>
   <dt>flood.advert.interval 47</dt><dd>Announces this repeater across the network every 47 hours.</dd>
   <dt>flood.max 16</dt><dd>No flood message travels more than 16 hops, scoped or not.</dd>
 </dl>
 
-### Step 3: Region settings
+These save by themselves. No `region save` is needed for them.
+
+### Step 4: Region settings
 
 Your city code is your **MeshMapper zone**. Open [MeshMapper](https://meshmapper.net/),
 find the zone your repeater sits in, and use its code. It is a map everyone
 already uses, so there is nothing new to look up.
 
-The pattern is always the same:
-
-```text
-region def <city>|* <on or qc>|* onqc|* can
-```
-
-Examples:
+On **firmware 1.16 or newer**, pick your area and run the four commands in
+order:
 
 === "Ottawa and surrounding areas"
 
     ```text
     region def yow|* on|* onqc|* can
+    ```
+
+    ```text
     region allowf *
+    ```
+
+    ```text
     region default yow
+    ```
+
+    ```text
     region save
     ```
 
@@ -317,8 +373,17 @@ Examples:
 
     ```text
     region def yow|* qc|* onqc|* can
+    ```
+
+    ```text
     region allowf *
+    ```
+
+    ```text
     region default yow
+    ```
+
+    ```text
     region save
     ```
 
@@ -326,8 +391,17 @@ Examples:
 
     ```text
     region def yul|* qc|* onqc|* can
+    ```
+
+    ```text
     region allowf *
+    ```
+
+    ```text
     region default yul
+    ```
+
+    ```text
     region save
     ```
 
@@ -335,8 +409,17 @@ Examples:
 
     ```text
     region def yqb|* qc|* onqc|* can
+    ```
+
+    ```text
     region allowf *
+    ```
+
+    ```text
     region default yqb
+    ```
+
+    ```text
     region save
     ```
 
@@ -348,31 +431,132 @@ nothing new to learn.
   <dt>region def …</dt><dd>Carry your city, your province, <code>onqc</code> and <code>can</code>.</dd>
   <dt>region allowf *</dt><dd>Also forward messages with <strong>no scope</strong>. This is already on by default. We set it anyway so you can see it.</dd>
   <dt>region default &lt;city&gt;</dt><dd>This repeater's own adverts use your city's scope, so they stay local.</dd>
-  <dt>region save</dt><dd>Keeps the region settings after a reboot. The <code>set</code> commands save by themselves.</dd>
+  <dt>region save</dt><dd>Keeps the region settings after a reboot.</dd>
 </dl>
 
-To check, run `region`. For Ottawa you should see:
+#### Older firmware
+
+If `region def` answers `Err - ??`, your firmware is older than 1.16. Add each
+code with `region put` instead. These examples are for Ottawa. For another
+area, replace `yow` with your city code, and `on` with `qc` in Québec.
+
+=== "Firmware 1.15"
+
+    ```text
+    region put yow
+    ```
+
+    ```text
+    region put on
+    ```
+
+    ```text
+    region put onqc
+    ```
+
+    ```text
+    region put can
+    ```
+
+    ```text
+    region allowf *
+    ```
+
+    ```text
+    region default yow
+    ```
+
+    ```text
+    region save
+    ```
+
+=== "Firmware 1.10 to 1.14"
+
+    ```text
+    region put yow
+    ```
+
+    ```text
+    region allowf yow
+    ```
+
+    ```text
+    region put on
+    ```
+
+    ```text
+    region allowf on
+    ```
+
+    ```text
+    region put onqc
+    ```
+
+    ```text
+    region allowf onqc
+    ```
+
+    ```text
+    region put can
+    ```
+
+    ```text
+    region allowf can
+    ```
+
+    ```text
+    region allowf *
+    ```
+
+    ```text
+    region save
+    ```
+
+On **1.15**, a new region forwards straight away. On **1.10 to 1.14**, a new
+region starts with forwarding **off**, so each one also needs
+`region allowf`. Those versions also have no `region default`, so the
+repeater's own adverts stay unscoped. Updating the firmware is worth it.
+
+### Step 5: Check the result
 
 ```text
-* F
+region
+```
+
+For Ottawa, you should see:
+
+```text
+*^ F
  yow F
  on F
  onqc F
  can F
 ```
 
-`F` means "flood allowed": the repeater forwards that name.
+`F` means "flood allowed": the repeater forwards that name. The `^` next to
+`*` marks the repeater's home region; with none set, it sits on `*`. You can
+ignore it.
 
 ### Bridge repeaters
 
 A repeater that links two city zones on purpose carries **both** city codes.
 For example, a repeater in **Rigaud** sits in the `yow` zone, on the Québec
-side, and links it to the Montréal zone:
+side, and links it to the Montréal zone. On firmware 1.16 or newer, run these
+in order:
 
 ```text
 region def yow|* yul|* qc|* onqc|* can
+```
+
+```text
 region denyf *
+```
+
+```text
 region default yow
+```
+
+```text
 region save
 ```
 
