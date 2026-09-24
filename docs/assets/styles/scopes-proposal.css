@@ -740,3 +740,18 @@
   from { background-position: 100% 0; }
   to { background-position: -150% 0; }
 }
+
+/* ---------- Tabs ---------- */
+
+/* On phones the theme bleeds the tab strip 0.8rem past the content edge, but
+   this site's gutter is wider, so long labels push the page past the viewport.
+   Keep the strip inside the content column; it still scrolls sideways. */
+@media screen and (max-width: 44.984375em) {
+  [dir] .md-content__inner > .tabbed-set .tabbed-labels {
+    max-width: 100%;
+    margin-right: 0;
+    margin-left: 0;
+    padding-left: 0;
+    scroll-padding-inline-start: 0;
+  }
+}

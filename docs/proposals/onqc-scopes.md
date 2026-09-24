@@ -179,6 +179,12 @@ Québec mesh".
 
 - They are the same codes MeshMapper already uses, for example
   `yow.meshmapper.net`.
+- MeshCore already uses airport codes in other places too, such as the
+  [location code every observer reports](../analyzer/iata-codes.md). Inventing
+  a separate set of names just for regions would mean two ways to name the
+  same area, and more confusion over time. Airport codes are not a perfect fit
+  for mesh areas, but MeshCore already uses them for a variety of things and
+  that is not going to change, so regions should follow along.
 - There are no accents or capital letters to get wrong. `montréal`,
   `Montreal` and `montreal` would be three different scopes.
 - They are easy to split later. If Renfrew wants its own area one day, it can
@@ -293,7 +299,7 @@ region def <city>|* <on or qc>|* onqc|* can
 
 Examples:
 
-=== "Ottawa"
+=== "Ottawa and surrounding areas"
 
     ```text
     region def yow|* on|* onqc|* can
@@ -311,7 +317,7 @@ Examples:
     region save
     ```
 
-=== "Montréal"
+=== "Montréal and surrounding areas"
 
     ```text
     region def yul|* qc|* onqc|* can
@@ -320,7 +326,7 @@ Examples:
     region save
     ```
 
-=== "Québec"
+=== "Québec City"
 
     ```text
     region def yqb|* qc|* onqc|* can
@@ -328,6 +334,10 @@ Examples:
     region default yqb
     region save
     ```
+
+These zones follow the MeshMapper boundaries that already exist. They are not
+perfect, but they are how most people already see the map today, so there is
+nothing new to learn.
 
 <dl class="scp-explain">
   <dt>region def …</dt><dd>Carry your city, your province, <code>onqc</code> and <code>can</code>.</dd>
