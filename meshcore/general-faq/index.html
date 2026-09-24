@@ -3924,10 +3924,13 @@ of repeating values that may change.</p>
 </ul>
 <h2 id="settings-and-range">Settings and range<a class="headerlink" href="#settings-and-range" title="Permanent link">&para;</a></h2>
 <h3 id="which-radio-settings-should-i-use-in-canada">Which radio settings should I use in Canada?<a class="headerlink" href="#which-radio-settings-should-i-use-in-canada" title="Permanent link">&para;</a></h3>
-<p>Use your community’s radio profile. The <a href="../../config/">repeater configurator</a>
-finds region paths, but keeps your radio settings unless you choose a profile.</p>
-<p>For any role, first check the <a href="../../provinces/">community directory</a>.
-Follow a published local override when one exists.</p>
+<p>Use the radio profile in the <a href="../../provinces/">community directory</a>. If none is published, choose <strong>Canada</strong> in the app
+for the Canadian radio settings and <strong>3-byte</strong> paths. See the
+<a href="../../provinces/#canada-baseline">preset details and older-app guidance</a>.</p>
+<p>The separate <strong>USA</strong> preset uses the same radio values but leaves the path-hash
+setting unchanged. <a href="https://github.com/meshcore-dev/MeshCore/issues/3302#issuecomment-5598886579">Upstream preset update</a>.</p>
+<p>The <a href="../../config/">repeater configurator</a> finds region paths. Its radio and
+advert ID controls remain separate and keep current settings until you choose a change.</p>
 <h3 id="what-is-path-hash-mode">What is path hash mode?<a class="headerlink" href="#what-is-path-hash-mode" title="Permanent link">&para;</a></h3>
 <p>It sets the size of the identifiers in this node’s advert paths: 1, 2, or 3 bytes.
 MeshCore Canada recommends 3 bytes to reduce collisions. Firmware 1.14 and newer

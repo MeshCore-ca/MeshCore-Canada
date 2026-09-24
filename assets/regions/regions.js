@@ -23,6 +23,8 @@
     "Advert ID size": "Taille de l’identifiant d’annonce",
     "Keep current settings": "Conserver les réglages actuels",
     "Choose a profile only after checking with your community. A region does not select a radio network.": "Confirmez le profil auprès de votre communauté. Une région ne détermine pas les réglages radio.",
+    "The Canada app preset uses 3-byte paths. Here, choose radio and advert ID settings separately.": "Le préréglage Canada de l’application utilise des parcours de 3 octets. Ici, choisissez séparément les réglages radio et la taille de l’identifiant d’annonce.",
+    "Canada preset details": "Détails du préréglage Canada",
     "Radio changes take effect after reboot.": "Les changements radio prennent effet après le redémarrage.",
     "Choose the region you mean:": "Choisissez la région recherchée :",
     "This saved location is invalid or no longer available. Choose a region again.": "Cet emplacement est invalide ou n’est plus disponible. Choisissez une région à nouveau.",
@@ -2086,6 +2088,7 @@
       '<p class="mcc-hint">Choose a profile only after checking with your community. A region does not select a radio network.</p>' +
       '<label class="mcc-label" for="mcc-hash-mode">Advert ID size</label>' +
       '<select class="mcc-select" id="mcc-hash-mode"><option value="keep">Keep current settings</option><option value="2">3 bytes</option><option value="1">2 bytes</option><option value="0">1 byte</option></select>' +
+      '<p class="mcc-hint" data-role="canada-preset-note">The Canada app preset uses 3-byte paths. Here, choose radio and advert ID settings separately. <a href="' + esc(new URL("../provinces/#canada-baseline", regionPageHref("config")).href) + '">Canada preset details</a></p>' +
       '<details class="mcc-advanced-options" data-role="technical-settings">' +
       '<summary>Firmware version</summary>' +
       '<p class="mcc-label">Firmware version</p>' +

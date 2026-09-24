@@ -3924,11 +3924,14 @@ source actuelle.</p>
 </ul>
 <h2 id="settings-and-range">Réglages et portée<a class="headerlink" href="#settings-and-range" title="Permanent link">&para;</a></h2>
 <h3 id="quels-reglages-radio-dois-je-utiliser-au-canada">Quels réglages radio dois-je utiliser au Canada?<a class="headerlink" href="#quels-reglages-radio-dois-je-utiliser-au-canada" title="Permanent link">&para;</a></h3>
-<p>Utilisez le profil radio de votre communauté. Le <a href="../../config/">configurateur de répéteur</a>
-trouve les chemins régionaux, mais conserve les réglages radio tant que vous ne choisissez pas de profil.</p>
-<p>Quel que soit le rôle de l’appareil, consultez d’abord le
-<a href="../../provinces/">répertoire des communautés</a>. Lorsqu’une communauté
-publie des réglages locaux différents, suivez-les.</p>
+<p>Utilisez le profil radio du <a href="../../provinces/">répertoire des communautés</a>. Si aucun n’est publié, choisissez
+<strong>Canada</strong> dans l’application pour les paramètres canadiens et des parcours de
+<strong>3 octets</strong>. Consultez les <a href="../../provinces/#canada-baseline">détails et les consignes pour les anciennes applications</a>.</p>
+<p>Le préréglage distinct <strong>USA</strong> utilise les mêmes valeurs radio, mais ne modifie pas
+la taille du hachage. <a href="https://github.com/meshcore-dev/MeshCore/issues/3302#issuecomment-5598886579">Annonce du changement</a>.</p>
+<p>Le <a href="../../config/">configurateur de répéteur</a> trouve les chemins régionaux.
+Ses réglages radio et de taille d’identifiant d’annonce sont séparés; les valeurs
+actuelles sont conservées tant que vous ne choisissez pas de changement.</p>
 <h3 id="quest-ce-que-le-mode-de-hachage-des-parcours">Qu’est-ce que le mode de hachage des parcours?<a class="headerlink" href="#quest-ce-que-le-mode-de-hachage-des-parcours" title="Permanent link">&para;</a></h3>
 <p>Il détermine la taille des identifiants dans les parcours d’annonce : 1, 2 ou 3 octets.
 MeshCore Canada recommande 3 octets pour réduire les collisions. Les versions 1.14
