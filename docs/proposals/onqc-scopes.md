@@ -373,8 +373,8 @@ people expect.
 
 ## Phone and companion setup
 
-1. Open the MeshCore app, then **Settings → Experimental Settings → Default
-   Region Scope**. Add `onqc` and select it.
+1. Open the MeshCore app, then **Settings**. Under **Network Settings**, tap
+   **Default Region Scope**, add `onqc` and select it.
 2. Open each local channel, such as `#public`. Use the channel menu, then
    **Set Region Scope**, and pick your city code, for example `yow`.
 3. For a channel meant to reach further, pick `on`, `qc` or `onqc` instead.

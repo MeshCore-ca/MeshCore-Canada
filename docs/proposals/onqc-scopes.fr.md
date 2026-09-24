@@ -386,8 +386,9 @@ messages de ville iront plus loin que prévu.
 
 ## Configuration du téléphone et de l’appareil compagnon
 
-1. Ouvrez l’application MeshCore, puis **Settings → Experimental Settings →
-   Default Region Scope**. Ajoutez `onqc` et sélectionnez-le.
+1. Ouvrez l’application MeshCore, puis **Settings**. Sous **Network
+   Settings**, touchez **Default Region Scope**, ajoutez `onqc` et
+   sélectionnez-le.
 2. Ouvrez chaque canal local, comme `#public`. Dans le menu du canal, touchez
    **Set Region Scope** et choisissez le code de votre ville, par exemple
    `yow`.
