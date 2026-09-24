@@ -1,7 +1,11 @@
 import { expect, test } from "./site-fixtures.mjs";
 import AxeBuilder from "@axe-core/playwright";
+import { readFileSync } from "node:fs";
 import { siteRoute } from "./site-route.mjs";
 
+const communityCount = JSON.parse(
+  readFileSync(new URL("../../data/communities.json", import.meta.url), "utf8"),
+).communities.length;
 const overview = { activeObservers: 12, activeIatas: 4, totalPackets: 900, windowHours: 24 };
 const types = [{ nodeType: 2, count: 50 }, { nodeType: 1, count: 20 }, { nodeType: 3, count: 3 }, { nodeType: 4, count: 2 }];
 
@@ -39,10 +43,10 @@ for (const locale of ["", "fr/"]) {
     expect(query.searchParams.get("keys")).toBe("geonames");
     expect(query.searchParams.get("lang")).toBe(locale ? "fr" : "en");
     await page.locator("[data-community-show-all]").click();
-    await expect(cards).toHaveCount(24);
+    await expect(cards).toHaveCount(communityCount);
     await page.locator("[data-community-clear]").first().click();
     await expect(page.locator("#community-search")).toHaveValue("");
-    await expect(cards).toHaveCount(24);
+    await expect(cards).toHaveCount(communityCount);
     await expect(cards.first()).toHaveAttribute("id", "directory-bc-mesh");
     expect(lookups).toHaveLength(1);
   });
