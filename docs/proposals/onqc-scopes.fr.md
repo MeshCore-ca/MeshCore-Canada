@@ -24,7 +24,7 @@ page_styles:
 
 <div class="scp-hero">
   <p class="mc-eyebrow">Proposition à discuter</p>
-  <p class="mc-lede">Les portées de région empêchent les échanges locaux d’inonder tout le réseau. La configuration actuelle est difficile à suivre. Cette proposition la ramène à trois codes faciles à retenir partout en Ontario et au Québec.</p>
+  <p class="mc-lede">Les portées de région empêchent les échanges locaux d’inonder tout le réseau. La configuration actuelle est difficile à suivre. Cette proposition la ramène à trois niveaux de codes faciles à retenir partout en Ontario et au Québec.</p>
   <ul class="scp-hero__badges">
     <li data-kind="proposal">Pas encore adoptée</li>
     <li>Projet pilote Ontario + Québec</li>
@@ -35,8 +35,8 @@ page_styles:
 
 ## En bref
 
-Il y a trois niveaux de portée. Chaque répéteur porte un code de chaque
-niveau : sa ville, sa province et `onqc`. Quand vous envoyez un message, vous
+Il y a trois niveaux de portée. Chaque répéteur porte sa ville, sa province
+et les codes de réseau `onqc` et `can`. Quand vous envoyez un message, vous
 choisissez le niveau à utiliser, et c’est ce qui décide jusqu’où il va.
 
 <div class="scp-levels-cards">
@@ -52,12 +52,12 @@ choisissez le niveau à utiliser, et c’est ce qui décide jusqu’où il va.
   </div>
   <div class="scp-level-card" data-level="mesh">
     <h3>Réseau</h3>
-    <span class="scp-tag" data-level="mesh">onqc</span>
-    <p>Tous les répéteurs de l’Ontario et du Québec.</p>
+    <span class="scp-tag" data-level="mesh">onqc</span> <span class="scp-tag" data-level="future">can</span>
+    <p><code>onqc</code> : tous les répéteurs de l’Ontario et du Québec. <code>can</code> : tout le Canada, réservé pour plus tard.</p>
   </div>
 </div>
 
-- **Les répéteurs** portent leur ville, leur province et `onqc`.
+- **Les répéteurs** portent leur ville, leur province, `onqc` et `can`.
 - **Les téléphones** utilisent `onqc` par défaut, pour que les messages privés
   joignent tout le monde.
 - **Les canaux locaux** comme `#public` sont réglés sur votre ville, pour que
@@ -96,6 +96,7 @@ avec cinq messages différents.
         <span class="scp-tag" data-level="city">yow</span>
         <span class="scp-tag" data-level="prov">on</span>
         <span class="scp-tag" data-level="mesh">onqc</span>
+        <span class="scp-tag" data-level="future">can</span>
       </div>
       <small>Sa liste de noms à relayer</small>
     </div>
@@ -130,6 +131,8 @@ Trois détails piègent souvent :
 ## Les trois niveaux
 
 <figure class="scp-figure">
+  <div class="scp-zone" data-level="future">
+  <p class="scp-zone__title"><span class="scp-tag" data-level="future">can</span> Canada <span>Réservé pour plus tard. Porté dès maintenant, pas encore utilisé.</span></p>
   <div class="scp-zone" data-level="mesh">
     <p class="scp-zone__title"><span class="scp-tag" data-level="mesh">onqc</span> Réseau <span>Tous les répéteurs de l’Ontario et du Québec</span></p>
     <div class="scp-zone__row">
@@ -155,13 +158,26 @@ Trois détails piègent souvent :
       </div>
     </div>
   </div>
+  </div>
   <div class="scp-flat">
     <strong>Ce qu’un répéteur d’Ottawa garde vraiment :</strong>
-    <span class="scp-flat__list"><span class="scp-tag" data-level="any">*</span><span class="scp-tag" data-level="city">yow</span><span class="scp-tag" data-level="prov">on</span><span class="scp-tag" data-level="mesh">onqc</span></span>
+    <span class="scp-flat__list"><span class="scp-tag" data-level="any">*</span><span class="scp-tag" data-level="city">yow</span><span class="scp-tag" data-level="prov">on</span><span class="scp-tag" data-level="mesh">onqc</span><span class="scp-tag" data-level="future">can</span></span>
     <span>Une simple liste de noms. Les boîtes ci-dessus servent aux gens, pas au répéteur.</span>
   </div>
   <figcaption>La zone <code>yow</code> traverse la rivière des Outaouais. Les répéteurs de Gatineau utilisent <code>yow</code> pour leur ville et <code>qc</code> pour leur province.</figcaption>
 </figure>
+
+### Et `can`?
+
+Chaque répéteur porte `can` dès maintenant pour qu’une portée pancanadienne
+fonctionne plus tard sans que personne n’ait à reconfigurer son répéteur. Bien
+des répéteurs configurés avec le configurateur actuel le portent déjà.
+
+**N’utilisez pas encore `can` sur votre téléphone ni dans vos canaux.**
+Aujourd’hui, il joint les mêmes répéteurs que `onqc`. Continuez d’utiliser
+`onqc`. Quand d’autres provinces porteront aussi `can`, il deviendra la façon
+d’aller plus loin, et `onqc` restera « seulement le réseau de l’Ontario et du
+Québec ».
 
 ### Pourquoi des codes d’aéroport?
 
@@ -176,20 +192,22 @@ Trois détails piègent souvent :
 La première fois, écrivez toujours le code avec son secteur, par exemple
 `yow` (secteur Ottawa–Gatineau), pour que les gens l’apprennent.
 
-## Lire `region def yow|* on|* onqc`
+## Lire `region def yow|* on|* onqc|* can`
 
 `region def` construit la liste d’un répéteur en une ligne. La commande garde un
 **curseur** qui part du sommet, `*`. Chaque nom est créé sous le curseur, et
 `|*` ramène le curseur au sommet.
 
 <figure class="scp-figure">
-  <div class="scp-tape" aria-label="region def yow|* on|* onqc">
+  <div class="scp-tape" aria-label="region def yow|* on|* onqc|* can">
     <span class="scp-tape__cmd">region def</span>
     <span class="scp-tape__tok"><b>1</b>yow</span>
     <span class="scp-tape__tok" data-kind="jump"><b>2</b>|*</span>
     <span class="scp-tape__tok"><b>3</b>on</span>
     <span class="scp-tape__tok" data-kind="jump"><b>4</b>|*</span>
     <span class="scp-tape__tok"><b>5</b>onqc</span>
+    <span class="scp-tape__tok" data-kind="jump"><b>6</b>|*</span>
+    <span class="scp-tape__tok"><b>7</b>can</span>
   </div>
   <ol class="scp-steps">
     <li>Crée <code>yow</code> sous le curseur. Le curseur entre dans <code>yow</code>.<div class="scp-tree">*
@@ -202,10 +220,19 @@ La première fois, écrivez toujours le code avec son secteur, par exemple
     <li><code>|*</code> ramène encore le curseur au sommet.<div class="scp-tree"><mark>*</mark>
 ├ yow
 └ on</div></li>
-    <li>Crée <code>onqc</code>. Terminé.<div class="scp-tree">*
+    <li>Crée <code>onqc</code>.<div class="scp-tree">*
 ├ yow
 ├ on
 └ <mark>onqc</mark></div></li>
+    <li><code>|*</code> ramène au sommet.<div class="scp-tree"><mark>*</mark>
+├ yow
+├ on
+└ onqc</div></li>
+    <li>Crée <code>can</code>. Terminé.<div class="scp-tree">*
+├ yow
+├ on
+├ onqc
+└ <mark>can</mark></div></li>
   </ol>
   <figcaption>Le résultat est une liste à plat : tous les codes sont côte à côte sous <code>*</code>. Le nom surligné indique la position du curseur.</figcaption>
 </figure>
@@ -240,8 +267,8 @@ region remove can
 region save
 ```
 
-Retirer `on` ne pose pas de problème. Les réglages de région de l’étape 3 le
-remettent. Lancez `region` de nouveau : vous ne devriez voir que `* F`.
+Retirer `on` et `can` ne pose pas de problème. Les réglages de région de
+l’étape 3 les remettent. Lancez `region` de nouveau : vous ne devriez voir que `* F`.
 
 ### Étape 2 : Réglages standard de MeshCore Canada
 
@@ -269,7 +296,7 @@ donc rien de nouveau à chercher.
 Le modèle est toujours le même :
 
 ```text
-region def <ville>|* <on ou qc>|* onqc
+region def <ville>|* <on ou qc>|* onqc|* can
 ```
 
 Exemples :
@@ -277,7 +304,7 @@ Exemples :
 === "Ottawa"
 
     ```text
-    region def yow|* on|* onqc
+    region def yow|* on|* onqc|* can
     region allowf *
     region default yow
     region save
@@ -286,7 +313,7 @@ Exemples :
 === "Gatineau"
 
     ```text
-    region def yow|* qc|* onqc
+    region def yow|* qc|* onqc|* can
     region allowf *
     region default yow
     region save
@@ -295,7 +322,7 @@ Exemples :
 === "Montréal"
 
     ```text
-    region def yul|* qc|* onqc
+    region def yul|* qc|* onqc|* can
     region allowf *
     region default yul
     region save
@@ -304,14 +331,14 @@ Exemples :
 === "Ville de Québec"
 
     ```text
-    region def yqb|* qc|* onqc
+    region def yqb|* qc|* onqc|* can
     region allowf *
     region default yqb
     region save
     ```
 
 <dl class="scp-explain">
-  <dt>region def …</dt><dd>Porter votre ville, votre province et <code>onqc</code>.</dd>
+  <dt>region def …</dt><dd>Porter votre ville, votre province, <code>onqc</code> et <code>can</code>.</dd>
   <dt>region allowf *</dt><dd>Relayer aussi les messages <strong>sans portée</strong>. C’est déjà le réglage par défaut. On le règle quand même pour que vous le voyiez.</dd>
   <dt>region default yow</dt><dd>Les annonces de ce répéteur utilisent la portée de votre ville, pour rester locales.</dd>
   <dt>region save</dt><dd>Conserve les réglages de région après un redémarrage. Les commandes <code>set</code> s’enregistrent d’elles-mêmes.</dd>
@@ -324,6 +351,7 @@ Pour vérifier, lancez `region`. Pour Ottawa, vous devriez voir :
  yow F
  on F
  onqc F
+ can F
 ```
 
 `F` veut dire « diffusion permise » : le répéteur relaie ce nom.
@@ -335,14 +363,14 @@ codes de ville. Par exemple, un répéteur à **Rigaud** se trouve dans la zone
 `yul` et relie Montréal à la zone d’Ottawa :
 
 ```text
-region def yul|* yow|* qc|* onqc
+region def yul|* yow|* qc|* onqc|* can
 region allowf *
 region default yul
 region save
 ```
 
-Il relaie les messages de ville d’Ottawa et de Montréal, ainsi que `qc` et
-`onqc`. Ses propres annonces restent dans sa zone, `yul`. N’ajoutez une ville
+Il relaie les messages de ville d’Ottawa et de Montréal, ainsi que `qc`,
+`onqc` et `can`. Ses propres annonces restent dans sa zone, `yul`. N’ajoutez une ville
 voisine que si le répéteur relie vraiment les deux secteurs; sinon, les
 messages de ville iront plus loin que prévu.
 
@@ -378,9 +406,9 @@ défaut **de votre contact**.
     <div class="scp-route__head">Portée par défaut <span class="scp-tag" data-level="city">yow</span><span class="scp-route__verdict" data-result="drop">N’arrive jamais</span></div>
     <ol class="scp-track">
       <li><span class="scp-stop" data-kind="phone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg></span><strong>Vous, Ottawa</strong><small>envoie yow</small></li>
-      <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Répéteur d’Ottawa</strong><small>yow on onqc</small></li>
-      <li data-link="drop"><span class="scp-stop" data-kind="repeater" data-state="dim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Répéteur de Montréal</strong><small>yul qc onqc</small></li>
-      <li data-link="none"><span class="scp-stop" data-kind="repeater" data-state="dim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Répéteur de Québec</strong><small>yqb qc onqc</small></li>
+      <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Répéteur d’Ottawa</strong><small>yow on onqc can</small></li>
+      <li data-link="drop"><span class="scp-stop" data-kind="repeater" data-state="dim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Répéteur de Montréal</strong><small>yul qc onqc can</small></li>
+      <li data-link="none"><span class="scp-stop" data-kind="repeater" data-state="dim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Répéteur de Québec</strong><small>yqb qc onqc can</small></li>
       <li data-link="none"><span class="scp-stop" data-kind="phone" data-state="dim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg></span><strong>Ami, Québec</strong><small>défaut yqb</small></li>
     </ol>
     <p class="scp-route__note">Le répéteur de Montréal ne porte pas <code>yow</code>, donc le message s’arrête là. Même s’il passait, la réponse de votre ami utiliserait <code>yqb</code> et s’arrêterait au retour.</p>
@@ -389,9 +417,9 @@ défaut **de votre contact**.
     <div class="scp-route__head">Portée par défaut <span class="scp-tag" data-level="mesh">onqc</span><span class="scp-route__verdict" data-result="ok">Livré</span></div>
     <ol class="scp-track" data-animate>
       <li><span class="scp-stop" data-kind="phone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg></span><strong>Vous, Ottawa</strong><small>envoie onqc</small></li>
-      <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Répéteur d’Ottawa</strong><small>yow on onqc</small></li>
-      <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Répéteur de Montréal</strong><small>yul qc onqc</small></li>
-      <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Répéteur de Québec</strong><small>yqb qc onqc</small></li>
+      <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Répéteur d’Ottawa</strong><small>yow on onqc can</small></li>
+      <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Répéteur de Montréal</strong><small>yul qc onqc can</small></li>
+      <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Répéteur de Québec</strong><small>yqb qc onqc can</small></li>
       <li data-link="ok"><span class="scp-stop" data-kind="phone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg></span><strong>Ami, Québec</strong><small>défaut onqc</small></li>
     </ol>
     <p class="scp-route__note">Tous les répéteurs portent <code>onqc</code>, dans les deux sens. Une fois le chemin trouvé, les MP suivants passent directement et les portées ne comptent plus.</p>
@@ -409,7 +437,7 @@ téléphone règle les canaux locaux sur votre ville.
 ## Déploiement
 
 <ol class="scp-timeline">
-  <li data-phase="Phase 1"><h3>Répéteurs</h3><p>Les propriétaires effacent les anciennes régions, ajoutent leurs trois codes et gardent <code>*</code> permis. Rien ne brise pour personne.</p></li>
+  <li data-phase="Phase 1"><h3>Répéteurs</h3><p>Les propriétaires effacent les anciennes régions, ajoutent leurs codes et gardent <code>*</code> permis. Rien ne brise pour personne.</p></li>
   <li data-phase="Phase 2"><h3>Téléphones</h3><p>Les utilisateurs règlent leur portée par défaut sur <code>onqc</code> et leurs canaux locaux sur leur ville.</p></li>
   <li data-phase="Phase 3"><h3>Bascule</h3><p>À une date convenue, les répéteurs lancent <code>set flood.max.unscoped 3</code>. Les messages sans portée restent alors à 3 sauts ou moins, tandis que les messages avec portée atteignent encore 16 sauts.</p></li>
 </ol>
