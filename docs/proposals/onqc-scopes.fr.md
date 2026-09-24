@@ -149,9 +149,9 @@ Trois détails piègent souvent :
       <div class="scp-zone" data-level="prov">
         <p class="scp-zone__title"><span class="scp-tag" data-level="prov">qc</span> Québec</p>
         <div class="scp-cities">
-          <div class="scp-city"><strong>yul</strong><span>Montréal, Trois-Rivières, Rigaud</span></div>
+          <div class="scp-city"><strong>yul</strong><span>Montréal, Trois-Rivières</span></div>
           <div class="scp-city"><strong>yqb</strong><span>Ville de Québec</span></div>
-          <div class="scp-city"><strong>yow</strong><span>Gatineau (partagé avec Ottawa)</span></div>
+          <div class="scp-city"><strong>yow</strong><span>Gatineau, Rigaud (partagé avec Ottawa)</span></div>
           <div class="scp-city"><strong>ytf</strong><span>Saguenay–Lac-Saint-Jean</span></div>
           <div class="scp-city" data-more><strong>…</strong><span>Autres zones MeshMapper</span></div>
         </div>
@@ -360,17 +360,17 @@ Pour vérifier, lancez `region`. Pour Ottawa, vous devriez voir :
 
 Un répéteur qui relie volontairement deux zones de ville porte **les deux**
 codes de ville. Par exemple, un répéteur à **Rigaud** se trouve dans la zone
-`yul` et relie Montréal à la zone d’Ottawa :
+`yow`, du côté québécois, et la relie à la zone de Montréal :
 
 ```text
-region def yul|* yow|* qc|* onqc|* can
+region def yow|* yul|* qc|* onqc|* can
 region allowf *
-region default yul
+region default yow
 region save
 ```
 
 Il relaie les messages de ville d’Ottawa et de Montréal, ainsi que `qc`,
-`onqc` et `can`. Ses propres annonces restent dans sa zone, `yul`. N’ajoutez une ville
+`onqc` et `can`. Ses propres annonces restent dans sa zone, `yow`. N’ajoutez une ville
 voisine que si le répéteur relie vraiment les deux secteurs; sinon, les
 messages de ville iront plus loin que prévu.
 
