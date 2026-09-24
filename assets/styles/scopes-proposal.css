@@ -111,6 +111,7 @@
 .scp-tag[data-level="mesh"] { color: var(--scp-mesh); background: var(--scp-mesh-bg); }
 .scp-tag[data-level="any"] { color: var(--scp-any); background: var(--scp-any-bg); }
 .scp-tag[data-level="bad"] { color: var(--scp-drop); background: var(--scp-drop-bg); }
+.scp-tag[data-level="future"] { color: var(--scp-any); background: transparent; border-style: dashed; }
 
 /* ---------- Summary cards ---------- */
 
@@ -323,6 +324,11 @@
 
 .scp-zone[data-level="mesh"] { --scp-zone: var(--scp-mesh); --scp-zone-bg: var(--scp-mesh-bg); }
 .scp-zone[data-level="prov"] { --scp-zone: var(--scp-prov); --scp-zone-bg: var(--mc-color-surface); }
+.scp-zone[data-level="future"] {
+  --scp-zone: var(--scp-any);
+  --scp-zone-bg: transparent;
+  border-style: dashed;
+}
 
 .scp-zone__title {
   display: flex;
