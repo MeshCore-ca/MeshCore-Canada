@@ -61,8 +61,8 @@ There are four levels of scope. Every repeater carries one code from each: its c
 </div>
 
 - **Repeaters** carry their city, their province, `onqc` and `can`.
-- **Phones** use `onqc` as their default, so direct messages reach anyone.
-- **Local channels** such as `#public` are set to your city, so chatter stays local.
+- **Companions** use `onqc` as their default, so direct messages reach anyone.
+- **Local channels** such as `Public` are set to your city, so chatter stays local.
 - **Messages with no scope** still work inside each city. Bridge repeaters
   between cities drop them, so they don't flood the next city.
 
@@ -102,7 +102,7 @@ different messages.
     </div>
     <ul class="scp-checks">
       <li><span class="scp-packet"><span class="scp-tag" data-level="city">yow</span> Ottawa channel</span><span class="scp-checks__arrow" aria-hidden="true">→</span><span class="scp-result" data-result="ok">Forwarded</span></li>
-      <li><span class="scp-packet"><span class="scp-tag" data-level="mesh">onqc</span> DM to Québec City, sent with the phone default</span><span class="scp-checks__arrow" aria-hidden="true">→</span><span class="scp-result" data-result="ok">Forwarded</span></li>
+      <li><span class="scp-packet"><span class="scp-tag" data-level="mesh">onqc</span> DM to Québec City, sent with the companion default</span><span class="scp-checks__arrow" aria-hidden="true">→</span><span class="scp-result" data-result="ok">Forwarded</span></li>
       <li><span class="scp-packet"><span class="scp-tag" data-level="any">none</span> Older app, no scope</span><span class="scp-checks__arrow" aria-hidden="true">→</span><span class="scp-result" data-result="ok">Forwarded</span></li>
       <li><span class="scp-packet"><span class="scp-tag" data-level="city">yul</span> Montréal channel</span><span class="scp-checks__arrow" aria-hidden="true">→</span><span class="scp-result" data-result="drop">Dropped</span></li>
       <li><span class="scp-packet"><span class="scp-tag" data-level="prov">qc</span> Québec-wide channel</span><span class="scp-checks__arrow" aria-hidden="true">→</span><span class="scp-result" data-result="drop">Dropped</span></li>
@@ -114,13 +114,13 @@ different messages.
     <div class="scp-rule__item" data-result="ok"><strong>No scope at all:</strong> it counts as <code>*</code>. Forward it only if <code>*</code> is allowed.</div>
     <div class="scp-rule__item" data-result="drop"><strong>Too many hops:</strong> dropped once it passes <code>flood.max</code>, whatever its scope.</div>
   </div>
-  <figcaption>The DM is tagged <code>onqc</code> because <code>onqc</code> is the phone default in this proposal. <a href="#why-the-phone-default-is-onqc">See why further down</a>. The repeater still hears every message. A scope only decides whether it passes the message on. Your phone also receives everything that reaches it.</figcaption>
+  <figcaption>The DM is tagged <code>onqc</code> because <code>onqc</code> is the companion default in this proposal. <a href="#why-the-companion-default-is-onqc">See why further down</a>. The repeater still hears every message. A scope only decides whether it passes the message on. Your companion also receives everything that reaches it.</figcaption>
 </figure>
 
 Three details catch people out:
 
 - **Spelling must be exact.** `yow`, `YOW` and `ott` are three different
-  names. A phone set to `yow` is ignored by a repeater that only carries `ott`.
+  names. A companion set to `yow` is ignored by a repeater that only carries `ott`.
 - **Only floods are checked.** Once a direct message has a known path, it goes
   straight along that path and scopes no longer matter.
 - **There is no inheritance.** Carrying `on` does not mean carrying `yow`.
@@ -171,7 +171,7 @@ Every repeater carries `can` now so that a Canada-wide scope works later
 without anyone having to reconfigure their repeater again. Many repeaters set
 up with the current configurator already carry it.
 
-**Don't use `can` on your phone or channels yet.** Today it reaches the same
+**Don't use `can` on your companion or channels yet.** Today it reaches the same
 repeaters as `onqc`. Keep using `onqc`. Once other provinces carry `can` too,
 it becomes the way to reach further, and `onqc` stays as "just the Ontario and
 Québec mesh".
@@ -397,23 +397,23 @@ messages with no scope go around it.
 | `set flood.max.unscoped <hops>` | A separate hop limit for messages with no scope. It only matters when it is lower than `flood.max`. `0` has the same effect as `region denyf *`. |
 | `region save` | Always run it after `allowf` or `denyf` |
 
-## Phone and companion setup
+## Companion setup
 
 1. Open the MeshCore app, then **Settings**. Under **Network Settings**, tap
    **Default Region Scope**, add `onqc` and select it.
-2. Open each local channel, such as `#public`. Use the channel menu, then
+2. Open each local channel, such as `Public`. Use the channel menu, then
    **Set Region Scope**, and pick your city code, for example `yow`.
 3. For a channel meant to reach further, pick `on`, `qc` or `onqc` instead.
 
-## Why the phone default is `onqc`
+## Why the companion default is `onqc`
 
 You cannot pick a scope for a single direct message. When a DM has no known
 path yet, it floods using your **default scope**. The reply that tells your
-phone the path comes back using **your contact's** default scope.
+companion the path comes back using **your contact's** default scope.
 
 <figure class="scp-figure">
   <div class="scp-route">
-    <div class="scp-route__head">Phone default <span class="scp-tag" data-level="city">yow</span><span class="scp-route__verdict" data-result="drop">Never arrives</span></div>
+    <div class="scp-route__head">Companion default <span class="scp-tag" data-level="city">yow</span><span class="scp-route__verdict" data-result="drop">Never arrives</span></div>
     <ol class="scp-track">
       <li><span class="scp-stop" data-kind="phone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg></span><strong>You, Ottawa</strong><small>sends yow</small></li>
       <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Ottawa repeater</strong><small>yow on onqc can</small></li>
@@ -424,7 +424,7 @@ phone the path comes back using **your contact's** default scope.
     <p class="scp-route__note">The Montréal repeater does not carry <code>yow</code>, so the message stops there. Even if it got through, your friend's reply would use <code>yqb</code> and stop on the way back.</p>
   </div>
   <div class="scp-route">
-    <div class="scp-route__head">Phone default <span class="scp-tag" data-level="mesh">onqc</span><span class="scp-route__verdict" data-result="ok">Delivered</span></div>
+    <div class="scp-route__head">Companion default <span class="scp-tag" data-level="mesh">onqc</span><span class="scp-route__verdict" data-result="ok">Delivered</span></div>
     <ol class="scp-track" data-animate>
       <li><span class="scp-stop" data-kind="phone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg></span><strong>You, Ottawa</strong><small>sends onqc</small></li>
       <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Ottawa repeater</strong><small>yow on onqc can</small></li>
@@ -439,8 +439,8 @@ phone the path comes back using **your contact's** default scope.
 
 <div class="mc-callout" data-kind="warning" markdown>
 **The catch:** a channel with no scope of its own also uses your default. With
-`onqc` as the default, an unscoped `#public` would reach all of Ontario and
-Québec. That is why step 2 of the phone setup sets local channels to your city.
+`onqc` as the default, an unscoped `Public` channel would reach all of Ontario and
+Québec. That is why step 2 of the companion setup sets local channels to your city.
 </div>
 
 ## Who hears what
@@ -473,7 +473,7 @@ into the next city. Here is the Ottawa to Montréal link through Rigaud.
     <p class="scp-route__note">Rigaud carries <code>yow</code>, so it passes the message on. Montréal repeaters do not carry <code>yow</code>, so it stops at the edge of the zone.</p>
   </div>
   <div class="scp-route">
-    <div class="scp-route__head">DM with the phone default <span class="scp-tag" data-level="mesh">onqc</span><span class="scp-route__verdict" data-result="ok">Whole mesh</span></div>
+    <div class="scp-route__head">DM with the companion default <span class="scp-tag" data-level="mesh">onqc</span><span class="scp-route__verdict" data-result="ok">Whole mesh</span></div>
     <ol class="scp-track" data-animate>
       <li><span class="scp-stop" data-kind="phone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg></span><strong>You, Ottawa</strong><small>sends onqc</small></li>
       <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Ottawa repeater</strong><small>yow on onqc can</small></li>
@@ -496,7 +496,7 @@ More examples on the same link:
 | Ottawa channel or bot, `yow` | ✅ Forward | ✅ Forward | ❌ Drop | Ottawa zone only |
 | Montréal channel or bot, `yul` | ❌ Drop | ✅ Forward | ✅ Forward | Montréal zone only |
 | Québec-wide channel, `qc` | ❌ Drop | ✅ Forward | ✅ Forward | Québec side, including Gatineau |
-| DM with the phone default, `onqc` | ✅ Forward | ✅ Forward | ✅ Forward | Whole ON/QC mesh |
+| DM with the companion default, `onqc` | ✅ Forward | ✅ Forward | ✅ Forward | Whole ON/QC mesh |
 
 This is why bots and MeshMapper should be scoped to their city: they stay
 contained no matter what, and new users who haven't set a scope yet still work
@@ -506,7 +506,7 @@ locally.
 
 <ol class="scp-timeline">
   <li data-phase="Phase 1"><h3>Repeaters</h3><p>Owners clear old regions and add their codes. Normal repeaters keep <code>*</code> allowed; bridge repeaters drop it. Nothing breaks inside any city.</p></li>
-  <li data-phase="Phase 2"><h3>Phones</h3><p>Users set their default to <code>onqc</code> and set local channels to their city.</p></li>
+  <li data-phase="Phase 2"><h3>Companions</h3><p>Users set their default to <code>onqc</code> and set local channels to their city.</p></li>
   <li data-phase="Phase 3"><h3>Only if needed</h3><p>If messages with no scope are still too noisy inside a city, repeaters can also run <code>set flood.max.unscoped 3</code>. Scoped messages still reach 16 hops.</p></li>
 </ol>
 
