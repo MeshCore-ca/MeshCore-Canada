@@ -31,9 +31,9 @@ Filtrez la liste par communauté ou province, ou cherchez votre ville pour trouv
     Ces renseignements pourraient être périmés !
 
 <div class="mc-directory-summary" aria-label="Résumé du répertoire">
-<span><strong>24</strong> fiches</span>
+<span><strong>25</strong> fiches</span>
 <span><strong>23</strong> fiches actives</span>
-<span><strong>1</strong> fiche en formation</span>
+<span><strong>2</strong> fiches en formation</span>
 <span><strong>1</strong> fiche avec des réglages locaux différents</span>
 </div>
 
@@ -57,7 +57,7 @@ Filtrez la liste par communauté ou province, ou cherchez votre ville pour trouv
   <div class="mc-directory-actions"><button class="md-button md-button--primary" type="submit" data-community-locate>Trouver à proximité</button>
   <button class="md-button" type="button" data-community-clear>Effacer</button></div>
   <output class="mc-directory-tools__count" data-community-count aria-live="polite">
-    24 communautés affichées
+    25 communautés affichées
   </output>
   <div class="mc-directory-lookup" data-community-lookup role="status" aria-live="polite"></div>
   <div class="mc-directory-choices" data-community-choices hidden></div>
@@ -274,9 +274,9 @@ Filtrez la liste par communauté ou province, ou cherchez votre ville pour trouv
 <p class="mc-community-area">Centre de la Saskatchewan</p>
 <p><strong>Province ou territoire :</strong> <a href="saskatchewan/">Saskatchewan</a></p>
 <p><strong>Réglages :</strong> Réglages par défaut du Canada</p>
-<p><strong>Fiche révisée :</strong> 2026-08-29</p>
+<p><strong>Fiche révisée :</strong> 2026-09-24</p>
 <ul class="mc-community-contacts">
-<li><strong>Telegram :</strong> <a href="https://t.me/MeshtSaska" rel="noopener">Mesh Saskatchewan Telegram</a> <span class="mc-community-external">(externe)</span></li>
+<li><strong>Discord :</strong> <a href="https://discord.gg/StFvPY7BZe" rel="noopener">Discord de StoonMesh</a> <span class="mc-community-external">(externe)</span></li>
 </ul>
 <p class="mc-community-card__action"><a href="saskatchewan/#community-stoonmesh">Voir les détails de la fiche</a></p>
 </article>
@@ -292,6 +292,21 @@ Filtrez la liste par communauté ou province, ou cherchez votre ville pour trouv
 <ul class="mc-community-contacts">
 </ul>
 <p class="mc-community-card__action"><a href="saskatchewan/#community-yqrmesh">Voir les détails de la fiche</a></p>
+</article>
+<article class="mc-community-card" id="directory-winnipeg-meshcore" data-community-card data-community-status="forming" data-community-override="false" data-community-search="winnipeg meshcore winnipeg, manitoba winnipeg (manitoba) mb manitoba winnipeg wpg ywg" data-community-points="[{&quot;label&quot;:&quot;Winnipeg&quot;,&quot;lat&quot;:49.896517,&quot;lon&quot;:-97.130584}]">
+<div class="mc-community-card__header">
+<h3><a href="manitoba/#community-winnipeg-meshcore">Winnipeg MeshCore</a></h3>
+<span class="mc-community-status" data-status="forming">En formation</span>
+</div>
+<p class="mc-community-area">Winnipeg (Manitoba)</p>
+<p><strong>Province ou territoire :</strong> <a href="manitoba/">Manitoba</a></p>
+<p><strong>Réglages :</strong> Réglages par défaut du Canada</p>
+<p><strong>Fiche révisée :</strong> 2026-09-24</p>
+<ul class="mc-community-contacts">
+<li><strong>Site Web :</strong> <a href="https://winnipegmeshcore.neocities.org/" rel="noopener">Site Web de Winnipeg MeshCore</a> <span class="mc-community-external">(externe)</span></li>
+<li><strong>Matrix :</strong> <a href="https://matrix.to/#/#winnipeg-meshcore:matrix.org" rel="noopener">Salon de Winnipeg MeshCore</a> <span class="mc-community-external">(externe)</span></li>
+</ul>
+<p class="mc-community-card__action"><a href="manitoba/#community-winnipeg-meshcore">Voir les détails de la fiche</a></p>
 </article>
 <article class="mc-community-card" id="directory-greater-ottawa-mesh-enthusiasts" data-community-card data-community-status="active" data-community-override="false" data-community-search="greater ottawa mesh enthusiasts eastern ontario and western quebec est de l’ontario et ouest du quebec on ontario ottawa eastern ontario western quebec" data-community-points="[{&quot;label&quot;:&quot;Ottawa&quot;,&quot;lat&quot;:45.4215,&quot;lon&quot;:-75.6972},{&quot;label&quot;:&quot;Outaouais / Gatineau&quot;,&quot;lat&quot;:45.48,&quot;lon&quot;:-75.65}]">
 <div class="mc-community-card__header">
@@ -485,7 +500,7 @@ Utilisez ces réglages sauf si votre communauté locale en indique d’autres.
 </article>
 <article class="mc-province-card">
 <h3><a href="manitoba/">Manitoba</a></h3>
-<p>Aucune fiche</p>
+<p>1 en formation</p>
 </article>
 <article class="mc-province-card">
 <h3><a href="ontario/">Ontario</a></h3>

@@ -84,8 +84,12 @@ const expectedCommunities = new Map([
     "yyc-meshcore-discord",
     ["https://discord.gg/CznDhsRWnJ", "https://meshmonitoring.com/"],
   ],
-  ["stoonmesh", ["https://t.me/MeshtSaska"]],
+  ["stoonmesh", ["https://discord.gg/StFvPY7BZe"]],
   ["yqrmesh", []],
+  [
+    "winnipeg-meshcore",
+    ["https://winnipegmeshcore.neocities.org/", "https://matrix.to/#/#winnipeg-meshcore:matrix.org"],
+  ],
   [
     "greater-ottawa-mesh-enthusiasts",
     ["https://discord.gg/WSyNd8SfNr", "https://ottawamesh.ca/"],
@@ -148,8 +152,8 @@ function idsMatching(query) {
     .map((community) => community.id);
 }
 
-test("all 24 structured listings match the reviewed contact fixture", () => {
-  assert.equal(data.communities.length, 24);
+test("all structured listings match the reviewed contact fixture", () => {
+  assert.equal(data.communities.length, expectedCommunities.size);
   assert.deepEqual(
     new Set(data.communities.map((community) => community.id)),
     new Set(expectedCommunities.keys()),
@@ -185,7 +189,7 @@ test("the generated directory cannot drift from structured data", () => {
       encoding: "utf8",
     },
   );
-  assert.match(output, /Community directory validated: 24 listings/);
+  assert.match(output, new RegExp(`Community directory validated: ${expectedCommunities.size} listings`));
 });
 
 test("search covers reviewed place names and common aliases", () => {
@@ -205,6 +209,9 @@ test("search covers reviewed place names and common aliases", () => {
   ]);
   assert.deepEqual(idsMatching("YQR"), ["yqrmesh"]);
   assert.deepEqual(idsMatching("Regina"), ["yqrmesh"]);
+  assert.deepEqual(idsMatching("Winnipeg"), ["winnipeg-meshcore"]);
+  assert.deepEqual(idsMatching("WPG"), ["winnipeg-meshcore"]);
+  assert.deepEqual(idsMatching("YWG"), ["winnipeg-meshcore"]);
   assert.deepEqual(idsMatching("Montréal"), ["montreal-mesh", "reseau-libre"]);
   assert.deepEqual(idsMatching("Airdrie"), [
     "alberta-meshcore-networks",
@@ -374,6 +381,36 @@ test("BC Mesh documents the issue 79 frequency override in both languages", () =
     assert.match(markdown, /<h3>BC Mesh<\/h3>[\s\S]*?910\.425 MHz \/ 62\.5 kHz \/ SF7 \/ CR5/);
     assert.match(markdown, /https:\/\/ridgeline\.ve7kod\.ca\/about/);
     assert.doesNotMatch(markdown, /910\.525/);
+  }
+});
+
+test("issues 94 and 95 keep corrected contacts and Winnipeg status in both languages", () => {
+  const winnipeg = data.communities.find(community => community.id === "winnipeg-meshcore");
+  assert.equal(winnipeg.province, "MB");
+  assert.equal(winnipeg.status, "forming");
+  assert.deepEqual(winnipeg.settings, { inherit_national: true, overrides: {} });
+  assert.deepEqual(winnipeg.contacts.map(contact => contact.type), ["website", "matrix"]);
+  const schema = JSON.parse(readFileSync(join(root, "schemas/community-directory.schema.json"), "utf8"));
+  assert.ok(schema.$defs.contact.properties.type.enum.includes("matrix"));
+  const anchors = JSON.parse(readFileSync(join(root, "data/community-search-anchors.json"), "utf8"));
+  assert.deepEqual(anchors.communities[winnipeg.id], ["wpg"]);
+
+  for (const suffix of [".md", ".fr.md"]) {
+    const index = readFileSync(join(provinceDir, `index${suffix}`), "utf8");
+    const saskatchewan = readFileSync(join(provinceDir, `saskatchewan${suffix}`), "utf8");
+    const manitoba = readFileSync(join(provinceDir, `manitoba${suffix}`), "utf8");
+    for (const page of [index, saskatchewan]) {
+      assert.ok(page.includes('href="https://discord.gg/StFvPY7BZe"'));
+      assert.ok(!page.includes("MeshtSaska"));
+      assert.ok(!page.includes("Mesh Saskatchewan Telegram"));
+    }
+    for (const page of [index, manitoba]) {
+      assert.ok(page.includes('href="https://winnipegmeshcore.neocities.org/"'));
+      assert.match(page, /<strong>Matrix\s*:<\/strong>/);
+      assert.ok(page.includes('href="https://matrix.to/#/#winnipeg-meshcore:matrix.org"'));
+    }
+    assert.ok(manitoba.includes('id="community-winnipeg-meshcore"'));
+    assert.match(manitoba, /data-status="forming">(?:Forming|En formation)</);
   }
 });
 

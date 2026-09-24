@@ -293,6 +293,29 @@ test("community directory deep links use their dedicated query parameter", async
   expect(url.searchParams.has("q")).toBeFalsy();
 });
 
+for (const locale of ["", "fr/"]) {
+  test(`${locale || "en/"} community updates expose StoonMesh and Winnipeg contacts`, async ({ page }) => {
+    await page.goto(siteRoute(`/${locale}provinces/?community=StoonMesh`));
+    const stoon = page.locator("#directory-stoonmesh");
+    await expect(stoon).toBeVisible();
+    await expect(stoon.locator('a[href="https://discord.gg/StFvPY7BZe"]')).toBeVisible();
+    await expect(stoon.locator('a[href*="t.me"]')).toHaveCount(0);
+    await stoon.locator("h3 a").click();
+    await expect(page.locator('#community-stoonmesh a[href="https://discord.gg/StFvPY7BZe"]')).toBeVisible();
+
+    await page.goto(siteRoute(`/${locale}provinces/?community=Winnipeg`));
+    const winnipeg = page.locator("#directory-winnipeg-meshcore");
+    await expect(page.locator("[data-community-card]:visible")).toHaveCount(1);
+    await expect(winnipeg.locator('[data-status="forming"]')).toHaveText(locale ? "En formation" : "Forming");
+    await expect(winnipeg.locator('a[href="https://matrix.to/#/#winnipeg-meshcore:matrix.org"]')).toBeVisible();
+    await winnipeg.locator("h3 a").click();
+    await expect(page).toHaveURL(new RegExp(`/${locale}provinces/manitoba/#community-winnipeg-meshcore$`));
+    const detail = page.locator("#community-winnipeg-meshcore");
+    await expect(detail.locator('a[href="https://winnipegmeshcore.neocities.org/"]')).toBeVisible();
+    await expect(detail.locator('a[href="https://matrix.to/#/#winnipeg-meshcore:matrix.org"]')).toBeVisible();
+  });
+}
+
 test("BC Mesh's local frequency is searchable in both directories", async ({ page }) => {
   for (const [route, count] of [
     ["/provinces/", "Showing 1 community"],

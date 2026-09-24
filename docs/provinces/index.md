@@ -31,9 +31,9 @@ Type a community or province to filter the list, or look up your city to find th
     This information could be out of date!
 
 <div class="mc-directory-summary" aria-label="Directory summary">
-<span><strong>24</strong> listings</span>
+<span><strong>25</strong> listings</span>
 <span><strong>23</strong> listed active</span>
-<span><strong>1</strong> listed forming</span>
+<span><strong>2</strong> listed forming</span>
 <span><strong>1</strong> with different local settings</span>
 </div>
 
@@ -57,7 +57,7 @@ Type a community or province to filter the list, or look up your city to find th
   <div class="mc-directory-actions"><button class="md-button md-button--primary" type="submit" data-community-locate>Find nearby</button>
   <button class="md-button" type="button" data-community-clear>Clear</button></div>
   <output class="mc-directory-tools__count" data-community-count aria-live="polite">
-    Showing 24 communities
+    Showing 25 communities
   </output>
   <div class="mc-directory-lookup" data-community-lookup role="status" aria-live="polite"></div>
   <div class="mc-directory-choices" data-community-choices hidden></div>
@@ -286,9 +286,9 @@ Type a community or province to filter the list, or look up your city to find th
 <p class="mc-community-distance" data-community-distance hidden></p>
 <p><strong>Province:</strong> <a href="saskatchewan/">Saskatchewan</a></p>
 <p><strong>Settings:</strong> Uses the Canada defaults</p>
-<p><strong>Listing reviewed:</strong> 2026-08-29</p>
+<p><strong>Listing reviewed:</strong> 2026-09-24</p>
 <ul class="mc-community-contacts">
-<li><strong>Telegram:</strong> <a href="https://t.me/MeshtSaska" rel="noopener">Mesh Saskatchewan Telegram</a> <span class="mc-community-external">(external)</span></li>
+<li><strong>Discord:</strong> <a href="https://discord.gg/StFvPY7BZe" rel="noopener">StoonMesh Discord</a> <span class="mc-community-external">(external)</span></li>
 </ul>
 <p class="mc-community-card__action"><a href="saskatchewan/#community-stoonmesh">View listing details</a></p>
 </article>
@@ -305,6 +305,22 @@ Type a community or province to filter the list, or look up your city to find th
 <ul class="mc-community-contacts">
 </ul>
 <p class="mc-community-card__action"><a href="saskatchewan/#community-yqrmesh">View listing details</a></p>
+</article>
+<article class="mc-community-card" id="directory-winnipeg-meshcore" data-community-card data-community-status="forming" data-community-override="false" data-community-search="winnipeg meshcore winnipeg, manitoba mb manitoba winnipeg wpg ywg" data-community-points="[{&quot;label&quot;:&quot;Winnipeg&quot;,&quot;lat&quot;:49.896517,&quot;lon&quot;:-97.130584}]">
+<div class="mc-community-card__header">
+<h3><a href="manitoba/#community-winnipeg-meshcore">Winnipeg MeshCore</a></h3>
+<span class="mc-community-status" data-status="forming">Forming</span>
+</div>
+<p class="mc-community-area">Winnipeg, Manitoba</p>
+<p class="mc-community-distance" data-community-distance hidden></p>
+<p><strong>Province:</strong> <a href="manitoba/">Manitoba</a></p>
+<p><strong>Settings:</strong> Uses the Canada defaults</p>
+<p><strong>Listing reviewed:</strong> 2026-09-24</p>
+<ul class="mc-community-contacts">
+<li><strong>Website:</strong> <a href="https://winnipegmeshcore.neocities.org/" rel="noopener">Winnipeg MeshCore website</a> <span class="mc-community-external">(external)</span></li>
+<li><strong>Matrix:</strong> <a href="https://matrix.to/#/#winnipeg-meshcore:matrix.org" rel="noopener">Winnipeg MeshCore chat</a> <span class="mc-community-external">(external)</span></li>
+</ul>
+<p class="mc-community-card__action"><a href="manitoba/#community-winnipeg-meshcore">View listing details</a></p>
 </article>
 <article class="mc-community-card" id="directory-greater-ottawa-mesh-enthusiasts" data-community-card data-community-status="active" data-community-override="false" data-community-search="greater ottawa mesh enthusiasts eastern ontario and western quebec on ontario ottawa eastern ontario western quebec" data-community-points="[{&quot;label&quot;:&quot;Ottawa&quot;,&quot;lat&quot;:45.4215,&quot;lon&quot;:-75.6972},{&quot;label&quot;:&quot;Outaouais / Gatineau&quot;,&quot;lat&quot;:45.48,&quot;lon&quot;:-75.65}]">
 <div class="mc-community-card__header">
@@ -509,7 +525,7 @@ Use these settings unless your local community lists different ones.
 </article>
 <article class="mc-province-card">
 <h3><a href="manitoba/">Manitoba</a></h3>
-<p>No listing yet</p>
+<p>1 forming</p>
 </article>
 <article class="mc-province-card">
 <h3><a href="ontario/">Ontario</a></h3>

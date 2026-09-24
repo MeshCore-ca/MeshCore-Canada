@@ -21,18 +21,40 @@ page_styles:
 
 # MeshCore communities in Manitoba
 
-We don't have a community listed here yet.
+Manitoba has **1 forming community listing**.
 
-<div class="mc-community-empty mc-community-empty--page">
-  <h2>Help add the first listing</h2>
-  <p>Share the community name, service area, status, and a public contact link.</p>
-  <p><a class="md-button md-button--primary" href="../../submit-idea/">Add a community</a></p>
-  <p><a href="../">Browse all Canadian communities</a></p>
+All listings use the [Canada defaults](index.md#canada-baseline) unless a
+card lists different local settings.
+
+## Community listings
+
+<div class="mc-community-grid">
+<article class="mc-community-card mc-community-card--detail" id="community-winnipeg-meshcore">
+<div class="mc-community-card__header">
+<h3>Winnipeg MeshCore</h3>
+<span class="mc-community-status" data-status="forming">Forming</span>
 </div>
-
-Until a reviewed local listing gives different settings, start with the
-[Canada defaults](index.md#canada-baseline) and confirm settings with nearby
-operators before transmitting.
+<p class="mc-community-area">Winnipeg, Manitoba</p>
+<dl class="mc-community-facts">
+<div><dt>Settings</dt>
+<dd>Uses the Canada defaults</dd></div>
+<div><dt>Listing reviewed</dt>
+<dd>2026-09-24</dd></div>
+</dl>
+<p class="mc-community-forming">
+This group is forming. Contact it to learn what is working and where help is needed.
+</p>
+<h4>Contacts</h4>
+<ul class="mc-community-contacts">
+<li><strong>Website:</strong> <a href="https://winnipegmeshcore.neocities.org/" rel="noopener">Winnipeg MeshCore website</a> <span class="mc-community-external">(external)</span></li>
+<li><strong>Matrix:</strong> <a href="https://matrix.to/#/#winnipeg-meshcore:matrix.org" rel="noopener">Winnipeg MeshCore chat</a> <span class="mc-community-external">(external)</span></li>
+</ul>
+<p class="mc-community-contact-health">
+<strong>Contact check:</strong> Links checked on 2026-09-24
+</p>
+<p class="mc-community-card__action"><a href="../../submit-idea/?community=winnipeg-meshcore&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Fprovinces%2Fmanitoba%2F%23community-winnipeg-meshcore">Update this listing</a></p>
+</article>
+</div>
 
 ## Add or update a listing
 

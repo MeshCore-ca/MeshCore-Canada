@@ -39,14 +39,14 @@ sauf si une fiche indique des réglages locaux différents.
 <div><dt>Réglages</dt>
 <dd>Réglages par défaut du Canada</dd></div>
 <div><dt>Fiche révisée</dt>
-<dd>2026-08-29</dd></div>
+<dd>2026-09-24</dd></div>
 </dl>
 <h4>Coordonnées</h4>
 <ul class="mc-community-contacts">
-<li><strong>Telegram :</strong> <a href="https://t.me/MeshtSaska" rel="noopener">Mesh Saskatchewan Telegram</a> <span class="mc-community-external">(externe)</span></li>
+<li><strong>Discord :</strong> <a href="https://discord.gg/StFvPY7BZe" rel="noopener">Discord de StoonMesh</a> <span class="mc-community-external">(externe)</span></li>
 </ul>
 <p class="mc-community-contact-health">
-<strong>Vérification :</strong> Effectuée le 2026-08-29
+<strong>Vérification :</strong> Effectuée le 2026-09-24
 </p>
 <p class="mc-community-card__action"><a href="../../submit-idea/?community=stoonmesh&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Ffr%2Fprovinces%2Fsaskatchewan%2F%23community-stoonmesh">Mettre cette fiche à jour</a></p>
 </article>
