@@ -35,7 +35,7 @@ page_styles:
 
 ## The short version
 
-Every repeater carries three codes. You pick how far a message travels by picking one of them.
+There are three levels of scope. Every repeater carries one code from each level: its city, its province, and `onqc`. When you send a message, you choose which level to use, and that decides how far it travels.
 
 <div class="scp-levels-cards">
   <div class="scp-level-card" data-level="city">
@@ -95,7 +95,7 @@ different messages.
     </div>
     <ul class="scp-checks">
       <li><span class="scp-packet"><span class="scp-tag" data-level="city">yow</span> Ottawa channel</span><span class="scp-checks__arrow" aria-hidden="true">→</span><span class="scp-result" data-result="ok">Forwarded</span></li>
-      <li><span class="scp-packet"><span class="scp-tag" data-level="mesh">onqc</span> DM to Québec City</span><span class="scp-checks__arrow" aria-hidden="true">→</span><span class="scp-result" data-result="ok">Forwarded</span></li>
+      <li><span class="scp-packet"><span class="scp-tag" data-level="mesh">onqc</span> DM to Québec City, sent with the phone default</span><span class="scp-checks__arrow" aria-hidden="true">→</span><span class="scp-result" data-result="ok">Forwarded</span></li>
       <li><span class="scp-packet"><span class="scp-tag" data-level="any">none</span> Older app, no scope</span><span class="scp-checks__arrow" aria-hidden="true">→</span><span class="scp-result" data-result="ok">Forwarded</span></li>
       <li><span class="scp-packet"><span class="scp-tag" data-level="city">yul</span> Montréal channel</span><span class="scp-checks__arrow" aria-hidden="true">→</span><span class="scp-result" data-result="drop">Dropped</span></li>
       <li><span class="scp-packet"><span class="scp-tag" data-level="prov">qc</span> Québec-wide channel</span><span class="scp-checks__arrow" aria-hidden="true">→</span><span class="scp-result" data-result="drop">Dropped</span></li>
@@ -107,7 +107,7 @@ different messages.
     <div class="scp-rule__item" data-result="ok"><strong>No scope at all:</strong> it counts as <code>*</code>. Forward it only if <code>*</code> is allowed.</div>
     <div class="scp-rule__item" data-result="drop"><strong>Too many hops:</strong> dropped once it passes <code>flood.max</code>, whatever its scope.</div>
   </div>
-  <figcaption>The repeater still hears every message. A scope only decides whether it passes the message on. Your phone also receives everything that reaches it.</figcaption>
+  <figcaption>The DM is tagged <code>onqc</code> because <code>onqc</code> is the phone default in this proposal. <a href="#why-the-phone-default-is-onqc">See why further down</a>. The repeater still hears every message. A scope only decides whether it passes the message on. Your phone also receives everything that reaches it.</figcaption>
 </figure>
 
 Three details catch people out:
@@ -128,7 +128,7 @@ Three details catch people out:
       <div class="scp-zone" data-level="prov">
         <p class="scp-zone__title"><span class="scp-tag" data-level="prov">on</span> Ontario</p>
         <div class="scp-cities">
-          <div class="scp-city"><strong>yow</strong><span>Ottawa, Lanark, Calabogie, Renfrew, Alfred</span></div>
+          <div class="scp-city"><strong>yow</strong><span>Ottawa, Lanark, Calabogie, Renfrew, Alfred, Hawkesbury</span></div>
           <div class="scp-city"><strong>yyz</strong><span>Toronto</span></div>
           <div class="scp-city"><strong>ygk</strong><span>Kingston</span></div>
           <div class="scp-city"><strong>ykf</strong><span>Waterloo</span></div>
@@ -138,7 +138,7 @@ Three details catch people out:
       <div class="scp-zone" data-level="prov">
         <p class="scp-zone__title"><span class="scp-tag" data-level="prov">qc</span> Québec</p>
         <div class="scp-cities">
-          <div class="scp-city"><strong>yul</strong><span>Montréal, Trois-Rivières</span></div>
+          <div class="scp-city"><strong>yul</strong><span>Montréal, Trois-Rivières, Rigaud</span></div>
           <div class="scp-city"><strong>yqb</strong><span>Québec City</span></div>
           <div class="scp-city"><strong>yow</strong><span>Gatineau (shared with Ottawa)</span></div>
           <div class="scp-city"><strong>ytf</strong><span>Saguenay–Lac-Saint-Jean</span></div>
@@ -161,7 +161,8 @@ Three details catch people out:
   `yow.meshmapper.net`.
 - There are no accents or capital letters to get wrong. `montréal`,
   `Montreal` and `montreal` would be three different scopes.
-- They are neutral. Renfrew is in the "YOW zone", not in "Ottawa".
+- They are easy to split later. If Renfrew wants its own area one day, it can
+  use its own airport code and still keep `on` and `onqc`. Nothing else changes.
 
 Always write the code with its area the first time, for example
 `yow` (Ottawa / NCR area), so people learn it.
@@ -197,23 +198,7 @@ the cursor back to the top.
 ├ on
 └ <mark>onqc</mark></div></li>
   </ol>
-  <div class="scp-compare">
-    <div class="scp-compare__item" data-result="ok">
-      <p><strong>With <code>|*</code></strong>: a flat list.</p>
-      <div class="scp-tree">*
-├ yow
-├ on
-└ onqc</div>
-    </div>
-    <div class="scp-compare__item" data-result="meh">
-      <p><strong>Without <code>|*</code></strong> (<code>region def yow on onqc</code>): each name nests inside the last.</p>
-      <div class="scp-tree">*
-└ yow
-  └ on
-    └ onqc</div>
-    </div>
-  </div>
-  <figcaption>Both versions forward exactly the same messages, because repeaters ignore nesting. The flat version is easier to read and check. The highlighted name is where the cursor is.</figcaption>
+  <figcaption>The result is a flat list: every code sits side by side under <code>*</code>. The highlighted name is where the cursor is.</figcaption>
 </figure>
 
 <div class="mc-callout" data-kind="warning" markdown>
@@ -223,7 +208,31 @@ there. Run `region` afterwards to see the full list.
 
 ## Repeater setup
 
-### Standard MeshCore Canada settings
+### Step 1: Clear any old regions
+
+Many repeaters already have regions from the older setup, such as `can`,
+`on-alg` or `ott`. `region def` never deletes anything, so clear them first.
+
+1. Run `region` to list what is there.
+2. Remove every name except `*` with `region remove <name>`. Start with the
+   most indented line and work up. If you see `Err - not empty`, a name is
+   still indented under it, so remove that one first.
+3. Run `region save`.
+
+For example, a repeater set up with the old Ottawa path:
+
+```text
+region remove ott
+region remove on-alg
+region remove on
+region remove can
+region save
+```
+
+Removing `on` is fine. The region settings in step 3 add it back. Run `region` again, and you
+should only see `* F`.
+
+### Step 2: Standard MeshCore Canada settings
 
 ```text
 set path.hash.mode 2
@@ -239,9 +248,19 @@ set flood.max 16
   <dt>flood.max 16</dt><dd>No flood message travels more than 16 hops, scoped or not.</dd>
 </dl>
 
-### Region settings
+### Step 3: Region settings
 
-Pick your area. Lanark, Calabogie, Renfrew and Alfred use the Ottawa setup. Trois-Rivières uses the Montréal setup.
+Your city code is your **MeshMapper zone**. Open [MeshMapper](https://meshmapper.net/),
+find the zone your repeater sits in, and use its code. It is a map everyone
+already uses, so there is nothing new to look up.
+
+The pattern is always the same:
+
+```text
+region def <city>|* <on or qc>|* onqc
+```
+
+Examples:
 
 === "Ottawa"
 
@@ -286,7 +305,7 @@ Pick your area. Lanark, Calabogie, Renfrew and Alfred use the Ottawa setup. Troi
   <dt>region save</dt><dd>Keeps the region settings after a reboot. The <code>set</code> commands save by themselves.</dd>
 </dl>
 
-To check, run `region`. You should see:
+To check, run `region`. For Ottawa you should see:
 
 ```text
 * F
@@ -297,8 +316,23 @@ To check, run `region`. You should see:
 
 `F` means "flood allowed": the repeater forwards that name.
 
-A **bridge repeater** that links two areas on purpose, for example between
-Ottawa and Montréal, can also carry the neighbouring city code.
+### Bridge repeaters
+
+A repeater that links two city zones on purpose carries **both** city codes.
+For example, a repeater in **Rigaud** sits in the `yul` zone and links Montréal
+to the Ottawa zone:
+
+```text
+region def yul|* yow|* qc|* onqc
+region allowf *
+region default yul
+region save
+```
+
+It forwards Ottawa and Montréal city messages, plus `qc` and `onqc`. Its own
+adverts stay in its home zone, `yul`. Only add a neighbouring city when the
+repeater really links the two areas, or city messages will leak further than
+people expect.
 
 ### Allow or drop, quick reference
 
@@ -359,7 +393,7 @@ Québec. That is why step 2 of the phone setup sets local channels to your city.
 ## Rollout
 
 <ol class="scp-timeline">
-  <li data-phase="Phase 1"><h3>Repeaters</h3><p>Owners add their three codes and keep <code>*</code> allowed. Nothing breaks for anyone.</p></li>
+  <li data-phase="Phase 1"><h3>Repeaters</h3><p>Owners clear old regions, add their three codes and keep <code>*</code> allowed. Nothing breaks for anyone.</p></li>
   <li data-phase="Phase 2"><h3>Phones</h3><p>Users set their default to <code>onqc</code> and set local channels to their city.</p></li>
   <li data-phase="Phase 3"><h3>Cutover</h3><p>On an agreed date, repeaters run <code>set flood.max.unscoped 3</code>. Messages with no scope then stay within 3 hops, while scoped messages still reach 16.</p></li>
 </ol>
@@ -368,10 +402,6 @@ Québec. That is why step 2 of the phone setup sets local channels to your city.
 
 - **Repeater adverts stay in their city.** Montréal users will not see Ottawa
   repeaters through flood adverts.
-- **Repeaters that already have older regions** such as `can`, `on-alg` or `ott`
-  should clear them. Run the new `region def` line first, which moves `on` to
-  the top. Then run `region` to see what is left, remove the old names from the
-  bottom up with `region remove <name>`, and finish with `region save`.
 - **16 hops has to be enough.** `flood.max` applies to `onqc` too. If the
   longest real path across the mesh is longer than 16 hops, cross-mesh
   messages will stop part way.

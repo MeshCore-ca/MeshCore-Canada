@@ -35,8 +35,9 @@ page_styles:
 
 ## En bref
 
-Chaque répéteur porte trois codes. Vous choisissez jusqu’où va un message en
-choisissant l’un d’eux.
+Il y a trois niveaux de portée. Chaque répéteur porte un code de chaque
+niveau : sa ville, sa province et `onqc`. Quand vous envoyez un message, vous
+choisissez le niveau à utiliser, et c’est ce qui décide jusqu’où il va.
 
 <div class="scp-levels-cards">
   <div class="scp-level-card" data-level="city">
@@ -100,7 +101,7 @@ avec cinq messages différents.
     </div>
     <ul class="scp-checks">
       <li><span class="scp-packet"><span class="scp-tag" data-level="city">yow</span> Canal d’Ottawa</span><span class="scp-checks__arrow" aria-hidden="true">→</span><span class="scp-result" data-result="ok">Relayé</span></li>
-      <li><span class="scp-packet"><span class="scp-tag" data-level="mesh">onqc</span> MP vers Québec</span><span class="scp-checks__arrow" aria-hidden="true">→</span><span class="scp-result" data-result="ok">Relayé</span></li>
+      <li><span class="scp-packet"><span class="scp-tag" data-level="mesh">onqc</span> MP vers Québec, envoyé avec la portée par défaut</span><span class="scp-checks__arrow" aria-hidden="true">→</span><span class="scp-result" data-result="ok">Relayé</span></li>
       <li><span class="scp-packet"><span class="scp-tag" data-level="any">aucune</span> Ancienne appli, sans portée</span><span class="scp-checks__arrow" aria-hidden="true">→</span><span class="scp-result" data-result="ok">Relayé</span></li>
       <li><span class="scp-packet"><span class="scp-tag" data-level="city">yul</span> Canal de Montréal</span><span class="scp-checks__arrow" aria-hidden="true">→</span><span class="scp-result" data-result="drop">Rejeté</span></li>
       <li><span class="scp-packet"><span class="scp-tag" data-level="prov">qc</span> Canal de tout le Québec</span><span class="scp-checks__arrow" aria-hidden="true">→</span><span class="scp-result" data-result="drop">Rejeté</span></li>
@@ -112,7 +113,7 @@ avec cinq messages différents.
     <div class="scp-rule__item" data-result="ok"><strong>Aucune portée :</strong> le message compte comme <code>*</code>. Il est relayé seulement si <code>*</code> est permis.</div>
     <div class="scp-rule__item" data-result="drop"><strong>Trop de sauts :</strong> rejeté dès qu’il dépasse <code>flood.max</code>, peu importe sa portée.</div>
   </div>
-  <figcaption>Le répéteur entend quand même tous les messages. La portée décide seulement s’il les relaie. Votre téléphone reçoit aussi tout ce qui l’atteint.</figcaption>
+  <figcaption>Le MP porte <code>onqc</code> parce que <code>onqc</code> est la portée par défaut du téléphone dans cette proposition. <a href="#pourquoi-le-telephone-utilise-onqc-par-defaut">Voir pourquoi plus bas</a>. Le répéteur entend quand même tous les messages. La portée décide seulement s’il les relaie. Votre téléphone reçoit aussi tout ce qui l’atteint.</figcaption>
 </figure>
 
 Trois détails piègent souvent :
@@ -135,7 +136,7 @@ Trois détails piègent souvent :
       <div class="scp-zone" data-level="prov">
         <p class="scp-zone__title"><span class="scp-tag" data-level="prov">on</span> Ontario</p>
         <div class="scp-cities">
-          <div class="scp-city"><strong>yow</strong><span>Ottawa, Lanark, Calabogie, Renfrew, Alfred</span></div>
+          <div class="scp-city"><strong>yow</strong><span>Ottawa, Lanark, Calabogie, Renfrew, Alfred, Hawkesbury</span></div>
           <div class="scp-city"><strong>yyz</strong><span>Toronto</span></div>
           <div class="scp-city"><strong>ygk</strong><span>Kingston</span></div>
           <div class="scp-city"><strong>ykf</strong><span>Waterloo</span></div>
@@ -145,7 +146,7 @@ Trois détails piègent souvent :
       <div class="scp-zone" data-level="prov">
         <p class="scp-zone__title"><span class="scp-tag" data-level="prov">qc</span> Québec</p>
         <div class="scp-cities">
-          <div class="scp-city"><strong>yul</strong><span>Montréal, Trois-Rivières</span></div>
+          <div class="scp-city"><strong>yul</strong><span>Montréal, Trois-Rivières, Rigaud</span></div>
           <div class="scp-city"><strong>yqb</strong><span>Ville de Québec</span></div>
           <div class="scp-city"><strong>yow</strong><span>Gatineau (partagé avec Ottawa)</span></div>
           <div class="scp-city"><strong>ytf</strong><span>Saguenay–Lac-Saint-Jean</span></div>
@@ -168,7 +169,9 @@ Trois détails piègent souvent :
   `yow.meshmapper.net`.
 - Il n’y a ni accent ni majuscule à se tromper. `montréal`, `Montreal` et
   `montreal` seraient trois portées différentes.
-- Ils sont neutres. Renfrew fait partie de la « zone YOW », pas d’« Ottawa ».
+- Ils sont faciles à diviser plus tard. Si Renfrew veut un jour son propre
+  secteur, il peut prendre son propre code d’aéroport et garder `on` et `onqc`.
+  Rien d’autre ne change.
 
 La première fois, écrivez toujours le code avec son secteur, par exemple
 `yow` (secteur Ottawa–Gatineau), pour que les gens l’apprennent.
@@ -204,23 +207,7 @@ La première fois, écrivez toujours le code avec son secteur, par exemple
 ├ on
 └ <mark>onqc</mark></div></li>
   </ol>
-  <div class="scp-compare">
-    <div class="scp-compare__item" data-result="ok">
-      <p><strong>Avec <code>|*</code></strong> : une liste à plat.</p>
-      <div class="scp-tree">*
-├ yow
-├ on
-└ onqc</div>
-    </div>
-    <div class="scp-compare__item" data-result="meh">
-      <p><strong>Sans <code>|*</code></strong> (<code>region def yow on onqc</code>) : chaque nom s’emboîte dans le précédent.</p>
-      <div class="scp-tree">*
-└ yow
-  └ on
-    └ onqc</div>
-    </div>
-  </div>
-  <figcaption>Les deux versions relaient exactement les mêmes messages, parce que les répéteurs ignorent l’emboîtement. La version à plat est plus facile à lire et à vérifier. Le nom surligné indique la position du curseur.</figcaption>
+  <figcaption>Le résultat est une liste à plat : tous les codes sont côte à côte sous <code>*</code>. Le nom surligné indique la position du curseur.</figcaption>
 </figure>
 
 <div class="mc-callout" data-kind="warning" markdown>
@@ -231,7 +218,32 @@ complète.
 
 ## Configuration du répéteur
 
-### Réglages standard de MeshCore Canada
+### Étape 1 : Effacer les anciennes régions
+
+Beaucoup de répéteurs ont déjà des régions de l’ancienne configuration, comme
+`can`, `on-alg` ou `ott`. `region def` ne supprime jamais rien, alors effacez-les
+d’abord.
+
+1. Lancez `region` pour voir ce qui s’y trouve.
+2. Retirez chaque nom sauf `*` avec `region remove <nom>`. Commencez par la
+   ligne la plus en retrait et remontez. Si vous voyez `Err - not empty`, un
+   nom est encore en retrait sous celui-ci; retirez-le d’abord.
+3. Lancez `region save`.
+
+Par exemple, un répéteur configuré avec l’ancien chemin d’Ottawa :
+
+```text
+region remove ott
+region remove on-alg
+region remove on
+region remove can
+region save
+```
+
+Retirer `on` ne pose pas de problème. Les réglages de région de l’étape 3 le
+remettent. Lancez `region` de nouveau : vous ne devriez voir que `* F`.
+
+### Étape 2 : Réglages standard de MeshCore Canada
 
 ```text
 set path.hash.mode 2
@@ -247,10 +259,20 @@ set flood.max 16
   <dt>flood.max 16</dt><dd>Aucune diffusion ne fait plus de 16 sauts, avec ou sans portée.</dd>
 </dl>
 
-### Réglages de région
+### Étape 3 : Réglages de région
 
-Choisissez votre secteur. Lanark, Calabogie, Renfrew et Alfred utilisent la
-configuration d’Ottawa. Trois-Rivières utilise celle de Montréal.
+Votre code de ville est votre **zone MeshMapper**. Ouvrez
+[MeshMapper](https://meshmapper.net/), trouvez la zone où se trouve votre
+répéteur et utilisez son code. C’est une carte que tout le monde utilise déjà,
+donc rien de nouveau à chercher.
+
+Le modèle est toujours le même :
+
+```text
+region def <ville>|* <on ou qc>|* onqc
+```
+
+Exemples :
 
 === "Ottawa"
 
@@ -295,7 +317,7 @@ configuration d’Ottawa. Trois-Rivières utilise celle de Montréal.
   <dt>region save</dt><dd>Conserve les réglages de région après un redémarrage. Les commandes <code>set</code> s’enregistrent d’elles-mêmes.</dd>
 </dl>
 
-Pour vérifier, lancez `region`. Vous devriez voir :
+Pour vérifier, lancez `region`. Pour Ottawa, vous devriez voir :
 
 ```text
 * F
@@ -306,8 +328,23 @@ Pour vérifier, lancez `region`. Vous devriez voir :
 
 `F` veut dire « diffusion permise » : le répéteur relaie ce nom.
 
-Un **répéteur passerelle** qui relie volontairement deux secteurs, par exemple
-entre Ottawa et Montréal, peut aussi porter le code de la ville voisine.
+### Répéteurs passerelles
+
+Un répéteur qui relie volontairement deux zones de ville porte **les deux**
+codes de ville. Par exemple, un répéteur à **Rigaud** se trouve dans la zone
+`yul` et relie Montréal à la zone d’Ottawa :
+
+```text
+region def yul|* yow|* qc|* onqc
+region allowf *
+region default yul
+region save
+```
+
+Il relaie les messages de ville d’Ottawa et de Montréal, ainsi que `qc` et
+`onqc`. Ses propres annonces restent dans sa zone, `yul`. N’ajoutez une ville
+voisine que si le répéteur relie vraiment les deux secteurs; sinon, les
+messages de ville iront plus loin que prévu.
 
 ### Permettre ou rejeter : aide-mémoire
 
@@ -372,20 +409,15 @@ téléphone règle les canaux locaux sur votre ville.
 ## Déploiement
 
 <ol class="scp-timeline">
-  <li data-phase="Étape 1"><h3>Répéteurs</h3><p>Les propriétaires ajoutent leurs trois codes et gardent <code>*</code> permis. Rien ne brise pour personne.</p></li>
-  <li data-phase="Étape 2"><h3>Téléphones</h3><p>Les utilisateurs règlent leur portée par défaut sur <code>onqc</code> et leurs canaux locaux sur leur ville.</p></li>
-  <li data-phase="Étape 3"><h3>Bascule</h3><p>À une date convenue, les répéteurs lancent <code>set flood.max.unscoped 3</code>. Les messages sans portée restent alors à 3 sauts ou moins, tandis que les messages avec portée atteignent encore 16 sauts.</p></li>
+  <li data-phase="Phase 1"><h3>Répéteurs</h3><p>Les propriétaires effacent les anciennes régions, ajoutent leurs trois codes et gardent <code>*</code> permis. Rien ne brise pour personne.</p></li>
+  <li data-phase="Phase 2"><h3>Téléphones</h3><p>Les utilisateurs règlent leur portée par défaut sur <code>onqc</code> et leurs canaux locaux sur leur ville.</p></li>
+  <li data-phase="Phase 3"><h3>Bascule</h3><p>À une date convenue, les répéteurs lancent <code>set flood.max.unscoped 3</code>. Les messages sans portée restent alors à 3 sauts ou moins, tandis que les messages avec portée atteignent encore 16 sauts.</p></li>
 </ol>
 
 ## À savoir
 
 - **Les annonces des répéteurs restent dans leur ville.** Les utilisateurs de
   Montréal ne verront pas les répéteurs d’Ottawa par les annonces diffusées.
-- **Les répéteurs qui ont déjà d’anciennes régions**, comme `can`, `on-alg` ou
-  `ott`, devraient les retirer. Lancez d’abord la nouvelle ligne
-  `region def`, qui déplace `on` au sommet. Lancez ensuite `region` pour voir
-  ce qui reste, retirez les anciens noms du bas vers le haut avec
-  `region remove <nom>`, puis terminez avec `region save`.
 - **16 sauts doivent suffire.** `flood.max` s’applique aussi à `onqc`. Si le
   plus long chemin réel dans le réseau dépasse 16 sauts, les messages qui
   traversent le réseau s’arrêteront en chemin.

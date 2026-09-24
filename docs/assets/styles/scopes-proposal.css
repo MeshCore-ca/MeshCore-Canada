@@ -503,33 +503,6 @@
   color: #172033;
 }
 
-.scp-compare {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
-  gap: var(--mc-space-4);
-  margin-top: var(--mc-space-6);
-}
-
-.scp-compare__item {
-  padding: var(--mc-space-4);
-  border: 1px solid var(--mc-color-border);
-  border-top: 0.3rem solid var(--scp-compare, var(--mc-color-border));
-  border-radius: var(--mc-radius-md);
-  background: var(--mc-color-surface-raised);
-}
-
-.scp-compare__item[data-result="ok"] { --scp-compare: var(--scp-ok); }
-.scp-compare__item[data-result="meh"] { --scp-compare: var(--mc-color-warning); }
-
-.md-typeset .scp-compare__item p {
-  margin: 0 0 var(--mc-space-2);
-  font-size: 0.85rem;
-}
-
-.md-typeset .scp-compare__item .scp-tree {
-  background: var(--mc-color-surface);
-}
-
 /* ---------- Diagram 4: DM route ---------- */
 
 .scp-route + .scp-route {
