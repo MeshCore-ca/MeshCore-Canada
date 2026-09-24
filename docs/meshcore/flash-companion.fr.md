@@ -94,8 +94,10 @@ réglage.
 1. Jumelez le nœud à une application MeshCore compatible sur votre téléphone ou votre ordinateur.
 2. Donnez-lui un nom descriptif qui ne révèle pas un emplacement privé.
 3. Vérifiez si la page de votre communauté locale indique des réglages différents.
-4. Si elle n’en indique aucun, utilisez les réglages par défaut du Canada : **USA/Canada (Recommended)** (`910.525 MHz / 62.5 kHz / SF7 / CR5`).
+4. Si elle n’en indique aucun, choisissez **Canada** (`910.525 MHz / 62.5 kHz / SF7 / CR5`) et confirmez les parcours de **3 octets**.
 5. Enregistrez les réglages, puis reconnectez-vous après le redémarrage de l’appareil.
+
+Si Canada n’apparaît pas dans votre application ou outil de programmation, suivez les [consignes pour l’ancien préréglage](../provinces/index.md#canada-baseline).
 
 Le réglage facultatif **Message Settings → Auto Reset Path** détermine comment
 l’application gère les changements de parcours. Conservez sa valeur par défaut,

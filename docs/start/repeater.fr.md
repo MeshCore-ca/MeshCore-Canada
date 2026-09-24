@@ -53,8 +53,10 @@ Suivez le guide [Reprogrammer et configurer un répéteur](../meshcore/flash-rep
 
 ## Choisir les bons paramètres radio et régionaux
 
-Utilisez le préréglage **USA/Canada (Recommended)** et le hachage des chemins
+Utilisez le préréglage **Canada** et le hachage des chemins
 sur **3 octets**, sauf si votre communauté indique d’autres paramètres.
+
+Si Canada n’apparaît pas, suivez les [consignes pour l’ancien préréglage](../provinces/index.md#canada-baseline).
 
 !!! warning "Coordonnez les changements avant l’installation"
     Consultez le [répertoire des communautés](../provinces/index.md). Les

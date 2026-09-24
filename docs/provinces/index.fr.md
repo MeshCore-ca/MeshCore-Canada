@@ -458,10 +458,20 @@ Utilisez ces réglages sauf si votre communauté locale en indique d’autres.
 
 | Réglage | Valeur par défaut au Canada |
 |---|---|
-| Préréglage radio | `USA/Canada (Recommended)` |
+| Préréglage radio | `Canada` |
 | Valeurs radio brutes | `910.525 MHz / 62.5 kHz / SF7 / CR5` |
 | Mode de hachage des parcours | `3-byte` |
 | Réglage du parcours en ligne de commande | `set path.hash.mode 2` |
+
+L’application MeshCore propose maintenant deux préréglages distincts : **Canada** et **USA**.
+Ils utilisent les mêmes valeurs radio ci-dessus, mais **Canada** choisit aussi des parcours de
+**3 octets**. **USA** ne modifie pas la taille du hachage. Vous pouvez toujours la régler
+manuellement. Voir l’[annonce du 9 septembre](https://github.com/meshcore-dev/MeshCore/issues/3302#issuecomment-5598886579).
+
+Si votre application ou outil de programmation affiche encore **USA/Canada (Recommended)**,
+utilisez-le pour les mêmes valeurs radio et réglez les parcours sur **3 octets** séparément.
+Mettez à jour les répéteurs dont le micrologiciel est antérieur à **1.14** : ces anciennes versions
+ne peuvent pas relayer les parcours multioctets.
 
 !!! warning "Vérifiez d’abord les réglages locaux"
     Les appareils à proximité doivent utiliser les mêmes réglages. Une fiche marquée

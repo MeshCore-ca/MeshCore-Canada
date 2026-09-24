@@ -80,8 +80,10 @@ The flasher reports completion, the board restarts as a companion, and the suppo
 1. Pair the node with the supported MeshCore app on your phone or computer.
 2. Give it a descriptive name that does not reveal a private location.
 3. Check your local community page for different settings.
-4. If none are listed, use the Canada defaults: **USA/Canada (Recommended)** (`910.525 MHz / 62.5 kHz / SF7 / CR5`).
+4. If none are listed, choose **Canada** (`910.525 MHz / 62.5 kHz / SF7 / CR5`) and confirm **3-byte** paths.
 5. Save the settings and reconnect after the device restarts.
+
+If Canada is not listed in your app or flasher, follow the [older-preset instructions](../provinces/index.md#canada-baseline).
 
 The optional **Message Settings → Auto Reset Path** preference affects how the app manages changing paths. Leave it at its default unless your local testing process calls for a different setting.
 

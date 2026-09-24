@@ -279,5 +279,6 @@ test("Canada baseline and local practice are explicitly separated", () => {
   assert.match(overview, /Canada defaults/i);
   assert.match(overview, /Official MeshCore resources/i);
   assert.match(companion, /Check the\s+\[community directory\]/i);
-  assert.match(companion, /USA\/Canada \(Recommended\)/);
+  assert.match(companion, /choose \*\*Canada\*\*/);
+  assert.match(companion, /\*\*3-byte\*\* paths/);
 });

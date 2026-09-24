@@ -78,7 +78,9 @@ Whichever setup you choose, you need:
 - packet publishing, not status-only publishing; and
 - an always-on host or board.
 
-The Canadian onboarding baseline is **USA/Canada (Recommended)**, `910.525 MHz / 62.5 kHz / SF7 / CR5`, with 3-byte path hashes. A published local setting takes priority.
+The Canadian onboarding baseline is **Canada**, `910.525 MHz / 62.5 kHz / SF7 / CR5`, with 3-byte path hashes. A published local setting takes priority.
+
+See the [Canada preset and older-app guidance](../provinces/index.md#canada-baseline).
 
 For exact broker fields, use the [observer connection reference](broker-reference.md).
 

@@ -73,8 +73,10 @@ The flasher reports completion, the device restarts as a Room Server, and **Conf
 4. Set separate, unique guest and admin passwords and store them securely.
    - The guest password is shared with people who should enter the room.
    - The admin password controls management access and should not be shared as the guest password.
-5. Check the local community page for different settings. If none are listed, use the Canada defaults: **USA/Canada (Recommended)** (`910.525 MHz / 62.5 kHz / SF7 / CR5`).
+5. Check the local community page for different settings. If none are listed, choose **Canada** (`910.525 MHz / 62.5 kHz / SF7 / CR5`) and **3-byte** paths (`set path.hash.mode 2`).
 6. Save settings and reboot.
+
+If Canada is not listed in your app or flasher, follow the [older-preset instructions](../provinces/index.md#canada-baseline).
 
 ## Test the server
 

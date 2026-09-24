@@ -10,7 +10,7 @@
     "update_route": "../submit-idea.md"
   },
   "national_defaults": {
-    "radio_preset": "USA/Canada (Recommended)",
+    "radio_preset": "Canada",
     "raw_radio": {
       "frequency_mhz": 910.525,
       "bandwidth_khz": 62.5,

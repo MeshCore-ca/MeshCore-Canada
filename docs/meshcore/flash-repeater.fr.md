@@ -126,7 +126,7 @@ n’est pas atteint, suivez le plan de récupération avant de configurer l’ap
 3. Entrez l’emplacement prévu ou utilisez la carte. Ne publiez pas un emplacement privé exact à moins que ce soit approprié pour le site.
 4. Donnez-lui un nom descriptif, comme `Callsign_R1` ou `Downtown_R1`.
 5. Créez un mot de passe administrateur unique et conservez-le de façon sécuritaire.
-6. Confirmez que la communauté locale n’a pas publié de réglages différents. Sinon, appliquez **USA/Canada (Recommended)** (`910.525 MHz / 62.5 kHz / SF7 / CR5`).
+6. Confirmez que la communauté locale n’a pas publié de réglages différents. Sinon, appliquez **Canada** (`910.525 MHz / 62.5 kHz / SF7 / CR5`).
 7. Utilisez les valeurs d’annonce actuellement recommandées par MeshCore Canada :
    - **Advert Interval:** `60` minutes
    - **Flood Advert Interval:** `24` heures
@@ -134,6 +134,8 @@ n’est pas atteint, suivez le plan de récupération avant de configurer l’ap
 8. Utilisez le [configurateur de répéteur](../config/index.md) pour obtenir les commandes de région et le mode de hachage des parcours. Le réglage canadien par défaut utilise 3 octets (`set path.hash.mode 2`); utilisez les réglages locaux différents lorsque votre communauté en publie.
 9. Ajoutez les renseignements sur le propriétaire seulement s’ils conviennent à des annonces publiques.
 10. Enregistrez les réglages et redémarrez l’appareil.
+
+Si Canada n’apparaît pas dans votre application ou outil de programmation, suivez les [consignes pour l’ancien préréglage](../provinces/index.md#canada-baseline).
 
 ### Détection des boucles { #loop-detection }
 

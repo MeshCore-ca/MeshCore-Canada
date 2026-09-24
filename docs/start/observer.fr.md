@@ -59,9 +59,11 @@ suivez uniquement le guide de la méthode choisie.
 ## Choisir les bons paramètres radio
 
 La radio connectée doit utiliser les mêmes paramètres que le réseau à
-proximité. Commencez avec le préréglage **USA/Canada (Recommended)** et le
+proximité. Commencez avec le préréglage **Canada** et le
 hachage des chemins sur **3 octets**, sauf si votre communauté indique
 d’autres paramètres.
+
+Si Canada n’apparaît pas, suivez les [consignes pour l’ancien préréglage](../provinces/index.md#canada-baseline).
 
 !!! warning "Utilisez les mêmes paramètres que votre communauté"
     Consultez le [répertoire des communautés](../provinces/index.md). Un

@@ -92,12 +92,14 @@ propre à la communauté, la configuration canadienne de départ est :
 
 | Paramètre | Valeur |
 |---|---|
-| Préréglage radio | **USA/Canada (Recommended)** |
+| Préréglage radio | **Canada** |
 | Valeurs radio brutes | `910.525 MHz / 62.5 kHz / SF7 / CR5` |
 | Empreintes de chemin | 3 octets (`set path.hash.mode 2`) |
 | Préréglage principal | `meshcore-ca-1` |
 | Préréglage de secours | `meshcore-ca-2` |
 | Wi-Fi | Un réseau 2,4 GHz |
+
+Si Canada n’apparaît pas dans l’outil de configuration, suivez les [consignes pour l’ancien préréglage](../../provinces/index.md#canada-baseline).
 
 ### 3. Générer les commandes
 

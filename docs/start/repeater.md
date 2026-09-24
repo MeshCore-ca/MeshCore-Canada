@@ -51,8 +51,10 @@ Follow [Flash and configure a repeater](../meshcore/flash-repeater.md).
 
 ## Use the right radio and region settings
 
-Use **USA/Canada (Recommended)** with the **3-byte** path setting unless your
+Use **Canada** with the **3-byte** path setting unless your
 community lists different settings.
+
+If Canada is not listed, follow the [older-preset instructions](../provinces/index.md#canada-baseline).
 
 !!! warning "Coordinate before installation"
     Check the [community directory](../provinces/index.md). Nearby repeaters

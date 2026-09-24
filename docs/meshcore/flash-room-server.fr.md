@@ -91,8 +91,10 @@ suivez le plan de récupération avant de configurer les accès.
 4. Créez des mots de passe invité et administrateur distincts et uniques, puis conservez-les de façon sécuritaire.
    - Le mot de passe invité est remis aux personnes qui doivent accéder au salon.
    - Le mot de passe administrateur contrôle la gestion et ne doit pas être utilisé comme mot de passe invité.
-5. Vérifiez si la page de la communauté locale indique d’autres réglages. Si elle n’en indique aucun, utilisez les réglages par défaut du Canada : **USA/Canada (Recommended)** (`910.525 MHz / 62.5 kHz / SF7 / CR5`).
+5. Vérifiez si la page de la communauté locale indique d’autres réglages. Si elle n’en indique aucun, choisissez **Canada** (`910.525 MHz / 62.5 kHz / SF7 / CR5`) et des parcours de **3 octets** (`set path.hash.mode 2`).
 6. Enregistrez les réglages et redémarrez l’appareil.
+
+Si Canada n’apparaît pas dans votre application ou outil de programmation, suivez les [consignes pour l’ancien préréglage](../provinces/index.md#canada-baseline).
 
 ## Tester le serveur
 

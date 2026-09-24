@@ -34,12 +34,16 @@ source actuelle.
 
 ### Quels réglages radio dois-je utiliser au Canada?
 
-Utilisez le profil radio de votre communauté. Le [configurateur de répéteur](../config/index.md)
-trouve les chemins régionaux, mais conserve les réglages radio tant que vous ne choisissez pas de profil.
+Utilisez le profil radio du [répertoire des communautés](../provinces/index.md). Si aucun n’est publié, choisissez
+**Canada** dans l’application pour les paramètres canadiens et des parcours de
+**3 octets**. Consultez les [détails et les consignes pour les anciennes applications](../provinces/index.md#canada-baseline).
 
-Quel que soit le rôle de l’appareil, consultez d’abord le
-[répertoire des communautés](../provinces/index.md). Lorsqu’une communauté
-publie des réglages locaux différents, suivez-les.
+Le préréglage distinct **USA** utilise les mêmes valeurs radio, mais ne modifie pas
+la taille du hachage. [Annonce du changement](https://github.com/meshcore-dev/MeshCore/issues/3302#issuecomment-5598886579).
+
+Le [configurateur de répéteur](../config/index.md) trouve les chemins régionaux.
+Ses réglages radio et de taille d’identifiant d’annonce sont séparés; les valeurs
+actuelles sont conservées tant que vous ne choisissez pas de changement.
 
 ### Qu’est-ce que le mode de hachage des parcours?
 

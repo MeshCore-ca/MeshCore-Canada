@@ -19,7 +19,7 @@ page_styles:
 page_scripts:
   - assets/javascripts/radio-profiles.js?v=20260904-1
   - assets/regions/modules/configurator-support.js?v=20260904-1
-  - assets/regions/regions.js?v=20260905-1
+  - assets/regions/regions.js?v=20260909-1
 hide:
   - toc
 ---
