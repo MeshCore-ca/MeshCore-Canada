@@ -24,7 +24,7 @@ page_styles:
 
 <div class="scp-hero">
   <p class="mc-eyebrow">Proposition à discuter</p>
-  <p class="mc-lede">Les portées de région empêchent les échanges locaux d’inonder tout le réseau. La configuration actuelle est difficile à suivre. Cette proposition la ramène à trois niveaux de codes faciles à retenir partout en Ontario et au Québec.</p>
+  <p class="mc-lede">Les portées de région empêchent les échanges locaux d’inonder tout le réseau. La configuration actuelle est difficile à suivre. Cette proposition la ramène à quatre niveaux de codes faciles à retenir partout en Ontario et au Québec.</p>
   <ul class="scp-hero__badges">
     <li data-kind="proposal">Pas encore adoptée</li>
     <li>Projet pilote Ontario + Québec</li>
@@ -35,9 +35,11 @@ page_styles:
 
 ## En bref
 
-Il y a trois niveaux de portée. Chaque répéteur porte sa ville, sa province
-et les codes de réseau `onqc` et `can`. Quand vous envoyez un message, vous
-choisissez le niveau à utiliser, et c’est ce qui décide jusqu’où il va.
+Il y a quatre niveaux de portée. Chaque répéteur porte un code de chacun :
+sa ville, sa province, `onqc` et `can`. Quand vous envoyez un message, vous
+choisissez le niveau à utiliser, et c’est ce qui décide jusqu’où il va. `can`
+est réservé pour plus tard; pour l’instant, vous choisissez parmi les trois
+premiers.
 
 <div class="scp-levels-cards">
   <div class="scp-level-card" data-level="city">
@@ -52,8 +54,13 @@ choisissez le niveau à utiliser, et c’est ce qui décide jusqu’où il va.
   </div>
   <div class="scp-level-card" data-level="mesh">
     <h3>Réseau</h3>
-    <span class="scp-tag" data-level="mesh">onqc</span> <span class="scp-tag" data-level="future">can</span>
-    <p><code>onqc</code> : tous les répéteurs de l’Ontario et du Québec. <code>can</code> : tout le Canada, réservé pour plus tard.</p>
+    <span class="scp-tag" data-level="mesh">onqc</span>
+    <p>Tous les répéteurs de l’Ontario et du Québec.</p>
+  </div>
+  <div class="scp-level-card" data-level="future">
+    <h3>Canada</h3>
+    <span class="scp-tag" data-level="future">can</span>
+    <p>Tout le Canada. Réservé pour plus tard : porté dès maintenant, pas encore utilisé.</p>
   </div>
 </div>
 
@@ -128,7 +135,7 @@ Trois détails piègent souvent :
 - **Il n’y a pas d’héritage.** Porter `on` ne veut pas dire porter `yow`.
   Chaque nom doit être sur la liste à part entière.
 
-## Les trois niveaux
+## Les quatre niveaux
 
 <figure class="scp-figure">
   <div class="scp-zone" data-level="future">

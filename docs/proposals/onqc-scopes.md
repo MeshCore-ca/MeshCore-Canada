@@ -24,7 +24,7 @@ page_styles:
 
 <div class="scp-hero">
   <p class="mc-eyebrow">Proposal for discussion</p>
-  <p class="mc-lede">Region scopes stop local chatter from flooding the whole network. Today's setup is hard to follow, so this proposal cuts it down to three levels of codes that everyone in Ontario and Québec can remember.</p>
+  <p class="mc-lede">Region scopes stop local chatter from flooding the whole network. Today's setup is hard to follow, so this proposal cuts it down to four levels of codes that everyone in Ontario and Québec can remember.</p>
   <ul class="scp-hero__badges">
     <li data-kind="proposal">Not adopted yet</li>
     <li>Ontario + Québec pilot</li>
@@ -35,7 +35,7 @@ page_styles:
 
 ## The short version
 
-There are three levels of scope. Every repeater carries its city, its province, and the mesh codes `onqc` and `can`. When you send a message, you choose which level to use, and that decides how far it travels.
+There are four levels of scope. Every repeater carries one code from each: its city, its province, `onqc` and `can`. When you send a message, you choose which level to use, and that decides how far it travels. `can` is reserved for later, so for now you only pick from the first three.
 
 <div class="scp-levels-cards">
   <div class="scp-level-card" data-level="city">
@@ -50,8 +50,13 @@ There are three levels of scope. Every repeater carries its city, its province, 
   </div>
   <div class="scp-level-card" data-level="mesh">
     <h3>Mesh</h3>
-    <span class="scp-tag" data-level="mesh">onqc</span> <span class="scp-tag" data-level="future">can</span>
-    <p><code>onqc</code>: every repeater in Ontario and Québec. <code>can</code>: all of Canada, reserved for later.</p>
+    <span class="scp-tag" data-level="mesh">onqc</span>
+    <p>Every repeater in Ontario and Québec.</p>
+  </div>
+  <div class="scp-level-card" data-level="future">
+    <h3>Canada</h3>
+    <span class="scp-tag" data-level="future">can</span>
+    <p>All of Canada. Reserved for later: carried now, not used yet.</p>
   </div>
 </div>
 
@@ -120,7 +125,7 @@ Three details catch people out:
 - **There is no inheritance.** Carrying `on` does not mean carrying `yow`.
   Each name has to be on the list by itself.
 
-## The three levels
+## The four levels
 
 <figure class="scp-figure">
   <div class="scp-zone" data-level="future">
