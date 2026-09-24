@@ -449,6 +449,14 @@ choisissez la portée selon ce tableau :
 Si vous faites fonctionner un robot, réglez aussi sa propre **Default Region
 Scope** sur votre ville.
 
+<div class="mc-callout" markdown>
+**Les messages avec portée sont un peu plus courts.** Dès qu’un canal a une
+portée, l’application permet moins de caractères par message. Lors de nos
+essais, la limite sur `Public` est passée de 137 à 127 caractères après l’avoir
+réglé sur `onqc`. L’application fixe la limite exacte, qui peut varier selon le
+nom de votre nœud et la version de l’application.
+</div>
+
 ## Pourquoi l’appareil compagnon utilise `onqc` par défaut
 
 On ne peut pas choisir la portée d’un seul message privé. Quand un MP n’a pas
@@ -559,6 +567,9 @@ pas encore réglé de portée fonctionnent quand même localement.
 
 ## À savoir
 
+- **Les messages avec portée ont environ 10 caractères de moins.**
+  L’application réduit la longueur maximale sur les canaux avec portée (de
+  137 à 127 lors de nos essais).
 - **Les annonces des répéteurs restent dans leur ville.** Les utilisateurs de
   Montréal ne verront pas les répéteurs d’Ottawa par les annonces diffusées.
 - **16 sauts doivent suffire.** `flood.max` s’applique aussi à `onqc`. Si le
