@@ -3422,15 +3422,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#les-trois-niveaux" class="md-nav__link">
+  <a href="#les-quatre-niveaux" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Les trois niveaux
+        Les quatre niveaux
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Les trois niveaux">
+    <nav class="md-nav" aria-label="Les quatre niveaux">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -3646,7 +3646,7 @@
   
 <div class="scp-hero">
   <p class="mc-eyebrow">Proposition à discuter</p>
-  <p class="mc-lede">Les portées de région empêchent les échanges locaux d’inonder tout le réseau. La configuration actuelle est difficile à suivre. Cette proposition la ramène à trois niveaux de codes faciles à retenir partout en Ontario et au Québec.</p>
+  <p class="mc-lede">Les portées de région empêchent les échanges locaux d’inonder tout le réseau. La configuration actuelle est difficile à suivre. Cette proposition la ramène à quatre niveaux de codes faciles à retenir partout en Ontario et au Québec.</p>
   <ul class="scp-hero__badges">
     <li data-kind="proposal">Pas encore adoptée</li>
     <li>Projet pilote Ontario + Québec</li>
@@ -3656,9 +3656,11 @@
 </div>
 
 <h2 id="en-bref">En bref<a class="headerlink" href="#en-bref" title="Permanent link">&para;</a></h2>
-<p>Il y a trois niveaux de portée. Chaque répéteur porte sa ville, sa province
-et les codes de réseau <code>onqc</code> et <code>can</code>. Quand vous envoyez un message, vous
-choisissez le niveau à utiliser, et c’est ce qui décide jusqu’où il va.</p>
+<p>Il y a quatre niveaux de portée. Chaque répéteur porte un code de chacun :
+sa ville, sa province, <code>onqc</code> et <code>can</code>. Quand vous envoyez un message, vous
+choisissez le niveau à utiliser, et c’est ce qui décide jusqu’où il va. <code>can</code>
+est réservé pour plus tard; pour l’instant, vous choisissez parmi les trois
+premiers.</p>
 <div class="scp-levels-cards">
   <div class="scp-level-card" data-level="city">
     <h3>Ville</h3>
@@ -3672,8 +3674,13 @@ choisissez le niveau à utiliser, et c’est ce qui décide jusqu’où il va.</
   </div>
   <div class="scp-level-card" data-level="mesh">
     <h3>Réseau</h3>
-    <span class="scp-tag" data-level="mesh">onqc</span> <span class="scp-tag" data-level="future">can</span>
-    <p><code>onqc</code> : tous les répéteurs de l’Ontario et du Québec. <code>can</code> : tout le Canada, réservé pour plus tard.</p>
+    <span class="scp-tag" data-level="mesh">onqc</span>
+    <p>Tous les répéteurs de l’Ontario et du Québec.</p>
+  </div>
+  <div class="scp-level-card" data-level="future">
+    <h3>Canada</h3>
+    <span class="scp-tag" data-level="future">can</span>
+    <p>Tout le Canada. Réservé pour plus tard : porté dès maintenant, pas encore utilisé.</p>
   </div>
 </div>
 
@@ -3743,7 +3750,7 @@ avec cinq messages différents.</p>
 <li><strong>Il n’y a pas d’héritage.</strong> Porter <code>on</code> ne veut pas dire porter <code>yow</code>.
   Chaque nom doit être sur la liste à part entière.</li>
 </ul>
-<h2 id="les-trois-niveaux">Les trois niveaux<a class="headerlink" href="#les-trois-niveaux" title="Permanent link">&para;</a></h2>
+<h2 id="les-quatre-niveaux">Les quatre niveaux<a class="headerlink" href="#les-quatre-niveaux" title="Permanent link">&para;</a></h2>
 <figure class="scp-figure">
   <div class="scp-zone" data-level="future">
   <p class="scp-zone__title"><span class="scp-tag" data-level="future">can</span> Canada <span>Réservé pour plus tard. Porté dès maintenant, pas encore utilisé.</span></p>
@@ -3794,6 +3801,13 @@ Québec ».</p>
 <ul>
 <li>Ce sont les mêmes codes que MeshMapper utilise déjà, par exemple
   <code>yow.meshmapper.net</code>.</li>
+<li>MeshCore utilise déjà les codes d’aéroport ailleurs, par exemple pour le
+  <a href="../../analyzer/iata-codes/">code d’emplacement que chaque observateur transmet</a>.
+  Inventer d’autres noms seulement pour les régions donnerait deux façons de
+  nommer le même secteur, et plus de confusion avec le temps. Les codes
+  d’aéroport ne sont pas parfaits pour des secteurs de réseau, mais MeshCore
+  les utilise déjà pour bien des choses et ça ne changera pas; les régions
+  devraient donc suivre.</li>
 <li>Il n’y a ni accent ni majuscule à se tromper. <code>montréal</code>, <code>Montreal</code> et
   <code>montreal</code> seraient trois portées différentes.</li>
 <li>Ils sont faciles à diviser plus tard. Si Renfrew veut un jour son propre
@@ -3893,7 +3907,7 @@ donc rien de nouveau à chercher.</p>
 <div class="highlight"><pre><span></span><code>region def &lt;ville&gt;|* &lt;on ou qc&gt;|* onqc|* can
 </code></pre></div>
 <p>Exemples :</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:4"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Ottawa</label><label for="__tabbed_1_2">Gatineau</label><label for="__tabbed_1_3">Montréal</label><label for="__tabbed_1_4">Ville de Québec</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:4"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Ottawa et environs</label><label for="__tabbed_1_2">Gatineau</label><label for="__tabbed_1_3">Montréal et environs</label><label for="__tabbed_1_4">Ville de Québec</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>region def yow|* on|* onqc|* can
@@ -3925,6 +3939,9 @@ region save
 </div>
 </div>
 </div>
+<p>Ces zones suivent les limites MeshMapper qui existent déjà. Elles ne sont pas
+parfaites, mais c’est ainsi que la plupart des gens voient déjà la carte
+aujourd’hui; il n’y a donc rien de nouveau à apprendre.</p>
 <dl class="scp-explain">
   <dt>region def …</dt><dd>Porter votre ville, votre province, <code>onqc</code> et <code>can</code>.</dd>
   <dt>region allowf *</dt><dd>Relayer aussi les messages <strong>sans portée</strong>. C’est déjà le réglage par défaut. On le règle quand même pour que vous le voyiez.</dd>
@@ -3986,8 +4003,9 @@ messages de ville iront plus loin que prévu.</p>
 </table>
 <h2 id="configuration-du-telephone-et-de-lappareil-compagnon">Configuration du téléphone et de l’appareil compagnon<a class="headerlink" href="#configuration-du-telephone-et-de-lappareil-compagnon" title="Permanent link">&para;</a></h2>
 <ol>
-<li>Ouvrez l’application MeshCore, puis <strong>Settings → Experimental Settings →
-   Default Region Scope</strong>. Ajoutez <code>onqc</code> et sélectionnez-le.</li>
+<li>Ouvrez l’application MeshCore, puis <strong>Settings</strong>. Sous <strong>Network
+   Settings</strong>, touchez <strong>Default Region Scope</strong>, ajoutez <code>onqc</code> et
+   sélectionnez-le.</li>
 <li>Ouvrez chaque canal local, comme <code>#public</code>. Dans le menu du canal, touchez
    <strong>Set Region Scope</strong> et choisissez le code de votre ville, par exemple
    <code>yow</code>.</li>
