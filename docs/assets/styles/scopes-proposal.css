@@ -133,6 +133,7 @@
 .scp-level-card[data-level="city"] { --scp-level: var(--scp-city); }
 .scp-level-card[data-level="prov"] { --scp-level: var(--scp-prov); }
 .scp-level-card[data-level="mesh"] { --scp-level: var(--scp-mesh); }
+.scp-level-card[data-level="future"] { --scp-level: var(--scp-any); border-top-style: dashed; }
 
 .md-typeset .scp-level-card h3 {
   margin: 0 0 var(--mc-space-2);
