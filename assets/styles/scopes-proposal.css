@@ -1,0 +1,762 @@
+/* ON/QC region scopes proposal: page-only diagrams and layout. */
+
+:root {
+  --scp-city: #1458b0;
+  --scp-city-bg: #e8f0fb;
+  --scp-prov: #146c43;
+  --scp-prov-bg: #e5f4ec;
+  --scp-mesh: #6b36a8;
+  --scp-mesh-bg: #f1e8fb;
+  --scp-any: #526174;
+  --scp-any-bg: #eef3f8;
+  --scp-ok: var(--mc-color-success);
+  --scp-ok-bg: #e5f4ec;
+  --scp-drop: var(--mc-color-danger);
+  --scp-drop-bg: #fdecea;
+}
+
+[data-md-color-scheme="slate"] {
+  --scp-city: #7db7ff;
+  --scp-city-bg: rgb(125 183 255 / 14%);
+  --scp-prov: #78dfa7;
+  --scp-prov-bg: rgb(120 223 167 / 12%);
+  --scp-mesh: #c9a4ff;
+  --scp-mesh-bg: rgb(201 164 255 / 14%);
+  --scp-any: #b6c0ce;
+  --scp-any-bg: rgb(182 192 206 / 12%);
+  --scp-ok: #78dfa7;
+  --scp-ok-bg: rgb(120 223 167 / 12%);
+  --scp-drop: #ffaaa3;
+  --scp-drop-bg: rgb(255 170 163 / 12%);
+}
+
+/* Undo the theme's list indents inside diagrams. */
+[dir] .md-typeset .scp-checks,
+[dir] .md-typeset .scp-steps,
+[dir] .md-typeset .scp-track,
+[dir] .md-typeset .scp-timeline,
+[dir] .md-typeset .scp-hero__badges {
+  margin-right: 0;
+  margin-left: 0;
+  padding: 0;
+  list-style: none;
+}
+
+[dir] .md-typeset .scp-checks > li,
+[dir] .md-typeset .scp-steps > li,
+[dir] .md-typeset .scp-track > li,
+[dir] .md-typeset .scp-timeline > li,
+[dir] .md-typeset .scp-hero__badges > li {
+  margin-right: 0;
+  margin-left: 0;
+}
+
+/* ---------- Hero ---------- */
+
+.scp-hero {
+  margin: var(--mc-space-4) 0 var(--mc-space-8);
+  padding: var(--mc-space-6);
+  border: 1px solid var(--mc-color-border);
+  border-radius: var(--mc-radius-lg);
+  background:
+    linear-gradient(135deg, var(--scp-city-bg), transparent 45%),
+    linear-gradient(315deg, var(--scp-mesh-bg), transparent 45%),
+    var(--mc-color-surface);
+  box-shadow: var(--mc-shadow-1);
+}
+
+.scp-hero > :first-child { margin-top: 0; }
+.scp-hero > :last-child { margin-bottom: 0; }
+
+[dir] .md-typeset .scp-hero__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--mc-space-2);
+  margin: var(--mc-space-4) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.md-typeset .scp-hero__badges li {
+  margin: 0;
+  padding: 0.2rem 0.65rem;
+  border: 1px solid var(--mc-color-border);
+  border-radius: 999px;
+  background: var(--mc-color-surface);
+  font-size: 0.78rem;
+  font-weight: 650;
+}
+
+.scp-hero__badges li[data-kind="proposal"] {
+  border-color: var(--mc-color-warning);
+  color: var(--mc-color-warning);
+}
+
+/* ---------- Tags ---------- */
+
+.md-typeset .scp-tag {
+  display: inline-block;
+  padding: 0.05rem 0.5rem;
+  border: 1px solid currentcolor;
+  border-radius: 999px;
+  font-family: var(--mc-font-code);
+  font-size: 0.85em;
+  font-weight: 700;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+.scp-tag[data-level="city"] { color: var(--scp-city); background: var(--scp-city-bg); }
+.scp-tag[data-level="prov"] { color: var(--scp-prov); background: var(--scp-prov-bg); }
+.scp-tag[data-level="mesh"] { color: var(--scp-mesh); background: var(--scp-mesh-bg); }
+.scp-tag[data-level="any"] { color: var(--scp-any); background: var(--scp-any-bg); }
+.scp-tag[data-level="bad"] { color: var(--scp-drop); background: var(--scp-drop-bg); }
+
+/* ---------- Summary cards ---------- */
+
+.scp-levels-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 9rem), 1fr));
+  gap: var(--mc-space-4);
+  margin: var(--mc-space-6) 0;
+}
+
+.scp-level-card {
+  padding: var(--mc-space-4);
+  border: 1px solid var(--mc-color-border);
+  border-top: 0.35rem solid var(--scp-level, var(--mc-color-border));
+  border-radius: var(--mc-radius-md);
+  background: var(--mc-color-surface);
+}
+
+.scp-level-card[data-level="city"] { --scp-level: var(--scp-city); }
+.scp-level-card[data-level="prov"] { --scp-level: var(--scp-prov); }
+.scp-level-card[data-level="mesh"] { --scp-level: var(--scp-mesh); }
+
+.md-typeset .scp-level-card h3 {
+  margin: 0 0 var(--mc-space-2);
+  color: var(--scp-level);
+  font-size: 1rem;
+}
+
+.md-typeset .scp-level-card p {
+  margin: var(--mc-space-2) 0 0;
+  font-size: 0.9rem;
+}
+
+/* ---------- Figures ---------- */
+
+.md-typeset .scp-figure {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: none;
+  container-type: inline-size;
+  text-align: left;
+  margin: var(--mc-space-6) 0 var(--mc-space-8);
+  padding: var(--mc-space-6);
+  border: 1px solid var(--mc-color-border);
+  border-radius: var(--mc-radius-lg);
+  background: var(--mc-color-surface);
+}
+
+.md-typeset .scp-figure figcaption {
+  max-width: none;
+  margin: var(--mc-space-4) 0 0;
+  color: var(--mc-color-text-muted);
+  font-size: 0.85rem;
+  font-style: normal;
+  text-align: left;
+}
+
+.scp-label {
+  margin: 0 0 var(--mc-space-2);
+  color: var(--mc-color-text-muted);
+  font-size: 0.72rem;
+  font-weight: 760;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ---------- Diagram 1: the filter ---------- */
+
+.scp-filter {
+  display: grid;
+  grid-template-columns: minmax(12rem, 15rem) minmax(0, 1fr);
+  gap: var(--mc-space-6);
+  align-items: center;
+}
+
+[dir] .md-typeset .scp-checks {
+  display: grid;
+  gap: var(--mc-space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.md-typeset .scp-checks > li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(7.5rem, auto);
+  gap: var(--mc-space-2);
+  align-items: center;
+  margin: 0;
+}
+
+.scp-checks__arrow {
+  color: var(--mc-color-text-muted);
+  font-weight: 700;
+}
+
+.scp-packet,
+.scp-result {
+  display: flex;
+  min-height: 2.6rem;
+  align-items: center;
+  gap: var(--mc-space-2);
+  padding: var(--mc-space-2) var(--mc-space-3);
+  border: 1px solid var(--mc-color-border);
+  border-radius: var(--mc-radius-md);
+  background: var(--mc-color-surface-raised);
+  font-size: 0.85rem;
+  line-height: 1.3;
+}
+
+.scp-result {
+  justify-content: center;
+  font-weight: 700;
+}
+
+.scp-result[data-result="ok"] {
+  border-color: var(--scp-ok);
+  background: var(--scp-ok-bg);
+  color: var(--scp-ok);
+}
+
+.scp-result[data-result="drop"] {
+  border-color: var(--scp-drop);
+  background: var(--scp-drop-bg);
+  color: var(--scp-drop);
+}
+
+.scp-repeater {
+  padding: var(--mc-space-4);
+  border: 2px solid var(--mc-color-text);
+  border-radius: var(--mc-radius-lg);
+  background: var(--mc-color-surface);
+  text-align: center;
+  box-shadow: var(--mc-shadow-2);
+}
+
+.scp-repeater__icon {
+  display: block;
+  width: 2.5rem;
+  height: 2.5rem;
+  margin: 0 auto var(--mc-space-2);
+  color: var(--mc-color-text);
+}
+
+.md-typeset .scp-repeater p {
+  margin: 0 0 var(--mc-space-2);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.scp-repeater__list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--mc-space-2);
+}
+
+.md-typeset .scp-repeater small {
+  display: block;
+  margin-top: var(--mc-space-3);
+  color: var(--mc-color-text-muted);
+  font-size: 0.75rem;
+}
+
+@container (max-width: 40rem) {
+  .scp-filter {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .md-typeset .scp-checks > li {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .scp-checks__arrow {
+    display: none;
+  }
+
+  .scp-result {
+    min-width: 6.5rem;
+  }
+}
+
+.scp-rule {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  gap: var(--mc-space-3);
+  margin-top: var(--mc-space-6);
+}
+
+.scp-rule__item {
+  padding: var(--mc-space-3) var(--mc-space-4);
+  border-left: 0.3rem solid var(--scp-rule, var(--mc-color-border));
+  border-radius: var(--mc-radius-sm);
+  background: var(--mc-color-surface-raised);
+  font-size: 0.85rem;
+}
+
+.scp-rule__item[data-result="ok"] { --scp-rule: var(--scp-ok); }
+.scp-rule__item[data-result="drop"] { --scp-rule: var(--scp-drop); }
+
+/* ---------- Diagram 2: nested levels ---------- */
+
+.scp-zone {
+  padding: var(--mc-space-4);
+  border: 2px solid var(--scp-zone);
+  border-radius: var(--mc-radius-lg);
+  background: var(--scp-zone-bg);
+}
+
+.scp-zone[data-level="mesh"] { --scp-zone: var(--scp-mesh); --scp-zone-bg: var(--scp-mesh-bg); }
+.scp-zone[data-level="prov"] { --scp-zone: var(--scp-prov); --scp-zone-bg: var(--mc-color-surface); }
+
+.scp-zone__title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--mc-space-2);
+  margin: 0 0 var(--mc-space-3);
+  color: var(--scp-zone);
+  font-size: 0.85rem;
+  font-weight: 760;
+}
+
+.scp-zone__title span {
+  color: var(--mc-color-text-muted);
+  font-weight: 500;
+}
+
+.scp-zone__row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  gap: var(--mc-space-4);
+}
+
+.scp-cities {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr));
+  gap: var(--mc-space-2);
+}
+
+.scp-city {
+  padding: var(--mc-space-2) var(--mc-space-3);
+  border: 1px solid var(--scp-city);
+  border-radius: var(--mc-radius-md);
+  background: var(--scp-city-bg);
+}
+
+.scp-city strong {
+  display: block;
+  color: var(--scp-city);
+  font-family: var(--mc-font-code);
+  font-size: 0.95rem;
+}
+
+.scp-city span {
+  display: block;
+  color: var(--mc-color-text-muted);
+  font-size: 0.72rem;
+  line-height: 1.35;
+}
+
+.scp-city[data-more] {
+  border-style: dashed;
+  background: transparent;
+}
+
+.scp-flat {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--mc-space-3);
+  margin-top: var(--mc-space-6);
+  padding: var(--mc-space-4);
+  border: 1px dashed var(--mc-color-border);
+  border-radius: var(--mc-radius-md);
+  background: var(--mc-color-surface-raised);
+  font-size: 0.88rem;
+}
+
+.scp-flat__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--mc-space-2);
+}
+
+/* ---------- Diagram 3: region def cursor ---------- */
+
+.scp-tape {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--mc-space-2);
+  align-items: center;
+  margin-bottom: var(--mc-space-6);
+  padding: var(--mc-space-3) var(--mc-space-4);
+  border-radius: var(--mc-radius-md);
+  background: #172033;
+  color: #f3f6fb;
+  font-family: var(--mc-font-code);
+  font-size: 0.95rem;
+}
+
+[data-md-color-scheme="slate"] .scp-tape {
+  background: #0a0f18;
+}
+
+.scp-tape__cmd {
+  margin-right: var(--mc-space-2);
+  color: #b6c0ce;
+}
+
+.scp-tape__tok {
+  padding: 0.1rem 0.45rem;
+  border-radius: var(--mc-radius-sm);
+  background: rgb(255 255 255 / 10%);
+}
+
+.scp-tape__tok b {
+  display: inline-block;
+  min-width: 1.1rem;
+  margin-right: 0.35rem;
+  border-radius: 999px;
+  background: #ffd166;
+  color: #172033;
+  font-size: 0.7rem;
+  text-align: center;
+}
+
+.scp-tape__tok[data-kind="jump"] {
+  background: rgb(255 209 102 / 18%);
+  color: #ffd166;
+}
+
+[dir] .md-typeset .scp-steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 9.5rem), 1fr));
+  gap: var(--mc-space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: scp-step;
+}
+
+.md-typeset .scp-steps > li {
+  position: relative;
+  margin: 0;
+  padding: 2.3rem var(--mc-space-3) var(--mc-space-3);
+  border: 1px solid var(--mc-color-border);
+  border-radius: var(--mc-radius-md);
+  background: var(--mc-color-surface-raised);
+  font-size: 0.8rem;
+  counter-increment: scp-step;
+}
+
+.md-typeset .scp-steps > li::before {
+  position: absolute;
+  top: var(--mc-space-2);
+  left: var(--mc-space-3);
+  width: 1.3rem;
+  height: 1.3rem;
+  border-radius: 999px;
+  background: #ffd166;
+  color: #172033;
+  content: counter(scp-step);
+  font-size: 0.72rem;
+  font-weight: 800;
+  line-height: 1.3rem;
+  text-align: center;
+}
+
+.scp-steps code {
+  font-weight: 700;
+}
+
+.scp-tree {
+  margin: var(--mc-space-2) 0 0;
+  padding: var(--mc-space-2);
+  border-radius: var(--mc-radius-sm);
+  background: var(--mc-color-surface);
+  font-family: var(--mc-font-code);
+  font-size: 0.78rem;
+  line-height: 1.5;
+  white-space: pre;
+}
+
+.scp-tree mark {
+  padding: 0 0.15rem;
+  border-radius: 0.2rem;
+  background: #ffd166;
+  color: #172033;
+}
+
+.scp-compare {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  gap: var(--mc-space-4);
+  margin-top: var(--mc-space-6);
+}
+
+.scp-compare__item {
+  padding: var(--mc-space-4);
+  border: 1px solid var(--mc-color-border);
+  border-top: 0.3rem solid var(--scp-compare, var(--mc-color-border));
+  border-radius: var(--mc-radius-md);
+  background: var(--mc-color-surface-raised);
+}
+
+.scp-compare__item[data-result="ok"] { --scp-compare: var(--scp-ok); }
+.scp-compare__item[data-result="meh"] { --scp-compare: var(--mc-color-warning); }
+
+.md-typeset .scp-compare__item p {
+  margin: 0 0 var(--mc-space-2);
+  font-size: 0.85rem;
+}
+
+.md-typeset .scp-compare__item .scp-tree {
+  background: var(--mc-color-surface);
+}
+
+/* ---------- Diagram 4: DM route ---------- */
+
+.scp-route + .scp-route {
+  margin-top: var(--mc-space-6);
+}
+
+.scp-route__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--mc-space-2);
+  margin-bottom: var(--mc-space-3);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.scp-route__verdict {
+  margin-left: auto;
+  padding: 0.1rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+}
+
+.scp-route__verdict[data-result="ok"] { background: var(--scp-ok-bg); color: var(--scp-ok); }
+.scp-route__verdict[data-result="drop"] { background: var(--scp-drop-bg); color: var(--scp-drop); }
+
+[dir] .md-typeset .scp-track {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0;
+  align-items: stretch;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.md-typeset .scp-track > li {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+  padding: 0 0.2rem;
+  text-align: center;
+}
+
+/* connector line between stops */
+.scp-track > li::before {
+  position: absolute;
+  top: 1.35rem;
+  left: -50%;
+  width: 100%;
+  height: 0.28rem;
+  border-radius: 999px;
+  background: var(--scp-ok);
+  content: "";
+}
+
+.scp-track > li:first-child::before {
+  display: none;
+}
+
+.scp-track > li[data-link="drop"]::before,
+.scp-track > li[data-link="none"]::before {
+  background: repeating-linear-gradient(
+    90deg,
+    var(--mc-color-border) 0 0.4rem,
+    transparent 0.4rem 0.7rem
+  );
+}
+
+.scp-track > li[data-link="drop"]::after {
+  position: absolute;
+  z-index: 2;
+  top: 0.55rem;
+  left: -0.8rem;
+  display: grid;
+  width: 1.6rem;
+  height: 1.6rem;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--scp-drop);
+  color: var(--mc-color-surface);
+  content: "✕";
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
+.scp-stop {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  width: 2.7rem;
+  height: 2.7rem;
+  place-items: center;
+  border: 2px solid var(--scp-stop, var(--mc-color-text));
+  border-radius: var(--scp-stop-radius, var(--mc-radius-md));
+  background: var(--mc-color-surface);
+  color: var(--scp-stop, var(--mc-color-text));
+  font-size: 1.1rem;
+}
+
+.scp-stop svg {
+  width: 1.35rem;
+  height: 1.35rem;
+}
+
+.scp-stop[data-kind="phone"] { --scp-stop-radius: 0.8rem; }
+.scp-stop[data-kind="repeater"] { --scp-stop-radius: 999px; }
+.scp-stop[data-state="dim"] { opacity: 0.45; }
+
+.md-typeset .scp-track strong {
+  margin-top: var(--mc-space-2);
+  font-size: 0.78rem;
+  line-height: 1.25;
+}
+
+.md-typeset .scp-track small {
+  margin-top: 0.15rem;
+  color: var(--mc-color-text-muted);
+  font-family: var(--mc-font-code);
+  font-size: 0.66rem;
+  line-height: 1.3;
+}
+
+@container (max-width: 34.99rem) {
+  .md-typeset .scp-track strong { font-size: 0.68rem; }
+  .md-typeset .scp-track small { font-size: 0.58rem; }
+  .scp-stop { width: 2.2rem; height: 2.2rem; }
+  .scp-track > li::before { top: 1.1rem; }
+  .scp-track > li[data-link="drop"]::after { top: 0.35rem; }
+}
+
+.scp-route__note {
+  margin: var(--mc-space-3) 0 0;
+  padding: var(--mc-space-2) var(--mc-space-3);
+  border-radius: var(--mc-radius-sm);
+  background: var(--mc-color-surface-raised);
+  font-size: 0.82rem;
+}
+
+/* ---------- Command explanations ---------- */
+
+.md-typeset .scp-explain {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: var(--mc-space-2) var(--mc-space-4);
+  margin: var(--mc-space-3) 0 var(--mc-space-6);
+  font-size: 0.88rem;
+}
+
+.md-typeset .scp-explain dt {
+  font-family: var(--mc-font-code);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.md-typeset .scp-explain dd {
+  margin: 0;
+}
+
+@media (max-width: 44.99rem) {
+  .md-typeset .scp-explain {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .md-typeset .scp-explain dd {
+    margin-bottom: var(--mc-space-3);
+  }
+}
+
+/* ---------- Diagram 5: timeline ---------- */
+
+[dir] .md-typeset .scp-timeline {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 9.5rem), 1fr));
+  gap: var(--mc-space-4);
+  margin: var(--mc-space-6) 0;
+  padding: 0;
+  list-style: none;
+}
+
+.md-typeset .scp-timeline > li {
+  position: relative;
+  margin: 0;
+  padding: var(--mc-space-6) var(--mc-space-4) var(--mc-space-4);
+  border: 1px solid var(--mc-color-border);
+  border-top: 0.35rem solid var(--scp-phase, var(--mc-color-action));
+  border-radius: var(--mc-radius-md);
+  background: var(--mc-color-surface);
+  font-size: 0.86rem;
+}
+
+.md-typeset .scp-timeline > li::before {
+  display: block;
+  margin-bottom: var(--mc-space-1);
+  color: var(--scp-phase, var(--mc-color-action));
+  content: attr(data-phase);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.scp-timeline > li:nth-child(1) { --scp-phase: var(--scp-city); }
+.scp-timeline > li:nth-child(2) { --scp-phase: var(--scp-mesh); }
+.scp-timeline > li:nth-child(3) { --scp-phase: var(--scp-prov); }
+
+.md-typeset .scp-timeline h3 {
+  margin: 0 0 var(--mc-space-2);
+  font-size: 1rem;
+}
+
+.md-typeset .scp-timeline p,
+.md-typeset .scp-timeline ul {
+  margin: var(--mc-space-2) 0 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .scp-track[data-animate] > li:not([data-link="drop"], [data-link="none"])::before {
+    background-image: linear-gradient(90deg, transparent 0 40%, rgb(255 255 255 / 55%) 50%, transparent 60% 100%);
+    background-size: 250% 100%;
+    animation: scp-flow 2.4s linear infinite;
+  }
+}
+
+@keyframes scp-flow {
+  from { background-position: 100% 0; }
+  to { background-position: -150% 0; }
+}
