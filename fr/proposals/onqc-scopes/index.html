@@ -3552,6 +3552,34 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Configuration de l’appareil compagnon">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#etape-1-regler-votre-portee-par-defaut" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Étape 1 : Régler votre portée par défaut
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#etape-2-regler-la-portee-de-chaque-canal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Étape 2 : Régler la portée de chaque canal
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -3699,8 +3727,10 @@ premiers.</p>
 <li><strong>Les répéteurs</strong> portent leur ville, leur province, <code>onqc</code> et <code>can</code>.</li>
 <li><strong>Les appareils compagnons</strong> utilisent <code>onqc</code> par défaut, pour que les messages privés
   joignent tout le monde.</li>
-<li><strong>Les canaux locaux</strong> comme <code>Public</code> sont réglés sur votre ville, pour que
-  les échanges restent locaux.</li>
+<li><strong><code>Public</code></strong> utilise <code>onqc</code>, pour que tout le monde en Ontario et au Québec
+  puisse se parler.</li>
+<li><strong>Les canaux de test et les robots</strong> utilisent votre ville, pour rester
+  locaux.</li>
 <li><strong>Les messages sans portée</strong> fonctionnent encore dans chaque ville. Les
   répéteurs passerelles entre les villes les rejettent, pour qu’ils n’inondent
   pas la ville voisine.</li>
@@ -4023,16 +4053,45 @@ rejeter <code>*</code> lui aussi. Sinon, les messages sans portée la contournen
 </tbody>
 </table>
 <h2 id="configuration-de-lappareil-compagnon">Configuration de l’appareil compagnon<a class="headerlink" href="#configuration-de-lappareil-compagnon" title="Permanent link">&para;</a></h2>
-<ol>
-<li>Ouvrez l’application MeshCore, puis <strong>Settings</strong>. Sous <strong>Network
-   Settings</strong>, touchez <strong>Default Region Scope</strong>, ajoutez <code>onqc</code> et
-   sélectionnez-le.</li>
-<li>Ouvrez chaque canal local, comme <code>Public</code>. Dans le menu du canal, touchez
-   <strong>Set Region Scope</strong> et choisissez le code de votre ville, par exemple
-   <code>yow</code>.</li>
-<li>Pour un canal qui doit aller plus loin, choisissez plutôt <code>on</code>, <code>qc</code> ou
-   <code>onqc</code>.</li>
-</ol>
+<h3 id="etape-1-regler-votre-portee-par-defaut">Étape 1 : Régler votre portée par défaut<a class="headerlink" href="#etape-1-regler-votre-portee-par-defaut" title="Permanent link">&para;</a></h3>
+<p>Dans l’application MeshCore, ouvrez <strong>Settings</strong>. Sous <strong>Network Settings</strong>,
+touchez <strong>Default Region Scope</strong>, ajoutez <code>onqc</code> et sélectionnez-le.</p>
+<h3 id="etape-2-regler-la-portee-de-chaque-canal">Étape 2 : Régler la portée de chaque canal<a class="headerlink" href="#etape-2-regler-la-portee-de-chaque-canal" title="Permanent link">&para;</a></h3>
+<p>Ouvrez le canal, utilisez le menu du canal, touchez <strong>Set Region Scope</strong> et
+choisissez la portée selon ce tableau :</p>
+<table>
+<thead>
+<tr>
+<th>Canal</th>
+<th>Portée</th>
+<th>Pourquoi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Public</code></td>
+<td><code>onqc</code></td>
+<td>Tout le monde en Ontario et au Québec peut se parler</td>
+</tr>
+<tr>
+<td>Canaux de test, comme <code>#test</code></td>
+<td>Votre ville, par exemple <code>yow</code></td>
+<td>Les tests restent locaux</td>
+</tr>
+<tr>
+<td>Canaux de robots</td>
+<td>Votre ville, par exemple <code>yow</code></td>
+<td>Les réponses des robots restent locales</td>
+</tr>
+<tr>
+<td>Vos propres canaux</td>
+<td>Votre ville, <code>on</code>/<code>qc</code> ou <code>onqc</code></td>
+<td>Choisissez jusqu’où ils doivent aller</td>
+</tr>
+</tbody>
+</table>
+<p>Si vous faites fonctionner un robot, réglez aussi sa propre <strong>Default Region
+Scope</strong> sur votre ville.</p>
 <h2 id="pourquoi-lappareil-compagnon-utilise-onqc-par-defaut">Pourquoi l’appareil compagnon utilise <code>onqc</code> par défaut<a class="headerlink" href="#pourquoi-lappareil-compagnon-utilise-onqc-par-defaut" title="Permanent link">&para;</a></h2>
 <p>On ne peut pas choisir la portée d’un seul message privé. Quand un MP n’a pas
 encore de chemin connu, il est diffusé avec votre <strong>portée par défaut</strong>. La
@@ -4066,9 +4125,10 @@ défaut <strong>de votre contact</strong>.</p>
 
 <div class="mc-callout" data-kind="warning">
 <p><strong>Le piège :</strong> un canal sans portée propre utilise aussi votre portée par
-défaut. Avec <code>onqc</code> par défaut, un canal <code>Public</code> sans portée joindrait tout
-l’Ontario et le Québec. C’est pourquoi l’étape 2 de la configuration de
-l’appareil compagnon règle les canaux locaux sur votre ville.</p>
+défaut, <code>onqc</code>, donc il joint tout l’Ontario et le Québec. C’est ce qu’on veut
+pour <code>Public</code>, mais pas pour les canaux de test et les robots. C’est pourquoi
+l’étape 2 de la configuration de l’appareil compagnon les règle sur votre
+ville.</p>
 </div>
 <h2 id="qui-recoit-quoi">Qui reçoit quoi<a class="headerlink" href="#qui-recoit-quoi" title="Permanent link">&para;</a></h2>
 <p>Quand les passerelles rejettent les messages sans portée, un nouvel utilisateur
@@ -4181,7 +4241,7 @@ pas encore réglé de portée fonctionnent quand même localement.</p>
 <h2 id="deploiement">Déploiement<a class="headerlink" href="#deploiement" title="Permanent link">&para;</a></h2>
 <ol class="scp-timeline">
   <li data-phase="Phase 1"><h3>Répéteurs</h3><p>Les propriétaires effacent les anciennes régions et ajoutent leurs codes. Les répéteurs normaux gardent <code>*</code> permis; les passerelles le rejettent. Rien ne brise dans aucune ville.</p></li>
-  <li data-phase="Phase 2"><h3>Appareils compagnons</h3><p>Les utilisateurs règlent leur portée par défaut sur <code>onqc</code> et leurs canaux locaux sur leur ville.</p></li>
+  <li data-phase="Phase 2"><h3>Appareils compagnons</h3><p>Les utilisateurs règlent leur portée par défaut et <code>Public</code> sur <code>onqc</code>, et leurs canaux de test et robots sur leur ville.</p></li>
   <li data-phase="Phase 3"><h3>Seulement au besoin</h3><p>Si les messages sans portée sont encore trop bruyants dans une ville, les répéteurs peuvent aussi lancer <code>set flood.max.unscoped 3</code>. Les messages avec portée atteignent encore 16 sauts.</p></li>
 </ol>
 

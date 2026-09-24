@@ -3552,6 +3552,34 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Companion setup">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-set-your-default-scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1: Set your default scope
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-set-a-scope-on-each-channel" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2: Set a scope on each channel
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -3694,7 +3722,8 @@
 <ul>
 <li><strong>Repeaters</strong> carry their city, their province, <code>onqc</code> and <code>can</code>.</li>
 <li><strong>Companions</strong> use <code>onqc</code> as their default, so direct messages reach anyone.</li>
-<li><strong>Local channels</strong> such as <code>Public</code> are set to your city, so chatter stays local.</li>
+<li><strong><code>Public</code></strong> uses <code>onqc</code>, so everyone in Ontario and Québec can talk.</li>
+<li><strong>Test channels and bots</strong> use your city, so they stay local.</li>
 <li><strong>Messages with no scope</strong> still work inside each city. Bridge repeaters
   between cities drop them, so they don't flood the next city.</li>
 </ul>
@@ -4007,13 +4036,44 @@ messages with no scope go around it.</p>
 </tbody>
 </table>
 <h2 id="companion-setup">Companion setup<a class="headerlink" href="#companion-setup" title="Permanent link">&para;</a></h2>
-<ol>
-<li>Open the MeshCore app, then <strong>Settings</strong>. Under <strong>Network Settings</strong>, tap
-   <strong>Default Region Scope</strong>, add <code>onqc</code> and select it.</li>
-<li>Open each local channel, such as <code>Public</code>. Use the channel menu, then
-   <strong>Set Region Scope</strong>, and pick your city code, for example <code>yow</code>.</li>
-<li>For a channel meant to reach further, pick <code>on</code>, <code>qc</code> or <code>onqc</code> instead.</li>
-</ol>
+<h3 id="step-1-set-your-default-scope">Step 1: Set your default scope<a class="headerlink" href="#step-1-set-your-default-scope" title="Permanent link">&para;</a></h3>
+<p>In the MeshCore app, open <strong>Settings</strong>. Under <strong>Network Settings</strong>, tap
+<strong>Default Region Scope</strong>, add <code>onqc</code> and select it.</p>
+<h3 id="step-2-set-a-scope-on-each-channel">Step 2: Set a scope on each channel<a class="headerlink" href="#step-2-set-a-scope-on-each-channel" title="Permanent link">&para;</a></h3>
+<p>Open the channel, use the channel menu, tap <strong>Set Region Scope</strong>, and pick the
+scope from this table:</p>
+<table>
+<thead>
+<tr>
+<th>Channel</th>
+<th>Scope</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Public</code></td>
+<td><code>onqc</code></td>
+<td>Everyone in Ontario and Québec can talk</td>
+</tr>
+<tr>
+<td>Test channels, such as <code>#test</code></td>
+<td>Your city, for example <code>yow</code></td>
+<td>Tests stay local</td>
+</tr>
+<tr>
+<td>Bot channels</td>
+<td>Your city, for example <code>yow</code></td>
+<td>Bot replies stay local</td>
+</tr>
+<tr>
+<td>Your own channels</td>
+<td>Your city, <code>on</code>/<code>qc</code>, or <code>onqc</code></td>
+<td>Pick how far it should reach</td>
+</tr>
+</tbody>
+</table>
+<p>If you run a bot, set that bot's own <strong>Default Region Scope</strong> to your city too.</p>
 <h2 id="why-the-companion-default-is-onqc">Why the companion default is <code>onqc</code><a class="headerlink" href="#why-the-companion-default-is-onqc" title="Permanent link">&para;</a></h2>
 <p>You cannot pick a scope for a single direct message. When a DM has no known
 path yet, it floods using your <strong>default scope</strong>. The reply that tells your
@@ -4045,9 +4105,10 @@ companion the path comes back using <strong>your contact's</strong> default scop
 </figure>
 
 <div class="mc-callout" data-kind="warning">
-<p><strong>The catch:</strong> a channel with no scope of its own also uses your default. With
-<code>onqc</code> as the default, an unscoped <code>Public</code> channel would reach all of Ontario and
-Québec. That is why step 2 of the companion setup sets local channels to your city.</p>
+<p><strong>The catch:</strong> a channel with no scope of its own also uses your default,
+<code>onqc</code>, so it reaches all of Ontario and Québec. That is what we want for
+<code>Public</code>, but not for test channels and bots. That is why step 2 of the
+companion setup sets those to your city.</p>
 </div>
 <h2 id="who-hears-what">Who hears what<a class="headerlink" href="#who-hears-what" title="Permanent link">&para;</a></h2>
 <p>With bridges dropping messages with no scope, a new user who hasn't set a scope
@@ -4159,7 +4220,7 @@ locally.</p>
 <h2 id="rollout">Rollout<a class="headerlink" href="#rollout" title="Permanent link">&para;</a></h2>
 <ol class="scp-timeline">
   <li data-phase="Phase 1"><h3>Repeaters</h3><p>Owners clear old regions and add their codes. Normal repeaters keep <code>*</code> allowed; bridge repeaters drop it. Nothing breaks inside any city.</p></li>
-  <li data-phase="Phase 2"><h3>Companions</h3><p>Users set their default to <code>onqc</code> and set local channels to their city.</p></li>
+  <li data-phase="Phase 2"><h3>Companions</h3><p>Users set their default and <code>Public</code> to <code>onqc</code>, and test channels and bots to their city.</p></li>
   <li data-phase="Phase 3"><h3>Only if needed</h3><p>If messages with no scope are still too noisy inside a city, repeaters can also run <code>set flood.max.unscoped 3</code>. Scoped messages still reach 16 hops.</p></li>
 </ol>
 
