@@ -69,8 +69,9 @@ premiers.
   joignent tout le monde.
 - **Les canaux locaux** comme `#public` sont réglés sur votre ville, pour que
   les échanges restent locaux.
-- **Les messages sans portée** continuent de fonctionner pendant le projet
-  pilote.
+- **Les messages sans portée** fonctionnent encore dans chaque ville. Les
+  répéteurs passerelles entre les villes les rejettent, pour qu’ils n’inondent
+  pas la ville voisine.
 
 ## Qu’est-ce qu’une portée?
 
@@ -382,15 +383,25 @@ codes de ville. Par exemple, un répéteur à **Rigaud** se trouve dans la zone
 
 ```text
 region def yow|* yul|* qc|* onqc|* can
-region allowf *
+region denyf *
 region default yow
 region save
 ```
 
-Il relaie les messages de ville d’Ottawa et de Montréal, ainsi que `qc`,
-`onqc` et `can`. Ses propres annonces restent dans sa zone, `yow`. N’ajoutez une ville
-voisine que si le répéteur relie vraiment les deux secteurs; sinon, les
-messages de ville iront plus loin que prévu.
+<dl class="scp-explain">
+  <dt>region def …</dt><dd>Porte les deux codes de ville, ainsi que <code>qc</code>, <code>onqc</code> et <code>can</code>.</dd>
+  <dt>region denyf *</dt><dd><strong>Rejette les messages sans portée.</strong> C’est la seule différence avec un répéteur normal. Les nouveaux utilisateurs sans portée joignent quand même tout le monde dans leur ville; leurs messages ne passent simplement pas dans la ville voisine. Voir <a href="#qui-recoit-quoi">Qui reçoit quoi</a>.</dd>
+  <dt>region default yow</dt><dd>Ses propres annonces restent dans sa zone, <code>yow</code>.</dd>
+</dl>
+
+N’ajoutez une ville voisine que si le répéteur relie vraiment les deux
+secteurs; sinon, les messages de ville iront plus loin que prévu.
+
+<div class="mc-callout" data-kind="warning" markdown>
+**Ça fonctionne seulement si la passerelle est le seul lien.** Tout répéteur
+qui entend des répéteurs des deux secteurs est aussi une passerelle et devrait
+rejeter `*` lui aussi. Sinon, les messages sans portée la contournent.
+</div>
 
 ### Permettre ou rejeter : aide-mémoire
 
@@ -453,12 +464,72 @@ l’Ontario et le Québec. C’est pourquoi l’étape 2 de la configuration du
 téléphone règle les canaux locaux sur votre ville.
 </div>
 
+## Qui reçoit quoi
+
+Quand les passerelles rejettent les messages sans portée, un nouvel utilisateur
+qui n’a pas encore réglé de portée joint quand même tout le monde dans sa ville.
+Ses messages ne passent simplement pas dans la ville voisine. Voici le lien
+Ottawa–Montréal par Rigaud.
+
+<figure class="scp-figure">
+  <div class="scp-route">
+    <div class="scp-route__head">Nouvel utilisateur à Ottawa, sans portée <span class="scp-tag" data-level="any">aucune</span><span class="scp-route__verdict" data-result="ok">Tout le secteur d’Ottawa</span></div>
+    <ol class="scp-track">
+      <li><span class="scp-stop" data-kind="phone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg></span><strong>Nouvel utilisateur, Ottawa</strong><small>sans portée</small></li>
+      <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Répéteur d’Ottawa</strong><small>permet *</small></li>
+      <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Passerelle de Rigaud</strong><small>rejette *</small></li>
+      <li data-link="drop"><span class="scp-stop" data-kind="repeater" data-state="dim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Répéteur de Montréal</strong><small>permet *</small></li>
+      <li data-link="none"><span class="scp-stop" data-kind="phone" data-state="dim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg></span><strong>Utilisateur de Montréal</strong><small>ne le voit jamais</small></li>
+    </ol>
+    <p class="scp-route__note">Chaque répéteur de la zone d’Ottawa le relaie, donc le nouvel utilisateur joint tout le secteur d’Ottawa. Rigaud l’entend mais ne le relaie pas, donc Montréal n’est jamais inondé.</p>
+  </div>
+  <div class="scp-route">
+    <div class="scp-route__head">Robot d’Ottawa ou MeshMapper, avec portée <span class="scp-tag" data-level="city">yow</span><span class="scp-route__verdict" data-result="ok">Zone d’Ottawa seulement</span></div>
+    <ol class="scp-track">
+      <li><span class="scp-stop" data-kind="phone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg></span><strong>Robot, Ottawa</strong><small>envoie yow</small></li>
+      <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Répéteur d’Ottawa</strong><small>yow on onqc can</small></li>
+      <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Passerelle de Rigaud</strong><small>yow yul qc onqc can</small></li>
+      <li data-link="drop"><span class="scp-stop" data-kind="repeater" data-state="dim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Répéteur de Montréal</strong><small>yul qc onqc can</small></li>
+      <li data-link="none"><span class="scp-stop" data-kind="phone" data-state="dim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg></span><strong>Utilisateur de Montréal</strong><small>ne le voit jamais</small></li>
+    </ol>
+    <p class="scp-route__note">Rigaud porte <code>yow</code>, donc il relaie le message. Les répéteurs de Montréal ne portent pas <code>yow</code>, donc le message s’arrête à la limite de la zone.</p>
+  </div>
+  <div class="scp-route">
+    <div class="scp-route__head">MP avec la portée par défaut <span class="scp-tag" data-level="mesh">onqc</span><span class="scp-route__verdict" data-result="ok">Tout le réseau</span></div>
+    <ol class="scp-track" data-animate>
+      <li><span class="scp-stop" data-kind="phone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg></span><strong>Vous, Ottawa</strong><small>envoie onqc</small></li>
+      <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Répéteur d’Ottawa</strong><small>yow on onqc can</small></li>
+      <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Passerelle de Rigaud</strong><small>yow yul qc onqc can</small></li>
+      <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Répéteur de Montréal</strong><small>yul qc onqc can</small></li>
+      <li data-link="ok"><span class="scp-stop" data-kind="phone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg></span><strong>Ami, Montréal</strong><small>défaut onqc</small></li>
+    </ol>
+    <p class="scp-route__note">Tous les répéteurs portent <code>onqc</code>, y compris la passerelle, donc les MP traversent encore tout le réseau.</p>
+  </div>
+  <figcaption>La même chose se produit à chaque passerelle entre deux villes.</figcaption>
+</figure>
+
+D’autres exemples sur le même lien :
+
+| Message | Répéteurs d’Ottawa<br>`* yow on onqc can` | Passerelle de Rigaud<br>`yow yul qc onqc can` | Répéteurs de Montréal<br>`* yul qc onqc can` | Qui le reçoit |
+| --- | --- | --- | --- | --- |
+| Nouvel utilisateur à Ottawa, sans portée | ✅ Relaie | ❌ Rejette | Jamais atteint | Tout le secteur d’Ottawa |
+| Nouvel utilisateur à Montréal, sans portée | Jamais atteint | ❌ Rejette | ✅ Relaie | Tout le secteur de Montréal |
+| Ancienne appli ou annonce d’un ancien répéteur, sans portée | ✅ Relaie | ❌ Rejette | ✅ Relaie | Reste dans la ville d’origine |
+| Canal ou robot d’Ottawa, `yow` | ✅ Relaie | ✅ Relaie | ❌ Rejette | Zone d’Ottawa seulement |
+| Canal ou robot de Montréal, `yul` | ❌ Rejette | ✅ Relaie | ✅ Relaie | Zone de Montréal seulement |
+| Canal de tout le Québec, `qc` | ❌ Rejette | ✅ Relaie | ✅ Relaie | Côté québécois, y compris Gatineau |
+| MP avec la portée par défaut, `onqc` | ✅ Relaie | ✅ Relaie | ✅ Relaie | Tout le réseau ON/QC |
+
+C’est pourquoi les robots et MeshMapper devraient avoir la portée de leur ville :
+ils restent contenus quoi qu’il arrive, et les nouveaux utilisateurs qui n’ont
+pas encore réglé de portée fonctionnent quand même localement.
+
 ## Déploiement
 
 <ol class="scp-timeline">
-  <li data-phase="Phase 1"><h3>Répéteurs</h3><p>Les propriétaires effacent les anciennes régions, ajoutent leurs codes et gardent <code>*</code> permis. Rien ne brise pour personne.</p></li>
+  <li data-phase="Phase 1"><h3>Répéteurs</h3><p>Les propriétaires effacent les anciennes régions et ajoutent leurs codes. Les répéteurs normaux gardent <code>*</code> permis; les passerelles le rejettent. Rien ne brise dans aucune ville.</p></li>
   <li data-phase="Phase 2"><h3>Téléphones</h3><p>Les utilisateurs règlent leur portée par défaut sur <code>onqc</code> et leurs canaux locaux sur leur ville.</p></li>
-  <li data-phase="Phase 3"><h3>Bascule</h3><p>À une date convenue, les répéteurs lancent <code>set flood.max.unscoped 3</code>. Les messages sans portée restent alors à 3 sauts ou moins, tandis que les messages avec portée atteignent encore 16 sauts.</p></li>
+  <li data-phase="Phase 3"><h3>Seulement au besoin</h3><p>Si les messages sans portée sont encore trop bruyants dans une ville, les répéteurs peuvent aussi lancer <code>set flood.max.unscoped 3</code>. Les messages avec portée atteignent encore 16 sauts.</p></li>
 </ol>
 
 ## À savoir

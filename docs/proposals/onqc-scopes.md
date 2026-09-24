@@ -63,7 +63,8 @@ There are four levels of scope. Every repeater carries one code from each: its c
 - **Repeaters** carry their city, their province, `onqc` and `can`.
 - **Phones** use `onqc` as their default, so direct messages reach anyone.
 - **Local channels** such as `#public` are set to your city, so chatter stays local.
-- **Messages with no scope** keep working during the pilot.
+- **Messages with no scope** still work inside each city. Bridge repeaters
+  between cities drop them, so they don't flood the next city.
 
 ## What a scope is
 
@@ -366,15 +367,25 @@ side, and links it to the Montréal zone:
 
 ```text
 region def yow|* yul|* qc|* onqc|* can
-region allowf *
+region denyf *
 region default yow
 region save
 ```
 
-It forwards Ottawa and Montréal city messages, plus `qc`, `onqc` and `can`. Its own
-adverts stay in its home zone, `yow`. Only add a neighbouring city when the
-repeater really links the two areas, or city messages will leak further than
-people expect.
+<dl class="scp-explain">
+  <dt>region def …</dt><dd>Carries both city codes, plus <code>qc</code>, <code>onqc</code> and <code>can</code>.</dd>
+  <dt>region denyf *</dt><dd><strong>Drops messages with no scope.</strong> This is the one difference from a normal repeater. New users with no scope still reach everyone in their own city; their messages just don't cross into the next one. See <a href="#who-hears-what">Who hears what</a>.</dd>
+  <dt>region default yow</dt><dd>Its own adverts stay in its home zone, <code>yow</code>.</dd>
+</dl>
+
+Only add a neighbouring city when the repeater really links the two areas, or
+city messages will leak further than people expect.
+
+<div class="mc-callout" data-kind="warning" markdown>
+**This only works if the bridge is the only link.** Any repeater that can hear
+repeaters in both areas is also a bridge and should drop `*` too. Otherwise,
+messages with no scope go around it.
+</div>
 
 ### Allow or drop, quick reference
 
@@ -432,12 +443,71 @@ phone the path comes back using **your contact's** default scope.
 Québec. That is why step 2 of the phone setup sets local channels to your city.
 </div>
 
+## Who hears what
+
+With bridges dropping messages with no scope, a new user who hasn't set a scope
+yet still reaches everyone in their own city. Their messages just don't cross
+into the next city. Here is the Ottawa to Montréal link through Rigaud.
+
+<figure class="scp-figure">
+  <div class="scp-route">
+    <div class="scp-route__head">New user in Ottawa, no scope <span class="scp-tag" data-level="any">none</span><span class="scp-route__verdict" data-result="ok">Whole Ottawa area</span></div>
+    <ol class="scp-track">
+      <li><span class="scp-stop" data-kind="phone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg></span><strong>New user, Ottawa</strong><small>no scope</small></li>
+      <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Ottawa repeater</strong><small>allows *</small></li>
+      <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Rigaud bridge</strong><small>drops *</small></li>
+      <li data-link="drop"><span class="scp-stop" data-kind="repeater" data-state="dim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Montréal repeater</strong><small>allows *</small></li>
+      <li data-link="none"><span class="scp-stop" data-kind="phone" data-state="dim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg></span><strong>Montréal user</strong><small>never sees it</small></li>
+    </ol>
+    <p class="scp-route__note">Every Ottawa-zone repeater passes it on, so the new user reaches the whole Ottawa area. Rigaud hears it but does not pass it on, so Montréal is never flooded.</p>
+  </div>
+  <div class="scp-route">
+    <div class="scp-route__head">Ottawa bot or MeshMapper, scoped <span class="scp-tag" data-level="city">yow</span><span class="scp-route__verdict" data-result="ok">Ottawa zone only</span></div>
+    <ol class="scp-track">
+      <li><span class="scp-stop" data-kind="phone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg></span><strong>Bot, Ottawa</strong><small>sends yow</small></li>
+      <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Ottawa repeater</strong><small>yow on onqc can</small></li>
+      <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Rigaud bridge</strong><small>yow yul qc onqc can</small></li>
+      <li data-link="drop"><span class="scp-stop" data-kind="repeater" data-state="dim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Montréal repeater</strong><small>yul qc onqc can</small></li>
+      <li data-link="none"><span class="scp-stop" data-kind="phone" data-state="dim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg></span><strong>Montréal user</strong><small>never sees it</small></li>
+    </ol>
+    <p class="scp-route__note">Rigaud carries <code>yow</code>, so it passes the message on. Montréal repeaters do not carry <code>yow</code>, so it stops at the edge of the zone.</p>
+  </div>
+  <div class="scp-route">
+    <div class="scp-route__head">DM with the phone default <span class="scp-tag" data-level="mesh">onqc</span><span class="scp-route__verdict" data-result="ok">Whole mesh</span></div>
+    <ol class="scp-track" data-animate>
+      <li><span class="scp-stop" data-kind="phone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg></span><strong>You, Ottawa</strong><small>sends onqc</small></li>
+      <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Ottawa repeater</strong><small>yow on onqc can</small></li>
+      <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Rigaud bridge</strong><small>yow yul qc onqc can</small></li>
+      <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Montréal repeater</strong><small>yul qc onqc can</small></li>
+      <li data-link="ok"><span class="scp-stop" data-kind="phone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg></span><strong>Friend, Montréal</strong><small>default onqc</small></li>
+    </ol>
+    <p class="scp-route__note">Every repeater carries <code>onqc</code>, including the bridge, so DMs still cross the whole mesh.</p>
+  </div>
+  <figcaption>The same thing happens at every bridge between two cities.</figcaption>
+</figure>
+
+More examples on the same link:
+
+| Message | Ottawa repeaters<br>`* yow on onqc can` | Rigaud bridge<br>`yow yul qc onqc can` | Montréal repeaters<br>`* yul qc onqc can` | Who gets it |
+| --- | --- | --- | --- | --- |
+| New user in Ottawa, no scope | ✅ Forward | ❌ Drop | Never reached | Whole Ottawa area |
+| New user in Montréal, no scope | Never reached | ❌ Drop | ✅ Forward | Whole Montréal area |
+| Old app or old repeater advert, no scope | ✅ Forward | ❌ Drop | ✅ Forward | Stays in whichever city sent it |
+| Ottawa channel or bot, `yow` | ✅ Forward | ✅ Forward | ❌ Drop | Ottawa zone only |
+| Montréal channel or bot, `yul` | ❌ Drop | ✅ Forward | ✅ Forward | Montréal zone only |
+| Québec-wide channel, `qc` | ❌ Drop | ✅ Forward | ✅ Forward | Québec side, including Gatineau |
+| DM with the phone default, `onqc` | ✅ Forward | ✅ Forward | ✅ Forward | Whole ON/QC mesh |
+
+This is why bots and MeshMapper should be scoped to their city: they stay
+contained no matter what, and new users who haven't set a scope yet still work
+locally.
+
 ## Rollout
 
 <ol class="scp-timeline">
-  <li data-phase="Phase 1"><h3>Repeaters</h3><p>Owners clear old regions, add their codes and keep <code>*</code> allowed. Nothing breaks for anyone.</p></li>
+  <li data-phase="Phase 1"><h3>Repeaters</h3><p>Owners clear old regions and add their codes. Normal repeaters keep <code>*</code> allowed; bridge repeaters drop it. Nothing breaks inside any city.</p></li>
   <li data-phase="Phase 2"><h3>Phones</h3><p>Users set their default to <code>onqc</code> and set local channels to their city.</p></li>
-  <li data-phase="Phase 3"><h3>Cutover</h3><p>On an agreed date, repeaters run <code>set flood.max.unscoped 3</code>. Messages with no scope then stay within 3 hops, while scoped messages still reach 16.</p></li>
+  <li data-phase="Phase 3"><h3>Only if needed</h3><p>If messages with no scope are still too noisy inside a city, repeaters can also run <code>set flood.max.unscoped 3</code>. Scoped messages still reach 16 hops.</p></li>
 </ol>
 
 ## Things to know
