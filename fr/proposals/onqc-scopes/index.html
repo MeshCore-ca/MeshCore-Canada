@@ -3544,10 +3544,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#configuration-du-telephone-et-de-lappareil-compagnon" class="md-nav__link">
+  <a href="#configuration-de-lappareil-compagnon" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Configuration du téléphone et de l’appareil compagnon
+        Configuration de l’appareil compagnon
       
     </span>
   </a>
@@ -3555,10 +3555,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#pourquoi-le-telephone-utilise-onqc-par-defaut" class="md-nav__link">
+  <a href="#pourquoi-lappareil-compagnon-utilise-onqc-par-defaut" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Pourquoi le téléphone utilise onqc par défaut
+        Pourquoi l’appareil compagnon utilise onqc par défaut
       
     </span>
   </a>
@@ -3697,9 +3697,9 @@ premiers.</p>
 
 <ul>
 <li><strong>Les répéteurs</strong> portent leur ville, leur province, <code>onqc</code> et <code>can</code>.</li>
-<li><strong>Les téléphones</strong> utilisent <code>onqc</code> par défaut, pour que les messages privés
+<li><strong>Les appareils compagnons</strong> utilisent <code>onqc</code> par défaut, pour que les messages privés
   joignent tout le monde.</li>
-<li><strong>Les canaux locaux</strong> comme <code>#public</code> sont réglés sur votre ville, pour que
+<li><strong>Les canaux locaux</strong> comme <code>Public</code> sont réglés sur votre ville, pour que
   les échanges restent locaux.</li>
 <li><strong>Les messages sans portée</strong> fonctionnent encore dans chaque ville. Les
   répéteurs passerelles entre les villes les rejettent, pour qu’ils n’inondent
@@ -3748,13 +3748,13 @@ avec cinq messages différents.</p>
     <div class="scp-rule__item" data-result="ok"><strong>Aucune portée :</strong> le message compte comme <code>*</code>. Il est relayé seulement si <code>*</code> est permis.</div>
     <div class="scp-rule__item" data-result="drop"><strong>Trop de sauts :</strong> rejeté dès qu’il dépasse <code>flood.max</code>, peu importe sa portée.</div>
   </div>
-  <figcaption>Le MP porte <code>onqc</code> parce que <code>onqc</code> est la portée par défaut du téléphone dans cette proposition. <a href="#pourquoi-le-telephone-utilise-onqc-par-defaut">Voir pourquoi plus bas</a>. Le répéteur entend quand même tous les messages. La portée décide seulement s’il les relaie. Votre téléphone reçoit aussi tout ce qui l’atteint.</figcaption>
+  <figcaption>Le MP porte <code>onqc</code> parce que <code>onqc</code> est la portée par défaut de l’appareil compagnon dans cette proposition. <a href="#pourquoi-lappareil-compagnon-utilise-onqc-par-defaut">Voir pourquoi plus bas</a>. Le répéteur entend quand même tous les messages. La portée décide seulement s’il les relaie. Votre appareil compagnon reçoit aussi tout ce qui l’atteint.</figcaption>
 </figure>
 
 <p>Trois détails piègent souvent :</p>
 <ul>
 <li><strong>L’orthographe doit être exacte.</strong> <code>yow</code>, <code>YOW</code> et <code>ott</code> sont trois noms
-  différents. Un téléphone réglé sur <code>yow</code> est ignoré par un répéteur qui ne
+  différents. Un appareil compagnon réglé sur <code>yow</code> est ignoré par un répéteur qui ne
   porte que <code>ott</code>.</li>
 <li><strong>Seules les diffusions (flood) sont vérifiées.</strong> Dès qu’un message privé a
   un chemin connu, il suit ce chemin directement et les portées ne comptent
@@ -3804,7 +3804,7 @@ avec cinq messages différents.</p>
 <p>Chaque répéteur porte <code>can</code> dès maintenant pour qu’une portée pancanadienne
 fonctionne plus tard sans que personne n’ait à reconfigurer son répéteur. Bien
 des répéteurs configurés avec le configurateur actuel le portent déjà.</p>
-<p><strong>N’utilisez pas encore <code>can</code> sur votre téléphone ni dans vos canaux.</strong>
+<p><strong>N’utilisez pas encore <code>can</code> sur votre appareil compagnon ni dans vos canaux.</strong>
 Aujourd’hui, il joint les mêmes répéteurs que <code>onqc</code>. Continuez d’utiliser
 <code>onqc</code>. Quand d’autres provinces porteront aussi <code>can</code>, il deviendra la façon
 d’aller plus loin, et <code>onqc</code> restera « seulement le réseau de l’Ontario et du
@@ -4022,21 +4022,21 @@ rejeter <code>*</code> lui aussi. Sinon, les messages sans portée la contournen
 </tr>
 </tbody>
 </table>
-<h2 id="configuration-du-telephone-et-de-lappareil-compagnon">Configuration du téléphone et de l’appareil compagnon<a class="headerlink" href="#configuration-du-telephone-et-de-lappareil-compagnon" title="Permanent link">&para;</a></h2>
+<h2 id="configuration-de-lappareil-compagnon">Configuration de l’appareil compagnon<a class="headerlink" href="#configuration-de-lappareil-compagnon" title="Permanent link">&para;</a></h2>
 <ol>
 <li>Ouvrez l’application MeshCore, puis <strong>Settings</strong>. Sous <strong>Network
    Settings</strong>, touchez <strong>Default Region Scope</strong>, ajoutez <code>onqc</code> et
    sélectionnez-le.</li>
-<li>Ouvrez chaque canal local, comme <code>#public</code>. Dans le menu du canal, touchez
+<li>Ouvrez chaque canal local, comme <code>Public</code>. Dans le menu du canal, touchez
    <strong>Set Region Scope</strong> et choisissez le code de votre ville, par exemple
    <code>yow</code>.</li>
 <li>Pour un canal qui doit aller plus loin, choisissez plutôt <code>on</code>, <code>qc</code> ou
    <code>onqc</code>.</li>
 </ol>
-<h2 id="pourquoi-le-telephone-utilise-onqc-par-defaut">Pourquoi le téléphone utilise <code>onqc</code> par défaut<a class="headerlink" href="#pourquoi-le-telephone-utilise-onqc-par-defaut" title="Permanent link">&para;</a></h2>
+<h2 id="pourquoi-lappareil-compagnon-utilise-onqc-par-defaut">Pourquoi l’appareil compagnon utilise <code>onqc</code> par défaut<a class="headerlink" href="#pourquoi-lappareil-compagnon-utilise-onqc-par-defaut" title="Permanent link">&para;</a></h2>
 <p>On ne peut pas choisir la portée d’un seul message privé. Quand un MP n’a pas
 encore de chemin connu, il est diffusé avec votre <strong>portée par défaut</strong>. La
-réponse qui indique le chemin à votre téléphone revient avec la portée par
+réponse qui indique le chemin à votre appareil compagnon revient avec la portée par
 défaut <strong>de votre contact</strong>.</p>
 <figure class="scp-figure">
   <div class="scp-route">
@@ -4066,9 +4066,9 @@ défaut <strong>de votre contact</strong>.</p>
 
 <div class="mc-callout" data-kind="warning">
 <p><strong>Le piège :</strong> un canal sans portée propre utilise aussi votre portée par
-défaut. Avec <code>onqc</code> par défaut, un <code>#public</code> sans portée joindrait tout
-l’Ontario et le Québec. C’est pourquoi l’étape 2 de la configuration du
-téléphone règle les canaux locaux sur votre ville.</p>
+défaut. Avec <code>onqc</code> par défaut, un canal <code>Public</code> sans portée joindrait tout
+l’Ontario et le Québec. C’est pourquoi l’étape 2 de la configuration de
+l’appareil compagnon règle les canaux locaux sur votre ville.</p>
 </div>
 <h2 id="qui-recoit-quoi">Qui reçoit quoi<a class="headerlink" href="#qui-recoit-quoi" title="Permanent link">&para;</a></h2>
 <p>Quand les passerelles rejettent les messages sans portée, un nouvel utilisateur
@@ -4181,7 +4181,7 @@ pas encore réglé de portée fonctionnent quand même localement.</p>
 <h2 id="deploiement">Déploiement<a class="headerlink" href="#deploiement" title="Permanent link">&para;</a></h2>
 <ol class="scp-timeline">
   <li data-phase="Phase 1"><h3>Répéteurs</h3><p>Les propriétaires effacent les anciennes régions et ajoutent leurs codes. Les répéteurs normaux gardent <code>*</code> permis; les passerelles le rejettent. Rien ne brise dans aucune ville.</p></li>
-  <li data-phase="Phase 2"><h3>Téléphones</h3><p>Les utilisateurs règlent leur portée par défaut sur <code>onqc</code> et leurs canaux locaux sur leur ville.</p></li>
+  <li data-phase="Phase 2"><h3>Appareils compagnons</h3><p>Les utilisateurs règlent leur portée par défaut sur <code>onqc</code> et leurs canaux locaux sur leur ville.</p></li>
   <li data-phase="Phase 3"><h3>Seulement au besoin</h3><p>Si les messages sans portée sont encore trop bruyants dans une ville, les répéteurs peuvent aussi lancer <code>set flood.max.unscoped 3</code>. Les messages avec portée atteignent encore 16 sauts.</p></li>
 </ol>
 
