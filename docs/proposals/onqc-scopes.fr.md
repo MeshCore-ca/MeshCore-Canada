@@ -65,8 +65,9 @@ premiers.
 </div>
 
 - **Les répéteurs** portent leur ville, leur province, `onqc` et `can`.
-- **Les appareils compagnons** utilisent `onqc` par défaut, pour que les messages privés
-  joignent tout le monde.
+- **Les appareils compagnons** utilisent `onqc` par défaut, pour que les
+  messages privés joignent tout le monde, une fois les répéteurs autour d’eux
+  configurés.
 - **`Public`** utilise `onqc`, pour que tout le monde en Ontario et au Québec
   puisse se parler.
 - **Les canaux de test et les robots** utilisent votre ville, pour rester
@@ -81,8 +82,9 @@ Une portée est un nom court joint à un message, par exemple `yow`. Les
 répéteurs s’en servent pour décider s’ils relaient le message.
 
 <div class="mc-callout" markdown>
-Une portée n’est **pas** du chiffrement et **pas** une clôture GPS. Tout le
-monde peut lire le nom, et il n’a rien à voir avec l’endroit où vous êtes. C’est
+Une portée n’est **pas** du chiffrement et **pas** une clôture GPS. Quiconque
+connaît le nom peut l’utiliser, et il n’a rien à voir avec l’endroit où vous
+êtes. C’est
 seulement une étiquette qui dit : « les répéteurs qui portent ce nom, relayez
 ce message ».
 </div>
@@ -127,7 +129,7 @@ avec cinq messages différents.
   <figcaption>Le MP porte <code>onqc</code> parce que <code>onqc</code> est la portée par défaut de l’appareil compagnon dans cette proposition. <a href="#pourquoi-lappareil-compagnon-utilise-onqc-par-defaut">Voir pourquoi plus bas</a>. Le répéteur entend quand même tous les messages. La portée décide seulement s’il les relaie. Votre appareil compagnon reçoit aussi tout ce qui l’atteint.</figcaption>
 </figure>
 
-Trois détails piègent souvent :
+Quatre détails piègent souvent :
 
 - **L’orthographe doit être exacte.** `yow`, `YOW` et `ott` sont trois noms
   différents. Un appareil compagnon réglé sur `yow` est ignoré par un répéteur qui ne
@@ -137,6 +139,10 @@ Trois détails piègent souvent :
   plus.
 - **Il n’y a pas d’héritage.** Porter `on` ne veut pas dire porter `yow`.
   Chaque nom doit être sur la liste à part entière.
+- **Un répéteur sans régions rejette tous les messages avec portée.** Par
+  défaut, un répéteur ne porte que `*` : il relaie les messages sans portée et
+  rien d’autre. Les messages avec portée fonctionnent seulement une fois les
+  répéteurs du trajet configurés.
 
 ## Les quatre niveaux
 
@@ -195,11 +201,9 @@ Québec ».
   `yow.meshmapper.net`.
 - MeshCore utilise déjà les codes d’aéroport ailleurs, par exemple pour le
   [code d’emplacement que chaque observateur transmet](../analyzer/iata-codes.md).
-  Inventer d’autres noms seulement pour les régions donnerait deux façons de
-  nommer le même secteur, et plus de confusion avec le temps. Les codes
-  d’aéroport ne sont pas parfaits pour des secteurs de réseau, mais MeshCore
-  les utilise déjà pour bien des choses et ça ne changera pas; les régions
-  devraient donc suivre.
+  Ils ne sont pas parfaits pour des secteurs de réseau, mais ça ne changera
+  pas, et d’autres noms seulement pour les régions ajouteraient de la
+  confusion avec le temps.
 - Il n’y a ni accent ni majuscule à se tromper. `montréal`, `Montreal` et
   `montreal` seraient trois portées différentes.
 - Ils sont faciles à diviser plus tard. Si Renfrew veut un jour son propre
@@ -361,7 +365,7 @@ aujourd’hui; il n’y a donc rien de nouveau à apprendre.
 <dl class="scp-explain">
   <dt>region def …</dt><dd>Porter votre ville, votre province, <code>onqc</code> et <code>can</code>.</dd>
   <dt>region allowf *</dt><dd>Relayer aussi les messages <strong>sans portée</strong>. C’est déjà le réglage par défaut. On le règle quand même pour que vous le voyiez.</dd>
-  <dt>region default yow</dt><dd>Les annonces de ce répéteur utilisent la portée de votre ville, pour rester locales.</dd>
+  <dt>region default &lt;ville&gt;</dt><dd>Les annonces de ce répéteur utilisent la portée de votre ville, pour rester locales.</dd>
   <dt>region save</dt><dd>Conserve les réglages de région après un redémarrage. Les commandes <code>set</code> s’enregistrent d’elles-mêmes.</dd>
 </dl>
 
@@ -416,6 +420,14 @@ rejeter `*` lui aussi. Sinon, les messages sans portée la contournent.
 | `region save` | À lancer après chaque `allowf` ou `denyf` |
 
 ## Configuration de l’appareil compagnon
+
+<div class="mc-callout" data-kind="warning" markdown>
+**Attendez que les répéteurs autour de vous soient configurés.** Un répéteur
+sans régions rejette tous les messages avec portée. Si vous réglez votre
+portée par défaut sur `onqc` avant que les répéteurs de vos trajets la
+portent, vos messages de canal et vos premiers MP n’iront pas loin. D’ici là,
+laissez **Default Region Scope** vide. Vous recevrez quand même tout.
+</div>
 
 ### Étape 1 : Régler votre portée par défaut
 
@@ -528,7 +540,6 @@ D’autres exemples sur le même lien :
 | --- | --- | --- | --- | --- |
 | Nouvel utilisateur à Ottawa, sans portée | ✅ Relaie | ❌ Rejette | Jamais atteint | Tout le secteur d’Ottawa |
 | Nouvel utilisateur à Montréal, sans portée | Jamais atteint | ❌ Rejette | ✅ Relaie | Tout le secteur de Montréal |
-| Ancienne appli ou annonce d’un ancien répéteur, sans portée | ✅ Relaie | ❌ Rejette | ✅ Relaie | Reste dans la ville d’origine |
 | Canal ou robot d’Ottawa, `yow` | ✅ Relaie | ✅ Relaie | ❌ Rejette | Zone d’Ottawa seulement |
 | Canal ou robot de Montréal, `yul` | ❌ Rejette | ✅ Relaie | ✅ Relaie | Zone de Montréal seulement |
 | Canal de tout le Québec, `qc` | ❌ Rejette | ✅ Relaie | ✅ Relaie | Côté québécois, y compris Gatineau |
@@ -542,7 +553,7 @@ pas encore réglé de portée fonctionnent quand même localement.
 
 <ol class="scp-timeline">
   <li data-phase="Phase 1"><h3>Répéteurs</h3><p>Les propriétaires effacent les anciennes régions et ajoutent leurs codes. Les répéteurs normaux gardent <code>*</code> permis; les passerelles le rejettent. Rien ne brise dans aucune ville.</p></li>
-  <li data-phase="Phase 2"><h3>Appareils compagnons</h3><p>Les utilisateurs règlent leur portée par défaut et <code>Public</code> sur <code>onqc</code>, et leurs canaux de test et robots sur leur ville.</p></li>
+  <li data-phase="Phase 2"><h3>Appareils compagnons</h3><p>Une fois les répéteurs autour d’eux configurés, les utilisateurs règlent leur portée par défaut et <code>Public</code> sur <code>onqc</code>, et leurs canaux de test et robots sur leur ville.</p></li>
   <li data-phase="Phase 3"><h3>Seulement au besoin</h3><p>Si les messages sans portée sont encore trop bruyants dans une ville, les répéteurs peuvent aussi lancer <code>set flood.max.unscoped 3</code>. Les messages avec portée atteignent encore 16 sauts.</p></li>
 </ol>
 

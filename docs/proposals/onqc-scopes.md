@@ -61,7 +61,8 @@ There are four levels of scope. Every repeater carries one code from each: its c
 </div>
 
 - **Repeaters** carry their city, their province, `onqc` and `can`.
-- **Companions** use `onqc` as their default, so direct messages reach anyone.
+- **Companions** use `onqc` as their default, so direct messages reach anyone,
+  once the repeaters around them are set up.
 - **`Public`** uses `onqc`, so everyone in Ontario and Québec can talk.
 - **Test channels and bots** use your city, so they stay local.
 - **Messages with no scope** still work inside each city. Bridge repeaters
@@ -73,9 +74,9 @@ A scope is a short name attached to a message, such as `yow`. Repeaters use it
 to decide whether to pass the message on.
 
 <div class="mc-callout" markdown>
-A scope is **not** encryption and **not** a GPS fence. Anyone can read the
-name, and it has nothing to do with where you are. It is only a label that
-says "repeaters that carry this name, please forward this."
+A scope is **not** encryption and **not** a GPS fence. Anyone who knows the
+name can use it, and it has nothing to do with where you are. It is only a
+label that says "repeaters that carry this name, please forward this."
 </div>
 
 Your app turns the name into a small code and puts it in the message header.
@@ -118,7 +119,7 @@ different messages.
   <figcaption>The DM is tagged <code>onqc</code> because <code>onqc</code> is the companion default in this proposal. <a href="#why-the-companion-default-is-onqc">See why further down</a>. The repeater still hears every message. A scope only decides whether it passes the message on. Your companion also receives everything that reaches it.</figcaption>
 </figure>
 
-Three details catch people out:
+Four details catch people out:
 
 - **Spelling must be exact.** `yow`, `YOW` and `ott` are three different
   names. A companion set to `yow` is ignored by a repeater that only carries `ott`.
@@ -126,6 +127,10 @@ Three details catch people out:
   straight along that path and scopes no longer matter.
 - **There is no inheritance.** Carrying `on` does not mean carrying `yow`.
   Each name has to be on the list by itself.
+- **A repeater with no regions set drops every scoped message.** Out of the
+  box, a repeater only carries `*`, so it forwards messages with no scope and
+  nothing else. Scoped messages only work once the repeaters along the way are
+  set up.
 
 ## The four levels
 
@@ -181,12 +186,10 @@ Québec mesh".
 
 - They are the same codes MeshMapper already uses, for example
   `yow.meshmapper.net`.
-- MeshCore already uses airport codes in other places too, such as the
-  [location code every observer reports](../analyzer/iata-codes.md). Inventing
-  a separate set of names just for regions would mean two ways to name the
-  same area, and more confusion over time. Airport codes are not a perfect fit
-  for mesh areas, but MeshCore already uses them for a variety of things and
-  that is not going to change, so regions should follow along.
+- MeshCore already uses airport codes elsewhere, such as the
+  [location code every observer reports](../analyzer/iata-codes.md). They are
+  not a perfect fit for mesh areas, but that is not going to change, and a
+  second set of names just for regions would only add confusion over time.
 - There are no accents or capital letters to get wrong. `montréal`,
   `Montreal` and `montreal` would be three different scopes.
 - They are easy to split later. If Renfrew wants its own area one day, it can
@@ -344,7 +347,7 @@ nothing new to learn.
 <dl class="scp-explain">
   <dt>region def …</dt><dd>Carry your city, your province, <code>onqc</code> and <code>can</code>.</dd>
   <dt>region allowf *</dt><dd>Also forward messages with <strong>no scope</strong>. This is already on by default. We set it anyway so you can see it.</dd>
-  <dt>region default yow</dt><dd>This repeater's own adverts use your city's scope, so they stay local.</dd>
+  <dt>region default &lt;city&gt;</dt><dd>This repeater's own adverts use your city's scope, so they stay local.</dd>
   <dt>region save</dt><dd>Keeps the region settings after a reboot. The <code>set</code> commands save by themselves.</dd>
 </dl>
 
@@ -399,6 +402,14 @@ messages with no scope go around it.
 | `region save` | Always run it after `allowf` or `denyf` |
 
 ## Companion setup
+
+<div class="mc-callout" data-kind="warning" markdown>
+**Wait until the repeaters around you are set up.** A repeater with no regions
+set drops every scoped message. If you set your default to `onqc` before the
+repeaters on your routes carry it, your channel messages and first DMs will
+only reach nearby. Until then, leave **Default Region Scope** empty. You will
+still receive everything.
+</div>
 
 ### Step 1: Set your default scope
 
@@ -507,7 +518,6 @@ More examples on the same link:
 | --- | --- | --- | --- | --- |
 | New user in Ottawa, no scope | ✅ Forward | ❌ Drop | Never reached | Whole Ottawa area |
 | New user in Montréal, no scope | Never reached | ❌ Drop | ✅ Forward | Whole Montréal area |
-| Old app or old repeater advert, no scope | ✅ Forward | ❌ Drop | ✅ Forward | Stays in whichever city sent it |
 | Ottawa channel or bot, `yow` | ✅ Forward | ✅ Forward | ❌ Drop | Ottawa zone only |
 | Montréal channel or bot, `yul` | ❌ Drop | ✅ Forward | ✅ Forward | Montréal zone only |
 | Québec-wide channel, `qc` | ❌ Drop | ✅ Forward | ✅ Forward | Québec side, including Gatineau |
@@ -521,7 +531,7 @@ locally.
 
 <ol class="scp-timeline">
   <li data-phase="Phase 1"><h3>Repeaters</h3><p>Owners clear old regions and add their codes. Normal repeaters keep <code>*</code> allowed; bridge repeaters drop it. Nothing breaks inside any city.</p></li>
-  <li data-phase="Phase 2"><h3>Companions</h3><p>Users set their default and <code>Public</code> to <code>onqc</code>, and test channels and bots to their city.</p></li>
+  <li data-phase="Phase 2"><h3>Companions</h3><p>Once the repeaters around them are set up, users set their default and <code>Public</code> to <code>onqc</code>, and test channels and bots to their city.</p></li>
   <li data-phase="Phase 3"><h3>Only if needed</h3><p>If messages with no scope are still too noisy inside a city, repeaters can also run <code>set flood.max.unscoped 3</code>. Scoped messages still reach 16 hops.</p></li>
 </ol>
 
