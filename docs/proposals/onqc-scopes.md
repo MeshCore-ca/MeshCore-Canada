@@ -141,9 +141,9 @@ Three details catch people out:
       <div class="scp-zone" data-level="prov">
         <p class="scp-zone__title"><span class="scp-tag" data-level="prov">qc</span> Québec</p>
         <div class="scp-cities">
-          <div class="scp-city"><strong>yul</strong><span>Montréal, Trois-Rivières, Rigaud</span></div>
+          <div class="scp-city"><strong>yul</strong><span>Montréal, Trois-Rivières</span></div>
           <div class="scp-city"><strong>yqb</strong><span>Québec City</span></div>
-          <div class="scp-city"><strong>yow</strong><span>Gatineau (shared with Ottawa)</span></div>
+          <div class="scp-city"><strong>yow</strong><span>Gatineau, Rigaud (shared with Ottawa)</span></div>
           <div class="scp-city"><strong>ytf</strong><span>Saguenay–Lac-Saint-Jean</span></div>
           <div class="scp-city" data-more><strong>…</strong><span>Other MeshMapper zones</span></div>
         </div>
@@ -346,18 +346,18 @@ To check, run `region`. For Ottawa you should see:
 ### Bridge repeaters
 
 A repeater that links two city zones on purpose carries **both** city codes.
-For example, a repeater in **Rigaud** sits in the `yul` zone and links Montréal
-to the Ottawa zone:
+For example, a repeater in **Rigaud** sits in the `yow` zone, on the Québec
+side, and links it to the Montréal zone:
 
 ```text
-region def yul|* yow|* qc|* onqc|* can
+region def yow|* yul|* qc|* onqc|* can
 region allowf *
-region default yul
+region default yow
 region save
 ```
 
 It forwards Ottawa and Montréal city messages, plus `qc`, `onqc` and `can`. Its own
-adverts stay in its home zone, `yul`. Only add a neighbouring city when the
+adverts stay in its home zone, `yow`. Only add a neighbouring city when the
 repeater really links the two areas, or city messages will leak further than
 people expect.
 
