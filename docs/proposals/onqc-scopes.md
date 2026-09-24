@@ -24,7 +24,7 @@ page_styles:
 
 <div class="scp-hero">
   <p class="mc-eyebrow">Proposal for discussion</p>
-  <p class="mc-lede">Region scopes stop local chatter from flooding the whole network. Today's setup is hard to follow, so this proposal cuts it down to three codes that everyone in Ontario and Québec can remember.</p>
+  <p class="mc-lede">Region scopes stop local chatter from flooding the whole network. Today's setup is hard to follow, so this proposal cuts it down to three levels of codes that everyone in Ontario and Québec can remember.</p>
   <ul class="scp-hero__badges">
     <li data-kind="proposal">Not adopted yet</li>
     <li>Ontario + Québec pilot</li>
@@ -35,7 +35,7 @@ page_styles:
 
 ## The short version
 
-There are three levels of scope. Every repeater carries one code from each level: its city, its province, and `onqc`. When you send a message, you choose which level to use, and that decides how far it travels.
+There are three levels of scope. Every repeater carries its city, its province, and the mesh codes `onqc` and `can`. When you send a message, you choose which level to use, and that decides how far it travels.
 
 <div class="scp-levels-cards">
   <div class="scp-level-card" data-level="city">
@@ -50,12 +50,12 @@ There are three levels of scope. Every repeater carries one code from each level
   </div>
   <div class="scp-level-card" data-level="mesh">
     <h3>Mesh</h3>
-    <span class="scp-tag" data-level="mesh">onqc</span>
-    <p>Every repeater in Ontario and Québec.</p>
+    <span class="scp-tag" data-level="mesh">onqc</span> <span class="scp-tag" data-level="future">can</span>
+    <p><code>onqc</code>: every repeater in Ontario and Québec. <code>can</code>: all of Canada, reserved for later.</p>
   </div>
 </div>
 
-- **Repeaters** carry their city, their province, and `onqc`.
+- **Repeaters** carry their city, their province, `onqc` and `can`.
 - **Phones** use `onqc` as their default, so direct messages reach anyone.
 - **Local channels** such as `#public` are set to your city, so chatter stays local.
 - **Messages with no scope** keep working during the pilot.
@@ -90,6 +90,7 @@ different messages.
         <span class="scp-tag" data-level="city">yow</span>
         <span class="scp-tag" data-level="prov">on</span>
         <span class="scp-tag" data-level="mesh">onqc</span>
+        <span class="scp-tag" data-level="future">can</span>
       </div>
       <small>Its list of names to forward</small>
     </div>
@@ -122,6 +123,8 @@ Three details catch people out:
 ## The three levels
 
 <figure class="scp-figure">
+  <div class="scp-zone" data-level="future">
+  <p class="scp-zone__title"><span class="scp-tag" data-level="future">can</span> Canada <span>Reserved for later. Carried now, not used yet.</span></p>
   <div class="scp-zone" data-level="mesh">
     <p class="scp-zone__title"><span class="scp-tag" data-level="mesh">onqc</span> Mesh <span>Every repeater in Ontario and Québec</span></p>
     <div class="scp-zone__row">
@@ -138,22 +141,34 @@ Three details catch people out:
       <div class="scp-zone" data-level="prov">
         <p class="scp-zone__title"><span class="scp-tag" data-level="prov">qc</span> Québec</p>
         <div class="scp-cities">
-          <div class="scp-city"><strong>yul</strong><span>Montréal, Trois-Rivières, Rigaud</span></div>
+          <div class="scp-city"><strong>yul</strong><span>Montréal, Trois-Rivières</span></div>
           <div class="scp-city"><strong>yqb</strong><span>Québec City</span></div>
-          <div class="scp-city"><strong>yow</strong><span>Gatineau (shared with Ottawa)</span></div>
+          <div class="scp-city"><strong>yow</strong><span>Gatineau, Rigaud (shared with Ottawa)</span></div>
           <div class="scp-city"><strong>ytf</strong><span>Saguenay–Lac-Saint-Jean</span></div>
           <div class="scp-city" data-more><strong>…</strong><span>Other MeshMapper zones</span></div>
         </div>
       </div>
     </div>
   </div>
+  </div>
   <div class="scp-flat">
     <strong>What an Ottawa repeater actually stores:</strong>
-    <span class="scp-flat__list"><span class="scp-tag" data-level="any">*</span><span class="scp-tag" data-level="city">yow</span><span class="scp-tag" data-level="prov">on</span><span class="scp-tag" data-level="mesh">onqc</span></span>
+    <span class="scp-flat__list"><span class="scp-tag" data-level="any">*</span><span class="scp-tag" data-level="city">yow</span><span class="scp-tag" data-level="prov">on</span><span class="scp-tag" data-level="mesh">onqc</span><span class="scp-tag" data-level="future">can</span></span>
     <span>A flat list of names. The boxes above are for people, not for the repeater.</span>
   </div>
   <figcaption>The <code>yow</code> zone crosses the Ottawa River. Gatineau repeaters use <code>yow</code> for their city and <code>qc</code> for their province.</figcaption>
 </figure>
+
+### What about `can`?
+
+Every repeater carries `can` now so that a Canada-wide scope works later
+without anyone having to reconfigure their repeater again. Many repeaters set
+up with the current configurator already carry it.
+
+**Don't use `can` on your phone or channels yet.** Today it reaches the same
+repeaters as `onqc`. Keep using `onqc`. Once other provinces carry `can` too,
+it becomes the way to reach further, and `onqc` stays as "just the Ontario and
+Québec mesh".
 
 ### Why airport codes?
 
@@ -167,20 +182,22 @@ Three details catch people out:
 Always write the code with its area the first time, for example
 `yow` (Ottawa / NCR area), so people learn it.
 
-## Reading `region def yow|* on|* onqc`
+## Reading `region def yow|* on|* onqc|* can`
 
 `region def` builds a repeater's list in one line. It keeps a **cursor** that
 starts at the top, `*`. Each name is created under the cursor, and `|*` jumps
 the cursor back to the top.
 
 <figure class="scp-figure">
-  <div class="scp-tape" aria-label="region def yow|* on|* onqc">
+  <div class="scp-tape" aria-label="region def yow|* on|* onqc|* can">
     <span class="scp-tape__cmd">region def</span>
     <span class="scp-tape__tok"><b>1</b>yow</span>
     <span class="scp-tape__tok" data-kind="jump"><b>2</b>|*</span>
     <span class="scp-tape__tok"><b>3</b>on</span>
     <span class="scp-tape__tok" data-kind="jump"><b>4</b>|*</span>
     <span class="scp-tape__tok"><b>5</b>onqc</span>
+    <span class="scp-tape__tok" data-kind="jump"><b>6</b>|*</span>
+    <span class="scp-tape__tok"><b>7</b>can</span>
   </div>
   <ol class="scp-steps">
     <li>Create <code>yow</code> under the cursor. The cursor moves into <code>yow</code>.<div class="scp-tree">*
@@ -193,10 +210,19 @@ the cursor back to the top.
     <li><code>|*</code> jumps back to the top again.<div class="scp-tree"><mark>*</mark>
 ├ yow
 └ on</div></li>
-    <li>Create <code>onqc</code>. Done.<div class="scp-tree">*
+    <li>Create <code>onqc</code>.<div class="scp-tree">*
 ├ yow
 ├ on
 └ <mark>onqc</mark></div></li>
+    <li><code>|*</code> back to the top.<div class="scp-tree"><mark>*</mark>
+├ yow
+├ on
+└ onqc</div></li>
+    <li>Create <code>can</code>. Done.<div class="scp-tree">*
+├ yow
+├ on
+├ onqc
+└ <mark>can</mark></div></li>
   </ol>
   <figcaption>The result is a flat list: every code sits side by side under <code>*</code>. The highlighted name is where the cursor is.</figcaption>
 </figure>
@@ -229,7 +255,7 @@ region remove can
 region save
 ```
 
-Removing `on` is fine. The region settings in step 3 add it back. Run `region` again, and you
+Removing `on` and `can` is fine. The region settings in step 3 add them back. Run `region` again, and you
 should only see `* F`.
 
 ### Step 2: Standard MeshCore Canada settings
@@ -257,7 +283,7 @@ already uses, so there is nothing new to look up.
 The pattern is always the same:
 
 ```text
-region def <city>|* <on or qc>|* onqc
+region def <city>|* <on or qc>|* onqc|* can
 ```
 
 Examples:
@@ -265,7 +291,7 @@ Examples:
 === "Ottawa"
 
     ```text
-    region def yow|* on|* onqc
+    region def yow|* on|* onqc|* can
     region allowf *
     region default yow
     region save
@@ -274,7 +300,7 @@ Examples:
 === "Gatineau"
 
     ```text
-    region def yow|* qc|* onqc
+    region def yow|* qc|* onqc|* can
     region allowf *
     region default yow
     region save
@@ -283,7 +309,7 @@ Examples:
 === "Montréal"
 
     ```text
-    region def yul|* qc|* onqc
+    region def yul|* qc|* onqc|* can
     region allowf *
     region default yul
     region save
@@ -292,14 +318,14 @@ Examples:
 === "Québec"
 
     ```text
-    region def yqb|* qc|* onqc
+    region def yqb|* qc|* onqc|* can
     region allowf *
     region default yqb
     region save
     ```
 
 <dl class="scp-explain">
-  <dt>region def …</dt><dd>Carry your city, your province, and <code>onqc</code>.</dd>
+  <dt>region def …</dt><dd>Carry your city, your province, <code>onqc</code> and <code>can</code>.</dd>
   <dt>region allowf *</dt><dd>Also forward messages with <strong>no scope</strong>. This is already on by default. We set it anyway so you can see it.</dd>
   <dt>region default yow</dt><dd>This repeater's own adverts use your city's scope, so they stay local.</dd>
   <dt>region save</dt><dd>Keeps the region settings after a reboot. The <code>set</code> commands save by themselves.</dd>
@@ -312,6 +338,7 @@ To check, run `region`. For Ottawa you should see:
  yow F
  on F
  onqc F
+ can F
 ```
 
 `F` means "flood allowed": the repeater forwards that name.
@@ -319,18 +346,18 @@ To check, run `region`. For Ottawa you should see:
 ### Bridge repeaters
 
 A repeater that links two city zones on purpose carries **both** city codes.
-For example, a repeater in **Rigaud** sits in the `yul` zone and links Montréal
-to the Ottawa zone:
+For example, a repeater in **Rigaud** sits in the `yow` zone, on the Québec
+side, and links it to the Montréal zone:
 
 ```text
-region def yul|* yow|* qc|* onqc
+region def yow|* yul|* qc|* onqc|* can
 region allowf *
-region default yul
+region default yow
 region save
 ```
 
-It forwards Ottawa and Montréal city messages, plus `qc` and `onqc`. Its own
-adverts stay in its home zone, `yul`. Only add a neighbouring city when the
+It forwards Ottawa and Montréal city messages, plus `qc`, `onqc` and `can`. Its own
+adverts stay in its home zone, `yow`. Only add a neighbouring city when the
 repeater really links the two areas, or city messages will leak further than
 people expect.
 
@@ -363,9 +390,9 @@ phone the path comes back using **your contact's** default scope.
     <div class="scp-route__head">Phone default <span class="scp-tag" data-level="city">yow</span><span class="scp-route__verdict" data-result="drop">Never arrives</span></div>
     <ol class="scp-track">
       <li><span class="scp-stop" data-kind="phone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg></span><strong>You, Ottawa</strong><small>sends yow</small></li>
-      <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Ottawa repeater</strong><small>yow on onqc</small></li>
-      <li data-link="drop"><span class="scp-stop" data-kind="repeater" data-state="dim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Montréal repeater</strong><small>yul qc onqc</small></li>
-      <li data-link="none"><span class="scp-stop" data-kind="repeater" data-state="dim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Québec repeater</strong><small>yqb qc onqc</small></li>
+      <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Ottawa repeater</strong><small>yow on onqc can</small></li>
+      <li data-link="drop"><span class="scp-stop" data-kind="repeater" data-state="dim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Montréal repeater</strong><small>yul qc onqc can</small></li>
+      <li data-link="none"><span class="scp-stop" data-kind="repeater" data-state="dim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Québec repeater</strong><small>yqb qc onqc can</small></li>
       <li data-link="none"><span class="scp-stop" data-kind="phone" data-state="dim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg></span><strong>Friend, Québec City</strong><small>default yqb</small></li>
     </ol>
     <p class="scp-route__note">The Montréal repeater does not carry <code>yow</code>, so the message stops there. Even if it got through, your friend's reply would use <code>yqb</code> and stop on the way back.</p>
@@ -374,9 +401,9 @@ phone the path comes back using **your contact's** default scope.
     <div class="scp-route__head">Phone default <span class="scp-tag" data-level="mesh">onqc</span><span class="scp-route__verdict" data-result="ok">Delivered</span></div>
     <ol class="scp-track" data-animate>
       <li><span class="scp-stop" data-kind="phone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg></span><strong>You, Ottawa</strong><small>sends onqc</small></li>
-      <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Ottawa repeater</strong><small>yow on onqc</small></li>
-      <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Montréal repeater</strong><small>yul qc onqc</small></li>
-      <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Québec repeater</strong><small>yqb qc onqc</small></li>
+      <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Ottawa repeater</strong><small>yow on onqc can</small></li>
+      <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Montréal repeater</strong><small>yul qc onqc can</small></li>
+      <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Québec repeater</strong><small>yqb qc onqc can</small></li>
       <li data-link="ok"><span class="scp-stop" data-kind="phone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg></span><strong>Friend, Québec City</strong><small>default onqc</small></li>
     </ol>
     <p class="scp-route__note">Every repeater carries <code>onqc</code>, in both directions. Once the path is found, later DMs go direct and scopes no longer matter.</p>
@@ -393,7 +420,7 @@ Québec. That is why step 2 of the phone setup sets local channels to your city.
 ## Rollout
 
 <ol class="scp-timeline">
-  <li data-phase="Phase 1"><h3>Repeaters</h3><p>Owners clear old regions, add their three codes and keep <code>*</code> allowed. Nothing breaks for anyone.</p></li>
+  <li data-phase="Phase 1"><h3>Repeaters</h3><p>Owners clear old regions, add their codes and keep <code>*</code> allowed. Nothing breaks for anyone.</p></li>
   <li data-phase="Phase 2"><h3>Phones</h3><p>Users set their default to <code>onqc</code> and set local channels to their city.</p></li>
   <li data-phase="Phase 3"><h3>Cutover</h3><p>On an agreed date, repeaters run <code>set flood.max.unscoped 3</code>. Messages with no scope then stay within 3 hops, while scoped messages still reach 16.</p></li>
 </ol>
