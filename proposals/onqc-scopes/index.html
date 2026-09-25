@@ -90,7 +90,7 @@
       }
     </script>
     
-      <link rel="stylesheet" href="../../assets/styles/scopes-proposal.css?v=20260924-4">
+      <link rel="stylesheet" href="../../assets/styles/scopes-proposal.css?v=20260925-2">
     
   
 
@@ -3852,10 +3852,12 @@ label that says "repeaters that carry this name, please forward this."</p>
 Every repeater keeps a list of names it will forward. When a message arrives,
 the repeater checks the code against its list.</p>
 <h2 id="how-a-repeater-decides">How a repeater decides<a class="headerlink" href="#how-a-repeater-decides" title="Permanent link">&para;</a></h2>
+<details class="scp-more">
+<summary>Show the explanation</summary>
 <p>Here is an Ottawa repeater under this proposal, and what it does with five
 different messages.</p>
 <figure class="scp-figure">
-  <div class="scp-filter">
+<div class="scp-filter">
     <div class="scp-repeater">
       <svg class="scp-repeater__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8M6.2 2.4a8.3 8.3 0 0 0 0 11.2M17.8 2.4a8.3 8.3 0 0 1 0 11.2"/></svg>
       <p>Ottawa repeater</p>
@@ -3884,7 +3886,6 @@ different messages.</p>
   </div>
   <figcaption>The DM is tagged <code>onqc</code> because <code>onqc</code> is the companion default in this proposal. <a href="#why-the-companion-default-is-onqc">See why further down</a>. The repeater still hears every message. A scope only decides whether it passes the message on. Your companion also receives everything that reaches it.</figcaption>
 </figure>
-
 <p>Four details catch people out:</p>
 <ul>
 <li><strong>Spelling must be exact.</strong> <code>yow</code>, <code>YOW</code> and <code>ott</code> are three different
@@ -3898,6 +3899,7 @@ different messages.</p>
   nothing else. Scoped messages only work once the repeaters along the way are
   set up.</li>
 </ul>
+</details>
 <h2 id="the-four-levels">The four levels<a class="headerlink" href="#the-four-levels" title="Permanent link">&para;</a></h2>
 <figure class="scp-figure">
   <div class="scp-zone" data-level="future">
@@ -3945,6 +3947,8 @@ repeaters as <code>onqc</code>. Keep using <code>onqc</code>. Once other provinc
 it becomes the way to reach further, and <code>onqc</code> stays as "just the Ontario and
 Québec mesh".</p>
 <h3 id="why-airport-codes">Why airport codes?<a class="headerlink" href="#why-airport-codes" title="Permanent link">&para;</a></h3>
+<details class="scp-more">
+<summary>Show the explanation</summary>
 <ul>
 <li>They are the same codes MeshMapper already uses, for example
   <code>yow.meshmapper.net</code>.</li>
@@ -3959,14 +3963,17 @@ Québec mesh".</p>
 </ul>
 <p>Always write the code with its area the first time, for example
 <code>yow</code> (Ottawa / NCR area), so people learn it.</p>
+</details>
 <h2 id="reading-region-def-yow-on-onqc-can">Reading <code>region def yow|* on|* onqc|* can</code><a class="headerlink" href="#reading-region-def-yow-on-onqc-can" title="Permanent link">&para;</a></h2>
 <p>This section is for repeater owners who want to understand the command. You
 can skip it: step 4 of Phase 1 gives you the exact commands to type.</p>
+<details class="scp-more">
+<summary>Show how the command works</summary>
 <p><code>region def</code> builds a repeater's list in one line. It keeps a <strong>cursor</strong> that
 starts at the top, <code>*</code>. Each name is created under the cursor, and <code>|*</code> jumps
 the cursor back to the top.</p>
 <figure class="scp-figure">
-  <div class="scp-tape" aria-label="region def yow|* on|* onqc|* can">
+<div aria-label="region def yow|* on|* onqc|* can" class="scp-tape">
     <span class="scp-tape__cmd">region def</span>
     <span class="scp-tape__tok"><b>1</b>yow</span>
     <span class="scp-tape__tok" data-kind="jump"><b>2</b>|*</span>
@@ -3976,7 +3983,7 @@ the cursor back to the top.</p>
     <span class="scp-tape__tok" data-kind="jump"><b>6</b>|*</span>
     <span class="scp-tape__tok"><b>7</b>can</span>
   </div>
-  <ol class="scp-steps">
+<ol class="scp-steps">
     <li>Create <code>yow</code> under the cursor. The cursor moves into <code>yow</code>.<div class="scp-tree">*
 └ <mark>yow</mark></div></li>
     <li><code>|*</code> jumps the cursor back to the top.<div class="scp-tree"><mark>*</mark>
@@ -4001,13 +4008,13 @@ the cursor back to the top.</p>
 ├ onqc
 └ <mark>can</mark></div></li>
   </ol>
-  <figcaption>The result is a flat list: every code sits side by side under <code>*</code>. The highlighted name is where the cursor is.</figcaption>
+<figcaption>The result is a flat list: every code sits side by side under <code>*</code>. The highlighted name is where the cursor is.</figcaption>
 </figure>
-
 <div class="mc-callout" data-kind="warning">
 <p><code>region def</code> only adds or moves names. It never deletes the ones already
 there. Run <code>region</code> afterwards to see the full list.</p>
 </div>
+</details>
 <h2 id="rollout-order">Rollout order<a class="headerlink" href="#rollout-order" title="Permanent link">&para;</a></h2>
 <p>Do this in order. Each phase starts only once the one before it is done, and
 is announced on Discord. <strong>Don't change your companion settings
@@ -4098,20 +4105,42 @@ avoid conflicts, remove any old ones first. Start by listing what is there:</p>
 <ol class="scp-cmds"><li class="scp-cmd"><code>region</code><button type="button" class="scp-copy" title="Copy" aria-label="Copy: region"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li></ol>
 </div>
 
+<div class="scp-ask" data-scp-ask hidden>
+<p class="scp-ask__q">Does the reply list any names other than <code>*</code>?</p>
+<div class="scp-ask__choices" role="group" aria-label="Does the reply list any names other than *?">
+<button type="button" class="scp-choice" data-scp-choice="old" aria-pressed="false">Yes, other names</button>
+<button type="button" class="scp-choice" data-scp-choice="clean" aria-pressed="false">No, only <code>*^ F</code></button>
+</div>
+</div>
+
+<div data-scp-ask-nojs="data-scp-ask-nojs">
 <p>Then check the reply:</p>
 <ul>
 <li><strong>Only <code>*^ F</code>:</strong> the repeater has no old regions. Nothing to clear, go to
-  step 3.</li>
-<li><strong>Other names as well</strong>, such as <code>can</code>, <code>on-alg</code> or <code>ott</code>: remove each one
-  except <code>*</code> with <code>region remove &lt;name&gt;</code>, one at a time, starting with the most
-  indented line. Then run <code>region save</code>, and <code>region</code> again to check. For
-  example, the old Ottawa layout:</li>
+  <a href="#step-3-standard-meshcore-canada-settings">step 3</a>.</li>
+<li><strong>Other names as well</strong>, such as <code>can</code>, <code>on-alg</code> or <code>ott</code>: remove them as
+  shown below.</li>
 </ul>
+</div>
+<div class="scp-branch" data-scp-branch="clean" hidden="hidden">
+<p><strong>Nothing to clear.</strong> Your repeater has no old regions. Go straight to
+<a href="#step-3-standard-meshcore-canada-settings">step 3</a>.</p>
+</div>
+<div class="scp-branch" data-scp-branch="old">
+<p>Remove each name except <code>*</code> with <code>region remove &lt;name&gt;</code>, one at a time,
+starting with the most indented line. Then run <code>region save</code>, and <code>region</code>
+again to check. For example, the old Ottawa layout:</p>
 <div class="scp-card">
 <p class="scp-variant__label">Example: the old Ottawa layout</p>
-<ol class="scp-cmds"><li class="scp-cmd"><code>region remove ott</code><button type="button" class="scp-copy" title="Copy" aria-label="Copy: region remove ott"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li><li class="scp-cmd"><code>region remove on-alg</code><button type="button" class="scp-copy" title="Copy" aria-label="Copy: region remove on-alg"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li><li class="scp-cmd"><code>region remove on</code><button type="button" class="scp-copy" title="Copy" aria-label="Copy: region remove on"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li><li class="scp-cmd"><code>region remove can</code><button type="button" class="scp-copy" title="Copy" aria-label="Copy: region remove can"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li><li class="scp-cmd"><code>region save</code><button type="button" class="scp-copy" title="Copy" aria-label="Copy: region save"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li><li class="scp-cmd"><code>region</code><button type="button" class="scp-copy" title="Copy" aria-label="Copy: region"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li></ol>
+<ol class="scp-cmds">
+<li class="scp-cmd"><code>region remove ott</code><button type="button" class="scp-copy" title="Copy" aria-label="Copy: region remove ott"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li>
+<li class="scp-cmd"><code>region remove on-alg</code><button type="button" class="scp-copy" title="Copy" aria-label="Copy: region remove on-alg"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li>
+<li class="scp-cmd"><code>region remove on</code><button type="button" class="scp-copy" title="Copy" aria-label="Copy: region remove on"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li>
+<li class="scp-cmd"><code>region remove can</code><button type="button" class="scp-copy" title="Copy" aria-label="Copy: region remove can"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li>
+<li class="scp-cmd"><code>region save</code><button type="button" class="scp-copy" title="Copy" aria-label="Copy: region save"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li>
+<li class="scp-cmd"><code>region</code><button type="button" class="scp-copy" title="Copy" aria-label="Copy: region"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li>
+</ol>
 </div>
-
 <p>If a <code>region remove</code> answers with an error:</p>
 <ul>
 <li><strong><code>Err - not empty</code>:</strong> another name is still indented under it. Remove that
@@ -4126,6 +4155,7 @@ avoid conflicts, remove any old ones first. Start by listing what is there:</p>
 <figcaption><span class="scp-shot__num">1</span> The old Ottawa layout, removed from the bottom up. Removing something twice just answers <code>Err - not found</code>. That is fine.</figcaption>
 </figure>
 </div>
+</div>
 <h3 id="step-3-standard-meshcore-canada-settings">Step 3: Standard MeshCore Canada settings<a class="headerlink" href="#step-3-standard-meshcore-canada-settings" title="Permanent link">&para;</a></h3>
 <div class="scp-card">
 <p class="scp-variant__label" data-scp-summary>Ottawa and surrounding areas · 1.16 or newer · City repeater</p>
@@ -4134,13 +4164,15 @@ avoid conflicts, remove any old ones first. Start by listing what is there:</p>
 <p class="scp-note" data-scp-nojs>These commands are for an Ottawa-area city repeater on firmware 1.16 or newer. Turn on JavaScript to match them to your repeater.</p>
 </div>
 
+<details class="scp-more">
+<summary>What do these commands do?</summary>
 <dl class="scp-explain">
-  <dt>path.hash.mode 2</dt><dd>Uses 3-byte repeater IDs in message paths, so fewer repeaters share an ID. Needs firmware 1.14 or newer.</dd>
+<dt>path.hash.mode 2</dt><dd>Uses 3-byte repeater IDs in message paths, so fewer repeaters share an ID. Needs firmware 1.14 or newer.</dd>
   <dt>advert.interval 240</dt><dd>Announces this repeater to direct neighbours every 4 hours.</dd>
   <dt>flood.advert.interval 47</dt><dd>Announces this repeater across the network every 47 hours.</dd>
   <dt>flood.max 16</dt><dd>No flood message travels more than 16 hops, scoped or not.</dd>
 </dl>
-
+</details>
 <p>These save by themselves. No <code>region save</code> is needed for them. If a command
 answers <code>Err - ??</code>, your firmware does not have that setting, so skip it.</p>
 <div class="scp-shots">
@@ -4162,13 +4194,15 @@ answers <code>Err - ??</code>, your firmware does not have that setting, so skip
 <p class="scp-note" data-scp-nojs>These commands are for an Ottawa-area city repeater on firmware 1.16 or newer. Turn on JavaScript to match them to your repeater.</p>
 </div>
 
+<details class="scp-more">
+<summary>What do these commands do?</summary>
 <dl class="scp-explain">
-  <dt>region def / region put</dt><dd>Carry your city, your province, <code>onqc</code> and <code>can</code>.</dd>
+<dt>region def / region put</dt><dd>Carry your city, your province, <code>onqc</code> and <code>can</code>.</dd>
   <dt>region allowf * / region denyf *</dt><dd>City repeaters forward messages with <strong>no scope</strong> (on by default, set so you can see it). Edge repeaters drop them.</dd>
   <dt>region default &lt;city&gt;</dt><dd>This repeater's own adverts use your city's scope, so they stay local. Not available before 1.15.</dd>
   <dt>region save</dt><dd>Keeps the region settings after a reboot.</dd>
 </dl>
-
+</details>
 <div class="scp-shots">
 <figure class="scp-shot">
 <p><a href="../../assets/images/onqc-scopes/repeater-region-def-116.webp"><img alt="Command line showing region def and its reply on firmware 1.16" height="1304" loading="lazy" src="../../assets/images/onqc-scopes/repeater-region-def-116.webp" width="600" /></a></p>
@@ -4201,6 +4235,8 @@ ignore it.</p>
 </figure>
 </div>
 <h3 id="allow-or-drop-quick-reference">Allow or drop, quick reference<a class="headerlink" href="#allow-or-drop-quick-reference" title="Permanent link">&para;</a></h3>
+<details class="scp-more">
+<summary>Show the quick reference</summary>
 <table>
 <thead>
 <tr>
@@ -4231,6 +4267,7 @@ ignore it.</p>
 </tr>
 </tbody>
 </table>
+</details>
 <h3 id="bots-and-meshmapper">Bots and MeshMapper<a class="headerlink" href="#bots-and-meshmapper" title="Permanent link">&para;</a></h3>
 <p>This comes at the end of Phase 1, once the repeaters around you carry your
 city code. Scoping bots and MeshMapper to your city keeps their traffic out
@@ -4363,11 +4400,13 @@ the exact limit, and it can vary with your node name and app version.</p>
 </figure>
 </div>
 <h3 id="why-the-companion-default-is-onqc">Why the companion default is <code>onqc</code><a class="headerlink" href="#why-the-companion-default-is-onqc" title="Permanent link">&para;</a></h3>
+<details class="scp-more">
+<summary>Show the explanation</summary>
 <p>You cannot pick a scope for a single direct message. When a DM has no known
 path yet, it floods using your <strong>default scope</strong>. The reply that tells your
 companion the path comes back using <strong>your contact's</strong> default scope.</p>
 <figure class="scp-figure">
-  <div class="scp-route">
+<div class="scp-route">
     <div class="scp-route__head">Companion default <span class="scp-tag" data-level="city">yow</span><span class="scp-route__verdict" data-result="drop">Never arrives</span></div>
     <ol class="scp-track">
       <li><span class="scp-stop" data-kind="phone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg></span><strong>You, Ottawa</strong><small>sends yow</small></li>
@@ -4391,25 +4430,27 @@ companion the path comes back using <strong>your contact's</strong> default scop
   </div>
   <figcaption>Logins to a repeater or room server work the same way when no path is known.</figcaption>
 </figure>
-
 <div class="mc-callout" data-kind="warning">
 <p><strong>The catch:</strong> a channel with no scope of its own also uses your default,
 <code>onqc</code>, so it reaches all of Ontario and Québec. That is what we want for
 <code>Public</code>, but not for test channels and bots. That is why step 2 of the
 companion setup sets those to your city.</p>
 </div>
+</details>
 <h2 id="phase-3-only-if-needed">Phase 3: Only if needed<a class="headerlink" href="#phase-3-only-if-needed" title="Permanent link">&para;</a></h2>
 <p>If messages with no scope are still too noisy inside a city after Phase 2,
 repeaters can also run <code>set flood.max.unscoped 3</code>, then <code>region save</code>.
 Messages with no scope then stop after 3 hops. Scoped messages still reach
 16 hops. Only do this once it is announced for your city.</p>
 <h2 id="who-hears-what">Who hears what<a class="headerlink" href="#who-hears-what" title="Permanent link">&para;</a></h2>
+<details class="scp-more">
+<summary>Show the examples</summary>
 <p>With edge repeaters dropping messages with no scope, a new user who hasn't set
 a scope yet still reaches everyone in their own city. Their messages just
 don't cross into the next city. Here is the Ottawa to Montréal link through
 Rigaud, an edge repeater that also carries Montréal's code, <code>yul</code>.</p>
 <figure class="scp-figure">
-  <div class="scp-route">
+<div class="scp-route">
     <div class="scp-route__head">New user in Ottawa, no scope <span class="scp-tag" data-level="any">none</span><span class="scp-route__verdict" data-result="ok">Whole Ottawa area</span></div>
     <ol class="scp-track">
       <li><span class="scp-stop" data-kind="phone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg></span><strong>New user, Ottawa</strong><small>no scope</small></li>
@@ -4444,7 +4485,6 @@ Rigaud, an edge repeater that also carries Montréal's code, <code>yul</code>.</
   </div>
   <figcaption>The same thing happens at every edge between two cities.</figcaption>
 </figure>
-
 <p>More examples on the same link:</p>
 <table>
 <thead>
@@ -4504,6 +4544,7 @@ Rigaud, an edge repeater that also carries Montréal's code, <code>yul</code>.</
 <p>This is why bots and MeshMapper should be scoped to their city: they stay
 contained no matter what, and new users who haven't set a scope yet still work
 locally.</p>
+</details>
 <h2 id="things-to-know">Things to know<a class="headerlink" href="#things-to-know" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>Scoped messages are about 10 characters shorter.</strong> The app lowers the
@@ -4652,7 +4693,7 @@ locally.</p>
     
   
     
-      <script src="../../assets/javascripts/scopes-picker.js?v=20260924-3" defer></script>
+      <script src="../../assets/javascripts/scopes-picker.js?v=20260925-1" defer></script>
     
     
   

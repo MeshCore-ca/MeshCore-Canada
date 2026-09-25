@@ -90,7 +90,7 @@
       }
     </script>
     
-      <link rel="stylesheet" href="../../../assets/styles/scopes-proposal.css?v=20260924-4">
+      <link rel="stylesheet" href="../../../assets/styles/scopes-proposal.css?v=20260925-2">
     
   
 
@@ -3863,10 +3863,12 @@ ce message ».</p>
 l’en-tête du message. Chaque répéteur garde une liste des noms qu’il relaie.
 Quand un message arrive, le répéteur compare le code à sa liste.</p>
 <h2 id="comment-un-repeteur-decide">Comment un répéteur décide<a class="headerlink" href="#comment-un-repeteur-decide" title="Permanent link">&para;</a></h2>
+<details class="scp-more">
+<summary>Afficher l’explication</summary>
 <p>Voici un répéteur d’Ottawa configuré selon cette proposition, et ce qu’il fait
 avec cinq messages différents.</p>
 <figure class="scp-figure">
-  <div class="scp-filter">
+<div class="scp-filter">
     <div class="scp-repeater">
       <svg class="scp-repeater__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8M6.2 2.4a8.3 8.3 0 0 0 0 11.2M17.8 2.4a8.3 8.3 0 0 1 0 11.2"/></svg>
       <p>Répéteur d’Ottawa</p>
@@ -3895,7 +3897,6 @@ avec cinq messages différents.</p>
   </div>
   <figcaption>Le MP porte <code>onqc</code> parce que <code>onqc</code> est la portée par défaut de l’appareil compagnon dans cette proposition. <a href="#pourquoi-lappareil-compagnon-utilise-onqc-par-defaut">Voir pourquoi plus bas</a>. Le répéteur entend quand même tous les messages. La portée décide seulement s’il les relaie. Votre appareil compagnon reçoit aussi tout ce qui l’atteint.</figcaption>
 </figure>
-
 <p>Quatre détails piègent souvent :</p>
 <ul>
 <li><strong>L’orthographe doit être exacte.</strong> <code>yow</code>, <code>YOW</code> et <code>ott</code> sont trois noms
@@ -3911,6 +3912,7 @@ avec cinq messages différents.</p>
   rien d’autre. Les messages avec portée fonctionnent seulement une fois les
   répéteurs du trajet configurés.</li>
 </ul>
+</details>
 <h2 id="les-quatre-niveaux">Les quatre niveaux<a class="headerlink" href="#les-quatre-niveaux" title="Permanent link">&para;</a></h2>
 <figure class="scp-figure">
   <div class="scp-zone" data-level="future">
@@ -3959,6 +3961,8 @@ Aujourd’hui, il joint les mêmes répéteurs que <code>onqc</code>. Continuez 
 d’aller plus loin, et <code>onqc</code> restera « seulement le réseau de l’Ontario et du
 Québec ».</p>
 <h3 id="pourquoi-des-codes-daeroport">Pourquoi des codes d’aéroport?<a class="headerlink" href="#pourquoi-des-codes-daeroport" title="Permanent link">&para;</a></h3>
+<details class="scp-more">
+<summary>Afficher l’explication</summary>
 <ul>
 <li>Ce sont les mêmes codes que MeshMapper utilise déjà, par exemple
   <code>yow.meshmapper.net</code>.</li>
@@ -3975,15 +3979,18 @@ Québec ».</p>
 </ul>
 <p>La première fois, écrivez toujours le code avec son secteur, par exemple
 <code>yow</code> (secteur Ottawa–Gatineau), pour que les gens l’apprennent.</p>
+</details>
 <h2 id="lire-region-def-yow-on-onqc-can">Lire <code>region def yow|* on|* onqc|* can</code><a class="headerlink" href="#lire-region-def-yow-on-onqc-can" title="Permanent link">&para;</a></h2>
 <p>Cette section s’adresse aux propriétaires de répéteurs qui veulent comprendre
 la commande. Vous pouvez la sauter : l’étape 4 de la phase 1 donne les
 commandes exactes à entrer.</p>
+<details class="scp-more">
+<summary>Afficher le fonctionnement de la commande</summary>
 <p><code>region def</code> construit la liste d’un répéteur en une ligne. La commande garde un
 <strong>curseur</strong> qui part du sommet, <code>*</code>. Chaque nom est créé sous le curseur, et
 <code>|*</code> ramène le curseur au sommet.</p>
 <figure class="scp-figure">
-  <div class="scp-tape" aria-label="region def yow|* on|* onqc|* can">
+<div aria-label="region def yow|* on|* onqc|* can" class="scp-tape">
     <span class="scp-tape__cmd">region def</span>
     <span class="scp-tape__tok"><b>1</b>yow</span>
     <span class="scp-tape__tok" data-kind="jump"><b>2</b>|*</span>
@@ -3993,7 +4000,7 @@ commandes exactes à entrer.</p>
     <span class="scp-tape__tok" data-kind="jump"><b>6</b>|*</span>
     <span class="scp-tape__tok"><b>7</b>can</span>
   </div>
-  <ol class="scp-steps">
+<ol class="scp-steps">
     <li>Crée <code>yow</code> sous le curseur. Le curseur entre dans <code>yow</code>.<div class="scp-tree">*
 └ <mark>yow</mark></div></li>
     <li><code>|*</code> ramène le curseur au sommet.<div class="scp-tree"><mark>*</mark>
@@ -4018,14 +4025,14 @@ commandes exactes à entrer.</p>
 ├ onqc
 └ <mark>can</mark></div></li>
   </ol>
-  <figcaption>Le résultat est une liste à plat : tous les codes sont côte à côte sous <code>*</code>. Le nom surligné indique la position du curseur.</figcaption>
+<figcaption>Le résultat est une liste à plat : tous les codes sont côte à côte sous <code>*</code>. Le nom surligné indique la position du curseur.</figcaption>
 </figure>
-
 <div class="mc-callout" data-kind="warning">
 <p><code>region def</code> ajoute ou déplace des noms seulement. La commande ne supprime
 jamais ceux qui existent déjà. Lancez <code>region</code> ensuite pour voir la liste
 complète.</p>
 </div>
+</details>
 <h2 id="ordre-de-deploiement">Ordre de déploiement<a class="headerlink" href="#ordre-de-deploiement" title="Permanent link">&para;</a></h2>
 <p>Suivez cet ordre. Chaque phase commence seulement quand la précédente est
 terminée, et elle est annoncée sur Discord. <strong>Ne changez pas
@@ -4124,20 +4131,43 @@ par afficher ce qui s’y trouve :</p>
 <ol class="scp-cmds"><li class="scp-cmd"><code>region</code><button type="button" class="scp-copy" title="Copier" aria-label="Copier: region"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li></ol>
 </div>
 
+<div class="scp-ask" data-scp-ask hidden>
+<p class="scp-ask__q">La réponse affiche-t-elle d’autres noms que <code>*</code>?</p>
+<div class="scp-ask__choices" role="group" aria-label="La réponse affiche-t-elle d’autres noms que *?">
+<button type="button" class="scp-choice" data-scp-choice="old" aria-pressed="false">Oui, d’autres noms</button>
+<button type="button" class="scp-choice" data-scp-choice="clean" aria-pressed="false">Non, seulement <code>*^ F</code></button>
+</div>
+</div>
+
+<div data-scp-ask-nojs="data-scp-ask-nojs">
 <p>Vérifiez ensuite la réponse :</p>
 <ul>
 <li><strong>Seulement <code>*^ F</code> :</strong> le répéteur n’a pas d’anciennes régions. Rien à
-  effacer, passez à l’étape 3.</li>
-<li><strong>D’autres noms aussi</strong>, comme <code>can</code>, <code>on-alg</code> ou <code>ott</code> : retirez chacun
-  sauf <code>*</code> avec <code>region remove &lt;nom&gt;</code>, un à la fois, en commençant par la ligne
-  la plus en retrait. Lancez ensuite <code>region save</code>, puis <code>region</code> de nouveau
-  pour vérifier. Par exemple, l’ancienne configuration d’Ottawa :</li>
+  effacer, passez à l’<a href="#etape-3-reglages-standard-de-meshcore-canada">étape 3</a>.</li>
+<li><strong>D’autres noms aussi</strong>, comme <code>can</code>, <code>on-alg</code> ou <code>ott</code> : retirez-les comme
+  indiqué ci-dessous.</li>
 </ul>
+</div>
+<div class="scp-branch" data-scp-branch="clean" hidden="hidden">
+<p><strong>Rien à effacer.</strong> Votre répéteur n’a pas d’anciennes régions. Passez
+directement à l’<a href="#etape-3-reglages-standard-de-meshcore-canada">étape 3</a>.</p>
+</div>
+<div class="scp-branch" data-scp-branch="old">
+<p>Retirez chaque nom sauf <code>*</code> avec <code>region remove &lt;nom&gt;</code>, un à la fois, en
+commençant par la ligne la plus en retrait. Lancez ensuite <code>region save</code>, puis
+<code>region</code> de nouveau pour vérifier. Par exemple, l’ancienne configuration
+d’Ottawa :</p>
 <div class="scp-card">
 <p class="scp-variant__label">Exemple : l’ancienne configuration d’Ottawa</p>
-<ol class="scp-cmds"><li class="scp-cmd"><code>region remove ott</code><button type="button" class="scp-copy" title="Copier" aria-label="Copier: region remove ott"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li><li class="scp-cmd"><code>region remove on-alg</code><button type="button" class="scp-copy" title="Copier" aria-label="Copier: region remove on-alg"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li><li class="scp-cmd"><code>region remove on</code><button type="button" class="scp-copy" title="Copier" aria-label="Copier: region remove on"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li><li class="scp-cmd"><code>region remove can</code><button type="button" class="scp-copy" title="Copier" aria-label="Copier: region remove can"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li><li class="scp-cmd"><code>region save</code><button type="button" class="scp-copy" title="Copier" aria-label="Copier: region save"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li><li class="scp-cmd"><code>region</code><button type="button" class="scp-copy" title="Copier" aria-label="Copier: region"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li></ol>
+<ol class="scp-cmds">
+<li class="scp-cmd"><code>region remove ott</code><button type="button" class="scp-copy" title="Copier" aria-label="Copier: region remove ott"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li>
+<li class="scp-cmd"><code>region remove on-alg</code><button type="button" class="scp-copy" title="Copier" aria-label="Copier: region remove on-alg"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li>
+<li class="scp-cmd"><code>region remove on</code><button type="button" class="scp-copy" title="Copier" aria-label="Copier: region remove on"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li>
+<li class="scp-cmd"><code>region remove can</code><button type="button" class="scp-copy" title="Copier" aria-label="Copier: region remove can"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li>
+<li class="scp-cmd"><code>region save</code><button type="button" class="scp-copy" title="Copier" aria-label="Copier: region save"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li>
+<li class="scp-cmd"><code>region</code><button type="button" class="scp-copy" title="Copier" aria-label="Copier: region"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li>
+</ol>
 </div>
-
 <p>Si un <code>region remove</code> répond par une erreur :</p>
 <ul>
 <li><strong><code>Err - not empty</code> :</strong> un autre nom est encore en retrait sous celui-ci.
@@ -4153,6 +4183,7 @@ Quand vous avez terminé, <code>region</code> devrait afficher seulement <code>*
 <figcaption><span class="scp-shot__num">1</span> L’ancienne configuration d’Ottawa, retirée du bas vers le haut. Retirer un nom deux fois répond simplement <code>Err - not found</code>. Ce n’est pas grave.</figcaption>
 </figure>
 </div>
+</div>
 <h3 id="etape-3-reglages-standard-de-meshcore-canada">Étape 3 : Réglages standard de MeshCore Canada<a class="headerlink" href="#etape-3-reglages-standard-de-meshcore-canada" title="Permanent link">&para;</a></h3>
 <div class="scp-card">
 <p class="scp-variant__label" data-scp-summary>Ottawa et environs · 1.16 ou plus récent · Répéteur de ville</p>
@@ -4161,13 +4192,15 @@ Quand vous avez terminé, <code>region</code> devrait afficher seulement <code>*
 <p class="scp-note" data-scp-nojs>Ces commandes sont pour un répéteur de ville du secteur d’Ottawa avec le micrologiciel 1.16 ou plus récent. Activez JavaScript pour les adapter à votre répéteur.</p>
 </div>
 
+<details class="scp-more">
+<summary>Que font ces commandes?</summary>
 <dl class="scp-explain">
-  <dt>path.hash.mode 2</dt><dd>Utilise des identifiants de répéteur de 3 octets dans les chemins, pour que moins de répéteurs partagent un identifiant. Exige le micrologiciel 1.14 ou plus récent.</dd>
+<dt>path.hash.mode 2</dt><dd>Utilise des identifiants de répéteur de 3 octets dans les chemins, pour que moins de répéteurs partagent un identifiant. Exige le micrologiciel 1.14 ou plus récent.</dd>
   <dt>advert.interval 240</dt><dd>Annonce ce répéteur à ses voisins directs toutes les 4 heures.</dd>
   <dt>flood.advert.interval 47</dt><dd>Annonce ce répéteur dans tout le réseau toutes les 47 heures.</dd>
   <dt>flood.max 16</dt><dd>Aucune diffusion ne fait plus de 16 sauts, avec ou sans portée.</dd>
 </dl>
-
+</details>
 <p>Ces réglages s’enregistrent d’eux-mêmes. Pas besoin de <code>region save</code>. Si une
 commande répond <code>Err - ??</code>, votre micrologiciel n’a pas ce réglage; passez-la.</p>
 <div class="scp-shots">
@@ -4189,13 +4222,15 @@ commande répond <code>Err - ??</code>, votre micrologiciel n’a pas ce réglag
 <p class="scp-note" data-scp-nojs>Ces commandes sont pour un répéteur de ville du secteur d’Ottawa avec le micrologiciel 1.16 ou plus récent. Activez JavaScript pour les adapter à votre répéteur.</p>
 </div>
 
+<details class="scp-more">
+<summary>Que font ces commandes?</summary>
 <dl class="scp-explain">
-  <dt>region def / region put</dt><dd>Porter votre ville, votre province, <code>onqc</code> et <code>can</code>.</dd>
+<dt>region def / region put</dt><dd>Porter votre ville, votre province, <code>onqc</code> et <code>can</code>.</dd>
   <dt>region allowf * / region denyf *</dt><dd>Les répéteurs de ville relaient les messages <strong>sans portée</strong> (déjà permis par défaut, réglé pour que vous le voyiez). Les répéteurs de bordure les rejettent.</dd>
   <dt>region default &lt;ville&gt;</dt><dd>Les annonces de ce répéteur utilisent la portée de votre ville, pour rester locales. Absent avant 1.15.</dd>
   <dt>region save</dt><dd>Conserve les réglages de région après un redémarrage.</dd>
 </dl>
-
+</details>
 <div class="scp-shots">
 <figure class="scp-shot">
 <p><a href="../../../assets/images/onqc-scopes/repeater-region-def-116.webp"><img alt="Ligne de commande avec region def et sa réponse sur le micrologiciel 1.16" height="1304" loading="lazy" src="../../../assets/images/onqc-scopes/repeater-region-def-116.webp" width="600" /></a></p>
@@ -4228,6 +4263,8 @@ se place sur <code>*</code>. Vous pouvez l’ignorer.</p>
 </figure>
 </div>
 <h3 id="permettre-ou-rejeter-aide-memoire">Permettre ou rejeter : aide-mémoire<a class="headerlink" href="#permettre-ou-rejeter-aide-memoire" title="Permanent link">&para;</a></h3>
+<details class="scp-more">
+<summary>Afficher l’aide-mémoire</summary>
 <table>
 <thead>
 <tr>
@@ -4258,6 +4295,7 @@ se place sur <code>*</code>. Vous pouvez l’ignorer.</p>
 </tr>
 </tbody>
 </table>
+</details>
 <h3 id="robots-et-meshmapper">Robots et MeshMapper<a class="headerlink" href="#robots-et-meshmapper" title="Permanent link">&para;</a></h3>
 <p>Ceci se fait à la fin de la phase 1, une fois que les répéteurs autour de vous
 portent le code de votre ville. Donner la portée de votre ville aux robots et à
@@ -4394,12 +4432,14 @@ nom de votre nœud et la version de l’application.</p>
 </figure>
 </div>
 <h3 id="pourquoi-lappareil-compagnon-utilise-onqc-par-defaut">Pourquoi l’appareil compagnon utilise <code>onqc</code> par défaut<a class="headerlink" href="#pourquoi-lappareil-compagnon-utilise-onqc-par-defaut" title="Permanent link">&para;</a></h3>
+<details class="scp-more">
+<summary>Afficher l’explication</summary>
 <p>On ne peut pas choisir la portée d’un seul message privé. Quand un MP n’a pas
 encore de chemin connu, il est diffusé avec votre <strong>portée par défaut</strong>. La
 réponse qui indique le chemin à votre appareil compagnon revient avec la portée par
 défaut <strong>de votre contact</strong>.</p>
 <figure class="scp-figure">
-  <div class="scp-route">
+<div class="scp-route">
     <div class="scp-route__head">Portée par défaut <span class="scp-tag" data-level="city">yow</span><span class="scp-route__verdict" data-result="drop">N’arrive jamais</span></div>
     <ol class="scp-track">
       <li><span class="scp-stop" data-kind="phone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg></span><strong>Vous, Ottawa</strong><small>envoie yow</small></li>
@@ -4423,7 +4463,6 @@ défaut <strong>de votre contact</strong>.</p>
   </div>
   <figcaption>Les connexions à un répéteur ou à un serveur de salon fonctionnent de la même façon quand aucun chemin n’est connu.</figcaption>
 </figure>
-
 <div class="mc-callout" data-kind="warning">
 <p><strong>Le piège :</strong> un canal sans portée propre utilise aussi votre portée par
 défaut, <code>onqc</code>, donc il joint tout l’Ontario et le Québec. C’est ce qu’on veut
@@ -4431,6 +4470,7 @@ pour <code>Public</code>, mais pas pour les canaux de test et les robots. C’es
 l’étape 2 de la configuration de l’appareil compagnon les règle sur votre
 ville.</p>
 </div>
+</details>
 <h2 id="phase-3-seulement-au-besoin">Phase 3 : Seulement au besoin<a class="headerlink" href="#phase-3-seulement-au-besoin" title="Permanent link">&para;</a></h2>
 <p>Si les messages sans portée sont encore trop bruyants dans une ville après la
 phase 2, les répéteurs peuvent aussi lancer <code>set flood.max.unscoped 3</code>, puis
@@ -4438,13 +4478,15 @@ phase 2, les répéteurs peuvent aussi lancer <code>set flood.max.unscoped 3</co
 messages avec portée atteignent encore 16 sauts. Faites-le seulement une fois
 que c’est annoncé pour votre ville.</p>
 <h2 id="qui-recoit-quoi">Qui reçoit quoi<a class="headerlink" href="#qui-recoit-quoi" title="Permanent link">&para;</a></h2>
+<details class="scp-more">
+<summary>Afficher les exemples</summary>
 <p>Quand les répéteurs de bordure rejettent les messages sans portée, un nouvel
 utilisateur qui n’a pas encore réglé de portée joint quand même tout le monde
 dans sa ville. Ses messages ne passent simplement pas dans la ville voisine.
 Voici le lien Ottawa–Montréal par Rigaud, un répéteur de bordure qui porte
 aussi le code de Montréal, <code>yul</code>.</p>
 <figure class="scp-figure">
-  <div class="scp-route">
+<div class="scp-route">
     <div class="scp-route__head">Nouvel utilisateur à Ottawa, sans portée <span class="scp-tag" data-level="any">aucune</span><span class="scp-route__verdict" data-result="ok">Tout le secteur d’Ottawa</span></div>
     <ol class="scp-track">
       <li><span class="scp-stop" data-kind="phone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg></span><strong>Nouvel utilisateur, Ottawa</strong><small>sans portée</small></li>
@@ -4479,7 +4521,6 @@ aussi le code de Montréal, <code>yul</code>.</p>
   </div>
   <figcaption>La même chose se produit à chaque bordure entre deux villes.</figcaption>
 </figure>
-
 <p>D’autres exemples sur le même lien :</p>
 <table>
 <thead>
@@ -4539,6 +4580,7 @@ aussi le code de Montréal, <code>yul</code>.</p>
 <p>C’est pourquoi les robots et MeshMapper devraient avoir la portée de leur ville :
 ils restent contenus quoi qu’il arrive, et les nouveaux utilisateurs qui n’ont
 pas encore réglé de portée fonctionnent quand même localement.</p>
+</details>
 <h2 id="a-savoir">À savoir<a class="headerlink" href="#a-savoir" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>Les messages avec portée ont environ 10 caractères de moins.</strong>
@@ -4691,7 +4733,7 @@ pas encore réglé de portée fonctionnent quand même localement.</p>
     
   
     
-      <script src="../../../assets/javascripts/scopes-picker.js?v=20260924-3" defer></script>
+      <script src="../../../assets/javascripts/scopes-picker.js?v=20260925-1" defer></script>
     
     
   
