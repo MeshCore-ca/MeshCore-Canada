@@ -33,6 +33,7 @@ for feature in expected:
     assert zone_shapes[feature["properties"]["tag"]].symmetric_difference(shape(feature["geometry"])).area < 1e-10
 published_area = unary_union([shape(feature["geometry"]) for feature in published["features"]])
 starter_shapes = {entry["tag"]: zone_shapes[entry["tag"]] for entry in policy["regions"]}
+assert {entry["province"] for entry in policy["regions"]} == set(province_shapes)
 for tag, geometry in starter_shapes.items():
     assert geometry.intersection(published_area).area < 1e-10, tag
     for other, second in starter_shapes.items():
@@ -46,7 +47,7 @@ for tag, point in [("yyg", Point(-63.1311, 46.2382)), ("yyt", Point(-52.7128, 47
                    ("yzf", Point(-114.3774, 62.454)), ("yfb", Point(-68.517, 63.7467)),
                    ("yyr", Point(-56.95, 51.426)), ("yyt", Point(-55.596, 51.37))]:
     assert zone_shapes[tag].contains(point), tag
-print(f"IATA geometry verified: {len(published['features'])} MeshMapper zones + {len(starter_shapes)} non-overlapping starters covering five added jurisdictions")
+print(f"IATA geometry verified: {len(published['features'])} MeshMapper zones + {len(starter_shapes)} non-overlapping starters completing all 13 jurisdictions")
 
 # Future published zones must take space from a starter, never the reverse.
 future = copy.deepcopy(published)

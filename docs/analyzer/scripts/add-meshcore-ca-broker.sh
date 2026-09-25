@@ -134,6 +134,7 @@ Ontario|YAM|Sault Ste. Marie
 Ontario|YQT|Thunder Bay
 Ontario|YSB|Sudbury
 Ontario|YTS|Timmins
+Ontario|YQK|Kenora
 Ontario|YQG|Windsor
 Ontario|YYB|North Bay
 Ontario|YGK|Kingston
@@ -147,6 +148,7 @@ Quebec|YQB|Quebec City
 Quebec|YND|Gatineau (Ottawa area)
 Quebec|YBG|Bagotville / Saguenay
 Quebec|YVO|Val-d'Or
+Quebec|YVP|Kuujjuaq
 Quebec|YHU|Montreal (St-Hubert)
 Quebec|YRJ|Roberval
 Quebec|YGL|La Grande Riviere
@@ -185,6 +187,7 @@ Saskatchewan|YPA|Prince Albert
 Manitoba|YWG|Winnipeg
 Manitoba|YBR|Brandon
 Manitoba|YTH|Thompson
+Manitoba|YYQ|Churchill
 Manitoba|YDN|Dauphin
 Manitoba|YPG|Portage la Prairie
 New Brunswick|YFC|Fredericton

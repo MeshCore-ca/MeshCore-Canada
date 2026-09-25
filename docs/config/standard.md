@@ -77,6 +77,24 @@ listings or coverage claims**. The map marks them with dashed gold boundaries.
 | Northwest Territories | `yzf` | [Yellowknife](https://tc.canada.ca/en/aviation/operating-airports-aerodromes/list-airports-owned-transport-canada) |
 | Nunavut | `yfb` | [Iqaluit](https://tc.canada.ca/en/aviation/operating-airports-aerodromes/list-airports-owned-transport-canada) |
 
+In the other provinces, these hubs fill the remaining gaps:
+
+| Province | Planning regions |
+| --- | --- |
+| BC | `ylw` Kelowna, `yxs` Prince George, `yxt` Terrace, `yxc` Cranbrook |
+| AB | `ymm` Fort McMurray, `yqu` Grande Prairie |
+| SK | `yxe` Saskatoon, `yqr` Regina |
+| MB | `ybr` Brandon, `yth` Thompson, `yyq` Churchill |
+| ON | `ysb` Sudbury, `yam` Sault Ste. Marie, `yts` Timmins, `yqk` Kenora |
+| QC | `yvo` Val-d’Or, `yzv` Sept-Îles, `yvp` Kuujjuaq |
+| NB | `yqm` Moncton, `yfc` Fredericton, `ysj` Saint John |
+| NS | `yhz` Halifax, `yqi` Yarmouth |
+
+Unassigned land is divided by distance to these hubs in Canada Lambert projection,
+then clipped to provincial borders and existing MeshMapper zones. These are
+planning boundaries for local review, not measured radio coverage. The map covers
+all 13 provinces and territories without changing a published MeshMapper polygon.
+
 For example, PEI uses `yyg`, `pe`, and `can`; Yukon uses `yxy`, `yt`, and `can`.
 They do not use `onqc`. The [configurator](index.md) generates the commands.
 
@@ -123,10 +141,31 @@ region remove can
 region save
 ```
 
+For a tailored comparison, open **Check an existing region list** in the
+configurator's last step. Paste the complete `region` reply and, on 1.15+,
+optionally the `region default` reply. The checker lists retained, added, changed,
+and removed scopes. It keeps the pasted data in your browser and requires you to
+review removals before copying commands. Remote replies may be truncated; use USB
+and keep a backup. The `^` marker indicates the home region, not the default scope.
+
 Other trees need their own names and order. Stop on `Err - not empty`, inspect
 the remaining children, and remove those first. Run `region` again; only `*`
-should remain before applying a fresh profile. Do not factory-reset a node
+should remain for a full manual replacement. The checker can instead retain
+matching entries and move them out of obsolete parents. Do not factory-reset a node
 just to change its scopes.
+
+### Region contacts and review
+
+Each map result shows its boundary source, local community links, maintainer,
+and settings-review status. A published boundary does not prove local adoption
+or confirm radio settings. Directory contacts are not automatically appointed as
+region maintainers.
+
+Use the region card to volunteer as maintainer, confirm settings with dated public
+evidence, or suggest a boundary refinement. Changes require a reviewed PR.
+MeshMapper changes are checked weekly and collected in a review issue; they are
+never published automatically. Settings confirmations are marked for another
+check after six months.
 
 ### Local repeater
 

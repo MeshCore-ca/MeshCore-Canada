@@ -5,7 +5,7 @@ Active map and scope model
 --------------------------
 
 iata-regions.json and iata-boundaries.geojson are the active catalogue and map.
-They combine published MeshMapper zones with six labelled MeshCore Canada starter
+They combine published MeshMapper zones with labelled MeshCore Canada planning
 regions, using lowercase IATA scope names. The source timestamp and SHA-256 are in the
 catalogue. canada-regions.json is an identical compatibility alias of the
 active IATA catalogue. Refresh using scripts/fetch-meshmapper-regions.mjs,
@@ -38,9 +38,22 @@ data/iata-starter-regions.json and explained in the bilingual scope guide.
 The Newfoundland/Labrador split uses official 2021 census divisions 1010 and
 1011 for Labrador, clipped to the existing province outline; Newfoundland is
 the province remainder. data/iata-labrador-outline.geojson records the pinned
-Statistics Canada CD source archive, licence, and SHA-256. The six starters
+Statistics Canada CD source archive, licence, and SHA-256. The starter regions
 never overlap each other; published MeshMapper geometry is subtracted from
 them. The merged asset records every input hash for reproducibility.
+
+In the other eight provinces, remaining land is divided between the explicit
+community hubs in data/iata-starter-regions.json using a Canada Lambert
+(EPSG:3347) Voronoi partition. Projected edges are sampled every 25 km before
+conversion to longitude/latitude. Source province coastlines and all published
+MeshMapper polygons are retained. These planning areas require local review;
+they do not imply a radio link across their extent or MeshMapper approval.
+
+data/iata-region-profiles.json records consenting public maintainers and local
+settings confirmations separately. Missing records remain unclaimed/unconfirmed.
+Community links use public directory reference points, not radio locations.
+The weekly MeshMapper review workflow prepares an issue and candidate artifact;
+only a reviewed PR can update the shipped map.
 
 The files described below are retained historical source material. The
 public tools no longer use the former census region hierarchy for scopes, and

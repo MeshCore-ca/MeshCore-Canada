@@ -78,6 +78,25 @@ La carte les identifie par des limites dorées en pointillé.
 | Territoires du Nord-Ouest | `yzf` | [Yellowknife](https://tc.canada.ca/fr/aviation/exploitation-aeroports-aerodromes/liste-aeroports-appartenant-transports-canada) |
 | Nunavut | `yfb` | [Iqaluit](https://tc.canada.ca/fr/aviation/exploitation-aeroports-aerodromes/liste-aeroports-appartenant-transports-canada) |
 
+Dans les autres provinces, ces pôles comblent les espaces restants :
+
+| Province | Régions proposées |
+| --- | --- |
+| C.-B. | `ylw` Kelowna, `yxs` Prince George, `yxt` Terrace, `yxc` Cranbrook |
+| Alb. | `ymm` Fort McMurray, `yqu` Grande Prairie |
+| Sask. | `yxe` Saskatoon, `yqr` Regina |
+| Man. | `ybr` Brandon, `yth` Thompson, `yyq` Churchill |
+| Ont. | `ysb` Sudbury, `yam` Sault-Sainte-Marie, `yts` Timmins, `yqk` Kenora |
+| Qc | `yvo` Val-d’Or, `yzv` Sept-Îles, `yvp` Kuujjuaq |
+| N.-B. | `yqm` Moncton, `yfc` Fredericton, `ysj` Saint John |
+| N.-É. | `yhz` Halifax, `yqi` Yarmouth |
+
+Les espaces non attribués sont répartis selon la distance à ces pôles en projection
+Lambert du Canada, puis limités aux frontières provinciales et aux zones existantes
+de MeshMapper. Ce sont des limites proposées à revoir localement, pas des mesures
+de couverture radio. La carte couvre les 13 provinces et territoires sans modifier
+les polygones publiés par MeshMapper.
+
 Par exemple, l’Île-du-Prince-Édouard utilise `yyg`, `pe` et `can`; le Yukon utilise
 `yxy`, `yt` et `can`. Ces régions n’utilisent pas `onqc`.
 Le [configurateur](index.md) fournit les commandes.
@@ -93,6 +112,29 @@ de recensement 10 et 11; Terre-Neuve couvre le reste de la province. Aucun cercl
 autour d’un aéroport ni ancien nom de scope hiérarchique n’est utilisé.
 
 ## Configuration du répéteur
+
+### Contacts et vérification locale
+
+Chaque résultat indique la source des limites, les communautés, le responsable et
+l’état de vérification des réglages. Une limite publiée ne prouve ni l’adoption
+locale ni les réglages radio. Les contacts de l’annuaire ne deviennent pas
+automatiquement responsables de région.
+
+La fiche permet de proposer un responsable, de confirmer les réglages avec une
+preuve publique datée ou de proposer une limite. Ces changements passent par une
+PR. Une vérification hebdomadaire regroupe les changements de MeshMapper dans un
+ticket à examiner; rien n’est publié automatiquement. Les réglages confirmés sont
+à revérifier après six mois.
+
+### Comparer une configuration existante
+
+À la dernière étape du configurateur, ouvrez **Vérifier une liste de régions
+existante**. Collez la réponse complète de `region` et, avec la version 1.15 ou
+plus récente, celle de `region default` si vous le souhaitez. La comparaison
+indique les scopes conservés, ajoutés, modifiés et supprimés. Les données restent
+dans votre navigateur. Vous devez examiner les suppressions avant de copier les
+commandes. Préférez USB et gardez une copie : une réponse à distance peut être
+tronquée. Le symbole `^` marque la région d’origine, pas le scope par défaut.
 
 Utilisez de préférence le micrologiciel **1.16 ou plus récent**. Le configurateur
 prend aussi en charge **1.15** et un mode limité pour **1.14**. Coordonnez le
@@ -129,7 +171,9 @@ region save
 
 Les autres arbres demandent leurs propres noms et leur propre ordre.
 En cas de `Err - not empty`, retirez d’abord les enfants restants.
-Exécutez `region` de nouveau : seul `*` devrait rester avant le nouveau profil.
+Pour un remplacement manuel complet, exécutez `region` de nouveau : seul `*`
+devrait rester. Le comparateur peut plutôt conserver les entrées utiles et les
+déplacer hors des anciens parents.
 Ne réinitialisez pas tout l’appareil pour changer ses portées.
 
 ### Répéteur local

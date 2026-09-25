@@ -109,17 +109,23 @@
     var lines = [];
     result.tags.forEach(function (tag) {
       lines.push("region put " + tag + (result.parentOverrides[tag] ? " " + result.parentOverrides[tag] : ""));
-      if (firmware === "1.14") lines.push("region allowf " + tag);
+      if (firmware === "1.14" || firmware === "1.10") lines.push("region allowf " + tag);
     });
     return lines;
   }
 
   function commands(result, firmware) {
     firmware = firmware || "1.16";
-    if (["1.14", "1.15", "1.16"].indexOf(firmware) === -1) throw new Error("Choose a supported firmware version.");
+    if (["1.10", "1.14", "1.15", "1.16"].indexOf(firmware) === -1) throw new Error("Choose a supported firmware version.");
     var lines = definitionCommands(result, firmware).concat([result.bridge ? "region denyf *" : "region allowf *"]);
-    if (firmware !== "1.14") lines.push("region default " + result.home);
+    if (firmware === "1.15" || firmware === "1.16") lines.push("region default " + result.home);
     return lines;
+  }
+
+  function standardCommands(firmware, includeHash) {
+    if (["1.10", "1.14", "1.15", "1.16"].indexOf(firmware) === -1) throw new Error("Choose a supported firmware version.");
+    var lines = includeHash !== false && firmware !== "1.10" ? ["set path.hash.mode 2"] : [];
+    return lines.concat(["set advert.interval 240", "set flood.advert.interval 47", "set flood.max 16"]);
   }
 
   function pointInRing(point, ring) {
@@ -150,6 +156,6 @@
     return found.length === 1 ? found[0].properties.tag : null;
   }
 
-  return { profile: profile, commands: commands, budget: budget, contains: contains, matches: matches, provinceAt: provinceAt,
+  return { profile: profile, commands: commands, standardCommands: standardCommands, budget: budget, contains: contains, matches: matches, provinceAt: provinceAt,
     maxTags: MAX_REGIONS, maxResponseBytes: MAX_RESPONSE_BYTES, maxCommandBytes: MAX_COMMAND_BYTES };
 }));

@@ -1,0 +1,40 @@
+name: Review MeshMapper changes
+on:
+  schedule:
+    - cron: '23 14 * * 2'
+  workflow_dispatch:
+permissions:
+  contents: read
+  issues: write
+concurrency:
+  group: meshmapper-source-review
+  cancel-in-progress: false
+jobs:
+  check:
+    # Scheduled review never runs code from an unmerged branch.
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.13'
+      - name: Fetch published boundaries
+        run: node scripts/fetch-meshmapper-regions.mjs .tmp/meshmapper-review/candidate.geojson
+      - name: Check candidate geometry
+        run: |
+          python -m pip install shapely==2.0.6
+          python -c "import json; from shapely.geometry import shape, Point; data=json.load(open('.tmp/meshmapper-review/candidate.geojson')); assert all(shape(f['geometry']).is_valid and shape(f['geometry']).covers(Point(*f['properties']['center'])) for f in data['features'])"
+      - name: Prepare or update the review issue
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node scripts/check-meshmapper-changes.mjs .tmp/meshmapper-review/candidate.geojson --publish-issue
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: meshmapper-review
+          path: .tmp/meshmapper-review/
+          retention-days: 30

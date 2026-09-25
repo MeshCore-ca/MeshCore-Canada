@@ -2280,3 +2280,19 @@ ol.mcc-guide-steps > li::before {
     flex: 1 1 12rem;
   }
 }
+[data-scope-migration] textarea,
+[data-scope-migration] input:not([type="checkbox"]) {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  padding: .6rem;
+  margin: .4rem 0 .8rem;
+  border: 1px solid var(--mcc-border);
+  border-radius: .3rem;
+  background: var(--mcc-panel);
+  color: inherit;
+  font: inherit;
+}
+[data-scope-migration] textarea { min-height: 8rem; font-family: monospace; resize: vertical; }
+[data-scope-migration] [hidden] { display: none !important; }
+[data-migration-report] { white-space: pre-wrap; overflow-wrap: anywhere; }

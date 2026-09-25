@@ -3,49 +3,510 @@
   "reviewedAt": "2026-09-25",
   "status": "starter",
   "authority": "MeshCore Canada",
-  "note": "Broad starter regions for areas without published MeshMapper zones. These are local assignments, not MeshMapper-approved boundaries or radio coverage claims.",
+  "note": "Planning regions fill gaps between published MeshMapper zones. Within each province, remaining land is assigned to the nearest listed hub in Canada Lambert projection. Newfoundland and Labrador stay separate. These are proposals for local review, not radio coverage or MeshMapper-approved boundaries.",
   "regions": [
     {
-      "tag": "yyg", "province": "pe", "area": "province",
-      "name": "Prince Edward Island", "nameFr": "Île-du-Prince-Édouard",
-      "hub": "Charlottetown", "center": [-63.1311, 46.2382],
-      "aliases": ["Charlottetown", "PEI", "Île-du-Prince-Édouard", "Summerside", "Montague", "Souris"],
+      "tag": "yyg",
+      "province": "pe",
+      "area": "province",
+      "name": "Prince Edward Island",
+      "nameFr": "Île-du-Prince-Édouard",
+      "hub": "Charlottetown",
+      "center": [
+        -63.1311,
+        46.2382
+      ],
+      "aliases": [
+        "Charlottetown",
+        "PEI",
+        "Île-du-Prince-Édouard",
+        "Summerside",
+        "Montague",
+        "Souris"
+      ],
       "codeSource": "https://flyyyg.com/"
     },
     {
-      "tag": "yyt", "province": "nl", "area": "newfoundland",
-      "name": "Newfoundland", "nameFr": "Terre-Neuve",
-      "hub": "St. John's", "center": [-52.7128, 47.5605],
-      "aliases": ["St. John's", "St Johns", "Saint-Jean", "Terre-Neuve", "Gander", "Corner Brook", "Deer Lake", "Grand Falls-Windsor", "Stephenville", "St. Anthony"],
+      "tag": "yyt",
+      "province": "nl",
+      "area": "newfoundland",
+      "name": "Newfoundland",
+      "nameFr": "Terre-Neuve",
+      "hub": "St. John's",
+      "center": [
+        -52.7128,
+        47.5605
+      ],
+      "aliases": [
+        "St. John's",
+        "St Johns",
+        "Terre-Neuve",
+        "Gander",
+        "Corner Brook",
+        "Deer Lake",
+        "Grand Falls-Windsor",
+        "Stephenville",
+        "St. Anthony"
+      ],
       "codeSource": "https://stjohnsairport.com/"
     },
     {
-      "tag": "yyr", "province": "nl", "area": "labrador",
-      "name": "Labrador", "nameFr": "Labrador",
-      "hub": "Happy Valley–Goose Bay", "center": [-60.326, 53.303],
-      "aliases": ["Happy Valley-Goose Bay", "Happy Valley–Goose Bay", "Goose Bay", "Labrador City", "Wabush", "Nain", "Hopedale", "L'Anse-au-Clair"],
+      "tag": "yyr",
+      "province": "nl",
+      "area": "labrador",
+      "name": "Labrador",
+      "nameFr": "Labrador",
+      "hub": "Happy Valley–Goose Bay",
+      "center": [
+        -60.326,
+        53.303
+      ],
+      "aliases": [
+        "Happy Valley-Goose Bay",
+        "Happy Valley–Goose Bay",
+        "Goose Bay",
+        "Labrador City",
+        "Wabush",
+        "Nain",
+        "Hopedale",
+        "L'Anse-au-Clair"
+      ],
       "codeSource": "https://goosebayairport.com/"
     },
     {
-      "tag": "yxy", "province": "yt", "area": "province",
-      "name": "Yukon", "nameFr": "Yukon",
-      "hub": "Whitehorse", "center": [-135.0568, 60.7212],
-      "aliases": ["Whitehorse", "Dawson City", "Watson Lake", "Haines Junction", "Old Crow"],
+      "tag": "yxy",
+      "province": "yt",
+      "area": "province",
+      "name": "Yukon",
+      "nameFr": "Yukon",
+      "hub": "Whitehorse",
+      "center": [
+        -135.0568,
+        60.7212
+      ],
+      "aliases": [
+        "Whitehorse",
+        "Dawson City",
+        "Watson Lake",
+        "Haines Junction",
+        "Old Crow"
+      ],
       "codeSource": "https://yukonairports.ca/contact-information"
     },
     {
-      "tag": "yzf", "province": "nt", "area": "province",
-      "name": "Northwest Territories", "nameFr": "Territoires du Nord-Ouest",
-      "hub": "Yellowknife", "center": [-114.3774, 62.454],
-      "aliases": ["Yellowknife", "NWT", "Territoires du Nord-Ouest", "Inuvik", "Hay River", "Fort Smith", "Fort Simpson", "Norman Wells", "Tuktoyaktuk"],
+      "tag": "yzf",
+      "province": "nt",
+      "area": "province",
+      "name": "Northwest Territories",
+      "nameFr": "Territoires du Nord-Ouest",
+      "hub": "Yellowknife",
+      "center": [
+        -114.3774,
+        62.454
+      ],
+      "aliases": [
+        "Yellowknife",
+        "NWT",
+        "Territoires du Nord-Ouest",
+        "Inuvik",
+        "Hay River",
+        "Fort Smith",
+        "Fort Simpson",
+        "Norman Wells",
+        "Tuktoyaktuk"
+      ],
       "codeSource": "https://tc.canada.ca/en/aviation/operating-airports-aerodromes/list-airports-owned-transport-canada"
     },
     {
-      "tag": "yfb", "province": "nu", "area": "province",
-      "name": "Nunavut", "nameFr": "Nunavut",
-      "hub": "Iqaluit", "center": [-68.517, 63.7467],
-      "aliases": ["Iqaluit", "Rankin Inlet", "Cambridge Bay", "Kugluktuk", "Arviat", "Pond Inlet", "Resolute", "Grise Fiord"],
+      "tag": "yfb",
+      "province": "nu",
+      "area": "province",
+      "name": "Nunavut",
+      "nameFr": "Nunavut",
+      "hub": "Iqaluit",
+      "center": [
+        -68.517,
+        63.7467
+      ],
+      "aliases": [
+        "Iqaluit",
+        "Rankin Inlet",
+        "Cambridge Bay",
+        "Kugluktuk",
+        "Arviat",
+        "Pond Inlet",
+        "Resolute",
+        "Grise Fiord"
+      ],
       "codeSource": "https://tc.canada.ca/en/aviation/operating-airports-aerodromes/list-airports-owned-transport-canada"
+    },
+    {
+      "tag": "ylw",
+      "province": "bc",
+      "area": "hub",
+      "name": "Kelowna",
+      "nameFr": "Kelowna",
+      "hub": "Kelowna",
+      "center": [
+        -119.496,
+        49.888
+      ],
+      "aliases": [
+        "Kelowna"
+      ],
+      "codeSource": "https://ylw.kelowna.ca/"
+    },
+    {
+      "tag": "yxs",
+      "province": "bc",
+      "area": "hub",
+      "name": "Prince George",
+      "nameFr": "Prince George",
+      "hub": "Prince George",
+      "center": [
+        -122.7497,
+        53.9171
+      ],
+      "aliases": [
+        "Prince George"
+      ],
+      "codeSource": "https://www.pgairport.ca/"
+    },
+    {
+      "tag": "yxt",
+      "province": "bc",
+      "area": "hub",
+      "name": "Terrace",
+      "nameFr": "Terrace",
+      "hub": "Terrace",
+      "center": [
+        -128.603,
+        54.518
+      ],
+      "aliases": [
+        "Terrace"
+      ],
+      "codeSource": "https://yxt.ca/"
+    },
+    {
+      "tag": "yxc",
+      "province": "bc",
+      "area": "hub",
+      "name": "Cranbrook",
+      "nameFr": "Cranbrook",
+      "hub": "Cranbrook",
+      "center": [
+        -115.769,
+        49.509
+      ],
+      "aliases": [
+        "Cranbrook"
+      ],
+      "codeSource": "https://flyyxc.com/"
+    },
+    {
+      "tag": "ymm",
+      "province": "ab",
+      "area": "hub",
+      "name": "Fort McMurray",
+      "nameFr": "Fort McMurray",
+      "hub": "Fort McMurray",
+      "center": [
+        -111.381,
+        56.727
+      ],
+      "aliases": [
+        "Fort McMurray"
+      ],
+      "codeSource": "https://flyymm.com/"
+    },
+    {
+      "tag": "yqu",
+      "province": "ab",
+      "area": "hub",
+      "name": "Grande Prairie",
+      "nameFr": "Grande Prairie",
+      "hub": "Grande Prairie",
+      "center": [
+        -118.795,
+        55.171
+      ],
+      "aliases": [
+        "Grande Prairie"
+      ],
+      "codeSource": "https://grandeprairieairport.com/"
+    },
+    {
+      "tag": "yxe",
+      "province": "sk",
+      "area": "hub",
+      "name": "Saskatoon",
+      "nameFr": "Saskatoon",
+      "hub": "Saskatoon",
+      "center": [
+        -106.67,
+        52.134
+      ],
+      "aliases": [
+        "Saskatoon"
+      ],
+      "codeSource": "https://skyxe.ca/"
+    },
+    {
+      "tag": "yqr",
+      "province": "sk",
+      "area": "hub",
+      "name": "Regina",
+      "nameFr": "Regina",
+      "hub": "Regina",
+      "center": [
+        -104.618,
+        50.445
+      ],
+      "aliases": [
+        "Regina"
+      ],
+      "codeSource": "https://www.yqr.ca/"
+    },
+    {
+      "tag": "ybr",
+      "province": "mb",
+      "area": "hub",
+      "name": "Brandon",
+      "nameFr": "Brandon",
+      "hub": "Brandon",
+      "center": [
+        -99.95,
+        49.848
+      ],
+      "aliases": [
+        "Brandon"
+      ],
+      "codeSource": "https://www.brandon.ca/airport"
+    },
+    {
+      "tag": "yth",
+      "province": "mb",
+      "area": "hub",
+      "name": "Thompson",
+      "nameFr": "Thompson",
+      "hub": "Thompson",
+      "center": [
+        -97.855,
+        55.744
+      ],
+      "aliases": [
+        "Thompson"
+      ],
+      "codeSource": "https://fly-yth.ca/"
+    },
+    {
+      "tag": "yyq",
+      "province": "mb",
+      "area": "hub",
+      "name": "Churchill",
+      "nameFr": "Churchill",
+      "hub": "Churchill",
+      "center": [
+        -94.164,
+        58.769
+      ],
+      "aliases": [
+        "Churchill"
+      ],
+      "codeSource": "https://tc.canada.ca/en/aviation/operating-airports-aerodromes/list-airports-owned-transport-canada"
+    },
+    {
+      "tag": "ysb",
+      "province": "on",
+      "area": "hub",
+      "name": "Sudbury",
+      "nameFr": "Sudbury",
+      "hub": "Sudbury",
+      "center": [
+        -80.993,
+        46.492
+      ],
+      "aliases": [
+        "Sudbury"
+      ],
+      "codeSource": "https://www.flysudbury.ca/"
+    },
+    {
+      "tag": "yam",
+      "province": "on",
+      "area": "hub",
+      "name": "Sault Ste. Marie",
+      "nameFr": "Sault Ste. Marie",
+      "hub": "Sault Ste. Marie",
+      "center": [
+        -84.346,
+        46.522
+      ],
+      "aliases": [
+        "Sault Ste. Marie"
+      ],
+      "codeSource": "https://saultairport.com/"
+    },
+    {
+      "tag": "yts",
+      "province": "on",
+      "area": "hub",
+      "name": "Timmins",
+      "nameFr": "Timmins",
+      "hub": "Timmins",
+      "center": [
+        -81.33,
+        48.475
+      ],
+      "aliases": [
+        "Timmins"
+      ],
+      "codeSource": "https://www.timminsairport.com/"
+    },
+    {
+      "tag": "yqk",
+      "province": "on",
+      "area": "hub",
+      "name": "Kenora",
+      "nameFr": "Kenora",
+      "hub": "Kenora",
+      "center": [
+        -94.489,
+        49.767
+      ],
+      "aliases": [
+        "Kenora"
+      ],
+      "codeSource": "https://www.kenoraairport.ca/"
+    },
+    {
+      "tag": "yvo",
+      "province": "qc",
+      "area": "hub",
+      "name": "Val-d’Or",
+      "nameFr": "Val-d’Or",
+      "hub": "Val-d’Or",
+      "center": [
+        -77.793,
+        48.099
+      ],
+      "aliases": [
+        "Val-d’Or"
+      ],
+      "codeSource": "https://aeroportvaldor.com/"
+    },
+    {
+      "tag": "yzv",
+      "province": "qc",
+      "area": "hub",
+      "name": "Sept-Îles",
+      "nameFr": "Sept-Îles",
+      "hub": "Sept-Îles",
+      "center": [
+        -66.382,
+        50.216
+      ],
+      "aliases": [
+        "Sept-Îles"
+      ],
+      "codeSource": "https://tc.canada.ca/en/aviation/operating-airports-aerodromes/list-airports-owned-transport-canada"
+    },
+    {
+      "tag": "yvp",
+      "province": "qc",
+      "area": "hub",
+      "name": "Kuujjuaq",
+      "nameFr": "Kuujjuaq",
+      "hub": "Kuujjuaq",
+      "center": [
+        -68.404,
+        58.101
+      ],
+      "aliases": [
+        "Kuujjuaq"
+      ],
+      "codeSource": "https://tc.canada.ca/en/aviation/operating-airports-aerodromes/list-airports-owned-transport-canada"
+    },
+    {
+      "tag": "yqm",
+      "province": "nb",
+      "area": "hub",
+      "name": "Moncton",
+      "nameFr": "Moncton",
+      "hub": "Moncton",
+      "center": [
+        -64.778,
+        46.088
+      ],
+      "aliases": [
+        "Moncton"
+      ],
+      "codeSource": "https://cyqm.ca/"
+    },
+    {
+      "tag": "yfc",
+      "province": "nb",
+      "area": "hub",
+      "name": "Fredericton",
+      "nameFr": "Fredericton",
+      "hub": "Fredericton",
+      "center": [
+        -66.643,
+        45.964
+      ],
+      "aliases": [
+        "Fredericton"
+      ],
+      "codeSource": "https://yfcfredericton.ca/"
+    },
+    {
+      "tag": "ysj",
+      "province": "nb",
+      "area": "hub",
+      "name": "Saint John",
+      "nameFr": "Saint John",
+      "hub": "Saint John",
+      "center": [
+        -66.063,
+        45.273
+      ],
+      "aliases": [
+        "Saint John"
+      ],
+      "codeSource": "https://ysjsaintjohn.ca/"
+    },
+    {
+      "tag": "yhz",
+      "province": "ns",
+      "area": "hub",
+      "name": "Halifax",
+      "nameFr": "Halifax",
+      "hub": "Halifax",
+      "center": [
+        -63.575,
+        44.648
+      ],
+      "aliases": [
+        "Halifax"
+      ],
+      "codeSource": "https://halifaxstanfield.ca/"
+    },
+    {
+      "tag": "yqi",
+      "province": "ns",
+      "area": "hub",
+      "name": "Yarmouth",
+      "nameFr": "Yarmouth",
+      "hub": "Yarmouth",
+      "center": [
+        -66.118,
+        43.837
+      ],
+      "aliases": [
+        "Yarmouth"
+      ],
+      "codeSource": "https://www.yarmouthairport.ca/"
     }
   ]
 }

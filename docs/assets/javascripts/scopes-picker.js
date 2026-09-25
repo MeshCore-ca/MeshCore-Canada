@@ -2,6 +2,9 @@
 // ("Your repeater") drives the standard settings and region commands, and
 // every command card gets a working copy button.
 (function () {
+  var catalogUrl = new URL("../regions/iata-regions.json", document.currentScript.src);
+  var catalog;
+  var scopeEngine = window.MeshCoreIataScopes;
   var root = document.documentElement;
   var picker = document.querySelector("[data-scp-picker]");
   var copyLabel = (picker && picker.getAttribute("data-copy-label")) || "Copy";
@@ -57,26 +60,18 @@
   var extraField = picker.querySelector("[data-scp-extra-field]");
 
   function standardCommands(version) {
-    var commands = [];
-    if (version !== "110") commands.push("set path.hash.mode 2");
-    return commands.concat(["set advert.interval 240", "set flood.advert.interval 47", "set flood.max 16"]);
+    return scopeEngine.standardCommands(firmwareId(version));
+  }
+
+  function firmwareId(version) {
+    return { "110": "1.10", "114": "1.14", "115": "1.15", "116": "1.16" }[version];
   }
 
   function regionCommands(version, city, province, neighbour, edge) {
-    var codes = [city].concat(neighbour ? [neighbour] : [], [province, "onqc", "can"]);
-    var commands = [];
-    if (version === "116") {
-      commands.push("region def " + codes.join("|* "));
-    } else {
-      codes.forEach(function (code) {
-        commands.push("region put " + code);
-        if (version === "114" || version === "110") commands.push("region allowf " + code);
-      });
-    }
-    commands.push(edge ? "region denyf *" : "region allowf *");
-    if (version === "116" || version === "115") commands.push("region default " + city);
-    commands.push("region save");
-    return commands;
+    var profile = scopeEngine.profile(catalog, {
+      home: city, province: province, bridge: edge, cities: neighbour ? [neighbour] : []
+    });
+    return scopeEngine.commands(profile, firmwareId(version)).concat(["region save"]);
   }
 
   function render(list, commands) {
@@ -145,9 +140,17 @@
   [area, firmware, type, extra].forEach(function (select) {
     select.addEventListener("change", update);
   });
-  picker.hidden = false;
-  document.querySelectorAll("[data-scp-nojs]").forEach(function (note) {
-    note.hidden = true;
+  fetch(catalogUrl, { cache: "no-cache" }).then(function (response) {
+    if (!response.ok) throw new Error("Region catalogue unavailable");
+    return response.json();
+  }).then(function (data) {
+    if (!scopeEngine || data.schema !== "meshcore-canada-iata-scopes/v1") throw new Error("Region catalogue unavailable");
+    catalog = data;
+    update();
+    picker.hidden = false;
+    document.querySelectorAll("[data-scp-nojs]").forEach(function (note) { note.hidden = true; });
+  }).catch(function () {
+    // Keep the static examples available if the shared catalogue cannot load.
+    root.classList.remove("scp-js");
   });
-  update();
 })();

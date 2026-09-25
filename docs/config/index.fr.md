@@ -14,12 +14,14 @@ tested_with:
 difficulty: intermediate
 estimated_time: 5-10 minutes
 page_styles:
-  - assets/regions/regions.css?v=20260925-1
+  - assets/regions/regions.css?v=20260925-2
 page_scripts:
+  - assets/javascripts/place-search.js?v=20260925-2
   - assets/javascripts/radio-profiles.js?v=20260904-1
   - assets/regions/modules/configurator-support.js?v=20260925-1
-  - assets/regions/modules/iata-scopes.js?v=20260925-1
-  - assets/regions/regions.js?v=20260925-1
+  - assets/regions/modules/iata-scopes.js?v=20260925-2
+  - assets/regions/modules/scope-migration.js?v=20260925-2
+  - assets/regions/regions.js?v=20260925-2
 hide:
   - navigation
   - toc

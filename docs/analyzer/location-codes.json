@@ -4,6 +4,9 @@
   "last_reviewed": "2026-09-24",
   "scope": "Curated Canadian quick list; not a complete official airport-code registry.",
   "locations": [
+    {"code": "YYQ", "name": "Churchill", "province": "Manitoba", "province_code": "MB"},
+    {"code": "YQK", "name": "Kenora", "province": "Ontario", "province_code": "ON"},
+    {"code": "YVP", "name": "Kuujjuaq", "province": "Quebec", "province_code": "QC"},
     {"code": "XCM", "name": "Chatham-Kent", "province": "Ontario", "province_code": "ON"},
     {"code": "XPH", "name": "Port Hope", "province": "Ontario", "province_code": "ON"},
     {"code": "YBL", "name": "Campbell River", "province": "British Columbia", "province_code": "BC"},

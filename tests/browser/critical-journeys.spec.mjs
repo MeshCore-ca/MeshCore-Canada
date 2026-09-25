@@ -187,19 +187,12 @@ test("hardware landing links directly to the restored 1 W build", async ({ page 
 });
 
 test("config place deep links resolve an online city search", async ({ page }) => {
-  await page.route("https://nominatim.openstreetmap.org/search?**", async (route) => {
+  await page.route("https://geolocator.api.geo.ca/**", async (route) => {
     await route.fulfill({
       contentType: "application/json",
       body: JSON.stringify([{
         lat: "43.5448",
-        lon: "-80.2482",
-        display_name: "Guelph, Ontario, Canada",
-        address: {
-          city: "Guelph",
-          state: "Ontario",
-          country: "Canada",
-          country_code: "ca"
-        }
+        lng: "-80.2482", name: "Guelph", province: "Ontario", category: "City", key: "geonames"
       }])
     });
   });
@@ -209,15 +202,15 @@ test("config place deep links resolve an online city search", async ({ page }) =
   await expect(page.locator("[data-role='status']")).toContainText("Region found.");
 });
 
-test("known config place deep links resolve locally without an external request", async ({ page }) => {
+test("exact IATA code deep links resolve locally without an external request", async ({ page }) => {
   const onlineRequests = [];
-  await page.route(/https:\/\/(?:nominatim\.openstreetmap\.org|geocoder\.ca)\//, async (route) => {
+  await page.route(/https:\/\/(?:nominatim\.openstreetmap\.org|geocoder\.ca|geolocator\.api\.geo\.ca)\//, async (route) => {
     onlineRequests.push(route.request().url());
     await route.abort();
   });
 
-  await page.goto(siteRoute("/config/?place=Ottawa"), { waitUntil: "domcontentloaded" });
-  await expect(page.locator("#mcc-location-input")).toHaveValue("Ottawa");
+  await page.goto(siteRoute("/config/?place=YOW"), { waitUntil: "domcontentloaded" });
+  await expect(page.locator("#mcc-location-input")).toHaveValue("YOW");
   await expect(page.locator("[data-action='online-search-consent']")).toHaveCount(0);
   await expect(page.locator("#__search")).not.toBeChecked();
   await expect(page.locator("[data-mcc-regions='config']")).toBeVisible();
@@ -225,7 +218,7 @@ test("known config place deep links resolve locally without an external request"
 
   expect(onlineRequests).toEqual([]);
   const url = new URL(page.url());
-  expect(url.searchParams.get("place")).toBe("Ottawa");
+  expect(url.searchParams.get("place")).toBe("YOW");
   expect(url.searchParams.has("lookup")).toBeFalsy();
   expect(url.searchParams.has("q")).toBeFalsy();
 });

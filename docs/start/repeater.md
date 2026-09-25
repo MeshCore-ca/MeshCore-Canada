@@ -21,7 +21,7 @@ requires:
 page_styles:
   - assets/styles/repeater-hash-check.css?v=20260820-1
 page_scripts:
-  - assets/javascripts/repeater-hash-check.js?v=20260904-1
+  - assets/javascripts/repeater-hash-check.js?v=20260925-2
 ---
 
 # Start with a repeater

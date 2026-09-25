@@ -167,18 +167,18 @@ test("map retry restores the selected marker after a tile failure", async ({ pag
   await expect(page.locator('[data-role="map-text-result"]')).toContainText("Ottawa");
 });
 
-test("Québec city aliases use MeshMapper locally and ambiguous aliases offer choices", async ({ page }) => {
+test("Québec city uses its actual coordinates and ambiguous legacy region codes offer choices", async ({ page }) => {
   let lookedUp = false;
-  await page.route("https://nominatim.openstreetmap.org/**", async (route) => {
+  await page.route("https://geolocator.api.geo.ca/**", async (route) => {
     lookedUp = true;
-    await route.fulfill({ json: [{ lat: "46.8139", lon: "-71.2080", display_name: "Québec, Québec, Canada", address: { country_code: "ca", state: "Quebec" } }] });
+    await route.fulfill({ json: [{ lat: "46.8139", lng: "-71.2080", name: "Québec", province: "Québec", key: "geonames", category: "Ville" }] });
   });
   await page.goto(siteRoute("/fr/config/map/"));
   const input = page.locator('[data-role="map-input"]');
   await input.fill("Québec");
   await page.locator('[data-action="map-locate"]').click();
   await expect(page.locator('[data-role="map-text-result"]')).toContainText("Québec");
-  expect(lookedUp).toBeFalsy();
+  expect(lookedUp).toBeTruthy();
   await input.fill("capnat");
   await page.locator('[data-action="map-locate"]').click();
   const choices = page.locator('[data-role="map-status"] button');

@@ -63,7 +63,7 @@ test("overlapping published zones need an explicit choice and gaps never use a n
   assert.equal(ambiguous.primary, null);
   assert.equal(ambiguous.matches.length, 2);
   assert.equal(api.resolveLocation(data, 45.4215, -75.6972, "yow").primary.seed.tag, "yow");
-  assert.equal(api.resolveLocation(data, 50.5, -103).hasMatch, false);
+  assert.equal(api.resolveLocation(data, 40.7, -74).hasMatch, false);
 });
 
 test("old links migrate only unique aliases and retain exact saved locations for a fresh lookup", () => {
@@ -79,12 +79,12 @@ test("old links migrate only unique aliases and retain exact saved locations for
   assert.equal(api.initialLocation(data, new URLSearchParams("tag=missing&lat=&lon=-71")), null);
 });
 
-test("shared-zone place labels never invent an Ontario location for Gatineau", () => {
+test("town names never use a zone seed as their actual location", () => {
   const { api, data } = internals();
   const hit = api.localGeocode(data, "Gatineau");
-  assert.equal(hit.tag, "yow");
-  assert.equal(hit.province, null);
-  assert.doesNotMatch(hit.name, /Ontario/);
+  assert.equal(hit, null);
+  assert.equal(api.localGeocode(data, "Saint-Jean"), null);
+  assert.equal(api.localGeocode(data, "YOW").tag, "yow");
 });
 
 test("neighbouring network paths remain explicit and do not become Canadian geometry", () => {

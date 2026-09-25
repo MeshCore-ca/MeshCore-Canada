@@ -19,12 +19,14 @@
   );
 
   var FRENCH_RUNTIME_TEXT = {
+    "Choose the place you mean:": "Choisissez le lieu recherché :",
+    "Place lookup failed": "La recherche de lieux a échoué",
     "MeshCore Canada starter region": "Région initiale de MeshCore Canada",
     "Starter regions": "Régions initiales",
     "Starter region details": "Détails des régions initiales",
     "This broad starter region is assigned by MeshCore Canada, not yet published by MeshMapper. Confirm its use with local operators; it does not promise radio coverage.": "Cette grande région initiale est attribuée par MeshCore Canada; elle n’est pas encore publiée dans MeshMapper. Confirmez son utilisation avec les opérateurs locaux; elle ne garantit pas la couverture radio.",
-    "Published MeshMapper zones are unchanged. Labelled starter regions fill PEI, Newfoundland and Labrador, and the three territories.": "Les zones publiées par MeshMapper restent inchangées. Des régions initiales identifiées couvrent l’Île-du-Prince-Édouard, Terre-Neuve-et-Labrador et les trois territoires.",
-    "Starter boundaries follow province and territory outlines; Newfoundland and Labrador are separate. Published MeshMapper zones take priority.": "Les limites initiales suivent les contours provinciaux et territoriaux; Terre-Neuve et le Labrador sont séparés. Les zones publiées par MeshMapper ont priorité.",
+    "Published MeshMapper zones are unchanged. Labelled planning regions fill the remaining gaps across Canada.": "Les zones publiées par MeshMapper restent inchangées. Des régions proposées identifiées comblent les espaces restants partout au Canada.",
+    "Planning regions follow provincial borders and nearby hubs. Newfoundland and Labrador are separate. Published MeshMapper zones take priority.": "Les régions proposées suivent les frontières provinciales et les pôles voisins. Terre-Neuve et le Labrador sont séparés. Les zones publiées par MeshMapper ont priorité.",
     "IATA boundaries SHA-256": "SHA-256 des limites IATA",
     "Download IATA boundaries": "Télécharger les limites IATA",
     "Other IATA regions": "Autres régions IATA",
@@ -1296,7 +1298,7 @@
     if (["1.14", "1.15", "1.16"].indexOf(settings.firmware) === -1) throw new Error("Choose a supported firmware version.");
     var lines = radioProfiles ? radioProfiles.commands(settings.radioProfile, settings.hashMode) : [];
     if (settings.standardDefaults && recommendation.companionDefault === "onqc") {
-      lines.push("set advert.interval 240", "set flood.advert.interval 47", "set flood.max 16");
+      lines = lines.concat(iataScopes.standardCommands(settings.firmware, false));
     }
     return lines.concat(iataScopes.commands(recommendation, settings.firmware));
   }
@@ -1397,6 +1399,10 @@
   function localGeocode(data, query) {
     var needle = normalizeLocationSearch(query);
     if (needle.length < 2) return null;
+    // Only codes identify a region. Town aliases must resolve their own location,
+    // not the seed of a large zone (for example Gatineau, QC versus Ottawa, ON).
+    if (!data.seeds.some(function (seed) { return seed.tag === needle; }) &&
+        !Object.prototype.hasOwnProperty.call(data.legacyAliases || {}, needle)) return null;
     var matches = (data.seeds || []).filter(function (seed) {
       return seed.resolve !== false;
     }).map(function (seed) {
@@ -1443,21 +1449,6 @@
       source: "region",
       exactLocalMatch: best.score <= 1
     };
-  }
-
-  function geocoderCaSearch(query, signal) {
-    return fetchWithTimeout(
-      "https://geocoder.ca/?locate=" + encodeURIComponent(query) + "&json=1",
-      { signal: signal },
-      REQUEST_TIMEOUT_MS
-    )
-      .then(function (res) {
-        if (!res.ok) throw new Error("Geocoding service error");
-        return res.json();
-      })
-      .then(function (body) {
-        return parseGeocoderCaHit(body, query);
-      });
   }
 
   function nominatimSearch(params, signal) {
@@ -1509,7 +1500,7 @@
       var button = document.createElement("button");
       button.type = "button";
       button.className = "mcc-button mcc-button-secondary";
-      button.textContent = geo.name + " (" + geo.tag + ")";
+      button.textContent = geo.name + (geo.tag ? " (" + geo.tag.toUpperCase() + ")" : "");
       button.addEventListener("click", function () { choose(geo); });
       target.appendChild(button);
     });
@@ -1524,21 +1515,22 @@
     }
     if (localMatch && localMatch.exactLocalMatch) return Promise.resolve(localMatch);
     var postal = parseCanadianPostalCode(query);
-    var primaryLookup = postal
-      ? geocodeCanadianPostal(postal, signal)
-      : nominatimSearch({ q: query, countrycodes: "ca" }, signal).then(function (hit) {
-        if (hit) return hit;
-        return nominatimSearch({ q: query }, signal);
+    if (postal) return geocodeCanadianPostal(postal, signal);
+    var places = window.MeshCorePlaceSearch;
+    var params = new URLSearchParams({ q: places.splitPlaceQuery(query).name, lang: frenchRuntime ? "fr" : "en", keys: "geonames" });
+    return fetchWithTimeout("https://geolocator.api.geo.ca/?" + params, { signal: signal, credentials: "omit" }, REQUEST_TIMEOUT_MS)
+      .then(function (res) { if (!res.ok) throw new Error("Place lookup failed"); return res.json(); })
+      .then(function (rows) {
+        var choices = places.placeCandidates(rows, query).map(function (place) {
+          return { lat: place.lat, lon: place.lon, name: place.name + ", " + place.province,
+            countryCode: "ca", province: places.provinceCode(place.province).toLowerCase() };
+        });
+        if (choices.length === 1) return choices[0];
+        if (!choices.length) throw new Error("Online place lookup is unavailable. Enter coordinates or browse the region list.");
+        var error = new Error("Choose the place you mean:");
+        error.choices = choices;
+        throw error;
       });
-
-    return primaryLookup.catch(function () {
-      if (signal && signal.aborted) throw new DOMException("Request cancelled", "AbortError");
-      return geocoderCaSearch(postal ? postal.formatted : query, signal).catch(function () { return null; });
-    }).then(function (hit) {
-      if (hit) return hit;
-      if (localMatch) return localMatch;
-      throw new Error("Online place lookup is unavailable. Enter coordinates or browse the region list.");
-    });
   }
 
   function isCanada(geo) {
@@ -1845,6 +1837,8 @@
       '<p class="mcc-note">' + esc(radioProfiles ? radioProfiles.label(state.radioProfile) : "Keep current settings") +
       (state.radioProfile !== "keep" ? ' — <span>Radio changes take effect after reboot.</span>' : '') + '</p>' +
       technicalDetails +
+      (window.MeshCoreRegionProfile ? window.MeshCoreRegionProfile.render(data, titleTag, state.jurisdictionTag, new URL("../", regionPageHref("config"))) : '') +
+      '<div data-scope-migration></div>' +
       resultBody +
       '<section class="mcc-record-actions" aria-labelledby="mcc-record-heading">' +
       '<div><h4 id="mcc-record-heading">Setup summary</h4><p>Download or print a summary without exact coordinates, credentials, or device identifiers.</p></div>' +
@@ -1854,6 +1848,7 @@
       (statusNotes ? '<div class="mcc-notes">' + statusNotes + "</div>" : "") +
       "</div>";
 
+    if (window.MeshCoreScopeMigration) window.MeshCoreScopeMigration.mount(target.querySelector("[data-scope-migration]"), rec, firmware, copyText);
     var copy = target.querySelector(".mcc-copy-all");
     if (copy) {
       copy.addEventListener("click", function () {
@@ -2876,8 +2871,8 @@
           '<p><a href="https://meshmapper.net/" target="_blank" rel="noopener noreferrer">Open MeshMapper</a></p></section>' +
           '<section class="mcc-card"><h3>Flat scopes</h3><p>City, province, mesh scope where defined, and can. Each scope is independent.</p>' +
           '<p>onqc is for Ontario and Québec. can is carried for future use, not a companion default.</p></section>' +
-          '<section class="mcc-card"><h3>Map limits</h3><p>Published MeshMapper zones are unchanged. Labelled starter regions fill PEI, Newfoundland and Labrador, and the three territories.</p>' +
-          '<p>Starter boundaries follow province and territory outlines; Newfoundland and Labrador are separate. Published MeshMapper zones take priority.</p></section>' +
+          '<section class="mcc-card"><h3>Map limits</h3><p>Published MeshMapper zones are unchanged. Labelled planning regions fill the remaining gaps across Canada.</p>' +
+          '<p>Planning regions follow provincial borders and nearby hubs. Newfoundland and Labrador are separate. Published MeshMapper zones take priority.</p></section>' +
           '</div>' +
           '<section class="mcc-card mcc-audit-artifacts"><h3>Source files</h3>' +
           '<dl class="mcc-hash-list"><div><dt>IATA boundaries SHA-256</dt><dd><code>' + esc(data.source.boundarySha256) + '</code></dd></div></dl>' +
@@ -2964,7 +2959,7 @@
         return aliases.findIndex(function (item) { return normalizeLocationSearch(item) === normalizeLocationSearch(alias); }) === index;
       });
       var communityUrl = new URL("../provinces/", regionPageHref("config"));
-      communityUrl.searchParams.set("community", labelFor(data, state.jurisdictionTag || provinceTagFor(data, tag)));
+      communityUrl.searchParams.set("region", tag);
       els.resultSection.hidden = false;
       els.textResult.innerHTML =
         '<p class="mcc-deterministic-result"><strong>' + esc(state.name) + '</strong> resolves to <strong>' +
@@ -2973,6 +2968,7 @@
         (state.resolution.sourceTier === "meshcore-canada"
           ? '<p class="mcc-note mcc-note-warning"><strong>MeshCore Canada starter region</strong><br>This broad starter region is assigned by MeshCore Canada, not yet published by MeshMapper. Confirm its use with local operators; it does not promise radio coverage.</p><p><a href="' + esc(sourceUrlFor(data, tag)) + '">Starter region details</a></p>'
           : '<p>These are published MeshMapper zones, not radio coverage or scope-enforcement boundaries.</p><p><a href="' + esc(seedForTag(data, tag).sourceUrl) + '" target="_blank" rel="noopener noreferrer">Open this zone in MeshMapper</a></p>') +
+        (window.MeshCoreRegionProfile ? window.MeshCoreRegionProfile.render(data, tag, state.jurisdictionTag, new URL("../", regionPageHref("config"))) : '') +
         '<p><a href="' + esc(communityUrl.href) + '">Find a community</a></p>' +
         '<details><summary>Region details</summary><dl class="mcc-review-list"><div><dt>Province or territory</dt><dd>' + esc(state.jurisdictionTag ? labelFor(data, state.jurisdictionTag) : "Choose the repeater province in the configurator") + '</dd></div>' +
         '<div><dt>Status</dt><dd>' + esc(statusLabel(statusFor(data, tag).state || "draft")) + '</dd></div>' +

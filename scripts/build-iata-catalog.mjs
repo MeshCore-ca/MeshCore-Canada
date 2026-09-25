@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { readFileSync, writeFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
+import "../docs/assets/regions/modules/iata-scopes.js";
 
 const root = new URL("../", import.meta.url);
 const load = path => JSON.parse(readFileSync(new URL(path, root), "utf8"));
@@ -11,8 +12,42 @@ const published = load("docs/assets/regions/meshmapper-iata-boundaries.geojson")
 const zones = load("docs/assets/regions/iata-boundaries.geojson");
 const starters = load("data/iata-starter-regions.json");
 const legacy = load("maintenance/legacy-regions/canada-regions.json");
+const profileRecords = load("data/iata-region-profiles.json");
+const communities = load("data/communities.json");
+const communityFr = load("data/communities.fr.json").communities;
+const anchors = load("data/community-search-anchors.json").communities;
 assert.equal(policy.scopeModel, "flat");
 const tags = zones.features.map(feature => feature.properties.tag);
+assert.equal(profileRecords.schema, "meshcore-canada-iata-profiles/v1");
+assert.ok(Object.keys(profileRecords.regions).every(tag => tags.includes(tag)), "Profile references unknown region");
+const profiles = Object.fromEntries(zones.features.map(feature => {
+  const tag = feature.properties.tag;
+  const record = profileRecords.regions[tag] || {};
+  assert.ok(Object.keys(record).every(key => ["maintainer", "settingsReview"].includes(key)), `Unknown profile field: ${tag}`);
+  const maintainer = record.maintainer || null;
+  const safeUrl = value => { try { const url = new URL(value); return url.protocol === "https:" && !url.username && !url.password; } catch { return false; } };
+  if (maintainer) {
+    assert.ok(typeof maintainer.name === "string" && maintainer.name.length <= 100 && maintainer.name.trim());
+    assert.ok(safeUrl(maintainer.contact) && safeUrl(maintainer.evidence), "Maintainer needs public contact and consent evidence");
+  }
+  const settingsReview = record.settingsReview || { status: "unconfirmed", checkedAt: null, evidence: null };
+  assert.ok(["unconfirmed", "confirmed"].includes(settingsReview.status));
+  if (settingsReview.status === "confirmed") {
+    assert.match(settingsReview.checkedAt, /^\d{4}-\d{2}-\d{2}$/);
+    assert.equal(new Date(settingsReview.checkedAt).toISOString().slice(0, 10), settingsReview.checkedAt, "Invalid settings review date");
+    assert.ok(Date.parse(settingsReview.checkedAt) <= Date.now(), "Settings review date is in the future");
+    assert.ok(safeUrl(settingsReview.evidence), "Settings confirmation needs its own public evidence");
+  } else {
+    assert.ok(!settingsReview.checkedAt && !settingsReview.evidence, "An unconfirmed record must not imply a completed review");
+  }
+  const local = communities.communities.filter(community => {
+    const points = Number.isFinite(community.location?.latitude) && Number.isFinite(community.location?.longitude) ? [{ lat: community.location.latitude, lon: community.location.longitude }] : anchors[community.id];
+    return points.some(point => globalThis.MeshCoreIataScopes.contains(feature, point.lat, point.lon));
+  }).map(community => ({ id: community.id, name: community.name, nameFr: communityFr[community.id]?.name || community.name,
+    route: community.canonical_route, override: !community.settings.inherit_national,
+    settings: community.settings, listingReviewed: community.verified_at }));
+  return [tag, { maintainer, settingsReview, communities: local }];
+}));
 assert.deepEqual([...tags].sort(), Object.keys(policy.zoneProvinces).sort(), "Review province metadata for every IATA region");
 const hierarchy = { can: { label: "Canada", labelFr: "Canada", parent: null, kind: "country" } };
 const status = { can: { state: "reserved", source: policy.proposal } };
@@ -59,7 +94,7 @@ const catalog = {
     meshmapperBoundarySha256: createHash("sha256").update(readFileSync(new URL("docs/assets/regions/meshmapper-iata-boundaries.geojson", root))).digest("hex"),
     jurisdictionSha256: createHash("sha256").update(readFileSync(new URL("docs/assets/regions/scope-jurisdictions.geojson", root))).digest("hex") },
   meta: { name: "MeshCore Canada IATA scopes", rootTag: "can", defaultFirmware: "1.16", map: legacy.meta.map },
-  hierarchy, status, seeds, aliases, legacyAliases,
+  hierarchy, status, seeds, aliases, legacyAliases, profiles,
   metroGroups: Object.entries(policy.provinces).map(([province, entry]) => ({ label: entry.label, tags: seeds.filter(seed => seed.provinces.includes(province)).map(seed => seed.tag) })),
   externalRegionPaths: legacy.externalRegionPaths,
 };

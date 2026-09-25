@@ -26,7 +26,7 @@ Vous pouvez consulter ce site sans compte MeshCore Canada ni compte GitHub.
 | Rechercher dans cette documentation | Vos mots de recherche restent dans le navigateur | Nulle part |
 | Trouver des communautés à proximité | La ville recherchée | API Géolocalisateur de Ressources naturelles Canada; les distances sont calculées dans votre navigateur |
 | Charger les totaux du réseau dans l’en-tête | Votre adresse IP et les renseignements habituels d’une requête Web, sans texte de recherche | Beacon à dev.meshcore.ca |
-| Rechercher un lieu dans les outils de région | Le lieu, le code d’aéroport ou le code postal saisi | Vérification locale d’abord, puis OpenStreetMap ou geocoder.ca au besoin |
+| Rechercher un lieu dans les outils de région | Le lieu, le code d’aéroport ou le code postal saisi | Codes IATA vérifiés localement. Noms de lieux transmis à l’API Géolocalisateur de Ressources naturelles Canada; codes postaux transmis à OpenStreetMap ou geocoder.ca |
 | Ouvrir la carte interactive des régions | Votre adresse IP et la partie visible de la carte | OpenStreetMap |
 | Vérifier un identifiant de parcours de répéteur | Le premier octet de la clé publique | Beacon à dev.meshcore.ca; les comparaisons régionales et des préfixes plus longs restent dans votre navigateur |
 | Charger le nombre d’étoiles GitHub | Votre adresse IP et les renseignements habituels d’une requête Web | GitHub |

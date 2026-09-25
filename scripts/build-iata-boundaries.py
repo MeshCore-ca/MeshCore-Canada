@@ -5,8 +5,10 @@ import hashlib
 import json
 from pathlib import Path
 
-from shapely.geometry import Point, mapping, shape
-from shapely.ops import unary_union
+from shapely import voronoi_polygons
+from shapely.geometry import MultiPoint, Point, mapping, shape
+from shapely.ops import transform, unary_union
+from pyproj import Transformer
 
 ROOT = Path(__file__).resolve().parents[1]
 INPUTS = {
@@ -44,11 +46,32 @@ def build_boundaries(published, jurisdictions, policy, labrador):
     labrador_area = provinces["nl"].intersection(shape(labrador["geometry"]))
     nl = {"labrador": labrador_area, "newfoundland": provinces["nl"].difference(labrador_area)}
     published_area = unary_union([shape(feature["geometry"]) for feature in published["features"]])
+    # Planning areas only: preserve source coastlines and every published zone.
+    # Projected hub distances avoid treating a longitude degree as a latitude degree.
+    forward = Transformer.from_crs(4326, 3347, always_xy=True).transform
+    reverse = Transformer.from_crs(3347, 4326, always_xy=True).transform
+    hub_areas = {}
+    for province in sorted({entry["province"] for entry in definitions if entry["area"] == "hub"}):
+        entries = [entry for entry in definitions if entry["province"] == province and entry["area"] == "hub"]
+        footprint = provinces[province]
+        points = [Point(*forward(*entry["center"])) for entry in entries]
+        cells = list(voronoi_polygons(MultiPoint(points), extend_to=transform(forward, footprint).envelope).geoms) if len(points) > 1 else []
+        remaining = footprint.difference(published_area)
+        for index, (entry, point) in enumerate(zip(entries, points)):
+            if index == len(entries) - 1:
+                area = remaining
+            else:
+                cell = next(cell for cell in cells if cell.covers(point))
+                area = remaining.intersection(transform(reverse, cell.segmentize(25000)))
+            hub_areas[entry["tag"]] = area
+            remaining = remaining.difference(area)
     features = [dict(feature, properties=dict(feature["properties"], regionSource="meshmapper")) for feature in published["features"]]
     for entry in definitions:
-        footprint = provinces[entry["province"]] if entry["area"] == "province" else nl[entry["area"]]
+        footprint = hub_areas[entry["tag"]] if entry["area"] == "hub" else provinces[entry["province"]] if entry["area"] == "province" else nl[entry["area"]]
         # Published zones always win, including future zones added inside a starter.
         geometry = footprint.difference(published_area)
+        if geometry.geom_type == "GeometryCollection":
+            geometry = unary_union([part for part in geometry.geoms if part.geom_type in ("Polygon", "MultiPolygon")])
         assert geometry.is_valid and not geometry.is_empty, entry["tag"]
         assert geometry.geom_type in ("Polygon", "MultiPolygon"), entry["tag"]
         assert geometry.covers(Point(*entry["center"])), "Starter hub is covered by MeshMapper; review the remaining starter area"
