@@ -3389,6 +3389,17 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#what-do-i-need-to-do" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What do I need to do?
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#the-short-version" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3396,6 +3407,23 @@
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="The short version">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#words-used-on-this-page" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Words used on this page
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -3472,15 +3500,26 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#repeater-setup" class="md-nav__link">
+  <a href="#rollout-order" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Repeater setup
+        Rollout order
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Repeater setup">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#phase-1-repeater-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Phase 1: Repeater setup
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Phase 1: Repeater setup">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -3549,21 +3588,32 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#bots-and-meshmapper" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Bots and MeshMapper
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#companion-setup" class="md-nav__link">
+  <a href="#phase-2-companion-setup" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Companion setup
+        Phase 2: Companion setup
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Companion setup">
+    <nav class="md-nav" aria-label="Phase 2: Companion setup">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -3588,16 +3638,27 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#why-the-companion-default-is-onqc" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Why the companion default is onqc
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#why-the-companion-default-is-onqc" class="md-nav__link">
+  <a href="#phase-3-only-if-needed" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Why the companion default is onqc
+        Phase 3: Only if needed
       
     </span>
   </a>
@@ -3609,17 +3670,6 @@
     <span class="md-ellipsis">
       
         Who hears what
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#rollout" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Rollout
       
     </span>
   </a>
@@ -3700,13 +3750,43 @@
   <ul class="scp-hero__badges">
     <li data-kind="proposal">Not adopted yet</li>
     <li>Ontario + Québec pilot</li>
-    <li>Repeater firmware 1.16+</li>
+    <li>Repeater firmware 1.16+ recommended</li>
     <li>MeshCore app 1.43+</li>
   </ul>
 </div>
 
+<h2 id="what-do-i-need-to-do">What do I need to do?<a class="headerlink" href="#what-do-i-need-to-do" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>You…</th>
+<th>What to do</th>
+<th>When</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Use the MeshCore app with a companion radio</td>
+<td><strong>Nothing yet.</strong> Leave your settings as they are. <a href="#phase-2-companion-setup">Phase 2</a> walks you through two settings, with screenshots.</td>
+<td>January 2027 at the earliest</td>
+</tr>
+<tr>
+<td>Own a repeater</td>
+<td>Follow <a href="#phase-1-repeater-setup">Phase 1: Repeater setup</a>.</td>
+<td>Now</td>
+</tr>
+<tr>
+<td>Run a bot or MeshMapper</td>
+<td>Scope it to your city, as described in <a href="#bots-and-meshmapper">Bots and MeshMapper</a>.</td>
+<td>End of Phase 1, once the repeaters around you are set up</td>
+</tr>
+</tbody>
+</table>
+<p>Each phase is announced on the
+<a href="https://discord.gg/BESFVMt7yk">MeshCore Canada Discord</a>. The rest of this page explains how it
+all works. You don't need to understand it to follow the steps.</p>
 <h2 id="the-short-version">The short version<a class="headerlink" href="#the-short-version" title="Permanent link">&para;</a></h2>
-<p>There are four levels of scope. Every repeater carries one code from each: its city, its province, <code>onqc</code> and <code>can</code>. When you send a message, you choose which level to use, and that decides how far it travels. <code>can</code> is reserved for later, so for now you only pick from the first three.</p>
+<p>There are four levels of scope. Every repeater carries one code from each: its city, its province, <code>onqc</code> and <code>can</code>. When you send a message, the scope decides how far it travels. <code>can</code> is reserved for later, so for now you only pick from the first three.</p>
 <div class="scp-levels-cards">
   <div class="scp-level-card" data-level="city">
     <h3>City</h3>
@@ -3730,14 +3810,35 @@
   </div>
 </div>
 
+<p>Once every phase is done:</p>
 <ul>
 <li><strong>Repeaters</strong> carry their city, their province, <code>onqc</code> and <code>can</code>.</li>
-<li><strong>Companions</strong> use <code>onqc</code> as their default, so direct messages reach anyone,
-  once the repeaters around them are set up.</li>
+<li><strong>Bots and MeshMapper</strong> use their city, so they stay local.</li>
+<li><strong>Companions</strong> use <code>onqc</code> as their default, so direct messages reach anyone.</li>
 <li><strong><code>Public</code></strong> uses <code>onqc</code>, so everyone in Ontario and Québec can talk.</li>
-<li><strong>Test channels and bots</strong> use your city, so they stay local.</li>
+<li><strong>Test channels</strong> use your city, so they stay local.</li>
 <li><strong>Messages with no scope</strong> still work inside each city. Edge repeaters,
   the ones that hear another city, drop them, so they don't flood the next city.</li>
+</ul>
+<div class="mc-callout" data-kind="warning">
+<p>Companions come last, in Phase 2. Setting a scope on your companion before
+the repeaters around you are ready makes your messages reach <strong>fewer</strong>
+people, not more.</p>
+</div>
+<h3 id="words-used-on-this-page">Words used on this page<a class="headerlink" href="#words-used-on-this-page" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Companion:</strong> the MeshCore radio you pair with the app on your phone or
+  computer.</li>
+<li><strong>Repeater:</strong> a fixed radio, often on a roof or tower, that passes messages
+  along.</li>
+<li><strong>Flood:</strong> how a message spreads when it has no known route: every repeater
+  that hears it passes it on. Channel messages always flood, and so does the
+  first DM to someone.</li>
+<li><strong>Hop:</strong> one repeater passing a message on.</li>
+<li><strong>DM:</strong> a direct message to one contact.</li>
+<li><strong>Advert:</strong> a radio announcing itself so others can find it.</li>
+<li><strong>Edge repeater:</strong> a repeater that regularly hears repeaters from another
+  city.</li>
 </ul>
 <h2 id="what-a-scope-is">What a scope is<a class="headerlink" href="#what-a-scope-is" title="Permanent link">&para;</a></h2>
 <p>A scope is a short name attached to a message, such as <code>yow</code>. Repeaters use it
@@ -3859,6 +3960,8 @@ Québec mesh".</p>
 <p>Always write the code with its area the first time, for example
 <code>yow</code> (Ottawa / NCR area), so people learn it.</p>
 <h2 id="reading-region-def-yow-on-onqc-can">Reading <code>region def yow|* on|* onqc|* can</code><a class="headerlink" href="#reading-region-def-yow-on-onqc-can" title="Permanent link">&para;</a></h2>
+<p>This section is for repeater owners who want to understand the command. You
+can skip it: step 4 of Phase 1 gives you the exact commands to type.</p>
 <p><code>region def</code> builds a repeater's list in one line. It keeps a <strong>cursor</strong> that
 starts at the top, <code>*</code>. Each name is created under the cursor, and <code>|*</code> jumps
 the cursor back to the top.</p>
@@ -3905,7 +4008,29 @@ the cursor back to the top.</p>
 <p><code>region def</code> only adds or moves names. It never deletes the ones already
 there. Run <code>region</code> afterwards to see the full list.</p>
 </div>
-<h2 id="repeater-setup">Repeater setup<a class="headerlink" href="#repeater-setup" title="Permanent link">&para;</a></h2>
+<h2 id="rollout-order">Rollout order<a class="headerlink" href="#rollout-order" title="Permanent link">&para;</a></h2>
+<p>Do this in order. Each phase starts only once the one before it is done, and
+is announced on Discord. <strong>Don't change your companion settings
+yet.</strong> Phase 2 is not open.</p>
+<ol class="scp-timeline">
+  <li data-phase="Phase 1"><h3>Repeaters</h3><p>Now. Owners clear old regions and add their codes. City repeaters keep <code>*</code> allowed; edge repeaters drop it. Near the end, bots and MeshMapper are scoped to their city. Nothing breaks inside any city.</p></li>
+  <li data-phase="Phase 2"><h3>Companions</h3><p>January 2027 at the earliest, once the repeaters around them are set up. Users set their default and <code>Public</code> to <code>onqc</code>, and test channels to their city.</p></li>
+  <li data-phase="Phase 3"><h3>Only if needed</h3><p>If messages with no scope are still too noisy inside a city, repeaters can also run <code>set flood.max.unscoped 3</code>. Scoped messages still reach 16 hops.</p></li>
+</ol>
+
+<h2 id="phase-1-repeater-setup">Phase 1: Repeater setup<a class="headerlink" href="#phase-1-repeater-setup" title="Permanent link">&para;</a></h2>
+<p>Phase 1 has three goals:</p>
+<ol>
+<li><strong>Get the new region config on every repeater</strong>, so each one carries its
+   city, its province, <code>onqc</code> and <code>can</code>.</li>
+<li><strong>Limit unscoped traffic between cities.</strong> Edge repeaters drop messages
+   with no scope, so local chatter stays in its own city.</li>
+<li><strong>Near the end, scope bots and MeshMapper to their city</strong>, once the
+   repeaters around them carry the city code. See
+   <a href="#bots-and-meshmapper">Bots and MeshMapper</a>.</li>
+</ol>
+<p>Companions don't change anything in this phase. If you only use the app,
+there is nothing for you to do here.</p>
 <p>Type these into the repeater's command line <strong>one command at a time</strong>: in the
 MeshCore app, open the repeater, log in as admin and use the command box in
 <strong>Repeater Admin</strong>, or use the USB console. Each command has its own copy
@@ -4080,14 +4205,28 @@ ignore it.</p>
 </tr>
 </tbody>
 </table>
-<h2 id="companion-setup">Companion setup<a class="headerlink" href="#companion-setup" title="Permanent link">&para;</a></h2>
+<h3 id="bots-and-meshmapper">Bots and MeshMapper<a class="headerlink" href="#bots-and-meshmapper" title="Permanent link">&para;</a></h3>
+<p>This comes at the end of Phase 1, once the repeaters around you carry your
+city code. Scoping bots and MeshMapper to your city keeps their traffic out
+of other cities.</p>
+<ul>
+<li><strong>Bots:</strong> on the companion the bot uses, set <strong>Default Region Scope</strong> to
+  your city code, for example <code>yow</code>. The steps are the same as
+  <a href="#step-1-set-your-default-scope">Phase 2, step 1</a>, with your city code
+  instead of <code>onqc</code>. Set any channel the bot posts in to your city as well.</li>
+<li><strong>MeshMapper:</strong> use your city code as the scope for its messages.</li>
+</ul>
+<h2 id="phase-2-companion-setup">Phase 2: Companion setup<a class="headerlink" href="#phase-2-companion-setup" title="Permanent link">&para;</a></h2>
 <div class="mc-callout" data-kind="warning">
-<p><strong>Wait until the repeaters around you are set up.</strong> A repeater with no regions
-set drops every scoped message. If you set your default to <code>onqc</code> before the
-repeaters on your routes carry it, your channel messages and first DMs will
-only reach nearby. Until then, leave <strong>Default Region Scope</strong> empty. You will
-still receive everything.</p>
+<p><strong>Not yet. The earliest this should be considered is January 2027.</strong> Phase 1
+has to be finished first. A repeater with no regions set drops every scoped
+message. If you set your default to <code>onqc</code> before the repeaters on your routes
+carry it, your channel messages and first DMs will only reach nearby. Until
+Phase 2 is announced, leave <strong>Default Region Scope</strong> empty and your channels
+unscoped. You will still receive everything.</p>
 </div>
+<p>When Phase 2 opens, this is all you need to do: set a default scope, then set
+a scope on a few channels. It takes about five minutes in the MeshCore app.</p>
 <h3 id="step-1-set-your-default-scope">Step 1: Set your default scope<a class="headerlink" href="#step-1-set-your-default-scope" title="Permanent link">&para;</a></h3>
 <p>In the MeshCore app, open <strong>Settings</strong>. Under <strong>Network Settings</strong>, tap
 <strong>Default Region Scope</strong>, add <code>onqc</code> and select it.</p>
@@ -4151,7 +4290,8 @@ and pick the scope from this table:</p>
 </tr>
 </tbody>
 </table>
-<p>If you run a bot, set that bot's own <strong>Default Region Scope</strong> to your city too.</p>
+<p>If you run a bot, it should already be on your city from
+<a href="#bots-and-meshmapper">Phase 1</a>.</p>
 <p><strong>Example: <code>Public</code> to <code>onqc</code></strong></p>
 <div class="scp-shots">
 <figure class="scp-shot">
@@ -4196,7 +4336,7 @@ the exact limit, and it can vary with your node name and app version.</p>
 <figcaption><span class="scp-shot__num">4</span> The header now shows <strong>Region: yow</strong>.</figcaption>
 </figure>
 </div>
-<h2 id="why-the-companion-default-is-onqc">Why the companion default is <code>onqc</code><a class="headerlink" href="#why-the-companion-default-is-onqc" title="Permanent link">&para;</a></h2>
+<h3 id="why-the-companion-default-is-onqc">Why the companion default is <code>onqc</code><a class="headerlink" href="#why-the-companion-default-is-onqc" title="Permanent link">&para;</a></h3>
 <p>You cannot pick a scope for a single direct message. When a DM has no known
 path yet, it floods using your <strong>default scope</strong>. The reply that tells your
 companion the path comes back using <strong>your contact's</strong> default scope.</p>
@@ -4232,6 +4372,11 @@ companion the path comes back using <strong>your contact's</strong> default scop
 <code>Public</code>, but not for test channels and bots. That is why step 2 of the
 companion setup sets those to your city.</p>
 </div>
+<h2 id="phase-3-only-if-needed">Phase 3: Only if needed<a class="headerlink" href="#phase-3-only-if-needed" title="Permanent link">&para;</a></h2>
+<p>If messages with no scope are still too noisy inside a city after Phase 2,
+repeaters can also run <code>set flood.max.unscoped 3</code>, then <code>region save</code>.
+Messages with no scope then stop after 3 hops. Scoped messages still reach
+16 hops. Only do this once it is announced for your city.</p>
 <h2 id="who-hears-what">Who hears what<a class="headerlink" href="#who-hears-what" title="Permanent link">&para;</a></h2>
 <p>With edge repeaters dropping messages with no scope, a new user who hasn't set
 a scope yet still reaches everyone in their own city. Their messages just
@@ -4333,13 +4478,6 @@ Rigaud, an edge repeater that also carries Montréal's code, <code>yul</code>.</
 <p>This is why bots and MeshMapper should be scoped to their city: they stay
 contained no matter what, and new users who haven't set a scope yet still work
 locally.</p>
-<h2 id="rollout">Rollout<a class="headerlink" href="#rollout" title="Permanent link">&para;</a></h2>
-<ol class="scp-timeline">
-  <li data-phase="Phase 1"><h3>Repeaters</h3><p>Owners clear old regions and add their codes. City repeaters keep <code>*</code> allowed; edge repeaters drop it. Nothing breaks inside any city.</p></li>
-  <li data-phase="Phase 2"><h3>Companions</h3><p>Once the repeaters around them are set up, users set their default and <code>Public</code> to <code>onqc</code>, and test channels and bots to their city.</p></li>
-  <li data-phase="Phase 3"><h3>Only if needed</h3><p>If messages with no scope are still too noisy inside a city, repeaters can also run <code>set flood.max.unscoped 3</code>. Scoped messages still reach 16 hops.</p></li>
-</ol>
-
 <h2 id="things-to-know">Things to know<a class="headerlink" href="#things-to-know" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>Scoped messages are about 10 characters shorter.</strong> The app lowers the
