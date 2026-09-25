@@ -831,6 +831,7 @@
 .scp-picker {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+  align-items: start;
   gap: var(--mc-space-3);
   padding: var(--mc-space-4);
   border-bottom: 1px solid var(--mc-color-border);
@@ -878,13 +879,22 @@
   outline-offset: 2px;
 }
 
-.md-typeset .scp-variant {
-  padding: var(--mc-space-4);
-  counter-reset: scp-cmd;
+.scp-picker__hint {
+  color: var(--mc-color-text-muted);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: normal;
+  text-transform: none;
 }
 
-.md-typeset .scp-variant + .scp-variant {
-  border-top: 1px solid var(--mc-color-border);
+.md-typeset .scp-picker__body,
+.md-typeset .scp-fallback {
+  padding: var(--mc-space-4);
+}
+
+.md-typeset .scp-fallback[hidden],
+.md-typeset .scp-picker__body [hidden] {
+  display: none;
 }
 
 .md-typeset .scp-variant__label {
@@ -898,13 +908,29 @@
   font-weight: 760;
 }
 
-.md-typeset .scp-variant .highlight {
+[dir] .md-typeset .scp-cmds {
+  display: grid;
+  gap: var(--mc-space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: scp-cmd;
+}
+
+[dir] .md-typeset .scp-cmds > .scp-cmd {
   position: relative;
-  margin: 0 0 var(--mc-space-2) 2rem;
+  display: flex;
+  min-height: 2.6rem;
+  align-items: center;
+  gap: var(--mc-space-2);
+  margin: 0 0 0 2rem;
+  padding: 0.35rem 0.35rem 0.35rem var(--mc-space-3);
+  border-radius: var(--mc-radius-sm);
+  background: var(--md-code-bg-color);
   counter-increment: scp-cmd;
 }
 
-.md-typeset .scp-variant .highlight::before {
+.md-typeset .scp-cmd::before {
   position: absolute;
   top: 50%;
   left: -2rem;
@@ -912,9 +938,9 @@
   width: 1.4rem;
   height: 1.4rem;
   place-items: center;
+  border: 1px solid var(--mc-color-border);
   border-radius: 999px;
   background: var(--mc-color-surface-raised);
-  border: 1px solid var(--mc-color-border);
   color: var(--mc-color-text-muted);
   content: counter(scp-cmd);
   font-size: 0.7rem;
@@ -922,11 +948,48 @@
   transform: translateY(-50%);
 }
 
-.md-typeset .scp-variant .highlight pre {
-  margin: 0;
+.md-typeset .scp-cmd code {
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  background: none;
+  color: var(--md-code-fg-color);
+  font-size: 0.85em;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
 }
 
-.md-typeset .scp-variant > p:not(.scp-variant__label) {
+.md-typeset button.scp-copy {
+  display: grid;
+  flex: none;
+  width: 1.75rem;
+  height: 1.75rem;
+  min-height: 0;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: var(--mc-radius-sm);
+  background: transparent;
+  color: var(--md-default-fg-color--lighter);
+  cursor: pointer;
+}
+
+.md-typeset .scp-copy svg {
+  width: 1.05rem;
+  height: 1.05rem;
+}
+
+.md-typeset .scp-copy:hover,
+.md-typeset .scp-copy.is-copied {
+  color: var(--mc-color-action);
+}
+
+.md-typeset .scp-copy:focus-visible {
+  outline: 3px solid var(--mc-color-focus);
+  outline-offset: 1px;
+}
+
+.md-typeset .scp-note {
   margin: var(--mc-space-3) 0 0;
   padding: var(--mc-space-3);
   border-left: 0.25rem solid var(--mc-color-warning);
@@ -935,7 +998,15 @@
   font-size: 0.82rem;
 }
 
-.md-typeset .scp-variant .highlight code {
+.md-typeset .scp-note[data-scp-note^="fw-"] {
+  border-left-color: var(--mc-color-info);
+}
+
+.md-typeset .scp-fallback .highlight {
+  margin: 0 0 var(--mc-space-2);
+}
+
+.md-typeset .scp-fallback .highlight code {
   padding-right: 2.75rem;
   white-space: pre-wrap;
 }

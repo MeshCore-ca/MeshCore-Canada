@@ -17,9 +17,9 @@ destructive: false
 search:
   exclude: true
 page_styles:
-  - assets/styles/scopes-proposal.css?v=20260924-2
+  - assets/styles/scopes-proposal.css?v=20260924-3
 page_scripts:
-  - assets/javascripts/scopes-picker.js?v=20260924-1
+  - assets/javascripts/scopes-picker.js?v=20260924-2
 ---
 
 # Proposition de portées de région ON/QC
@@ -75,8 +75,8 @@ premiers.
 - **Les canaux de test et les robots** utilisent votre ville, pour rester
   locaux.
 - **Les messages sans portée** fonctionnent encore dans chaque ville. Les
-  répéteurs passerelles entre les villes les rejettent, pour qu’ils n’inondent
-  pas la ville voisine.
+  répéteurs de bordure, ceux qui entendent une autre ville, les rejettent, pour
+  qu’ils n’inondent pas la ville voisine.
 
 ## Qu’est-ce qu’une portée?
 
@@ -371,6 +371,15 @@ region save
 Retirer `on` et `can` ne pose pas de problème. L’étape 4 les remet. Lancez
 `region` de nouveau : vous ne devriez voir que `*^ F`.
 
+<div class="scp-shots" markdown>
+
+<figure class="scp-shot" markdown>
+[![Ligne de commande qui retire les anciennes régions d’Ottawa](../assets/images/onqc-scopes/repeater-clear-old.webp){ loading=lazy width="600" height="1304" }](../assets/images/onqc-scopes/repeater-clear-old.webp)
+<figcaption markdown="span"><span class="scp-shot__num">1</span> L’ancienne configuration d’Ottawa, retirée du bas vers le haut. Retirer un nom deux fois répond simplement <code>Err - not found</code>. Ce n’est pas grave.</figcaption>
+</figure>
+
+</div>
+
 ### Étape 3 : Réglages standard de MeshCore Canada
 
 ```text
@@ -398,6 +407,15 @@ set flood.max 16
 
 Ces réglages s’enregistrent d’eux-mêmes. Pas besoin de `region save`.
 
+<div class="scp-shots" markdown>
+
+<figure class="scp-shot" markdown>
+[![Ligne de commande avec les quatre réglages standard qui répondent OK](../assets/images/onqc-scopes/repeater-standard-settings.webp){ loading=lazy width="600" height="1304" }](../assets/images/onqc-scopes/repeater-standard-settings.webp)
+<figcaption markdown="span"><span class="scp-shot__num">1</span> Chaque réglage répond <code>OK</code>.</figcaption>
+</figure>
+
+</div>
+
 ### Étape 4 : Réglages de région
 
 Votre code de ville est votre **zone MeshMapper**. Ouvrez
@@ -407,19 +425,32 @@ existent déjà. Elles ne sont pas parfaites, mais c’est ainsi que la plupart 
 gens voient déjà la carte aujourd’hui; il n’y a donc rien de nouveau à
 apprendre.
 
-Choisissez votre secteur et la version de votre micrologiciel, puis lancez les
-commandes dans l’ordre :
+Répondez aux questions ci-dessous, puis lancez les commandes dans l’ordre.
 
-<div class="scp-picker-group" data-scp-picker-group markdown>
+<div class="scp-picker-group" data-scp-picker-group data-copy-label="Copier" data-copied-label="Copié" markdown>
 
 <div class="scp-picker" data-scp-picker hidden>
-  <label class="scp-picker__field"><span>Secteur</span><select data-scp-area><option value="ottawa">Ottawa et environs</option><option value="gatineau">Gatineau</option><option value="montreal">Montréal et environs</option><option value="quebec">Ville de Québec</option></select></label>
+  <label class="scp-picker__field"><span>Secteur</span><select data-scp-area><option value="ottawa" data-city="yow" data-province="on">Ottawa et environs</option><option value="gatineau" data-city="yow" data-province="qc">Gatineau</option><option value="montreal" data-city="yul" data-province="qc">Montréal et environs</option><option value="quebec" data-city="yqb" data-province="qc">Ville de Québec</option></select></label>
   <label class="scp-picker__field"><span>Micrologiciel (voir l’étape 1)</span><select data-scp-firmware><option value="116">1.16 ou plus récent</option><option value="115">1.15</option><option value="110">1.10 à 1.14</option></select></label>
+  <label class="scp-picker__field"><span>Type de répéteur</span><select data-scp-type><option value="city">Répéteur de ville</option><option value="edge">Répéteur de bordure</option></select><small class="scp-picker__hint">Choisissez bordure s’il entend souvent une autre ville.</small></label>
+  <label class="scp-picker__field" data-scp-extra-field hidden><span>Ville voisine (facultatif)</span><select data-scp-extra><option value="">Aucune</option><option value="yow">Ottawa / Gatineau (yow)</option><option value="yul">Montréal (yul)</option><option value="yqb">Ville de Québec (yqb)</option></select></label>
 </div>
 
-<div class="scp-variant" data-scp-variant data-area="ottawa" data-firmware="116" markdown>
+<div class="scp-picker__body">
+  <p class="scp-variant__label" data-scp-summary hidden></p>
+  <ol class="scp-cmds" data-scp-output hidden></ol>
+  <p class="scp-note" data-scp-note="fw-116" hidden><code>region def</code> répond avec la liste terminée, donc vous voyez tout de suite que ça a fonctionné.</p>
+  <p class="scp-note" data-scp-note="fw-115" hidden>Chaque <code>region put</code> répond <code>OK - (flood allowed)</code>, et <code>region default</code> répond <code>default scope is now …</code>.</p>
+  <p class="scp-note" data-scp-note="fw-110" hidden>Avec ces versions, une nouvelle région commence avec la diffusion <strong>désactivée</strong>, donc chacune a aussi besoin de <code>region allowf</code>. Il n’y a pas de <code>region default</code>, donc les annonces du répéteur restent sans portée. Une mise à jour du micrologiciel vaut la peine.</p>
+  <p class="scp-note" data-scp-note="edge" hidden><strong>Répéteur de bordure :</strong> rejette les messages sans portée, pour qu’ils n’inondent pas la ville voisine. Utilisez-le pour tout répéteur qui entend souvent une autre ville, par exemple près d’une limite de zone, sur un site élevé ou avec des voisins d’une autre ville. Sinon, les messages sans portée passent par lui. Les gens tout près sans portée ne sont pas relayés par lui; évitez-le là où c’est le seul répéteur. Voir <a href="#qui-recoit-quoi">Qui reçoit quoi</a>.</p>
+  <p class="scp-note" data-scp-note="extra" hidden><strong>Ville voisine :</strong> cela aide seulement les gens près de ce répéteur à participer aux canaux de cette ville. Tous les autres joignent l’autre ville par <code>onqc</code>. Rigaud, par exemple, porte <code>yul</code> en plus de <code>yow</code>.</p>
+</div>
 
-<p class="scp-variant__label">Ottawa et environs · Micrologiciel 1.16 ou plus récent</p>
+<div class="scp-fallback" data-scp-fallback markdown>
+
+<p class="scp-note">Voici les commandes pour un répéteur de ville avec le micrologiciel 1.16 ou plus récent. Activez JavaScript pour choisir une autre version ou un répéteur de bordure.</p>
+
+<p class="scp-variant__label">Ottawa et environs</p>
 
 ```text
 region def yow|* on|* onqc|* can
@@ -437,95 +468,7 @@ region default yow
 region save
 ```
 
-</div>
-
-<div class="scp-variant" data-scp-variant data-area="ottawa" data-firmware="115" markdown>
-
-<p class="scp-variant__label">Ottawa et environs · Micrologiciel 1.15</p>
-
-```text
-region put yow
-```
-
-```text
-region put on
-```
-
-```text
-region put onqc
-```
-
-```text
-region put can
-```
-
-```text
-region allowf *
-```
-
-```text
-region default yow
-```
-
-```text
-region save
-```
-
-Chaque `region put` répond `OK - (flood allowed)`, et `region default` répond `default scope is now …`.
-
-</div>
-
-<div class="scp-variant" data-scp-variant data-area="ottawa" data-firmware="110" markdown>
-
-<p class="scp-variant__label">Ottawa et environs · Micrologiciel 1.10 à 1.14</p>
-
-```text
-region put yow
-```
-
-```text
-region allowf yow
-```
-
-```text
-region put on
-```
-
-```text
-region allowf on
-```
-
-```text
-region put onqc
-```
-
-```text
-region allowf onqc
-```
-
-```text
-region put can
-```
-
-```text
-region allowf can
-```
-
-```text
-region allowf *
-```
-
-```text
-region save
-```
-
-Avec ces versions, une nouvelle région commence avec la diffusion **désactivée**, donc chacune a aussi besoin de `region allowf`. Il n’y a pas de `region default`, donc les annonces du répéteur restent sans portée. Une mise à jour du micrologiciel vaut la peine.
-
-</div>
-
-<div class="scp-variant" data-scp-variant data-area="gatineau" data-firmware="116" markdown>
-
-<p class="scp-variant__label">Gatineau · Micrologiciel 1.16 ou plus récent</p>
+<p class="scp-variant__label">Gatineau</p>
 
 ```text
 region def yow|* qc|* onqc|* can
@@ -543,95 +486,7 @@ region default yow
 region save
 ```
 
-</div>
-
-<div class="scp-variant" data-scp-variant data-area="gatineau" data-firmware="115" markdown>
-
-<p class="scp-variant__label">Gatineau · Micrologiciel 1.15</p>
-
-```text
-region put yow
-```
-
-```text
-region put qc
-```
-
-```text
-region put onqc
-```
-
-```text
-region put can
-```
-
-```text
-region allowf *
-```
-
-```text
-region default yow
-```
-
-```text
-region save
-```
-
-Chaque `region put` répond `OK - (flood allowed)`, et `region default` répond `default scope is now …`.
-
-</div>
-
-<div class="scp-variant" data-scp-variant data-area="gatineau" data-firmware="110" markdown>
-
-<p class="scp-variant__label">Gatineau · Micrologiciel 1.10 à 1.14</p>
-
-```text
-region put yow
-```
-
-```text
-region allowf yow
-```
-
-```text
-region put qc
-```
-
-```text
-region allowf qc
-```
-
-```text
-region put onqc
-```
-
-```text
-region allowf onqc
-```
-
-```text
-region put can
-```
-
-```text
-region allowf can
-```
-
-```text
-region allowf *
-```
-
-```text
-region save
-```
-
-Avec ces versions, une nouvelle région commence avec la diffusion **désactivée**, donc chacune a aussi besoin de `region allowf`. Il n’y a pas de `region default`, donc les annonces du répéteur restent sans portée. Une mise à jour du micrologiciel vaut la peine.
-
-</div>
-
-<div class="scp-variant" data-scp-variant data-area="montreal" data-firmware="116" markdown>
-
-<p class="scp-variant__label">Montréal et environs · Micrologiciel 1.16 ou plus récent</p>
+<p class="scp-variant__label">Montréal et environs</p>
 
 ```text
 region def yul|* qc|* onqc|* can
@@ -649,95 +504,7 @@ region default yul
 region save
 ```
 
-</div>
-
-<div class="scp-variant" data-scp-variant data-area="montreal" data-firmware="115" markdown>
-
-<p class="scp-variant__label">Montréal et environs · Micrologiciel 1.15</p>
-
-```text
-region put yul
-```
-
-```text
-region put qc
-```
-
-```text
-region put onqc
-```
-
-```text
-region put can
-```
-
-```text
-region allowf *
-```
-
-```text
-region default yul
-```
-
-```text
-region save
-```
-
-Chaque `region put` répond `OK - (flood allowed)`, et `region default` répond `default scope is now …`.
-
-</div>
-
-<div class="scp-variant" data-scp-variant data-area="montreal" data-firmware="110" markdown>
-
-<p class="scp-variant__label">Montréal et environs · Micrologiciel 1.10 à 1.14</p>
-
-```text
-region put yul
-```
-
-```text
-region allowf yul
-```
-
-```text
-region put qc
-```
-
-```text
-region allowf qc
-```
-
-```text
-region put onqc
-```
-
-```text
-region allowf onqc
-```
-
-```text
-region put can
-```
-
-```text
-region allowf can
-```
-
-```text
-region allowf *
-```
-
-```text
-region save
-```
-
-Avec ces versions, une nouvelle région commence avec la diffusion **désactivée**, donc chacune a aussi besoin de `region allowf`. Il n’y a pas de `region default`, donc les annonces du répéteur restent sans portée. Une mise à jour du micrologiciel vaut la peine.
-
-</div>
-
-<div class="scp-variant" data-scp-variant data-area="quebec" data-firmware="116" markdown>
-
-<p class="scp-variant__label">Ville de Québec · Micrologiciel 1.16 ou plus récent</p>
+<p class="scp-variant__label">Ville de Québec</p>
 
 ```text
 region def yqb|* qc|* onqc|* can
@@ -757,95 +524,11 @@ region save
 
 </div>
 
-<div class="scp-variant" data-scp-variant data-area="quebec" data-firmware="115" markdown>
-
-<p class="scp-variant__label">Ville de Québec · Micrologiciel 1.15</p>
-
-```text
-region put yqb
-```
-
-```text
-region put qc
-```
-
-```text
-region put onqc
-```
-
-```text
-region put can
-```
-
-```text
-region allowf *
-```
-
-```text
-region default yqb
-```
-
-```text
-region save
-```
-
-Chaque `region put` répond `OK - (flood allowed)`, et `region default` répond `default scope is now …`.
-
-</div>
-
-<div class="scp-variant" data-scp-variant data-area="quebec" data-firmware="110" markdown>
-
-<p class="scp-variant__label">Ville de Québec · Micrologiciel 1.10 à 1.14</p>
-
-```text
-region put yqb
-```
-
-```text
-region allowf yqb
-```
-
-```text
-region put qc
-```
-
-```text
-region allowf qc
-```
-
-```text
-region put onqc
-```
-
-```text
-region allowf onqc
-```
-
-```text
-region put can
-```
-
-```text
-region allowf can
-```
-
-```text
-region allowf *
-```
-
-```text
-region save
-```
-
-Avec ces versions, une nouvelle région commence avec la diffusion **désactivée**, donc chacune a aussi besoin de `region allowf`. Il n’y a pas de `region default`, donc les annonces du répéteur restent sans portée. Une mise à jour du micrologiciel vaut la peine.
-
-</div>
-
 </div>
 
 <dl class="scp-explain">
   <dt>region def / region put</dt><dd>Porter votre ville, votre province, <code>onqc</code> et <code>can</code>.</dd>
-  <dt>region allowf *</dt><dd>Relayer aussi les messages <strong>sans portée</strong>. C’est déjà le réglage par défaut. On le règle quand même pour que vous le voyiez.</dd>
+  <dt>region allowf * / region denyf *</dt><dd>Les répéteurs de ville relaient les messages <strong>sans portée</strong> (déjà permis par défaut, réglé pour que vous le voyiez). Les répéteurs de bordure les rejettent.</dd>
   <dt>region default &lt;ville&gt;</dt><dd>Les annonces de ce répéteur utilisent la portée de votre ville, pour rester locales. Absent avant 1.15.</dd>
   <dt>region save</dt><dd>Conserve les réglages de région après un redémarrage.</dd>
 </dl>
@@ -853,8 +536,13 @@ Avec ces versions, une nouvelle région commence avec la diffusion **désactivé
 <div class="scp-shots" markdown>
 
 <figure class="scp-shot" markdown>
+[![Ligne de commande avec region def et sa réponse sur le micrologiciel 1.16](../assets/images/onqc-scopes/repeater-region-def-116.webp){ loading=lazy width="600" height="1304" }](../assets/images/onqc-scopes/repeater-region-def-116.webp)
+<figcaption markdown="span"><span class="scp-shot__num">1</span> Micrologiciel 1.16 ou plus récent : <code>region def</code> répond avec la liste terminée.</figcaption>
+</figure>
+
+<figure class="scp-shot" markdown>
 [![Ligne de commande avec les commandes region put sur le micrologiciel 1.15](../assets/images/onqc-scopes/repeater-07-region-put-115.webp){ loading=lazy width="600" height="1304" }](../assets/images/onqc-scopes/repeater-07-region-put-115.webp)
-<figcaption markdown="span"><span class="scp-shot__num">1</span> Micrologiciel 1.15 : chaque <code>region put</code> répond <code>OK - (flood allowed)</code>.</figcaption>
+<figcaption markdown="span"><span class="scp-shot__num">2</span> Micrologiciel 1.15 : chaque <code>region put</code> répond <code>OK - (flood allowed)</code>.</figcaption>
 </figure>
 
 </div>
@@ -886,44 +574,6 @@ se place sur `*`. Vous pouvez l’ignorer.
 <figcaption markdown="span"><span class="scp-shot__num">1</span> La liste terminée sur un répéteur d’Ottawa.</figcaption>
 </figure>
 
-</div>
-
-### Répéteurs passerelles
-
-Un répéteur qui relie volontairement deux zones de ville porte **les deux**
-codes de ville. Par exemple, un répéteur à **Rigaud** se trouve dans la zone
-`yow`, du côté québécois, et la relie à la zone de Montréal. Avec le
-micrologiciel 1.16 ou plus récent, lancez ces commandes dans l’ordre :
-
-```text
-region def yow|* yul|* qc|* onqc|* can
-```
-
-```text
-region denyf *
-```
-
-```text
-region default yow
-```
-
-```text
-region save
-```
-
-<dl class="scp-explain">
-  <dt>region def …</dt><dd>Porte les deux codes de ville, ainsi que <code>qc</code>, <code>onqc</code> et <code>can</code>.</dd>
-  <dt>region denyf *</dt><dd><strong>Rejette les messages sans portée.</strong> C’est la seule différence avec un répéteur normal. Les nouveaux utilisateurs sans portée joignent quand même tout le monde dans leur ville; leurs messages ne passent simplement pas dans la ville voisine. Voir <a href="#qui-recoit-quoi">Qui reçoit quoi</a>.</dd>
-  <dt>region default yow</dt><dd>Ses propres annonces restent dans sa zone, <code>yow</code>.</dd>
-</dl>
-
-N’ajoutez une ville voisine que si le répéteur relie vraiment les deux
-secteurs; sinon, les messages de ville iront plus loin que prévu.
-
-<div class="mc-callout" data-kind="warning" markdown>
-**Ça fonctionne seulement si la passerelle est le seul lien.** Tout répéteur
-qui entend des répéteurs des deux secteurs est aussi une passerelle et devrait
-rejeter `*` lui aussi. Sinon, les messages sans portée la contournent.
 </div>
 
 ### Permettre ou rejeter : aide-mémoire
@@ -1103,10 +753,11 @@ ville.
 
 ## Qui reçoit quoi
 
-Quand les passerelles rejettent les messages sans portée, un nouvel utilisateur
-qui n’a pas encore réglé de portée joint quand même tout le monde dans sa ville.
-Ses messages ne passent simplement pas dans la ville voisine. Voici le lien
-Ottawa–Montréal par Rigaud.
+Quand les répéteurs de bordure rejettent les messages sans portée, un nouvel
+utilisateur qui n’a pas encore réglé de portée joint quand même tout le monde
+dans sa ville. Ses messages ne passent simplement pas dans la ville voisine.
+Voici le lien Ottawa–Montréal par Rigaud, un répéteur de bordure qui porte
+aussi le code de Montréal, `yul`.
 
 <figure class="scp-figure">
   <div class="scp-route">
@@ -1114,7 +765,7 @@ Ottawa–Montréal par Rigaud.
     <ol class="scp-track">
       <li><span class="scp-stop" data-kind="phone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg></span><strong>Nouvel utilisateur, Ottawa</strong><small>sans portée</small></li>
       <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Répéteur d’Ottawa</strong><small>permet *</small></li>
-      <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Passerelle de Rigaud</strong><small>rejette *</small></li>
+      <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Bordure de Rigaud</strong><small>rejette *</small></li>
       <li data-link="drop"><span class="scp-stop" data-kind="repeater" data-state="dim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Répéteur de Montréal</strong><small>permet *</small></li>
       <li data-link="none"><span class="scp-stop" data-kind="phone" data-state="dim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg></span><strong>Utilisateur de Montréal</strong><small>ne le voit jamais</small></li>
     </ol>
@@ -1125,7 +776,7 @@ Ottawa–Montréal par Rigaud.
     <ol class="scp-track">
       <li><span class="scp-stop" data-kind="phone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg></span><strong>Robot, Ottawa</strong><small>envoie yow</small></li>
       <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Répéteur d’Ottawa</strong><small>yow on onqc can</small></li>
-      <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Passerelle de Rigaud</strong><small>yow yul qc onqc can</small></li>
+      <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Bordure de Rigaud</strong><small>yow yul qc onqc can</small></li>
       <li data-link="drop"><span class="scp-stop" data-kind="repeater" data-state="dim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Répéteur de Montréal</strong><small>yul qc onqc can</small></li>
       <li data-link="none"><span class="scp-stop" data-kind="phone" data-state="dim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg></span><strong>Utilisateur de Montréal</strong><small>ne le voit jamais</small></li>
     </ol>
@@ -1136,18 +787,18 @@ Ottawa–Montréal par Rigaud.
     <ol class="scp-track" data-animate>
       <li><span class="scp-stop" data-kind="phone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg></span><strong>Vous, Ottawa</strong><small>envoie onqc</small></li>
       <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Répéteur d’Ottawa</strong><small>yow on onqc can</small></li>
-      <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Passerelle de Rigaud</strong><small>yow yul qc onqc can</small></li>
+      <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Bordure de Rigaud</strong><small>yow yul qc onqc can</small></li>
       <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Répéteur de Montréal</strong><small>yul qc onqc can</small></li>
       <li data-link="ok"><span class="scp-stop" data-kind="phone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg></span><strong>Ami, Montréal</strong><small>défaut onqc</small></li>
     </ol>
-    <p class="scp-route__note">Tous les répéteurs portent <code>onqc</code>, y compris la passerelle, donc les MP traversent encore tout le réseau.</p>
+    <p class="scp-route__note">Tous les répéteurs portent <code>onqc</code>, y compris le répéteur de bordure, donc les MP traversent encore tout le réseau.</p>
   </div>
-  <figcaption>La même chose se produit à chaque passerelle entre deux villes.</figcaption>
+  <figcaption>La même chose se produit à chaque bordure entre deux villes.</figcaption>
 </figure>
 
 D’autres exemples sur le même lien :
 
-| Message | Répéteurs d’Ottawa<br>`* yow on onqc can` | Passerelle de Rigaud<br>`yow yul qc onqc can` | Répéteurs de Montréal<br>`* yul qc onqc can` | Qui le reçoit |
+| Message | Répéteurs d’Ottawa<br>`* yow on onqc can` | Bordure de Rigaud<br>`yow yul qc onqc can` | Répéteurs de Montréal<br>`* yul qc onqc can` | Qui le reçoit |
 | --- | --- | --- | --- | --- |
 | Nouvel utilisateur à Ottawa, sans portée | ✅ Relaie | ❌ Rejette | Jamais atteint | Tout le secteur d’Ottawa |
 | Nouvel utilisateur à Montréal, sans portée | Jamais atteint | ❌ Rejette | ✅ Relaie | Tout le secteur de Montréal |
@@ -1163,7 +814,7 @@ pas encore réglé de portée fonctionnent quand même localement.
 ## Déploiement
 
 <ol class="scp-timeline">
-  <li data-phase="Phase 1"><h3>Répéteurs</h3><p>Les propriétaires effacent les anciennes régions et ajoutent leurs codes. Les répéteurs normaux gardent <code>*</code> permis; les passerelles le rejettent. Rien ne brise dans aucune ville.</p></li>
+  <li data-phase="Phase 1"><h3>Répéteurs</h3><p>Les propriétaires effacent les anciennes régions et ajoutent leurs codes. Les répéteurs de ville gardent <code>*</code> permis; les répéteurs de bordure le rejettent. Rien ne brise dans aucune ville.</p></li>
   <li data-phase="Phase 2"><h3>Appareils compagnons</h3><p>Une fois les répéteurs autour d’eux configurés, les utilisateurs règlent leur portée par défaut et <code>Public</code> sur <code>onqc</code>, et leurs canaux de test et robots sur leur ville.</p></li>
   <li data-phase="Phase 3"><h3>Seulement au besoin</h3><p>Si les messages sans portée sont encore trop bruyants dans une ville, les répéteurs peuvent aussi lancer <code>set flood.max.unscoped 3</code>. Les messages avec portée atteignent encore 16 sauts.</p></li>
 </ol>
