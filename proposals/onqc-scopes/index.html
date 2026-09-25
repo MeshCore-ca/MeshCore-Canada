@@ -3484,10 +3484,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#step-1-clear-any-old-regions" class="md-nav__link">
+  <a href="#step-1-check-your-firmware" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 1: Clear any old regions
+        Step 1: Check your firmware
       
     </span>
   </a>
@@ -3495,10 +3495,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#step-2-standard-meshcore-canada-settings" class="md-nav__link">
+  <a href="#step-2-clear-any-old-regions" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 2: Standard MeshCore Canada settings
+        Step 2: Clear any old regions
       
     </span>
   </a>
@@ -3506,10 +3506,49 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#step-3-region-settings" class="md-nav__link">
+  <a href="#step-3-standard-meshcore-canada-settings" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Step 3: Region settings
+        Step 3: Standard MeshCore Canada settings
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-4-region-settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 4: Region settings
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 4: Region settings">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#older-firmware" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Older firmware
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-5-check-the-result" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 5: Check the result
       
     </span>
   </a>
@@ -3721,7 +3760,8 @@
 
 <ul>
 <li><strong>Repeaters</strong> carry their city, their province, <code>onqc</code> and <code>can</code>.</li>
-<li><strong>Companions</strong> use <code>onqc</code> as their default, so direct messages reach anyone.</li>
+<li><strong>Companions</strong> use <code>onqc</code> as their default, so direct messages reach anyone,
+  once the repeaters around them are set up.</li>
 <li><strong><code>Public</code></strong> uses <code>onqc</code>, so everyone in Ontario and Québec can talk.</li>
 <li><strong>Test channels and bots</strong> use your city, so they stay local.</li>
 <li><strong>Messages with no scope</strong> still work inside each city. Bridge repeaters
@@ -3731,9 +3771,9 @@
 <p>A scope is a short name attached to a message, such as <code>yow</code>. Repeaters use it
 to decide whether to pass the message on.</p>
 <div class="mc-callout">
-<p>A scope is <strong>not</strong> encryption and <strong>not</strong> a GPS fence. Anyone can read the
-name, and it has nothing to do with where you are. It is only a label that
-says "repeaters that carry this name, please forward this."</p>
+<p>A scope is <strong>not</strong> encryption and <strong>not</strong> a GPS fence. Anyone who knows the
+name can use it, and it has nothing to do with where you are. It is only a
+label that says "repeaters that carry this name, please forward this."</p>
 </div>
 <p>Your app turns the name into a small code and puts it in the message header.
 Every repeater keeps a list of names it will forward. When a message arrives,
@@ -3772,7 +3812,7 @@ different messages.</p>
   <figcaption>The DM is tagged <code>onqc</code> because <code>onqc</code> is the companion default in this proposal. <a href="#why-the-companion-default-is-onqc">See why further down</a>. The repeater still hears every message. A scope only decides whether it passes the message on. Your companion also receives everything that reaches it.</figcaption>
 </figure>
 
-<p>Three details catch people out:</p>
+<p>Four details catch people out:</p>
 <ul>
 <li><strong>Spelling must be exact.</strong> <code>yow</code>, <code>YOW</code> and <code>ott</code> are three different
   names. A companion set to <code>yow</code> is ignored by a repeater that only carries <code>ott</code>.</li>
@@ -3780,6 +3820,10 @@ different messages.</p>
   straight along that path and scopes no longer matter.</li>
 <li><strong>There is no inheritance.</strong> Carrying <code>on</code> does not mean carrying <code>yow</code>.
   Each name has to be on the list by itself.</li>
+<li><strong>A repeater with no regions set drops every scoped message.</strong> Out of the
+  box, a repeater only carries <code>*</code>, so it forwards messages with no scope and
+  nothing else. Scoped messages only work once the repeaters along the way are
+  set up.</li>
 </ul>
 <h2 id="the-four-levels">The four levels<a class="headerlink" href="#the-four-levels" title="Permanent link">&para;</a></h2>
 <figure class="scp-figure">
@@ -3831,12 +3875,10 @@ Québec mesh".</p>
 <ul>
 <li>They are the same codes MeshMapper already uses, for example
   <code>yow.meshmapper.net</code>.</li>
-<li>MeshCore already uses airport codes in other places too, such as the
-  <a href="../../analyzer/iata-codes/">location code every observer reports</a>. Inventing
-  a separate set of names just for regions would mean two ways to name the
-  same area, and more confusion over time. Airport codes are not a perfect fit
-  for mesh areas, but MeshCore already uses them for a variety of things and
-  that is not going to change, so regions should follow along.</li>
+<li>MeshCore already uses airport codes elsewhere, such as the
+  <a href="../../analyzer/iata-codes/">location code every observer reports</a>. They are
+  not a perfect fit for mesh areas, but that is not going to change, and a
+  second set of names just for regions would only add confusion over time.</li>
 <li>There are no accents or capital letters to get wrong. <code>montréal</code>,
   <code>Montreal</code> and <code>montreal</code> would be three different scopes.</li>
 <li>They are easy to split later. If Renfrew wants its own area one day, it can
@@ -3892,74 +3934,155 @@ the cursor back to the top.</p>
 there. Run <code>region</code> afterwards to see the full list.</p>
 </div>
 <h2 id="repeater-setup">Repeater setup<a class="headerlink" href="#repeater-setup" title="Permanent link">&para;</a></h2>
-<h3 id="step-1-clear-any-old-regions">Step 1: Clear any old regions<a class="headerlink" href="#step-1-clear-any-old-regions" title="Permanent link">&para;</a></h3>
-<p>Many repeaters already have regions from the older setup, such as <code>can</code>,
-<code>on-alg</code> or <code>ott</code>. <code>region def</code> never deletes anything, so clear them first.</p>
-<ol>
-<li>Run <code>region</code> to list what is there.</li>
-<li>Remove every name except <code>*</code> with <code>region remove &lt;name&gt;</code>. Start with the
-   most indented line and work up. If you see <code>Err - not empty</code>, a name is
-   still indented under it, so remove that one first.</li>
-<li>Run <code>region save</code>.</li>
-</ol>
-<p>For example, a repeater set up with the old Ottawa path:</p>
-<div class="highlight"><pre><span></span><code>region remove ott
-region remove on-alg
-region remove on
-region remove can
-region save
+<p>Type these into the repeater's command line <strong>one command at a time</strong>: in the
+MeshCore app, open the repeater, log in as admin and use the command box in
+<strong>Repeater Admin</strong>, or use the USB console. Each command has its own copy
+button. Wait for <code>OK</code> before sending the next one.</p>
+<div class="scp-shots">
+<figure class="scp-shot">
+<p><a href="../../assets/images/onqc-scopes/repeater-01-contacts.webp"><img alt="Contacts list filtered to find a repeater" height="1304" loading="lazy" src="../../assets/images/onqc-scopes/repeater-01-contacts.webp" width="600" /></a></p>
+<figcaption><span class="scp-shot__num">1</span> In <strong>Contacts</strong>, find your repeater (search by name) and tap it.</figcaption>
+</figure>
+<figure class="scp-shot">
+<p><a href="../../assets/images/onqc-scopes/repeater-02-login.webp"><img alt="Repeater Login screen with a password field" height="1304" loading="lazy" src="../../assets/images/onqc-scopes/repeater-02-login.webp" width="600" /></a></p>
+<figcaption><span class="scp-shot__num">2</span> Enter the admin password and tap <strong>Log In</strong>.</figcaption>
+</figure>
+<figure class="scp-shot">
+<p><a href="../../assets/images/onqc-scopes/repeater-03-admin.webp"><img alt="Repeater Admin screen with Command Line at the bottom" height="1304" loading="lazy" src="../../assets/images/onqc-scopes/repeater-03-admin.webp" width="600" /></a></p>
+<figcaption><span class="scp-shot__num">3</span> Check for <strong>You are logged in as an Admin</strong>, then tap <strong>Command Line</strong> at the bottom.</figcaption>
+</figure>
+</div>
+<div class="mc-callout" data-kind="warning">
+<p><strong>No <code>OK</code>? Send the same command again.</strong> Over the mesh, a reply can take a few
+seconds or get lost. In the MeshCore app, tap and hold the command in the
+history and choose <strong>Send Again</strong>. Running a command twice is safe. If a
+repeated <code>region remove</code> answers <code>Err - not found</code>, the first one already
+worked.</p>
+</div>
+<div class="scp-shots">
+<figure class="scp-shot">
+<p><a href="../../assets/images/onqc-scopes/repeater-04-cli-standard.webp"><img alt="Command line where one command was sent twice before getting OK" height="1304" loading="lazy" src="../../assets/images/onqc-scopes/repeater-04-cli-standard.webp" width="600" /></a></p>
+<figcaption><span class="scp-shot__num">1</span> Make sure every command gets an <code>OK</code> back. Here, the first <code>set flood.advert.interval 47</code> never got one, so it was sent again.</figcaption>
+</figure>
+<figure class="scp-shot">
+<p><a href="../../assets/images/onqc-scopes/repeater-06-send-again.webp"><img alt="Command history menu with Copy and Send Again" height="1304" loading="lazy" src="../../assets/images/onqc-scopes/repeater-06-send-again.webp" width="600" /></a></p>
+<figcaption><span class="scp-shot__num">2</span> No <code>OK</code>? Tap and hold the command and choose <strong>Send Again</strong>.</figcaption>
+</figure>
+</div>
+<h3 id="step-1-check-your-firmware">Step 1: Check your firmware<a class="headerlink" href="#step-1-check-your-firmware" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>ver
 </code></pre></div>
-<p>Removing <code>on</code> and <code>can</code> is fine. The region settings in step 3 add them back. Run <code>region</code> again, and you
-should only see <code>* F</code>.</p>
-<h3 id="step-2-standard-meshcore-canada-settings">Step 2: Standard MeshCore Canada settings<a class="headerlink" href="#step-2-standard-meshcore-canada-settings" title="Permanent link">&para;</a></h3>
+<p>This shows the firmware version. It decides which region commands you use in
+step 4:</p>
+<ul>
+<li><strong>1.16 or newer:</strong> use <code>region def</code>.</li>
+<li><strong>1.15 or older:</strong> <code>region def</code> answers <code>Err - ??</code>. Use the <code>region put</code>
+  commands under <a href="#older-firmware">Older firmware</a> instead, or update the
+  firmware first.</li>
+</ul>
+<div class="scp-shots">
+<figure class="scp-shot">
+<p><a href="../../assets/images/onqc-scopes/repeater-05-ver.webp"><img alt="Command line showing region def answering Err - ?? and ver showing v1.15.0" height="1304" loading="lazy" src="../../assets/images/onqc-scopes/repeater-05-ver.webp" width="600" /></a></p>
+<figcaption><span class="scp-shot__num">1</span> On this repeater, <code>region def</code> answers <code>Err - ??</code>, and <code>ver</code> shows <strong>v1.15.0</strong>, so it uses the older-firmware steps.</figcaption>
+</figure>
+</div>
+<h3 id="step-2-clear-any-old-regions">Step 2: Clear any old regions<a class="headerlink" href="#step-2-clear-any-old-regions" title="Permanent link">&para;</a></h3>
+<p>Many repeaters already have regions from the older setup, such as <code>can</code>,
+<code>on-alg</code> or <code>ott</code>. The new commands never delete anything, so clear them first.</p>
+<ol>
+<li>
+<p>List what is there:</p>
+<div class="highlight"><pre><span></span><code>region
+</code></pre></div>
+</li>
+<li>
+<p>Remove every name except <code>*</code>, one at a time, with <code>region remove &lt;name&gt;</code>.
+   Start with the most indented line and work up. If you see
+   <code>Err - not empty</code>, another name is still indented under it, so remove that
+   one first.</p>
+</li>
+<li>
+<p>Save:</p>
+<div class="highlight"><pre><span></span><code>region save
+</code></pre></div>
+</li>
+</ol>
+<p>For example, a repeater set up with the old Ottawa path runs these, in order:</p>
+<div class="highlight"><pre><span></span><code>region remove ott
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region remove on-alg
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region remove on
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region remove can
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region save
+</code></pre></div>
+<p>Removing <code>on</code> and <code>can</code> is fine. Step 4 adds them back. Run <code>region</code> again,
+and you should only see <code>*^ F</code>.</p>
+<h3 id="step-3-standard-meshcore-canada-settings">Step 3: Standard MeshCore Canada settings<a class="headerlink" href="#step-3-standard-meshcore-canada-settings" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code>set path.hash.mode 2
-set advert.interval 240
-set flood.advert.interval 47
-set flood.max 16
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>set advert.interval 240
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>set flood.advert.interval 47
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>set flood.max 16
 </code></pre></div>
 <dl class="scp-explain">
-  <dt>path.hash.mode 2</dt><dd>Uses 3-byte repeater IDs in message paths, so fewer repeaters share an ID.</dd>
+  <dt>path.hash.mode 2</dt><dd>Uses 3-byte repeater IDs in message paths, so fewer repeaters share an ID. Needs firmware 1.14 or newer.</dd>
   <dt>advert.interval 240</dt><dd>Announces this repeater to direct neighbours every 4 hours.</dd>
   <dt>flood.advert.interval 47</dt><dd>Announces this repeater across the network every 47 hours.</dd>
   <dt>flood.max 16</dt><dd>No flood message travels more than 16 hops, scoped or not.</dd>
 </dl>
 
-<h3 id="step-3-region-settings">Step 3: Region settings<a class="headerlink" href="#step-3-region-settings" title="Permanent link">&para;</a></h3>
+<p>These save by themselves. No <code>region save</code> is needed for them.</p>
+<h3 id="step-4-region-settings">Step 4: Region settings<a class="headerlink" href="#step-4-region-settings" title="Permanent link">&para;</a></h3>
 <p>Your city code is your <strong>MeshMapper zone</strong>. Open <a href="https://meshmapper.net/">MeshMapper</a>,
 find the zone your repeater sits in, and use its code. It is a map everyone
 already uses, so there is nothing new to look up.</p>
-<p>The pattern is always the same:</p>
-<div class="highlight"><pre><span></span><code>region def &lt;city&gt;|* &lt;on or qc&gt;|* onqc|* can
-</code></pre></div>
-<p>Examples:</p>
+<p>On <strong>firmware 1.16 or newer</strong>, pick your area and run the four commands in
+order:</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:4"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Ottawa and surrounding areas</label><label for="__tabbed_1_2">Gatineau</label><label for="__tabbed_1_3">Montréal and surrounding areas</label><label for="__tabbed_1_4">Québec City</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>region def yow|* on|* onqc|* can
-region allowf *
-region default yow
-region save
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region allowf *
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region default yow
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region save
 </code></pre></div>
 </div>
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>region def yow|* qc|* onqc|* can
-region allowf *
-region default yow
-region save
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region allowf *
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region default yow
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region save
 </code></pre></div>
 </div>
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>region def yul|* qc|* onqc|* can
-region allowf *
-region default yul
-region save
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region allowf *
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region default yul
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region save
 </code></pre></div>
 </div>
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code>region def yqb|* qc|* onqc|* can
-region allowf *
-region default yqb
-region save
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region allowf *
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region default yqb
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region save
 </code></pre></div>
 </div>
 </div>
@@ -3970,26 +4093,99 @@ nothing new to learn.</p>
 <dl class="scp-explain">
   <dt>region def …</dt><dd>Carry your city, your province, <code>onqc</code> and <code>can</code>.</dd>
   <dt>region allowf *</dt><dd>Also forward messages with <strong>no scope</strong>. This is already on by default. We set it anyway so you can see it.</dd>
-  <dt>region default yow</dt><dd>This repeater's own adverts use your city's scope, so they stay local.</dd>
-  <dt>region save</dt><dd>Keeps the region settings after a reboot. The <code>set</code> commands save by themselves.</dd>
+  <dt>region default &lt;city&gt;</dt><dd>This repeater's own adverts use your city's scope, so they stay local.</dd>
+  <dt>region save</dt><dd>Keeps the region settings after a reboot.</dd>
 </dl>
 
-<p>To check, run <code>region</code>. For Ottawa you should see:</p>
-<div class="highlight"><pre><span></span><code>* F
+<h4 id="older-firmware">Older firmware<a class="headerlink" href="#older-firmware" title="Permanent link">&para;</a></h4>
+<p>If <code>region def</code> answers <code>Err - ??</code>, your firmware is older than 1.16. Add each
+code with <code>region put</code> instead. These examples are for Ottawa. For another
+area, replace <code>yow</code> with your city code, and <code>on</code> with <code>qc</code> in Québec.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Firmware 1.15</label><label for="__tabbed_2_2">Firmware 1.10 to 1.14</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>region put yow
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region put on
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region put onqc
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region put can
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region allowf *
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region default yow
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region save
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code>region put yow
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region allowf yow
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region put on
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region allowf on
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region put onqc
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region allowf onqc
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region put can
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region allowf can
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region allowf *
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region save
+</code></pre></div>
+</div>
+</div>
+</div>
+<p>On <strong>1.15</strong>, each <code>region put</code> answers <code>OK - (flood allowed)</code>, and
+<code>region default yow</code> answers <code>default scope is now yow</code>. A new region forwards
+straight away. On <strong>1.10 to 1.14</strong>, a new
+region starts with forwarding <strong>off</strong>, so each one also needs
+<code>region allowf</code>. Those versions also have no <code>region default</code>, so the
+repeater's own adverts stay unscoped. Updating the firmware is worth it.</p>
+<div class="scp-shots">
+<figure class="scp-shot">
+<p><a href="../../assets/images/onqc-scopes/repeater-07-region-put-115.webp"><img alt="Command line showing region put commands on firmware 1.15" height="1304" loading="lazy" src="../../assets/images/onqc-scopes/repeater-07-region-put-115.webp" width="600" /></a></p>
+<figcaption><span class="scp-shot__num">1</span> Firmware 1.15: each <code>region put</code> answers <code>OK - (flood allowed)</code>. <code>region put on</code> needed a second send.</figcaption>
+</figure>
+</div>
+<h3 id="step-5-check-the-result">Step 5: Check the result<a class="headerlink" href="#step-5-check-the-result" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code>region
+</code></pre></div>
+<p>For Ottawa, you should see:</p>
+<div class="highlight"><pre><span></span><code>*^ F
  yow F
  on F
  onqc F
  can F
 </code></pre></div>
-<p><code>F</code> means "flood allowed": the repeater forwards that name.</p>
+<p><code>F</code> means "flood allowed": the repeater forwards that name. The <code>^</code> next to
+<code>*</code> marks the repeater's home region; with none set, it sits on <code>*</code>. You can
+ignore it.</p>
+<div class="scp-shots">
+<figure class="scp-shot">
+<p><a href="../../assets/images/onqc-scopes/repeater-08-region-result.webp"><img alt="Command line showing the final region list" height="1304" loading="lazy" src="../../assets/images/onqc-scopes/repeater-08-region-result.webp" width="600" /></a></p>
+<figcaption><span class="scp-shot__num">1</span> The finished list on an Ottawa repeater.</figcaption>
+</figure>
+</div>
 <h3 id="bridge-repeaters">Bridge repeaters<a class="headerlink" href="#bridge-repeaters" title="Permanent link">&para;</a></h3>
 <p>A repeater that links two city zones on purpose carries <strong>both</strong> city codes.
 For example, a repeater in <strong>Rigaud</strong> sits in the <code>yow</code> zone, on the Québec
-side, and links it to the Montréal zone:</p>
+side, and links it to the Montréal zone. On firmware 1.16 or newer, run these
+in order:</p>
 <div class="highlight"><pre><span></span><code>region def yow|* yul|* qc|* onqc|* can
-region denyf *
-region default yow
-region save
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region denyf *
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region default yow
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region save
 </code></pre></div>
 <dl class="scp-explain">
   <dt>region def …</dt><dd>Carries both city codes, plus <code>qc</code>, <code>onqc</code> and <code>can</code>.</dd>
@@ -4036,12 +4232,45 @@ messages with no scope go around it.</p>
 </tbody>
 </table>
 <h2 id="companion-setup">Companion setup<a class="headerlink" href="#companion-setup" title="Permanent link">&para;</a></h2>
+<div class="mc-callout" data-kind="warning">
+<p><strong>Wait until the repeaters around you are set up.</strong> A repeater with no regions
+set drops every scoped message. If you set your default to <code>onqc</code> before the
+repeaters on your routes carry it, your channel messages and first DMs will
+only reach nearby. Until then, leave <strong>Default Region Scope</strong> empty. You will
+still receive everything.</p>
+</div>
 <h3 id="step-1-set-your-default-scope">Step 1: Set your default scope<a class="headerlink" href="#step-1-set-your-default-scope" title="Permanent link">&para;</a></h3>
 <p>In the MeshCore app, open <strong>Settings</strong>. Under <strong>Network Settings</strong>, tap
 <strong>Default Region Scope</strong>, add <code>onqc</code> and select it.</p>
+<div class="scp-shots">
+<figure class="scp-shot">
+<p><a href="../../assets/images/onqc-scopes/companion-01-connected.webp"><img alt="MeshCore app contacts list with the settings cog at the top right" height="1304" loading="lazy" src="../../assets/images/onqc-scopes/companion-01-connected.webp" width="600" /></a></p>
+<figcaption><span class="scp-shot__num">1</span> Connect your companion to the MeshCore app and tap the <strong>settings cog</strong> in the top right.</figcaption>
+</figure>
+<figure class="scp-shot">
+<p><a href="../../assets/images/onqc-scopes/companion-02-settings.webp"><img alt="Settings screen with Network Settings and Default Region Scope" height="1304" loading="lazy" src="../../assets/images/onqc-scopes/companion-02-settings.webp" width="600" /></a></p>
+<figcaption><span class="scp-shot__num">2</span> Scroll down to <strong>Network Settings</strong> and tap <strong>Default Region Scope</strong>.</figcaption>
+</figure>
+<figure class="scp-shot">
+<p><a href="../../assets/images/onqc-scopes/companion-03-select-region.webp"><img alt="Select Region screen with no regions and an Add Region button" height="1304" loading="lazy" src="../../assets/images/onqc-scopes/companion-03-select-region.webp" width="600" /></a></p>
+<figcaption><span class="scp-shot__num">3</span> If <code>onqc</code> is not listed, tap <strong>Add Region</strong>, or the <strong>+</strong> at the top right.</figcaption>
+</figure>
+<figure class="scp-shot">
+<p><a href="../../assets/images/onqc-scopes/companion-04-add-region.webp"><img alt="Add Region screen with onqc typed in" height="1304" loading="lazy" src="../../assets/images/onqc-scopes/companion-04-add-region.webp" width="600" /></a></p>
+<figcaption><span class="scp-shot__num">4</span> Type <code>onqc</code>, all lowercase, and tap the <strong>checkmark</strong> in the top right.</figcaption>
+</figure>
+<figure class="scp-shot">
+<p><a href="../../assets/images/onqc-scopes/companion-05-pick-onqc.webp"><img alt="Select Region screen with onqc listed" height="1304" loading="lazy" src="../../assets/images/onqc-scopes/companion-05-pick-onqc.webp" width="600" /></a></p>
+<figcaption><span class="scp-shot__num">5</span> Tap <code>onqc</code> to select it.</figcaption>
+</figure>
+<figure class="scp-shot">
+<p><a href="../../assets/images/onqc-scopes/companion-06-saved.webp"><img alt="Settings showing onqc as the default region scope and a Settings Saved message" height="1304" loading="lazy" src="../../assets/images/onqc-scopes/companion-06-saved.webp" width="600" /></a></p>
+<figcaption><span class="scp-shot__num">6</span> Default Region Scope now shows <code>onqc</code>. Tap the <strong>checkmark</strong> in the top right. It spins while saving, then <strong>Settings Saved!</strong> pops up.</figcaption>
+</figure>
+</div>
 <h3 id="step-2-set-a-scope-on-each-channel">Step 2: Set a scope on each channel<a class="headerlink" href="#step-2-set-a-scope-on-each-channel" title="Permanent link">&para;</a></h3>
-<p>Open the channel, use the channel menu, tap <strong>Set Region Scope</strong>, and pick the
-scope from this table:</p>
+<p>Open the channel, tap <strong>⋮</strong> in the top right, choose <strong>Set Region Scope</strong>,
+and pick the scope from this table:</p>
 <table>
 <thead>
 <tr>
@@ -4057,12 +4286,12 @@ scope from this table:</p>
 <td>Everyone in Ontario and Québec can talk</td>
 </tr>
 <tr>
-<td>Test channels, such as <code>#test</code></td>
+<td>Test channels, such as <code>#testing</code></td>
 <td>Your city, for example <code>yow</code></td>
 <td>Tests stay local</td>
 </tr>
 <tr>
-<td>Bot channels</td>
+<td>Bot channels, such as <code>#bots</code></td>
 <td>Your city, for example <code>yow</code></td>
 <td>Bot replies stay local</td>
 </tr>
@@ -4074,6 +4303,50 @@ scope from this table:</p>
 </tbody>
 </table>
 <p>If you run a bot, set that bot's own <strong>Default Region Scope</strong> to your city too.</p>
+<p><strong>Example: <code>Public</code> to <code>onqc</code></strong></p>
+<div class="scp-shots">
+<figure class="scp-shot">
+<p><a href="../../assets/images/onqc-scopes/companion-07-channels.webp"><img alt="Channels list with Public at the top" height="1304" loading="lazy" src="../../assets/images/onqc-scopes/companion-07-channels.webp" width="600" /></a></p>
+<figcaption><span class="scp-shot__num">1</span> Tap <strong>Channels</strong> in the bottom menu bar and open <strong>Public</strong>.</figcaption>
+</figure>
+<figure class="scp-shot">
+<p><a href="../../assets/images/onqc-scopes/companion-09-channel-menu.webp"><img alt="Public channel menu with Set Region Scope" height="1304" loading="lazy" src="../../assets/images/onqc-scopes/companion-09-channel-menu.webp" width="600" /></a></p>
+<figcaption><span class="scp-shot__num">2</span> Tap <strong>⋮</strong> in the top right and choose <strong>Set Region Scope</strong>.</figcaption>
+</figure>
+<figure class="scp-shot">
+<p><a href="../../assets/images/onqc-scopes/companion-10-public-pick-onqc.webp"><img alt="Select Region list with onqc" height="1304" loading="lazy" src="../../assets/images/onqc-scopes/companion-10-public-pick-onqc.webp" width="600" /></a></p>
+<figcaption><span class="scp-shot__num">3</span> Tap <code>onqc</code>.</figcaption>
+</figure>
+<figure class="scp-shot">
+<p><a href="../../assets/images/onqc-scopes/companion-11-public-scoped.webp"><img alt="Public channel header showing Region: onqc" height="1304" loading="lazy" src="../../assets/images/onqc-scopes/companion-11-public-scoped.webp" width="600" /></a></p>
+<figcaption><span class="scp-shot__num">4</span> The header now shows <strong>Region: onqc</strong>, and a banner says only repeaters allowing that region will forward. The limit drops to 127 characters.</figcaption>
+</figure>
+</div>
+<div class="mc-callout">
+<p><strong>Scoped messages are a little shorter.</strong> Once a channel has a scope, the app
+allows fewer characters per message. In our testing, the limit on <code>Public</code>
+dropped from 137 to 127 characters after setting it to <code>onqc</code>. The app sets
+the exact limit, and it can vary with your node name and app version.</p>
+</div>
+<p><strong>Example: <code>#testing</code> to your city</strong></p>
+<div class="scp-shots">
+<figure class="scp-shot">
+<p><a href="../../assets/images/onqc-scopes/companion-13-testing-menu.webp"><img alt="#testing channel menu with Set Region Scope" height="1304" loading="lazy" src="../../assets/images/onqc-scopes/companion-13-testing-menu.webp" width="600" /></a></p>
+<figcaption><span class="scp-shot__num">1</span> Open the channel, tap <strong>⋮</strong> and choose <strong>Set Region Scope</strong>.</figcaption>
+</figure>
+<figure class="scp-shot">
+<p><a href="../../assets/images/onqc-scopes/companion-15-add-yow.webp"><img alt="Add Region screen with yow typed in" height="1304" loading="lazy" src="../../assets/images/onqc-scopes/companion-15-add-yow.webp" width="600" /></a></p>
+<figcaption><span class="scp-shot__num">2</span> If your city code is not listed, tap <strong>+</strong>, type it (for example <code>yow</code>) and tap the <strong>checkmark</strong>.</figcaption>
+</figure>
+<figure class="scp-shot">
+<p><a href="../../assets/images/onqc-scopes/companion-16-yow-added.webp"><img alt="Select Region list with onqc and yow and a Region has been added message" height="1304" loading="lazy" src="../../assets/images/onqc-scopes/companion-16-yow-added.webp" width="600" /></a></p>
+<figcaption><span class="scp-shot__num">3</span> <strong>Region has been added!</strong> Tap your city code to select it.</figcaption>
+</figure>
+<figure class="scp-shot">
+<p><a href="../../assets/images/onqc-scopes/companion-17-testing-scoped.webp"><img alt="#testing channel header showing Region: yow" height="1304" loading="lazy" src="../../assets/images/onqc-scopes/companion-17-testing-scoped.webp" width="600" /></a></p>
+<figcaption><span class="scp-shot__num">4</span> The header now shows <strong>Region: yow</strong>.</figcaption>
+</figure>
+</div>
 <h2 id="why-the-companion-default-is-onqc">Why the companion default is <code>onqc</code><a class="headerlink" href="#why-the-companion-default-is-onqc" title="Permanent link">&para;</a></h2>
 <p>You cannot pick a scope for a single direct message. When a DM has no known
 path yet, it floods using your <strong>default scope</strong>. The reply that tells your
@@ -4178,13 +4451,6 @@ into the next city. Here is the Ottawa to Montréal link through Rigaud.</p>
 <td>Whole Montréal area</td>
 </tr>
 <tr>
-<td>Old app or old repeater advert, no scope</td>
-<td>✅ Forward</td>
-<td>❌ Drop</td>
-<td>✅ Forward</td>
-<td>Stays in whichever city sent it</td>
-</tr>
-<tr>
 <td>Ottawa channel or bot, <code>yow</code></td>
 <td>✅ Forward</td>
 <td>✅ Forward</td>
@@ -4220,12 +4486,14 @@ locally.</p>
 <h2 id="rollout">Rollout<a class="headerlink" href="#rollout" title="Permanent link">&para;</a></h2>
 <ol class="scp-timeline">
   <li data-phase="Phase 1"><h3>Repeaters</h3><p>Owners clear old regions and add their codes. Normal repeaters keep <code>*</code> allowed; bridge repeaters drop it. Nothing breaks inside any city.</p></li>
-  <li data-phase="Phase 2"><h3>Companions</h3><p>Users set their default and <code>Public</code> to <code>onqc</code>, and test channels and bots to their city.</p></li>
+  <li data-phase="Phase 2"><h3>Companions</h3><p>Once the repeaters around them are set up, users set their default and <code>Public</code> to <code>onqc</code>, and test channels and bots to their city.</p></li>
   <li data-phase="Phase 3"><h3>Only if needed</h3><p>If messages with no scope are still too noisy inside a city, repeaters can also run <code>set flood.max.unscoped 3</code>. Scoped messages still reach 16 hops.</p></li>
 </ol>
 
 <h2 id="things-to-know">Things to know<a class="headerlink" href="#things-to-know" title="Permanent link">&para;</a></h2>
 <ul>
+<li><strong>Scoped messages are about 10 characters shorter.</strong> The app lowers the
+  message length limit on scoped channels (137 to 127 in our testing).</li>
 <li><strong>Repeater adverts stay in their city.</strong> Montréal users will not see Ottawa
   repeaters through flood adverts.</li>
 <li><strong>16 hops has to be enough.</strong> <code>flood.max</code> applies to <code>onqc</code> too. If the
