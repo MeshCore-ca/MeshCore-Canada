@@ -272,6 +272,13 @@ administrateur et utilisez la zone de commande de **Repeater Admin**, ou
 utilisez la console USB. Chaque commande a son propre bouton de copie.
 Attendez `OK` avant d’envoyer la suivante.
 
+<div class="mc-callout" data-kind="warning" markdown>
+**Pas de `OK`? Renvoyez la même commande.** Par le réseau maillé, une réponse
+peut prendre quelques secondes ou se perdre. Lancer une commande deux fois ne
+cause pas de problème. Si un `region remove` répété répond `Err - not found`,
+le premier a déjà fonctionné.
+</div>
+
 ### Étape 1 : Vérifier le micrologiciel
 
 ```text
