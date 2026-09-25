@@ -48,6 +48,31 @@
     });
   });
 
+  // "Any old regions?" question: show only the branch that matches the answer.
+  var ask = document.querySelector("[data-scp-ask]");
+  if (ask) {
+    var choices = ask.querySelectorAll("[data-scp-choice]");
+    var branches = document.querySelectorAll("[data-scp-branch]");
+    branches.forEach(function (branch) {
+      branch.hidden = true;
+    });
+    choices.forEach(function (choice) {
+      choice.addEventListener("click", function () {
+        var answer = choice.getAttribute("data-scp-choice");
+        choices.forEach(function (other) {
+          other.setAttribute("aria-pressed", String(other === choice));
+        });
+        branches.forEach(function (branch) {
+          branch.hidden = branch.getAttribute("data-scp-branch") !== answer;
+        });
+      });
+    });
+    ask.hidden = false;
+    document.querySelectorAll("[data-scp-ask-nojs]").forEach(function (note) {
+      note.hidden = true;
+    });
+  }
+
   if (!picker) return;
 
   var area = picker.querySelector("[data-scp-area]");
