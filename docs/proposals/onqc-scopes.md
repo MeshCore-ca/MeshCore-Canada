@@ -82,7 +82,7 @@ Once every phase is done:
 - **`Public`** uses `onqc`, so everyone in Ontario and Québec can talk.
 - **Test channels** use your city, so they stay local.
 - **Messages with no scope** still work inside each city. Edge repeaters,
-  the ones that hear another city, drop them, so they don't flood the next city.
+  the ones that link two cities, drop them, so they don't flood the next city.
 
 <div class="mc-callout" data-kind="warning" markdown>
 Companions come last, in Phase 2. Setting a scope on your companion before
@@ -102,8 +102,8 @@ people, not more.
 - **Hop:** one repeater passing a message on.
 - **DM:** a direct message to one contact.
 - **Advert:** a radio announcing itself so others can find it.
-- **Edge repeater:** a repeater that regularly hears repeaters from another
-  city.
+- **Edge repeater:** a repeater that regularly talks to repeaters in two
+  MeshMapper zones, for example both `yow` and `yul`.
 
 ## What a scope is
 
@@ -369,9 +369,18 @@ people already see the map today, so there is nothing new to learn.
 <div class="scp-picker" data-scp-picker data-copy-label="Copy" data-copied-label="Copied" hidden>
   <label class="scp-picker__field"><span>Area</span><select data-scp-area><option value="ottawa" data-city="yow" data-province="on">Ottawa and surrounding areas</option><option value="gatineau" data-city="yow" data-province="qc">Gatineau</option><option value="montreal" data-city="yul" data-province="qc">Montréal and surrounding areas</option><option value="quebec" data-city="yqb" data-province="qc">Québec City</option></select></label>
   <label class="scp-picker__field"><span>Firmware</span><select data-scp-firmware><option value="116">1.16 or newer</option><option value="115">1.15</option><option value="114">1.14</option><option value="110">1.10 to 1.13</option></select></label>
-  <label class="scp-picker__field"><span>Repeater type</span><select data-scp-type><option value="city">City repeater</option><option value="edge">Edge repeater</option></select><small class="scp-picker__hint">Pick edge if it regularly hears another city.</small></label>
+  <label class="scp-picker__field"><span>Repeater type</span><select data-scp-type><option value="city">City repeater</option><option value="edge">Edge repeater</option></select><small class="scp-picker__hint">Pick edge only if it regularly talks to repeaters in another MeshMapper zone.</small></label>
   <label class="scp-picker__field" data-scp-extra-field hidden><span>Neighbouring city (optional)</span><select data-scp-extra><option value="">None</option><option value="yow">Ottawa / Gatineau (yow)</option><option value="yul">Montréal (yul)</option><option value="yqb">Québec City (yqb)</option></select></label>
 </div>
+
+<div class="mc-callout" markdown>
+**City or edge?** An edge repeater regularly talks to repeaters in **two
+MeshMapper zones**, for example both `yow` and `yul`. Every other repeater is
+a city repeater, including one on the outer edge of its zone: if nothing on
+the other side connects to it, it is a city repeater. If it starts linking to
+another zone regularly, switch it to edge.
+</div>
+
 
 ### Step 2: Clear any old regions
 
@@ -438,7 +447,7 @@ These follow your answers in step 1. Run them in order.
 <p class="scp-note scp-note--info" data-scp-note="fw-116" hidden><code>region def</code> answers with the finished list, so you can see straight away that it worked.</p>
 <p class="scp-note scp-note--info" data-scp-note="fw-115" hidden>Each <code>region put</code> answers <code>OK - (flood allowed)</code>, and <code>region default</code> answers <code>default scope is now …</code>.</p>
 <p class="scp-note scp-note--info" data-scp-note="fw-put-allow" hidden>On this firmware a new region starts with forwarding <strong>off</strong>, so each one also needs <code>region allowf</code>. There is no <code>region default</code>, so this repeater's own adverts stay unscoped. Updating the firmware is worth it.</p>
-<p class="scp-note" data-scp-note="edge" hidden><strong>Edge repeater:</strong> drops messages with no scope, so they do not flood the next city. Use it for any repeater that regularly hears another city, such as one near a zone boundary, on a high site, or with neighbours from another city. Otherwise, messages with no scope leak through it. Nearby people without a scope are not relayed by it, so avoid it where it is the only repeater. See <a href="#who-hears-what">Who hears what</a>.</p>
+<p class="scp-note" data-scp-note="edge" hidden><strong>Edge repeater:</strong> drops messages with no scope, so they do not flood the next city. Use it for any repeater that regularly talks to repeaters in two MeshMapper zones, such as Rigaud, which links <code>yow</code> and <code>yul</code>. Otherwise, messages with no scope leak through it. Nearby people without a scope are not relayed by it, so avoid it where it is the only repeater. See <a href="#who-hears-what">Who hears what</a>.</p>
 <p class="scp-note" data-scp-note="extra" hidden><strong>Neighbouring city:</strong> this only helps people near this repeater take part in that city's channels. Everyone else reaches the other city through <code>onqc</code>. Rigaud, for example, carries <code>yul</code> as well as <code>yow</code>.</p>
 <p class="scp-note" data-scp-nojs>These commands are for an Ottawa-area city repeater on firmware 1.16 or newer. Turn on JavaScript to match them to your repeater.</p>
 </div>

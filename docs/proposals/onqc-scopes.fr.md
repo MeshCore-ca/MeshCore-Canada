@@ -89,7 +89,7 @@ Une fois toutes les phases terminées :
   puisse se parler.
 - **Les canaux de test** utilisent votre ville, pour rester locaux.
 - **Les messages sans portée** fonctionnent encore dans chaque ville. Les
-  répéteurs de bordure, ceux qui entendent une autre ville, les rejettent, pour
+  répéteurs de bordure, ceux qui relient deux villes, les rejettent, pour
   qu’ils n’inondent pas la ville voisine.
 
 <div class="mc-callout" data-kind="warning" markdown>
@@ -111,8 +111,8 @@ prêts fait que vos messages joignent **moins** de gens, pas plus.
 - **MP :** un message privé à un seul contact.
 - **Annonce (advert) :** une radio qui s’annonce pour que les autres la
   trouvent.
-- **Répéteur de bordure :** un répéteur qui entend régulièrement des
-  répéteurs d’une autre ville.
+- **Répéteur de bordure :** un répéteur qui communique régulièrement avec des
+  répéteurs de deux zones MeshMapper, par exemple `yow` et `yul`.
 
 ## Qu’est-ce qu’une portée?
 
@@ -392,9 +392,19 @@ carte aujourd’hui; il n’y a donc rien de nouveau à apprendre.
 <div class="scp-picker" data-scp-picker data-copy-label="Copier" data-copied-label="Copié" hidden>
   <label class="scp-picker__field"><span>Secteur</span><select data-scp-area><option value="ottawa" data-city="yow" data-province="on">Ottawa et environs</option><option value="gatineau" data-city="yow" data-province="qc">Gatineau</option><option value="montreal" data-city="yul" data-province="qc">Montréal et environs</option><option value="quebec" data-city="yqb" data-province="qc">Ville de Québec</option></select></label>
   <label class="scp-picker__field"><span>Micrologiciel</span><select data-scp-firmware><option value="116">1.16 ou plus récent</option><option value="115">1.15</option><option value="114">1.14</option><option value="110">1.10 à 1.13</option></select></label>
-  <label class="scp-picker__field"><span>Type de répéteur</span><select data-scp-type><option value="city">Répéteur de ville</option><option value="edge">Répéteur de bordure</option></select><small class="scp-picker__hint">Choisissez bordure s’il entend souvent une autre ville.</small></label>
+  <label class="scp-picker__field"><span>Type de répéteur</span><select data-scp-type><option value="city">Répéteur de ville</option><option value="edge">Répéteur de bordure</option></select><small class="scp-picker__hint">Choisissez bordure seulement s’il communique régulièrement avec des répéteurs d’une autre zone MeshMapper.</small></label>
   <label class="scp-picker__field" data-scp-extra-field hidden><span>Ville voisine (facultatif)</span><select data-scp-extra><option value="">Aucune</option><option value="yow">Ottawa / Gatineau (yow)</option><option value="yul">Montréal (yul)</option><option value="yqb">Ville de Québec (yqb)</option></select></label>
 </div>
+
+<div class="mc-callout" markdown>
+**Ville ou bordure?** Un répéteur de bordure communique régulièrement avec des
+répéteurs de **deux zones MeshMapper**, par exemple `yow` et `yul`. Tous les
+autres sont des répéteurs de ville, y compris celui qui se trouve à la limite
+extérieure de sa zone : si rien de l’autre côté ne s’y connecte, c’est un
+répéteur de ville. S’il commence à se relier régulièrement à une autre zone,
+passez-le en bordure.
+</div>
+
 
 ### Étape 2 : Effacer les anciennes régions
 
@@ -463,7 +473,7 @@ Ces commandes suivent vos réponses de l’étape 1. Lancez-les dans l’ordre.
 <p class="scp-note scp-note--info" data-scp-note="fw-116" hidden><code>region def</code> répond avec la liste terminée, donc vous voyez tout de suite que ça a fonctionné.</p>
 <p class="scp-note scp-note--info" data-scp-note="fw-115" hidden>Chaque <code>region put</code> répond <code>OK - (flood allowed)</code>, et <code>region default</code> répond <code>default scope is now …</code>.</p>
 <p class="scp-note scp-note--info" data-scp-note="fw-put-allow" hidden>Avec ce micrologiciel, une nouvelle région commence avec la diffusion <strong>désactivée</strong>, donc chacune a aussi besoin de <code>region allowf</code>. Il n’y a pas de <code>region default</code>, donc les annonces du répéteur restent sans portée. Une mise à jour du micrologiciel vaut la peine.</p>
-<p class="scp-note" data-scp-note="edge" hidden><strong>Répéteur de bordure :</strong> rejette les messages sans portée, pour qu’ils n’inondent pas la ville voisine. Utilisez-le pour tout répéteur qui entend souvent une autre ville, par exemple près d’une limite de zone, sur un site élevé ou avec des voisins d’une autre ville. Sinon, les messages sans portée passent par lui. Les gens tout près sans portée ne sont pas relayés par lui; évitez-le là où c’est le seul répéteur. Voir <a href="#qui-recoit-quoi">Qui reçoit quoi</a>.</p>
+<p class="scp-note" data-scp-note="edge" hidden><strong>Répéteur de bordure :</strong> rejette les messages sans portée, pour qu’ils n’inondent pas la ville voisine. Utilisez-le pour tout répéteur qui communique régulièrement avec des répéteurs de deux zones MeshMapper, comme Rigaud, qui relie <code>yow</code> et <code>yul</code>. Sinon, les messages sans portée passent par lui. Les gens tout près sans portée ne sont pas relayés par lui; évitez-le là où c’est le seul répéteur. Voir <a href="#qui-recoit-quoi">Qui reçoit quoi</a>.</p>
 <p class="scp-note" data-scp-note="extra" hidden><strong>Ville voisine :</strong> cela aide seulement les gens près de ce répéteur à participer aux canaux de cette ville. Tous les autres joignent l’autre ville par <code>onqc</code>. Rigaud, par exemple, porte <code>yul</code> en plus de <code>yow</code>.</p>
 <p class="scp-note" data-scp-nojs>Ces commandes sont pour un répéteur de ville du secteur d’Ottawa avec le micrologiciel 1.16 ou plus récent. Activez JavaScript pour les adapter à votre répéteur.</p>
 </div>
