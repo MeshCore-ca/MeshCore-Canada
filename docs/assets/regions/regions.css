@@ -1142,19 +1142,19 @@ body:has([data-mcc-regions]) .md-typeset h3 {
   background: #071016;
 }
 
-.mcc-map-canvas .leaflet-bar a,
-.mcc-map-canvas .leaflet-bar a:hover {
+[data-mcc-regions] .mcc-map-canvas .leaflet-bar a,
+[data-mcc-regions] .mcc-map-canvas .leaflet-bar a:hover {
   border-color: var(--mcc-border);
   color: var(--mcc-text);
   background: var(--mcc-surface);
 }
 
-.mcc-map-canvas .leaflet-control-attribution {
+[data-mcc-regions] .mcc-map-canvas .leaflet-control-attribution {
   color: var(--mcc-text);
   background: var(--mcc-surface);
 }
 
-.mcc-map-canvas .leaflet-control-attribution a {
+[data-mcc-regions] .mcc-map-canvas .leaflet-control-attribution a {
   color: var(--md-typeset-a-color);
 }
 

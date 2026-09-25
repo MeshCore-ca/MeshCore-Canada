@@ -15,7 +15,7 @@ tested_with:
   region_catalog: meshcore-canada-iata-scopes-v1
 difficulty: beginner
 page_styles:
-  - assets/regions/regions.css?v=20260924-1
+  - assets/regions/regions.css?v=20260924-2
 page_scripts:
   - assets/javascripts/radio-profiles.js?v=20260904-1
   - assets/regions/modules/configurator-support.js?v=20260924-1
