@@ -6,11 +6,31 @@ import test from "node:test";
 const load = name => JSON.parse(readFileSync(`docs/assets/regions/${name}`, "utf8"));
 const catalog = load("iata-regions.json");
 const zones = load("meshmapper-iata-boundaries.geojson");
+const combined = load("iata-boundaries.geojson");
 const provinces = load("scope-jurisdictions.geojson");
 const context = vm.createContext({ TextEncoder });
 vm.runInContext(readFileSync("docs/assets/regions/modules/iata-scopes.js", "utf8"), context);
 const api = context.MeshCoreIataScopes;
 const plain = value => JSON.parse(JSON.stringify(value));
+
+test("six starter regions cover the missing jurisdictions with honest source labels and flat scopes", () => {
+  for (const [tag, province, lat, lon] of [
+    ["yyg", "pe", 46.2382, -63.1311], ["yyt", "nl", 47.5605, -52.7128],
+    ["yyr", "nl", 53.303, -60.326], ["yxy", "yt", 60.7212, -135.0568],
+    ["yzf", "nt", 62.454, -114.3774], ["yfb", "nu", 63.7467, -68.517],
+  ]) {
+    const found = plain(api.matches(combined, lat, lon));
+    assert.deepEqual(found.map(feature => feature.properties.tag), [tag]);
+    assert.equal(found[0].properties.regionSource, "meshcore-canada");
+    assert.equal(catalog.status[tag].state, "starter");
+    assert.ok(!catalog.seeds.find(seed => seed.tag === tag).sourceUrl.includes("meshmapper.net"));
+    const result = api.profile(catalog, { home: tag, province });
+    assert.deepEqual(plain(api.commands(result)), [`region def ${tag}|* ${province}|* can`, "region allowf *", `region default ${tag}`]);
+  }
+  for (const feature of zones.features) {
+    assert.deepEqual(combined.features.find(item => item.properties.tag === feature.properties.tag).geometry, feature.geometry);
+  }
+});
 
 test("Ottawa and Gatineau share yow but retain the repeater's physical province", () => {
   for (const province of ["on", "qc"]) {

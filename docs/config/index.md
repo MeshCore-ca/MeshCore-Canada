@@ -1,32 +1,32 @@
 ---
 title: Set up repeater scopes
-description: Choose MeshMapper IATA zones, local or bridge forwarding, and firmware-specific repeater commands.
+description: Choose IATA regions, local or bridge forwarding, and firmware-specific repeater commands.
 audience:
   - repeater-operator
 task: configure-repeater-regions
 scope: canada-baseline
 status: verified
 owner: region-maintainers
-last_reviewed: 2026-09-24
+last_reviewed: 2026-09-25
 review_by: 2027-03-24
 tested_with:
   region_catalog: meshcore-canada-iata-scopes-v1
 difficulty: intermediate
 estimated_time: 5-10 minutes
 page_styles:
-  - assets/regions/regions.css?v=20260924-2
+  - assets/regions/regions.css?v=20260925-1
 page_scripts:
   - assets/javascripts/radio-profiles.js?v=20260904-1
-  - assets/regions/modules/configurator-support.js?v=20260924-1
-  - assets/regions/modules/iata-scopes.js?v=20260924-1
-  - assets/regions/regions.js?v=20260924-1
+  - assets/regions/modules/configurator-support.js?v=20260925-1
+  - assets/regions/modules/iata-scopes.js?v=20260925-1
+  - assets/regions/regions.js?v=20260925-1
 hide:
   - navigation
   - toc
 ---
 # Set up repeater scopes
 
-Choose the MeshMapper city zones this repeater serves. Local repeaters allow
+Choose the IATA regions this repeater serves. Local repeaters allow
 unscoped messages; bridge repeaters block them. Review existing regions before
 applying a new profile.
 

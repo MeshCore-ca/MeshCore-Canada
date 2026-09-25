@@ -1,0 +1,51 @@
+{
+  "schema": "meshcore-canada-iata-starters/v1",
+  "reviewedAt": "2026-09-25",
+  "status": "starter",
+  "authority": "MeshCore Canada",
+  "note": "Broad starter regions for areas without published MeshMapper zones. These are local assignments, not MeshMapper-approved boundaries or radio coverage claims.",
+  "regions": [
+    {
+      "tag": "yyg", "province": "pe", "area": "province",
+      "name": "Prince Edward Island", "nameFr": "Île-du-Prince-Édouard",
+      "hub": "Charlottetown", "center": [-63.1311, 46.2382],
+      "aliases": ["Charlottetown", "PEI", "Île-du-Prince-Édouard", "Summerside", "Montague", "Souris"],
+      "codeSource": "https://flyyyg.com/"
+    },
+    {
+      "tag": "yyt", "province": "nl", "area": "newfoundland",
+      "name": "Newfoundland", "nameFr": "Terre-Neuve",
+      "hub": "St. John's", "center": [-52.7128, 47.5605],
+      "aliases": ["St. John's", "St Johns", "Saint-Jean", "Terre-Neuve", "Gander", "Corner Brook", "Deer Lake", "Grand Falls-Windsor", "Stephenville", "St. Anthony"],
+      "codeSource": "https://stjohnsairport.com/"
+    },
+    {
+      "tag": "yyr", "province": "nl", "area": "labrador",
+      "name": "Labrador", "nameFr": "Labrador",
+      "hub": "Happy Valley–Goose Bay", "center": [-60.326, 53.303],
+      "aliases": ["Happy Valley-Goose Bay", "Happy Valley–Goose Bay", "Goose Bay", "Labrador City", "Wabush", "Nain", "Hopedale", "L'Anse-au-Clair"],
+      "codeSource": "https://goosebayairport.com/"
+    },
+    {
+      "tag": "yxy", "province": "yt", "area": "province",
+      "name": "Yukon", "nameFr": "Yukon",
+      "hub": "Whitehorse", "center": [-135.0568, 60.7212],
+      "aliases": ["Whitehorse", "Dawson City", "Watson Lake", "Haines Junction", "Old Crow"],
+      "codeSource": "https://yukonairports.ca/contact-information"
+    },
+    {
+      "tag": "yzf", "province": "nt", "area": "province",
+      "name": "Northwest Territories", "nameFr": "Territoires du Nord-Ouest",
+      "hub": "Yellowknife", "center": [-114.3774, 62.454],
+      "aliases": ["Yellowknife", "NWT", "Territoires du Nord-Ouest", "Inuvik", "Hay River", "Fort Smith", "Fort Simpson", "Norman Wells", "Tuktoyaktuk"],
+      "codeSource": "https://tc.canada.ca/en/aviation/operating-airports-aerodromes/list-airports-owned-transport-canada"
+    },
+    {
+      "tag": "yfb", "province": "nu", "area": "province",
+      "name": "Nunavut", "nameFr": "Nunavut",
+      "hub": "Iqaluit", "center": [-68.517, 63.7467],
+      "aliases": ["Iqaluit", "Rankin Inlet", "Cambridge Bay", "Kugluktuk", "Arviat", "Pond Inlet", "Resolute", "Grise Fiord"],
+      "codeSource": "https://tc.canada.ca/en/aviation/operating-airports-aerodromes/list-airports-owned-transport-canada"
+    }
+  ]
+}

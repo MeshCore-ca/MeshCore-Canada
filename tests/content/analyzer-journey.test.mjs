@@ -390,7 +390,8 @@ test("French analyzer terminology and map controls use natural location wording"
   assert.doesNotMatch(config, /Location codes: Codes de localisation/);
   assert.match(runtime, /"Zoom in": "Zoom avant"/);
   assert.match(runtime, /"Zoom out": "Zoom arrière"/);
-  assert.match(standard, /mêmes\s+limites publiées par MeshMapper/);
+  assert.match(standard, /mêmes\s+limites et identifient leur source/);
+  assert.match(standard, /Régions initiales/);
   assert.match(standard, /province où le répéteur est installé/);
   assert.match(standard, /portées en minuscules/);
 });

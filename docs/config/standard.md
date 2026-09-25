@@ -18,8 +18,8 @@ difficulty: intermediate
 
 # IATA regions and message scopes
 
-Use the [region map](map.md) to find your MeshMapper city zone, then open the
-[repeater configurator](index.md). The map and configurator use the same published boundaries.
+Use the [region map](map.md) to find your IATA region, then open the
+[repeater configurator](index.md). Both use the same boundaries and label their sources.
 
 Write scope names in lowercase: **yow (Ottawa–Gatineau)**, **yul (Montréal)**,
 or **yyz (Toronto)**. Uppercase airport codes can be used to search, but the
@@ -51,7 +51,7 @@ flood filters.
 
 ## Find your city and province
 
-- Use the code from your published [MeshMapper](https://meshmapper.net/) zone.
+- Use the code shown on the map: a published [MeshMapper](https://meshmapper.net/) zone or a labelled starter region below.
 - For a cross-province zone, use the repeater's physical province. A city name
   does not override its location.
 - If the map shows no zone, ask your community to add or update it in
@@ -59,8 +59,34 @@ flood filters.
 - If published polygons overlap, choose the intended community zone; the tool
   does not silently choose one.
 
-The separate province outlines help identify the province. They do not split
-MeshMapper zones or supply replacement city boundaries.
+Province outlines identify the repeater's province and define the broad starter
+regions below. They do not split or change published MeshMapper zones.
+
+## Starter regions {#starter-regions}
+
+These MeshCore Canada assignments fill places without published MeshMapper zones.
+They use real IATA codes and the same flat scope format, but are **not MeshMapper
+listings or coverage claims**. The map marks them with dashed gold boundaries.
+
+| Area | Scope | Code reference |
+| --- | --- | --- |
+| Prince Edward Island | `yyg` | [Charlottetown](https://flyyyg.com/) |
+| Newfoundland | `yyt` | [St. John's](https://stjohnsairport.com/) |
+| Labrador | `yyr` | [Happy Valley–Goose Bay](https://goosebayairport.com/) |
+| Yukon | `yxy` | [Whitehorse](https://yukonairports.ca/contact-information) |
+| Northwest Territories | `yzf` | [Yellowknife](https://tc.canada.ca/en/aviation/operating-airports-aerodromes/list-airports-owned-transport-canada) |
+| Nunavut | `yfb` | [Iqaluit](https://tc.canada.ca/en/aviation/operating-airports-aerodromes/list-airports-owned-transport-canada) |
+
+For example, PEI uses `yyg`, `pe`, and `can`; Yukon uses `yxy`, `yt`, and `can`.
+They do not use `onqc`. The [configurator](index.md) generates the commands.
+
+These are broad starting areas, not a claim that distant communities share an
+RF path. Confirm use with local operators and [suggest a refinement](../submit-idea.md)
+as local meshes develop. Published MeshMapper boundaries always take priority.
+
+The outlines use the existing Statistics Canada province/territory geography.
+Labrador follows census divisions 10 and 11; Newfoundland is the rest of that
+province. No nearest-airport circles or former multi-level scope names are used.
 
 ## Repeater setup
 
@@ -198,8 +224,9 @@ Select only useful bridge zones. An oversized profile produces no commands.
 
 ## Updates and older links
 
-Request zone changes in [MeshMapper](https://meshmapper.net/). MeshCore Canada
-publishes reviewed snapshots, not a competing census-based map.
+Request changes to published zones in [MeshMapper](https://meshmapper.net/).
+For our starter regions, [send a community proposal](../submit-idea.md).
+MeshCore Canada keeps published zones unchanged and labels its own additions separately.
 Known old links can lead to the corresponding IATA zone, but boundaries may
 have changed. Recheck the place, province, and extra bridge zones. Ambiguous
 or missing old names require a new selection.

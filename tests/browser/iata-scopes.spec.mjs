@@ -3,6 +3,27 @@ import { siteRoute } from "./site-route.mjs";
 import { readFile } from "node:fs/promises";
 
 for (const locale of ["", "fr/"]) {
+  for (const [tag, province, lat, lon] of [
+    ["yyg", "pe", 46.2382, -63.1311], ["yyt", "nl", 47.5605, -52.7128],
+    ["yyr", "nl", 53.303, -60.326], ["yxy", "yt", 60.7212, -135.0568],
+    ["yzf", "nt", 62.454, -114.3774], ["yfb", "nu", 63.7467, -68.517],
+  ]) {
+    test(`${locale || "en/"} ${tag} starter region resolves and configures without claiming MeshMapper approval`, async ({ page }) => {
+      await page.goto(siteRoute(`/${locale}config/map/?lat=${lat}&lon=${lon}`));
+      const detail = page.locator('[data-role="map-text-result"]');
+      await expect(detail).toContainText(tag);
+      await expect(detail).toContainText(locale ? "Région initiale de MeshCore Canada" : "MeshCore Canada starter region");
+      await expect(detail.locator(`a[href="https://${tag}.meshmapper.net/"]`)).toHaveCount(0);
+      await expect(detail.locator('a[href*="standard/#starter-regions"]')).toHaveAttribute("href", new RegExp(`/${locale}config/standard/#starter-regions$`));
+      await detail.locator('a[href*="province=' + province + '"]').click();
+      await page.locator('[data-wizard-step="3"] [data-next-step]').click();
+      const output = page.locator('[data-role="result"]');
+      await expect(output).toContainText(`region def ${tag}|* ${province}|* can`);
+      await expect(output).toContainText(locale ? "pas encore publiée dans MeshMapper" : "not yet published by MeshMapper");
+      await expect(output).not.toContainText("onqc");
+      await expect(output).not.toContainText("set radio");
+    });
+  }
   test(`${locale || "en/"} older firmware gets explicit permissions and no unsupported advert command`, async ({ page }) => {
     for (const firmware of ["1.14", "1.15"]) {
       await page.goto(siteRoute(`/${locale}config/?tag=yow&province=on&step=4&firmware=${firmware}&instructions=technical`));
@@ -96,7 +117,7 @@ for (const locale of ["", "fr/"]) {
     await expect(configure).toHaveCount(1);
     await configure.click();
     await expect(page.locator("#mcc-home-province")).toHaveValue("qc");
-    expect(requests.some(url => url.includes("meshmapper-iata-boundaries.geojson"))).toBeTruthy();
+    expect(requests.some(url => url.includes("iata-boundaries.geojson"))).toBeTruthy();
     expect(requests.some(url => url.includes("canada-region-partition"))).toBeFalsy();
   });
 }

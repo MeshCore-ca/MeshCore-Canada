@@ -9,7 +9,9 @@ const root = new URL("../", import.meta.url);
 const read = path => readFileSync(new URL(path, root), "utf8");
 const load = path => JSON.parse(read(path));
 const data = load("docs/assets/regions/iata-regions.json");
-const zones = load("docs/assets/regions/meshmapper-iata-boundaries.geojson");
+const zones = load("docs/assets/regions/iata-boundaries.geojson");
+const published = load("docs/assets/regions/meshmapper-iata-boundaries.geojson");
+const starters = load("data/iata-starter-regions.json");
 const provinces = load("docs/assets/regions/scope-jurisdictions.geojson");
 assert.equal(data.schema, "meshcore-canada-iata-scopes/v1");
 assert.equal(data.policy.scopeModel, "flat");
@@ -25,24 +27,44 @@ assert.equal(new Set(zones.features.map(feature => feature.properties.tag)).size
 assert.deepEqual(zones.features.map(feature => feature.properties.tag).sort(), data.seeds.map(seed => seed.tag).sort());
 assert.equal(provinces.features.length, 13);
 assert.deepEqual(provinces.features.map(feature => feature.properties.tag).sort(), Object.keys(data.policy.provinces).sort());
-assert.equal(data.source.boundarySha256, createHash("sha256").update(read("docs/assets/regions/meshmapper-iata-boundaries.geojson")).digest("hex"));
+assert.equal(data.source.boundarySha256, createHash("sha256").update(read("docs/assets/regions/iata-boundaries.geojson")).digest("hex"));
+assert.equal(data.source.meshmapperBoundarySha256, createHash("sha256").update(read("docs/assets/regions/meshmapper-iata-boundaries.geojson")).digest("hex"));
 assert.equal(provinces.sourceSha256, createHash("sha256").update(read("docs/assets/regions/canada-region-partition-digital.geojson")).digest("hex"));
-assert.equal(zones.source.endpoint, "https://meshmapper.net/?ajax=zones_bbox");
-assert.ok(Number.isFinite(Date.parse(zones.fetchedAt)));
+assert.equal(published.source.endpoint, "https://meshmapper.net/?ajax=zones_bbox");
+assert.ok(Number.isFinite(Date.parse(published.fetchedAt)));
+assert.equal(zones.publishedCount, published.features.length);
+assert.equal(zones.starterCount, starters.regions.length);
+assert.deepEqual(zones.features.filter(feature => feature.properties.regionSource === "meshmapper").map(feature => feature.properties.tag).sort(), published.features.map(feature => feature.properties.tag).sort());
+assert.deepEqual(zones.features.filter(feature => feature.properties.regionSource === "meshcore-canada").map(feature => feature.properties.tag).sort(), starters.regions.map(region => region.tag).sort());
+for (const feature of published.features) {
+  const merged = zones.features.find(item => item.properties.tag === feature.properties.tag);
+  assert.deepEqual(merged, { ...feature, properties: { ...feature.properties, regionSource: "meshmapper" } }, "Never alter a published MeshMapper zone");
+}
+for (const [name, path] of Object.entries({ meshmapper: "docs/assets/regions/meshmapper-iata-boundaries.geojson", jurisdictions: "docs/assets/regions/scope-jurisdictions.geojson", starters: "data/iata-starter-regions.json", labrador: "data/iata-labrador-outline.geojson" })) {
+  assert.equal(zones.sourceHashes[name], createHash("sha256").update(read(path)).digest("hex"), `Regenerate IATA boundaries after changing ${name}`);
+}
 for (const feature of zones.features) {
   const { tag, code, country, name, center, sourceUrl } = feature.properties;
   assert.match(tag, /^[a-z]{3}$/);
   assert.equal(code, tag.toUpperCase());
   assert.equal(country, "CA");
   assert.ok(typeof name === "string" && name.trim());
-  assert.equal(sourceUrl, `https://${tag}.meshmapper.net/`);
+  if (feature.properties.regionSource === "meshmapper") assert.equal(sourceUrl, `https://${tag}.meshmapper.net/`);
+  else {
+    assert.equal(feature.properties.regionSource, "meshcore-canada");
+    assert.ok(starters.regions.some(region => region.tag === tag));
+    assert.equal(data.status[tag].state, "starter");
+    assert.match(feature.properties.codeSource, /^https:\/\//);
+  }
   assert.equal(center.length, 2);
   assert.ok(center.every(Number.isFinite));
-  assert.equal(feature.geometry.type, "Polygon");
-  const ring = feature.geometry.coordinates[0];
-  assert.ok(ring.length >= 4);
-  assert.deepEqual(ring[0], ring.at(-1));
-  assert.ok(ring.every(point => point.length === 2 && point.every(Number.isFinite) && Math.abs(point[0]) <= 180 && Math.abs(point[1]) <= 90));
+  assert.ok(["Polygon", "MultiPolygon"].includes(feature.geometry.type));
+  const polygons = feature.geometry.type === "Polygon" ? [feature.geometry.coordinates] : feature.geometry.coordinates;
+  for (const rings of polygons) for (const ring of rings) {
+    assert.ok(ring.length >= 4);
+    assert.deepEqual(ring[0], ring.at(-1));
+    assert.ok(ring.every(point => point.length === 2 && point.every(Number.isFinite) && Math.abs(point[0]) <= 180 && Math.abs(point[1]) <= 90));
+  }
 }
 const context = vm.createContext({ TextEncoder });
 vm.runInContext(read("docs/assets/regions/modules/iata-scopes.js"), context);
@@ -58,7 +80,7 @@ for (const seed of data.seeds) {
 }
 const source = read("docs/assets/regions/regions.js");
 assert.ok(source.includes('fetchJsonAsset("iata-regions.json"'));
-assert.ok(source.includes('"meshmapper-iata-boundaries.geojson?v="'));
+assert.ok(source.includes('"iata-boundaries.geojson?v="'));
 assert.ok(!source.includes("canada-region-partition"), "The public app must not load the former partition");
 assert.ok(!source.includes('fetchJsonAsset("canada-regions.json"'));
 for (const page of ["index.md", "index.fr.md", "map.md", "map.fr.md"]) {

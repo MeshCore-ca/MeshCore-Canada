@@ -158,8 +158,8 @@ test("repository stars and the human-review notice appear in both languages", as
 
 test("English and French homepages link directly to the region finder", async ({ page }, testInfo) => {
   for (const [home, linkName, destination, heading, finder, directory] of [
-    ["/", "Find my region", "/config/map/", "Find your MeshMapper IATA zone", "Find a region", "Browse all regions"],
-    ["/fr/", "Trouver ma région", "/fr/config/map/", "Trouver votre zone IATA MeshMapper", "Trouver une région", "Parcourir toutes les régions"]
+    ["/", "Find my region", "/config/map/", "Find your IATA region", "Find a region", "Browse all regions"],
+    ["/fr/", "Trouver ma région", "/fr/config/map/", "Trouver votre région IATA", "Trouver une région", "Parcourir toutes les régions"]
   ]) {
     await page.goto(siteRoute(home));
     const link = page.getByRole("link", { name: linkName, exact: true });

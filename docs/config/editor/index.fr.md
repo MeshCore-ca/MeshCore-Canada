@@ -21,6 +21,10 @@ que MeshMapper. Demandez les nouvelles zones et les changements de limites dans
 MeshMapper pour garder les deux outils cohérents. L’ancien éditeur fondé sur les
 secteurs de recensement est retiré.
 
+Pour les [régions initiales de MeshCore Canada](../standard.md#starter-regions),
+[envoyez une proposition communautaire](../../submit-idea.md). Ces ajouts sont
+identifiés séparément et ne modifient pas les zones publiées par MeshMapper.
+
 [Ouvrir MeshMapper](https://meshmapper.net/){ .md-button .md-button--primary }
 [Trouver votre zone IATA](../map.md){ .md-button }
 

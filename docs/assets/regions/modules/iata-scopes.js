@@ -43,13 +43,13 @@
 
   function profile(data, selection) {
     var home = String(selection.home || "").toLowerCase();
-    if (!city(data, home)) throw new Error("Choose a published MeshMapper city zone.");
+    if (!city(data, home)) throw new Error("Choose an IATA region from the map.");
     var province = String(selection.province || "").toLowerCase();
     if (!Object.prototype.hasOwnProperty.call(data.policy.provinces, province)) throw new Error("Choose the province or territory where the repeater is installed.");
     var bridge = selection.bridge === true;
     var extra = unique(selection.cities || []).filter(function (tag) { return tag !== home; });
     extra.forEach(function (tag) {
-      if (!city(data, tag)) throw new Error("Unknown MeshMapper city zone: " + tag);
+      if (!city(data, tag)) throw new Error("Unknown IATA region: " + tag);
     });
     var external = unique(selection.external || []).map(function (id) {
       var record = data.externalRegionPaths && data.externalRegionPaths[id];

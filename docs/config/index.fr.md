@@ -1,32 +1,32 @@
 ---
 title: Configurer les portées d’un répéteur
-description: Choisissez les zones IATA de MeshMapper, le mode local ou de liaison et les commandes adaptées au micrologiciel.
+description: Choisissez les régions IATA, le mode local ou de liaison et les commandes adaptées au micrologiciel.
 audience:
   - repeater-operator
 task: configure-repeater-regions
 scope: canada-baseline
 status: verified
 owner: region-maintainers
-last_reviewed: 2026-09-24
+last_reviewed: 2026-09-25
 review_by: 2027-03-24
 tested_with:
   region_catalog: meshcore-canada-iata-scopes-v1
 difficulty: intermediate
 estimated_time: 5-10 minutes
 page_styles:
-  - assets/regions/regions.css?v=20260924-2
+  - assets/regions/regions.css?v=20260925-1
 page_scripts:
   - assets/javascripts/radio-profiles.js?v=20260904-1
-  - assets/regions/modules/configurator-support.js?v=20260924-1
-  - assets/regions/modules/iata-scopes.js?v=20260924-1
-  - assets/regions/regions.js?v=20260924-1
+  - assets/regions/modules/configurator-support.js?v=20260925-1
+  - assets/regions/modules/iata-scopes.js?v=20260925-1
+  - assets/regions/regions.js?v=20260925-1
 hide:
   - navigation
   - toc
 ---
 # Configurer les portées d’un répéteur
 
-Choisissez les zones MeshMapper desservies par ce répéteur. Un répéteur local
+Choisissez les régions IATA desservies par ce répéteur. Un répéteur local
 laisse passer les messages sans portée; un répéteur de liaison les bloque.
 Vérifiez les anciennes régions avant d’appliquer un nouveau profil.
 

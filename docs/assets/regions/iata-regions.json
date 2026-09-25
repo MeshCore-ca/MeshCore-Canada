@@ -1,6 +1,6 @@
 {
   "schema": "meshcore-canada-iata-scopes/v1",
-  "version": "meshmapper-iata-2026-09-24",
+  "version": "meshmapper-iata-2026-09-24-starters-2026-09-25",
   "policy": {
     "schema": "meshcore-canada-iata-policy/v1",
     "proposal": "https://meshcore.ca/proposals/onqc-scopes/",
@@ -172,6 +172,24 @@
       ],
       "yyz": [
         "on"
+      ],
+      "yyg": [
+        "pe"
+      ],
+      "yyt": [
+        "nl"
+      ],
+      "yyr": [
+        "nl"
+      ],
+      "yxy": [
+        "yt"
+      ],
+      "yzf": [
+        "nt"
+      ],
+      "yfb": [
+        "nu"
       ]
     },
     "searchAliases": {
@@ -221,6 +239,40 @@
       ],
       "ncr": [
         "yow"
+      ],
+      "avalon": [
+        "yyt"
+      ],
+      "burin": [
+        "yyt"
+      ],
+      "bonav": [
+        "yyt"
+      ],
+      "cent": [
+        "yyt"
+      ],
+      "scoast": [
+        "yyt"
+      ],
+      "steph": [
+        "yyt"
+      ],
+      "humber": [
+        "yyt"
+      ],
+      "npen": [
+        "yyr",
+        "yyt"
+      ],
+      "labw": [
+        "yyr"
+      ],
+      "hvgb": [
+        "yyr"
+      ],
+      "nain": [
+        "yyr"
       ]
     }
   },
@@ -231,7 +283,11 @@
     "boundaryAttribution": "MeshMapper zone owners; OpenStreetMap contributors (ODbL) and geoBoundaries (CC BY 4.0) where used by MeshMapper.",
     "conversion": "Published [latitude, longitude] rings converted to GeoJSON [longitude, latitude]. No clipping, simplification, or radius-based replacement.",
     "fetchedAt": "2026-09-24T23:49:23.116Z",
-    "boundarySha256": "78e0d08608b82328033b2ba59b22ce08a82a563725e5d59c5059ca0dc119c2d6",
+    "starterReviewedAt": "2026-09-25",
+    "publishedCount": 33,
+    "starterCount": 6,
+    "boundarySha256": "7dd462819e1553f61ff996d552e9419f51225aaec3c6e5dbadf45e6b4c96453e",
+    "meshmapperBoundarySha256": "78e0d08608b82328033b2ba59b22ce08a82a563725e5d59c5059ca0dc119c2d6",
     "jurisdictionSha256": "753d7ad13f089cdeee54cb29c9105706226fa75228193c4eda2d4ecc5ed78349"
   },
   "meta": {
@@ -612,6 +668,60 @@
         "on"
       ],
       "kind": "city"
+    },
+    "yyg": {
+      "label": "Prince Edward Island",
+      "labelFr": "Île-du-Prince-Édouard",
+      "parent": "pe",
+      "provinces": [
+        "pe"
+      ],
+      "kind": "city"
+    },
+    "yyt": {
+      "label": "Newfoundland",
+      "labelFr": "Terre-Neuve",
+      "parent": "nl",
+      "provinces": [
+        "nl"
+      ],
+      "kind": "city"
+    },
+    "yyr": {
+      "label": "Labrador",
+      "labelFr": "Labrador",
+      "parent": "nl",
+      "provinces": [
+        "nl"
+      ],
+      "kind": "city"
+    },
+    "yxy": {
+      "label": "Yukon",
+      "labelFr": "Yukon",
+      "parent": "yt",
+      "provinces": [
+        "yt"
+      ],
+      "kind": "city"
+    },
+    "yzf": {
+      "label": "Northwest Territories",
+      "labelFr": "Territoires du Nord-Ouest",
+      "parent": "nt",
+      "provinces": [
+        "nt"
+      ],
+      "kind": "city"
+    },
+    "yfb": {
+      "label": "Nunavut",
+      "labelFr": "Nunavut",
+      "parent": "nu",
+      "provinces": [
+        "nu"
+      ],
+      "kind": "city"
     }
   },
   "status": {
@@ -839,6 +949,36 @@
       "state": "published",
       "source": "MeshMapper",
       "sourceUrl": "https://yyz.meshmapper.net/"
+    },
+    "yyg": {
+      "state": "starter",
+      "source": "MeshCore Canada",
+      "sourceUrl": "https://flyyyg.com/"
+    },
+    "yyt": {
+      "state": "starter",
+      "source": "MeshCore Canada",
+      "sourceUrl": "https://stjohnsairport.com/"
+    },
+    "yyr": {
+      "state": "starter",
+      "source": "MeshCore Canada",
+      "sourceUrl": "https://goosebayairport.com/"
+    },
+    "yxy": {
+      "state": "starter",
+      "source": "MeshCore Canada",
+      "sourceUrl": "https://yukonairports.ca/contact-information"
+    },
+    "yzf": {
+      "state": "starter",
+      "source": "MeshCore Canada",
+      "sourceUrl": "https://tc.canada.ca/en/aviation/operating-airports-aerodromes/list-airports-owned-transport-canada"
+    },
+    "yfb": {
+      "state": "starter",
+      "source": "MeshCore Canada",
+      "sourceUrl": "https://tc.canada.ca/en/aviation/operating-airports-aerodromes/list-airports-owned-transport-canada"
     }
   },
   "seeds": [
@@ -850,7 +990,8 @@
       "provinces": [
         "on"
       ],
-      "sourceUrl": "https://xcm.meshmapper.net/"
+      "sourceUrl": "https://xcm.meshmapper.net/",
+      "regionSource": "meshmapper"
     },
     {
       "tag": "xph",
@@ -860,7 +1001,8 @@
       "provinces": [
         "on"
       ],
-      "sourceUrl": "https://xph.meshmapper.net/"
+      "sourceUrl": "https://xph.meshmapper.net/",
+      "regionSource": "meshmapper"
     },
     {
       "tag": "ybl",
@@ -870,7 +1012,8 @@
       "provinces": [
         "bc"
       ],
-      "sourceUrl": "https://ybl.meshmapper.net/"
+      "sourceUrl": "https://ybl.meshmapper.net/",
+      "regionSource": "meshmapper"
     },
     {
       "tag": "ycd",
@@ -880,7 +1023,8 @@
       "provinces": [
         "bc"
       ],
-      "sourceUrl": "https://ycd.meshmapper.net/"
+      "sourceUrl": "https://ycd.meshmapper.net/",
+      "regionSource": "meshmapper"
     },
     {
       "tag": "yeg",
@@ -890,7 +1034,8 @@
       "provinces": [
         "ab"
       ],
-      "sourceUrl": "https://yeg.meshmapper.net/"
+      "sourceUrl": "https://yeg.meshmapper.net/",
+      "regionSource": "meshmapper"
     },
     {
       "tag": "ygk",
@@ -900,7 +1045,8 @@
       "provinces": [
         "on"
       ],
-      "sourceUrl": "https://ygk.meshmapper.net/"
+      "sourceUrl": "https://ygk.meshmapper.net/",
+      "regionSource": "meshmapper"
     },
     {
       "tag": "yka",
@@ -910,7 +1056,8 @@
       "provinces": [
         "bc"
       ],
-      "sourceUrl": "https://yka.meshmapper.net/"
+      "sourceUrl": "https://yka.meshmapper.net/",
+      "regionSource": "meshmapper"
     },
     {
       "tag": "ykf",
@@ -920,7 +1067,8 @@
       "provinces": [
         "on"
       ],
-      "sourceUrl": "https://ykf.meshmapper.net/"
+      "sourceUrl": "https://ykf.meshmapper.net/",
+      "regionSource": "meshmapper"
     },
     {
       "tag": "ylk",
@@ -930,7 +1078,8 @@
       "provinces": [
         "on"
       ],
-      "sourceUrl": "https://ylk.meshmapper.net/"
+      "sourceUrl": "https://ylk.meshmapper.net/",
+      "regionSource": "meshmapper"
     },
     {
       "tag": "yml",
@@ -940,7 +1089,8 @@
       "provinces": [
         "qc"
       ],
-      "sourceUrl": "https://yml.meshmapper.net/"
+      "sourceUrl": "https://yml.meshmapper.net/",
+      "regionSource": "meshmapper"
     },
     {
       "tag": "yow",
@@ -951,7 +1101,8 @@
         "on",
         "qc"
       ],
-      "sourceUrl": "https://yow.meshmapper.net/"
+      "sourceUrl": "https://yow.meshmapper.net/",
+      "regionSource": "meshmapper"
     },
     {
       "tag": "ypa",
@@ -961,7 +1112,8 @@
       "provinces": [
         "sk"
       ],
-      "sourceUrl": "https://ypa.meshmapper.net/"
+      "sourceUrl": "https://ypa.meshmapper.net/",
+      "regionSource": "meshmapper"
     },
     {
       "tag": "yqa",
@@ -971,7 +1123,8 @@
       "provinces": [
         "on"
       ],
-      "sourceUrl": "https://yqa.meshmapper.net/"
+      "sourceUrl": "https://yqa.meshmapper.net/",
+      "regionSource": "meshmapper"
     },
     {
       "tag": "yqb",
@@ -981,7 +1134,8 @@
       "provinces": [
         "qc"
       ],
-      "sourceUrl": "https://yqb.meshmapper.net/"
+      "sourceUrl": "https://yqb.meshmapper.net/",
+      "regionSource": "meshmapper"
     },
     {
       "tag": "yqf",
@@ -991,7 +1145,8 @@
       "provinces": [
         "ab"
       ],
-      "sourceUrl": "https://yqf.meshmapper.net/"
+      "sourceUrl": "https://yqf.meshmapper.net/",
+      "regionSource": "meshmapper"
     },
     {
       "tag": "yql",
@@ -1001,7 +1156,8 @@
       "provinces": [
         "ab"
       ],
-      "sourceUrl": "https://yql.meshmapper.net/"
+      "sourceUrl": "https://yql.meshmapper.net/",
+      "regionSource": "meshmapper"
     },
     {
       "tag": "yqq",
@@ -1011,7 +1167,8 @@
       "provinces": [
         "bc"
       ],
-      "sourceUrl": "https://yqq.meshmapper.net/"
+      "sourceUrl": "https://yqq.meshmapper.net/",
+      "regionSource": "meshmapper"
     },
     {
       "tag": "yqt",
@@ -1021,7 +1178,8 @@
       "provinces": [
         "on"
       ],
-      "sourceUrl": "https://yqt.meshmapper.net/"
+      "sourceUrl": "https://yqt.meshmapper.net/",
+      "regionSource": "meshmapper"
     },
     {
       "tag": "yqy",
@@ -1031,7 +1189,8 @@
       "provinces": [
         "ns"
       ],
-      "sourceUrl": "https://yqy.meshmapper.net/"
+      "sourceUrl": "https://yqy.meshmapper.net/",
+      "regionSource": "meshmapper"
     },
     {
       "tag": "yse",
@@ -1041,7 +1200,8 @@
       "provinces": [
         "bc"
       ],
-      "sourceUrl": "https://yse.meshmapper.net/"
+      "sourceUrl": "https://yse.meshmapper.net/",
+      "regionSource": "meshmapper"
     },
     {
       "tag": "ytf",
@@ -1051,7 +1211,8 @@
       "provinces": [
         "qc"
       ],
-      "sourceUrl": "https://ytf.meshmapper.net/"
+      "sourceUrl": "https://ytf.meshmapper.net/",
+      "regionSource": "meshmapper"
     },
     {
       "tag": "ytr",
@@ -1061,7 +1222,8 @@
       "provinces": [
         "on"
       ],
-      "sourceUrl": "https://ytr.meshmapper.net/"
+      "sourceUrl": "https://ytr.meshmapper.net/",
+      "regionSource": "meshmapper"
     },
     {
       "tag": "yul",
@@ -1071,7 +1233,8 @@
       "provinces": [
         "qc"
       ],
-      "sourceUrl": "https://yul.meshmapper.net/"
+      "sourceUrl": "https://yul.meshmapper.net/",
+      "regionSource": "meshmapper"
     },
     {
       "tag": "yvr",
@@ -1081,7 +1244,8 @@
       "provinces": [
         "bc"
       ],
-      "sourceUrl": "https://yvr.meshmapper.net/"
+      "sourceUrl": "https://yvr.meshmapper.net/",
+      "regionSource": "meshmapper"
     },
     {
       "tag": "ywg",
@@ -1091,7 +1255,8 @@
       "provinces": [
         "mb"
       ],
-      "sourceUrl": "https://ywg.meshmapper.net/"
+      "sourceUrl": "https://ywg.meshmapper.net/",
+      "regionSource": "meshmapper"
     },
     {
       "tag": "yws",
@@ -1101,7 +1266,8 @@
       "provinces": [
         "bc"
       ],
-      "sourceUrl": "https://yws.meshmapper.net/"
+      "sourceUrl": "https://yws.meshmapper.net/",
+      "regionSource": "meshmapper"
     },
     {
       "tag": "yxu",
@@ -1111,7 +1277,8 @@
       "provinces": [
         "on"
       ],
-      "sourceUrl": "https://yxu.meshmapper.net/"
+      "sourceUrl": "https://yxu.meshmapper.net/",
+      "regionSource": "meshmapper"
     },
     {
       "tag": "yxx",
@@ -1121,7 +1288,8 @@
       "provinces": [
         "bc"
       ],
-      "sourceUrl": "https://yxx.meshmapper.net/"
+      "sourceUrl": "https://yxx.meshmapper.net/",
+      "regionSource": "meshmapper"
     },
     {
       "tag": "yyb",
@@ -1132,7 +1300,8 @@
         "on",
         "qc"
       ],
-      "sourceUrl": "https://yyb.meshmapper.net/"
+      "sourceUrl": "https://yyb.meshmapper.net/",
+      "regionSource": "meshmapper"
     },
     {
       "tag": "yyc",
@@ -1142,7 +1311,8 @@
       "provinces": [
         "ab"
       ],
-      "sourceUrl": "https://yyc.meshmapper.net/"
+      "sourceUrl": "https://yyc.meshmapper.net/",
+      "regionSource": "meshmapper"
     },
     {
       "tag": "yyj",
@@ -1152,7 +1322,8 @@
       "provinces": [
         "bc"
       ],
-      "sourceUrl": "https://yyj.meshmapper.net/"
+      "sourceUrl": "https://yyj.meshmapper.net/",
+      "regionSource": "meshmapper"
     },
     {
       "tag": "yyy",
@@ -1163,7 +1334,8 @@
         "qc",
         "nb"
       ],
-      "sourceUrl": "https://yyy.meshmapper.net/"
+      "sourceUrl": "https://yyy.meshmapper.net/",
+      "regionSource": "meshmapper"
     },
     {
       "tag": "yyz",
@@ -1173,7 +1345,74 @@
       "provinces": [
         "on"
       ],
-      "sourceUrl": "https://yyz.meshmapper.net/"
+      "sourceUrl": "https://yyz.meshmapper.net/",
+      "regionSource": "meshmapper"
+    },
+    {
+      "tag": "yyg",
+      "lat": 46.2382,
+      "lon": -63.1311,
+      "r": 0,
+      "provinces": [
+        "pe"
+      ],
+      "sourceUrl": "https://flyyyg.com/",
+      "regionSource": "meshcore-canada"
+    },
+    {
+      "tag": "yyt",
+      "lat": 47.5605,
+      "lon": -52.7128,
+      "r": 0,
+      "provinces": [
+        "nl"
+      ],
+      "sourceUrl": "https://stjohnsairport.com/",
+      "regionSource": "meshcore-canada"
+    },
+    {
+      "tag": "yyr",
+      "lat": 53.303,
+      "lon": -60.326,
+      "r": 0,
+      "provinces": [
+        "nl"
+      ],
+      "sourceUrl": "https://goosebayairport.com/",
+      "regionSource": "meshcore-canada"
+    },
+    {
+      "tag": "yxy",
+      "lat": 60.7212,
+      "lon": -135.0568,
+      "r": 0,
+      "provinces": [
+        "yt"
+      ],
+      "sourceUrl": "https://yukonairports.ca/contact-information",
+      "regionSource": "meshcore-canada"
+    },
+    {
+      "tag": "yzf",
+      "lat": 62.454,
+      "lon": -114.3774,
+      "r": 0,
+      "provinces": [
+        "nt"
+      ],
+      "sourceUrl": "https://tc.canada.ca/en/aviation/operating-airports-aerodromes/list-airports-owned-transport-canada",
+      "regionSource": "meshcore-canada"
+    },
+    {
+      "tag": "yfb",
+      "lat": 63.7467,
+      "lon": -68.517,
+      "r": 0,
+      "provinces": [
+        "nu"
+      ],
+      "sourceUrl": "https://tc.canada.ca/en/aviation/operating-airports-aerodromes/list-airports-owned-transport-canada",
+      "regionSource": "meshcore-canada"
     }
   ],
   "aliases": {
@@ -1333,6 +1572,82 @@
       "Toronto",
       "Toronto",
       "GTA"
+    ],
+    "yyg": [
+      "yyg",
+      "Prince Edward Island",
+      "Île-du-Prince-Édouard",
+      "Charlottetown",
+      "PEI",
+      "Île-du-Prince-Édouard",
+      "Summerside",
+      "Montague",
+      "Souris"
+    ],
+    "yyt": [
+      "yyt",
+      "Newfoundland",
+      "Terre-Neuve",
+      "St. John's",
+      "St Johns",
+      "Saint-Jean",
+      "Terre-Neuve",
+      "Gander",
+      "Corner Brook",
+      "Deer Lake",
+      "Grand Falls-Windsor",
+      "Stephenville",
+      "St. Anthony"
+    ],
+    "yyr": [
+      "yyr",
+      "Labrador",
+      "Labrador",
+      "Happy Valley-Goose Bay",
+      "Happy Valley–Goose Bay",
+      "Goose Bay",
+      "Labrador City",
+      "Wabush",
+      "Nain",
+      "Hopedale",
+      "L'Anse-au-Clair"
+    ],
+    "yxy": [
+      "yxy",
+      "Yukon",
+      "Yukon",
+      "Whitehorse",
+      "Dawson City",
+      "Watson Lake",
+      "Haines Junction",
+      "Old Crow"
+    ],
+    "yzf": [
+      "yzf",
+      "Northwest Territories",
+      "Territoires du Nord-Ouest",
+      "Yellowknife",
+      "NWT",
+      "Territoires du Nord-Ouest",
+      "Inuvik",
+      "Hay River",
+      "Fort Smith",
+      "Fort Simpson",
+      "Norman Wells",
+      "Tuktoyaktuk"
+    ],
+    "yfb": [
+      "yfb",
+      "Nunavut",
+      "Nunavut",
+      "Iqaluit",
+      "Rankin Inlet",
+      "Cambridge Bay",
+      "Kugluktuk",
+      "Arviat",
+      "Pond Inlet",
+      "Resolute",
+      "Grise Fiord"
     ]
   },
   "legacyAliases": {
@@ -1341,6 +1656,40 @@
     ],
     "ncr": [
       "yow"
+    ],
+    "avalon": [
+      "yyt"
+    ],
+    "burin": [
+      "yyt"
+    ],
+    "bonav": [
+      "yyt"
+    ],
+    "cent": [
+      "yyt"
+    ],
+    "scoast": [
+      "yyt"
+    ],
+    "steph": [
+      "yyt"
+    ],
+    "humber": [
+      "yyt"
+    ],
+    "npen": [
+      "yyr",
+      "yyt"
+    ],
+    "labw": [
+      "yyr"
+    ],
+    "hvgb": [
+      "yyr"
+    ],
+    "nain": [
+      "yyr"
     ],
     "chk": [
       "xcm"
@@ -1421,6 +1770,57 @@
     ],
     "tor": [
       "yyz"
+    ],
+    "pri": [
+      "yyg"
+    ],
+    "qns-pe": [
+      "yyg"
+    ],
+    "kings-pe": [
+      "yyg"
+    ],
+    "whse": [
+      "yxy"
+    ],
+    "kluane": [
+      "yxy"
+    ],
+    "dawson": [
+      "yxy"
+    ],
+    "mayo": [
+      "yxy"
+    ],
+    "watson": [
+      "yxy"
+    ],
+    "oldcrow": [
+      "yxy"
+    ],
+    "nsl": [
+      "yzf"
+    ],
+    "ssl": [
+      "yzf"
+    ],
+    "dehcho": [
+      "yzf"
+    ],
+    "sahtu": [
+      "yzf"
+    ],
+    "inuvik": [
+      "yzf"
+    ],
+    "qik": [
+      "yfb"
+    ],
+    "kiv": [
+      "yfb"
+    ],
+    "kitik": [
+      "yfb"
     ]
   },
   "metroGroups": [
@@ -1502,23 +1902,34 @@
     },
     {
       "label": "Prince Edward Island",
-      "tags": []
+      "tags": [
+        "yyg"
+      ]
     },
     {
       "label": "Newfoundland and Labrador",
-      "tags": []
+      "tags": [
+        "yyt",
+        "yyr"
+      ]
     },
     {
       "label": "Yukon",
-      "tags": []
+      "tags": [
+        "yxy"
+      ]
     },
     {
       "label": "Northwest Territories",
-      "tags": []
+      "tags": [
+        "yzf"
+      ]
     },
     {
       "label": "Nunavut",
-      "tags": []
+      "tags": [
+        "yfb"
+      ]
     }
   ],
   "externalRegionPaths": {

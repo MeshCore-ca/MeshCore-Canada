@@ -20,6 +20,10 @@ MeshCore Canada's map and configurator use the same IATA zones as MeshMapper.
 Request new zones or boundary changes there so both tools stay consistent.
 The former census-cell editor is retired.
 
+For the [MeshCore Canada starter regions](../standard.md#starter-regions),
+[send a community proposal](../../submit-idea.md). These additions are labelled
+separately and do not change MeshMapper's published zones.
+
 [Open MeshMapper](https://meshmapper.net/){ .md-button .md-button--primary }
 [Find your IATA zone](../map.md){ .md-button }
 

@@ -47,7 +47,7 @@ for (const locale of ["", "fr/"]) {
   test(`${locale || "en/"} map loads when visible and its keyboard shortcut stays out of the way`, async ({ page }, testInfo) => {
     const displayRequests = [];
     page.on("request", (request) => {
-      if (request.url().includes("/meshmapper-iata-boundaries.geojson")) displayRequests.push(request.url());
+      if (request.url().includes("/iata-boundaries.geojson")) displayRequests.push(request.url());
     });
     await page.route("https://tile.openstreetmap.org/**", (route) => route.fulfill({
       contentType: "image/png",
@@ -130,7 +130,7 @@ test("language switch keeps selected region, firmware, radio, and review step", 
 test("map tiles appear while a slow boundary overlay is still loading", async ({ page }) => {
   let releaseBoundary;
   const boundaryGate = new Promise(resolve => { releaseBoundary = resolve; });
-  await page.route("**/meshmapper-iata-boundaries.geojson?*", async route => {
+  await page.route("**/iata-boundaries.geojson?*", async route => {
     await boundaryGate;
     await route.continue();
   });

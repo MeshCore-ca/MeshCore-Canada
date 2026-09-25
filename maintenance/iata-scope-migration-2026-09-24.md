@@ -24,6 +24,27 @@ deployment. No device, broker account, or production service is changed by this 
 
 ## Model
 
+### September 25: starter assignments
+
+At the user's request, six MeshCore Canada regions now fill the five missing
+jurisdictions: `yyg` for PEI, `yyt` for Newfoundland, `yyr` for Labrador, `yxy`
+for Yukon, `yzf` for the Northwest Territories, and `yfb` for Nunavut. These
+use the same flat IATA/province/Canada scopes, without `onqc`.
+
+They are explicitly labelled starter regions, not MeshMapper publications or
+coverage claims. Airport authorities and Transport Canada's airport list confirm
+the codes; references are in the bilingual scope guide and starter policy.
+Province/territory outlines define the broad extents. Labrador is drawn from the
+SHA-256-pinned Statistics Canada divisions 1010/1011, with Newfoundland the rest
+of the province. The 33 published MeshMapper polygons remain unchanged and take
+priority if their coverage expands. A newly published matching code requires an
+explicit starter-to-MeshMapper transition, not duplicate regions.
+
+Geometry checks prove complete coverage of these five jurisdictions, no starter
+overlap, unchanged MeshMapper geometry, and correct Labrador/Newfoundland coastal
+lookups. EN/FR browser checks cover every added code and confirm that generated
+commands do not include `onqc` or an unrequested radio change.
+
 | Concern | New behavior |
 |---|---|
 | City zone | Published MeshMapper IATA code, lowercase on air |
@@ -43,8 +64,9 @@ map geometry. Scopes do not provide encryption, geofencing, or proof of RF cover
 
 Ottawa and Gatineau share `yow`; their repeaters retain `on` and `qc` respectively.
 North Bay's `yyb` footprint also crosses into Québec. Province outlines identify
-the physical province without clipping MeshMapper polygons. Gaps stay gaps and
-overlaps require a choice; no nearest-airport circles are substituted.
+the physical province without clipping MeshMapper polygons. Outside the six
+starter assignments, gaps stay gaps. Published overlaps require a choice;
+no nearest-airport circles are substituted.
 
 ## Firmware and migration safety
 

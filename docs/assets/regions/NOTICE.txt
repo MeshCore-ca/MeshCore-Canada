@@ -4,28 +4,46 @@ MeshCore Canada region data notice
 Active map and scope model
 --------------------------
 
-iata-regions.json and meshmapper-iata-boundaries.geojson are the active
-catalogue and map. They use MeshMapper's published Canadian city zones and
-lowercase IATA scope names. The source timestamp and SHA-256 are in the
+iata-regions.json and iata-boundaries.geojson are the active catalogue and map.
+They combine published MeshMapper zones with six labelled MeshCore Canada starter
+regions, using lowercase IATA scope names. The source timestamp and SHA-256 are in the
 catalogue. canada-regions.json is an identical compatibility alias of the
-active IATA catalogue. Refresh them with scripts/fetch-meshmapper-regions.mjs and
-scripts/build-iata-catalog.mjs; all changes require a reviewed pull request.
+active IATA catalogue. Refresh using scripts/fetch-meshmapper-regions.mjs,
+scripts/build-iata-boundaries.py and scripts/build-iata-catalog.mjs.
+All changes require a reviewed pull request.
 
 MeshMapper source: https://meshmapper.net/
 Public boundary feed: https://meshmapper.net/?ajax=zones_bbox
 
 The importer changes coordinate order to GeoJSON and closes open rings. It
 does not clip, simplify, or replace published polygons with radius circles.
+meshmapper-iata-boundaries.geojson retains that unchanged source snapshot.
 Credit MeshMapper zone owners, OpenStreetMap contributors (ODbL), and
 geoBoundaries (CC BY 4.0) where those sources are used by MeshMapper.
 
 scope-jurisdictions.geojson is a separate province/territory lookup, dissolved
 without simplification from the existing Statistics Canada 2021 digital
-geography snapshot. It determines the repeater's physical province; it does
-not define radio scopes or change MeshMapper zones.
+geography snapshot. It determines the repeater's physical province and provides
+outlines for broad starter regions. It never changes published MeshMapper zones.
+
+MeshCore Canada starter regions
+-------------------------------
+
+YYG (PEI), YYT (Newfoundland), YYR (Labrador), YXY (Yukon), YZF (Northwest
+Territories), and YFB (Nunavut) are MeshCore Canada assignments, not zones
+approved or published by MeshMapper. They are broad planning areas, not RF
+coverage claims. Their airport-code sources and labels are recorded in
+data/iata-starter-regions.json and explained in the bilingual scope guide.
+
+The Newfoundland/Labrador split uses official 2021 census divisions 1010 and
+1011 for Labrador, clipped to the existing province outline; Newfoundland is
+the province remainder. data/iata-labrador-outline.geojson records the pinned
+Statistics Canada CD source archive, licence, and SHA-256. The six starters
+never overlap each other; published MeshMapper geometry is subtracted from
+them. The merged asset records every input hash for reproducibility.
 
 The files described below are retained historical source material. The
-public tools no longer use the census partition to assign city scopes, and
+public tools no longer use the former census region hierarchy for scopes, and
 the former census boundary editor and automatic publisher are retired.
 
 maintenance/legacy-regions/canada-regions.json

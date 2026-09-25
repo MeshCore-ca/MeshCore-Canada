@@ -698,9 +698,15 @@ body:has([data-mcc-regions]) .md-typeset h3 {
   background: color-mix(in srgb, var(--mcc-green), transparent 84%);
 }
 
-.mcc-source-tier-community {
+.mcc-source-tier-community,
+.mcc-source-tier-meshcore-canada {
   border-style: dashed;
   border-color: rgba(214, 219, 239, 0.42);
+}
+
+.mcc-map-legend .mcc-legend-starter {
+  border: 2px dashed #ffd166;
+  background: var(--mcc-surface);
 }
 
 .mcc-source-tier-strategy {

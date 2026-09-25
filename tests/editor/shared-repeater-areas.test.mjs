@@ -5,7 +5,7 @@ import { runInNewContext } from "node:vm";
 
 const read = path => readFileSync(new URL("../../" + path, import.meta.url), "utf8");
 const catalog = JSON.parse(read("docs/assets/regions/iata-regions.json"));
-const boundaries = JSON.parse(read("docs/assets/regions/meshmapper-iata-boundaries.geojson"));
+const boundaries = JSON.parse(read("docs/assets/regions/iata-boundaries.geojson"));
 const provinces = JSON.parse(read("docs/assets/regions/scope-jurisdictions.geojson"));
 const script = read("docs/assets/regions/regions.js");
 const plain = value => JSON.parse(JSON.stringify(value));
@@ -63,7 +63,7 @@ test("overlapping published zones need an explicit choice and gaps never use a n
   assert.equal(ambiguous.primary, null);
   assert.equal(ambiguous.matches.length, 2);
   assert.equal(api.resolveLocation(data, 45.4215, -75.6972, "yow").primary.seed.tag, "yow");
-  assert.equal(api.resolveLocation(data, 80, -100).hasMatch, false);
+  assert.equal(api.resolveLocation(data, 50.5, -103).hasMatch, false);
 });
 
 test("old links migrate only unique aliases and retain exact saved locations for a fresh lookup", () => {

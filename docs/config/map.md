@@ -1,6 +1,6 @@
 ---
-title: Find your MeshMapper IATA zone
-description: Find a published Canadian MeshMapper zone by place, IATA code or map, then configure the same scope on your repeater.
+title: Find your IATA region
+description: Find a MeshMapper zone or MeshCore Canada starter region by place, IATA code or map.
 audience:
   - meshcore-user
   - repeater-operator
@@ -9,26 +9,27 @@ task: find-region
 scope: canada-baseline
 status: verified
 owner: region-maintainers
-last_reviewed: 2026-09-24
+last_reviewed: 2026-09-25
 review_by: 2027-03-24
 tested_with:
   region_catalog: meshcore-canada-iata-scopes-v1
 difficulty: beginner
 page_styles:
-  - assets/regions/regions.css?v=20260924-2
+  - assets/regions/regions.css?v=20260925-1
 page_scripts:
   - assets/javascripts/radio-profiles.js?v=20260904-1
-  - assets/regions/modules/configurator-support.js?v=20260924-1
-  - assets/regions/modules/iata-scopes.js?v=20260924-1
-  - assets/regions/regions.js?v=20260924-1
+  - assets/regions/modules/configurator-support.js?v=20260925-1
+  - assets/regions/modules/iata-scopes.js?v=20260925-1
+  - assets/regions/regions.js?v=20260925-1
 hide:
   - toc
 ---
 
-# Find your MeshMapper IATA zone
+# Find your IATA region
 
-Search for a place or select a published MeshMapper zone. Areas without a
-published zone remain unassigned; a boundary is not a promise of radio coverage.
+Search for a place or choose an IATA region. The map combines published MeshMapper
+zones with labelled [starter regions](standard.md#starter-regions) for PEI,
+Newfoundland and Labrador, and the three territories. Boundaries do not promise radio coverage.
 
 <div data-mcc-regions="map" data-mcc-root="../"></div>
 

@@ -20,7 +20,7 @@ difficulty: intermediate
 
 Trouvez votre zone dans la [carte des régions](map.md), puis ouvrez le
 [configurateur de répéteur](index.md). Les deux outils utilisent les mêmes
-limites publiées par MeshMapper.
+limites et identifient leur source.
 
 Écrivez les portées en minuscules : **yow (Ottawa–Gatineau)**, **yul (Montréal)**
 ou **yyz (Toronto)**. La recherche accepte les codes d’aéroport en majuscules,
@@ -52,15 +52,45 @@ barrières GPS. Elles ne limitent pas les messages directs dont le chemin est co
 
 ## Trouver la ville et la province
 
-- Utilisez le code de votre zone publiée dans [MeshMapper](https://meshmapper.net/).
+- Utilisez le code indiqué sur la carte : une zone [MeshMapper](https://meshmapper.net/) ou une région initiale ci-dessous.
 - Pour une zone interprovinciale, choisissez la province où le répéteur est installé.
 - Si aucune zone n’est publiée, demandez à votre communauté de l’ajouter dans
   MeshMapper. L’aéroport le plus proche ne détermine pas votre zone.
 - Si des polygones se chevauchent, choisissez la zone de votre communauté;
   l’outil n’en sélectionne pas une arbitrairement.
 
-Les contours provinciaux servent seulement à identifier la province.
-Ils ne découpent pas les zones de MeshMapper.
+Les contours provinciaux indiquent la province du répéteur et définissent les
+grandes régions initiales ci-dessous. Ils ne modifient pas les zones de MeshMapper.
+
+## Régions initiales {#starter-regions}
+
+Ces attributions de MeshCore Canada couvrent des endroits sans zone publiée dans
+MeshMapper. Elles utilisent de vrais codes IATA et les mêmes scopes indépendants,
+mais **ne sont ni des zones publiées dans MeshMapper ni des garanties de couverture**.
+La carte les identifie par des limites dorées en pointillé.
+
+| Secteur | Scope | Référence du code |
+| --- | --- | --- |
+| Île-du-Prince-Édouard | `yyg` | [Charlottetown](https://flyyyg.com/) |
+| Terre-Neuve | `yyt` | [Saint-Jean](https://stjohnsairport.com/) |
+| Labrador | `yyr` | [Happy Valley–Goose Bay](https://goosebayairport.com/) |
+| Yukon | `yxy` | [Whitehorse](https://yukonairports.ca/contact-information) |
+| Territoires du Nord-Ouest | `yzf` | [Yellowknife](https://tc.canada.ca/fr/aviation/exploitation-aeroports-aerodromes/liste-aeroports-appartenant-transports-canada) |
+| Nunavut | `yfb` | [Iqaluit](https://tc.canada.ca/fr/aviation/exploitation-aeroports-aerodromes/liste-aeroports-appartenant-transports-canada) |
+
+Par exemple, l’Île-du-Prince-Édouard utilise `yyg`, `pe` et `can`; le Yukon utilise
+`yxy`, `yt` et `can`. Ces régions n’utilisent pas `onqc`.
+Le [configurateur](index.md) fournit les commandes.
+
+Ces grandes régions sont un point de départ, pas la preuve d’un lien radio entre
+des communautés éloignées. Confirmez leur utilisation localement et
+[proposez des ajustements](../submit-idea.md) selon le développement des réseaux.
+Les limites publiées par MeshMapper ont toujours priorité.
+
+Les contours proviennent de la géographie provinciale et territoriale de
+Statistique Canada déjà utilisée par le site. Le Labrador correspond aux divisions
+de recensement 10 et 11; Terre-Neuve couvre le reste de la province. Aucun cercle
+autour d’un aéroport ni ancien nom de scope hiérarchique n’est utilisé.
 
 ## Configuration du répéteur
 
@@ -202,9 +232,10 @@ de commandes pour un profil trop volumineux.
 
 ## Mises à jour et anciens liens
 
-Demandez les changements dans [MeshMapper](https://meshmapper.net/).
-MeshCore Canada publie des instantanés examinés, pas une carte concurrente
-fondée sur le recensement. Certains anciens liens mènent à leur zone IATA;
+Demandez les changements aux zones publiées dans [MeshMapper](https://meshmapper.net/).
+Pour nos régions initiales, [envoyez une proposition communautaire](../submit-idea.md).
+MeshCore Canada conserve les zones publiées intactes et identifie ses ajouts séparément.
+Certains anciens liens mènent à leur zone IATA;
 vérifiez le lieu, la province et les zones de liaison, car les limites ont changé.
 Un nom absent ou ambigu exige une nouvelle sélection.
 

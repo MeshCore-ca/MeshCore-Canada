@@ -1,6 +1,6 @@
 ---
 title: Trouver le code d’emplacement d’un observateur
-description: Associez le code d’emplacement de votre observateur à sa zone IATA MeshMapper.
+description: Associez le code d’emplacement de votre observateur à sa région IATA.
 audience:
   - observer-operators
 task: choose-location-code
@@ -21,14 +21,14 @@ page_scripts:
 # Trouver le code d’emplacement d’un observateur
 
 Utilisez le code indiqué par la [carte des régions IATA](../config/map.md) à
-l’emplacement de votre observateur. MeshMapper définit la zone; la distance
-jusqu’à un aéroport ne la détermine pas.
+l’emplacement de votre observateur. La carte distingue les zones MeshMapper des
+régions initiales de MeshCore Canada; la distance jusqu’à un aéroport ne détermine pas le code.
 
 Les observateurs utilisent des majuscules, comme `YOW`; les scopes radio
 utilisent des minuscules, comme `yow`. Gardez le même code d’observateur dans
 chaque entrée du courtier. Consultez l’opérateur avant de modifier un observateur existant.
 
-Si MeshMapper n’a pas de zone à cet endroit, demandez à votre communauté quel
+Si la carte n’attribue aucune région à cet endroit, demandez à votre communauté quel
 code utiliser. La liste ci-dessous sert de référence, pas de carte des limites.
 
 <div class="mc-location-tool" id="location-code-tool" data-source="../location-codes.json">

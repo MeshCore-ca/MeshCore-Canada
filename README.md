@@ -27,7 +27,8 @@ Open `http://127.0.0.1:4173/`. Rebuild after editing. Build output belongs in
   It generates the directory pages and `docs/assets/radio-profiles.json`.
   Keep `data/community-search-anchors.json` in sync when adding listings. These
   are approximate search references, not claimed radio locations or coverage.
-- Region tools: `docs/assets/regions/`, using published MeshMapper IATA zones.
+- Region tools: `docs/assets/regions/`, using published MeshMapper IATA zones
+  plus explicitly labelled MeshCore Canada starter regions.
   Scope policy lives in `data/iata-scope-policy.json`. Follow the refresh steps
   below; the former census boundary editor no longer accepts proposals.
 - Broker settings: `docs/analyzer/observer-config.json`. The build generates the
@@ -95,14 +96,23 @@ polygon is missing; do not substitute circles or nearest-airport areas. Update
 `data/iata-scope-policy.json` for new/removed zones, then run:
 
 ```sh
+python scripts/build-iata-boundaries.py
 node scripts/build-iata-catalog.mjs
 node scripts/validate-regions.cjs
 python scripts/verify-iata-geometry.py
 ```
 
 `iata-regions.json` and the compatibility URL `canada-regions.json` are identical
-generated catalogues. `scope-jurisdictions.geojson` identifies the physical
-province only; it does not alter MeshMapper boundaries. The old catalogue lives
+generated catalogues. `iata-boundaries.geojson` combines unchanged published zones
+with the six starter assignments in `data/iata-starter-regions.json`.
+`scope-jurisdictions.geojson` identifies the physical province and supplies broad
+starter outlines; it does not alter MeshMapper boundaries. Labrador's outline
+comes from official divisions 10 and 11, recorded in
+`data/iata-labrador-outline.geojson`. To refresh that input, pass the SHA-256-locked
+Statistics Canada CD ZIP to `python scripts/build-iata-boundaries.py --labrador-source <zip>`.
+The generator subtracts published zones from starters and refuses a code collision;
+review the starter's retirement when MeshMapper publishes the same code.
+The old catalogue lives
 in `maintenance/legacy-regions/` with its original geography retained for history.
 See [the migration audit](maintenance/iata-scope-migration-2026-09-24.md) for scope
 decisions, firmware support, migration risks, and deployment checks.

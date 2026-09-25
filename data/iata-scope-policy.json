@@ -31,7 +31,8 @@
     "yqq": ["bc"], "yqt": ["on"], "yqy": ["ns"], "yse": ["bc"],
     "ytf": ["qc"], "ytr": ["on"], "yul": ["qc"], "yvr": ["bc"],
     "ywg": ["mb"], "yws": ["bc"], "yxu": ["on"], "yxx": ["bc"],
-    "yyb": ["on", "qc"], "yyc": ["ab"], "yyj": ["bc"], "yyy": ["qc", "nb"], "yyz": ["on"]
+    "yyb": ["on", "qc"], "yyc": ["ab"], "yyj": ["bc"], "yyy": ["qc", "nb"], "yyz": ["on"],
+    "yyg": ["pe"], "yyt": ["nl"], "yyr": ["nl"], "yxy": ["yt"], "yzf": ["nt"], "yfb": ["nu"]
   },
   "searchAliases": {
     "yow": ["Ottawa", "Gatineau", "NCR", "Rigaud", "Lanark", "Calabogie", "Renfrew", "Alfred", "Hawkesbury"],
@@ -42,5 +43,10 @@
     "ytf": ["Saguenay", "Lac-Saint-Jean"],
     "ytr": ["Quinte", "Belleville", "Trenton"]
   },
-  "additionalLegacyAliases": { "gatout": ["yow"], "ncr": ["yow"] }
+  "additionalLegacyAliases": {
+    "gatout": ["yow"], "ncr": ["yow"],
+    "avalon": ["yyt"], "burin": ["yyt"], "bonav": ["yyt"], "cent": ["yyt"],
+    "scoast": ["yyt"], "steph": ["yyt"], "humber": ["yyt"], "npen": ["yyr", "yyt"],
+    "labw": ["yyr"], "hvgb": ["yyr"], "nain": ["yyr"]
+  }
 }
