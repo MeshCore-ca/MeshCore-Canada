@@ -30,16 +30,29 @@ page_scripts:
   <ul class="scp-hero__badges">
     <li data-kind="proposal">Pas encore adoptée</li>
     <li>Projet pilote Ontario + Québec</li>
-    <li>Micrologiciel du répéteur 1.16+</li>
+    <li>Micrologiciel du répéteur 1.16+ recommandé</li>
     <li>Application MeshCore 1.43+</li>
   </ul>
 </div>
 
+## Qu’est-ce que je dois faire?
+
+| Vous… | Quoi faire | Quand |
+| --- | --- | --- |
+| Utilisez l’application MeshCore avec une radio compagnon | **Rien pour l’instant.** Laissez vos réglages tels quels. La [phase 2](#phase-2-configuration-de-lappareil-compagnon) vous guide pour deux réglages, avec captures d’écran. | Janvier 2027 au plus tôt |
+| Avez un répéteur | Suivez la [phase 1 : Configuration du répéteur](#phase-1-configuration-du-repeteur). | Maintenant |
+| Faites fonctionner un robot ou MeshMapper | Donnez-lui la portée de votre ville, comme expliqué dans [Robots et MeshMapper](#robots-et-meshmapper). | Fin de la phase 1, une fois les répéteurs autour de vous configurés |
+
+Chaque phase est annoncée sur le
+[Discord de MeshCore Canada](https://discord.gg/BESFVMt7yk). Le reste de cette page explique comment
+tout fonctionne. Vous n’avez pas besoin de le comprendre pour suivre les
+étapes.
+
 ## En bref
 
 Il y a quatre niveaux de portée. Chaque répéteur porte un code de chacun :
-sa ville, sa province, `onqc` et `can`. Quand vous envoyez un message, vous
-choisissez le niveau à utiliser, et c’est ce qui décide jusqu’où il va. `can`
+sa ville, sa province, `onqc` et `can`. Quand vous envoyez un message, la
+portée décide jusqu’où il va. `can`
 est réservé pour plus tard; pour l’instant, vous choisissez parmi les trois
 premiers.
 
@@ -66,17 +79,40 @@ premiers.
   </div>
 </div>
 
+Une fois toutes les phases terminées :
+
 - **Les répéteurs** portent leur ville, leur province, `onqc` et `can`.
+- **Les robots et MeshMapper** utilisent leur ville, pour rester locaux.
 - **Les appareils compagnons** utilisent `onqc` par défaut, pour que les
-  messages privés joignent tout le monde, une fois les répéteurs autour d’eux
-  configurés.
+  messages privés joignent tout le monde.
 - **`Public`** utilise `onqc`, pour que tout le monde en Ontario et au Québec
   puisse se parler.
-- **Les canaux de test et les robots** utilisent votre ville, pour rester
-  locaux.
+- **Les canaux de test** utilisent votre ville, pour rester locaux.
 - **Les messages sans portée** fonctionnent encore dans chaque ville. Les
   répéteurs de bordure, ceux qui entendent une autre ville, les rejettent, pour
   qu’ils n’inondent pas la ville voisine.
+
+<div class="mc-callout" data-kind="warning" markdown>
+Les appareils compagnons viennent en dernier, à la phase 2. Régler une portée
+sur votre appareil compagnon avant que les répéteurs autour de vous soient
+prêts fait que vos messages joignent **moins** de gens, pas plus.
+</div>
+
+### Les mots de cette page
+
+- **Appareil compagnon :** la radio MeshCore que vous jumelez à l’application
+  sur votre téléphone ou votre ordinateur.
+- **Répéteur :** une radio fixe, souvent sur un toit ou une tour, qui relaie
+  les messages.
+- **Diffusion (flood) :** la façon dont un message se propage quand il n’a pas
+  de trajet connu : chaque répéteur qui l’entend le relaie. Les messages de
+  canal sont toujours diffusés, tout comme le premier MP à quelqu’un.
+- **Saut :** un répéteur qui relaie un message.
+- **MP :** un message privé à un seul contact.
+- **Annonce (advert) :** une radio qui s’annonce pour que les autres la
+  trouvent.
+- **Répéteur de bordure :** un répéteur qui entend régulièrement des
+  répéteurs d’une autre ville.
 
 ## Qu’est-ce qu’une portée?
 
@@ -217,6 +253,10 @@ La première fois, écrivez toujours le code avec son secteur, par exemple
 
 ## Lire `region def yow|* on|* onqc|* can`
 
+Cette section s’adresse aux propriétaires de répéteurs qui veulent comprendre
+la commande. Vous pouvez la sauter : l’étape 4 de la phase 1 donne les
+commandes exactes à entrer.
+
 `region def` construit la liste d’un répéteur en une ligne. La commande garde un
 **curseur** qui part du sommet, `*`. Chaque nom est créé sous le curseur, et
 `|*` ramène le curseur au sommet.
@@ -266,7 +306,34 @@ jamais ceux qui existent déjà. Lancez `region` ensuite pour voir la liste
 complète.
 </div>
 
-## Configuration du répéteur
+## Ordre de déploiement
+
+Suivez cet ordre. Chaque phase commence seulement quand la précédente est
+terminée, et elle est annoncée sur Discord. **Ne changez pas
+encore les réglages de votre appareil compagnon.** La phase 2 n’est pas
+ouverte.
+
+<ol class="scp-timeline">
+  <li data-phase="Phase 1"><h3>Répéteurs</h3><p>Maintenant. Les propriétaires effacent les anciennes régions et ajoutent leurs codes. Les répéteurs de ville gardent <code>*</code> permis; les répéteurs de bordure le rejettent. Vers la fin, les robots et MeshMapper reçoivent la portée de leur ville. Rien ne brise dans aucune ville.</p></li>
+  <li data-phase="Phase 2"><h3>Appareils compagnons</h3><p>Janvier 2027 au plus tôt, une fois les répéteurs autour d’eux configurés. Les utilisateurs règlent leur portée par défaut et <code>Public</code> sur <code>onqc</code>, et leurs canaux de test sur leur ville.</p></li>
+  <li data-phase="Phase 3"><h3>Seulement au besoin</h3><p>Si les messages sans portée sont encore trop bruyants dans une ville, les répéteurs peuvent aussi lancer <code>set flood.max.unscoped 3</code>. Les messages avec portée atteignent encore 16 sauts.</p></li>
+</ol>
+
+## Phase 1 : Configuration du répéteur
+
+La phase 1 a trois objectifs :
+
+1. **Mettre la nouvelle configuration de région sur chaque répéteur**, pour
+   que chacun porte sa ville, sa province, `onqc` et `can`.
+2. **Limiter le trafic sans portée entre les villes.** Les répéteurs de
+   bordure rejettent les messages sans portée, pour que les échanges locaux
+   restent dans leur ville.
+3. **Vers la fin, donner aux robots et à MeshMapper la portée de leur ville**,
+   une fois que les répéteurs autour d’eux portent le code de la ville. Voir
+   [Robots et MeshMapper](#robots-et-meshmapper).
+
+Les appareils compagnons ne changent rien pendant cette phase. Si vous
+utilisez seulement l’application, vous n’avez rien à faire ici.
 
 Entrez ces commandes dans la ligne de commande du répéteur **une à la fois** :
 dans l’application MeshCore, ouvrez le répéteur, connectez-vous comme
@@ -461,15 +528,34 @@ se place sur `*`. Vous pouvez l’ignorer.
 | `set flood.max.unscoped <sauts>` | Une limite de sauts séparée pour les messages sans portée. Elle compte seulement si elle est plus basse que `flood.max`. `0` a le même effet que `region denyf *`. |
 | `region save` | À lancer après chaque `allowf` ou `denyf` |
 
-## Configuration de l’appareil compagnon
+### Robots et MeshMapper
+
+Ceci se fait à la fin de la phase 1, une fois que les répéteurs autour de vous
+portent le code de votre ville. Donner la portée de votre ville aux robots et à
+MeshMapper garde leur trafic hors des autres villes.
+
+- **Robots :** sur l’appareil compagnon du robot, réglez **Default Region
+  Scope** sur le code de votre ville, par exemple `yow`. Les étapes sont les
+  mêmes qu’à la [phase 2, étape 1](#etape-1-regler-votre-portee-par-defaut),
+  avec le code de votre ville au lieu de `onqc`. Réglez aussi sur votre ville
+  chaque canal où le robot publie.
+- **MeshMapper :** utilisez le code de votre ville comme portée pour ses
+  messages.
+
+## Phase 2 : Configuration de l’appareil compagnon
 
 <div class="mc-callout" data-kind="warning" markdown>
-**Attendez que les répéteurs autour de vous soient configurés.** Un répéteur
-sans régions rejette tous les messages avec portée. Si vous réglez votre
-portée par défaut sur `onqc` avant que les répéteurs de vos trajets la
-portent, vos messages de canal et vos premiers MP n’iront pas loin. D’ici là,
-laissez **Default Region Scope** vide. Vous recevrez quand même tout.
+**Pas encore. Pas avant janvier 2027 au plus tôt.** La phase 1 doit d’abord
+être terminée. Un répéteur sans régions rejette tous les messages avec portée.
+Si vous réglez votre portée par défaut sur `onqc` avant que les répéteurs de
+vos trajets la portent, vos messages de canal et vos premiers MP n’iront pas
+loin. Tant que la phase 2 n’est pas annoncée, laissez **Default Region Scope**
+vide et vos canaux sans portée. Vous recevrez quand même tout.
 </div>
+
+Quand la phase 2 ouvrira, voici tout ce que vous aurez à faire : régler une
+portée par défaut, puis régler la portée de quelques canaux. Ça prend environ
+cinq minutes dans l’application MeshCore.
 
 ### Étape 1 : Régler votre portée par défaut
 
@@ -522,8 +608,8 @@ Ouvrez le canal, touchez **⋮** en haut à droite, choisissez
 | Canaux de robots, comme `#bots` | Votre ville, par exemple `yow` | Les réponses des robots restent locales |
 | Vos propres canaux | Votre ville, `on`/`qc` ou `onqc` | Choisissez jusqu’où ils doivent aller |
 
-Si vous faites fonctionner un robot, réglez aussi sa propre **Default Region
-Scope** sur votre ville.
+Si vous faites fonctionner un robot, il devrait déjà être réglé sur votre
+ville depuis la [phase 1](#robots-et-meshmapper).
 
 **Exemple : `Public` sur `onqc`**
 
@@ -585,7 +671,7 @@ nom de votre nœud et la version de l’application.
 
 </div>
 
-## Pourquoi l’appareil compagnon utilise `onqc` par défaut
+### Pourquoi l’appareil compagnon utilise `onqc` par défaut
 
 On ne peut pas choisir la portée d’un seul message privé. Quand un MP n’a pas
 encore de chemin connu, il est diffusé avec votre **portée par défaut**. La
@@ -625,6 +711,14 @@ pour `Public`, mais pas pour les canaux de test et les robots. C’est pourquoi
 l’étape 2 de la configuration de l’appareil compagnon les règle sur votre
 ville.
 </div>
+
+## Phase 3 : Seulement au besoin
+
+Si les messages sans portée sont encore trop bruyants dans une ville après la
+phase 2, les répéteurs peuvent aussi lancer `set flood.max.unscoped 3`, puis
+`region save`. Les messages sans portée s’arrêtent alors après 3 sauts. Les
+messages avec portée atteignent encore 16 sauts. Faites-le seulement une fois
+que c’est annoncé pour votre ville.
 
 ## Qui reçoit quoi
 
@@ -685,14 +779,6 @@ D’autres exemples sur le même lien :
 C’est pourquoi les robots et MeshMapper devraient avoir la portée de leur ville :
 ils restent contenus quoi qu’il arrive, et les nouveaux utilisateurs qui n’ont
 pas encore réglé de portée fonctionnent quand même localement.
-
-## Déploiement
-
-<ol class="scp-timeline">
-  <li data-phase="Phase 1"><h3>Répéteurs</h3><p>Les propriétaires effacent les anciennes régions et ajoutent leurs codes. Les répéteurs de ville gardent <code>*</code> permis; les répéteurs de bordure le rejettent. Rien ne brise dans aucune ville.</p></li>
-  <li data-phase="Phase 2"><h3>Appareils compagnons</h3><p>Une fois les répéteurs autour d’eux configurés, les utilisateurs règlent leur portée par défaut et <code>Public</code> sur <code>onqc</code>, et leurs canaux de test et robots sur leur ville.</p></li>
-  <li data-phase="Phase 3"><h3>Seulement au besoin</h3><p>Si les messages sans portée sont encore trop bruyants dans une ville, les répéteurs peuvent aussi lancer <code>set flood.max.unscoped 3</code>. Les messages avec portée atteignent encore 16 sauts.</p></li>
-</ol>
 
 ## À savoir
 
