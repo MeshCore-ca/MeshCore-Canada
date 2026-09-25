@@ -17,7 +17,7 @@ destructive: false
 search:
   exclude: true
 page_styles:
-  - assets/styles/scopes-proposal.css?v=20260925-1
+  - assets/styles/scopes-proposal.css?v=20260925-2
 page_scripts:
   - assets/javascripts/scopes-picker.js?v=20260925-1
 ---
@@ -133,6 +133,9 @@ Quand un message arrive, le répéteur compare le code à sa liste.
 
 ## Comment un répéteur décide
 
+<details class="scp-more" markdown>
+<summary>Afficher l’explication</summary>
+
 Voici un répéteur d’Ottawa configuré selon cette proposition, et ce qu’il fait
 avec cinq messages différents.
 
@@ -181,6 +184,9 @@ Quatre détails piègent souvent :
   défaut, un répéteur ne porte que `*` : il relaie les messages sans portée et
   rien d’autre. Les messages avec portée fonctionnent seulement une fois les
   répéteurs du trajet configurés.
+
+</details>
+
 
 ## Les quatre niveaux
 
@@ -235,6 +241,9 @@ Québec ».
 
 ### Pourquoi des codes d’aéroport?
 
+<details class="scp-more" markdown>
+<summary>Afficher l’explication</summary>
+
 - Ce sont les mêmes codes que MeshMapper utilise déjà, par exemple
   `yow.meshmapper.net`.
 - MeshCore utilise déjà les codes d’aéroport ailleurs, par exemple pour le
@@ -251,11 +260,17 @@ Québec ».
 La première fois, écrivez toujours le code avec son secteur, par exemple
 `yow` (secteur Ottawa–Gatineau), pour que les gens l’apprennent.
 
+</details>
+
+
 ## Lire `region def yow|* on|* onqc|* can`
 
 Cette section s’adresse aux propriétaires de répéteurs qui veulent comprendre
 la commande. Vous pouvez la sauter : l’étape 4 de la phase 1 donne les
 commandes exactes à entrer.
+
+<details class="scp-more" markdown>
+<summary>Afficher le fonctionnement de la commande</summary>
 
 `region def` construit la liste d’un répéteur en une ligne. La commande garde un
 **curseur** qui part du sommet, `*`. Chaque nom est créé sous le curseur, et
@@ -305,6 +320,9 @@ commandes exactes à entrer.
 jamais ceux qui existent déjà. Lancez `region` ensuite pour voir la liste
 complète.
 </div>
+
+</details>
+
 
 ## Ordre de déploiement
 
@@ -493,12 +511,17 @@ Quand vous avez terminé, `region` devrait afficher seulement `*^ F`.
 <p class="scp-note" data-scp-nojs>Ces commandes sont pour un répéteur de ville du secteur d’Ottawa avec le micrologiciel 1.16 ou plus récent. Activez JavaScript pour les adapter à votre répéteur.</p>
 </div>
 
+<details class="scp-more" markdown>
+<summary>Que font ces commandes?</summary>
+
 <dl class="scp-explain">
   <dt>path.hash.mode 2</dt><dd>Utilise des identifiants de répéteur de 3 octets dans les chemins, pour que moins de répéteurs partagent un identifiant. Exige le micrologiciel 1.14 ou plus récent.</dd>
   <dt>advert.interval 240</dt><dd>Annonce ce répéteur à ses voisins directs toutes les 4 heures.</dd>
   <dt>flood.advert.interval 47</dt><dd>Annonce ce répéteur dans tout le réseau toutes les 47 heures.</dd>
   <dt>flood.max 16</dt><dd>Aucune diffusion ne fait plus de 16 sauts, avec ou sans portée.</dd>
 </dl>
+
+</details>
 
 Ces réglages s’enregistrent d’eux-mêmes. Pas besoin de `region save`. Si une
 commande répond `Err - ??`, votre micrologiciel n’a pas ce réglage; passez-la.
@@ -527,12 +550,17 @@ Ces commandes suivent vos réponses de l’étape 1. Lancez-les dans l’ordre.
 <p class="scp-note" data-scp-nojs>Ces commandes sont pour un répéteur de ville du secteur d’Ottawa avec le micrologiciel 1.16 ou plus récent. Activez JavaScript pour les adapter à votre répéteur.</p>
 </div>
 
+<details class="scp-more" markdown>
+<summary>Que font ces commandes?</summary>
+
 <dl class="scp-explain">
   <dt>region def / region put</dt><dd>Porter votre ville, votre province, <code>onqc</code> et <code>can</code>.</dd>
   <dt>region allowf * / region denyf *</dt><dd>Les répéteurs de ville relaient les messages <strong>sans portée</strong> (déjà permis par défaut, réglé pour que vous le voyiez). Les répéteurs de bordure les rejettent.</dd>
   <dt>region default &lt;ville&gt;</dt><dd>Les annonces de ce répéteur utilisent la portée de votre ville, pour rester locales. Absent avant 1.15.</dd>
   <dt>region save</dt><dd>Conserve les réglages de région après un redémarrage.</dd>
 </dl>
+
+</details>
 
 <div class="scp-shots" markdown>
 
@@ -579,6 +607,9 @@ se place sur `*`. Vous pouvez l’ignorer.
 
 ### Permettre ou rejeter : aide-mémoire
 
+<details class="scp-more" markdown>
+<summary>Afficher l’aide-mémoire</summary>
+
 | Commande | Effet |
 | --- | --- |
 | `region allowf <nom>` | Relayer les messages portant ce nom |
@@ -586,6 +617,9 @@ se place sur `*`. Vous pouvez l’ignorer.
 | `<nom>` | Peut être `*` pour les messages sans portée, ou un code comme `yow` |
 | `set flood.max.unscoped <sauts>` | Une limite de sauts séparée pour les messages sans portée. Elle compte seulement si elle est plus basse que `flood.max`. `0` a le même effet que `region denyf *`. |
 | `region save` | À lancer après chaque `allowf` ou `denyf` |
+
+</details>
+
 
 ### Robots et MeshMapper
 
@@ -732,6 +766,9 @@ nom de votre nœud et la version de l’application.
 
 ### Pourquoi l’appareil compagnon utilise `onqc` par défaut
 
+<details class="scp-more" markdown>
+<summary>Afficher l’explication</summary>
+
 On ne peut pas choisir la portée d’un seul message privé. Quand un MP n’a pas
 encore de chemin connu, il est diffusé avec votre **portée par défaut**. La
 réponse qui indique le chemin à votre appareil compagnon revient avec la portée par
@@ -771,6 +808,9 @@ l’étape 2 de la configuration de l’appareil compagnon les règle sur votre
 ville.
 </div>
 
+</details>
+
+
 ## Phase 3 : Seulement au besoin
 
 Si les messages sans portée sont encore trop bruyants dans une ville après la
@@ -780,6 +820,9 @@ messages avec portée atteignent encore 16 sauts. Faites-le seulement une fois
 que c’est annoncé pour votre ville.
 
 ## Qui reçoit quoi
+
+<details class="scp-more" markdown>
+<summary>Afficher les exemples</summary>
 
 Quand les répéteurs de bordure rejettent les messages sans portée, un nouvel
 utilisateur qui n’a pas encore réglé de portée joint quand même tout le monde
@@ -838,6 +881,9 @@ D’autres exemples sur le même lien :
 C’est pourquoi les robots et MeshMapper devraient avoir la portée de leur ville :
 ils restent contenus quoi qu’il arrive, et les nouveaux utilisateurs qui n’ont
 pas encore réglé de portée fonctionnent quand même localement.
+
+</details>
+
 
 ## À savoir
 

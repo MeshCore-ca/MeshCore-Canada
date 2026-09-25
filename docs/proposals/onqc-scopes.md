@@ -17,7 +17,7 @@ destructive: false
 search:
   exclude: true
 page_styles:
-  - assets/styles/scopes-proposal.css?v=20260925-1
+  - assets/styles/scopes-proposal.css?v=20260925-2
 page_scripts:
   - assets/javascripts/scopes-picker.js?v=20260925-1
 ---
@@ -122,6 +122,9 @@ the repeater checks the code against its list.
 
 ## How a repeater decides
 
+<details class="scp-more" markdown>
+<summary>Show the explanation</summary>
+
 Here is an Ottawa repeater under this proposal, and what it does with five
 different messages.
 
@@ -168,6 +171,9 @@ Four details catch people out:
   box, a repeater only carries `*`, so it forwards messages with no scope and
   nothing else. Scoped messages only work once the repeaters along the way are
   set up.
+
+</details>
+
 
 ## The four levels
 
@@ -221,6 +227,9 @@ Québec mesh".
 
 ### Why airport codes?
 
+<details class="scp-more" markdown>
+<summary>Show the explanation</summary>
+
 - They are the same codes MeshMapper already uses, for example
   `yow.meshmapper.net`.
 - MeshCore already uses airport codes elsewhere, such as the
@@ -235,10 +244,16 @@ Québec mesh".
 Always write the code with its area the first time, for example
 `yow` (Ottawa / NCR area), so people learn it.
 
+</details>
+
+
 ## Reading `region def yow|* on|* onqc|* can`
 
 This section is for repeater owners who want to understand the command. You
 can skip it: step 4 of Phase 1 gives you the exact commands to type.
+
+<details class="scp-more" markdown>
+<summary>Show how the command works</summary>
 
 `region def` builds a repeater's list in one line. It keeps a **cursor** that
 starts at the top, `*`. Each name is created under the cursor, and `|*` jumps
@@ -287,6 +302,9 @@ the cursor back to the top.
 `region def` only adds or moves names. It never deletes the ones already
 there. Run `region` afterwards to see the full list.
 </div>
+
+</details>
+
 
 ## Rollout order
 
@@ -465,12 +483,17 @@ Removing `on` and `can` is fine too. Step 4 adds them back. When you are done,
 <p class="scp-note" data-scp-nojs>These commands are for an Ottawa-area city repeater on firmware 1.16 or newer. Turn on JavaScript to match them to your repeater.</p>
 </div>
 
+<details class="scp-more" markdown>
+<summary>What do these commands do?</summary>
+
 <dl class="scp-explain">
   <dt>path.hash.mode 2</dt><dd>Uses 3-byte repeater IDs in message paths, so fewer repeaters share an ID. Needs firmware 1.14 or newer.</dd>
   <dt>advert.interval 240</dt><dd>Announces this repeater to direct neighbours every 4 hours.</dd>
   <dt>flood.advert.interval 47</dt><dd>Announces this repeater across the network every 47 hours.</dd>
   <dt>flood.max 16</dt><dd>No flood message travels more than 16 hops, scoped or not.</dd>
 </dl>
+
+</details>
 
 These save by themselves. No `region save` is needed for them. If a command
 answers `Err - ??`, your firmware does not have that setting, so skip it.
@@ -499,12 +522,17 @@ These follow your answers in step 1. Run them in order.
 <p class="scp-note" data-scp-nojs>These commands are for an Ottawa-area city repeater on firmware 1.16 or newer. Turn on JavaScript to match them to your repeater.</p>
 </div>
 
+<details class="scp-more" markdown>
+<summary>What do these commands do?</summary>
+
 <dl class="scp-explain">
   <dt>region def / region put</dt><dd>Carry your city, your province, <code>onqc</code> and <code>can</code>.</dd>
   <dt>region allowf * / region denyf *</dt><dd>City repeaters forward messages with <strong>no scope</strong> (on by default, set so you can see it). Edge repeaters drop them.</dd>
   <dt>region default &lt;city&gt;</dt><dd>This repeater's own adverts use your city's scope, so they stay local. Not available before 1.15.</dd>
   <dt>region save</dt><dd>Keeps the region settings after a reboot.</dd>
 </dl>
+
+</details>
 
 <div class="scp-shots" markdown>
 
@@ -551,6 +579,9 @@ ignore it.
 
 ### Allow or drop, quick reference
 
+<details class="scp-more" markdown>
+<summary>Show the quick reference</summary>
+
 | Command | What it does |
 | --- | --- |
 | `region allowf <name>` | Forward messages with that name |
@@ -558,6 +589,9 @@ ignore it.
 | `<name>` | Can be `*` for messages with no scope, or a code such as `yow` |
 | `set flood.max.unscoped <hops>` | A separate hop limit for messages with no scope. It only matters when it is lower than `flood.max`. `0` has the same effect as `region denyf *`. |
 | `region save` | Always run it after `allowf` or `denyf` |
+
+</details>
+
 
 ### Bots and MeshMapper
 
@@ -700,6 +734,9 @@ the exact limit, and it can vary with your node name and app version.
 
 ### Why the companion default is `onqc`
 
+<details class="scp-more" markdown>
+<summary>Show the explanation</summary>
+
 You cannot pick a scope for a single direct message. When a DM has no known
 path yet, it floods using your **default scope**. The reply that tells your
 companion the path comes back using **your contact's** default scope.
@@ -737,6 +774,9 @@ companion the path comes back using **your contact's** default scope.
 companion setup sets those to your city.
 </div>
 
+</details>
+
+
 ## Phase 3: Only if needed
 
 If messages with no scope are still too noisy inside a city after Phase 2,
@@ -745,6 +785,9 @@ Messages with no scope then stop after 3 hops. Scoped messages still reach
 16 hops. Only do this once it is announced for your city.
 
 ## Who hears what
+
+<details class="scp-more" markdown>
+<summary>Show the examples</summary>
 
 With edge repeaters dropping messages with no scope, a new user who hasn't set
 a scope yet still reaches everyone in their own city. Their messages just
@@ -802,6 +845,9 @@ More examples on the same link:
 This is why bots and MeshMapper should be scoped to their city: they stay
 contained no matter what, and new users who haven't set a scope yet still work
 locally.
+
+</details>
+
 
 ## Things to know
 
