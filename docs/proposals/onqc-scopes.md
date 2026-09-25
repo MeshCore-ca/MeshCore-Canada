@@ -31,14 +31,26 @@ page_scripts:
   <ul class="scp-hero__badges">
     <li data-kind="proposal">Not adopted yet</li>
     <li>Ontario + Québec pilot</li>
-    <li>Repeater firmware 1.16+</li>
+    <li>Repeater firmware 1.16+ recommended</li>
     <li>MeshCore app 1.43+</li>
   </ul>
 </div>
 
+## What do I need to do?
+
+| You… | What to do | When |
+| --- | --- | --- |
+| Use the MeshCore app with a companion radio | **Nothing yet.** Leave your settings as they are. [Phase 2](#phase-2-companion-setup) walks you through two settings, with screenshots. | January 2027 at the earliest |
+| Own a repeater | Follow [Phase 1: Repeater setup](#phase-1-repeater-setup). | Now |
+| Run a bot or MeshMapper | Scope it to your city, as described in [Bots and MeshMapper](#bots-and-meshmapper). | End of Phase 1, once the repeaters around you are set up |
+
+Each phase is announced on the
+[MeshCore Canada Discord](https://discord.gg/BESFVMt7yk). The rest of this page explains how it
+all works. You don't need to understand it to follow the steps.
+
 ## The short version
 
-There are four levels of scope. Every repeater carries one code from each: its city, its province, `onqc` and `can`. When you send a message, you choose which level to use, and that decides how far it travels. `can` is reserved for later, so for now you only pick from the first three.
+There are four levels of scope. Every repeater carries one code from each: its city, its province, `onqc` and `can`. When you send a message, the scope decides how far it travels. `can` is reserved for later, so for now you only pick from the first three.
 
 <div class="scp-levels-cards">
   <div class="scp-level-card" data-level="city">
@@ -63,13 +75,36 @@ There are four levels of scope. Every repeater carries one code from each: its c
   </div>
 </div>
 
+Once every phase is done:
+
 - **Repeaters** carry their city, their province, `onqc` and `can`.
-- **Companions** use `onqc` as their default, so direct messages reach anyone,
-  once the repeaters around them are set up.
+- **Bots and MeshMapper** use their city, so they stay local.
+- **Companions** use `onqc` as their default, so direct messages reach anyone.
 - **`Public`** uses `onqc`, so everyone in Ontario and Québec can talk.
-- **Test channels and bots** use your city, so they stay local.
+- **Test channels** use your city, so they stay local.
 - **Messages with no scope** still work inside each city. Bridge repeaters,
   the ones that hear another city, drop them, so they don't flood the next city.
+
+<div class="mc-callout" data-kind="warning" markdown>
+Companions come last, in Phase 2. Setting a scope on your companion before
+the repeaters around you are ready makes your messages reach **fewer**
+people, not more.
+</div>
+
+### Words used on this page
+
+- **Companion:** the MeshCore radio you pair with the app on your phone or
+  computer.
+- **Repeater:** a fixed radio, often on a roof or tower, that passes messages
+  along.
+- **Flood:** how a message spreads when it has no known route: every repeater
+  that hears it passes it on. Channel messages always flood, and so does the
+  first DM to someone.
+- **Hop:** one repeater passing a message on.
+- **DM:** a direct message to one contact.
+- **Advert:** a radio announcing itself so others can find it.
+- **Bridge repeater:** a repeater that regularly hears repeaters from another
+  city.
 
 ## What a scope is
 
@@ -203,6 +238,9 @@ Always write the code with its area the first time, for example
 
 ## Reading `region def yow|* on|* onqc|* can`
 
+This section is for repeater owners who want to understand the command. You
+can skip it: step 4 of Phase 1 gives you the exact commands to type.
+
 `region def` builds a repeater's list in one line. It keeps a **cursor** that
 starts at the top, `*`. Each name is created under the cursor, and `|*` jumps
 the cursor back to the top.
@@ -251,7 +289,32 @@ the cursor back to the top.
 there. Run `region` afterwards to see the full list.
 </div>
 
-## Repeater setup
+## Rollout order
+
+Do this in order. Each phase starts only once the one before it is done, and
+is announced on Discord. **Don't change your companion settings
+yet.** Phase 2 is not open.
+
+<ol class="scp-timeline">
+  <li data-phase="Phase 1"><h3>Repeaters</h3><p>Now. Owners clear old regions and add their codes. Local repeaters keep <code>*</code> allowed; bridge repeaters drop it. Near the end, bots and MeshMapper are scoped to their city. Test local messaging after the change.</p></li>
+  <li data-phase="Phase 2"><h3>Companions</h3><p>January 2027 at the earliest, once the repeaters around them are set up. Users set their default and <code>Public</code> to <code>onqc</code>, and test channels to their city.</p></li>
+  <li data-phase="Phase 3"><h3>Only if needed</h3><p>If messages with no scope are still too noisy inside a city, repeaters can also run <code>set flood.max.unscoped 3</code>. Scoped messages still reach 16 hops.</p></li>
+</ol>
+
+## Phase 1: Repeater setup
+
+Phase 1 has three goals:
+
+1. **Get the new region config on every repeater**, so each one carries its
+   city, its province, `onqc` and `can`.
+2. **Limit unscoped traffic between cities.** Bridge repeaters drop messages
+   with no scope, so local chatter stays in its own city.
+3. **Near the end, scope bots and MeshMapper to their city**, once the
+   repeaters around them carry the city code. See
+   [Bots and MeshMapper](#bots-and-meshmapper).
+
+Companions don't change anything in this phase. If you only use the app,
+there is nothing for you to do here.
 
 Type these into the repeater's command line **one command at a time**: in the
 MeshCore app, open the repeater, log in as admin and use the command box in
@@ -441,15 +504,31 @@ ignore it.
 | `set flood.max.unscoped <hops>` | A separate hop limit for messages with no scope. It only matters when it is lower than `flood.max`. `0` has the same effect as `region denyf *`. |
 | `region save` | Always run it after `allowf` or `denyf` |
 
-## Companion setup
+### Bots and MeshMapper
+
+This comes at the end of Phase 1, once the repeaters around you carry your
+city code. Scoping bots and MeshMapper to your city keeps their traffic out
+of other cities.
+
+- **Bots:** on the companion the bot uses, set **Default Region Scope** to
+  your city code, for example `yow`. The steps are the same as
+  [Phase 2, step 1](#step-1-set-your-default-scope), with your city code
+  instead of `onqc`. Set any channel the bot posts in to your city as well.
+- **MeshMapper:** use your city code as the scope for its messages.
+
+## Phase 2: Companion setup
 
 <div class="mc-callout" data-kind="warning" markdown>
-**Wait until the repeaters around you are set up.** A repeater with no regions
-set drops every scoped message. If you set your default to `onqc` before the
-repeaters on your routes carry it, your channel messages and first DMs will
-only reach nearby. Until then, leave **Default Region Scope** empty. You will
-still receive everything.
+**Not yet. The earliest this should be considered is January 2027.** Phase 1
+has to be finished first. A repeater with no regions set drops every scoped
+message. If you set your default to `onqc` before the repeaters on your routes
+carry it, your channel messages and first DMs will only reach nearby. Until
+Phase 2 is announced, leave **Default Region Scope** empty and your channels
+unscoped. You will still receive everything.
 </div>
+
+When Phase 2 opens, this is all you need to do: set a default scope, then set
+a scope on a few channels. It takes about five minutes in the MeshCore app.
 
 ### Step 1: Set your default scope
 
@@ -502,7 +581,8 @@ and pick the scope from this table:
 | Bot channels, such as `#bots` | Your city, for example `yow` | Bot replies stay local |
 | Your own channels | Your city, `on`/`qc`, or `onqc` | Pick how far it should reach |
 
-If you run a bot, set that bot's own **Default Region Scope** to your city too.
+If you run a bot, it should already be on your city from
+[Phase 1](#bots-and-meshmapper).
 
 **Example: `Public` to `onqc`**
 
@@ -563,7 +643,7 @@ the exact limit, and it can vary with your node name and app version.
 
 </div>
 
-## Why the companion default is `onqc`
+### Why the companion default is `onqc`
 
 You cannot pick a scope for a single direct message. When a DM has no known
 path yet, it floods using your **default scope**. The reply that tells your
@@ -601,6 +681,13 @@ companion the path comes back using **your contact's** default scope.
 `Public`, but not for test channels and bots. That is why step 2 of the
 companion setup sets those to your city.
 </div>
+
+## Phase 3: Only if needed
+
+If messages with no scope are still too noisy inside a city after Phase 2,
+repeaters can also run `set flood.max.unscoped 3`, then `region save`.
+Messages with no scope then stop after 3 hops. Scoped messages still reach
+16 hops. Only do this once it is announced for your city.
 
 ## Who hears what
 
@@ -660,14 +747,6 @@ More examples on the same link:
 This is why bots and MeshMapper should be scoped to their city: they stay
 contained no matter what, and new users who haven't set a scope yet still work
 locally.
-
-## Rollout
-
-<ol class="scp-timeline">
-  <li data-phase="Phase 1"><h3>Repeaters</h3><p>Owners clear old regions and add their codes. Local repeaters keep <code>*</code> allowed; bridge repeaters drop it. Test local messaging after the change.</p></li>
-  <li data-phase="Phase 2"><h3>Companions</h3><p>Once the repeaters around them are set up, users set their default and <code>Public</code> to <code>onqc</code>, and test channels and bots to their city.</p></li>
-  <li data-phase="Phase 3"><h3>Only if needed</h3><p>If messages with no scope are still too noisy inside a city, repeaters can also run <code>set flood.max.unscoped 3</code>. Scoped messages still reach 16 hops.</p></li>
-</ol>
 
 ## Things to know
 
