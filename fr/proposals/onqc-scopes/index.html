@@ -49,7 +49,7 @@
     
       <link rel="stylesheet" href="../../../assets/styles/tokens.css?v=20260722-2">
     
-      <link rel="stylesheet" href="../../../assets/styles/base.css?v=20260821-1">
+      <link rel="stylesheet" href="../../../assets/styles/base.css?v=20260924-1">
     
       <link rel="stylesheet" href="../../../assets/styles/shell.css?v=20260821-1">
     
@@ -90,7 +90,7 @@
       }
     </script>
     
-      <link rel="stylesheet" href="../../../assets/styles/scopes-proposal.css?v=20260924-1">
+      <link rel="stylesheet" href="../../../assets/styles/scopes-proposal.css?v=20260924-2">
     
   
 
@@ -3525,23 +3525,6 @@
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Étape 4 : Réglages de région">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#micrologiciel-plus-ancien" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Micrologiciel plus ancien
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
         
           <li class="md-nav__item">
@@ -3969,22 +3952,11 @@ Attendez <code>OK</code> avant d’envoyer la suivante.</p>
 <figcaption><span class="scp-shot__num">3</span> Vérifiez <strong>You are logged in as an Admin</strong>, puis touchez <strong>Command Line</strong> en bas.</figcaption>
 </figure>
 </div>
-<div class="mc-callout" data-kind="warning">
-<p><strong>Pas de <code>OK</code>? Renvoyez la même commande.</strong> Par le réseau maillé, une réponse
-peut prendre quelques secondes ou se perdre. Dans l’application MeshCore,
-touchez longuement la commande dans l’historique et choisissez <strong>Send Again</strong>.
-Lancer une commande deux fois ne cause pas de problème. Si un <code>region remove</code> répété répond <code>Err - not found</code>,
-le premier a déjà fonctionné.</p>
-</div>
-<div class="scp-shots">
-<figure class="scp-shot">
-<p><a href="../../../assets/images/onqc-scopes/repeater-04-cli-standard.webp"><img alt="Ligne de commande où une commande a été envoyée deux fois avant d’obtenir OK" height="1304" loading="lazy" src="../../../assets/images/onqc-scopes/repeater-04-cli-standard.webp" width="600" /></a></p>
-<figcaption><span class="scp-shot__num">1</span> Assurez-vous que chaque commande reçoit un <code>OK</code>. Ici, le premier <code>set flood.advert.interval 47</code> n’en a pas reçu, donc il a été renvoyé.</figcaption>
-</figure>
-<figure class="scp-shot">
-<p><a href="../../../assets/images/onqc-scopes/repeater-06-send-again.webp"><img alt="Menu de l’historique des commandes avec Copy et Send Again" height="1304" loading="lazy" src="../../../assets/images/onqc-scopes/repeater-06-send-again.webp" width="600" /></a></p>
-<figcaption><span class="scp-shot__num">2</span> Pas de <code>OK</code>? Touchez longuement la commande et choisissez <strong>Send Again</strong>.</figcaption>
-</figure>
+<div class="mc-callout">
+<p><strong>Astuce :</strong> chaque commande devrait recevoir une réponse, habituellement <code>OK</code>.
+Si rien ne revient après quelques secondes, renvoyez-la : touchez longuement
+la commande et choisissez <strong>Send Again</strong>. Envoyer une commande deux fois ne
+cause pas de problème.</p>
 </div>
 <h3 id="etape-1-verifier-le-micrologiciel">Étape 1 : Vérifier le micrologiciel<a class="headerlink" href="#etape-1-verifier-le-micrologiciel" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code>ver
@@ -3993,14 +3965,14 @@ le premier a déjà fonctionné.</p>
 commandes de région à utiliser à l’étape 4 :</p>
 <ul>
 <li><strong>1.16 ou plus récent :</strong> utilisez <code>region def</code>.</li>
-<li><strong>1.15 ou plus ancien :</strong> <code>region def</code> répond <code>Err - ??</code>. Utilisez plutôt les
-  commandes <code>region put</code> sous <a href="#micrologiciel-plus-ancien">Micrologiciel plus ancien</a>,
-  ou mettez d’abord le micrologiciel à jour.</li>
+<li><strong>1.15 ou plus ancien :</strong> <code>region def</code> répond <code>Err - ??</code>. Choisissez votre
+  version à l’étape 4 pour obtenir les bonnes commandes, ou mettez d’abord le
+  micrologiciel à jour.</li>
 </ul>
 <div class="scp-shots">
 <figure class="scp-shot">
-<p><a href="../../../assets/images/onqc-scopes/repeater-05-ver.webp"><img alt="Ligne de commande où region def répond Err - ?? et ver affiche v1.15.0" height="1304" loading="lazy" src="../../../assets/images/onqc-scopes/repeater-05-ver.webp" width="600" /></a></p>
-<figcaption><span class="scp-shot__num">1</span> Sur ce répéteur, <code>region def</code> répond <code>Err - ??</code>, et <code>ver</code> affiche <strong>v1.15.0</strong>; il utilise donc les étapes pour micrologiciel plus ancien.</figcaption>
+<p><a href="../../../assets/images/onqc-scopes/repeater-05-ver.webp"><img alt="Ligne de commande avec la commande ver envoyée" height="1304" loading="lazy" src="../../../assets/images/onqc-scopes/repeater-05-ver.webp" width="600" /></a></p>
+<figcaption><span class="scp-shot__num">1</span> Tapez <code>ver</code> et touchez envoyer. La version du micrologiciel apparaît en dessous, par exemple <code>v1.15.0</code>.</figcaption>
 </figure>
 </div>
 <h3 id="etape-2-effacer-les-anciennes-regions">Étape 2 : Effacer les anciennes régions<a class="headerlink" href="#etape-2-effacer-les-anciennes-regions" title="Permanent link">&para;</a></h3>
@@ -4059,13 +4031,19 @@ commandes, dans l’ordre :</p>
 <h3 id="etape-4-reglages-de-region">Étape 4 : Réglages de région<a class="headerlink" href="#etape-4-reglages-de-region" title="Permanent link">&para;</a></h3>
 <p>Votre code de ville est votre <strong>zone MeshMapper</strong>. Ouvrez
 <a href="https://meshmapper.net/">MeshMapper</a>, trouvez la zone où se trouve votre
-répéteur et utilisez son code. C’est une carte que tout le monde utilise déjà,
-donc rien de nouveau à chercher.</p>
-<p>Avec le <strong>micrologiciel 1.16 ou plus récent</strong>, choisissez votre secteur et
-lancez les quatre commandes dans l’ordre :</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:4"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><input id="__tabbed_1_4" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Ottawa et environs</label><label for="__tabbed_1_2">Gatineau</label><label for="__tabbed_1_3">Montréal et environs</label><label for="__tabbed_1_4">Ville de Québec</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
+répéteur et utilisez son code. Ces zones suivent les limites MeshMapper qui
+existent déjà. Elles ne sont pas parfaites, mais c’est ainsi que la plupart des
+gens voient déjà la carte aujourd’hui; il n’y a donc rien de nouveau à
+apprendre.</p>
+<p>Choisissez votre secteur et la version de votre micrologiciel, puis lancez les
+commandes dans l’ordre :</p>
+<div class="scp-picker-group" data-scp-picker-group="data-scp-picker-group">
+<div class="scp-picker" data-scp-picker="data-scp-picker" hidden="hidden">
+  <label class="scp-picker__field"><span>Secteur</span><select data-scp-area><option value="ottawa">Ottawa et environs</option><option value="gatineau">Gatineau</option><option value="montreal">Montréal et environs</option><option value="quebec">Ville de Québec</option></select></label>
+  <label class="scp-picker__field"><span>Micrologiciel (voir l’étape 1)</span><select data-scp-firmware><option value="116">1.16 ou plus récent</option><option value="115">1.15</option><option value="110">1.10 à 1.14</option></select></label>
+</div>
+<div class="scp-variant" data-area="ottawa" data-firmware="116" data-scp-variant="data-scp-variant">
+<p class="scp-variant__label">Ottawa et environs · Micrologiciel 1.16 ou plus récent</p>
 <div class="highlight"><pre><span></span><code>region def yow|* on|* onqc|* can
 </code></pre></div>
 <div class="highlight"><pre><span></span><code>region allowf *
@@ -4075,56 +4053,8 @@ lancez les quatre commandes dans l’ordre :</p>
 <div class="highlight"><pre><span></span><code>region save
 </code></pre></div>
 </div>
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>region def yow|* qc|* onqc|* can
-</code></pre></div>
-<div class="highlight"><pre><span></span><code>region allowf *
-</code></pre></div>
-<div class="highlight"><pre><span></span><code>region default yow
-</code></pre></div>
-<div class="highlight"><pre><span></span><code>region save
-</code></pre></div>
-</div>
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>region def yul|* qc|* onqc|* can
-</code></pre></div>
-<div class="highlight"><pre><span></span><code>region allowf *
-</code></pre></div>
-<div class="highlight"><pre><span></span><code>region default yul
-</code></pre></div>
-<div class="highlight"><pre><span></span><code>region save
-</code></pre></div>
-</div>
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code>region def yqb|* qc|* onqc|* can
-</code></pre></div>
-<div class="highlight"><pre><span></span><code>region allowf *
-</code></pre></div>
-<div class="highlight"><pre><span></span><code>region default yqb
-</code></pre></div>
-<div class="highlight"><pre><span></span><code>region save
-</code></pre></div>
-</div>
-</div>
-</div>
-<p>Ces zones suivent les limites MeshMapper qui existent déjà. Elles ne sont pas
-parfaites, mais c’est ainsi que la plupart des gens voient déjà la carte
-aujourd’hui; il n’y a donc rien de nouveau à apprendre.</p>
-<dl class="scp-explain">
-  <dt>region def …</dt><dd>Porter votre ville, votre province, <code>onqc</code> et <code>can</code>.</dd>
-  <dt>region allowf *</dt><dd>Relayer aussi les messages <strong>sans portée</strong>. C’est déjà le réglage par défaut. On le règle quand même pour que vous le voyiez.</dd>
-  <dt>region default &lt;ville&gt;</dt><dd>Les annonces de ce répéteur utilisent la portée de votre ville, pour rester locales.</dd>
-  <dt>region save</dt><dd>Conserve les réglages de région après un redémarrage.</dd>
-</dl>
-
-<h4 id="micrologiciel-plus-ancien">Micrologiciel plus ancien<a class="headerlink" href="#micrologiciel-plus-ancien" title="Permanent link">&para;</a></h4>
-<p>Si <code>region def</code> répond <code>Err - ??</code>, votre micrologiciel est plus ancien que 1.16.
-Ajoutez plutôt chaque code avec <code>region put</code>. Ces exemples sont pour Ottawa.
-Pour un autre secteur, remplacez <code>yow</code> par votre code de ville, et <code>on</code> par
-<code>qc</code> au Québec.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Micrologiciel 1.15</label><label for="__tabbed_2_2">Micrologiciel 1.10 à 1.14</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
+<div class="scp-variant" data-area="ottawa" data-firmware="115" data-scp-variant="data-scp-variant">
+<p class="scp-variant__label">Ottawa et environs · Micrologiciel 1.15</p>
 <div class="highlight"><pre><span></span><code>region put yow
 </code></pre></div>
 <div class="highlight"><pre><span></span><code>region put on
@@ -4139,8 +4069,10 @@ Pour un autre secteur, remplacez <code>yow</code> par votre code de ville, et <c
 </code></pre></div>
 <div class="highlight"><pre><span></span><code>region save
 </code></pre></div>
+<p>Chaque <code>region put</code> répond <code>OK - (flood allowed)</code>, et <code>region default</code> répond <code>default scope is now …</code>.</p>
 </div>
-<div class="tabbed-block">
+<div class="scp-variant" data-area="ottawa" data-firmware="110" data-scp-variant="data-scp-variant">
+<p class="scp-variant__label">Ottawa et environs · Micrologiciel 1.10 à 1.14</p>
 <div class="highlight"><pre><span></span><code>region put yow
 </code></pre></div>
 <div class="highlight"><pre><span></span><code>region allowf yow
@@ -4161,20 +4093,179 @@ Pour un autre secteur, remplacez <code>yow</code> par votre code de ville, et <c
 </code></pre></div>
 <div class="highlight"><pre><span></span><code>region save
 </code></pre></div>
+<p>Avec ces versions, une nouvelle région commence avec la diffusion <strong>désactivée</strong>, donc chacune a aussi besoin de <code>region allowf</code>. Il n’y a pas de <code>region default</code>, donc les annonces du répéteur restent sans portée. Une mise à jour du micrologiciel vaut la peine.</p>
+</div>
+<div class="scp-variant" data-area="gatineau" data-firmware="116" data-scp-variant="data-scp-variant">
+<p class="scp-variant__label">Gatineau · Micrologiciel 1.16 ou plus récent</p>
+<div class="highlight"><pre><span></span><code>region def yow|* qc|* onqc|* can
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region allowf *
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region default yow
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region save
+</code></pre></div>
+</div>
+<div class="scp-variant" data-area="gatineau" data-firmware="115" data-scp-variant="data-scp-variant">
+<p class="scp-variant__label">Gatineau · Micrologiciel 1.15</p>
+<div class="highlight"><pre><span></span><code>region put yow
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region put qc
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region put onqc
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region put can
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region allowf *
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region default yow
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region save
+</code></pre></div>
+<p>Chaque <code>region put</code> répond <code>OK - (flood allowed)</code>, et <code>region default</code> répond <code>default scope is now …</code>.</p>
+</div>
+<div class="scp-variant" data-area="gatineau" data-firmware="110" data-scp-variant="data-scp-variant">
+<p class="scp-variant__label">Gatineau · Micrologiciel 1.10 à 1.14</p>
+<div class="highlight"><pre><span></span><code>region put yow
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region allowf yow
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region put qc
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region allowf qc
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region put onqc
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region allowf onqc
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region put can
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region allowf can
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region allowf *
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region save
+</code></pre></div>
+<p>Avec ces versions, une nouvelle région commence avec la diffusion <strong>désactivée</strong>, donc chacune a aussi besoin de <code>region allowf</code>. Il n’y a pas de <code>region default</code>, donc les annonces du répéteur restent sans portée. Une mise à jour du micrologiciel vaut la peine.</p>
+</div>
+<div class="scp-variant" data-area="montreal" data-firmware="116" data-scp-variant="data-scp-variant">
+<p class="scp-variant__label">Montréal et environs · Micrologiciel 1.16 ou plus récent</p>
+<div class="highlight"><pre><span></span><code>region def yul|* qc|* onqc|* can
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region allowf *
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region default yul
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region save
+</code></pre></div>
+</div>
+<div class="scp-variant" data-area="montreal" data-firmware="115" data-scp-variant="data-scp-variant">
+<p class="scp-variant__label">Montréal et environs · Micrologiciel 1.15</p>
+<div class="highlight"><pre><span></span><code>region put yul
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region put qc
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region put onqc
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region put can
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region allowf *
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region default yul
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region save
+</code></pre></div>
+<p>Chaque <code>region put</code> répond <code>OK - (flood allowed)</code>, et <code>region default</code> répond <code>default scope is now …</code>.</p>
+</div>
+<div class="scp-variant" data-area="montreal" data-firmware="110" data-scp-variant="data-scp-variant">
+<p class="scp-variant__label">Montréal et environs · Micrologiciel 1.10 à 1.14</p>
+<div class="highlight"><pre><span></span><code>region put yul
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region allowf yul
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region put qc
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region allowf qc
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region put onqc
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region allowf onqc
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region put can
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region allowf can
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region allowf *
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region save
+</code></pre></div>
+<p>Avec ces versions, une nouvelle région commence avec la diffusion <strong>désactivée</strong>, donc chacune a aussi besoin de <code>region allowf</code>. Il n’y a pas de <code>region default</code>, donc les annonces du répéteur restent sans portée. Une mise à jour du micrologiciel vaut la peine.</p>
+</div>
+<div class="scp-variant" data-area="quebec" data-firmware="116" data-scp-variant="data-scp-variant">
+<p class="scp-variant__label">Ville de Québec · Micrologiciel 1.16 ou plus récent</p>
+<div class="highlight"><pre><span></span><code>region def yqb|* qc|* onqc|* can
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region allowf *
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region default yqb
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region save
+</code></pre></div>
+</div>
+<div class="scp-variant" data-area="quebec" data-firmware="115" data-scp-variant="data-scp-variant">
+<p class="scp-variant__label">Ville de Québec · Micrologiciel 1.15</p>
+<div class="highlight"><pre><span></span><code>region put yqb
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region put qc
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region put onqc
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region put can
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region allowf *
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region default yqb
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region save
+</code></pre></div>
+<p>Chaque <code>region put</code> répond <code>OK - (flood allowed)</code>, et <code>region default</code> répond <code>default scope is now …</code>.</p>
+</div>
+<div class="scp-variant" data-area="quebec" data-firmware="110" data-scp-variant="data-scp-variant">
+<p class="scp-variant__label">Ville de Québec · Micrologiciel 1.10 à 1.14</p>
+<div class="highlight"><pre><span></span><code>region put yqb
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region allowf yqb
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region put qc
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region allowf qc
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region put onqc
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region allowf onqc
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region put can
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region allowf can
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region allowf *
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>region save
+</code></pre></div>
+<p>Avec ces versions, une nouvelle région commence avec la diffusion <strong>désactivée</strong>, donc chacune a aussi besoin de <code>region allowf</code>. Il n’y a pas de <code>region default</code>, donc les annonces du répéteur restent sans portée. Une mise à jour du micrologiciel vaut la peine.</p>
 </div>
 </div>
-</div>
-<p>Avec <strong>1.15</strong>, chaque <code>region put</code> répond <code>OK - (flood allowed)</code>, et
-<code>region default yow</code> répond <code>default scope is now yow</code>. Une nouvelle région
-relaie tout de suite. Avec <strong>1.10 à 1.14</strong>,
-une nouvelle région commence avec la diffusion <strong>désactivée</strong>, donc chacune a
-aussi besoin de <code>region allowf</code>. Ces versions n’ont pas non plus de
-<code>region default</code>, donc les annonces du répéteur restent sans portée. Une mise
-à jour du micrologiciel vaut la peine.</p>
+<dl class="scp-explain">
+  <dt>region def / region put</dt><dd>Porter votre ville, votre province, <code>onqc</code> et <code>can</code>.</dd>
+  <dt>region allowf *</dt><dd>Relayer aussi les messages <strong>sans portée</strong>. C’est déjà le réglage par défaut. On le règle quand même pour que vous le voyiez.</dd>
+  <dt>region default &lt;ville&gt;</dt><dd>Les annonces de ce répéteur utilisent la portée de votre ville, pour rester locales. Absent avant 1.15.</dd>
+  <dt>region save</dt><dd>Conserve les réglages de région après un redémarrage.</dd>
+</dl>
+
 <div class="scp-shots">
 <figure class="scp-shot">
 <p><a href="../../../assets/images/onqc-scopes/repeater-07-region-put-115.webp"><img alt="Ligne de commande avec les commandes region put sur le micrologiciel 1.15" height="1304" loading="lazy" src="../../../assets/images/onqc-scopes/repeater-07-region-put-115.webp" width="600" /></a></p>
-<figcaption><span class="scp-shot__num">1</span> Micrologiciel 1.15 : chaque <code>region put</code> répond <code>OK - (flood allowed)</code>. <code>region put on</code> a dû être renvoyé.</figcaption>
+<figcaption><span class="scp-shot__num">1</span> Micrologiciel 1.15 : chaque <code>region put</code> répond <code>OK - (flood allowed)</code>.</figcaption>
 </figure>
 </div>
 <h3 id="etape-5-verifier-le-resultat">Étape 5 : Vérifier le résultat<a class="headerlink" href="#etape-5-verifier-le-resultat" title="Permanent link">&para;</a></h3>
@@ -4668,6 +4759,8 @@ pas encore réglé de portée fonctionnent quand même localement.</p>
       
     
   
+    
+      <script src="../../../assets/javascripts/scopes-picker.js?v=20260924-1" defer></script>
     
     
   

@@ -1,7 +1,7 @@
 {
   "schema": "meshcore-canada-site-manifest-v1",
-  "revision": "e20cb22ca10642eb2eeae41d87929eb7eaac3301",
-  "generatedAt": "2026-09-25T00:18:05.798Z",
+  "revision": "78fb7b09e4475ee8d7b383ab404daefa058ec352",
+  "generatedAt": "2026-09-25T00:39:24.527Z",
   "siteOrigin": "https://meshcore.ca",
   "siteBaseUrl": "https://meshcore.ca/",
   "pageCount": 131,
@@ -12,5 +12,5 @@
   "indexedPageCount": 123,
   "noIndexPageCount": 8,
   "sitemapSha256": "a6c9415b92337bb7f691fb1c2ba4560617d21e867b6d38306ea2af2cca3c65d4",
-  "artifactSha256": "1ec074bea63b0e9b93a0ff1783bff6a622ad675198d20de37691db7893743353"
+  "artifactSha256": "15cdd3d88e483d3e4d95c5f65443ca84242c3615a2b633c3b32d0cc549cc6789"
 }
