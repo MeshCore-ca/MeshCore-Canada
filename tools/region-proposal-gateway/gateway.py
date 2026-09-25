@@ -1537,6 +1537,11 @@ class GatewayService:
         submission = envelope.get("submission")
         if not isinstance(submission, dict) or submission.get("schema") not in BOUNDARY_PROPOSAL_SCHEMAS | {IDEA_SCHEMA}:
             raise GatewayError(422, "invalid_submission", "The submission format is not supported.")
+        if submission["schema"] in BOUNDARY_PROPOSAL_SCHEMAS:
+            raise GatewayError(
+                410, "boundary_editor_retired",
+                "Region boundaries are now maintained in MeshMapper. Legacy census-cell proposals are no longer accepted."
+            )
         token = envelope.get("turnstileToken")
         if not isinstance(token, str) or not token or len(token) > MAX_TURNSTILE_TOKEN:
             raise GatewayError(400, "turnstile_failed", "Human verification is required.")
@@ -1550,35 +1555,9 @@ class GatewayService:
             self.global_pre_limiter.check("global")
         self.turnstile.verify(token, client_ip)
         self.rate_limiter.check(rate_key)
-        if submission["schema"] == IDEA_SCHEMA:
-            canonical, payload, submission_hash = validate_idea(submission)
-            preview_url = None
-        else:
-            try:
-                authority = self.authority.get()
-            except RuntimeError as exc:
-                raise GatewayError(
-                    503, "service_unavailable", "Region data is being updated. Try again shortly."
-                ) from exc
-            canonical, payload, submission_hash = validate_proposal(submission, authority)
-            if self.preview_store is None:
-                raise GatewayError(
-                    503, "service_unavailable", "The boundary preview service is unavailable."
-                )
-            try:
-                first_dguid = canonical["changes"][0]["DGUID"]
-                pruid = authority.membership[first_dguid].pruid
-                with self._preview_lock:
-                    topology = self.authority.topology(authority, pruid)
-                    preview_png = render_boundary_preview(canonical, topology)
-                    preview_url = self.preview_store.put(submission_hash, preview_png)
-            except (KeyError, RuntimeError, PreviewRenderError) as exc:
-                raise GatewayError(
-                    503, "service_unavailable",
-                    "The boundary preview could not be generated. Try again shortly.",
-                ) from exc
+        canonical, payload, submission_hash = validate_idea(submission)
         return self.github.submit(
-            canonical, payload, submission_hash, preview_url=preview_url
+            canonical, payload, submission_hash, preview_url=None
         )
 
 
@@ -1732,7 +1711,7 @@ class GatewayHandler(BaseHTTPRequestHandler):
             return
         self._send(
             200,
-            {"version": API_VERSION, "turnstileSiteKey": self.service.config.turnstile_site_key, "turnstileAction": TURNSTILE_ACTION, "communityIdeaOptionalDetails": True},
+            {"version": API_VERSION, "turnstileSiteKey": self.service.config.turnstile_site_key, "turnstileAction": TURNSTILE_ACTION, "communityIdeaOptionalDetails": True, "boundaryProposals": False, "regionAuthority": "https://meshmapper.net/"},
             cors=origin is not None,
         )
 

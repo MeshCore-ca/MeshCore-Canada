@@ -58,6 +58,12 @@ If Canada is not listed, follow the [older-preset instructions](../provinces/ind
 
 Reboot after changing the radio settings, then send an advert.
 
+## Choose a scope
+
+Find your city code on the [IATA region map](../config/map.md). In Ontario and Québec, the proposed shared scope is `onqc`: use it for the default scope and Public channel. Keep test channels and bots on your lowercase city scope, such as `yow`. Leave `can` for future use.
+
+Elsewhere, use the scope agreed by your local community. See the [scope setup guide](../config/standard.md) for app requirements and examples. Scopes do not change your radio settings.
+
 ## Test it
 
 The companion is ready when:

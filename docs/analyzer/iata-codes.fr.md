@@ -1,6 +1,6 @@
 ---
 title: Trouver le code d’emplacement d’un observateur
-description: Trouvez le code d’aéroport à trois lettres le plus proche de votre observateur.
+description: Associez le code d’emplacement de votre observateur à sa zone IATA MeshMapper.
 audience:
   - observer-operators
 task: choose-location-code
@@ -20,11 +20,16 @@ page_scripts:
 
 # Trouver le code d’emplacement d’un observateur
 
-Un observateur indique sa zone générale avec le code à trois lettres d’un
-aéroport réel. Ce code ne définit pas les limites d’une région MeshCore.
+Utilisez le code indiqué par la [carte des régions IATA](../config/map.md) à
+l’emplacement de votre observateur. MeshMapper définit la zone; la distance
+jusqu’à un aéroport ne la détermine pas.
 
-Choisissez le code de l’aéroport le plus proche de l’observateur. Utilisez le
-même code dans chaque entrée du courtier.
+Les observateurs utilisent des majuscules, comme `YOW`; les scopes radio
+utilisent des minuscules, comme `yow`. Gardez le même code d’observateur dans
+chaque entrée du courtier. Consultez l’opérateur avant de modifier un observateur existant.
+
+Si MeshMapper n’a pas de zone à cet endroit, demandez à votre communauté quel
+code utiliser. La liste ci-dessous sert de référence, pas de carte des limites.
 
 <div class="mc-location-tool" id="location-code-tool" data-source="../location-codes.json">
   <div class="mc-location-controls">
@@ -61,14 +66,14 @@ alimentent l’outil de recherche et les suggestions du générateur de commande
 Il s’agit d’une courte liste canadienne organisée pour ce site, et non d’un
 registre officiel complet des codes d’aéroport.
 
-Si le code de l’aéroport le plus proche n’y figure pas :
+Si le code de votre communauté n’y figure pas :
 
-1. confirmez-le auprès d’une source aéroportuaire fiable;
+1. confirmez-le auprès de la communauté et de MeshMapper;
 2. entrez le code à trois lettres dans une méthode qui accepte du texte libre;
 3. demandez à MeshCore Canada d’ajouter ce lieu à la liste.
 
-N’utilisez pas `CAN` pour représenter le Canada : il s’agit du code d’un
-aéroport de Guangzhou. N’utilisez pas non plus de valeurs temporaires comme
-`XXX` ou `HOME`.
+N’utilisez pas `CAN` pour un observateur au Canada : c’est le code d’un
+aéroport de Guangzhou. Le scope radio réservé `can` est un réglage distinct.
+N’utilisez pas de valeurs temporaires comme `XXX` ou `HOME`.
 
 Retournez à [Choisir une méthode d’observation](intro.md).

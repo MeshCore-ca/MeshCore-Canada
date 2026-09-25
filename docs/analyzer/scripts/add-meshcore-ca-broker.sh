@@ -114,6 +114,17 @@ IATA_CHOICES="$(cat <<'EOF'
 Ontario|YYZ|Toronto (Pearson)
 Ontario|YTZ|Toronto (Billy Bishop)
 Ontario|YOW|Ottawa
+Ontario|XCM|Chatham-Kent
+Ontario|XPH|Port Hope
+British Columbia|YBL|Campbell River
+Ontario|YLK|Barrie
+Quebec|YML|La Malbaie
+Ontario|YQA|Muskoka
+Alberta|YQF|Red Deer
+British Columbia|YSE|Squamish
+Quebec|YTF|Saguenay-Lac-Saint-Jean
+British Columbia|YWS|Whistler
+Quebec|YYY|Bas-Saint-Laurent-Gaspesie
 Ontario|YHM|Hamilton
 Ontario|YKF|Kitchener / Waterloo
 Ontario|YXU|London

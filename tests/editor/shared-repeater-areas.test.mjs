@@ -1,200 +1,132 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { readFileSync } from "node:fs";
 import { runInNewContext } from "node:vm";
 
-const catalog = JSON.parse(await readFile(
-  new URL("../../docs/assets/regions/canada-regions.json", import.meta.url),
-  "utf8"
-));
-const regionsScript = await readFile(
-  new URL("../../docs/assets/regions/regions.js", import.meta.url),
-  "utf8"
-);
-const editorHtml = await readFile(
-  new URL("../../docs/config/editor/index.html", import.meta.url),
-  "utf8"
-);
+const read = path => readFileSync(new URL("../../" + path, import.meta.url), "utf8");
+const catalog = JSON.parse(read("docs/assets/regions/iata-regions.json"));
+const boundaries = JSON.parse(read("docs/assets/regions/meshmapper-iata-boundaries.geojson"));
+const provinces = JSON.parse(read("docs/assets/regions/scope-jurisdictions.geojson"));
+const script = read("docs/assets/regions/regions.js");
+const plain = value => JSON.parse(JSON.stringify(value));
 
-function regionInternals() {
-  const marker = "  if (window.document$";
-  assert.ok(regionsScript.includes(marker));
-  const instrumented = regionsScript.replace(
-    marker,
-    "  globalThis.__mccRegionTest = { prepareCatalog, expandSharedRepeaterLeaves, recommend };\n\n" + marker
-  );
+function internals() {
   const context = {
-    URL,
-    URLSearchParams,
-    console,
-    fetch() {
-      throw new Error("Unexpected asset request in unit test");
-    },
-    window: {
-      location: {
-        origin: "https://meshcore.ca",
-        pathname: "/config/",
-        search: ""
-      },
-      setTimeout
-    },
+    URL, URLSearchParams, TextEncoder, console,
+    fetch() { throw new Error("Unexpected network request"); },
+    window: { location: { origin: "https://meshcore.ca", pathname: "/config/", search: "" }, setTimeout },
     document: {
-      currentScript: {
-        src: "https://meshcore.ca/assets/regions/regions.js"
-      },
+      currentScript: { src: "https://meshcore.ca/assets/regions/regions.js" },
+      baseURI: "https://meshcore.ca/config/",
       readyState: "loading",
-      addEventListener() {}
+      addEventListener() {},
+      querySelector() { return { getAttribute() { return "./"; } }; }
     }
   };
-  runInNewContext(instrumented, context);
-  return context.__mccRegionTest;
+  runInNewContext(read("docs/assets/regions/modules/iata-scopes.js"), context);
+  context.window.MeshCoreIataScopes = context.MeshCoreIataScopes;
+  runInNewContext(read("docs/assets/regions/modules/configurator-support.js"), context);
+  context.window.MeshCoreRegionConfiguratorSupport = context.MeshCoreRegionConfiguratorSupport;
+  const marker = "  if (window.document$";
+  assert.ok(script.includes(marker));
+  runInNewContext(script.replace(marker,
+    "  globalThis.api = { prepareCatalog, applyGeneratedPartition, expandSharedRepeaterLeaves, recommend, resolveLocation, initialLocation, mapHrefForState, localGeocode };\n" + marker), context);
+  const data = context.api.prepareCatalog(structuredClone(catalog));
+  context.api.applyGeneratedPartition(data, structuredClone(boundaries), structuredClone(provinces));
+  return { api: context.api, scopes: context.MeshCoreIataScopes, data };
 }
 
-function ancestry(tag) {
-  const path = [];
-  let current = tag;
-  while (current) {
-    path.unshift(current);
-    current = catalog.hierarchy[current]?.parent;
-  }
-  return path;
-}
-
-function sharedCommand(members) {
-  const leaves = [...new Set(members)].sort((left, right) => {
-    return ancestry(left).join("/").localeCompare(ancestry(right).join("/"));
-  });
-  const tags = [...new Set(leaves.flatMap(ancestry))];
-  const tokens = tags.map((tag, index) => {
-    if (index === tags.length - 1) return tag;
-    const nextParent = catalog.hierarchy[tags[index + 1]]?.parent || "*";
-    return nextParent === tag ? tag : `${tag}|${nextParent}`;
-  });
-  return `region def ${tokens.join(" ")}`;
-}
-
-function combinedCommand(members, externalIds) {
-  const leaves = [...new Set(members)].sort((left, right) => {
-    return ancestry(left).join("/").localeCompare(ancestry(right).join("/"));
-  });
-  const external = externalIds
-    .map((id) => catalog.externalRegionPaths[id])
-    .sort((left, right) => left.path.join("/").localeCompare(right.path.join("/")));
-  const tags = [...new Set(leaves.flatMap(ancestry).concat(external.flatMap((record) => record.path)))];
-  const parentOverrides = new Map();
-  external.forEach((record) => {
-    record.path.forEach((tag, index) => parentOverrides.set(tag, index ? record.path[index - 1] : null));
-  });
-  const tokens = tags.map((tag, index) => {
-    if (index === tags.length - 1) return tag;
-    const next = tags[index + 1];
-    const nextParent = parentOverrides.has(next)
-      ? parentOverrides.get(next)
-      : catalog.hierarchy[next]?.parent;
-    return nextParent === tag ? tag : `${tag}|${nextParent || "*"}`;
-  });
-  return `region def ${tokens.join(" ")}`;
-}
-
-test("National Capital Region keeps separate map leaves and emits one multi-branch repeater tree", () => {
-  const ncr = catalog.searchGroups.ncr;
-  assert.equal(ncr.geographic, false);
-  assert.equal(ncr.emitInCommands, false);
-  assert.deepEqual(ncr.members, ["ott", "gatout"]);
-  assert.deepEqual(
-    ncr.members.map((tag) => ancestry(tag)[1]),
-    ["on", "qc"]
-  );
-  assert.equal(
-    sharedCommand(ncr.members),
-    "region def can on on-alg ott|can qc gatout"
-  );
+test("the active configurator refuses the former census catalogue", () => {
+  const { api } = internals();
+  assert.throws(() => api.prepareCatalog(JSON.parse(read("maintenance/legacy-regions/canada-regions.json"))), /out of date/);
 });
 
-test("every declared cross-province group uses the shared member-path policy", () => {
-  for (const [id, group] of Object.entries(catalog.searchGroups)) {
-    const jurisdictions = new Set(group.members.map((tag) => ancestry(tag)[1]));
-    if (jurisdictions.size < 2) continue;
-    assert.deepEqual(group.repeaterConfig, {
-      mode: "shared-member-paths",
-      defaultForMembers: true,
-      basis: group.repeaterConfig.basis
-    }, id);
-    assert.equal(sharedCommand(group.members).includes(` ${id} `), false, id);
+test("Ottawa and Gatineau use the same city zone without automatically carrying both provinces", () => {
+  const { api, data } = internals();
+  for (const [lat, lon, province] of [[45.4215, -75.6972, "on"], [45.4765, -75.7013, "qc"]]) {
+    const result = api.resolveLocation(data, lat, lon);
+    assert.equal(result.primary.seed.tag, "yow");
+    assert.equal(result.province, province);
+    const profile = api.recommend(data, result, "residential", [], []);
+    assert.deepEqual(plain(profile.tags), ["yow", province, "onqc", "can"]);
+    assert.deepEqual(plain(api.expandSharedRepeaterLeaves(data, ["yow"])), ["yow"]);
   }
 });
 
-test("adding either shared-area member expands every member path", () => {
-  const internals = regionInternals();
-  const prepared = internals.prepareCatalog(JSON.parse(JSON.stringify(catalog)));
-  const resolution = { primary: { seed: { tag: "tor" } } };
+test("overlapping published zones need an explicit choice and gaps never use a nearest-zone fallback", () => {
+  const { api, data } = internals();
+  const altered = structuredClone(boundaries);
+  altered.features.find(feature => feature.properties.tag === "yul").geometry =
+    structuredClone(altered.features.find(feature => feature.properties.tag === "yow").geometry);
+  api.applyGeneratedPartition(data, altered, provinces);
+  const ambiguous = api.resolveLocation(data, 45.4215, -75.6972);
+  assert.equal(ambiguous.primary, null);
+  assert.equal(ambiguous.matches.length, 2);
+  assert.equal(api.resolveLocation(data, 45.4215, -75.6972, "yow").primary.seed.tag, "yow");
+  assert.equal(api.resolveLocation(data, 80, -100).hasMatch, false);
+});
 
-  for (const group of Object.values(catalog.searchGroups)) {
-    if (!group.repeaterConfig?.defaultForMembers) continue;
-    for (const member of group.members) {
-      const recommendation = internals.recommend(
-        prepared,
-        resolution,
-        "high-site",
-        ["tor", member],
-        []
-      );
-      const expected = ["tor", ...group.members].sort((left, right) => {
-        return ancestry(left).join("/").localeCompare(ancestry(right).join("/"));
-      });
-      assert.deepEqual(Array.from(recommendation.leaves), expected, member);
-      assert.ok(group.members.every((tag) => recommendation.tags.includes(tag)), member);
-    }
+test("old links migrate only unique aliases and retain exact saved locations for a fresh lookup", () => {
+  const { api, data } = internals();
+  const ottawa = api.initialLocation(data, new URLSearchParams("tag=ott&province=on"));
+  assert.equal(ottawa.tag, "yow");
+  assert.equal(ottawa.legacyTag, "ott");
+  assert.equal(ottawa.provinceTag, "on");
+  assert.equal(api.initialLocation(data, new URLSearchParams("tag=capnat")), null);
+  const location = api.initialLocation(data, new URLSearchParams("tag=capnat&lat=46.89&lon=-71.41"));
+  assert.equal(location.tag, null);
+  assert.equal(location.lat, 46.89);
+  assert.equal(api.initialLocation(data, new URLSearchParams("tag=missing&lat=&lon=-71")), null);
+});
+
+test("shared-zone place labels never invent an Ontario location for Gatineau", () => {
+  const { api, data } = internals();
+  const hit = api.localGeocode(data, "Gatineau");
+  assert.equal(hit.tag, "yow");
+  assert.equal(hit.province, null);
+  assert.doesNotMatch(hit.name, /Ontario/);
+});
+
+test("neighbouring network paths remain explicit and do not become Canadian geometry", () => {
+  const { api, data, scopes } = internals();
+  const entries = Object.entries(data.externalRegionPaths);
+  assert.ok(entries.length > 0);
+  for (const [, record] of entries) {
+    assert.equal(record.automatic, false);
+    assert.equal(record.geographic, false);
+    assert.ok(record.trafficEvidence);
   }
+  const [wny] = entries.find(([, record]) => record.path.join(" ") === "us us-ny");
+  const result = api.resolveLocation(data, 43.6532, -79.3832);
+  const local = api.recommend(data, result, "residential", [], []);
+  assert.ok(!local.tags.includes("us"));
+  const bridge = api.recommend(data, result, "high-site", ["yyz", "ykf"], [wny]);
+  assert.equal(scopes.commands(bridge)[0], "region def yyz|* ykf|* on|* onqc|* can|* us us-ny");
+  assert.equal(scopes.commands(bridge)[1], "region denyf *");
+  assert.ok(bridge.notes.every(note => !note.includes("before applying")));
+  assert.equal(data.partitionByTag["us-ny"], undefined);
 });
 
-test("configurator and editor expose generic cross-province behavior without merging geometry", () => {
-  assert.match(regionsScript, /Provinces and territories may be mixed\./);
-  assert.match(regionsScript, /Add any Canadian region/);
-  assert.match(regionsScript, /All map boundaries remain separate\./);
-  assert.match(editorHtml, /This editor changes Canadian map cells only\./);
-  assert.match(editorHtml, /(?:Choose|Set) cross-province and U\.S\. paths in the configurator\./);
+test("extra Canadian city zones never add their provinces automatically", () => {
+  const { api, data } = internals();
+  const result = api.resolveLocation(data, 43.6532, -79.3832);
+  const bridge = api.recommend(data, result, "high-site", ["yyz", "yul"], []);
+  assert.deepEqual(plain(bridge.tags), ["yyz", "yul", "on", "onqc", "can"]);
 });
 
-test("only traffic-evidenced neighbouring paths are offered and none is automatic geography", () => {
-  assert.deepEqual(
-    Object.keys(catalog.externalRegionPaths).sort(),
-    ["california", "ohio", "oregon", "pennsylvania", "washington", "western-new-york"]
-  );
-  for (const [id, record] of Object.entries(catalog.externalRegionPaths)) {
-    assert.equal(record.country, "us", id);
-    assert.equal(record.geographic, false, id);
-    assert.equal(record.automatic, false, id);
-    assert.ok(record.trafficEvidence.routePatterns > 0, id);
-    assert.ok(record.trafficEvidence.observations > 0, id);
-    assert.equal(record.trafficEvidence.method, "mixed-canada-us-resolved-route", id);
-  }
-  assert.deepEqual(catalog.externalRegionPaths["western-new-york"].path, ["us", "us-ny"]);
-  assert.deepEqual(catalog.externalRegionPaths.washington.path, ["west", "pnw", "wa"]);
-  assert.deepEqual(catalog.externalRegionPaths.oregon.path, ["west", "pnw", "or"]);
-});
-
-test("Ontario bridge selection emits complete Canadian and Western New York branches", () => {
-  assert.equal(
-    combinedCommand(["tor", "wat"], ["western-new-york"]),
-    "region def can on on-gtha gta tor|on on-ktw wat|* us us-ny"
-  );
-  assert.match(regionsScript, /Different repeaters can carry different paths to spread traffic\./);
-  assert.match(regionsScript, /Add one only when this repeater should forward traffic for that area\./);
-  assert.match(regionsScript, /Nothing outside Canada is added to the boundary map\./);
-  assert.match(regionsScript, /requestedExternalPaths/);
-});
-
-test("config-to-map handoff preserves large Canadian and neighbouring selections", () => {
-  assert.match(regionsScript, /params\.set\("type", "large"\)/);
-  assert.match(regionsScript, /params\.set\("regions", state\.selectedMetros\.join\(","\)\)/);
-  assert.match(regionsScript, /params\.set\("external", state\.selectedExternalPaths\.join\(","\)\)/);
-  assert.match(regionsScript, /refreshTool\(data, els, state, updateMapLinks\)/);
-  assert.match(regionsScript, /map\.fitBounds\(selectedLayer\.getBounds\(\)/);
-});
-
-test("documented neighbouring paths do not inherit Canadian draft warnings", () => {
-  assert.ok(
-    regionsScript.match(/if \(data\.externalTagLabels && data\.externalTagLabels\[tag\]\) return false;/g)?.length >= 2
-  );
+test("config-to-map handoff preserves IATA choices, province, and opt-in settings without unrelated fields", () => {
+  const { api, data } = internals();
+  const resolution = api.resolveLocation(data, 45.4765, -75.7013);
+  const url = new URL(api.mapHrefForState({
+    lat: 45.4765, lon: -75.7013, name: "Gatineau", forcedTag: "yow", resolution,
+    jurisdictionTag: "qc", type: "high-site", selectedMetros: ["yow", "yul"],
+    selectedExternalPaths: [], firmware: "1.16", radioProfile: "keep", hashMode: "2",
+    standardDefaults: true, privateKey: "never-forward"
+  }));
+  assert.equal(url.searchParams.get("tag"), "yow");
+  assert.equal(url.searchParams.get("province"), "qc");
+  assert.equal(url.searchParams.get("regions"), "yow,yul");
+  assert.equal(url.searchParams.get("defaults"), "onqc");
+  assert.equal(url.searchParams.get("hash"), "2");
+  assert.ok(!url.href.includes("never-forward"));
 });

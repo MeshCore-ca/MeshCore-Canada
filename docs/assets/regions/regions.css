@@ -45,6 +45,20 @@ body:has([data-mcc-regions]) .md-typeset h3 {
   border: 0 !important;
 }
 
+/* Keep the scope review compact without losing readable labels on phones. */
+[data-mcc-regions] .mcc-review-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+  gap: 0.8rem 1.2rem;
+}
+[data-mcc-regions] .mcc-review-list > div { min-width: 0; }
+[data-mcc-regions] .mcc-review-list dt { font-weight: 600; }
+[data-mcc-regions] .mcc-review-list dd { margin: 0.2rem 0 0; overflow-wrap: anywhere; }
+[data-mcc-regions] .mcc-review-paths {
+  columns: 2 13rem;
+}
+[data-mcc-regions] .mcc-review-paths li { break-inside: avoid; }
+
 .mcc-region-hero {
   margin: 1.2rem 0 1.5rem;
   padding: 1rem 1.1rem;

@@ -1153,11 +1153,10 @@ locally.
 
 ## Next steps
 
-- Agree on the list of city codes for Ontario and Québec.
-- Add a "find your town" lookup to meshcore.ca that shows your code.
-- Publish clean-up and setup commands for each city.
-- Add a simple Ontario and Québec mode to the [repeater configurator](../config/index.md).
-- Other provinces keep the current setup until the pilot has proven itself.
+- Check your published MeshMapper code in the [IATA region map](../config/map.md).
+- Use the [migration guide](../config/standard.md) and [repeater configurator](../config/index.md) for clean-up and firmware-specific commands.
+- Coordinate and test the ON/QC rollout with local operators before changing deployed repeaters.
+- The website now offers IATA zones across Canada. This is not a nationwide rollout of `onqc`: that scope and the pilot settings remain specific to Ontario and Québec. Other provinces coordinate their own migration.
 
 Have thoughts? Share them on the
 [MeshCore Canada Discord](https://discord.gg/BESFVMt7yk) or the

@@ -31,7 +31,7 @@ You can read this site without a MeshCore Canada or GitHub account.
 | Check a repeater path ID | The first byte of the public key | Beacon at dev.meshcore.ca; regional and longer-prefix comparisons stay in your browser |
 | Load the GitHub star count | Your IP address and standard web request information | GitHub |
 | Open an external link | Normal web request information | The named external service |
-| Submit an idea or region proposal | The text and proposal details shown at review, plus anti-spam verification | MeshCore Canada’s submission service, Cloudflare Turnstile, and a public GitHub issue |
+| Submit a community idea | The text and proposal details shown at review, plus anti-spam verification | MeshCore Canada’s submission service, Cloudflare Turnstile, and a public GitHub issue |
 
 ## Public submissions
 
@@ -46,9 +46,12 @@ period has not yet been published.
 
 Switching language or moving between the region map and configurator carries your
 selection in the destination URL. This can include entered coordinates, a location
-label, region paths, and radio-profile choices. These URLs may appear in browser
+label, city and province scopes, and radio-profile choices. These URLs may appear in browser
 history and server access logs. Do not share a link containing a private location.
 Downloaded setup summaries omit exact coordinates and credentials.
+
+The retired region editor can download drafts saved in this browser. Downloading
+does not upload or delete them; old drafts are not approved MeshMapper boundaries.
 
 Setup checklists, idea drafts, and the last Beacon region code selected in the
 repeater-ID checker are saved in your browser only when you use those features.

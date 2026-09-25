@@ -1184,13 +1184,10 @@ pas encore réglé de portée fonctionnent quand même localement.
 
 ## Prochaines étapes
 
-- S’entendre sur la liste des codes de ville pour l’Ontario et le Québec.
-- Ajouter à meshcore.ca un outil « trouvez votre ville » qui affiche votre code.
-- Publier les commandes de nettoyage et de configuration pour chaque ville.
-- Ajouter un mode simple Ontario et Québec au
-  [configurateur de répéteur](../config/index.md).
-- Les autres provinces gardent la configuration actuelle jusqu’à ce que le
-  projet pilote ait fait ses preuves.
+- Trouvez votre code MeshMapper sur la [carte des régions IATA](../config/map.md).
+- Utilisez le [guide de migration](../config/standard.md) et le [configurateur](../config/index.md) pour le nettoyage et les commandes adaptées au micrologiciel.
+- Coordonnez et testez le déploiement ON/QC avec les opérateurs locaux avant de modifier les répéteurs installés.
+- Le site propose maintenant les zones IATA partout au Canada. Cela ne déploie pas `onqc` à l’échelle nationale : ce scope et les réglages pilotes restent propres à l’Ontario et au Québec. Les autres provinces coordonnent leur propre migration.
 
 Des idées? Partagez-les sur le
 [Discord de MeshCore Canada](https://discord.gg/BESFVMt7yk) ou sur le

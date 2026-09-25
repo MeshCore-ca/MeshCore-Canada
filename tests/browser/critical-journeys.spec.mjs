@@ -101,13 +101,13 @@ test("French search returns French routes", async ({ page }) => {
   expect(resultLinks.some((href) => /(?:^|\/)fr\//.test(href))).toBeTruthy();
 });
 
-test("French boundary editor has localized controls and its own switcher", async ({ page }, testInfo) => {
+test("retired French editor links to MeshMapper and retains its language switcher", async ({ page }, testInfo) => {
   await page.goto(siteRoute("/fr/config/editor/"));
   await expect(page.locator("html")).toHaveAttribute("lang", "fr");
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Éditeur des limites régionales");
-  await expect(page.getByText("Modifier une limite existante", { exact: true })).toBeVisible();
-  await expect(page.getByRole("link", { name: "Français", exact: true })).toHaveAttribute("aria-current", "page");
-  await page.getByRole("link", { name: "English", exact: true }).click();
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("Les régions se modifient maintenant dans MeshMapper");
+  await expect(page.locator("[data-legacy-draft-export]")).toHaveText("Télécharger les brouillons");
+  await page.locator(".md-select > button").click();
+  await page.locator('.md-select__link[hreflang="en"]').click();
   await expect(page).toHaveURL(
     resolveSiteRoute(testInfo.project.use.baseURL, "/config/editor/"),
   );
@@ -158,8 +158,8 @@ test("repository stars and the human-review notice appear in both languages", as
 
 test("English and French homepages link directly to the region finder", async ({ page }, testInfo) => {
   for (const [home, linkName, destination, heading, finder, directory] of [
-    ["/", "Find my region", "/config/map/", "Find your Canadian MeshCore region", "Find a region", "Browse all regions"],
-    ["/fr/", "Trouver ma région", "/fr/config/map/", "Trouver votre région MeshCore au Canada", "Trouver une région", "Parcourir toutes les régions"]
+    ["/", "Find my region", "/config/map/", "Find your MeshMapper IATA zone", "Find a region", "Browse all regions"],
+    ["/fr/", "Trouver ma région", "/fr/config/map/", "Trouver votre zone IATA MeshMapper", "Trouver une région", "Parcourir toutes les régions"]
   ]) {
     await page.goto(siteRoute(home));
     const link = page.getByRole("link", { name: linkName, exact: true });
@@ -221,7 +221,7 @@ test("known config place deep links resolve locally without an external request"
   await expect(page.locator("[data-action='online-search-consent']")).toHaveCount(0);
   await expect(page.locator("#__search")).not.toBeChecked();
   await expect(page.locator("[data-mcc-regions='config']")).toBeVisible();
-  await expect(page.locator("[data-role='status']")).toContainText("Region found.");
+  await expect(page.locator("[data-role='status']")).toContainText("Zone found. Choose the province");
 
   expect(onlineRequests).toEqual([]);
   const url = new URL(page.url());
@@ -412,32 +412,16 @@ test("tool assets remain route scoped", async ({ page }) => {
   expect(submitAssets.some((url) => /submission-form\.js/.test(url))).toBeTruthy();
 });
 
-test("boundary editor makes both proposal paths and review-only behavior explicit", async ({ page }) => {
-  await page.goto(siteRoute("/config/editor/"));
-  await expect(page.getByText("Adjust an existing boundary", { exact: true })).toBeVisible();
-  await expect(page.getByText(/propose a new region\/subregion/i)).toBeVisible();
-  await expect(page.getByText(/Submitting creates a public proposal for review/i)).toBeVisible();
-  await expect(page.getByText(/does not change the map/i)).toBeVisible();
-});
-
-test("boundary editor waits to load editing data and anti-spam", async ({ page }, testInfo) => {
-  test.skip(testInfo.project.name !== "chromium", "One browser proves the shared startup contract");
+test("retired editor preserves drafts and does not load census data or submission services", async ({ page }) => {
   const requests = [];
-  page.on("request", (request) => requests.push(request.url()));
-
+  page.on("request", request => requests.push(request.url()));
   await page.goto(siteRoute("/config/editor/"), { waitUntil: "networkidle" });
-
-  await expect(page.locator("html")).toHaveAttribute("data-editor-state", "waiting");
-  expect(requests.some((url) => url.includes("canada-region-membership.csv"))).toBeFalsy();
-  expect(requests.some((url) => url.includes("canada-region-partition.geojson"))).toBeFalsy();
-  expect(requests.some((url) => url.startsWith("https://challenges.cloudflare.com/"))).toBeFalsy();
-
-  await page.getByLabel("Adjust an existing boundary").check();
-  await expect(page.locator("html")).toHaveAttribute("data-editor-state", "ready");
-  expect(requests.some((url) => url.includes("canada-region-membership.csv"))).toBeTruthy();
-  expect(requests.some((url) => url.includes("cells-35.topo.json"))).toBeTruthy();
-  expect(requests.some((url) => url.includes("canada-region-partition.geojson"))).toBeFalsy();
-  expect(requests.some((url) => url.startsWith("https://challenges.cloudflare.com/"))).toBeFalsy();
+  await expect(page.locator("h1")).toContainText("Region changes now use MeshMapper");
+  await expect(page.getByRole("link", { name: "Open MeshMapper", exact: true })).toHaveAttribute("href", "https://meshmapper.net/");
+  await expect(page.locator('a[href*="submit-idea"]')).not.toHaveCount(0);
+  await page.locator("[data-legacy-draft-export]").click();
+  await expect(page.locator("[data-legacy-draft-status]")).toHaveText("No saved drafts were found in this browser.");
+  expect(requests.some(url => /canada-region-membership|cells-35|canada-region-partition|challenges.cloudflare.com|api.meshcore.ca:21323/.test(url))).toBeFalsy();
 });
 
 test("idea form exposes review, verification, and final submission", async ({ page }) => {

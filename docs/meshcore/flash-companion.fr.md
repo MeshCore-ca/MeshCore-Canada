@@ -103,6 +103,10 @@ Le réglage facultatif **Message Settings → Auto Reset Path** détermine comme
 l’application gère les changements de parcours. Conservez sa valeur par défaut,
 sauf si votre méthode d’essai locale exige un autre réglage.
 
+## Choisir votre scope
+
+Après l’installation, [choisissez votre scope local](../start/companion.md#choisir-un-scope). La [carte des régions IATA](../config/map.md) utilise les zones MeshMapper. En Ontario et au Québec, `onqc` est proposé par défaut et pour le canal Public; utilisez le scope de ville pour les tests et les robots. Ailleurs, consultez votre communauté; `can` est réservé à un usage futur.
+
 ## Vérifier avant l’utilisation courante
 
 1. Confirmez que l’application se reconnecte et affiche le nom de l’appareil et les réglages radio attendus.

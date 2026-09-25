@@ -73,7 +73,7 @@ Add the primary entry:
 | Status Topic | `meshcore/{IATA}/{PUBLIC_KEY}/status` |
 | Packets Topic | `meshcore/{IATA}/{PUBLIC_KEY}/packets` |
 
-Set the integration's location field to the real three-letter code nearest the observer.
+Set the integration's location field to the uppercase code from the [IATA region map](../../config/map.md).
 
 Add the backup entry with the same settings, changing only:
 

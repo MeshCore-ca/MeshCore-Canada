@@ -62,6 +62,12 @@ Si Canada n’apparaît pas, suivez les [consignes pour l’ancien préréglage]
 Redémarrez l’appareil après avoir modifié les paramètres radio, puis envoyez
 une annonce.
 
+## Choisir un scope
+
+Trouvez votre code de ville sur la [carte des régions IATA](../config/map.md). En Ontario et au Québec, le scope partagé proposé est `onqc` : utilisez-le par défaut et pour le canal Public. Gardez les canaux de test et les robots sur le scope local en minuscules, par exemple `yow`. Réservez `can` à un usage futur.
+
+Ailleurs, utilisez le scope convenu avec votre communauté. Le [guide des scopes](../config/standard.md) présente les versions d’application requises et des exemples. Les scopes ne changent pas les réglages radio.
+
 ## Tester l’appareil
 
 Le compagnon est prêt lorsque :

@@ -87,6 +87,10 @@ If Canada is not listed in your app or flasher, follow the [older-preset instruc
 
 The optional **Message Settings → Auto Reset Path** preference affects how the app manages changing paths. Leave it at its default unless your local testing process calls for a different setting.
 
+## Choose your scope
+
+After flashing, [choose your local scope](../start/companion.md#choose-a-scope). The [IATA region map](../config/map.md) uses MeshMapper zones. In Ontario and Québec, use `onqc` for the proposed default and Public channel scope, and your city scope for tests and bots. Elsewhere, check with your community; `can` is reserved for future use.
+
 ## Verify before regular use
 
 1. Confirm the app reconnects and shows the expected device name and radio settings.

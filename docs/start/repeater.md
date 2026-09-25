@@ -61,8 +61,9 @@ If Canada is not listed, follow the [older-preset instructions](../provinces/ind
     need matching local settings, and operators should agree on changes that
     affect shared traffic.
 
-Use the [repeater configurator](../config/index.md) to find the regional
-settings and review its commands before applying them.
+Use the [repeater configurator](../config/index.md) to select your MeshMapper IATA
+zone and independent scopes. Moving from the old region tree? Follow the
+[migration steps](../config/standard.md) before applying the new list.
 
 <div data-mc-repeater-hash-check></div>
 

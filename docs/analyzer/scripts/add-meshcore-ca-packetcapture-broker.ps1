@@ -34,6 +34,7 @@ function Prompt-YesNo {
 # Keep this quick-list snapshot aligned with ../location-codes.json. The
 # analyzer content test fails when the published JSON and helper drift.
 $KnownIataCodes = @(
+    "XCM","XPH","YBL","YLK","YML","YQA","YQF","YSE","YTF","YWS","YYY",
     "YYZ","YTZ","YOW","YHM","YKF","YXU","YOO","YKZ","YAM","YQT","YSB","YTS","YQG","YYB","YGK","YPQ","YTR","YHD","YPL","YND",
     "YUL","YMX","YQB","YBG","YVO","YHU","YRJ","YGL","YSC","YTQ","YUY","YZV","YGP","YRQ",
     "YVR","YYJ","YXX","YLW","YXS","YPR","YXT","YQQ","YCD","YYD","YDQ","YXJ","YYF","YCG","YKA","YXC","YBC",

@@ -78,8 +78,8 @@ Ajoutez l’entrée principale :
 | Status Topic | `meshcore/{IATA}/{PUBLIC_KEY}/status` |
 | Packets Topic | `meshcore/{IATA}/{PUBLIC_KEY}/packets` |
 
-Réglez le champ d’emplacement de l’intégration au véritable code à trois
-lettres le plus près de l’observateur.
+Réglez le champ d’emplacement de l’intégration sur le code en majuscules de la
+[carte des régions IATA](../../config/map.md).
 
 Ajoutez l’entrée de secours avec les mêmes paramètres, en ne modifiant que :
 

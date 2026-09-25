@@ -64,7 +64,7 @@ Ouvrez **Settings** → **MQTT & Automation**, ajoutez
 | Token Audience | `mqtt1.meshcore.ca` |
 | Use TLS | Enabled |
 | Verify TLS certificates | Enabled |
-| Region Code | Le véritable code d’emplacement à trois lettres le plus près |
+| Region Code | Le code en majuscules de la [carte des régions IATA](../config/map.md) |
 | Packet Topic Template | `meshcore/{IATA}/{PUBLIC_KEY}/packets` |
 
 Laissez le champ facultatif de courriel du responsable vide, sauf s’il est

@@ -46,7 +46,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--public-key", type=Path, required=True)
     parser.add_argument("--config", type=Path, default=ROOT / ".github" / "region-boundary-automation.json")
     parser.add_argument("--membership", type=Path, default=ROOT / "docs" / "assets" / "regions" / "canada-region-membership.csv")
-    parser.add_argument("--catalog", type=Path, default=ROOT / "docs" / "assets" / "regions" / "canada-regions.json")
+    parser.add_argument("--catalog", type=Path, default=ROOT / "maintenance" / "legacy-regions" / "canada-regions.json")
     parser.add_argument("--cells-dir", type=Path, default=ROOT / "docs" / "assets" / "regions" / "cells")
     parser.add_argument("--overrides", type=Path, default=ROOT / "docs" / "assets" / "regions" / "municipal-overrides.json")
     parser.add_argument("--sources-lock", type=Path, default=ROOT / "docs" / "assets" / "regions" / "sources.lock.json")
@@ -622,6 +622,8 @@ def write_result(result: dict[str, Any], summary_path: Path | None, github_outpu
 
 
 def main() -> None:
+    if (ROOT / "data" / "iata-scope-policy.json").is_file():
+        raise ValueError("Legacy census boundary application is retired. Update MeshMapper zones through a reviewed snapshot PR.")
     args = parse_args()
     event, comments, config = read_json(args.event), flatten_comments(read_json(args.comments)), read_json(args.config)
     if not isinstance(event, dict) or not isinstance(config, dict):

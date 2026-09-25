@@ -1,8 +1,35 @@
 MeshCore Canada region data notice
 ==================================
 
-canada-regions.json
--------------------
+Active map and scope model
+--------------------------
+
+iata-regions.json and meshmapper-iata-boundaries.geojson are the active
+catalogue and map. They use MeshMapper's published Canadian city zones and
+lowercase IATA scope names. The source timestamp and SHA-256 are in the
+catalogue. canada-regions.json is an identical compatibility alias of the
+active IATA catalogue. Refresh them with scripts/fetch-meshmapper-regions.mjs and
+scripts/build-iata-catalog.mjs; all changes require a reviewed pull request.
+
+MeshMapper source: https://meshmapper.net/
+Public boundary feed: https://meshmapper.net/?ajax=zones_bbox
+
+The importer changes coordinate order to GeoJSON and closes open rings. It
+does not clip, simplify, or replace published polygons with radius circles.
+Credit MeshMapper zone owners, OpenStreetMap contributors (ODbL), and
+geoBoundaries (CC BY 4.0) where those sources are used by MeshMapper.
+
+scope-jurisdictions.geojson is a separate province/territory lookup, dissolved
+without simplification from the existing Statistics Canada 2021 digital
+geography snapshot. It determines the repeater's physical province; it does
+not define radio scopes or change MeshMapper zones.
+
+The files described below are retained historical source material. The
+public tools no longer use the census partition to assign city scopes, and
+the former census boundary editor and automatic publisher are retired.
+
+maintenance/legacy-regions/canada-regions.json
+--------------------------------------------
 
 This file implements the Canada MeshCore Region Strategy v1.1.1. It also
 credits Adam Gessaman's Pacific Northwest MeshCore region tools as an
