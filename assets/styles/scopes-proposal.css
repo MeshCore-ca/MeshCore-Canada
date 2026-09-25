@@ -685,7 +685,7 @@
 
 [dir] .md-typeset .scp-timeline {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 9.5rem), 1fr));
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--mc-space-4);
   margin: var(--mc-space-6) 0;
   padding: 0;
@@ -817,30 +817,28 @@
   border-radius: var(--mc-radius-md);
 }
 
-/* ---------- Command picker ---------- */
+/* ---------- Your repeater (picker) ---------- */
 
-.md-typeset .scp-picker-group {
-  margin: var(--mc-space-4) 0 var(--mc-space-6);
-  overflow: hidden;
-  border: 1px solid var(--mc-color-border);
-  border-radius: var(--mc-radius-lg);
-  background: var(--mc-color-surface);
-  box-shadow: var(--mc-shadow-1);
-}
-
-.scp-picker {
+.md-typeset .scp-picker {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
   align-items: start;
   gap: var(--mc-space-3);
+  margin: var(--mc-space-4) 0 var(--mc-space-6);
   padding: var(--mc-space-4);
-  border-bottom: 1px solid var(--mc-color-border);
+  border: 1px solid var(--mc-color-border);
+  border-radius: var(--mc-radius-lg);
   background:
     linear-gradient(135deg, var(--scp-city-bg), transparent 70%),
     var(--mc-color-surface-raised);
+  box-shadow: var(--mc-shadow-1);
 }
 
-.scp-picker[hidden] {
+/* The theme and these components set display on their elements, which would
+   override the hidden attribute. Keep hidden things hidden. */
+.md-typeset .scp-picker[hidden],
+.md-typeset .scp-picker [hidden],
+.md-typeset .scp-card [hidden] {
   display: none;
 }
 
@@ -887,14 +885,19 @@
   text-transform: none;
 }
 
-.md-typeset .scp-picker__body,
-.md-typeset .scp-fallback {
+/* ---------- Command cards ---------- */
+
+.md-typeset .scp-card {
+  margin: var(--mc-space-4) 0 var(--mc-space-6);
   padding: var(--mc-space-4);
+  border: 1px solid var(--mc-color-border);
+  border-radius: var(--mc-radius-lg);
+  background: var(--mc-color-surface);
+  box-shadow: var(--mc-shadow-1);
 }
 
-.md-typeset .scp-fallback[hidden],
-.md-typeset .scp-picker__body [hidden] {
-  display: none;
+.md-typeset .scp-card > :last-child {
+  margin-bottom: 0;
 }
 
 .md-typeset .scp-variant__label {
@@ -959,8 +962,9 @@
   white-space: pre-wrap;
 }
 
+/* Copy buttons only work with JavaScript, so only show them then. */
 .md-typeset button.scp-copy {
-  display: grid;
+  display: none;
   flex: none;
   width: 1.75rem;
   height: 1.75rem;
@@ -972,6 +976,10 @@
   background: transparent;
   color: var(--md-default-fg-color--lighter);
   cursor: pointer;
+}
+
+.scp-js .md-typeset button.scp-copy {
+  display: grid;
 }
 
 .md-typeset .scp-copy svg {
@@ -998,15 +1006,38 @@
   font-size: 0.82rem;
 }
 
-.md-typeset .scp-note[data-scp-note^="fw-"] {
+.md-typeset .scp-note--info {
   border-left-color: var(--mc-color-info);
 }
 
-.md-typeset .scp-fallback .highlight {
-  margin: 0 0 var(--mc-space-2);
+/* ---------- Screenshot captions above images, aligned per row ---------- */
+
+.md-typeset .scp-shots .scp-shot figcaption {
+  order: -1;
 }
 
-.md-typeset .scp-fallback .highlight code {
-  padding-right: 2.75rem;
-  white-space: pre-wrap;
+@supports (grid-template-rows: subgrid) {
+  .md-typeset .scp-shots .scp-shot {
+    display: grid;
+    grid-row: span 2;
+    grid-template-rows: subgrid;
+    align-items: end;
+  }
+
+  .md-typeset .scp-shots .scp-shot figcaption {
+    grid-row: 1;
+    align-self: end;
+  }
+
+  .md-typeset .scp-shots .scp-shot > p {
+    grid-row: 2;
+    align-self: start;
+    margin: 0;
+  }
+}
+
+@media screen and (min-width: 45em) {
+  [dir] .md-typeset .scp-timeline {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
