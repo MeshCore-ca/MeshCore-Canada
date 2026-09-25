@@ -24,6 +24,10 @@ test("remaining city centres have assigned IATA planning regions", () => {
 });
 
 test("ambiguous place names keep province choices and never accept a mismatched suffix", () => {
+  assert.deepEqual(plain(places.lookupQueries("Saint-Jean")), ["Saint-Jean", "Saint John", "St. John's"]);
+  assert.deepEqual(plain(places.lookupQueries("Saint-Jean, NB")), ["Saint John"]);
+  assert.deepEqual(plain(places.lookupQueries("Saint-Jean, NL")), ["St. John's"]);
+  assert.equal(places.placeCandidates([{key:"geonames",name:"Cambridge Bay",province:"Nunavut",category:"Hameau constitué",lat:69.113889,lng:-105.05278}],"Cambridge Bay, NU").length,1);
   const rows = [
     { key: "geonames", name: "Saint-Jean", province: "Québec", category: "Ville", lat:45.3,lng:-73.3 },
     { key: "geonames", name: "Saint-Jean", province: "New Brunswick", category: "City", lat:45.273,lng:-66.063 },

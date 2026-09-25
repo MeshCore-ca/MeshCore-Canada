@@ -53,16 +53,24 @@
     var seen = new Set();
     var places = rows.slice(0, 500).filter(function (row) {
       var category = normalize(row.category);
-      return row.key === "geonames" && /^(city|town|ville|cite|village|hamlet|hameau|community|communaute|settlement|etablissement|locality|localite|urban community|agglomeration urbaine|dispersed rural community|collectivite rurale dispersee|municipality|municipalite|rural municipality|indian reserve|reserve indienne)$/.test(category);
+      return row.key === "geonames" && /^(city|town|ville|cite|village|hamlet|incorporated hamlet|hameau|hameau constitue|incorporated village|village constitue|community|communaute|settlement|etablissement|locality|localite|urban community|agglomeration urbaine|dispersed rural community|collectivite rurale dispersee|municipality|municipalite|rural municipality|indian reserve|reserve indienne)$/.test(category);
     }).map(function (row) {
       return { name: decode(row.name).slice(0, 180), province: decode(row.province).slice(0, 80), lat: Number(row.lat), lon: Number(row.lng), category: normalize(row.category) };
     }).filter(function (place) {
       var code = provinceCode(place.province);
-      var key = place.name + ":" + place.lat + ":" + place.lon;
+      var key = place.lat + ":" + place.lon;
       if (!place.name || !code || !Number.isFinite(place.lat) || !Number.isFinite(place.lon) || place.lat < 41 || place.lat > 84 || place.lon < -142 || place.lon > -52 || (requested.province && requested.province !== code) || seen.has(key)) return false;
       seen.add(key);
       return true;
     });
+    if (saintJean(requested.name)) {
+      // Official GeoNames retain the English names in NB/NL. Keep those
+      // province choices alongside Quebec's several Saint-Jean communities.
+      places.sort(function (a, b) { return Number(/^(city|town|ville|cite)$/.test(b.category)) - Number(/^(city|town|ville|cite)$/.test(a.category)); });
+      var represented = new Set(), first = [], rest = [];
+      places.forEach(function (place) { var code = provinceCode(place.province); (represented.has(code) ? rest : first).push(place); represented.add(code); });
+      return first.concat(rest).slice(0, 5);
+    }
     var exact = places.filter(function (place) { return normalize(place.name) === normalize(requested.name); });
     if (exact.length) {
       var cities = exact.filter(function (place) { return /^(city|town|ville|cite)$/.test(place.category); });
@@ -72,5 +80,26 @@
     return places.slice(0, 5);
   }
 
-  globalThis.MeshCorePlaceSearch = { normalize: normalize, provinceCode: provinceCode, splitPlaceQuery: splitPlaceQuery, placeCandidates: placeCandidates, distanceKm: distanceKm };
+  function saintJean(name) { return normalize(name).replace(/[^a-z]/g, "") === "saintjean"; }
+  function lookupQueries(query) {
+    var place = splitPlaceQuery(query);
+    if (!saintJean(place.name)) return [place.name];
+    if (place.province === "NB") return ["Saint John"];
+    if (place.province === "NL") return ["St. John's"];
+    return place.province ? [place.name] : [place.name, "Saint John", "St. John's"];
+  }
+  async function lookup(query, language, request) {
+    var rows = [];
+    for (var name of lookupQueries(query)) {
+      var url = "https://geolocator.api.geo.ca/?" + new URLSearchParams({ q: name, lang: language, keys: "geonames" });
+      var response = await request(url);
+      if (!response.ok) throw new Error("Place lookup failed");
+      var result = await response.json();
+      if (!Array.isArray(result)) throw new Error("Invalid place response");
+      if (name !== splitPlaceQuery(query).name) result = result.filter(function (row) { return normalize(row.name) === normalize(name); });
+      rows = rows.concat(result);
+    }
+    return placeCandidates(rows, query);
+  }
+  globalThis.MeshCorePlaceSearch = { normalize: normalize, provinceCode: provinceCode, splitPlaceQuery: splitPlaceQuery, placeCandidates: placeCandidates, distanceKm: distanceKm, lookupQueries: lookupQueries, lookup: lookup };
 })();

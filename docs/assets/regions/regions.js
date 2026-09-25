@@ -1517,11 +1517,10 @@
     var postal = parseCanadianPostalCode(query);
     if (postal) return geocodeCanadianPostal(postal, signal);
     var places = window.MeshCorePlaceSearch;
-    var params = new URLSearchParams({ q: places.splitPlaceQuery(query).name, lang: frenchRuntime ? "fr" : "en", keys: "geonames" });
-    return fetchWithTimeout("https://geolocator.api.geo.ca/?" + params, { signal: signal, credentials: "omit" }, REQUEST_TIMEOUT_MS)
-      .then(function (res) { if (!res.ok) throw new Error("Place lookup failed"); return res.json(); })
-      .then(function (rows) {
-        var choices = places.placeCandidates(rows, query).map(function (place) {
+    return places.lookup(query, frenchRuntime ? "fr" : "en", function (url) {
+      return fetchWithTimeout(url, { signal: signal, credentials: "omit" }, REQUEST_TIMEOUT_MS);
+    }).then(function (results) {
+        var choices = results.map(function (place) {
           return { lat: place.lat, lon: place.lon, name: place.name + ", " + place.province,
             countryCode: "ca", province: places.provinceCode(place.province).toLowerCase() };
         });

@@ -145,11 +145,9 @@
           lastRequest = Date.now();
           var requestController = controller;
           timer = window.setTimeout(function () { requestController.abort(); }, 12000);
-          var url = new URL("https://geolocator.api.geo.ca/");
-          url.search = new URLSearchParams({ q: splitPlaceQuery(query).name, lang: isFrench ? "fr" : "en", keys: "geonames" }).toString();
-          var response = await fetch(url, { signal: signal, credentials: "omit", referrerPolicy: "strict-origin-when-cross-origin" });
-          if (!response.ok) throw new Error("Place lookup failed");
-          places = placeCandidates(await response.json(), query);
+          places = await globalThis.MeshCorePlaceSearch.lookup(query, isFrench ? "fr" : "en", function (url) {
+            return fetch(url, { signal: signal, credentials: "omit", referrerPolicy: "strict-origin-when-cross-origin" });
+          });
           if (placeCache.size >= 20) placeCache.delete(placeCache.keys().next().value);
           placeCache.set(key, places);
         }
