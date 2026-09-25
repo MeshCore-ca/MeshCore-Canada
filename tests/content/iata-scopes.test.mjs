@@ -70,6 +70,17 @@ test("Rigaud bridge carries both cities, drops unscoped floods, and keeps local 
   assert.throws(() => api.profile(catalog, { home: "yow", province: "on", cities: ["yul"] }));
 });
 
+test("edge mode is explicit and does not require an extra city scope", () => {
+  for (const home of ["yow", "ykf"]) {
+    for (const bridge of [false, true]) {
+      const result = api.profile(catalog, { home, province: "on", bridge, cities: [home] });
+      assert.deepEqual(plain(result.tags), [home, "on", "onqc", "can"]);
+      assert.equal(api.commands(result)[1], bridge ? "region denyf *" : "region allowf *");
+    }
+  }
+  assert.throws(() => api.profile(catalog, { home: "yow", province: "on", cities: ["yul"] }), /Choose edge mode/);
+});
+
 test("Canada-wide IATA codes do not invent an ON/QC mesh scope in other provinces", () => {
   const result = api.profile(catalog, { home: "yyc", province: "ab" });
   assert.deepEqual(plain(result.tags), ["yyc", "ab", "can"]);

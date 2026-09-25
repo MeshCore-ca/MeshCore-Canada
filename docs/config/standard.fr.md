@@ -188,7 +188,11 @@ devrait rester. Le comparateur peut plutôt conserver les entrées utiles et les
 déplacer hors des anciens parents.
 Ne réinitialisez pas tout l’appareil pour changer ses portées.
 
-### Répéteur local
+### Répéteur de ville {#repeteur-local}
+
+Un répéteur qui dessert une seule région IATA reste un répéteur de ville, même
+à sa limite extérieure. Des villes ou des contours portant le même code IATA
+comptent toujours comme une seule région.
 
 Exemple pour Ottawa :
 
@@ -208,10 +212,12 @@ region
 Pour Gatineau, remplacez `on` par `qc`. Pour Montréal, utilisez `yul` et `qc`.
 À Calgary, utilisez `region def yyc|* ab|* can` et `region default yyc`.
 
-### Répéteur de liaison
+### Répéteur de bordure {#repeteur-de-liaison}
 
-Choisissez ce mode seulement si le répéteur relie volontairement des zones.
-Ajoutez les villes qu’il dessert réellement. À Rigaud, du côté québécois,
+Choisissez le mode bordure si le répéteur communique régulièrement avec des
+répéteurs de régions IATA différentes. Sa proximité d’une limite ne suffit pas.
+Les portées des villes voisines sont facultatives : ajoutez-les seulement pour
+retransmettre leurs messages avec portée. À Rigaud, du côté québécois,
 pour relier Ottawa–Gatineau et Montréal :
 
 ```text
@@ -256,7 +262,7 @@ Les commandes peuvent prendre effet ou être enregistrées dès leur saisie.
 Conservez une sauvegarde : un redémarrage ne suffit pas nécessairement à les
 annuler. Vérifiez chaque réponse et arrêtez-vous en cas d’erreur.
 Après `region save`, vérifiez les noms et les indicateurs `F` avec `region`.
-Sur un répéteur de liaison, `*` ne doit pas porter `F`.
+Sur un répéteur de bordure, `*` ne doit pas porter `F`.
 
 ## Compagnons et canaux
 

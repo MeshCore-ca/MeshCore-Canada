@@ -94,15 +94,17 @@
     "City zone": "Zone locale",
     "Nearby city zones": "Zones locales à proximité",
     "Other MeshMapper zones": "Autres zones MeshMapper",
-    "Select only city zones this repeater links. Bridge mode blocks unscoped floods.": "Sélectionnez seulement les zones reliées par ce répéteur. Le mode liaison bloque la retransmission sans portée.",
-    "A bridge can carry several city codes. Its province scope stays the province where it is installed.": "Une liaison peut porter plusieurs codes de ville. Sa portée provinciale reste celle de son lieu d’installation.",
+    "Select only city zones this repeater links. Edge mode blocks unscoped floods.": "Sélectionnez seulement les zones reliées par ce répéteur. Le mode bordure bloque la retransmission sans portée.",
+    "An edge repeater can carry several IATA codes. Its province scope stays the province where it is installed.": "Un répéteur de bordure peut porter plusieurs codes IATA. Sa portée provinciale reste celle de son lieu d’installation.",
     "Choose the city scopes this repeater should forward.": "Choisissez les portées de ville que ce répéteur doit retransmettre.",
     "Request a zone change": "Demander une modification de zone",
     "Uses the same scope list": "Utilise la même liste de portées",
-    "Local repeater": "Répéteur local",
-    "One city zone; unscoped messages work locally.": "Une zone locale; les messages sans portée restent utilisables localement.",
-    "Bridge repeater": "Répéteur de liaison",
-    "Link city zones; unscoped floods are blocked.": "Relie des zones locales; bloque la retransmission sans portée.",
+    "City repeater": "Répéteur de ville",
+    "One IATA region; unscoped messages work locally.": "Une région IATA; les messages sans portée restent utilisables localement.",
+    "Edge repeater": "Répéteur de bordure",
+    "Regularly links repeaters in different IATA regions; blocks unscoped floods.": "Relie régulièrement des répéteurs de régions IATA différentes; bloque la retransmission sans portée.",
+    "A repeater on the outer boundary stays a city repeater unless it regularly links to another IATA region.": "Un répéteur à la limite extérieure reste un répéteur de ville, sauf s’il relie régulièrement une autre région IATA.",
+    "Different cities or map outlines with the same IATA code still count as one region.": "Des villes ou des contours portant le même code IATA comptent toujours comme une seule région.",
     "Forwarded scopes": "Portées retransmises",
     "Forwarded scopes:": "Portées retransmises :",
     "Before applying a new scope list": "Avant d’appliquer une nouvelle liste de portées",
@@ -1626,10 +1628,10 @@
     target.innerHTML = (state.migrationNeedsReview
       ? '<div class="mcc-note mcc-note-warning"><strong>Review the replacement scope list</strong><p>These saved zones need a new choice:</p><p><code>' + esc((state.unresolvedRegions || []).join(", ")) + '</code></p><label class="mcc-choice"><input type="checkbox" data-action="confirm-scope-migration"><span>I checked the replacement scope list.</span></label></div>'
       : '') +
-      '<p class="mcc-hint">Select only city zones this repeater links. Bridge mode blocks unscoped floods.</p>' +
+      '<p class="mcc-hint">Select only city zones this repeater links. Edge mode blocks unscoped floods.</p>' +
       sharedNote +
       '<h3 class="mcc-picker-heading">Canadian regions</h3>' +
-      '<p class="mcc-hint">A bridge can carry several city codes. Its province scope stays the province where it is installed.</p>' +
+      '<p class="mcc-hint">An edge repeater can carry several IATA codes. Its province scope stays the province where it is installed.</p>' +
       '<div class="mcc-served-region-groups">' +
       groups.map(function (group) {
         return '<div class="mcc-chip-group"><strong>' + esc(group.label) + '</strong><div class="mcc-chip-list">' +
@@ -2167,9 +2169,11 @@
       '<p class="mcc-step-label">Step 3 of 4</p>' +
       '<h2>What should this node serve?</h2>' +
       '<div class="mcc-choice-list mcc-choice-list-large" data-role="types" role="radiogroup" aria-label="Repeater forwarding coverage">' +
-      '<label class="mcc-choice"><input type="radio" name="mcc-type" value="residential" checked><span><strong>Local repeater</strong><small>One city zone; unscoped messages work locally.</small></span></label>' +
-      '<label class="mcc-choice"><input type="radio" name="mcc-type" value="high-site"><span><strong>Bridge repeater</strong><small>Link city zones; unscoped floods are blocked.</small></span></label>' +
+      '<label class="mcc-choice"><input type="radio" name="mcc-type" value="residential" checked><span><strong>City repeater</strong><small>One IATA region; unscoped messages work locally.</small></span></label>' +
+      '<label class="mcc-choice"><input type="radio" name="mcc-type" value="high-site"><span><strong>Edge repeater</strong><small>Regularly links repeaters in different IATA regions; blocks unscoped floods.</small></span></label>' +
       '</div>' +
+      '<p class="mcc-hint" data-role="repeater-type-help">A repeater on the outer boundary stays a city repeater unless it regularly links to another IATA region.</p>' +
+      '<p class="mcc-hint">Different cities or map outlines with the same IATA code still count as one region.</p>' +
       '<div data-role="metro"></div>' +
       '<label class="mcc-label" for="mcc-radio-profile">Radio network</label>' +
       '<select class="mcc-select" id="mcc-radio-profile"><option value="keep">Keep current settings</option></select>' +

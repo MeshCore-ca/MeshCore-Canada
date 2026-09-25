@@ -5,6 +5,29 @@ import "../../docs/assets/regions/modules/iata-scopes.js";
 const catalog = JSON.parse(readFileSync("docs/assets/regions/iata-regions.json", "utf8"));
 
 for (const locale of ["", "fr/"]) {
+  test(`${locale || "en/"} city or edge is an explicit choice, not a map boundary inference`, async ({ page }) => {
+    for (const [lat, lon, tag] of [[43.8678, -81.2619, "ykf"], [45.4765, -75.7013, "yow"]]) {
+      await page.goto(siteRoute(`/${locale}config/?lat=${lat}&lon=${lon}&step=3&instructions=technical`));
+      const step = page.locator('[data-wizard-step="3"]');
+      await expect(step).toBeVisible();
+      await expect(step.getByRole("radio", { name: locale ? "Répéteur de ville" : "City repeater" })).toBeChecked();
+      await expect(step.locator('[data-role="repeater-type-help"]')).toContainText(locale ? "limite extérieure" : "outer boundary");
+      await expect(step).toContainText(locale ? "même code IATA" : "same IATA code");
+      await step.locator('[data-next-step]').click();
+      const result = page.locator('[data-role="result"]');
+      await expect(result).toContainText(`region def ${tag}|*`);
+      await expect(result).toContainText("region allowf *");
+      await expect(result).not.toContainText("region denyf *");
+    }
+    // Preserve existing edge-mode bookmarks; an extra city scope is optional.
+    await page.goto(siteRoute(`/${locale}config/?tag=yow&province=on&type=large&step=3&instructions=technical`));
+    const step = page.locator('[data-wizard-step="3"]');
+    await expect(step.getByRole("radio", { name: locale ? "Répéteur de bordure" : "Edge repeater" })).toBeChecked();
+    await step.locator('[data-next-step]').click();
+    await expect(page.locator('[data-role="result"]')).toContainText("region def yow|* on|* onqc|* can");
+    await expect(page.locator('[data-role="result"]')).toContainText("region denyf *");
+  });
+
   test(`${locale || "en/"} ambiguous city search asks for the province and respects the choice`, async ({ page }) => {
     await page.route("https://geolocator.api.geo.ca/**", route => route.fulfill({ json: [
       { key:"geonames", name:"Saint-Jean", province:"Québec", category:"Ville", lat:45.307,lng:-73.262 },
@@ -64,6 +87,10 @@ for (const locale of ["", "fr/"]) {
   test(`${locale || "en/"} proposal picker shares commands and keeps static examples on failure`, async ({ page }) => {
     await page.goto(siteRoute(`/${locale}proposals/onqc-scopes/`));
     const picker=page.locator('[data-scp-picker]'); await expect(picker).toBeVisible();
+    await expect(picker.locator('[data-scp-type]')).toContainText(locale ? "Répéteur de bordure" : "Edge repeater");
+    const guidance = page.locator('.mc-callout').filter({ hasText: locale ? "Ville ou bordure?" : "City or edge?" });
+    await expect(guidance).toContainText(locale ? "limite extérieure" : "outer edge");
+    await expect(guidance).toContainText(locale ? "même code IATA" : "same IATA code");
     const home=await picker.locator('[data-scp-area]').evaluate(select=>({home:select.selectedOptions[0].dataset.city,province:select.selectedOptions[0].dataset.province}));
     for(const [value,firmware] of [["116","1.16"],["115","1.15"],["114","1.14"],["110","1.10"]]) {
       await picker.locator('[data-scp-firmware]').selectOption(value);

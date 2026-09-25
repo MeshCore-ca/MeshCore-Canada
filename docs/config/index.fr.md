@@ -1,6 +1,6 @@
 ---
 title: Configurer les portées d’un répéteur
-description: Choisissez les régions IATA, le mode local ou de liaison et les commandes adaptées au micrologiciel.
+description: Choisissez les régions IATA, le mode ville ou bordure et les commandes adaptées au micrologiciel.
 audience:
   - repeater-operator
 task: configure-repeater-regions
@@ -19,17 +19,17 @@ page_scripts:
   - assets/javascripts/place-search.js?v=20260925-2
   - assets/javascripts/radio-profiles.js?v=20260904-1
   - assets/regions/modules/configurator-support.js?v=20260925-1
-  - assets/regions/modules/iata-scopes.js?v=20260925-2
+  - assets/regions/modules/iata-scopes.js?v=20260925-4
   - assets/regions/modules/scope-migration.js?v=20260925-2
-  - assets/regions/regions.js?v=20260925-3
+  - assets/regions/regions.js?v=20260925-4
 hide:
   - navigation
   - toc
 ---
 # Configurer les portées d’un répéteur
 
-Choisissez les régions IATA desservies par ce répéteur. Un répéteur local
-laisse passer les messages sans portée; un répéteur de liaison les bloque.
+Choisissez les régions IATA desservies par ce répéteur. Un répéteur de ville
+laisse passer les messages sans portée; un répéteur de bordure les bloque.
 Vérifiez les anciennes régions avant d’appliquer un nouveau profil.
 
 <div data-mcc-regions="config" data-mcc-root="./"></div>

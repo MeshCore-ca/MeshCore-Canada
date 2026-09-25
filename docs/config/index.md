@@ -1,6 +1,6 @@
 ---
 title: Set up repeater scopes
-description: Choose IATA regions, local or bridge forwarding, and firmware-specific repeater commands.
+description: Choose IATA regions, city or edge repeater mode, and firmware-specific commands.
 audience:
   - repeater-operator
 task: configure-repeater-regions
@@ -19,17 +19,17 @@ page_scripts:
   - assets/javascripts/place-search.js?v=20260925-2
   - assets/javascripts/radio-profiles.js?v=20260904-1
   - assets/regions/modules/configurator-support.js?v=20260925-1
-  - assets/regions/modules/iata-scopes.js?v=20260925-2
+  - assets/regions/modules/iata-scopes.js?v=20260925-4
   - assets/regions/modules/scope-migration.js?v=20260925-2
-  - assets/regions/regions.js?v=20260925-3
+  - assets/regions/regions.js?v=20260925-4
 hide:
   - navigation
   - toc
 ---
 # Set up repeater scopes
 
-Choose the IATA regions this repeater serves. Local repeaters allow
-unscoped messages; bridge repeaters block them. Review existing regions before
+Choose the IATA regions this repeater serves. City repeaters allow
+unscoped messages; edge repeaters block them. Review existing regions before
 applying a new profile.
 
 <div data-mcc-regions="config" data-mcc-root="./"></div>

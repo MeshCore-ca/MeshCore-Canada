@@ -56,7 +56,7 @@
       if (!record || record.automatic !== false || record.geographic !== false) throw new Error("Unknown neighbouring network: " + id);
       return Object.assign({ id: id, status: record.authority && record.authority.status || "provisional" }, record);
     });
-    if (!bridge && (extra.length || external.length)) throw new Error("Choose bridge mode before adding other zones.");
+    if (!bridge && (extra.length || external.length)) throw new Error("Choose edge mode before adding other zones.");
     var cities = [home].concat(extra.sort());
     var meshScopes = Object.keys(data.policy.meshScopes).filter(function (scope) {
       return data.policy.meshScopes[scope].indexOf(province) !== -1;
