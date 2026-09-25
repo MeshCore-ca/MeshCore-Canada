@@ -1112,3 +1112,20 @@
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
+
+/* ---------- Optional explanations (collapsed) ---------- */
+
+.md-typeset details.scp-more {
+  border-color: var(--mc-color-border);
+  font-size: inherit;
+  box-shadow: none;
+}
+
+.md-typeset details.scp-more > summary {
+  background: var(--mc-color-surface-raised);
+  font-size: 0.85rem;
+}
+
+.md-typeset details.scp-more > summary::before {
+  background-color: var(--mc-color-text-muted);
+}
