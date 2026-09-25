@@ -255,12 +255,45 @@ MeshCore app, open the repeater, log in as admin and use the command box in
 **Repeater Admin**, or use the USB console. Each command has its own copy
 button. Wait for `OK` before sending the next one.
 
+<div class="scp-shots" markdown>
+
+<figure class="scp-shot" markdown>
+[![Contacts list filtered to find a repeater](../assets/images/onqc-scopes/repeater-01-contacts.webp){ loading=lazy width="600" height="1304" }](../assets/images/onqc-scopes/repeater-01-contacts.webp)
+<figcaption markdown="span"><span class="scp-shot__num">1</span> In <strong>Contacts</strong>, find your repeater (search by name) and tap it.</figcaption>
+</figure>
+
+<figure class="scp-shot" markdown>
+[![Repeater Login screen with a password field](../assets/images/onqc-scopes/repeater-02-login.webp){ loading=lazy width="600" height="1304" }](../assets/images/onqc-scopes/repeater-02-login.webp)
+<figcaption markdown="span"><span class="scp-shot__num">2</span> Enter the admin password and tap <strong>Log In</strong>.</figcaption>
+</figure>
+
+<figure class="scp-shot" markdown>
+[![Repeater Admin screen with Command Line at the bottom](../assets/images/onqc-scopes/repeater-03-admin.webp){ loading=lazy width="600" height="1304" }](../assets/images/onqc-scopes/repeater-03-admin.webp)
+<figcaption markdown="span"><span class="scp-shot__num">3</span> Check for <strong>You are logged in as an Admin</strong>, then tap <strong>Command Line</strong> at the bottom.</figcaption>
+</figure>
+
+</div>
+
 <div class="mc-callout" data-kind="warning" markdown>
 **No `OK`? Send the same command again.** Over the mesh, a reply can take a few
 seconds or get lost. In the MeshCore app, tap and hold the command in the
 history and choose **Send Again**. Running a command twice is safe. If a
 repeated `region remove` answers `Err - not found`, the first one already
 worked.
+</div>
+
+<div class="scp-shots" markdown>
+
+<figure class="scp-shot" markdown>
+[![Command line where one command was sent twice before getting OK](../assets/images/onqc-scopes/repeater-04-cli-standard.webp){ loading=lazy width="600" height="1304" }](../assets/images/onqc-scopes/repeater-04-cli-standard.webp)
+<figcaption markdown="span"><span class="scp-shot__num">1</span> Make sure every command gets an <code>OK</code> back. Here, the first <code>set flood.advert.interval 47</code> never got one, so it was sent again.</figcaption>
+</figure>
+
+<figure class="scp-shot" markdown>
+[![Command history menu with Copy and Send Again](../assets/images/onqc-scopes/repeater-06-send-again.webp){ loading=lazy width="600" height="1304" }](../assets/images/onqc-scopes/repeater-06-send-again.webp)
+<figcaption markdown="span"><span class="scp-shot__num">2</span> No <code>OK</code>? Tap and hold the command and choose <strong>Send Again</strong>.</figcaption>
+</figure>
+
 </div>
 
 ### Step 1: Check your firmware
@@ -276,6 +309,15 @@ step 4:
 - **1.15 or older:** `region def` answers `Err - ??`. Use the `region put`
   commands under [Older firmware](#older-firmware) instead, or update the
   firmware first.
+
+<div class="scp-shots" markdown>
+
+<figure class="scp-shot" markdown>
+[![Command line showing region def answering Err - ?? and ver showing v1.15.0](../assets/images/onqc-scopes/repeater-05-ver.webp){ loading=lazy width="600" height="1304" }](../assets/images/onqc-scopes/repeater-05-ver.webp)
+<figcaption markdown="span"><span class="scp-shot__num">1</span> On this repeater, <code>region def</code> answers <code>Err - ??</code>, and <code>ver</code> shows <strong>v1.15.0</strong>, so it uses the older-firmware steps.</figcaption>
+</figure>
+
+</div>
 
 ### Step 2: Clear any old regions
 
@@ -527,6 +569,15 @@ region starts with forwarding **off**, so each one also needs
 `region allowf`. Those versions also have no `region default`, so the
 repeater's own adverts stay unscoped. Updating the firmware is worth it.
 
+<div class="scp-shots" markdown>
+
+<figure class="scp-shot" markdown>
+[![Command line showing region put commands on firmware 1.15](../assets/images/onqc-scopes/repeater-07-region-put-115.webp){ loading=lazy width="600" height="1304" }](../assets/images/onqc-scopes/repeater-07-region-put-115.webp)
+<figcaption markdown="span"><span class="scp-shot__num">1</span> Firmware 1.15: each <code>region put</code> answers <code>OK - (flood allowed)</code>. <code>region put on</code> needed a second send.</figcaption>
+</figure>
+
+</div>
+
 ### Step 5: Check the result
 
 ```text
@@ -546,6 +597,15 @@ For Ottawa, you should see:
 `F` means "flood allowed": the repeater forwards that name. The `^` next to
 `*` marks the repeater's home region; with none set, it sits on `*`. You can
 ignore it.
+
+<div class="scp-shots" markdown>
+
+<figure class="scp-shot" markdown>
+[![Command line showing the final region list](../assets/images/onqc-scopes/repeater-08-region-result.webp){ loading=lazy width="600" height="1304" }](../assets/images/onqc-scopes/repeater-08-region-result.webp)
+<figcaption markdown="span"><span class="scp-shot__num">1</span> The finished list on an Ottawa repeater.</figcaption>
+</figure>
+
+</div>
 
 ### Bridge repeaters
 
@@ -610,25 +670,111 @@ still receive everything.
 In the MeshCore app, open **Settings**. Under **Network Settings**, tap
 **Default Region Scope**, add `onqc` and select it.
 
+<div class="scp-shots" markdown>
+
+<figure class="scp-shot" markdown>
+[![MeshCore app contacts list with the settings cog at the top right](../assets/images/onqc-scopes/companion-01-connected.webp){ loading=lazy width="600" height="1304" }](../assets/images/onqc-scopes/companion-01-connected.webp)
+<figcaption markdown="span"><span class="scp-shot__num">1</span> Connect your companion to the MeshCore app and tap the <strong>settings cog</strong> in the top right.</figcaption>
+</figure>
+
+<figure class="scp-shot" markdown>
+[![Settings screen with Network Settings and Default Region Scope](../assets/images/onqc-scopes/companion-02-settings.webp){ loading=lazy width="600" height="1304" }](../assets/images/onqc-scopes/companion-02-settings.webp)
+<figcaption markdown="span"><span class="scp-shot__num">2</span> Scroll down to <strong>Network Settings</strong> and tap <strong>Default Region Scope</strong>.</figcaption>
+</figure>
+
+<figure class="scp-shot" markdown>
+[![Select Region screen with no regions and an Add Region button](../assets/images/onqc-scopes/companion-03-select-region.webp){ loading=lazy width="600" height="1304" }](../assets/images/onqc-scopes/companion-03-select-region.webp)
+<figcaption markdown="span"><span class="scp-shot__num">3</span> If <code>onqc</code> is not listed, tap <strong>Add Region</strong>, or the <strong>+</strong> at the top right.</figcaption>
+</figure>
+
+<figure class="scp-shot" markdown>
+[![Add Region screen with onqc typed in](../assets/images/onqc-scopes/companion-04-add-region.webp){ loading=lazy width="600" height="1304" }](../assets/images/onqc-scopes/companion-04-add-region.webp)
+<figcaption markdown="span"><span class="scp-shot__num">4</span> Type <code>onqc</code>, all lowercase, and tap the <strong>checkmark</strong> in the top right.</figcaption>
+</figure>
+
+<figure class="scp-shot" markdown>
+[![Select Region screen with onqc listed](../assets/images/onqc-scopes/companion-05-pick-onqc.webp){ loading=lazy width="600" height="1304" }](../assets/images/onqc-scopes/companion-05-pick-onqc.webp)
+<figcaption markdown="span"><span class="scp-shot__num">5</span> Tap <code>onqc</code> to select it.</figcaption>
+</figure>
+
+<figure class="scp-shot" markdown>
+[![Settings showing onqc as the default region scope and a Settings Saved message](../assets/images/onqc-scopes/companion-06-saved.webp){ loading=lazy width="600" height="1304" }](../assets/images/onqc-scopes/companion-06-saved.webp)
+<figcaption markdown="span"><span class="scp-shot__num">6</span> Default Region Scope now shows <code>onqc</code>. Tap the <strong>checkmark</strong> in the top right. It spins while saving, then <strong>Settings Saved!</strong> pops up.</figcaption>
+</figure>
+
+</div>
+
 ### Step 2: Set a scope on each channel
 
-Open the channel, use the channel menu, tap **Set Region Scope**, and pick the
-scope from this table:
+Open the channel, tap **⋮** in the top right, choose **Set Region Scope**,
+and pick the scope from this table:
 
 | Channel | Scope | Why |
 | --- | --- | --- |
 | `Public` | `onqc` | Everyone in Ontario and Québec can talk |
-| Test channels, such as `#test` | Your city, for example `yow` | Tests stay local |
-| Bot channels | Your city, for example `yow` | Bot replies stay local |
+| Test channels, such as `#testing` | Your city, for example `yow` | Tests stay local |
+| Bot channels, such as `#bots` | Your city, for example `yow` | Bot replies stay local |
 | Your own channels | Your city, `on`/`qc`, or `onqc` | Pick how far it should reach |
 
 If you run a bot, set that bot's own **Default Region Scope** to your city too.
+
+**Example: `Public` to `onqc`**
+
+<div class="scp-shots" markdown>
+
+<figure class="scp-shot" markdown>
+[![Channels list with Public at the top](../assets/images/onqc-scopes/companion-07-channels.webp){ loading=lazy width="600" height="1304" }](../assets/images/onqc-scopes/companion-07-channels.webp)
+<figcaption markdown="span"><span class="scp-shot__num">1</span> Tap <strong>Channels</strong> in the bottom menu bar and open <strong>Public</strong>.</figcaption>
+</figure>
+
+<figure class="scp-shot" markdown>
+[![Public channel menu with Set Region Scope](../assets/images/onqc-scopes/companion-09-channel-menu.webp){ loading=lazy width="600" height="1304" }](../assets/images/onqc-scopes/companion-09-channel-menu.webp)
+<figcaption markdown="span"><span class="scp-shot__num">2</span> Tap <strong>⋮</strong> in the top right and choose <strong>Set Region Scope</strong>.</figcaption>
+</figure>
+
+<figure class="scp-shot" markdown>
+[![Select Region list with onqc](../assets/images/onqc-scopes/companion-10-public-pick-onqc.webp){ loading=lazy width="600" height="1304" }](../assets/images/onqc-scopes/companion-10-public-pick-onqc.webp)
+<figcaption markdown="span"><span class="scp-shot__num">3</span> Tap <code>onqc</code>.</figcaption>
+</figure>
+
+<figure class="scp-shot" markdown>
+[![Public channel header showing Region: onqc](../assets/images/onqc-scopes/companion-11-public-scoped.webp){ loading=lazy width="600" height="1304" }](../assets/images/onqc-scopes/companion-11-public-scoped.webp)
+<figcaption markdown="span"><span class="scp-shot__num">4</span> The header now shows <strong>Region: onqc</strong>, and a banner says only repeaters allowing that region will forward. The limit drops to 127 characters.</figcaption>
+</figure>
+
+</div>
 
 <div class="mc-callout" markdown>
 **Scoped messages are a little shorter.** Once a channel has a scope, the app
 allows fewer characters per message. In our testing, the limit on `Public`
 dropped from 137 to 127 characters after setting it to `onqc`. The app sets
 the exact limit, and it can vary with your node name and app version.
+</div>
+
+**Example: `#testing` to your city**
+
+<div class="scp-shots" markdown>
+
+<figure class="scp-shot" markdown>
+[![#testing channel menu with Set Region Scope](../assets/images/onqc-scopes/companion-13-testing-menu.webp){ loading=lazy width="600" height="1304" }](../assets/images/onqc-scopes/companion-13-testing-menu.webp)
+<figcaption markdown="span"><span class="scp-shot__num">1</span> Open the channel, tap <strong>⋮</strong> and choose <strong>Set Region Scope</strong>.</figcaption>
+</figure>
+
+<figure class="scp-shot" markdown>
+[![Add Region screen with yow typed in](../assets/images/onqc-scopes/companion-15-add-yow.webp){ loading=lazy width="600" height="1304" }](../assets/images/onqc-scopes/companion-15-add-yow.webp)
+<figcaption markdown="span"><span class="scp-shot__num">2</span> If your city code is not listed, tap <strong>+</strong>, type it (for example <code>yow</code>) and tap the <strong>checkmark</strong>.</figcaption>
+</figure>
+
+<figure class="scp-shot" markdown>
+[![Select Region list with onqc and yow and a Region has been added message](../assets/images/onqc-scopes/companion-16-yow-added.webp){ loading=lazy width="600" height="1304" }](../assets/images/onqc-scopes/companion-16-yow-added.webp)
+<figcaption markdown="span"><span class="scp-shot__num">3</span> <strong>Region has been added!</strong> Tap your city code to select it.</figcaption>
+</figure>
+
+<figure class="scp-shot" markdown>
+[![#testing channel header showing Region: yow](../assets/images/onqc-scopes/companion-17-testing-scoped.webp){ loading=lazy width="600" height="1304" }](../assets/images/onqc-scopes/companion-17-testing-scoped.webp)
+<figcaption markdown="span"><span class="scp-shot__num">4</span> The header now shows <strong>Region: yow</strong>.</figcaption>
+</figure>
+
 </div>
 
 ## Why the companion default is `onqc`
