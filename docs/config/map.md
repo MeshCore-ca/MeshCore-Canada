@@ -15,21 +15,22 @@ tested_with:
   region_catalog: meshcore-canada-iata-scopes-v1
 difficulty: beginner
 page_styles:
-  - assets/regions/regions.css?v=20260925-2
+  - assets/regions/regions.css?v=20260925-3
 page_scripts:
   - assets/javascripts/place-search.js?v=20260925-2
   - assets/javascripts/radio-profiles.js?v=20260904-1
   - assets/regions/modules/configurator-support.js?v=20260925-1
   - assets/regions/modules/iata-scopes.js?v=20260925-2
-  - assets/regions/regions.js?v=20260925-2
+  - assets/regions/regions.js?v=20260925-3
 hide:
   - toc
 ---
 
 # Find your IATA region
 
-Search for a place or choose an IATA region. The map combines published MeshMapper
-zones with labelled [starter regions](standard.md#starter-regions) throughout Canada. Boundaries do not promise radio coverage.
+Search for a place or choose an IATA region. Solid outlines are published MeshMapper
+boundaries. Dashed outlines are MeshCore Canada [planning regions and extensions](standard.md#planning-extensions).
+Neither shows measured radio coverage.
 
 <div data-mcc-regions="map" data-mcc-root="../"></div>
 

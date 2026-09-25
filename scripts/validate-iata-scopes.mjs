@@ -22,9 +22,11 @@ assert.equal(data.policy.scopedAdvertFirmware, "1.15");
 assert.equal(data.policy.bulkDefinitionFirmware, "1.16");
 assert.equal(data.policy.minimumApp, "1.43");
 assert.equal(zones.type, "FeatureCollection");
+assert.equal(zones.schema, "meshcore-canada-iata-boundaries/v2");
+assert.equal(data.source.boundarySchema, zones.schema);
 assert.equal(zones.featureCount, zones.features.length);
-assert.equal(new Set(zones.features.map(feature => feature.properties.tag)).size, zones.features.length);
-assert.deepEqual(zones.features.map(feature => feature.properties.tag).sort(), data.seeds.map(seed => seed.tag).sort());
+assert.equal(new Set(zones.features.map(feature => feature.properties.tag + ":" + feature.properties.regionSource)).size, zones.features.length, "Each region may have one published feature and one planning feature");
+assert.deepEqual([...new Set(zones.features.map(feature => feature.properties.tag))].sort(), data.seeds.map(seed => seed.tag).sort());
 assert.equal(provinces.features.length, 13);
 assert.deepEqual(provinces.features.map(feature => feature.properties.tag).sort(), Object.keys(data.policy.provinces).sort());
 assert.equal(data.source.boundarySha256, createHash("sha256").update(read("docs/assets/regions/iata-boundaries.geojson")).digest("hex"));
@@ -35,12 +37,14 @@ assert.ok(Number.isFinite(Date.parse(published.fetchedAt)));
 assert.equal(zones.publishedCount, published.features.length);
 assert.equal(zones.starterCount, starters.regions.length);
 assert.deepEqual(zones.features.filter(feature => feature.properties.regionSource === "meshmapper").map(feature => feature.properties.tag).sort(), published.features.map(feature => feature.properties.tag).sort());
-assert.deepEqual(zones.features.filter(feature => feature.properties.regionSource === "meshcore-canada").map(feature => feature.properties.tag).sort(), starters.regions.map(region => region.tag).sort());
+assert.deepEqual(zones.features.filter(feature => feature.properties.planningKind === "starter").map(feature => feature.properties.tag).sort(), starters.regions.map(region => region.tag).sort());
+assert.equal(zones.features.filter(feature => feature.properties.planningKind === "extension").length, zones.planningExtensionCount);
+assert.equal(data.source.planningExtensionCount, zones.planningExtensionCount);
 for (const feature of published.features) {
   const merged = zones.features.find(item => item.properties.tag === feature.properties.tag);
   assert.deepEqual(merged, { ...feature, properties: { ...feature.properties, regionSource: "meshmapper" } }, "Never alter a published MeshMapper zone");
 }
-for (const [name, path] of Object.entries({ meshmapper: "docs/assets/regions/meshmapper-iata-boundaries.geojson", jurisdictions: "docs/assets/regions/scope-jurisdictions.geojson", starters: "data/iata-starter-regions.json", labrador: "data/iata-labrador-outline.geojson" })) {
+for (const [name, path] of Object.entries({ meshmapper: "docs/assets/regions/meshmapper-iata-boundaries.geojson", jurisdictions: "docs/assets/regions/scope-jurisdictions.geojson", starters: "data/iata-starter-regions.json", scopes: "data/iata-scope-policy.json", labrador: "data/iata-labrador-outline.geojson" })) {
   assert.equal(zones.sourceHashes[name], createHash("sha256").update(read(path)).digest("hex"), `Regenerate IATA boundaries after changing ${name}`);
 }
 for (const feature of zones.features) {
@@ -52,8 +56,14 @@ for (const feature of zones.features) {
   if (feature.properties.regionSource === "meshmapper") assert.equal(sourceUrl, `https://${tag}.meshmapper.net/`);
   else {
     assert.equal(feature.properties.regionSource, "meshcore-canada");
-    assert.ok(starters.regions.some(region => region.tag === tag));
-    assert.equal(data.status[tag].state, "starter");
+    if (feature.properties.planningKind === "extension") {
+      assert.ok(published.features.some(region => region.properties.tag === tag));
+      assert.equal(data.status[tag].planningExtension, true);
+    } else {
+      assert.equal(feature.properties.planningKind, "starter");
+      assert.ok(starters.regions.some(region => region.tag === tag));
+      assert.equal(data.status[tag].state, "starter");
+    }
     assert.match(feature.properties.codeSource, /^https:\/\//);
   }
   assert.equal(center.length, 2);

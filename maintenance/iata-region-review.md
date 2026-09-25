@@ -11,6 +11,16 @@ geometry, and compares names, centres and boundaries. No change means no issue
 update. A change opens or updates one bot-owned review issue and saves the
 candidate GeoJSON and comparison as a 30-day artifact.
 
+Gap assignments consider every eligible published regional centre as well as
+starter hubs. Never distribute all leftover land among only newly added hubs.
+Extensions reuse the nearby IATA code but remain separate planning features in the
+combined v2 GeoJSON. Do not union them into or relabel the original published
+polygon. Feature keys are (tag, regionSource); the catalogue has one entry per code.
+
+The geometry check includes named towns between regions, a national half-degree
+sample grid against all eligible centres, and an order-independence check. Full
+coverage and valid polygons alone are not enough to approve a boundary update.
+
 Download the candidate from the linked run. Review it before replacing
 `docs/assets/regions/meshmapper-iata-boundaries.geojson`. Update the province
 assignments in `data/iata-scope-policy.json` for any new code. If MeshMapper now

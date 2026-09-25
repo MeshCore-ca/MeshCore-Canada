@@ -91,11 +91,23 @@ Dans les autres provinces, ces pôles comblent les espaces restants :
 | N.-B. | `yqm` Moncton, `yfc` Fredericton, `ysj` Saint John |
 | N.-É. | `yhz` Halifax, `yqi` Yarmouth |
 
-Les espaces non attribués sont répartis selon la distance à ces pôles en projection
-Lambert du Canada, puis limités aux frontières provinciales et aux zones existantes
-de MeshMapper. Ce sont des limites proposées à revoir localement, pas des mesures
-de couverture radio. La carte couvre les 13 provinces et territoires sans modifier
-les polygones publiés par MeshMapper.
+Les espaces non attribués sont répartis selon la distance à **tous les centres
+régionaux de la province** : les régions publiées dans MeshMapper et les pôles
+initiaux ci-dessus. Ils ne sont pas attribués seulement aux nouvelles régions.
+Les distances utilisent la projection Lambert du Canada.
+
+### Extensions proposées {#planning-extensions}
+
+Un espace voisin d’une région IATA existante peut reprendre son code comme
+**extension proposée**. Par exemple, le point `43.8678, -81.2619` près de Wingham
+est attribué à `ykf`, pas à Sudbury (`ysb`). Goderich est attribuée à `yxu` et
+Kincardine à `ylk`.
+
+Les extensions sont des surfaces distinctes en pointillé, pas des modifications
+aux polygones publiés par MeshMapper. Le résultat indique la source de la surface
+qui contient votre point. Les 13 provinces et territoires restent cartographiés.
+Les limites proposées doivent être revues localement; elles ne représentent pas
+la couverture radio mesurée.
 
 Par exemple, l’Île-du-Prince-Édouard utilise `yyg`, `pe` et `can`; le Yukon utilise
 `yxy`, `yt` et `can`. Ces régions n’utilisent pas `onqc`.

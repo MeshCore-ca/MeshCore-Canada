@@ -30,7 +30,7 @@ function internals() {
   const marker = "  if (window.document$";
   assert.ok(script.includes(marker));
   runInNewContext(script.replace(marker,
-    "  globalThis.api = { prepareCatalog, applyGeneratedPartition, expandSharedRepeaterLeaves, recommend, resolveLocation, initialLocation, mapHrefForState, localGeocode };\n" + marker), context);
+    "  globalThis.api = { prepareCatalog, applyGeneratedPartition, expandSharedRepeaterLeaves, recommend, resolveLocation, initialLocation, mapHrefForState, localGeocode, featuresForNode };\n" + marker), context);
   const data = context.api.prepareCatalog(structuredClone(catalog));
   context.api.applyGeneratedPartition(data, structuredClone(boundaries), structuredClone(provinces));
   return { api: context.api, scopes: context.MeshCoreIataScopes, data };
@@ -39,6 +39,24 @@ function internals() {
 test("the active configurator refuses the former census catalogue", () => {
   const { api } = internals();
   assert.throws(() => api.prepareCatalog(JSON.parse(read("maintenance/legacy-regions/canada-regions.json"))), /out of date/);
+});
+
+test("one IATA code keeps separate published and planning geometry without duplicate seeds", () => {
+  const {api,data}=internals();
+  const parts=api.featuresForNode(data,"ykf").features;
+  assert.equal(parts.length,2);
+  assert.deepEqual(plain(parts.map(feature=>feature.properties.regionSource)),["meshmapper","meshcore-canada"]);
+  assert.equal(data.seeds.filter(seed=>seed.tag==="ykf").length,1);
+  assert.equal(data.partitionByTag.ykf.properties.regionSource,"meshmapper");
+  const pin=api.resolveLocation(data,43.8678,-81.2619);
+  assert.equal(pin.primary.seed.tag,"ykf");
+  assert.equal(pin.province,"on");
+  assert.equal(pin.sourceTier,"meshcore-canada");
+  assert.equal(pin.planningKind,"extension");
+  assert.equal(api.resolveLocation(data,43.8678,-81.2619,"ysb").hasMatch,false,"Do not silently accept a saved bad Sudbury assignment");
+  const duplicate=structuredClone(boundaries);
+  duplicate.features.push(structuredClone(parts[1]));
+  assert.throws(()=>api.applyGeneratedPartition(data,duplicate,provinces),/duplicate/);
 });
 
 test("Ottawa and Gatineau use the same city zone without automatically carrying both provinces", () => {

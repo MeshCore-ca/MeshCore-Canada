@@ -49,7 +49,7 @@ extra_css:
   - assets/styles/network-status.css?v=20260905-1
 
 extra_javascript:
-  - assets/javascripts/region-profile.js?v=20260925-2
+  - assets/javascripts/region-profile.js?v=20260925-3
   - assets/javascripts/i18n-runtime.js?v=20260829-1
   - assets/javascripts/bootstrap.js?v=20260821-1
   - assets/javascripts/network-status.js?v=20260905-1

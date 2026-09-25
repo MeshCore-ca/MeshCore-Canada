@@ -355,7 +355,9 @@
     "starterReviewedAt": "2026-09-25",
     "publishedCount": 33,
     "starterCount": 29,
-    "boundarySha256": "8ac31d44a55635fe23939828e5f2d65078a1e1a11be9d2aed3301cd8b90f19dd",
+    "boundarySchema": "meshcore-canada-iata-boundaries/v2",
+    "planningExtensionCount": 33,
+    "boundarySha256": "24b4132f20d23030ac2e3f93062dfca0bcd6313988bf4e0182211760ad143891",
     "meshmapperBoundarySha256": "78e0d08608b82328033b2ba59b22ce08a82a563725e5d59c5059ca0dc119c2d6",
     "jurisdictionSha256": "753d7ad13f089cdeee54cb29c9105706226fa75228193c4eda2d4ecc5ed78349"
   },
@@ -1064,312 +1066,374 @@
     "xcm": {
       "state": "published",
       "source": "MeshMapper",
-      "sourceUrl": "https://xcm.meshmapper.net/"
+      "sourceUrl": "https://xcm.meshmapper.net/",
+      "planningExtension": true
     },
     "xph": {
       "state": "published",
       "source": "MeshMapper",
-      "sourceUrl": "https://xph.meshmapper.net/"
+      "sourceUrl": "https://xph.meshmapper.net/",
+      "planningExtension": true
     },
     "ybl": {
       "state": "published",
       "source": "MeshMapper",
-      "sourceUrl": "https://ybl.meshmapper.net/"
+      "sourceUrl": "https://ybl.meshmapper.net/",
+      "planningExtension": true
     },
     "ycd": {
       "state": "published",
       "source": "MeshMapper",
-      "sourceUrl": "https://ycd.meshmapper.net/"
+      "sourceUrl": "https://ycd.meshmapper.net/",
+      "planningExtension": true
     },
     "yeg": {
       "state": "published",
       "source": "MeshMapper",
-      "sourceUrl": "https://yeg.meshmapper.net/"
+      "sourceUrl": "https://yeg.meshmapper.net/",
+      "planningExtension": true
     },
     "ygk": {
       "state": "published",
       "source": "MeshMapper",
-      "sourceUrl": "https://ygk.meshmapper.net/"
+      "sourceUrl": "https://ygk.meshmapper.net/",
+      "planningExtension": true
     },
     "yka": {
       "state": "published",
       "source": "MeshMapper",
-      "sourceUrl": "https://yka.meshmapper.net/"
+      "sourceUrl": "https://yka.meshmapper.net/",
+      "planningExtension": true
     },
     "ykf": {
       "state": "published",
       "source": "MeshMapper",
-      "sourceUrl": "https://ykf.meshmapper.net/"
+      "sourceUrl": "https://ykf.meshmapper.net/",
+      "planningExtension": true
     },
     "ylk": {
       "state": "published",
       "source": "MeshMapper",
-      "sourceUrl": "https://ylk.meshmapper.net/"
+      "sourceUrl": "https://ylk.meshmapper.net/",
+      "planningExtension": true
     },
     "yml": {
       "state": "published",
       "source": "MeshMapper",
-      "sourceUrl": "https://yml.meshmapper.net/"
+      "sourceUrl": "https://yml.meshmapper.net/",
+      "planningExtension": true
     },
     "yow": {
       "state": "published",
       "source": "MeshMapper",
-      "sourceUrl": "https://yow.meshmapper.net/"
+      "sourceUrl": "https://yow.meshmapper.net/",
+      "planningExtension": true
     },
     "ypa": {
       "state": "published",
       "source": "MeshMapper",
-      "sourceUrl": "https://ypa.meshmapper.net/"
+      "sourceUrl": "https://ypa.meshmapper.net/",
+      "planningExtension": true
     },
     "yqa": {
       "state": "published",
       "source": "MeshMapper",
-      "sourceUrl": "https://yqa.meshmapper.net/"
+      "sourceUrl": "https://yqa.meshmapper.net/",
+      "planningExtension": true
     },
     "yqb": {
       "state": "published",
       "source": "MeshMapper",
-      "sourceUrl": "https://yqb.meshmapper.net/"
+      "sourceUrl": "https://yqb.meshmapper.net/",
+      "planningExtension": true
     },
     "yqf": {
       "state": "published",
       "source": "MeshMapper",
-      "sourceUrl": "https://yqf.meshmapper.net/"
+      "sourceUrl": "https://yqf.meshmapper.net/",
+      "planningExtension": true
     },
     "yql": {
       "state": "published",
       "source": "MeshMapper",
-      "sourceUrl": "https://yql.meshmapper.net/"
+      "sourceUrl": "https://yql.meshmapper.net/",
+      "planningExtension": true
     },
     "yqq": {
       "state": "published",
       "source": "MeshMapper",
-      "sourceUrl": "https://yqq.meshmapper.net/"
+      "sourceUrl": "https://yqq.meshmapper.net/",
+      "planningExtension": true
     },
     "yqt": {
       "state": "published",
       "source": "MeshMapper",
-      "sourceUrl": "https://yqt.meshmapper.net/"
+      "sourceUrl": "https://yqt.meshmapper.net/",
+      "planningExtension": true
     },
     "yqy": {
       "state": "published",
       "source": "MeshMapper",
-      "sourceUrl": "https://yqy.meshmapper.net/"
+      "sourceUrl": "https://yqy.meshmapper.net/",
+      "planningExtension": true
     },
     "yse": {
       "state": "published",
       "source": "MeshMapper",
-      "sourceUrl": "https://yse.meshmapper.net/"
+      "sourceUrl": "https://yse.meshmapper.net/",
+      "planningExtension": true
     },
     "ytf": {
       "state": "published",
       "source": "MeshMapper",
-      "sourceUrl": "https://ytf.meshmapper.net/"
+      "sourceUrl": "https://ytf.meshmapper.net/",
+      "planningExtension": true
     },
     "ytr": {
       "state": "published",
       "source": "MeshMapper",
-      "sourceUrl": "https://ytr.meshmapper.net/"
+      "sourceUrl": "https://ytr.meshmapper.net/",
+      "planningExtension": true
     },
     "yul": {
       "state": "published",
       "source": "MeshMapper",
-      "sourceUrl": "https://yul.meshmapper.net/"
+      "sourceUrl": "https://yul.meshmapper.net/",
+      "planningExtension": true
     },
     "yvr": {
       "state": "published",
       "source": "MeshMapper",
-      "sourceUrl": "https://yvr.meshmapper.net/"
+      "sourceUrl": "https://yvr.meshmapper.net/",
+      "planningExtension": true
     },
     "ywg": {
       "state": "published",
       "source": "MeshMapper",
-      "sourceUrl": "https://ywg.meshmapper.net/"
+      "sourceUrl": "https://ywg.meshmapper.net/",
+      "planningExtension": true
     },
     "yws": {
       "state": "published",
       "source": "MeshMapper",
-      "sourceUrl": "https://yws.meshmapper.net/"
+      "sourceUrl": "https://yws.meshmapper.net/",
+      "planningExtension": true
     },
     "yxu": {
       "state": "published",
       "source": "MeshMapper",
-      "sourceUrl": "https://yxu.meshmapper.net/"
+      "sourceUrl": "https://yxu.meshmapper.net/",
+      "planningExtension": true
     },
     "yxx": {
       "state": "published",
       "source": "MeshMapper",
-      "sourceUrl": "https://yxx.meshmapper.net/"
+      "sourceUrl": "https://yxx.meshmapper.net/",
+      "planningExtension": true
     },
     "yyb": {
       "state": "published",
       "source": "MeshMapper",
-      "sourceUrl": "https://yyb.meshmapper.net/"
+      "sourceUrl": "https://yyb.meshmapper.net/",
+      "planningExtension": true
     },
     "yyc": {
       "state": "published",
       "source": "MeshMapper",
-      "sourceUrl": "https://yyc.meshmapper.net/"
+      "sourceUrl": "https://yyc.meshmapper.net/",
+      "planningExtension": true
     },
     "yyj": {
       "state": "published",
       "source": "MeshMapper",
-      "sourceUrl": "https://yyj.meshmapper.net/"
+      "sourceUrl": "https://yyj.meshmapper.net/",
+      "planningExtension": true
     },
     "yyy": {
       "state": "published",
       "source": "MeshMapper",
-      "sourceUrl": "https://yyy.meshmapper.net/"
+      "sourceUrl": "https://yyy.meshmapper.net/",
+      "planningExtension": true
     },
     "yyz": {
       "state": "published",
       "source": "MeshMapper",
-      "sourceUrl": "https://yyz.meshmapper.net/"
+      "sourceUrl": "https://yyz.meshmapper.net/",
+      "planningExtension": true
     },
     "yyg": {
       "state": "starter",
       "source": "MeshCore Canada",
-      "sourceUrl": "https://flyyyg.com/"
+      "sourceUrl": "https://flyyyg.com/",
+      "planningExtension": false
     },
     "yyt": {
       "state": "starter",
       "source": "MeshCore Canada",
-      "sourceUrl": "https://stjohnsairport.com/"
+      "sourceUrl": "https://stjohnsairport.com/",
+      "planningExtension": false
     },
     "yyr": {
       "state": "starter",
       "source": "MeshCore Canada",
-      "sourceUrl": "https://goosebayairport.com/"
+      "sourceUrl": "https://goosebayairport.com/",
+      "planningExtension": false
     },
     "yxy": {
       "state": "starter",
       "source": "MeshCore Canada",
-      "sourceUrl": "https://yukonairports.ca/contact-information"
+      "sourceUrl": "https://yukonairports.ca/contact-information",
+      "planningExtension": false
     },
     "yzf": {
       "state": "starter",
       "source": "MeshCore Canada",
-      "sourceUrl": "https://tc.canada.ca/en/aviation/operating-airports-aerodromes/list-airports-owned-transport-canada"
+      "sourceUrl": "https://tc.canada.ca/en/aviation/operating-airports-aerodromes/list-airports-owned-transport-canada",
+      "planningExtension": false
     },
     "yfb": {
       "state": "starter",
       "source": "MeshCore Canada",
-      "sourceUrl": "https://tc.canada.ca/en/aviation/operating-airports-aerodromes/list-airports-owned-transport-canada"
+      "sourceUrl": "https://tc.canada.ca/en/aviation/operating-airports-aerodromes/list-airports-owned-transport-canada",
+      "planningExtension": false
     },
     "ylw": {
       "state": "starter",
       "source": "MeshCore Canada",
-      "sourceUrl": "https://ylw.kelowna.ca/"
+      "sourceUrl": "https://ylw.kelowna.ca/",
+      "planningExtension": false
     },
     "yxs": {
       "state": "starter",
       "source": "MeshCore Canada",
-      "sourceUrl": "https://www.pgairport.ca/"
+      "sourceUrl": "https://www.pgairport.ca/",
+      "planningExtension": false
     },
     "yxt": {
       "state": "starter",
       "source": "MeshCore Canada",
-      "sourceUrl": "https://yxt.ca/"
+      "sourceUrl": "https://yxt.ca/",
+      "planningExtension": false
     },
     "yxc": {
       "state": "starter",
       "source": "MeshCore Canada",
-      "sourceUrl": "https://flyyxc.com/"
+      "sourceUrl": "https://flyyxc.com/",
+      "planningExtension": false
     },
     "ymm": {
       "state": "starter",
       "source": "MeshCore Canada",
-      "sourceUrl": "https://flyymm.com/"
+      "sourceUrl": "https://flyymm.com/",
+      "planningExtension": false
     },
     "yqu": {
       "state": "starter",
       "source": "MeshCore Canada",
-      "sourceUrl": "https://grandeprairieairport.com/"
+      "sourceUrl": "https://grandeprairieairport.com/",
+      "planningExtension": false
     },
     "yxe": {
       "state": "starter",
       "source": "MeshCore Canada",
-      "sourceUrl": "https://skyxe.ca/"
+      "sourceUrl": "https://skyxe.ca/",
+      "planningExtension": false
     },
     "yqr": {
       "state": "starter",
       "source": "MeshCore Canada",
-      "sourceUrl": "https://www.yqr.ca/"
+      "sourceUrl": "https://www.yqr.ca/",
+      "planningExtension": false
     },
     "ybr": {
       "state": "starter",
       "source": "MeshCore Canada",
-      "sourceUrl": "https://www.brandon.ca/airport"
+      "sourceUrl": "https://www.brandon.ca/airport",
+      "planningExtension": false
     },
     "yth": {
       "state": "starter",
       "source": "MeshCore Canada",
-      "sourceUrl": "https://fly-yth.ca/"
+      "sourceUrl": "https://fly-yth.ca/",
+      "planningExtension": false
     },
     "yyq": {
       "state": "starter",
       "source": "MeshCore Canada",
-      "sourceUrl": "https://tc.canada.ca/en/aviation/operating-airports-aerodromes/list-airports-owned-transport-canada"
+      "sourceUrl": "https://tc.canada.ca/en/aviation/operating-airports-aerodromes/list-airports-owned-transport-canada",
+      "planningExtension": false
     },
     "ysb": {
       "state": "starter",
       "source": "MeshCore Canada",
-      "sourceUrl": "https://www.flysudbury.ca/"
+      "sourceUrl": "https://www.flysudbury.ca/",
+      "planningExtension": false
     },
     "yam": {
       "state": "starter",
       "source": "MeshCore Canada",
-      "sourceUrl": "https://saultairport.com/"
+      "sourceUrl": "https://saultairport.com/",
+      "planningExtension": false
     },
     "yts": {
       "state": "starter",
       "source": "MeshCore Canada",
-      "sourceUrl": "https://www.timminsairport.com/"
+      "sourceUrl": "https://www.timminsairport.com/",
+      "planningExtension": false
     },
     "yqk": {
       "state": "starter",
       "source": "MeshCore Canada",
-      "sourceUrl": "https://www.kenoraairport.ca/"
+      "sourceUrl": "https://www.kenoraairport.ca/",
+      "planningExtension": false
     },
     "yvo": {
       "state": "starter",
       "source": "MeshCore Canada",
-      "sourceUrl": "https://aeroportvaldor.com/"
+      "sourceUrl": "https://aeroportvaldor.com/",
+      "planningExtension": false
     },
     "yzv": {
       "state": "starter",
       "source": "MeshCore Canada",
-      "sourceUrl": "https://tc.canada.ca/en/aviation/operating-airports-aerodromes/list-airports-owned-transport-canada"
+      "sourceUrl": "https://tc.canada.ca/en/aviation/operating-airports-aerodromes/list-airports-owned-transport-canada",
+      "planningExtension": false
     },
     "yvp": {
       "state": "starter",
       "source": "MeshCore Canada",
-      "sourceUrl": "https://tc.canada.ca/en/aviation/operating-airports-aerodromes/list-airports-owned-transport-canada"
+      "sourceUrl": "https://tc.canada.ca/en/aviation/operating-airports-aerodromes/list-airports-owned-transport-canada",
+      "planningExtension": false
     },
     "yqm": {
       "state": "starter",
       "source": "MeshCore Canada",
-      "sourceUrl": "https://cyqm.ca/"
+      "sourceUrl": "https://cyqm.ca/",
+      "planningExtension": false
     },
     "yfc": {
       "state": "starter",
       "source": "MeshCore Canada",
-      "sourceUrl": "https://yfcfredericton.ca/"
+      "sourceUrl": "https://yfcfredericton.ca/",
+      "planningExtension": false
     },
     "ysj": {
       "state": "starter",
       "source": "MeshCore Canada",
-      "sourceUrl": "https://ysjsaintjohn.ca/"
+      "sourceUrl": "https://ysjsaintjohn.ca/",
+      "planningExtension": false
     },
     "yhz": {
       "state": "starter",
       "source": "MeshCore Canada",
-      "sourceUrl": "https://halifaxstanfield.ca/"
+      "sourceUrl": "https://halifaxstanfield.ca/",
+      "planningExtension": false
     },
     "yqi": {
       "state": "starter",
       "source": "MeshCore Canada",
-      "sourceUrl": "https://www.yarmouthairport.ca/"
+      "sourceUrl": "https://www.yarmouthairport.ca/",
+      "planningExtension": false
     }
   },
   "seeds": [

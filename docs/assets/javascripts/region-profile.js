@@ -11,10 +11,12 @@
     if (request) url.searchParams.set("request", request);
     return esc(url.href);
   }
-  function render(data, tag, province, base) {
+  function render(data, tag, province, base, resolution) {
     var profile = data.profiles && data.profiles[tag];
     if (!profile) return "";
     var review = profile.settingsReview;
+    var planning = resolution ? resolution.sourceTier === "meshcore-canada" : data.status[tag].state !== "published";
+    var sourceLabel = planning ? (data.status[tag].state === "published" ? t("MeshCore Canada planning extension", "Extension proposée par MeshCore Canada") : t("MeshCore Canada planning region", "Région proposée par MeshCore Canada")) : "MeshMapper";
     var stale = review.checkedAt && Date.now() - Date.parse(review.checkedAt) > 180 * 86400000;
     var settings = review.status === "confirmed" ? (stale ? t("Due for a new check", "À revérifier") : t("Locally confirmed", "Confirmés localement")) : t("Not locally confirmed", "Non confirmés localement");
     var owner = profile.maintainer ? '<a href="' + esc(profile.maintainer.contact) + '">' + esc(profile.maintainer.name) + '</a>' : t("No maintainer listed", "Aucun responsable indiqué");
@@ -23,7 +25,7 @@
       return '<li><a href="' + esc(url.href) + '">' + esc(french ? community.nameFr : community.name) + '</a>' + (community.override ? ' — ' + t("different radio settings listed", "réglages radio différents indiqués") : '') + '</li>';
     }).join("");
     return '<section class="mc-region-profile" aria-label="' + t("Region profile", "Fiche régionale") + '"><h3>' + t("Your region", "Votre région") + ': <code>' + esc(tag.toUpperCase()) + '</code></h3>' +
-      '<dl><div><dt>' + t("Boundary source", "Source des limites") + '</dt><dd>' + (data.status[tag].state === "published" ? "MeshMapper" : t("MeshCore Canada planning region", "Région proposée par MeshCore Canada")) + ' · ' + esc(data.status[tag].state === "published" ? data.source.fetchedAt.slice(0,10) : data.source.starterReviewedAt) + '</dd></div>' +
+      '<dl><div><dt>' + t("Boundary source", "Source des limites") + '</dt><dd>' + sourceLabel + ' · ' + esc(planning ? data.source.starterReviewedAt : data.source.fetchedAt.slice(0,10)) + '</dd></div>' +
       '<div><dt>' + t("Local settings", "Réglages locaux") + '</dt><dd>' + settings + (review.checkedAt ? ' · <a href="' + esc(review.evidence) + '">' + esc(review.checkedAt) + '</a>' : '') + '</dd></div>' +
       '<div><dt>' + t("Maintainer", "Responsable") + '</dt><dd>' + owner + '</dd></div></dl>' +
       '<p>' + t("A published boundary does not confirm local radio settings or adoption. Directory contacts below are not appointed region maintainers.", "Une limite publiée ne confirme ni les réglages radio ni l’adoption locale. Les contacts ci-dessous ne sont pas des responsables régionaux désignés.") + '</p>' +

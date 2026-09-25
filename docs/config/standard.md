@@ -90,10 +90,20 @@ In the other provinces, these hubs fill the remaining gaps:
 | NB | `yqm` Moncton, `yfc` Fredericton, `ysj` Saint John |
 | NS | `yhz` Halifax, `yqi` Yarmouth |
 
-Unassigned land is divided by distance to these hubs in Canada Lambert projection,
-then clipped to provincial borders and existing MeshMapper zones. These are
-planning boundaries for local review, not measured radio coverage. The map covers
-all 13 provinces and territories without changing a published MeshMapper polygon.
+Unassigned land is divided by distance to **all regional centres in the province**:
+published MeshMapper regions and the starter hubs above. It is not assigned only
+to new regions. Distance uses Canada Lambert projection.
+
+### Planning extensions {#planning-extensions}
+
+A gap next to an existing IATA region can use that code as a **planning extension**.
+For example, the Wingham-area point `43.8678, -81.2619` is assigned to `ykf`, not
+Sudbury (`ysb`). Goderich is assigned to `yxu`, and Kincardine to `ylk`.
+
+Extensions are separate, dashed areas, not changes to MeshMapper's published
+polygons. The result identifies which source contains your point. All 13 provinces
+and territories remain mapped. Planning boundaries need local review and do not
+represent measured radio coverage.
 
 For example, PEI uses `yyg`, `pe`, and `can`; Yukon uses `yxy`, `yt`, and `can`.
 They do not use `onqc`. The [configurator](index.md) generates the commands.

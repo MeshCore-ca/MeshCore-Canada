@@ -13,6 +13,23 @@ vm.runInContext(readFileSync("docs/assets/regions/modules/iata-scopes.js", "utf8
 const api = context.MeshCoreIataScopes;
 const plain = value => JSON.parse(JSON.stringify(value));
 
+test("southern Ontario gaps use nearby existing codes, not the new Sudbury hub", () => {
+  for (const [tag, lat, lon] of [["ykf",43.8678,-81.2619],["yxu",43.743,-81.71],["ylk",44.176,-81.636]]) {
+    const matches = api.matches(combined, lat, lon);
+    assert.equal(matches.length, 1);
+    assert.equal(matches[0].properties.tag, tag);
+    assert.equal(matches[0].properties.planningKind, "extension");
+    assert.equal(matches[0].properties.regionSource, "meshcore-canada");
+    assert.equal(api.matches(zones, lat, lon).length, 0);
+    assert.equal(catalog.status[tag].planningExtension, true);
+    assert.deepEqual(plain(api.commands(api.profile(catalog, {home:tag,province:"on"}))), [`region def ${tag}|* on|* onqc|* can`, "region allowf *", `region default ${tag}`]);
+  }
+  assert.equal(api.matches(combined,46.492,-80.993)[0].properties.tag,"ysb");
+  for (const original of zones.features) {
+    assert.deepEqual(combined.features.find(feature=>feature.properties.tag===original.properties.tag && feature.properties.regionSource==="meshmapper").geometry,original.geometry);
+  }
+});
+
 test("six starter regions cover the missing jurisdictions with honest source labels and flat scopes", () => {
   for (const [tag, province, lat, lon] of [
     ["yyg", "pe", 46.2382, -63.1311], ["yyt", "nl", 47.5605, -52.7128],

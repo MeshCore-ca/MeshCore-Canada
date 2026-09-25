@@ -42,12 +42,19 @@ Statistics Canada CD source archive, licence, and SHA-256. The starter regions
 never overlap each other; published MeshMapper geometry is subtracted from
 them. The merged asset records every input hash for reproducibility.
 
-In the other eight provinces, remaining land is divided between the explicit
-community hubs in data/iata-starter-regions.json using a Canada Lambert
-(EPSG:3347) Voronoi partition. Projected edges are sampled every 25 km before
-conversion to longitude/latitude. Source province coastlines and all published
-MeshMapper polygons are retained. These planning areas require local review;
-they do not imply a radio link across their extent or MeshMapper approval.
+In the other eight provinces, remaining land is divided between ALL eligible
+regional centres: published MeshMapper zones and the explicit community hubs in
+data/iata-starter-regions.json. Province eligibility is in iata-scope-policy.json.
+The partition uses Canada Lambert (EPSG:3347); edges are sampled every 10 km before
+conversion to longitude/latitude. Source coastlines and published polygons remain
+unchanged. Unexplained leftovers fail the build, rather than going to the last hub.
+These planning areas require local review; they are not RF coverage or approval.
+
+The combined GeoJSON uses meshcore-canada-iata-boundaries/v2. An IATA code can
+have one unchanged published feature and one separate planning extension. Use
+(tag, regionSource) as the feature key, not tag alone. planningKind distinguishes
+starter regions from extensions. Source attribution follows the feature containing
+the selected point. The catalogue still has exactly one seed/profile per IATA code.
 
 data/iata-region-profiles.json records consenting public maintainers and local
 settings confirmations separately. Missing records remain unclaimed/unconfirmed.

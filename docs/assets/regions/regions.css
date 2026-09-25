@@ -952,7 +952,9 @@ body:has([data-mcc-regions]) .md-typeset h3 {
 .mcc-map-stage {
   position: relative;
   min-width: 0;
-  min-height: 30rem;
+  min-height: 24rem;
+  height: clamp(24rem, 70vh, 44rem);
+  align-self: start;
 }
 
 .md-typeset .mcc-skip-map {
@@ -1815,6 +1817,7 @@ body:has([data-mcc-regions]) .md-typeset h3 {
 
   .mcc-map-stage {
     min-height: 32rem;
+    height: 32rem;
   }
 
   .mcc-sticky-result,
@@ -2296,3 +2299,4 @@ ol.mcc-guide-steps > li::before {
 [data-scope-migration] textarea { min-height: 8rem; font-family: monospace; resize: vertical; }
 [data-scope-migration] [hidden] { display: none !important; }
 [data-migration-report] { white-space: pre-wrap; overflow-wrap: anywhere; }
+.mcc-legend-published { border: 2px solid #aeb8ff; }

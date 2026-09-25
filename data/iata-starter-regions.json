@@ -3,7 +3,7 @@
   "reviewedAt": "2026-09-25",
   "status": "starter",
   "authority": "MeshCore Canada",
-  "note": "Planning regions fill gaps between published MeshMapper zones. Within each province, remaining land is assigned to the nearest listed hub in Canada Lambert projection. Newfoundland and Labrador stay separate. These are proposals for local review, not radio coverage or MeshMapper-approved boundaries.",
+  "note": "These starter hubs complement all published MeshMapper regional centres when assigning gaps within each province. Planning extensions of existing IATA codes are separate features; published polygons never change. Distance uses Canada Lambert projection. Newfoundland and Labrador stay separate. These are proposals for local review, not radio coverage or MeshMapper-approved boundaries.",
   "regions": [
     {
       "tag": "yyg",

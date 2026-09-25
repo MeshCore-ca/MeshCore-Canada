@@ -17,10 +17,13 @@ const communities = load("data/communities.json");
 const communityFr = load("data/communities.fr.json").communities;
 const anchors = load("data/community-search-anchors.json").communities;
 assert.equal(policy.scopeModel, "flat");
-const tags = zones.features.map(feature => feature.properties.tag);
+const canonicalFeatures = zones.features.filter(feature => feature.properties.planningKind !== "extension");
+const tags = canonicalFeatures.map(feature => feature.properties.tag);
+const extended = new Set(zones.features.filter(feature => feature.properties.planningKind === "extension").map(feature => feature.properties.tag));
+assert.equal(new Set(tags).size, tags.length);
 assert.equal(profileRecords.schema, "meshcore-canada-iata-profiles/v1");
 assert.ok(Object.keys(profileRecords.regions).every(tag => tags.includes(tag)), "Profile references unknown region");
-const profiles = Object.fromEntries(zones.features.map(feature => {
+const profiles = Object.fromEntries(canonicalFeatures.map(feature => {
   const tag = feature.properties.tag;
   const record = profileRecords.regions[tag] || {};
   assert.ok(Object.keys(record).every(key => ["maintainer", "settingsReview"].includes(key)), `Unknown profile field: ${tag}`);
@@ -42,7 +45,7 @@ const profiles = Object.fromEntries(zones.features.map(feature => {
   }
   const local = communities.communities.filter(community => {
     const points = Number.isFinite(community.location?.latitude) && Number.isFinite(community.location?.longitude) ? [{ lat: community.location.latitude, lon: community.location.longitude }] : anchors[community.id];
-    return points.some(point => globalThis.MeshCoreIataScopes.contains(feature, point.lat, point.lon));
+    return points.some(point => zones.features.some(part => part.properties.tag === tag && globalThis.MeshCoreIataScopes.contains(part, point.lat, point.lon)));
   }).map(community => ({ id: community.id, name: community.name, nameFr: communityFr[community.id]?.name || community.name,
     route: community.canonical_route, override: !community.settings.inherit_national,
     settings: community.settings, listingReviewed: community.verified_at }));
@@ -59,14 +62,14 @@ for (const [tag] of Object.entries(policy.meshScopes)) {
   hierarchy[tag] = { label: "Ontario + Québec", labelFr: "Ontario + Québec", parent: null, kind: "mesh-scope" };
   status[tag] = { state: "pilot", source: policy.proposal };
 }
-const seeds = zones.features.map(feature => {
+const seeds = canonicalFeatures.map(feature => {
   const { tag, name, nameFr, center, regionSource, codeSource } = feature.properties;
   const starter = regionSource === "meshcore-canada";
   const sourceUrl = starter ? codeSource : feature.properties.sourceUrl;
   const provinces = policy.zoneProvinces[tag];
   assert.ok(provinces.length && provinces.every(province => policy.provinces[province]));
   hierarchy[tag] = { label: name, ...(nameFr ? { labelFr: nameFr } : {}), parent: provinces[0], provinces, kind: "city" };
-  status[tag] = { state: starter ? "starter" : "published", source: starter ? "MeshCore Canada" : "MeshMapper", sourceUrl };
+  status[tag] = { state: starter ? "starter" : "published", source: starter ? "MeshCore Canada" : "MeshMapper", sourceUrl, planningExtension: extended.has(tag) };
   return { tag, lat: center[1], lon: center[0], r: 0, provinces, sourceUrl, regionSource };
 });
 const aliases = Object.fromEntries(tags.map(tag => [tag, [tag, hierarchy[tag].label, hierarchy[tag].labelFr,
@@ -90,6 +93,7 @@ const catalog = {
   policy,
   source: { ...published.source, fetchedAt: published.fetchedAt, starterReviewedAt: starters.reviewedAt,
     publishedCount: published.features.length, starterCount: starters.regions.length,
+    boundarySchema: zones.schema, planningExtensionCount: zones.planningExtensionCount,
     boundarySha256: createHash("sha256").update(readFileSync(new URL("docs/assets/regions/iata-boundaries.geojson", root))).digest("hex"),
     meshmapperBoundarySha256: createHash("sha256").update(readFileSync(new URL("docs/assets/regions/meshmapper-iata-boundaries.geojson", root))).digest("hex"),
     jurisdictionSha256: createHash("sha256").update(readFileSync(new URL("docs/assets/regions/scope-jurisdictions.geojson", root))).digest("hex") },
