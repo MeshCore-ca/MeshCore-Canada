@@ -17,9 +17,9 @@ destructive: false
 search:
   exclude: true
 page_styles:
-  - assets/styles/scopes-proposal.css?v=20260924-4
+  - assets/styles/scopes-proposal.css?v=20260925-1
 page_scripts:
-  - assets/javascripts/scopes-picker.js?v=20260924-3
+  - assets/javascripts/scopes-picker.js?v=20260925-1
 ---
 
 # Proposition de portées de région ON/QC
@@ -425,14 +425,38 @@ par afficher ce qui s’y trouve :
 <ol class="scp-cmds"><li class="scp-cmd"><code>region</code><button type="button" class="scp-copy" title="Copier" aria-label="Copier: region"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li></ol>
 </div>
 
+<div class="scp-ask" data-scp-ask hidden>
+<p class="scp-ask__q">La réponse affiche-t-elle d’autres noms que <code>*</code>?</p>
+<div class="scp-ask__choices" role="group" aria-label="La réponse affiche-t-elle d’autres noms que *?">
+<button type="button" class="scp-choice" data-scp-choice="old" aria-pressed="false">Oui, d’autres noms</button>
+<button type="button" class="scp-choice" data-scp-choice="clean" aria-pressed="false">Non, seulement <code>*^ F</code></button>
+</div>
+</div>
+
+<div data-scp-ask-nojs markdown>
+
 Vérifiez ensuite la réponse :
 
 - **Seulement `*^ F` :** le répéteur n’a pas d’anciennes régions. Rien à
-  effacer, passez à l’étape 3.
-- **D’autres noms aussi**, comme `can`, `on-alg` ou `ott` : retirez chacun
-  sauf `*` avec `region remove <nom>`, un à la fois, en commençant par la ligne
-  la plus en retrait. Lancez ensuite `region save`, puis `region` de nouveau
-  pour vérifier. Par exemple, l’ancienne configuration d’Ottawa :
+  effacer, passez à l’[étape 3](#etape-3-reglages-standard-de-meshcore-canada).
+- **D’autres noms aussi**, comme `can`, `on-alg` ou `ott` : retirez-les comme
+  indiqué ci-dessous.
+
+</div>
+
+<div class="scp-branch" data-scp-branch="clean" hidden markdown>
+
+**Rien à effacer.** Votre répéteur n’a pas d’anciennes régions. Passez
+directement à l’[étape 3](#etape-3-reglages-standard-de-meshcore-canada).
+
+</div>
+
+<div class="scp-branch" data-scp-branch="old" markdown>
+
+Retirez chaque nom sauf `*` avec `region remove <nom>`, un à la fois, en
+commençant par la ligne la plus en retrait. Lancez ensuite `region save`, puis
+`region` de nouveau pour vérifier. Par exemple, l’ancienne configuration
+d’Ottawa :
 
 <div class="scp-card">
 <p class="scp-variant__label">Exemple : l’ancienne configuration d’Ottawa</p>
@@ -455,6 +479,8 @@ Quand vous avez terminé, `region` devrait afficher seulement `*^ F`.
 [![Ligne de commande qui retire les anciennes régions d’Ottawa](../assets/images/onqc-scopes/repeater-clear-old.webp){ loading=lazy width="600" height="1304" }](../assets/images/onqc-scopes/repeater-clear-old.webp)
 <figcaption markdown="span"><span class="scp-shot__num">1</span> L’ancienne configuration d’Ottawa, retirée du bas vers le haut. Retirer un nom deux fois répond simplement <code>Err - not found</code>. Ce n’est pas grave.</figcaption>
 </figure>
+
+</div>
 
 </div>
 

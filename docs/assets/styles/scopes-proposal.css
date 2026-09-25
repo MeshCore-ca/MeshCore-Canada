@@ -838,8 +838,79 @@
    override the hidden attribute. Keep hidden things hidden. */
 .md-typeset .scp-picker[hidden],
 .md-typeset .scp-picker [hidden],
-.md-typeset .scp-card [hidden] {
+.md-typeset .scp-card [hidden],
+.md-typeset .scp-ask[hidden],
+.md-typeset .scp-branch[hidden],
+.md-typeset [data-scp-ask-nojs][hidden] {
   display: none;
+}
+
+/* ---------- Yes/No question (old regions) ---------- */
+
+.md-typeset .scp-ask {
+  margin: var(--mc-space-4) 0 var(--mc-space-6);
+  padding: var(--mc-space-4);
+  border: 1px solid var(--mc-color-border);
+  border-radius: var(--mc-radius-lg);
+  background:
+    linear-gradient(135deg, var(--scp-city-bg), transparent 70%),
+    var(--mc-color-surface-raised);
+  box-shadow: var(--mc-shadow-1);
+}
+
+.md-typeset .scp-ask__q {
+  margin: 0 0 var(--mc-space-3);
+  font-weight: 700;
+}
+
+.md-typeset .scp-ask__choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--mc-space-2);
+}
+
+.md-typeset .scp-choice {
+  flex: 1 1 10rem;
+  padding: 0.6rem var(--mc-space-3);
+  border: 1px solid var(--mc-color-border);
+  border-radius: var(--mc-radius-md);
+  background: var(--mc-color-surface);
+  color: var(--mc-color-text);
+  font: inherit;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.md-typeset .scp-choice:hover {
+  border-color: var(--scp-city);
+}
+
+.md-typeset .scp-choice[aria-pressed="true"] {
+  border-color: var(--scp-city);
+  background: var(--scp-city-bg);
+  color: var(--scp-city);
+  box-shadow: inset 0 0 0 1px var(--scp-city);
+}
+
+.md-typeset .scp-choice:focus-visible {
+  outline: 3px solid var(--mc-color-focus);
+  outline-offset: 2px;
+}
+
+.md-typeset .scp-branch[data-scp-branch="clean"] {
+  margin: var(--mc-space-4) 0 var(--mc-space-6);
+  padding: var(--mc-space-3) var(--mc-space-4);
+  border-left: 0.25rem solid var(--scp-ok);
+  border-radius: var(--mc-radius-sm);
+  background: var(--scp-ok-bg);
+}
+
+.md-typeset .scp-branch[data-scp-branch="clean"] > :first-child {
+  margin-top: 0;
+}
+
+.md-typeset .scp-branch[data-scp-branch="clean"] > :last-child {
+  margin-bottom: 0;
 }
 
 .scp-picker__field {
