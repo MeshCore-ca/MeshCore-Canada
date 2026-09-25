@@ -381,9 +381,9 @@ the other side connects to it, it is a city repeater. If it starts linking to
 another zone regularly, switch it to edge.
 </div>
 
-**Not sure? Check the map.** Open [onqc.meshmapper.net](https://onqc.meshmapper.net/),
-open **Layers** and turn on **Repeater Neighbours** and **Neighbour Zone
-Boundaries**. Find your repeater and look at its neighbours. For each one, the
+**Not sure? Check the map.** Open [this MeshMapper view](https://onqc.meshmapper.net/?preset=all&lat=45.21108&lon=-75.44812&zoom=9.61&m=dark&l=rep.nbr.nz.nzb.rb&cm=std). It
+shows zone boundaries and repeater neighbours on a dark map, so the borders
+are easy to see. Click your repeater to see its neighbours. For each one, the
 map shows how many packets have been seen on that link and when it was last
 seen. If several neighbours are outside your MeshMapper zone and those links
 are used often and recently, make it an edge repeater. A single link seen a

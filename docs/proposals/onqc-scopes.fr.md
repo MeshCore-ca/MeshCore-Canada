@@ -406,9 +406,9 @@ passez-le en bordure.
 </div>
 
 **Pas certain? Vérifiez sur la carte.** Ouvrez
-[onqc.meshmapper.net](https://onqc.meshmapper.net/), ouvrez **Layers** et
-activez **Repeater Neighbours** et **Neighbour Zone Boundaries**. Trouvez votre
-répéteur et regardez ses voisins. Pour chacun, la carte indique combien de
+[cette vue MeshMapper](https://onqc.meshmapper.net/?preset=all&lat=45.21108&lon=-75.44812&zoom=9.61&m=dark&l=rep.nbr.nz.nzb.rb&cm=std). Elle affiche les limites des zones et les
+voisins des répéteurs sur une carte sombre, pour bien voir les limites.
+Cliquez sur votre répéteur pour voir ses voisins. Pour chacun, la carte indique combien de
 paquets ont été vus sur ce lien et quand il a été vu pour la dernière fois. Si
 plusieurs voisins sont hors de votre zone MeshMapper et que ces liens sont
 utilisés souvent et récemment, faites-en un répéteur de bordure. Un seul lien
