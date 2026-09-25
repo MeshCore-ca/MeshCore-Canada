@@ -137,10 +137,18 @@ summary {
 }
 
 .md-button,
-button:not(.md-search__icon),
+button:not(.md-search__icon):not(.md-code__button),
 select,
 input:not([type="checkbox"]):not([type="radio"]):not(.md-search__input) {
   min-height: var(--mc-target-size);
+}
+
+/* Code copy buttons sit inside the code block. The general 44px minimum made
+   them taller than one-line blocks, so they hung out below and were hard to
+   tap. A 28px square still meets the WCAG 2.2 24px target size. */
+.md-typeset .md-code__button {
+  width: 1.75rem;
+  height: 1.75rem;
 }
 
 .md-typeset .md-button {
