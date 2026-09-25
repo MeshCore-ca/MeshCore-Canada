@@ -3135,7 +3135,7 @@
         } }).addTo(map);
         selectedLayer = L.geoJSON(null, { interactive: false, style: function (feature) {
           var planning = feature.properties.regionSource === "meshcore-canada";
-          return { color: planning ? "#ffd166" : "#ffffff", opacity: 1, weight: 3, dashArray: planning ? "8 5" : null, fillColor: "#4287ff", fillOpacity: 0.24 };
+          return { color: "#ffffff", opacity: 1, weight: 4, dashArray: planning ? "8 5" : null, fillColor: "#4287ff", fillOpacity: 0.3 };
         } }).addTo(map);
         updateMapVisuals(false);
         // Paint tiles first; the much larger boundary overlay can arrive independently.
