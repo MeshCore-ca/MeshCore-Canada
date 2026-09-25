@@ -43,7 +43,7 @@ theme:
 
 extra_css:
   - assets/styles/tokens.css?v=20260722-2
-  - assets/styles/base.css?v=20260821-1
+  - assets/styles/base.css?v=20260924-1
   - assets/styles/shell.css?v=20260821-1
   - assets/styles/components.css?v=20260728-1
   - assets/styles/network-status.css?v=20260905-1

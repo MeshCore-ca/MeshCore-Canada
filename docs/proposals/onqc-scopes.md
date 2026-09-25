@@ -17,7 +17,9 @@ destructive: false
 search:
   exclude: true
 page_styles:
-  - assets/styles/scopes-proposal.css?v=20260924-1
+  - assets/styles/scopes-proposal.css?v=20260924-2
+page_scripts:
+  - assets/javascripts/scopes-picker.js?v=20260924-1
 ---
 
 # ON/QC region scopes proposal
@@ -274,26 +276,10 @@ button. Wait for `OK` before sending the next one.
 
 </div>
 
-<div class="mc-callout" data-kind="warning" markdown>
-**No `OK`? Send the same command again.** Over the mesh, a reply can take a few
-seconds or get lost. In the MeshCore app, tap and hold the command in the
-history and choose **Send Again**. Running a command twice is safe. If a
-repeated `region remove` answers `Err - not found`, the first one already
-worked.
-</div>
-
-<div class="scp-shots" markdown>
-
-<figure class="scp-shot" markdown>
-[![Command line where one command was sent twice before getting OK](../assets/images/onqc-scopes/repeater-04-cli-standard.webp){ loading=lazy width="600" height="1304" }](../assets/images/onqc-scopes/repeater-04-cli-standard.webp)
-<figcaption markdown="span"><span class="scp-shot__num">1</span> Make sure every command gets an <code>OK</code> back. Here, the first <code>set flood.advert.interval 47</code> never got one, so it was sent again.</figcaption>
-</figure>
-
-<figure class="scp-shot" markdown>
-[![Command history menu with Copy and Send Again](../assets/images/onqc-scopes/repeater-06-send-again.webp){ loading=lazy width="600" height="1304" }](../assets/images/onqc-scopes/repeater-06-send-again.webp)
-<figcaption markdown="span"><span class="scp-shot__num">2</span> No <code>OK</code>? Tap and hold the command and choose <strong>Send Again</strong>.</figcaption>
-</figure>
-
+<div class="mc-callout" markdown>
+**Tip:** every command should get a reply, usually `OK`. If nothing comes back
+after a few seconds, send it again: tap and hold the command and choose
+**Send Again**. Sending a command twice is safe.
 </div>
 
 ### Step 1: Check your firmware
@@ -305,16 +291,15 @@ ver
 This shows the firmware version. It decides which region commands you use in
 step 4:
 
-- **1.16 or newer:** use `region def`.
-- **1.15 or older:** `region def` answers `Err - ??`. Use the `region put`
-  commands under [Older firmware](#older-firmware) instead, or update the
-  firmware first.
+- **1.16 or newer:** uses `region def`.
+- **1.15 or older:** `region def` answers `Err - ??`. Pick your version in
+  step 4 to get the right commands, or update the firmware first.
 
 <div class="scp-shots" markdown>
 
 <figure class="scp-shot" markdown>
-[![Command line showing region def answering Err - ?? and ver showing v1.15.0](../assets/images/onqc-scopes/repeater-05-ver.webp){ loading=lazy width="600" height="1304" }](../assets/images/onqc-scopes/repeater-05-ver.webp)
-<figcaption markdown="span"><span class="scp-shot__num">1</span> On this repeater, <code>region def</code> answers <code>Err - ??</code>, and <code>ver</code> shows <strong>v1.15.0</strong>, so it uses the older-firmware steps.</figcaption>
+[![Command line with the ver command sent](../assets/images/onqc-scopes/repeater-05-ver.webp){ loading=lazy width="600" height="1304" }](../assets/images/onqc-scopes/repeater-05-ver.webp)
+<figcaption markdown="span"><span class="scp-shot__num">1</span> Type <code>ver</code> and tap send. The firmware version appears underneath, for example <code>v1.15.0</code>.</figcaption>
 </figure>
 
 </div>
@@ -395,185 +380,457 @@ These save by themselves. No `region save` is needed for them.
 ### Step 4: Region settings
 
 Your city code is your **MeshMapper zone**. Open [MeshMapper](https://meshmapper.net/),
-find the zone your repeater sits in, and use its code. It is a map everyone
-already uses, so there is nothing new to look up.
+find the zone your repeater sits in, and use its code. These zones follow the
+MeshMapper boundaries that already exist. They are not perfect, but they are
+how most people already see the map today, so there is nothing new to learn.
 
-On **firmware 1.16 or newer**, pick your area and run the four commands in
-order:
+Choose your area and your firmware version, then run the commands in order:
 
-=== "Ottawa and surrounding areas"
+<div class="scp-picker-group" data-scp-picker-group markdown>
 
-    ```text
-    region def yow|* on|* onqc|* can
-    ```
+<div class="scp-picker" data-scp-picker hidden>
+  <label class="scp-picker__field"><span>Area</span><select data-scp-area><option value="ottawa">Ottawa and surrounding areas</option><option value="gatineau">Gatineau</option><option value="montreal">Montréal and surrounding areas</option><option value="quebec">Québec City</option></select></label>
+  <label class="scp-picker__field"><span>Firmware (from step 1)</span><select data-scp-firmware><option value="116">1.16 or newer</option><option value="115">1.15</option><option value="110">1.10 to 1.14</option></select></label>
+</div>
 
-    ```text
-    region allowf *
-    ```
+<div class="scp-variant" data-scp-variant data-area="ottawa" data-firmware="116" markdown>
 
-    ```text
-    region default yow
-    ```
+<p class="scp-variant__label">Ottawa and surrounding areas · Firmware 1.16 or newer</p>
 
-    ```text
-    region save
-    ```
+```text
+region def yow|* on|* onqc|* can
+```
 
-=== "Gatineau"
+```text
+region allowf *
+```
 
-    ```text
-    region def yow|* qc|* onqc|* can
-    ```
+```text
+region default yow
+```
 
-    ```text
-    region allowf *
-    ```
+```text
+region save
+```
 
-    ```text
-    region default yow
-    ```
+</div>
 
-    ```text
-    region save
-    ```
+<div class="scp-variant" data-scp-variant data-area="ottawa" data-firmware="115" markdown>
 
-=== "Montréal and surrounding areas"
+<p class="scp-variant__label">Ottawa and surrounding areas · Firmware 1.15</p>
 
-    ```text
-    region def yul|* qc|* onqc|* can
-    ```
+```text
+region put yow
+```
 
-    ```text
-    region allowf *
-    ```
+```text
+region put on
+```
 
-    ```text
-    region default yul
-    ```
+```text
+region put onqc
+```
 
-    ```text
-    region save
-    ```
+```text
+region put can
+```
 
-=== "Québec City"
+```text
+region allowf *
+```
 
-    ```text
-    region def yqb|* qc|* onqc|* can
-    ```
+```text
+region default yow
+```
 
-    ```text
-    region allowf *
-    ```
+```text
+region save
+```
 
-    ```text
-    region default yqb
-    ```
+Each `region put` answers `OK - (flood allowed)`, and `region default` answers `default scope is now …`.
 
-    ```text
-    region save
-    ```
+</div>
 
-These zones follow the MeshMapper boundaries that already exist. They are not
-perfect, but they are how most people already see the map today, so there is
-nothing new to learn.
+<div class="scp-variant" data-scp-variant data-area="ottawa" data-firmware="110" markdown>
+
+<p class="scp-variant__label">Ottawa and surrounding areas · Firmware 1.10 to 1.14</p>
+
+```text
+region put yow
+```
+
+```text
+region allowf yow
+```
+
+```text
+region put on
+```
+
+```text
+region allowf on
+```
+
+```text
+region put onqc
+```
+
+```text
+region allowf onqc
+```
+
+```text
+region put can
+```
+
+```text
+region allowf can
+```
+
+```text
+region allowf *
+```
+
+```text
+region save
+```
+
+On these versions a new region starts with forwarding **off**, so each one also needs `region allowf`. There is no `region default`, so this repeater's own adverts stay unscoped. Updating the firmware is worth it.
+
+</div>
+
+<div class="scp-variant" data-scp-variant data-area="gatineau" data-firmware="116" markdown>
+
+<p class="scp-variant__label">Gatineau · Firmware 1.16 or newer</p>
+
+```text
+region def yow|* qc|* onqc|* can
+```
+
+```text
+region allowf *
+```
+
+```text
+region default yow
+```
+
+```text
+region save
+```
+
+</div>
+
+<div class="scp-variant" data-scp-variant data-area="gatineau" data-firmware="115" markdown>
+
+<p class="scp-variant__label">Gatineau · Firmware 1.15</p>
+
+```text
+region put yow
+```
+
+```text
+region put qc
+```
+
+```text
+region put onqc
+```
+
+```text
+region put can
+```
+
+```text
+region allowf *
+```
+
+```text
+region default yow
+```
+
+```text
+region save
+```
+
+Each `region put` answers `OK - (flood allowed)`, and `region default` answers `default scope is now …`.
+
+</div>
+
+<div class="scp-variant" data-scp-variant data-area="gatineau" data-firmware="110" markdown>
+
+<p class="scp-variant__label">Gatineau · Firmware 1.10 to 1.14</p>
+
+```text
+region put yow
+```
+
+```text
+region allowf yow
+```
+
+```text
+region put qc
+```
+
+```text
+region allowf qc
+```
+
+```text
+region put onqc
+```
+
+```text
+region allowf onqc
+```
+
+```text
+region put can
+```
+
+```text
+region allowf can
+```
+
+```text
+region allowf *
+```
+
+```text
+region save
+```
+
+On these versions a new region starts with forwarding **off**, so each one also needs `region allowf`. There is no `region default`, so this repeater's own adverts stay unscoped. Updating the firmware is worth it.
+
+</div>
+
+<div class="scp-variant" data-scp-variant data-area="montreal" data-firmware="116" markdown>
+
+<p class="scp-variant__label">Montréal and surrounding areas · Firmware 1.16 or newer</p>
+
+```text
+region def yul|* qc|* onqc|* can
+```
+
+```text
+region allowf *
+```
+
+```text
+region default yul
+```
+
+```text
+region save
+```
+
+</div>
+
+<div class="scp-variant" data-scp-variant data-area="montreal" data-firmware="115" markdown>
+
+<p class="scp-variant__label">Montréal and surrounding areas · Firmware 1.15</p>
+
+```text
+region put yul
+```
+
+```text
+region put qc
+```
+
+```text
+region put onqc
+```
+
+```text
+region put can
+```
+
+```text
+region allowf *
+```
+
+```text
+region default yul
+```
+
+```text
+region save
+```
+
+Each `region put` answers `OK - (flood allowed)`, and `region default` answers `default scope is now …`.
+
+</div>
+
+<div class="scp-variant" data-scp-variant data-area="montreal" data-firmware="110" markdown>
+
+<p class="scp-variant__label">Montréal and surrounding areas · Firmware 1.10 to 1.14</p>
+
+```text
+region put yul
+```
+
+```text
+region allowf yul
+```
+
+```text
+region put qc
+```
+
+```text
+region allowf qc
+```
+
+```text
+region put onqc
+```
+
+```text
+region allowf onqc
+```
+
+```text
+region put can
+```
+
+```text
+region allowf can
+```
+
+```text
+region allowf *
+```
+
+```text
+region save
+```
+
+On these versions a new region starts with forwarding **off**, so each one also needs `region allowf`. There is no `region default`, so this repeater's own adverts stay unscoped. Updating the firmware is worth it.
+
+</div>
+
+<div class="scp-variant" data-scp-variant data-area="quebec" data-firmware="116" markdown>
+
+<p class="scp-variant__label">Québec City · Firmware 1.16 or newer</p>
+
+```text
+region def yqb|* qc|* onqc|* can
+```
+
+```text
+region allowf *
+```
+
+```text
+region default yqb
+```
+
+```text
+region save
+```
+
+</div>
+
+<div class="scp-variant" data-scp-variant data-area="quebec" data-firmware="115" markdown>
+
+<p class="scp-variant__label">Québec City · Firmware 1.15</p>
+
+```text
+region put yqb
+```
+
+```text
+region put qc
+```
+
+```text
+region put onqc
+```
+
+```text
+region put can
+```
+
+```text
+region allowf *
+```
+
+```text
+region default yqb
+```
+
+```text
+region save
+```
+
+Each `region put` answers `OK - (flood allowed)`, and `region default` answers `default scope is now …`.
+
+</div>
+
+<div class="scp-variant" data-scp-variant data-area="quebec" data-firmware="110" markdown>
+
+<p class="scp-variant__label">Québec City · Firmware 1.10 to 1.14</p>
+
+```text
+region put yqb
+```
+
+```text
+region allowf yqb
+```
+
+```text
+region put qc
+```
+
+```text
+region allowf qc
+```
+
+```text
+region put onqc
+```
+
+```text
+region allowf onqc
+```
+
+```text
+region put can
+```
+
+```text
+region allowf can
+```
+
+```text
+region allowf *
+```
+
+```text
+region save
+```
+
+On these versions a new region starts with forwarding **off**, so each one also needs `region allowf`. There is no `region default`, so this repeater's own adverts stay unscoped. Updating the firmware is worth it.
+
+</div>
+
+</div>
 
 <dl class="scp-explain">
-  <dt>region def …</dt><dd>Carry your city, your province, <code>onqc</code> and <code>can</code>.</dd>
+  <dt>region def / region put</dt><dd>Carry your city, your province, <code>onqc</code> and <code>can</code>.</dd>
   <dt>region allowf *</dt><dd>Also forward messages with <strong>no scope</strong>. This is already on by default. We set it anyway so you can see it.</dd>
-  <dt>region default &lt;city&gt;</dt><dd>This repeater's own adverts use your city's scope, so they stay local.</dd>
+  <dt>region default &lt;city&gt;</dt><dd>This repeater's own adverts use your city's scope, so they stay local. Not available before 1.15.</dd>
   <dt>region save</dt><dd>Keeps the region settings after a reboot.</dd>
 </dl>
-
-#### Older firmware
-
-If `region def` answers `Err - ??`, your firmware is older than 1.16. Add each
-code with `region put` instead. These examples are for Ottawa. For another
-area, replace `yow` with your city code, and `on` with `qc` in Québec.
-
-=== "Firmware 1.15"
-
-    ```text
-    region put yow
-    ```
-
-    ```text
-    region put on
-    ```
-
-    ```text
-    region put onqc
-    ```
-
-    ```text
-    region put can
-    ```
-
-    ```text
-    region allowf *
-    ```
-
-    ```text
-    region default yow
-    ```
-
-    ```text
-    region save
-    ```
-
-=== "Firmware 1.10 to 1.14"
-
-    ```text
-    region put yow
-    ```
-
-    ```text
-    region allowf yow
-    ```
-
-    ```text
-    region put on
-    ```
-
-    ```text
-    region allowf on
-    ```
-
-    ```text
-    region put onqc
-    ```
-
-    ```text
-    region allowf onqc
-    ```
-
-    ```text
-    region put can
-    ```
-
-    ```text
-    region allowf can
-    ```
-
-    ```text
-    region allowf *
-    ```
-
-    ```text
-    region save
-    ```
-
-On **1.15**, each `region put` answers `OK - (flood allowed)`, and
-`region default yow` answers `default scope is now yow`. A new region forwards
-straight away. On **1.10 to 1.14**, a new
-region starts with forwarding **off**, so each one also needs
-`region allowf`. Those versions also have no `region default`, so the
-repeater's own adverts stay unscoped. Updating the firmware is worth it.
 
 <div class="scp-shots" markdown>
 
 <figure class="scp-shot" markdown>
 [![Command line showing region put commands on firmware 1.15](../assets/images/onqc-scopes/repeater-07-region-put-115.webp){ loading=lazy width="600" height="1304" }](../assets/images/onqc-scopes/repeater-07-region-put-115.webp)
-<figcaption markdown="span"><span class="scp-shot__num">1</span> Firmware 1.15: each <code>region put</code> answers <code>OK - (flood allowed)</code>. <code>region put on</code> needed a second send.</figcaption>
+<figcaption markdown="span"><span class="scp-shot__num">1</span> Firmware 1.15: each <code>region put</code> answers <code>OK - (flood allowed)</code>.</figcaption>
 </figure>
 
 </div>
