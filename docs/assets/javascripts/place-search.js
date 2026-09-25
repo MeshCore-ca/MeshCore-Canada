@@ -74,4 +74,3 @@
 
   globalThis.MeshCorePlaceSearch = { normalize: normalize, provinceCode: provinceCode, splitPlaceQuery: splitPlaceQuery, placeCandidates: placeCandidates, distanceKm: distanceKm };
 })();
-

@@ -113,7 +113,7 @@ for (const locale of ["", "fr/"]) {
     const detail = page.locator('[data-role="map-text-result"]');
     await expect(detail).toContainText("yow");
     await expect(detail.locator('a[href="https://yow.meshmapper.net/"]')).toBeVisible();
-    const configure = detail.locator('a[href*="province=qc"]');
+    const configure = detail.locator('.mcc-detail-actions a[href*="province=qc"]');
     await expect(configure).toHaveCount(1);
     await configure.click();
     await expect(page.locator("#mcc-home-province")).toHaveValue("qc");
