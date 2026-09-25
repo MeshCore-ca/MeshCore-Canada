@@ -17,9 +17,9 @@ destructive: false
 search:
   exclude: true
 page_styles:
-  - assets/styles/scopes-proposal.css?v=20260924-3
+  - assets/styles/scopes-proposal.css?v=20260924-4
 page_scripts:
-  - assets/javascripts/scopes-picker.js?v=20260924-2
+  - assets/javascripts/scopes-picker.js?v=20260924-3
 ---
 
 # Proposition de portées de région ON/QC
@@ -300,19 +300,11 @@ la commande et choisissez **Send Again**. Envoyer une commande deux fois ne
 cause pas de problème.
 </div>
 
-### Étape 1 : Vérifier le micrologiciel
+### Étape 1 : Vérifier le micrologiciel et décrire votre répéteur
 
-```text
-ver
-```
-
-Cette commande affiche la version du micrologiciel. Elle détermine les
-commandes de région à utiliser à l’étape 4 :
-
-- **1.16 ou plus récent :** utilisez `region def`.
-- **1.15 ou plus ancien :** `region def` répond `Err - ??`. Choisissez votre
-  version à l’étape 4 pour obtenir les bonnes commandes, ou mettez d’abord le
-  micrologiciel à jour.
+<div class="scp-card">
+<ol class="scp-cmds"><li class="scp-cmd"><code>ver</code><button type="button" class="scp-copy" title="Copier" aria-label="Copier: ver"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li></ol>
+</div>
 
 <div class="scp-shots" markdown>
 
@@ -323,53 +315,39 @@ commandes de région à utiliser à l’étape 4 :
 
 </div>
 
+Décrivez ensuite votre répéteur. Les étapes 3 et 4 affichent les bonnes
+commandes pour lui. Votre secteur est votre **zone MeshMapper** : ouvrez
+[MeshMapper](https://meshmapper.net/) et trouvez la zone où se trouve votre
+répéteur. Ces zones suivent les limites MeshMapper qui existent déjà. Elles ne
+sont pas parfaites, mais c’est ainsi que la plupart des gens voient déjà la
+carte aujourd’hui; il n’y a donc rien de nouveau à apprendre.
+
+<div class="scp-picker" data-scp-picker data-copy-label="Copier" data-copied-label="Copié" hidden>
+  <label class="scp-picker__field"><span>Secteur</span><select data-scp-area><option value="ottawa" data-city="yow" data-province="on">Ottawa et environs</option><option value="gatineau" data-city="yow" data-province="qc">Gatineau</option><option value="montreal" data-city="yul" data-province="qc">Montréal et environs</option><option value="quebec" data-city="yqb" data-province="qc">Ville de Québec</option></select></label>
+  <label class="scp-picker__field"><span>Micrologiciel</span><select data-scp-firmware><option value="116">1.16 ou plus récent</option><option value="115">1.15</option><option value="114">1.14</option><option value="110">1.10 à 1.13</option></select></label>
+  <label class="scp-picker__field"><span>Type de répéteur</span><select data-scp-type><option value="city">Répéteur de ville</option><option value="edge">Répéteur de bordure</option></select><small class="scp-picker__hint">Choisissez bordure s’il entend souvent une autre ville.</small></label>
+  <label class="scp-picker__field" data-scp-extra-field hidden><span>Ville voisine (facultatif)</span><select data-scp-extra><option value="">Aucune</option><option value="yow">Ottawa / Gatineau (yow)</option><option value="yul">Montréal (yul)</option><option value="yqb">Ville de Québec (yqb)</option></select></label>
+</div>
+
 ### Étape 2 : Effacer les anciennes régions
 
 Beaucoup de répéteurs ont déjà des régions de l’ancienne configuration, comme
 `can`, `on-alg` ou `ott`. Les nouvelles commandes ne suppriment jamais rien,
-alors effacez-les d’abord.
+alors effacez-les d’abord. Affichez ce qui s’y trouve avec `region`, puis
+retirez chaque nom sauf `*`, un à la fois, en commençant par la ligne la plus
+en retrait. Par exemple, l’ancienne configuration d’Ottawa :
 
-1. Affichez ce qui s’y trouve :
+<div class="scp-card">
+<p class="scp-variant__label">Exemple : l’ancienne configuration d’Ottawa</p>
+<ol class="scp-cmds"><li class="scp-cmd"><code>region</code><button type="button" class="scp-copy" title="Copier" aria-label="Copier: region"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li><li class="scp-cmd"><code>region remove ott</code><button type="button" class="scp-copy" title="Copier" aria-label="Copier: region remove ott"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li><li class="scp-cmd"><code>region remove on-alg</code><button type="button" class="scp-copy" title="Copier" aria-label="Copier: region remove on-alg"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li><li class="scp-cmd"><code>region remove on</code><button type="button" class="scp-copy" title="Copier" aria-label="Copier: region remove on"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li><li class="scp-cmd"><code>region remove can</code><button type="button" class="scp-copy" title="Copier" aria-label="Copier: region remove can"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li><li class="scp-cmd"><code>region save</code><button type="button" class="scp-copy" title="Copier" aria-label="Copier: region save"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li><li class="scp-cmd"><code>region</code><button type="button" class="scp-copy" title="Copier" aria-label="Copier: region"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li></ol>
+</div>
 
-    ```text
-    region
-    ```
-
-2. Retirez chaque nom sauf `*`, un à la fois, avec `region remove <nom>`.
-   Commencez par la ligne la plus en retrait et remontez. Si vous voyez
-   `Err - not empty`, un autre nom est encore en retrait sous celui-ci;
-   retirez-le d’abord.
-3. Enregistrez :
-
-    ```text
-    region save
-    ```
-
-Par exemple, un répéteur configuré avec l’ancien chemin d’Ottawa lance ces
-commandes, dans l’ordre :
-
-```text
-region remove ott
-```
-
-```text
-region remove on-alg
-```
-
-```text
-region remove on
-```
-
-```text
-region remove can
-```
-
-```text
-region save
-```
-
-Retirer `on` et `can` ne pose pas de problème. L’étape 4 les remet. Lancez
-`region` de nouveau : vous ne devriez voir que `*^ F`.
+- `Err - not empty` veut dire qu’un autre nom est encore en retrait sous
+  celui-ci. Retirez-le d’abord.
+- Retirer un nom deux fois répond simplement `Err - not found`. Ce n’est pas
+  grave.
+- Retirer `on` et `can` ne pose pas de problème non plus. L’étape 4 les remet.
+- Le dernier `region` devrait afficher seulement `*^ F`.
 
 <div class="scp-shots" markdown>
 
@@ -382,21 +360,12 @@ Retirer `on` et `can` ne pose pas de problème. L’étape 4 les remet. Lancez
 
 ### Étape 3 : Réglages standard de MeshCore Canada
 
-```text
-set path.hash.mode 2
-```
-
-```text
-set advert.interval 240
-```
-
-```text
-set flood.advert.interval 47
-```
-
-```text
-set flood.max 16
-```
+<div class="scp-card">
+<p class="scp-variant__label" data-scp-summary>Ottawa et environs · 1.16 ou plus récent · Répéteur de ville</p>
+<ol class="scp-cmds" data-scp-output="standard"><li class="scp-cmd"><code>set path.hash.mode 2</code><button type="button" class="scp-copy" title="Copier" aria-label="Copier: set path.hash.mode 2"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li><li class="scp-cmd"><code>set advert.interval 240</code><button type="button" class="scp-copy" title="Copier" aria-label="Copier: set advert.interval 240"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li><li class="scp-cmd"><code>set flood.advert.interval 47</code><button type="button" class="scp-copy" title="Copier" aria-label="Copier: set flood.advert.interval 47"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li><li class="scp-cmd"><code>set flood.max 16</code><button type="button" class="scp-copy" title="Copier" aria-label="Copier: set flood.max 16"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li></ol>
+<p class="scp-note scp-note--info" data-scp-note="no-hash" hidden><code>set path.hash.mode 2</code> est omis : il exige le micrologiciel 1.14 ou plus récent.</p>
+<p class="scp-note" data-scp-nojs>Ces commandes sont pour un répéteur de ville du secteur d’Ottawa avec le micrologiciel 1.16 ou plus récent. Activez JavaScript pour les adapter à votre répéteur.</p>
+</div>
 
 <dl class="scp-explain">
   <dt>path.hash.mode 2</dt><dd>Utilise des identifiants de répéteur de 3 octets dans les chemins, pour que moins de répéteurs partagent un identifiant. Exige le micrologiciel 1.14 ou plus récent.</dd>
@@ -405,7 +374,8 @@ set flood.max 16
   <dt>flood.max 16</dt><dd>Aucune diffusion ne fait plus de 16 sauts, avec ou sans portée.</dd>
 </dl>
 
-Ces réglages s’enregistrent d’eux-mêmes. Pas besoin de `region save`.
+Ces réglages s’enregistrent d’eux-mêmes. Pas besoin de `region save`. Si une
+commande répond `Err - ??`, votre micrologiciel n’a pas ce réglage; passez-la.
 
 <div class="scp-shots" markdown>
 
@@ -418,112 +388,17 @@ Ces réglages s’enregistrent d’eux-mêmes. Pas besoin de `region save`.
 
 ### Étape 4 : Réglages de région
 
-Votre code de ville est votre **zone MeshMapper**. Ouvrez
-[MeshMapper](https://meshmapper.net/), trouvez la zone où se trouve votre
-répéteur et utilisez son code. Ces zones suivent les limites MeshMapper qui
-existent déjà. Elles ne sont pas parfaites, mais c’est ainsi que la plupart des
-gens voient déjà la carte aujourd’hui; il n’y a donc rien de nouveau à
-apprendre.
+Ces commandes suivent vos réponses de l’étape 1. Lancez-les dans l’ordre.
 
-Répondez aux questions ci-dessous, puis lancez les commandes dans l’ordre.
-
-<div class="scp-picker-group" data-scp-picker-group data-copy-label="Copier" data-copied-label="Copié" markdown>
-
-<div class="scp-picker" data-scp-picker hidden>
-  <label class="scp-picker__field"><span>Secteur</span><select data-scp-area><option value="ottawa" data-city="yow" data-province="on">Ottawa et environs</option><option value="gatineau" data-city="yow" data-province="qc">Gatineau</option><option value="montreal" data-city="yul" data-province="qc">Montréal et environs</option><option value="quebec" data-city="yqb" data-province="qc">Ville de Québec</option></select></label>
-  <label class="scp-picker__field"><span>Micrologiciel (voir l’étape 1)</span><select data-scp-firmware><option value="116">1.16 ou plus récent</option><option value="115">1.15</option><option value="110">1.10 à 1.14</option></select></label>
-  <label class="scp-picker__field"><span>Type de répéteur</span><select data-scp-type><option value="city">Répéteur de ville</option><option value="edge">Répéteur de bordure</option></select><small class="scp-picker__hint">Choisissez bordure s’il entend souvent une autre ville.</small></label>
-  <label class="scp-picker__field" data-scp-extra-field hidden><span>Ville voisine (facultatif)</span><select data-scp-extra><option value="">Aucune</option><option value="yow">Ottawa / Gatineau (yow)</option><option value="yul">Montréal (yul)</option><option value="yqb">Ville de Québec (yqb)</option></select></label>
-</div>
-
-<div class="scp-picker__body">
-  <p class="scp-variant__label" data-scp-summary hidden></p>
-  <ol class="scp-cmds" data-scp-output hidden></ol>
-  <p class="scp-note" data-scp-note="fw-116" hidden><code>region def</code> répond avec la liste terminée, donc vous voyez tout de suite que ça a fonctionné.</p>
-  <p class="scp-note" data-scp-note="fw-115" hidden>Chaque <code>region put</code> répond <code>OK - (flood allowed)</code>, et <code>region default</code> répond <code>default scope is now …</code>.</p>
-  <p class="scp-note" data-scp-note="fw-110" hidden>Avec ces versions, une nouvelle région commence avec la diffusion <strong>désactivée</strong>, donc chacune a aussi besoin de <code>region allowf</code>. Il n’y a pas de <code>region default</code>, donc les annonces du répéteur restent sans portée. Une mise à jour du micrologiciel vaut la peine.</p>
-  <p class="scp-note" data-scp-note="edge" hidden><strong>Répéteur de bordure :</strong> rejette les messages sans portée, pour qu’ils n’inondent pas la ville voisine. Utilisez-le pour tout répéteur qui entend souvent une autre ville, par exemple près d’une limite de zone, sur un site élevé ou avec des voisins d’une autre ville. Sinon, les messages sans portée passent par lui. Les gens tout près sans portée ne sont pas relayés par lui; évitez-le là où c’est le seul répéteur. Voir <a href="#qui-recoit-quoi">Qui reçoit quoi</a>.</p>
-  <p class="scp-note" data-scp-note="extra" hidden><strong>Ville voisine :</strong> cela aide seulement les gens près de ce répéteur à participer aux canaux de cette ville. Tous les autres joignent l’autre ville par <code>onqc</code>. Rigaud, par exemple, porte <code>yul</code> en plus de <code>yow</code>.</p>
-</div>
-
-<div class="scp-fallback" data-scp-fallback markdown>
-
-<p class="scp-note">Voici les commandes pour un répéteur de ville avec le micrologiciel 1.16 ou plus récent. Activez JavaScript pour choisir une autre version ou un répéteur de bordure.</p>
-
-<p class="scp-variant__label">Ottawa et environs</p>
-
-```text
-region def yow|* on|* onqc|* can
-```
-
-```text
-region allowf *
-```
-
-```text
-region default yow
-```
-
-```text
-region save
-```
-
-<p class="scp-variant__label">Gatineau</p>
-
-```text
-region def yow|* qc|* onqc|* can
-```
-
-```text
-region allowf *
-```
-
-```text
-region default yow
-```
-
-```text
-region save
-```
-
-<p class="scp-variant__label">Montréal et environs</p>
-
-```text
-region def yul|* qc|* onqc|* can
-```
-
-```text
-region allowf *
-```
-
-```text
-region default yul
-```
-
-```text
-region save
-```
-
-<p class="scp-variant__label">Ville de Québec</p>
-
-```text
-region def yqb|* qc|* onqc|* can
-```
-
-```text
-region allowf *
-```
-
-```text
-region default yqb
-```
-
-```text
-region save
-```
-
-</div>
-
+<div class="scp-card">
+<p class="scp-variant__label" data-scp-summary>Ottawa et environs · 1.16 ou plus récent · Répéteur de ville</p>
+<ol class="scp-cmds" data-scp-output="region"><li class="scp-cmd"><code>region def yow|* on|* onqc|* can</code><button type="button" class="scp-copy" title="Copier" aria-label="Copier: region def yow|* on|* onqc|* can"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li><li class="scp-cmd"><code>region allowf *</code><button type="button" class="scp-copy" title="Copier" aria-label="Copier: region allowf *"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li><li class="scp-cmd"><code>region default yow</code><button type="button" class="scp-copy" title="Copier" aria-label="Copier: region default yow"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li><li class="scp-cmd"><code>region save</code><button type="button" class="scp-copy" title="Copier" aria-label="Copier: region save"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li></ol>
+<p class="scp-note scp-note--info" data-scp-note="fw-116" hidden><code>region def</code> répond avec la liste terminée, donc vous voyez tout de suite que ça a fonctionné.</p>
+<p class="scp-note scp-note--info" data-scp-note="fw-115" hidden>Chaque <code>region put</code> répond <code>OK - (flood allowed)</code>, et <code>region default</code> répond <code>default scope is now …</code>.</p>
+<p class="scp-note scp-note--info" data-scp-note="fw-put-allow" hidden>Avec ce micrologiciel, une nouvelle région commence avec la diffusion <strong>désactivée</strong>, donc chacune a aussi besoin de <code>region allowf</code>. Il n’y a pas de <code>region default</code>, donc les annonces du répéteur restent sans portée. Une mise à jour du micrologiciel vaut la peine.</p>
+<p class="scp-note" data-scp-note="edge" hidden><strong>Répéteur de bordure :</strong> rejette les messages sans portée, pour qu’ils n’inondent pas la ville voisine. Utilisez-le pour tout répéteur qui entend souvent une autre ville, par exemple près d’une limite de zone, sur un site élevé ou avec des voisins d’une autre ville. Sinon, les messages sans portée passent par lui. Les gens tout près sans portée ne sont pas relayés par lui; évitez-le là où c’est le seul répéteur. Voir <a href="#qui-recoit-quoi">Qui reçoit quoi</a>.</p>
+<p class="scp-note" data-scp-note="extra" hidden><strong>Ville voisine :</strong> cela aide seulement les gens près de ce répéteur à participer aux canaux de cette ville. Tous les autres joignent l’autre ville par <code>onqc</code>. Rigaud, par exemple, porte <code>yul</code> en plus de <code>yow</code>.</p>
+<p class="scp-note" data-scp-nojs>Ces commandes sont pour un répéteur de ville du secteur d’Ottawa avec le micrologiciel 1.16 ou plus récent. Activez JavaScript pour les adapter à votre répéteur.</p>
 </div>
 
 <dl class="scp-explain">
@@ -549,9 +424,9 @@ region save
 
 ### Étape 5 : Vérifier le résultat
 
-```text
-region
-```
+<div class="scp-card">
+<ol class="scp-cmds"><li class="scp-cmd"><code>region</code><button type="button" class="scp-copy" title="Copier" aria-label="Copier: region"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li></ol>
+</div>
 
 Pour Ottawa, vous devriez voir :
 

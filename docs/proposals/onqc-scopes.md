@@ -17,9 +17,9 @@ destructive: false
 search:
   exclude: true
 page_styles:
-  - assets/styles/scopes-proposal.css?v=20260924-3
+  - assets/styles/scopes-proposal.css?v=20260924-4
 page_scripts:
-  - assets/javascripts/scopes-picker.js?v=20260924-2
+  - assets/javascripts/scopes-picker.js?v=20260924-3
 ---
 
 # ON/QC region scopes proposal
@@ -282,18 +282,11 @@ after a few seconds, send it again: tap and hold the command and choose
 **Send Again**. Sending a command twice is safe.
 </div>
 
-### Step 1: Check your firmware
+### Step 1: Check your firmware and describe your repeater
 
-```text
-ver
-```
-
-This shows the firmware version. It decides which region commands you use in
-step 4:
-
-- **1.16 or newer:** uses `region def`.
-- **1.15 or older:** `region def` answers `Err - ??`. Pick your version in
-  step 4 to get the right commands, or update the firmware first.
+<div class="scp-card">
+<ol class="scp-cmds"><li class="scp-cmd"><code>ver</code><button type="button" class="scp-copy" title="Copy" aria-label="Copy: ver"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li></ol>
+</div>
 
 <div class="scp-shots" markdown>
 
@@ -304,51 +297,36 @@ step 4:
 
 </div>
 
+Then tell us about your repeater. Steps 3 and 4 show the right commands for
+it. Your area is your **MeshMapper zone**: open [MeshMapper](https://meshmapper.net/)
+and find the zone your repeater sits in. These zones follow the MeshMapper
+boundaries that already exist. They are not perfect, but they are how most
+people already see the map today, so there is nothing new to learn.
+
+<div class="scp-picker" data-scp-picker data-copy-label="Copy" data-copied-label="Copied" hidden>
+  <label class="scp-picker__field"><span>Area</span><select data-scp-area><option value="ottawa" data-city="yow" data-province="on">Ottawa and surrounding areas</option><option value="gatineau" data-city="yow" data-province="qc">Gatineau</option><option value="montreal" data-city="yul" data-province="qc">Montréal and surrounding areas</option><option value="quebec" data-city="yqb" data-province="qc">Québec City</option></select></label>
+  <label class="scp-picker__field"><span>Firmware</span><select data-scp-firmware><option value="116">1.16 or newer</option><option value="115">1.15</option><option value="114">1.14</option><option value="110">1.10 to 1.13</option></select></label>
+  <label class="scp-picker__field"><span>Repeater type</span><select data-scp-type><option value="city">City repeater</option><option value="edge">Edge repeater</option></select><small class="scp-picker__hint">Pick edge if it regularly hears another city.</small></label>
+  <label class="scp-picker__field" data-scp-extra-field hidden><span>Neighbouring city (optional)</span><select data-scp-extra><option value="">None</option><option value="yow">Ottawa / Gatineau (yow)</option><option value="yul">Montréal (yul)</option><option value="yqb">Québec City (yqb)</option></select></label>
+</div>
+
 ### Step 2: Clear any old regions
 
 Many repeaters already have regions from the older setup, such as `can`,
 `on-alg` or `ott`. The new commands never delete anything, so clear them first.
+List what is there with `region`, then remove every name except `*`, one at a
+time, starting with the most indented line. For example, the old Ottawa layout:
 
-1. List what is there:
+<div class="scp-card">
+<p class="scp-variant__label">Example: the old Ottawa layout</p>
+<ol class="scp-cmds"><li class="scp-cmd"><code>region</code><button type="button" class="scp-copy" title="Copy" aria-label="Copy: region"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li><li class="scp-cmd"><code>region remove ott</code><button type="button" class="scp-copy" title="Copy" aria-label="Copy: region remove ott"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li><li class="scp-cmd"><code>region remove on-alg</code><button type="button" class="scp-copy" title="Copy" aria-label="Copy: region remove on-alg"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li><li class="scp-cmd"><code>region remove on</code><button type="button" class="scp-copy" title="Copy" aria-label="Copy: region remove on"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li><li class="scp-cmd"><code>region remove can</code><button type="button" class="scp-copy" title="Copy" aria-label="Copy: region remove can"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li><li class="scp-cmd"><code>region save</code><button type="button" class="scp-copy" title="Copy" aria-label="Copy: region save"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li><li class="scp-cmd"><code>region</code><button type="button" class="scp-copy" title="Copy" aria-label="Copy: region"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li></ol>
+</div>
 
-    ```text
-    region
-    ```
-
-2. Remove every name except `*`, one at a time, with `region remove <name>`.
-   Start with the most indented line and work up. If you see
-   `Err - not empty`, another name is still indented under it, so remove that
-   one first.
-3. Save:
-
-    ```text
-    region save
-    ```
-
-For example, a repeater set up with the old Ottawa path runs these, in order:
-
-```text
-region remove ott
-```
-
-```text
-region remove on-alg
-```
-
-```text
-region remove on
-```
-
-```text
-region remove can
-```
-
-```text
-region save
-```
-
-Removing `on` and `can` is fine. Step 4 adds them back. Run `region` again,
-and you should only see `*^ F`.
+- `Err - not empty` means another name is still indented under it. Remove that
+  one first.
+- Removing a name twice just answers `Err - not found`. That is fine.
+- Removing `on` and `can` is fine too. Step 4 adds them back.
+- The last `region` should show only `*^ F`.
 
 <div class="scp-shots" markdown>
 
@@ -361,21 +339,12 @@ and you should only see `*^ F`.
 
 ### Step 3: Standard MeshCore Canada settings
 
-```text
-set path.hash.mode 2
-```
-
-```text
-set advert.interval 240
-```
-
-```text
-set flood.advert.interval 47
-```
-
-```text
-set flood.max 16
-```
+<div class="scp-card">
+<p class="scp-variant__label" data-scp-summary>Ottawa and surrounding areas · 1.16 or newer · City repeater</p>
+<ol class="scp-cmds" data-scp-output="standard"><li class="scp-cmd"><code>set path.hash.mode 2</code><button type="button" class="scp-copy" title="Copy" aria-label="Copy: set path.hash.mode 2"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li><li class="scp-cmd"><code>set advert.interval 240</code><button type="button" class="scp-copy" title="Copy" aria-label="Copy: set advert.interval 240"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li><li class="scp-cmd"><code>set flood.advert.interval 47</code><button type="button" class="scp-copy" title="Copy" aria-label="Copy: set flood.advert.interval 47"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li><li class="scp-cmd"><code>set flood.max 16</code><button type="button" class="scp-copy" title="Copy" aria-label="Copy: set flood.max 16"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li></ol>
+<p class="scp-note scp-note--info" data-scp-note="no-hash" hidden><code>set path.hash.mode 2</code> is left out: it needs firmware 1.14 or newer.</p>
+<p class="scp-note" data-scp-nojs>These commands are for an Ottawa-area city repeater on firmware 1.16 or newer. Turn on JavaScript to match them to your repeater.</p>
+</div>
 
 <dl class="scp-explain">
   <dt>path.hash.mode 2</dt><dd>Uses 3-byte repeater IDs in message paths, so fewer repeaters share an ID. Needs firmware 1.14 or newer.</dd>
@@ -384,7 +353,8 @@ set flood.max 16
   <dt>flood.max 16</dt><dd>No flood message travels more than 16 hops, scoped or not.</dd>
 </dl>
 
-These save by themselves. No `region save` is needed for them.
+These save by themselves. No `region save` is needed for them. If a command
+answers `Err - ??`, your firmware does not have that setting, so skip it.
 
 <div class="scp-shots" markdown>
 
@@ -397,110 +367,17 @@ These save by themselves. No `region save` is needed for them.
 
 ### Step 4: Region settings
 
-Your city code is your **MeshMapper zone**. Open [MeshMapper](https://meshmapper.net/),
-find the zone your repeater sits in, and use its code. These zones follow the
-MeshMapper boundaries that already exist. They are not perfect, but they are
-how most people already see the map today, so there is nothing new to learn.
+These follow your answers in step 1. Run them in order.
 
-Answer the questions below, then run the commands in order.
-
-<div class="scp-picker-group" data-scp-picker-group data-copy-label="Copy" data-copied-label="Copied" markdown>
-
-<div class="scp-picker" data-scp-picker hidden>
-  <label class="scp-picker__field"><span>Area</span><select data-scp-area><option value="ottawa" data-city="yow" data-province="on">Ottawa and surrounding areas</option><option value="gatineau" data-city="yow" data-province="qc">Gatineau</option><option value="montreal" data-city="yul" data-province="qc">Montréal and surrounding areas</option><option value="quebec" data-city="yqb" data-province="qc">Québec City</option></select></label>
-  <label class="scp-picker__field"><span>Firmware (from step 1)</span><select data-scp-firmware><option value="116">1.16 or newer</option><option value="115">1.15</option><option value="110">1.10 to 1.14</option></select></label>
-  <label class="scp-picker__field"><span>Repeater type</span><select data-scp-type><option value="city">City repeater</option><option value="edge">Edge repeater</option></select><small class="scp-picker__hint">Pick edge if it regularly hears another city.</small></label>
-  <label class="scp-picker__field" data-scp-extra-field hidden><span>Neighbouring city (optional)</span><select data-scp-extra><option value="">None</option><option value="yow">Ottawa / Gatineau (yow)</option><option value="yul">Montréal (yul)</option><option value="yqb">Québec City (yqb)</option></select></label>
-</div>
-
-<div class="scp-picker__body">
-  <p class="scp-variant__label" data-scp-summary hidden></p>
-  <ol class="scp-cmds" data-scp-output hidden></ol>
-  <p class="scp-note" data-scp-note="fw-116" hidden><code>region def</code> answers with the finished list, so you can see straight away that it worked.</p>
-  <p class="scp-note" data-scp-note="fw-115" hidden>Each <code>region put</code> answers <code>OK - (flood allowed)</code>, and <code>region default</code> answers <code>default scope is now …</code>.</p>
-  <p class="scp-note" data-scp-note="fw-110" hidden>On these versions a new region starts with forwarding <strong>off</strong>, so each one also needs <code>region allowf</code>. There is no <code>region default</code>, so this repeater's own adverts stay unscoped. Updating the firmware is worth it.</p>
-  <p class="scp-note" data-scp-note="edge" hidden><strong>Edge repeater:</strong> drops messages with no scope, so they do not flood the next city. Use it for any repeater that regularly hears another city, such as one near a zone boundary, on a high site, or with neighbours from another city. Otherwise, messages with no scope leak through it. Nearby people without a scope are not relayed by it, so avoid it where it is the only repeater. See <a href="#who-hears-what">Who hears what</a>.</p>
-  <p class="scp-note" data-scp-note="extra" hidden><strong>Neighbouring city:</strong> this only helps people near this repeater take part in that city's channels. Everyone else reaches the other city through <code>onqc</code>. Rigaud, for example, carries <code>yul</code> as well as <code>yow</code>.</p>
-</div>
-
-<div class="scp-fallback" data-scp-fallback markdown>
-
-<p class="scp-note">These are the commands for a city repeater on firmware 1.16 or newer. Turn on JavaScript to choose another firmware version or an edge repeater.</p>
-
-<p class="scp-variant__label">Ottawa and surrounding areas</p>
-
-```text
-region def yow|* on|* onqc|* can
-```
-
-```text
-region allowf *
-```
-
-```text
-region default yow
-```
-
-```text
-region save
-```
-
-<p class="scp-variant__label">Gatineau</p>
-
-```text
-region def yow|* qc|* onqc|* can
-```
-
-```text
-region allowf *
-```
-
-```text
-region default yow
-```
-
-```text
-region save
-```
-
-<p class="scp-variant__label">Montréal and surrounding areas</p>
-
-```text
-region def yul|* qc|* onqc|* can
-```
-
-```text
-region allowf *
-```
-
-```text
-region default yul
-```
-
-```text
-region save
-```
-
-<p class="scp-variant__label">Québec City</p>
-
-```text
-region def yqb|* qc|* onqc|* can
-```
-
-```text
-region allowf *
-```
-
-```text
-region default yqb
-```
-
-```text
-region save
-```
-
-</div>
-
+<div class="scp-card">
+<p class="scp-variant__label" data-scp-summary>Ottawa and surrounding areas · 1.16 or newer · City repeater</p>
+<ol class="scp-cmds" data-scp-output="region"><li class="scp-cmd"><code>region def yow|* on|* onqc|* can</code><button type="button" class="scp-copy" title="Copy" aria-label="Copy: region def yow|* on|* onqc|* can"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li><li class="scp-cmd"><code>region allowf *</code><button type="button" class="scp-copy" title="Copy" aria-label="Copy: region allowf *"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li><li class="scp-cmd"><code>region default yow</code><button type="button" class="scp-copy" title="Copy" aria-label="Copy: region default yow"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li><li class="scp-cmd"><code>region save</code><button type="button" class="scp-copy" title="Copy" aria-label="Copy: region save"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li></ol>
+<p class="scp-note scp-note--info" data-scp-note="fw-116" hidden><code>region def</code> answers with the finished list, so you can see straight away that it worked.</p>
+<p class="scp-note scp-note--info" data-scp-note="fw-115" hidden>Each <code>region put</code> answers <code>OK - (flood allowed)</code>, and <code>region default</code> answers <code>default scope is now …</code>.</p>
+<p class="scp-note scp-note--info" data-scp-note="fw-put-allow" hidden>On this firmware a new region starts with forwarding <strong>off</strong>, so each one also needs <code>region allowf</code>. There is no <code>region default</code>, so this repeater's own adverts stay unscoped. Updating the firmware is worth it.</p>
+<p class="scp-note" data-scp-note="edge" hidden><strong>Edge repeater:</strong> drops messages with no scope, so they do not flood the next city. Use it for any repeater that regularly hears another city, such as one near a zone boundary, on a high site, or with neighbours from another city. Otherwise, messages with no scope leak through it. Nearby people without a scope are not relayed by it, so avoid it where it is the only repeater. See <a href="#who-hears-what">Who hears what</a>.</p>
+<p class="scp-note" data-scp-note="extra" hidden><strong>Neighbouring city:</strong> this only helps people near this repeater take part in that city's channels. Everyone else reaches the other city through <code>onqc</code>. Rigaud, for example, carries <code>yul</code> as well as <code>yow</code>.</p>
+<p class="scp-note" data-scp-nojs>These commands are for an Ottawa-area city repeater on firmware 1.16 or newer. Turn on JavaScript to match them to your repeater.</p>
 </div>
 
 <dl class="scp-explain">
@@ -526,9 +403,9 @@ region save
 
 ### Step 5: Check the result
 
-```text
-region
-```
+<div class="scp-card">
+<ol class="scp-cmds"><li class="scp-cmd"><code>region</code><button type="button" class="scp-copy" title="Copy" aria-label="Copy: region"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li></ol>
+</div>
 
 For Ottawa, you should see:
 
