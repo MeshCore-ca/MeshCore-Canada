@@ -405,6 +405,15 @@ répéteur de ville. S’il commence à se relier régulièrement à une autre z
 passez-le en bordure.
 </div>
 
+**Pas certain? Vérifiez sur la carte.** Ouvrez
+[onqc.meshmapper.net](https://onqc.meshmapper.net/), ouvrez **Layers** et
+activez **Repeater Neighbours** et **Neighbour Zone Boundaries**. Trouvez votre
+répéteur et regardez ses voisins. Pour chacun, la carte indique combien de
+paquets ont été vus sur ce lien et quand il a été vu pour la dernière fois. Si
+plusieurs voisins sont hors de votre zone MeshMapper et que ces liens sont
+utilisés souvent et récemment, faites-en un répéteur de bordure. Un seul lien
+vu quelques fois, ou pas depuis des semaines, ne compte pas.
+
 
 ### Étape 2 : Effacer les anciennes régions
 
