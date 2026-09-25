@@ -255,6 +255,12 @@ MeshCore app, open the repeater, log in as admin and use the command box in
 **Repeater Admin**, or use the USB console. Each command has its own copy
 button. Wait for `OK` before sending the next one.
 
+<div class="mc-callout" data-kind="warning" markdown>
+**No `OK`? Send the same command again.** Over the mesh, a reply can take a few
+seconds or get lost. Running a command twice is safe. If a repeated
+`region remove` answers `Err - not found`, the first one already worked.
+</div>
+
 ### Step 1: Check your firmware
 
 ```text
