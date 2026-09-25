@@ -257,8 +257,10 @@ button. Wait for `OK` before sending the next one.
 
 <div class="mc-callout" data-kind="warning" markdown>
 **No `OK`? Send the same command again.** Over the mesh, a reply can take a few
-seconds or get lost. Running a command twice is safe. If a repeated
-`region remove` answers `Err - not found`, the first one already worked.
+seconds or get lost. In the MeshCore app, tap and hold the command in the
+history and choose **Send Again**. Running a command twice is safe. If a
+repeated `region remove` answers `Err - not found`, the first one already
+worked.
 </div>
 
 ### Step 1: Check your firmware
@@ -518,7 +520,9 @@ area, replace `yow` with your city code, and `on` with `qc` in Québec.
     region save
     ```
 
-On **1.15**, a new region forwards straight away. On **1.10 to 1.14**, a new
+On **1.15**, each `region put` answers `OK - (flood allowed)`, and
+`region default yow` answers `default scope is now yow`. A new region forwards
+straight away. On **1.10 to 1.14**, a new
 region starts with forwarding **off**, so each one also needs
 `region allowf`. Those versions also have no `region default`, so the
 repeater's own adverts stay unscoped. Updating the firmware is worth it.

@@ -274,8 +274,9 @@ Attendez `OK` avant d’envoyer la suivante.
 
 <div class="mc-callout" data-kind="warning" markdown>
 **Pas de `OK`? Renvoyez la même commande.** Par le réseau maillé, une réponse
-peut prendre quelques secondes ou se perdre. Lancer une commande deux fois ne
-cause pas de problème. Si un `region remove` répété répond `Err - not found`,
+peut prendre quelques secondes ou se perdre. Dans l’application MeshCore,
+touchez longuement la commande dans l’historique et choisissez **Send Again**.
+Lancer une commande deux fois ne cause pas de problème. Si un `region remove` répété répond `Err - not found`,
 le premier a déjà fonctionné.
 </div>
 
@@ -540,7 +541,9 @@ Pour un autre secteur, remplacez `yow` par votre code de ville, et `on` par
     region save
     ```
 
-Avec **1.15**, une nouvelle région relaie tout de suite. Avec **1.10 à 1.14**,
+Avec **1.15**, chaque `region put` répond `OK - (flood allowed)`, et
+`region default yow` répond `default scope is now yow`. Une nouvelle région
+relaie tout de suite. Avec **1.10 à 1.14**,
 une nouvelle région commence avec la diffusion **désactivée**, donc chacune a
 aussi besoin de `region allowf`. Ces versions n’ont pas non plus de
 `region default`, donc les annonces du répéteur restent sans portée. Une mise
