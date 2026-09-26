@@ -8,6 +8,7 @@ for (const locale of ["", "fr/"]) {
     await page.goto(siteRoute(`/${locale}proposals/onqc-scopes/`));
     await expect(page.locator('.scp-level-card')).toHaveCount(5);
     await expect(page.locator('.scp-level-card[data-level="future"] .scp-tag')).toHaveText(["can", "na"]);
+    await page.locator('[data-scp-area]').selectOption("yow:on");
     const codes = ["yow", "on", "onqc", "can", "na"];
     for (const version of ["110", "114", "115", "116"]) {
       await page.locator('[data-scp-firmware]').selectOption(version);

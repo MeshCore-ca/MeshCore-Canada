@@ -91,6 +91,7 @@ for (const locale of ["", "fr/"]) {
     const guidance = page.locator('.mc-callout').filter({ hasText: locale ? "Ville ou bordure?" : "City or edge?" });
     await expect(guidance).toContainText(locale ? "limite extérieure" : "outer edge");
     await expect(guidance).toContainText(locale ? "même code IATA" : "same IATA code");
+    await picker.locator('[data-scp-area]').selectOption("yow:on");
     const home=await picker.locator('[data-scp-area]').evaluate(select=>({home:select.selectedOptions[0].dataset.city,province:select.selectedOptions[0].dataset.province}));
     for(const [value,firmware] of [["116","1.16"],["115","1.15"],["114","1.14"],["110","1.10"]]) {
       await picker.locator('[data-scp-firmware]').selectOption(value);

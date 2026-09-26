@@ -17,10 +17,11 @@ destructive: false
 search:
   exclude: true
 page_styles:
-  - assets/styles/scopes-proposal.css?v=20260926-1
+  - assets/styles/scopes-proposal.css?v=20260926-2
 page_scripts:
   - assets/regions/modules/iata-scopes.js?v=20260926-1
-  - assets/javascripts/scopes-picker.js?v=20260926-2
+  - assets/javascripts/place-search.js?v=20260925-2
+  - assets/javascripts/scopes-picker.js?v=20260926-3
 ---
 
 # Proposition de portées de région ON/QC
@@ -48,6 +49,39 @@ Chaque phase est annoncée sur le
 [Discord de MeshCore Canada](https://discord.gg/BESFVMt7yk). Le reste de cette page explique comment
 tout fonctionne. Vous n’avez pas besoin de le comprendre pour suivre les
 étapes.
+
+## Trouver les réglages de votre répéteur { #your-region }
+
+Cherchez votre ville ou votre code IATA, ou choisissez une région ci-dessous.
+**Quinte / Belleville / Trenton (`ytr`)**, Kingston (`ygk`), Port Hope (`xph`)
+et les autres régions ON/QC de la [carte des régions](../config/map.md) y figurent.
+Les secteurs proposés sont indiqués; un contour sur la carte ne garantit pas
+la couverture radio.
+
+<div class="scp-picker" data-scp-picker data-copy-label="Copier" data-copied-label="Copié" hidden>
+  <form class="scp-finder" data-scp-search>
+    <label class="scp-picker__field" for="scp-place">Ville ou code IATA</label>
+    <div class="scp-finder__row"><input id="scp-place" data-scp-place type="search" maxlength="120" placeholder="Quinte, Belleville, YTR…" autocomplete="off" required><button class="scp-choice" type="submit">Trouver les réglages</button></div>
+    <small class="scp-picker__hint">La recherche de villes utilise le service de noms géographiques du Canada. Les codes IATA et la liste ci-dessous fonctionnent sans ce service.</small>
+    <p class="scp-finder__status" data-scp-status role="status" aria-live="polite"></p>
+    <div class="scp-finder__choices" data-scp-places></div>
+    <p class="scp-picker__hint"><a href="../../config/map/">Consulter la carte de toutes les régions canadiennes</a></p>
+  </form>
+  <label class="scp-picker__field"><span>Région · province du répéteur</span><select data-scp-area><option value="">Choisissez votre secteur</option></select></label>
+  <label class="scp-picker__field"><span>Micrologiciel</span><select data-scp-firmware><option value="116">1.16 ou plus récent</option><option value="115">1.15</option><option value="114">1.14</option><option value="110">1.10 à 1.13</option></select></label>
+  <label class="scp-picker__field"><span>Type de répéteur</span><select data-scp-type><option value="city">Répéteur de ville</option><option value="edge">Répéteur de bordure</option></select><small class="scp-picker__hint">Choisissez bordure seulement s’il communique régulièrement avec des répéteurs d’une autre zone MeshMapper.</small></label>
+  <label class="scp-picker__field" data-scp-extra-field hidden><span>Ville voisine (facultatif)</span><select data-scp-extra><option value="">Aucune</option></select></label>
+  <div class="scp-finder__result" data-scp-result hidden>
+    <p><strong data-scp-region-name></strong></p>
+    <p data-scp-region-source></p>
+    <p class="scp-finder__tags" data-scp-tags></p>
+    <p class="scp-picker__hint"><code>can</code> et <code>na</code> sont réservés. Les réglages des appareils compagnons attendent la phase 2.</p>
+    <p class="scp-finder__links"><a class="md-button md-button--primary" href="#etape-4-reglages-de-region">Voir les commandes de région</a><a data-scp-map href="../../config/map/">Vérifier sur la carte</a><a data-scp-share href="#your-region">Lien vers ces réglages</a></p>
+    <p class="scp-picker__hint">Avant d’appliquer les commandes, sauvegardez vos réglages et suivez <a href="#etape-2-effacer-les-anciennes-regions">l’étape de nettoyage</a>.</p>
+  </div>
+</div>
+
+<p data-scp-nojs>La recherche nécessite JavaScript et le catalogue des régions. Les exemples ci-dessous sont pour Ottawa, pas pour toutes les régions. Vous pouvez aussi consulter la <a href="../../config/map/">carte des régions</a>.</p>
 
 ## En bref
 
@@ -431,19 +465,10 @@ cause pas de problème.
 
 </div>
 
-Décrivez ensuite votre répéteur. Les étapes 3 et 4 affichent les bonnes
-commandes pour lui. Votre secteur est votre **zone MeshMapper** : ouvrez
-[MeshMapper](https://meshmapper.net/) et trouvez la zone où se trouve votre
-répéteur. Ces zones suivent les limites MeshMapper qui existent déjà. Elles ne
-sont pas parfaites, mais c’est ainsi que la plupart des gens voient déjà la
-carte aujourd’hui; il n’y a donc rien de nouveau à apprendre.
-
-<div class="scp-picker" data-scp-picker data-copy-label="Copier" data-copied-label="Copié" hidden>
-  <label class="scp-picker__field"><span>Secteur</span><select data-scp-area><option value="ottawa" data-city="yow" data-province="on">Ottawa et environs</option><option value="gatineau" data-city="yow" data-province="qc">Gatineau</option><option value="montreal" data-city="yul" data-province="qc">Montréal et environs</option><option value="quebec" data-city="yqb" data-province="qc">Ville de Québec</option></select></label>
-  <label class="scp-picker__field"><span>Micrologiciel</span><select data-scp-firmware><option value="116">1.16 ou plus récent</option><option value="115">1.15</option><option value="114">1.14</option><option value="110">1.10 à 1.13</option></select></label>
-  <label class="scp-picker__field"><span>Type de répéteur</span><select data-scp-type><option value="city">Répéteur de ville</option><option value="edge">Répéteur de bordure</option></select><small class="scp-picker__hint">Choisissez bordure seulement s’il communique régulièrement avec des répéteurs d’une autre zone MeshMapper.</small></label>
-  <label class="scp-picker__field" data-scp-extra-field hidden><span>Ville voisine (facultatif)</span><select data-scp-extra><option value="">Aucune</option><option value="yow">Ottawa / Gatineau (yow)</option><option value="yul">Montréal (yul)</option><option value="yqb">Ville de Québec (yqb)</option></select></label>
-</div>
+Choisissez votre région, votre micrologiciel et votre type de répéteur dans
+[l’outil ci-dessus](#your-region). Les étapes 3 et 4 s’adaptent à vos choix.
+Utilisez la province où se trouve le répéteur, même si sa zone MeshMapper
+traverse une frontière provinciale.
 
 <div class="mc-callout" markdown>
 **Ville ou bordure?** Un répéteur de bordure communique régulièrement avec des
@@ -571,7 +596,8 @@ commande répond `Err - ??`, votre micrologiciel n’a pas ce réglage; passez-l
 
 ### Étape 4 : Réglages de région
 
-Ces commandes suivent vos réponses de l’étape 1. Lancez-les dans l’ordre.
+Ces commandes correspondent à vos choix dans [l’outil de recherche](#your-region).
+Lancez-les dans l’ordre.
 
 <div class="scp-card">
 <p class="scp-variant__label" data-scp-summary>Ottawa et environs · 1.16 ou plus récent · Répéteur de ville</p>
@@ -616,7 +642,9 @@ Ces commandes suivent vos réponses de l’étape 1. Lancez-les dans l’ordre.
 <ol class="scp-cmds"><li class="scp-cmd"><code>region</code><button type="button" class="scp-copy" title="Copier" aria-label="Copier: region"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li></ol>
 </div>
 
-Pour Ottawa, vous devriez voir :
+Vérifiez que votre ville, votre province, `onqc`, `can` et `na` portent chacun
+`F`, ainsi que toute ville voisine choisie. Pour un répéteur de bordure, `*`
+ne doit **pas** porter `F`. Voici un exemple pour un répéteur de ville à Ottawa :
 
 ```text
 *^ F
@@ -919,6 +947,21 @@ pas encore réglé de portée fonctionnent quand même localement.
 
 </details>
 
+
+## Comment les MP atteignent-ils une autre ville sans les annonces de ses répéteurs? { #route-discovery }
+
+Vous n’avez pas besoin d’une annonce de chaque répéteur sur le trajet. Si vous
+avez un contact mais aucun chemin enregistré, le premier MP se diffuse dans
+le réseau. Le destinataire renvoie un chemin pour les MP suivants. Il faut
+toujours avoir le contact du destinataire et des liaisons radio fonctionnelles.
+Voir la [FAQ de routage MeshCore (en anglais)](https://github.com/meshcore-dev/MeshCore/blob/main/docs/faq.md#54-q-how-does-a-node-discover-a-path-to-its-destination-and-then-use-it-to-send-messages-in-the-future-instead-of-flooding-every-message-it-sends-like-meshtastic).
+
+Une fois la phase 2 annoncée, `onqc` permet la découverte de chemins à travers
+les répéteurs ON/QC configurés. Pendant la transition, **une découverte sans
+portée ne peut pas traverser un répéteur de bordure qui bloque `*`**. Un chemin
+enregistré peut encore fonctionner, mais pas forcément un nouveau contact
+dans une autre région. Respectez l’ordre de déploiement; ne changez pas les
+portées des appareils compagnons à l’avance.
 
 ## À savoir
 

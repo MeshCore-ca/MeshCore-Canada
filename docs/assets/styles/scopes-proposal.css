@@ -928,6 +928,48 @@
   text-transform: none;
 }
 
+.md-typeset .scp-finder,
+.md-typeset .scp-finder__result {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+
+.md-typeset .scp-finder__row,
+.md-typeset .scp-finder__choices,
+.md-typeset .scp-finder__links,
+.md-typeset .scp-finder__tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--mc-space-2);
+}
+
+.md-typeset .scp-finder__row { margin: var(--mc-space-2) 0; }
+.md-typeset .scp-finder__row input {
+  flex: 2 1 14rem;
+  width: 100%;
+  min-width: 0;
+  height: 2.6rem;
+  padding: 0.5rem var(--mc-space-3);
+  border: 1px solid var(--mc-color-border);
+  border-radius: var(--mc-radius-md);
+  background: var(--mc-color-surface);
+  color: var(--mc-color-text);
+  font: inherit;
+}
+
+.md-typeset .scp-finder__row input:focus-visible {
+  outline: 3px solid var(--mc-color-focus);
+  outline-offset: 2px;
+}
+
+.md-typeset .scp-finder .scp-choice,
+.md-typeset .scp-picker__field select { min-height: 44px; }
+.md-typeset .scp-finder__status:empty,
+.md-typeset .scp-finder__choices:empty { display: none; }
+.md-typeset .scp-finder__result { border-top: 1px solid var(--mc-color-border); }
+.md-typeset .scp-finder__links { gap: var(--mc-space-3); }
+
 /* ---------- Command cards ---------- */
 
 .md-typeset .scp-card {

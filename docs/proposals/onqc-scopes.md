@@ -17,10 +17,11 @@ destructive: false
 search:
   exclude: true
 page_styles:
-  - assets/styles/scopes-proposal.css?v=20260926-1
+  - assets/styles/scopes-proposal.css?v=20260926-2
 page_scripts:
   - assets/regions/modules/iata-scopes.js?v=20260926-1
-  - assets/javascripts/scopes-picker.js?v=20260926-2
+  - assets/javascripts/place-search.js?v=20260925-2
+  - assets/javascripts/scopes-picker.js?v=20260926-3
 ---
 
 # ON/QC region scopes proposal
@@ -47,6 +48,38 @@ page_scripts:
 Each phase is announced on the
 [MeshCore Canada Discord](https://discord.gg/BESFVMt7yk). The rest of this page explains how it
 all works. You don't need to understand it to follow the steps.
+
+## Find your repeater settings { #your-region }
+
+Search for your city or IATA code, or choose a region below. This includes
+**Quinte / Belleville / Trenton (`ytr`)**, Kingston (`ygk`), Port Hope (`xph`)
+and the other ON/QC regions in the [region map](../config/map.md).
+Proposed areas are labelled; a map outline does not guarantee radio coverage.
+
+<div class="scp-picker" data-scp-picker data-copy-label="Copy" data-copied-label="Copied" hidden>
+  <form class="scp-finder" data-scp-search>
+    <label class="scp-picker__field" for="scp-place">City or IATA code</label>
+    <div class="scp-finder__row"><input id="scp-place" data-scp-place type="search" maxlength="120" placeholder="Quinte, Belleville, YTR…" autocomplete="off" required><button class="scp-choice" type="submit">Find settings</button></div>
+    <small class="scp-picker__hint">City searches use the Canadian Geographical Names service. IATA codes and the list below work without it.</small>
+    <p class="scp-finder__status" data-scp-status role="status" aria-live="polite"></p>
+    <div class="scp-finder__choices" data-scp-places></div>
+    <p class="scp-picker__hint"><a href="../../config/map/">Browse the full Canadian region map</a></p>
+  </form>
+  <label class="scp-picker__field"><span>Region · physical province</span><select data-scp-area><option value="">Choose your area</option></select></label>
+  <label class="scp-picker__field"><span>Firmware</span><select data-scp-firmware><option value="116">1.16 or newer</option><option value="115">1.15</option><option value="114">1.14</option><option value="110">1.10 to 1.13</option></select></label>
+  <label class="scp-picker__field"><span>Repeater type</span><select data-scp-type><option value="city">City repeater</option><option value="edge">Edge repeater</option></select><small class="scp-picker__hint">Pick edge only if it regularly talks to repeaters in another MeshMapper zone.</small></label>
+  <label class="scp-picker__field" data-scp-extra-field hidden><span>Neighbouring city (optional)</span><select data-scp-extra><option value="">None</option></select></label>
+  <div class="scp-finder__result" data-scp-result hidden>
+    <p><strong data-scp-region-name></strong></p>
+    <p data-scp-region-source></p>
+    <p class="scp-finder__tags" data-scp-tags></p>
+    <p class="scp-picker__hint"><code>can</code> and <code>na</code> are reserved. Companion settings wait for Phase 2.</p>
+    <p class="scp-finder__links"><a class="md-button md-button--primary" href="#step-4-region-settings">Show region commands</a><a data-scp-map href="../../config/map/">Check the map</a><a data-scp-share href="#your-region">Link to these settings</a></p>
+    <p class="scp-picker__hint">Before applying commands, save your current settings and follow <a href="#step-2-clear-any-old-regions">the cleanup step</a>.</p>
+  </div>
+</div>
+
+<p data-scp-nojs>The finder needs JavaScript and the region catalogue. The examples below are for Ottawa, not every region. You can also use the <a href="../../config/map/">region map</a>.</p>
 
 ## The short version
 
@@ -408,18 +441,9 @@ after a few seconds, send it again: tap and hold the command and choose
 
 </div>
 
-Then tell us about your repeater. Steps 3 and 4 show the right commands for
-it. Your area is your **MeshMapper zone**: open [MeshMapper](https://meshmapper.net/)
-and find the zone your repeater sits in. These zones follow the MeshMapper
-boundaries that already exist. They are not perfect, but they are how most
-people already see the map today, so there is nothing new to learn.
-
-<div class="scp-picker" data-scp-picker data-copy-label="Copy" data-copied-label="Copied" hidden>
-  <label class="scp-picker__field"><span>Area</span><select data-scp-area><option value="ottawa" data-city="yow" data-province="on">Ottawa and surrounding areas</option><option value="gatineau" data-city="yow" data-province="qc">Gatineau</option><option value="montreal" data-city="yul" data-province="qc">Montréal and surrounding areas</option><option value="quebec" data-city="yqb" data-province="qc">Québec City</option></select></label>
-  <label class="scp-picker__field"><span>Firmware</span><select data-scp-firmware><option value="116">1.16 or newer</option><option value="115">1.15</option><option value="114">1.14</option><option value="110">1.10 to 1.13</option></select></label>
-  <label class="scp-picker__field"><span>Repeater type</span><select data-scp-type><option value="city">City repeater</option><option value="edge">Edge repeater</option></select><small class="scp-picker__hint">Pick edge only if it regularly talks to repeaters in another MeshMapper zone.</small></label>
-  <label class="scp-picker__field" data-scp-extra-field hidden><span>Neighbouring city (optional)</span><select data-scp-extra><option value="">None</option><option value="yow">Ottawa / Gatineau (yow)</option><option value="yul">Montréal (yul)</option><option value="yqb">Québec City (yqb)</option></select></label>
-</div>
+Choose your region, firmware and repeater type in [the finder above](#your-region).
+Steps 3 and 4 update to match. Use the province where the repeater is physically
+located, even when its MeshMapper zone crosses a provincial border.
 
 <div class="mc-callout" markdown>
 **City or edge?** An edge repeater regularly talks to repeaters in **two
@@ -542,7 +566,7 @@ answers `Err - ??`, your firmware does not have that setting, so skip it.
 
 ### Step 4: Region settings
 
-These follow your answers in step 1. Run them in order.
+These match your choices in [the finder](#your-region). Run them in order.
 
 <div class="scp-card">
 <p class="scp-variant__label" data-scp-summary>Ottawa and surrounding areas · 1.16 or newer · City repeater</p>
@@ -587,7 +611,9 @@ These follow your answers in step 1. Run them in order.
 <ol class="scp-cmds"><li class="scp-cmd"><code>region</code><button type="button" class="scp-copy" title="Copy" aria-label="Copy: region"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li></ol>
 </div>
 
-For Ottawa, you should see:
+Check that your selected city, province, `onqc`, `can` and `na` each have `F`.
+Include any neighbouring city you chose. For an edge repeater, `*` must **not**
+have `F`. Here is an example for an Ottawa city repeater:
 
 ```text
 *^ F
@@ -882,6 +908,18 @@ locally.
 
 </details>
 
+
+## How do DMs reach another city without its repeater adverts? { #route-discovery }
+
+You don't need an advert from every repeater along the way. If you have a
+contact but no saved path, the first DM floods through the network. The
+destination returns a path for later DMs to use. You still need the recipient's
+contact and working radio links. See the [MeshCore routing FAQ](https://github.com/meshcore-dev/MeshCore/blob/main/docs/faq.md#54-q-how-does-a-node-discover-a-path-to-its-destination-and-then-use-it-to-send-messages-in-the-future-instead-of-flooding-every-message-it-sends-like-meshtastic).
+
+Once Phase 2 is announced, `onqc` lets discovery pass through configured
+ON/QC repeaters. During migration, **unscoped discovery cannot cross an edge
+repeater that blocks `*`**. A saved path may still work, but a new cross-region
+contact may not. Follow the rollout order; don't change companion scopes early.
 
 ## Things to know
 

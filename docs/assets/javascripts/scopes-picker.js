@@ -83,6 +83,41 @@
   var type = picker.querySelector("[data-scp-type]");
   var extra = picker.querySelector("[data-scp-extra]");
   var extraField = picker.querySelector("[data-scp-extra-field]");
+  var placeSearch = window.MeshCorePlaceSearch;
+  var language = root.lang === "fr" ? "fr" : "en";
+  var form = picker.querySelector("[data-scp-search]");
+  var query = picker.querySelector("[data-scp-place]");
+  var status = picker.querySelector("[data-scp-status]");
+  var places = picker.querySelector("[data-scp-places]");
+  var result = picker.querySelector("[data-scp-result]");
+  var origin = null;
+  var controller;
+  var requestId = 0;
+  var geometry;
+
+  function t(en, fr) { return language === "fr" ? fr : en; }
+  function name(tag) { var item = catalog.hierarchy[tag]; return language === "fr" && item.labelFr || item.label; }
+  function provinceName(code) { var item = catalog.policy.provinces[code]; return language === "fr" ? item.labelFr : item.label; }
+  function regionLabel(tag) {
+    return name(tag) + " (" + tag.toUpperCase() + ")" + (catalog.status[tag].state === "starter" ? t(" — proposed", " — proposé") : "");
+  }
+
+  function populate() {
+    var seeds = catalog.seeds.filter(function (seed) { return seed.provinces.some(function (p) { return catalog.policy.meshScopes.onqc.includes(p); }); });
+    seeds.sort(function (a, b) { return name(a.tag).localeCompare(name(b.tag), language); });
+    catalog.policy.meshScopes.onqc.forEach(function (province) {
+      var group = document.createElement("optgroup");
+      group.label = provinceName(province);
+      seeds.filter(function (seed) { return seed.provinces.includes(province); }).forEach(function (seed) {
+        var option = new Option(regionLabel(seed.tag) + " · " + province.toUpperCase(), seed.tag + ":" + province);
+        option.dataset.city = seed.tag;
+        option.dataset.province = province;
+        group.appendChild(option);
+      });
+      area.appendChild(group);
+    });
+    seeds.forEach(function (seed) { extra.appendChild(new Option(regionLabel(seed.tag), seed.tag)); });
+  }
 
   function standardCommands(version) {
     return scopeEngine.standardCommands(firmwareId(version));
@@ -135,19 +170,53 @@
     });
     if (extra.value === city) extra.value = "";
     var neighbour = edge ? extra.value : "";
+    result.hidden = !city;
 
-    var summary = [shortText(area), shortText(firmware), shortText(type)];
+    var summary = city ? [shortText(area), shortText(firmware), shortText(type)] : [t("Choose your area in the finder above.", "Choisissez votre secteur dans l’outil ci-dessus.")];
     if (neighbour) summary.push("+ " + neighbour);
     document.querySelectorAll("[data-scp-summary]").forEach(function (label) {
       label.textContent = summary.join(" · ");
     });
 
     document.querySelectorAll('[data-scp-output="standard"]').forEach(function (list) {
-      render(list, standardCommands(version));
+      render(list, city ? standardCommands(version) : []);
     });
     document.querySelectorAll('[data-scp-output="region"]').forEach(function (list) {
-      render(list, regionCommands(version, city, province, neighbour, edge));
+      render(list, city ? regionCommands(version, city, province, neighbour, edge) : []);
     });
+
+    if (city) {
+      picker.querySelector("[data-scp-region-name]").textContent = name(city) + " (" + city.toUpperCase() + ") · " + provinceName(province);
+      var source;
+      if (origin && origin.planningKind === "extension") source = t("Proposed extension outside the published MeshMapper zone. Confirm this area with local operators.", "Extension proposée hors de la zone publiée par MeshMapper. Confirmez ce secteur avec les opérateurs locaux.");
+      else if (catalog.status[city].state === "starter") source = t("Proposed MeshCore Canada region, not a published MeshMapper zone. Confirm local use before applying.", "Région proposée par MeshCore Canada, non publiée par MeshMapper. Confirmez son utilisation locale avant de l’appliquer.");
+      else source = t("Published MeshMapper zone. Check your repeater’s location on the map", "Zone publiée par MeshMapper. Vérifiez l’emplacement de votre répéteur sur la carte") + (!origin && catalog.status[city].planningExtension ? t("; proposed extensions are shown separately.", "; les extensions proposées sont indiquées séparément.") : ".");
+      picker.querySelector("[data-scp-region-source]").textContent = source;
+      var tags = picker.querySelector("[data-scp-tags]");
+      tags.textContent = "";
+      var profile = scopeEngine.profile(catalog, { home: city, province: province, bridge: edge, cities: neighbour ? [neighbour] : [] });
+      profile.tags.forEach(function (tag) {
+        var badge = document.createElement("span");
+        badge.className = "scp-tag";
+        badge.dataset.level = tag === province ? "prov" : tag === "onqc" ? "mesh" : catalog.policy.reservedScopes.includes(tag) ? "future" : "city";
+        badge.textContent = tag;
+        tags.appendChild(badge);
+      });
+      var map = new URL("../../config/map/", location.href);
+      map.search = new URLSearchParams({ tag: city, province: province });
+      picker.querySelector("[data-scp-map]").href = map.href;
+      var share = new URL(location.href);
+      share.search = new URLSearchParams({ tag: city, province: province, firmware: version, type: type.value });
+      if (neighbour) share.searchParams.set("neighbour", neighbour);
+      share.hash = "your-region";
+      picker.querySelector("[data-scp-share]").href = share.href;
+      share.hash = location.hash;
+      history.replaceState(history.state, "", share.href);
+    } else {
+      var address = new URL(location.href);
+      ["tag", "province", "firmware", "type", "neighbour"].forEach(function (key) { address.searchParams.delete(key); });
+      history.replaceState(history.state, "", address.href);
+    }
 
     var active = {
       "fw-116": version === "116",
@@ -158,19 +227,169 @@
       extra: Boolean(neighbour)
     };
     document.querySelectorAll("[data-scp-note]").forEach(function (note) {
-      note.hidden = !active[note.getAttribute("data-scp-note")];
+      note.hidden = !city || !active[note.getAttribute("data-scp-note")];
     });
   }
 
-  [area, firmware, type, extra].forEach(function (select) {
+  function cancel() {
+    requestId++;
+    if (controller) controller.abort();
+    form.removeAttribute("aria-busy");
+  }
+
+  function clearSelection() {
+    area.value = "";
+    origin = null;
+    extra.value = "";
+    places.textContent = "";
+    status.textContent = "";
+    update();
+  }
+
+  function choose(value, source) {
+    cancel();
+    area.value = value;
+    origin = source || null;
+    places.textContent = "";
+    status.textContent = shortText(area) + t(" selected. Check the settings below.", " sélectionné. Vérifiez les réglages ci-dessous.");
+    update();
+  }
+
+  function offer(items, label, select, message) {
+    status.textContent = message;
+    places.textContent = "";
+    items.forEach(function (item) {
+      var button = document.createElement("button");
+      button.type = "button";
+      button.className = "scp-choice";
+      button.textContent = label(item);
+      button.addEventListener("click", function () { select(item); });
+      places.appendChild(button);
+    });
+  }
+
+  function optionsFor(tag, province) {
+    return Array.from(area.options).filter(function (option) { return option.dataset.city === tag && (!province || option.dataset.province === province.toLowerCase()); });
+  }
+
+  function selectCode(tag, province) {
+    var options = optionsFor(tag, province);
+    if (options.length === 1) choose(options[0].value);
+    else if (options.length) offer(options, function (o) { return o.text; }, function (o) { choose(o.value); }, t("Which province is the repeater in?", "Dans quelle province se trouve le répéteur?"));
+    else status.textContent = t("This region is outside the ON/QC pilot. Use the full Canadian region map below.", "Cette région est hors du projet pilote ON/QC. Consultez la carte canadienne ci-dessous.");
+  }
+
+  // Aliases offer a manual zone choice, never pretend a town is at the zone centre.
+  function offerAliases(text, message) {
+    var requested = placeSearch.splitPlaceQuery(text);
+    var tags = Object.keys(catalog.aliases).filter(function (tag) {
+      return catalog.aliases[tag].some(function (alias) { return placeSearch.normalize(alias) === placeSearch.normalize(requested.name); });
+    });
+    var options = tags.flatMap(function (tag) { return optionsFor(tag, requested.province); });
+    if (options.length) offer(options, function (o) { return o.text; }, function (o) { choose(o.value); }, message + " " + t("Listed region matches — choose only if this is your zone:", "Régions correspondantes — choisissez seulement s’il s’agit de votre zone :"));
+    else status.textContent = message;
+  }
+
+  async function loadGeometry(signal) {
+    if (!geometry) {
+      var paths = [["iata-boundaries.geojson", catalog.source.boundarySha256], ["scope-jurisdictions.geojson", catalog.source.jurisdictionSha256]];
+      var data = await Promise.all(paths.map(async function (item) {
+        var url = new URL(item[0], catalogUrl);
+        url.searchParams.set("v", item[1]);
+        var response = await fetch(url, { signal: signal });
+        if (!response.ok) throw new Error("Region boundaries unavailable");
+        var collection = await response.json();
+        if (collection.type !== "FeatureCollection" || !Array.isArray(collection.features)) throw new Error("Invalid region boundaries");
+        return collection;
+      }));
+      geometry = data;
+    }
+    return geometry;
+  }
+
+  function resolvePlace(place, data) {
+    var province = scopeEngine.provinceAt(data[1], place.lat, place.lon);
+    if (province && province !== placeSearch.provinceCode(place.province).toLowerCase()) province = null;
+    if (!catalog.policy.meshScopes.onqc.includes(province)) {
+      status.textContent = province ? t("This place is outside the ON/QC pilot. Use the full Canadian region map below.", "Ce lieu est hors du projet pilote ON/QC. Consultez la carte canadienne ci-dessous.") : t("The province is uncertain at this location. Choose your region and physical province manually.", "La province est incertaine à cet endroit. Choisissez votre région et la province du répéteur manuellement.");
+      places.textContent = "";
+      return;
+    }
+    var matches = scopeEngine.matches(data[0], place.lat, place.lon);
+    var published = matches.filter(function (feature) { return feature.properties.regionSource === "meshmapper"; });
+    if (published.length) matches = published;
+    var seen = new Set();
+    matches = matches.filter(function (feature) {
+      var tag = feature.properties.tag;
+      if (seen.has(tag) || !optionsFor(tag, province).length) return false;
+      seen.add(tag);
+      return true;
+    });
+    if (matches.length === 1) choose(matches[0].properties.tag + ":" + province, matches[0].properties);
+    else if (matches.length) offer(matches, function (feature) { return regionLabel(feature.properties.tag) + " · " + province.toUpperCase(); }, function (feature) { choose(feature.properties.tag + ":" + province, feature.properties); }, t("More than one zone covers this place. Choose the one your local operators use.", "Plusieurs zones couvrent ce lieu. Choisissez celle utilisée par les opérateurs locaux."));
+    else {
+      places.textContent = "";
+      status.textContent = t("No listed region covers this place. Check the map or ask local operators; no region has been assigned.", "Aucune région répertoriée ne couvre ce lieu. Consultez la carte ou les opérateurs locaux; aucune région n’a été attribuée.");
+    }
+  }
+
+  query.addEventListener("input", function () { cancel(); clearSelection(); });
+  form.addEventListener("submit", async function (event) {
+    event.preventDefault();
+    cancel();
+    clearSelection();
+    var text = query.value.trim();
+    if (!text) return;
+    var requested = placeSearch.splitPlaceQuery(text);
+    var code = requested.name.toLowerCase();
+    if (catalog.seeds.some(function (seed) { return seed.tag === code; })) {
+      selectCode(code, requested.province);
+      return;
+    }
+    controller = new AbortController();
+    var signal = controller.signal;
+    var id = requestId;
+    var requestController = controller;
+    var timeout = window.setTimeout(function () { requestController.abort(); }, 12000);
+    form.setAttribute("aria-busy", "true");
+    status.textContent = t("Finding your region…", "Recherche de votre région…");
+    try {
+      var found = await placeSearch.lookup(text, language, function (url) {
+        return fetch(url, { signal: signal, credentials: "omit", referrerPolicy: "strict-origin-when-cross-origin" });
+      });
+      if (id !== requestId) return;
+      if (!found.length) {
+        offerAliases(text, t("No place found. Try a city and province, an IATA code, or the list below.", "Aucun lieu trouvé. Essayez une ville et une province, un code IATA ou la liste ci-dessous."));
+        return;
+      }
+      var data = await loadGeometry(signal);
+      if (id !== requestId) return;
+      if (found.length === 1) resolvePlace(found[0], data);
+      else offer(found, function (place) { return place.name + " · " + place.province; }, function (place) { resolvePlace(place, data); }, t("Which place do you mean?", "Quel lieu cherchez-vous?"));
+    } catch (error) {
+      if (id === requestId) offerAliases(text, t("Place lookup is unavailable. Choose a region below or try again.", "La recherche de lieux est indisponible. Choisissez une région ci-dessous ou réessayez."));
+    } finally {
+      window.clearTimeout(timeout);
+      if (id === requestId) form.removeAttribute("aria-busy");
+    }
+  });
+
+  area.addEventListener("change", function () { cancel(); origin = null; extra.value = ""; query.value = ""; places.textContent = ""; status.textContent = ""; update(); });
+  [firmware, type, extra].forEach(function (select) {
     select.addEventListener("change", update);
   });
   fetch(catalogUrl, { cache: "no-cache" }).then(function (response) {
     if (!response.ok) throw new Error("Region catalogue unavailable");
     return response.json();
   }).then(function (data) {
-    if (!scopeEngine || data.schema !== "meshcore-canada-iata-scopes/v1") throw new Error("Region catalogue unavailable");
+    if (!scopeEngine || !placeSearch || data.schema !== "meshcore-canada-iata-scopes/v1") throw new Error("Region catalogue unavailable");
     catalog = data;
+    populate();
+    var params = new URLSearchParams(location.search);
+    if (firmwareId(params.get("firmware"))) firmware.value = params.get("firmware");
+    if (params.get("type") === "edge") type.value = "edge";
+    if (Array.from(extra.options).some(function (o) { return o.value === params.get("neighbour"); })) extra.value = params.get("neighbour");
+    if (params.has("tag")) selectCode(params.get("tag").toLowerCase(), params.get("province"));
     update();
     picker.hidden = false;
     document.querySelectorAll("[data-scp-nojs]").forEach(function (note) { note.hidden = true; });
