@@ -88,7 +88,7 @@
   }
 
   function regionCommands(version, city, province, neighbour, edge) {
-    var codes = [city].concat(neighbour ? [neighbour] : [], [province, "onqc", "can"]);
+    var codes = [city].concat(neighbour ? [neighbour] : [], [province, "onqc", "can", "na"]);
     var commands = [];
     if (version === "116") {
       commands.push("region def " + codes.join("|* "));
