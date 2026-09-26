@@ -68,7 +68,7 @@ Reboot after changing the radio settings, then send an advert.
 
 Find your city code on the [IATA region map](../config/map.md). **When Phase 2 is
 announced**, use `onqc` for your default scope and Public channel, and your city
-scope, such as `yow`, for test channels. Leave `can` for future use.
+scope, such as `yow`, for test channels. Leave `can` and `na` for future use.
 
 Bot and MeshMapper operators follow the [end-of-Phase-1 instructions](../proposals/onqc-scopes.md#bots-and-meshmapper), once local repeaters are ready. See the [rollout order](../proposals/onqc-scopes.md#rollout-order) before changing scopes.
 

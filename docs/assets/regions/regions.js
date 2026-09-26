@@ -90,8 +90,8 @@
     "Published zones": "Zones publiées",
     "Fetched": "Récupéré le",
     "Flat scopes": "Portées indépendantes",
-    "City, province, mesh scope where defined, and can. Each scope is independent.": "Ville, province, réseau partagé s’il est défini et can. Chaque portée est indépendante.",
-    "onqc is for Ontario and Québec. can is carried for future use, not a companion default.": "onqc couvre l’Ontario et le Québec. can est prévu pour plus tard, pas comme portée par défaut d’un compagnon.",
+    "City, province, mesh scope where defined, can, and na. Each scope is independent.": "Ville, province, réseau partagé s’il est défini, can et na. Chaque portée est indépendante.",
+    "onqc is for Ontario and Québec. can and na are reserved for future use, not companion defaults or active cross-border routes.": "onqc couvre l’Ontario et le Québec. can et na sont réservés pour plus tard, pas comme portées par défaut d’un compagnon ni comme routes transfrontalières actives.",
     "Map limits": "Limites de la carte",
     "Only published MeshMapper boundaries are shown. Gaps are not filled with guessed circles or census regions.": "Seules les limites publiées par MeshMapper sont affichées. Les espaces vides ne sont pas comblés par des cercles estimés ou des régions de recensement.",
     "Province outlines are used only to identify the repeater province. They do not change MeshMapper boundaries.": "Les contours provinciaux servent seulement à identifier la province du répéteur. Ils ne modifient pas les limites de MeshMapper.",
@@ -679,7 +679,7 @@
 
   function prepareCatalog(data) {
     if (data.__mccPrepared) return data;
-    if (!iataScopes || data.schema !== "meshcore-canada-iata-scopes/v1") throw new Error("The IATA scope catalog is unavailable or out of date.");
+    if (!iataScopes || data.schema !== "meshcore-canada-iata-scopes/v1" || !Array.isArray(data.policy && data.policy.reservedScopes)) throw new Error("The IATA scope catalog is unavailable or out of date.");
     if (!/^[0-9a-f]{64}$/.test(data.source.boundarySha256) || !/^[0-9a-f]{64}$/.test(data.source.jurisdictionSha256)) throw new Error("The IATA scope catalog is unavailable or out of date.");
     var suppliedAliases = data.aliases || {};
     var previousAliases = data.regionAliases || {};
@@ -1856,7 +1856,7 @@
         var external = Boolean(data.externalTagLabels && data.externalTagLabels[tag]);
         var stateName = external ? "external" : statusFor(data, tag).state || "draft";
         var kind = data.hierarchy[tag] && data.hierarchy[tag].kind;
-        var level = external ? "any" : tag === data.policy.reservedScope ? "future" :
+        var level = external ? "any" : data.policy.reservedScopes.indexOf(tag) !== -1 ? "future" :
           kind === "province" ? "prov" : kind === "mesh-scope" ? "mesh" : "city";
         return '<span class="mcc-tag-pill' + (stateName === "draft" ? " is-draft" : "") +
           (external ? " is-external" : "") + '" data-level="' + level + '"><code>' + esc(tag) + "</code></span>";
@@ -2927,8 +2927,8 @@
           '<div><dt>Planning extensions</dt><dd>' + data.regionCounts.extensions + '</dd></div>' +
           '<div><dt>Fetched</dt><dd>' + esc(data.source.fetchedAt) + '</dd></div></dl>' +
           '<p><a href="https://meshmapper.net/" target="_blank" rel="noopener noreferrer">Open MeshMapper</a></p></section>' +
-          '<section class="mcc-card"><h3>Flat scopes</h3><p>City, province, mesh scope where defined, and can. Each scope is independent.</p>' +
-          '<p>onqc is for Ontario and Québec. can is carried for future use, not a companion default.</p></section>' +
+          '<section class="mcc-card"><h3>Flat scopes</h3><p>City, province, mesh scope where defined, can, and na. Each scope is independent.</p>' +
+          '<p>onqc is for Ontario and Québec. can and na are reserved for future use, not companion defaults or active cross-border routes.</p></section>' +
           '<section class="mcc-card"><h3>Map limits</h3><p>Published MeshMapper zones are unchanged. Labelled planning regions fill the remaining gaps across Canada.</p>' +
           '<p>Planning regions follow provincial borders and nearby hubs. Newfoundland and Labrador are separate. Published MeshMapper zones take priority.</p></section>' +
           '</div>' +

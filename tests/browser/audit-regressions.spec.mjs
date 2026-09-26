@@ -7,7 +7,7 @@ for (const locale of ["", "fr/"]) {
   test(`${locale || "en/"} region setup preserves radio until explicitly selected`, async ({ page }) => {
     await page.goto(siteRoute(`/${locale}config/?tag=mvrd&step=4`));
     const result = page.locator('[data-role="result"]');
-    await expect(result).toContainText("region def yvr|* bc|* can");
+    await expect(result).toContainText("region def yvr|* bc|* can|* na");
     await expect(result).not.toContainText("set radio");
     await expect(result).not.toContainText("set path.hash.mode");
     await page.locator('[data-go-step="3"]').click();

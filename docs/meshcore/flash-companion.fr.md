@@ -117,7 +117,7 @@ Consultez le [guide des portées du compagnon](../start/companion.md#choisir-un-
 et l’[ordre de déploiement](../proposals/onqc-scopes.md#ordre-de-deploiement).
 **Quand la phase 2 sera annoncée**, utilisez `onqc` par défaut et pour le canal
 Public, et votre code de ville pour les tests. Les robots suivent les [consignes de fin de phase 1](../proposals/onqc-scopes.md#robots-et-meshmapper).
-Ailleurs, suivez les réglages de votre communauté; `can` reste réservé à un usage futur.
+Ailleurs, suivez les réglages de votre communauté; `can` et `na` restent réservés à un usage futur.
 
 ## Vérifier avant l’utilisation courante
 

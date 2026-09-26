@@ -97,7 +97,7 @@ The optional **Message Settings → Auto Reset Path** preference affects how the
 Flashing does not mean you should change scopes. You can still [find your IATA region](../config/map.md). Read the [companion scope guide](../start/companion.md#choose-a-scope) and [rollout order](../proposals/onqc-scopes.md#rollout-order) before changing settings.
 **When Phase 2 is announced**, use `onqc` for the default and Public channel,
 and your city scope for tests. Bots follow the separate [end-of-Phase-1 guidance](../proposals/onqc-scopes.md#bots-and-meshmapper).
-Elsewhere, follow your community’s settings; `can` remains reserved for future use.
+Elsewhere, follow your community’s settings; `can` and `na` remain reserved for future use.
 
 ## Verify before regular use
 

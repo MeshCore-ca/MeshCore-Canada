@@ -52,8 +52,11 @@ const profiles = Object.fromEntries(canonicalFeatures.map(feature => {
   return [tag, { maintainer, settingsReview, communities: local }];
 }));
 assert.deepEqual([...tags].sort(), Object.keys(policy.zoneProvinces).sort(), "Review province metadata for every IATA region");
-const hierarchy = { can: { label: "Canada", labelFr: "Canada", parent: null, kind: "country" } };
-const status = { can: { state: "reserved", source: policy.proposal } };
+const hierarchy = {
+  can: { label: "Canada", labelFr: "Canada", parent: null, kind: "country" },
+  na: { label: "North America", labelFr: "Amérique du Nord", parent: null, kind: "continent" },
+};
+const status = Object.fromEntries(policy.reservedScopes.map(tag => [tag, { state: "reserved", source: policy.proposal }]));
 for (const [tag, province] of Object.entries(policy.provinces)) {
   hierarchy[tag] = { ...province, parent: "can", kind: "province" };
   status[tag] = { state: "scope", source: policy.proposal };

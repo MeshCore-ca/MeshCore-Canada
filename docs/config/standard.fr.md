@@ -35,15 +35,21 @@ sont des noms distincts sur le réseau.
 | Province ou territoire | `on` ou `qc` | Le lieu d’installation du répéteur |
 | Réseau partagé | `onqc` | Ontario et Québec seulement |
 | Canada | `can` | Prévu pour plus tard; pas encore la portée par défaut d’un compagnon |
+| Amérique du Nord | `na` | Réservé pour plus tard; pas une route transfrontalière active |
 
-Ces noms sont indépendants. Un répéteur d’Ottawa porte `yow`, `on`, `onqc`
-et `can`. Un répéteur de Gatineau porte `yow`, `qc`, `onqc` et `can`.
+Ces noms sont indépendants. Un répéteur d’Ottawa porte `yow`, `on`, `onqc`,
+`can` et `na`. Un répéteur de Gatineau porte `yow`, `qc`, `onqc`, `can` et `na`.
 La zone de ville reste la même des deux côtés de la rivière.
+
+Gardez `can` et `na` dans la liste du répéteur, mais ne les utilisez pas encore
+pour les compagnons ou les canaux. Ces noms réservés ne créent pas de lien radio
+vers un autre pays et ne permettent pas aux messages sans portée de traverser
+un répéteur de bordure.
 
 Le site utilise les codes IATA partout au Canada. Les réglages du réseau
 partagé viennent de la [proposition ON/QC](../proposals/onqc-scopes.md); leur
 publication ne signifie pas que tous les opérateurs les ont adoptés.
-Ailleurs, l’outil propose ville, province et `can`, sans inventer une autre
+Ailleurs, l’outil propose ville, province, `can` et `na`, sans inventer une autre
 portée de réseau partagé. Convenez des portées plus larges avec les opérateurs locaux.
 
 Les portées filtrent la retransmission par inondation. Ce ne sont ni du
@@ -112,8 +118,8 @@ qui contient votre point. Les 13 provinces et territoires restent cartographiés
 Les limites proposées doivent être revues localement; elles ne représentent pas
 la couverture radio mesurée.
 
-Par exemple, l’Île-du-Prince-Édouard utilise `yyg`, `pe` et `can`; le Yukon utilise
-`yxy`, `yt` et `can`. Ces régions n’utilisent pas `onqc`.
+Par exemple, l’Île-du-Prince-Édouard utilise `yyg`, `pe`, `can` et `na`; le Yukon
+utilise `yxy`, `yt`, `can` et `na`. Ces régions n’utilisent pas `onqc`.
 Le [configurateur](index.md) fournit les commandes.
 
 Ces grandes régions sont un point de départ, pas la preuve d’un lien radio entre
@@ -200,7 +206,7 @@ comptent toujours comme une seule région.
 Exemple pour Ottawa :
 
 ```text
-region def yow|* on|* onqc|* can
+region def yow|* on|* onqc|* can|* na
 region allowf *
 region default yow
 region
@@ -213,7 +219,7 @@ region
 `region default yow` garde les annonces du répéteur dans sa zone de ville.
 
 Pour Gatineau, remplacez `on` par `qc`. Pour Montréal, utilisez `yul` et `qc`.
-À Calgary, utilisez `region def yyc|* ab|* can` et `region default yyc`.
+À Calgary, utilisez `region def yyc|* ab|* can|* na` et `region default yyc`.
 
 ### Répéteur de bordure {#repeteur-de-liaison}
 
@@ -224,7 +230,7 @@ retransmettre leurs messages avec portée. À Rigaud, du côté québécois,
 pour relier Ottawa–Gatineau et Montréal :
 
 ```text
-region def yow|* yul|* qc|* onqc|* can
+region def yow|* yul|* qc|* onqc|* can|* na
 region denyf *
 region default yow
 region
@@ -294,7 +300,7 @@ découverte de chemin peuvent ainsi traverser le réseau partagé.
 | Autres canaux | Ville, province ou `onqc`, selon l’entente locale |
 
 Définissez chaque canal : sans portée propre, il utilise celle du compagnon.
-N’utilisez pas encore `can` par défaut. Hors ON/QC, convenez d’une portée
+N’utilisez pas encore `can` ou `na` par défaut. Hors ON/QC, convenez d’une portée
 partagée avec les opérateurs; le site ne suppose pas qu’un trajet pancanadien existe.
 
 ## Limites du micrologiciel

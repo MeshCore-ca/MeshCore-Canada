@@ -34,15 +34,20 @@ different on-air names.
 | Province or territory | `on` or `qc` | The province where the repeater is installed |
 | Shared mesh | `onqc` | Ontario and Québec only |
 | Canada | `can` | Carried for future use; not a companion default yet |
+| North America | `na` | Reserved for future use; not an active cross-border route |
 
 These are independent names, not an inherited path. An Ottawa repeater carries
-`yow`, `on`, `onqc`, and `can`. A Gatineau repeater carries `yow`, `qc`, `onqc`,
-and `can`. Both use one city zone across the river.
+`yow`, `on`, `onqc`, `can`, and `na`. A Gatineau repeater carries `yow`, `qc`,
+`onqc`, `can`, and `na`. Both use one city zone across the river.
+
+Keep `can` and `na` on the repeater's list, but do not use them as companion or
+channel scopes yet. They reserve names for later; they do not create a radio
+path to another country or let unscoped floods cross an edge repeater.
 
 The website uses IATA city codes across Canada. The wider-mesh defaults below
 come from the [ON/QC proposal](../proposals/onqc-scopes.md); they are not an
 announcement that every operator has adopted them. Outside ON/QC, the tool
-uses city, province, and `can`, without inventing another shared-mesh scope.
+uses city, province, `can`, and `na`, without inventing another shared-mesh scope.
 Agree on wider companion and channel scopes with your local operators.
 
 Scopes filter flood forwarding. They are not encryption, access control, radio
@@ -108,7 +113,7 @@ polygons. The result identifies which source contains your point. All 13 provinc
 and territories remain mapped. Planning boundaries need local review and do not
 represent measured radio coverage.
 
-For example, PEI uses `yyg`, `pe`, and `can`; Yukon uses `yxy`, `yt`, and `can`.
+For example, PEI uses `yyg`, `pe`, `can`, and `na`; Yukon uses `yxy`, `yt`, `can`, and `na`.
 They do not use `onqc`. The [configurator](index.md) generates the commands.
 
 These are broad starting areas, not a claim that distant communities share an
@@ -188,7 +193,7 @@ Different cities or map outlines with the same IATA code still count as one regi
 An Ottawa repeater uses:
 
 ```text
-region def yow|* on|* onqc|* can
+region def yow|* on|* onqc|* can|* na
 region allowf *
 region default yow
 region
@@ -201,7 +206,7 @@ region
 puts this repeater's own flood adverts in its city scope.
 
 For Gatineau, change `on` to `qc`. For Montréal, use `yul` with `qc`. Outside
-ON/QC, a Calgary repeater uses `region def yyc|* ab|* can` and
+ON/QC, a Calgary repeater uses `region def yyc|* ab|* can|* na` and
 `region default yyc`.
 
 ### Edge repeater {#bridge-repeater}
@@ -213,7 +218,7 @@ they are optional. For Rigaud, linking
 Ottawa–Gatineau to Montréal from the Québec side:
 
 ```text
-region def yow|* yul|* qc|* onqc|* can
+region def yow|* yul|* qc|* onqc|* can|* na
 region denyf *
 region default yow
 region
@@ -278,7 +283,7 @@ flooded direct message, and its path-discovery reply, cross the shared mesh.
 | Other channels | City, province, or `onqc`, by agreement |
 
 Set channel scopes explicitly: an unset channel uses the companion default.
-Do not use `can` as the default yet. Outside ON/QC, agree on a mesh-wide
+Do not use `can` or `na` as the default yet. Outside ON/QC, agree on a mesh-wide
 default locally; the website does not assume that a Canada-wide route exists.
 
 ## Firmware limits

@@ -51,6 +51,7 @@ commands do not include `onqc` or an unrequested radio change.
 | Province | Physical repeater province, independent of city boundaries |
 | Shared mesh | `onqc` only for Ontario/Québec; no invented scopes elsewhere |
 | National | `can` carried for future use, not a companion default |
+| North America | `na` carried as a reserved placeholder, not active cross-border routing |
 | Local repeater | Allow unscoped floods with `region allowf *` |
 | Bridge | Explicit city choices, own province only, `region denyf *` |
 | Own adverts | Home city on 1.15+; unscoped on 1.14 with a visible warning |
@@ -61,6 +62,11 @@ commands do not include `onqc` or an unrequested radio change.
 Canadian scopes are flat siblings. The province grouping in the browser is only
 navigation. Explicit neighbouring U.S. paths remain opt-in metadata, not Canadian
 map geometry. Scopes do not provide encryption, geofencing, or proof of RF coverage.
+
+The September 26 update incorporates [#114](https://github.com/MeshCore-ca/MeshCore-Canada/pull/114):
+`can` and `na` are reserved scopes in the shared catalogue and command generator.
+Both guides, the configurator, migration checks and budgets use that same list.
+They do not change companion defaults, unscoped forwarding or geographic boundaries.
 
 Ottawa and Gatineau share `yow`; their repeaters retain `on` and `qc` respectively.
 North Bay's `yyb` footprint also crosses into Québec. Province outlines identify

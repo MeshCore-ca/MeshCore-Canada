@@ -4,6 +4,27 @@ import { siteRoute } from "./site-route.mjs";
 const removals = ["region remove ott", "region remove on-alg", "region remove on", "region remove can", "region save", "region"];
 
 for (const locale of ["", "fr/"]) {
+  test(`${locale || "en/"} proposal carries can and na as flat reserved scopes on each firmware`, async ({ page }) => {
+    await page.goto(siteRoute(`/${locale}proposals/onqc-scopes/`));
+    await expect(page.locator('.scp-level-card')).toHaveCount(5);
+    await expect(page.locator('.scp-level-card[data-level="future"] .scp-tag')).toHaveText(["can", "na"]);
+    const codes = ["yow", "on", "onqc", "can", "na"];
+    for (const version of ["110", "114", "115", "116"]) {
+      await page.locator('[data-scp-firmware]').selectOption(version);
+      const expected = version === "116" ? ["region def " + codes.join("|* ")] :
+        codes.flatMap(code => version === "115" ? [`region put ${code}`] : [`region put ${code}`, `region allowf ${code}`]);
+      expected.push("region allowf *");
+      if (["115", "116"].includes(version)) expected.push("region default yow");
+      expected.push("region save");
+      await expect(page.locator('[data-scp-output="region"] code')).toHaveText(expected);
+    }
+    await page.locator('[data-scp-type]').selectOption("edge");
+    await expect(page.locator('[data-scp-output="region"] code')).toHaveText([
+      "region def yow|* on|* onqc|* can|* na", "region denyf *", "region default yow", "region save"
+    ]);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1)).toBeTruthy();
+  });
+
   test(`${locale || "en/"} proposal cleanup choices and optional explanations work together`, async ({ page }) => {
     const errors = [];
     page.on("pageerror", error => errors.push(error.message));
@@ -69,6 +90,7 @@ for (const locale of ["", "fr/"]) {
       await expect(old.locator('ol.scp-cmds code')).toHaveText(removals);
       await expect(page.locator('[data-scp-picker]')).toBeHidden();
       await expect(page.locator('[data-scp-nojs]').first()).toBeVisible();
+      await expect(page.locator('[data-scp-output="region"] code').first()).toHaveText("region def yow|* on|* onqc|* can|* na");
       const explanation = page.locator('details.scp-more').first();
       await expect(explanation.locator('figure')).toBeHidden();
       await explanation.locator('summary').click();

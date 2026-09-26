@@ -22,7 +22,7 @@ test("southern Ontario gaps use nearby existing codes, not the new Sudbury hub",
     assert.equal(matches[0].properties.regionSource, "meshcore-canada");
     assert.equal(api.matches(zones, lat, lon).length, 0);
     assert.equal(catalog.status[tag].planningExtension, true);
-    assert.deepEqual(plain(api.commands(api.profile(catalog, {home:tag,province:"on"}))), [`region def ${tag}|* on|* onqc|* can`, "region allowf *", `region default ${tag}`]);
+    assert.deepEqual(plain(api.commands(api.profile(catalog, {home:tag,province:"on"}))), [`region def ${tag}|* on|* onqc|* can|* na`, "region allowf *", `region default ${tag}`]);
   }
   assert.equal(api.matches(combined,46.492,-80.993)[0].properties.tag,"ysb");
   for (const original of zones.features) {
@@ -42,7 +42,7 @@ test("six starter regions cover the missing jurisdictions with honest source lab
     assert.equal(catalog.status[tag].state, "starter");
     assert.ok(!catalog.seeds.find(seed => seed.tag === tag).sourceUrl.includes("meshmapper.net"));
     const result = api.profile(catalog, { home: tag, province });
-    assert.deepEqual(plain(api.commands(result)), [`region def ${tag}|* ${province}|* can`, "region allowf *", `region default ${tag}`]);
+    assert.deepEqual(plain(api.commands(result)), [`region def ${tag}|* ${province}|* can|* na`, "region allowf *", `region default ${tag}`]);
   }
   for (const feature of zones.features) {
     assert.deepEqual(combined.features.find(item => item.properties.tag === feature.properties.tag).geometry, feature.geometry);
@@ -52,8 +52,8 @@ test("six starter regions cover the missing jurisdictions with honest source lab
 test("Ottawa and Gatineau share yow but retain the repeater's physical province", () => {
   for (const province of ["on", "qc"]) {
     const result = api.profile(catalog, { home: "yow", province });
-    assert.deepEqual(plain(result.tags), ["yow", province, "onqc", "can"]);
-    assert.deepEqual(plain(api.commands(result)), [`region def yow|* ${province}|* onqc|* can`, "region allowf *", "region default yow"]);
+    assert.deepEqual(plain(result.tags), ["yow", province, "onqc", "can", "na"]);
+    assert.deepEqual(plain(api.commands(result)), [`region def yow|* ${province}|* onqc|* can|* na`, "region allowf *", "region default yow"]);
     assert.equal(result.companionDefault, "onqc");
   }
   assert.equal(api.provinceAt(provinces, 45.4215, -75.6972), "on");
@@ -65,7 +65,7 @@ test("Ottawa and Gatineau share yow but retain the repeater's physical province"
 
 test("Rigaud bridge carries both cities, drops unscoped floods, and keeps local adverts", () => {
   const result = api.profile(catalog, { home: "yow", province: "qc", bridge: true, cities: ["yul", "yow", "yul"] });
-  assert.deepEqual(plain(api.commands(result)), ["region def yow|* yul|* qc|* onqc|* can", "region denyf *", "region default yow"]);
+  assert.deepEqual(plain(api.commands(result)), ["region def yow|* yul|* qc|* onqc|* can|* na", "region denyf *", "region default yow"]);
   assert.deepEqual(plain(result.jurisdictions), ["qc"]);
   assert.throws(() => api.profile(catalog, { home: "yow", province: "on", cities: ["yul"] }));
 });
@@ -74,7 +74,7 @@ test("edge mode is explicit and does not require an extra city scope", () => {
   for (const home of ["yow", "ykf"]) {
     for (const bridge of [false, true]) {
       const result = api.profile(catalog, { home, province: "on", bridge, cities: [home] });
-      assert.deepEqual(plain(result.tags), [home, "on", "onqc", "can"]);
+      assert.deepEqual(plain(result.tags), [home, "on", "onqc", "can", "na"]);
       assert.equal(api.commands(result)[1], bridge ? "region denyf *" : "region allowf *");
     }
   }
@@ -83,9 +83,10 @@ test("edge mode is explicit and does not require an extra city scope", () => {
 
 test("Canada-wide IATA codes do not invent an ON/QC mesh scope in other provinces", () => {
   const result = api.profile(catalog, { home: "yyc", province: "ab" });
-  assert.deepEqual(plain(result.tags), ["yyc", "ab", "can"]);
+  assert.deepEqual(plain(result.tags), ["yyc", "ab", "can", "na"]);
   assert.equal(result.companionDefault, null);
-  assert.equal(result.reservedScope, "can");
+  assert.deepEqual(plain(result.reservedScopes), ["can", "na"]);
+  for (const home of ["can", "na"]) assert.throws(() => api.profile(catalog, { home, province: "ab" }), /Choose an IATA region/);
   assert.throws(() => api.profile(catalog, { home: "ott", province: "on" }));
   assert.throws(() => api.profile(catalog, { home: "yow" }));
   assert.throws(() => api.profile(catalog, { home: "yow", province: "invalid" }));
@@ -96,9 +97,9 @@ test("Canada-wide IATA codes do not invent an ON/QC mesh scope in other province
 
 test("older supported firmware uses put and explicit allow flags only where required", () => {
   const result = api.profile(catalog, { home: "yow", province: "on" });
-  assert.deepEqual(plain(api.commands(result, "1.15")), ["region put yow", "region put on", "region put onqc", "region put can", "region allowf *", "region default yow"]);
+  assert.deepEqual(plain(api.commands(result, "1.15")), ["region put yow", "region put on", "region put onqc", "region put can", "region put na", "region allowf *", "region default yow"]);
   const legacy = plain(api.commands(result, "1.14"));
-  assert.deepEqual(legacy, ["region put yow", "region allowf yow", "region put on", "region allowf on", "region put onqc", "region allowf onqc", "region put can", "region allowf can", "region allowf *"]);
+  assert.deepEqual(legacy, ["region put yow", "region allowf yow", "region put on", "region allowf on", "region put onqc", "region allowf onqc", "region put can", "region allowf can", "region put na", "region allowf na", "region allowf *"]);
   assert.ok(!legacy.some(command => command.startsWith("region default") || command.startsWith("region def ")));
   assert.throws(() => api.commands(result, "1.13"));
 });
@@ -111,6 +112,10 @@ test("every published city generates a flat, bounded profile with explicit wildc
       assert.ok(result.tags.every(tag => result.parentOverrides[tag] === null));
       assert.ok(commands.every(command => Buffer.byteLength(command) <= 160));
       assert.ok(result.budget.responseBytes <= 160);
+      assert.deepEqual(plain(result.tags.slice(-2)), ["can", "na"]);
+      assert.ok(result.reservedScopes.every(tag => catalog.status[tag].state === "reserved"));
+      assert.ok(!result.tags.includes("us"));
+      assert.ok(!result.reservedScopes.includes(result.companionDefault));
       assert.equal(commands[1], "region allowf *");
     }
   }

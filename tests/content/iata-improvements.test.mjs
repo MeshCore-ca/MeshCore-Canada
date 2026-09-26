@@ -45,7 +45,7 @@ test("migration compares permissions and default separately from the home marker
   const desired=scope.profile(catalog,{home:"yow",province:"on",bridge:true});
   const plan=plain(migration.plan(current,desired,"1.16"));
   assert.deepEqual(plan.kept,["yow","on","can"]);
-  assert.deepEqual(plan.added,["onqc"]);
+  assert.deepEqual(plan.added,["onqc","na"]);
   assert.deepEqual(plan.removed,["on-alg","ott"]);
   assert.deepEqual(plan.changed,["yow","on"]);
   assert.ok(plan.commands.indexOf("region remove ott")<plan.commands.indexOf("region remove on-alg"));

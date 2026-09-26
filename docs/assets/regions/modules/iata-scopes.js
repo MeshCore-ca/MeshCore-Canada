@@ -61,7 +61,7 @@
     var meshScopes = Object.keys(data.policy.meshScopes).filter(function (scope) {
       return data.policy.meshScopes[scope].indexOf(province) !== -1;
     });
-    var tags = unique(cities.concat([province], meshScopes, [data.policy.reservedScope]));
+    var tags = unique(cities.concat([province], meshScopes, data.policy.reservedScopes));
     var canadianTags = tags.slice();
     var parents = {};
     tags.forEach(function (tag) { parents[tag] = null; });
@@ -91,7 +91,7 @@
       externalPaths: external, parentOverrides: parents,
       sharedArea: null, budget: limits, notes: notes,
       companionDefault: meshScopes[0] || null,
-      reservedScope: data.policy.reservedScope,
+      reservedScopes: data.policy.reservedScopes.slice(),
     };
   }
 

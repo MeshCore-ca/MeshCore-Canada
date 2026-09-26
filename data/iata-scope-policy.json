@@ -8,7 +8,7 @@
       "qc"
     ]
   },
-  "reservedScope": "can",
+  "reservedScopes": ["can", "na"],
   "minimumFirmware": "1.14",
   "scopedAdvertFirmware": "1.15",
   "bulkDefinitionFirmware": "1.16",

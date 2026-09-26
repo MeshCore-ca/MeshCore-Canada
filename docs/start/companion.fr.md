@@ -74,7 +74,7 @@ une annonce.
 Trouvez votre code de ville sur la [carte des régions IATA](../config/map.md).
 **Quand la phase 2 sera annoncée**, utilisez `onqc` par défaut et pour le canal
 Public, et votre code de ville, comme `yow`, pour les canaux de test. Réservez
-`can` à un usage futur.
+`can` et `na` à un usage futur.
 
 Les responsables de robots et de MeshMapper suivent les [consignes de fin de phase 1](../proposals/onqc-scopes.md#robots-et-meshmapper), une fois les répéteurs locaux prêts. Consultez l’[ordre de déploiement](../proposals/onqc-scopes.md#ordre-de-deploiement) avant de changer les portées.
 

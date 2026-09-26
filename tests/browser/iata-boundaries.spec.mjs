@@ -30,7 +30,7 @@ for (const locale of ["", "fr/"]) {
       await result.locator('.mcc-detail-actions a').click();
       await page.locator('[data-wizard-step="3"] [data-next-step]').click();
       const output=page.locator('[data-role="result"]');
-      await expect(output).toContainText(`region def ${tag}|* on|* onqc|* can`);
+      await expect(output).toContainText(`region def ${tag}|* on|* onqc|* can|* na`);
       await expect(output.locator('.mc-region-profile')).toContainText(locale ? "Extension proposée" : "planning extension");
       expect(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth+1)).toBeTruthy();
     });

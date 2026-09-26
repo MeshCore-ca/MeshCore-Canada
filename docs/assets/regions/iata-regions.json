@@ -11,7 +11,10 @@
         "qc"
       ]
     },
-    "reservedScope": "can",
+    "reservedScopes": [
+      "can",
+      "na"
+    ],
     "minimumFirmware": "1.14",
     "scopedAdvertFirmware": "1.15",
     "bulkDefinitionFirmware": "1.16",
@@ -357,7 +360,7 @@
     "starterCount": 29,
     "boundarySchema": "meshcore-canada-iata-boundaries/v2",
     "planningExtensionCount": 33,
-    "boundarySha256": "24b4132f20d23030ac2e3f93062dfca0bcd6313988bf4e0182211760ad143891",
+    "boundarySha256": "5c00957d06188d3a36a9af7680997fc7bdbbc940c67e15e80f22def84c7f948b",
     "meshmapperBoundarySha256": "78e0d08608b82328033b2ba59b22ce08a82a563725e5d59c5059ca0dc119c2d6",
     "jurisdictionSha256": "753d7ad13f089cdeee54cb29c9105706226fa75228193c4eda2d4ecc5ed78349"
   },
@@ -388,6 +391,12 @@
       "labelFr": "Canada",
       "parent": null,
       "kind": "country"
+    },
+    "na": {
+      "label": "North America",
+      "labelFr": "Amérique du Nord",
+      "parent": null,
+      "kind": "continent"
     },
     "bc": {
       "label": "British Columbia",
@@ -1004,6 +1013,10 @@
   },
   "status": {
     "can": {
+      "state": "reserved",
+      "source": "https://meshcore.ca/proposals/onqc-scopes/"
+    },
+    "na": {
       "state": "reserved",
       "source": "https://meshcore.ca/proposals/onqc-scopes/"
     },
