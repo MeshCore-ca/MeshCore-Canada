@@ -1,34 +1,6 @@
 /* ON/QC region scopes proposal: page-only diagrams and layout. */
 
-:root {
-  --scp-city: #1458b0;
-  --scp-city-bg: #e8f0fb;
-  --scp-prov: #146c43;
-  --scp-prov-bg: #e5f4ec;
-  --scp-mesh: #6b36a8;
-  --scp-mesh-bg: #f1e8fb;
-  --scp-any: #526174;
-  --scp-any-bg: #eef3f8;
-  --scp-ok: var(--mc-color-success);
-  --scp-ok-bg: #e5f4ec;
-  --scp-drop: var(--mc-color-danger);
-  --scp-drop-bg: #fdecea;
-}
-
-[data-md-color-scheme="slate"] {
-  --scp-city: #7db7ff;
-  --scp-city-bg: rgb(125 183 255 / 14%);
-  --scp-prov: #78dfa7;
-  --scp-prov-bg: rgb(120 223 167 / 12%);
-  --scp-mesh: #c9a4ff;
-  --scp-mesh-bg: rgb(201 164 255 / 14%);
-  --scp-any: #b6c0ce;
-  --scp-any-bg: rgb(182 192 206 / 12%);
-  --scp-ok: #78dfa7;
-  --scp-ok-bg: rgb(120 223 167 / 12%);
-  --scp-drop: #ffaaa3;
-  --scp-drop-bg: rgb(255 170 163 / 12%);
-}
+/* Scope colours live in tokens.css so the map and configurator use this palette. */
 
 /* Undo the theme's list indents inside diagrams. */
 [dir] .md-typeset .scp-checks,

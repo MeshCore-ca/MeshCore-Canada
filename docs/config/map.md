@@ -15,13 +15,13 @@ tested_with:
   region_catalog: meshcore-canada-iata-scopes-v1
 difficulty: beginner
 page_styles:
-  - assets/regions/regions.css?v=20260925-3
+  - assets/regions/regions.css?v=20260926-1
 page_scripts:
   - assets/javascripts/place-search.js?v=20260925-2
   - assets/javascripts/radio-profiles.js?v=20260904-1
   - assets/regions/modules/configurator-support.js?v=20260925-1
   - assets/regions/modules/iata-scopes.js?v=20260925-4
-  - assets/regions/regions.js?v=20260926-2
+  - assets/regions/regions.js?v=20260926-3
 hide:
   - toc
 ---

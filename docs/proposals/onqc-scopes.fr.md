@@ -17,7 +17,7 @@ destructive: false
 search:
   exclude: true
 page_styles:
-  - assets/styles/scopes-proposal.css?v=20260925-2
+  - assets/styles/scopes-proposal.css?v=20260926-1
 page_scripts:
   - assets/regions/modules/iata-scopes.js?v=20260925-4
   - assets/javascripts/scopes-picker.js?v=20260926-1

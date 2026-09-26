@@ -1821,21 +1821,21 @@
         '<p class="mcc-connect-note">If the repeater is missing, open Tools → Discover Nearby Nodes. If a wait timer appears, let it finish before logging in.</p></section>' +
         '</div></div></li>' +
         '<li><div><h4>Confirm the command line</h4><p>Run <code>ver</code> and check the version.</p>' +
-        '<button type="button" class="mcc-command-line" data-cmd="ver"><span>ver</span><em>' + icon("copy") + 'Copy</em></button></div></li>' +
+        '<button type="button" class="mcc-command-line" data-cmd="ver"><span>ver</span><em>' + icon("copy") + '<span class="mcc-visually-hidden">Copy</span></em></button></div></li>' +
         '<li><div><h4>Apply the settings</h4><p>Run each line in order. Wait for a reply.</p><p>No reply? Check the connection and use Send Again. On 1.15, region put replies OK - (flood allowed).</p>' +
         '<div class="mcc-guide-command-list">' + commands.map(function (line) {
-          return '<button type="button" class="mcc-command-line" data-cmd="' + esc(line) + '"><span>' + esc(line) + '</span><em>' + icon("copy") + 'Copy</em></button>';
+          return '<button type="button" class="mcc-command-line" data-cmd="' + esc(line) + '"><span>' + esc(line) + '</span><em>' + icon("copy") + '<span class="mcc-visually-hidden">Copy</span></em></button>';
         }).join("") + '</div><p class="mcc-guide-stop">Stop on <code>Err</code>. Existing regions are not cleared. Some commands save immediately.</p></div></li>' +
         '<li><div><h4>Check and save</h4><p>Run <code>region</code> and confirm each path:</p>' +
         expectedPathMarkup +
-        '<div class="mcc-guide-command-list"><button type="button" class="mcc-command-line" data-cmd="region"><span>region</span><em>' + icon("copy") + 'Copy</em></button></div>' +
+        '<div class="mcc-guide-command-list"><button type="button" class="mcc-command-line" data-cmd="region"><span>region</span><em>' + icon("copy") + '<span class="mcc-visually-hidden">Copy</span></em></button></div>' +
         '<p>Save:</p>' +
-        '<div class="mcc-guide-command-list"><button type="button" class="mcc-command-line" data-cmd="region save"><span>region save</span><em>' + icon("copy") + 'Copy</em></button></div>' +
+        '<div class="mcc-guide-command-list"><button type="button" class="mcc-command-line" data-cmd="region save"><span>region save</span><em>' + icon("copy") + '<span class="mcc-visually-hidden">Copy</span></em></button></div>' +
         '<p>' + (state.radioProfile !== "keep"
           ? 'Restart the device, reconnect, then run these final checks:'
           : 'Run this once more to confirm the saved region:') + '</p>' +
         '<div class="mcc-guide-command-list">' + verificationCommands.map(function (line) {
-          return '<button type="button" class="mcc-command-line" data-cmd="' + esc(line) + '"><span>' + esc(line) + '</span><em>' + icon("copy") + 'Copy</em></button>';
+          return '<button type="button" class="mcc-command-line" data-cmd="' + esc(line) + '"><span>' + esc(line) + '</span><em>' + icon("copy") + '<span class="mcc-visually-hidden">Copy</span></em></button>';
         }).join("") + '</div></div></li>' +
         '</ol>' +
         '<a class="mcc-guide-docs" href="https://docs.meshcore.io/cli_commands/" target="_blank" rel="noopener noreferrer">MeshCore command help ' + icon("external-link") + '</a>' +
@@ -1844,7 +1844,7 @@
         '<div class="mcc-command-toolbar"><span>Commands</span></div>' +
         '<pre><code>' +
         technicalCommands.map(function (line) {
-          return '<button type="button" class="mcc-command-line" data-cmd="' + esc(line) + '"><span>' + esc(line) + '</span><em>' + icon("copy") + 'Copy</em></button>';
+          return '<button type="button" class="mcc-command-line" data-cmd="' + esc(line) + '"><span>' + esc(line) + '</span><em>' + icon("copy") + '<span class="mcc-visually-hidden">Copy</span></em></button>';
         }).join("") +
         '</code></pre>' +
         '</div>';
@@ -1855,8 +1855,11 @@
       rec.tags.map(function (tag) {
         var external = Boolean(data.externalTagLabels && data.externalTagLabels[tag]);
         var stateName = external ? "external" : statusFor(data, tag).state || "draft";
+        var kind = data.hierarchy[tag] && data.hierarchy[tag].kind;
+        var level = external ? "any" : tag === data.policy.reservedScope ? "future" :
+          kind === "province" ? "prov" : kind === "mesh-scope" ? "mesh" : "city";
         return '<span class="mcc-tag-pill' + (stateName === "draft" ? " is-draft" : "") +
-          (external ? " is-external" : "") + '"><code>' + esc(tag) + "</code></span>";
+          (external ? " is-external" : "") + '" data-level="' + level + '"><code>' + esc(tag) + "</code></span>";
       }).join("") +
       "</div>";
     var metaMarkup = '<dl class="mcc-result-meta">' +
