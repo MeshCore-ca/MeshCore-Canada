@@ -62,6 +62,24 @@ Si Canada n’apparaît pas, suivez les [consignes pour l’ancien préréglage]
 Redémarrez l’appareil après avoir modifié les paramètres radio, puis envoyez
 une annonce.
 
+## Choisir un scope
+
+!!! warning "ON/QC : attendez la phase 2"
+    Pour un compagnon personnel, laissez **Default Region Scope** vide et les
+    canaux **sans portée** pour le moment. La phase 2 n’est pas ouverte. Elle ne
+    peut commencer avant **janvier 2027**, lorsque les répéteurs seront prêts et
+    que le déploiement sera annoncé. Un changement trop tôt peut empêcher vos
+    messages de joindre les autres utilisateurs.
+
+Trouvez votre code de ville sur la [carte des régions IATA](../config/map.md).
+**Quand la phase 2 sera annoncée**, utilisez `onqc` par défaut et pour le canal
+Public, et votre code de ville, comme `yow`, pour les canaux de test. Réservez
+`can` et `na` à un usage futur.
+
+Les responsables de robots et de MeshMapper suivent les [consignes de fin de phase 1](../proposals/onqc-scopes.md#robots-et-meshmapper), une fois les répéteurs locaux prêts. Consultez l’[ordre de déploiement](../proposals/onqc-scopes.md#ordre-de-deploiement) avant de changer les portées.
+
+Ailleurs, utilisez le scope convenu avec votre communauté. Le [guide des scopes](../config/standard.md) présente les versions d’application requises et des exemples. Les scopes ne changent pas les réglages radio.
+
 ## Tester l’appareil
 
 Le compagnon est prêt lorsque :

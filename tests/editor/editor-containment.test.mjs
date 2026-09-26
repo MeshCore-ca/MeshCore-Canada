@@ -8,46 +8,33 @@ async function source(name) {
   return readFile(new URL(name, editorRoot), "utf8");
 }
 
-test("proposal type is explicit before geography and new-region eligibility is visible", async () => {
-  const html = await source("index.html");
-  const typePosition = html.indexOf('id="proposal-type-panel"');
-  const provincePosition = html.indexOf('id="province-select"');
-  assert.ok(typePosition >= 0);
-  assert.ok(typePosition < provincePosition);
-  assert.match(html, /Advanced: propose a new region\/subregion/);
-  assert.match(html, /Region proposal/);
-  assert.match(html, /does not change\s+the map/);
+test("the retired editor directs both languages to MeshMapper without an editing form", async () => {
+  for (const page of ["index.md", "index.fr.md"]) {
+    const markdown = await source(page);
+    assert.match(markdown, /https:\/\/meshmapper\.net\//);
+    assert.doesNotMatch(markdown, /<form|proposal-type|editor-map|app\.js/);
+    assert.match(markdown, /\.\.\/map\.md/);
+  }
 });
 
-test("heavy editor data and anti-spam load only after the visitor starts", async () => {
-  const [html, app] = await Promise.all([source("index.html"), source("app.js")]);
-  assert.match(html, /data-editor-state="waiting"/);
-  assert.match(html, /id="review-panel"/);
-  assert.match(app, /if \(!await initialise\(\)\)/);
-  assert.match(app, /IntersectionObserver/);
-  assert.doesNotMatch(app, /canada-region-partition\.geojson/);
-  assert.doesNotMatch(app, /\n  initialise\(\);\n/);
-  assert.doesNotMatch(app, /\n  initialiseSubmission\(\);\n/);
+test("retirement landing loads no census map or anti-spam widget", async () => {
+  const markdown = await source("index.md");
+  assert.doesNotMatch(markdown, /leaflet|turnstile|app\.js|cells/);
+  assert.match(markdown, /legacy-draft-export\.js/);
 });
 
-test("editor exposes a complete structured alternative to the optional map", async () => {
-  const html = await source("index.html");
-  assert.match(html, /id="municipality-select"/);
-  assert.match(html, /id="move-municipality-button"/);
-  assert.match(html, /id="changes-table-body"/);
-  assert.match(html, /id="text-summary"/);
-  assert.match(html, /Skip the map and choose a municipality/);
-  assert.match(html, /id="editor-map" role="region"/);
-  assert.doesNotMatch(html, /role="application"/);
+test("saved drafts have a native export button and an accessible status", async () => {
+  for (const page of ["index.md", "index.fr.md"]) {
+    const markdown = await source(page);
+    assert.match(markdown, /<button type="button"[^>]+data-legacy-draft-export/);
+    assert.match(markdown, /data-legacy-draft-status role="status" aria-live="polite"/);
+  }
 });
 
-test("anchor and readiness are available outside the map", async () => {
-  const html = await source("index.html");
-  assert.match(html, /id="anchor-select"/);
-  assert.match(html, />Confirm this anchor</);
-  assert.match(html, /id="derived-parent"/);
-  assert.match(html, /id="hierarchy-path"/);
-  assert.match(html, /id="readiness-list"/);
+test("community listing updates remain linked from the retired editor", async () => {
+  for (const page of ["index.md", "index.fr.md"]) {
+    assert.match(await source(page), /\.\.\/\.\.\/submit-idea\.md/);
+  }
 });
 
 test("native confirms and automatic first-cell anchoring are absent", async () => {

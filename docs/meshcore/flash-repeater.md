@@ -21,7 +21,7 @@ page_styles:
   - assets/styles/devices-builds.css?v=20260728-1
   - assets/styles/repeater-hash-check.css?v=20260820-1
 page_scripts:
-  - assets/javascripts/repeater-hash-check.js?v=20260904-1
+  - assets/javascripts/repeater-hash-check.js?v=20260925-2
 ---
 # Flash, configure, and bench-test a repeater
 
@@ -104,10 +104,7 @@ The flasher reports completion, the board restarts as a repeater, and the setup 
 4. Set a descriptive name, such as `Callsign_R1` or `Downtown_R1`.
 5. Set a unique admin password and store it securely.
 6. Confirm the local community has not documented an override. Otherwise apply **Canada** (`910.525 MHz / 62.5 kHz / SF7 / CR5`).
-7. Set the current MeshCore Canada default advert values:
-   - **Advert Interval:** `60` minutes
-   - **Flood Advert Interval:** `24` hours
-   - **Flood Max:** `64`
+7. Use the advert intervals agreed by your local network. The proposed ON/QC scope profile offers **Advert Interval** `240` minutes, **Flood Advert Interval** `47` hours, and **Flood Max** `16`. These are optional settings, not automatic changes for every Canadian network.
 8. Use the [Repeater Configurator](../config/index.md) to get the region commands and path-hash mode. The Canada default is 3-byte (`set path.hash.mode 2`); use different local settings when your community lists them.
 9. Add owner information only if it is suitable for public adverts.
 10. Save the settings and reboot.

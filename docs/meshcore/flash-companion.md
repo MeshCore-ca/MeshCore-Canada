@@ -87,6 +87,18 @@ If Canada is not listed in your app or flasher, follow the [older-preset instruc
 
 The optional **Message Settings → Auto Reset Path** preference affects how the app manages changing paths. Leave it at its default unless your local testing process calls for a different setting.
 
+## Choose your scope
+
+!!! warning "ON/QC: wait for Phase 2"
+    For personal companions, leave **Default Region Scope** empty and channels
+    **unscoped** for now. Phase 2 is not open. It can start no earlier than
+    **January 2027**, after the repeaters are ready and the rollout is announced.
+
+Flashing does not mean you should change scopes. You can still [find your IATA region](../config/map.md). Read the [companion scope guide](../start/companion.md#choose-a-scope) and [rollout order](../proposals/onqc-scopes.md#rollout-order) before changing settings.
+**When Phase 2 is announced**, use `onqc` for the default and Public channel,
+and your city scope for tests. Bots follow the separate [end-of-Phase-1 guidance](../proposals/onqc-scopes.md#bots-and-meshmapper).
+Elsewhere, follow your community’s settings; `can` and `na` remain reserved for future use.
+
 ## Verify before regular use
 
 1. Confirm the app reconnects and shows the expected device name and radio settings.

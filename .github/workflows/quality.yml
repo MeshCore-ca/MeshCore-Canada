@@ -68,6 +68,8 @@ jobs:
       - name: Validate region authority and proposal automation
         run: |
           node scripts/validate-regions.cjs
+          python scripts/verify-iata-geometry.py
+          node scripts/validate-legacy-region-data.cjs
           python scripts/verify-region-geometry.py
           python scripts/verify-region-geometry.py --partition docs/assets/regions/canada-region-partition-digital.geojson
           python -m unittest discover -s tools/region-proposal-gateway/tests -v

@@ -17,9 +17,10 @@ destructive: false
 search:
   exclude: true
 page_styles:
-  - assets/styles/scopes-proposal.css?v=20260925-2
+  - assets/styles/scopes-proposal.css?v=20260926-1
 page_scripts:
-  - assets/javascripts/scopes-picker.js?v=20260926-1
+  - assets/regions/modules/iata-scopes.js?v=20260926-1
+  - assets/javascripts/scopes-picker.js?v=20260926-2
 ---
 
 # ON/QC region scopes proposal
@@ -87,7 +88,7 @@ Once every phase is done:
 - **`Public`** uses `onqc`, so everyone in Ontario and Québec can talk.
 - **Test channels** use your city, so they stay local.
 - **Messages with no scope** still work inside each city. Edge repeaters,
-  the ones that link two cities, drop them, so they don't flood the next city.
+  the ones that regularly link different IATA regions, drop them so they stay local.
 
 <div class="mc-callout" data-kind="warning" markdown>
 Companions come last, in Phase 2. Setting a scope on your companion before
@@ -238,6 +239,9 @@ Québec mesh".
 can link with the US one day, again without anyone reconfiguring their
 repeater. **Don't use `na` yet either.**
 
+This reserves a name, not a cross-border radio path. Edge repeaters still block
+unscoped floods.
+
 ### Why airport codes?
 
 <details class="scp-more" markdown>
@@ -339,7 +343,7 @@ is announced on Discord. **Don't change your companion settings
 yet.** Phase 2 is not open.
 
 <ol class="scp-timeline">
-  <li data-phase="Phase 1"><h3>Repeaters</h3><p>Now. Owners clear old regions and add their codes. City repeaters keep <code>*</code> allowed; edge repeaters drop it. Near the end, bots and MeshMapper are scoped to their city. Nothing breaks inside any city.</p></li>
+  <li data-phase="Phase 1"><h3>Repeaters</h3><p>Now. Owners clear old regions and add their codes. City repeaters keep <code>*</code> allowed; edge repeaters drop it. Near the end, bots and MeshMapper are scoped to their city. Test local messaging after the change.</p></li>
   <li data-phase="Phase 2"><h3>Companions</h3><p>January 2027 at the earliest, once the repeaters around them are set up. Users set their default and <code>Public</code> to <code>onqc</code>, and test channels to their city.</p></li>
   <li data-phase="Phase 3"><h3>Only if needed</h3><p>If messages with no scope are still too noisy inside a city, repeaters can also run <code>set flood.max.unscoped 3</code>. Scoped messages still reach 16 hops.</p></li>
 </ol>
@@ -423,6 +427,9 @@ MeshMapper zones**, for example both `yow` and `yul`. Every other repeater is
 a city repeater, including one on the outer edge of its zone: if nothing on
 the other side connects to it, it is a city repeater. If it starts linking to
 another zone regularly, switch it to edge.
+
+Different cities or map outlines with the same IATA code still count as one
+region. Ottawa and Gatineau, for example, both use `yow`.
 </div>
 
 **Not sure? Check the map.** Open [this MeshMapper view](https://onqc.meshmapper.net/?preset=all&lat=45.21108&lon=-75.44812&zoom=9.61&m=dark&l=rep.nbr.nz.nzb.rb&cm=std). It
@@ -563,13 +570,13 @@ These follow your answers in step 1. Run them in order.
 <div class="scp-shots" markdown>
 
 <figure class="scp-shot" markdown>
-[![Command line showing region def and its reply on firmware 1.16](../assets/images/onqc-scopes/repeater-region-def-116.webp){ loading=lazy width="600" height="1304" }](../assets/images/onqc-scopes/repeater-region-def-116.webp)
-<figcaption markdown="span"><span class="scp-shot__num">1</span> Firmware 1.16 or newer: <code>region def</code> answers with the finished list.</figcaption>
+[![Earlier region def example on firmware 1.16, without the reserved na scope](../assets/images/onqc-scopes/repeater-region-def-116.webp){ loading=lazy width="600" height="1304" }](../assets/images/onqc-scopes/repeater-region-def-116.webp)
+<figcaption markdown="span"><span class="scp-shot__num">1</span> Firmware 1.16+: <code>region def</code> returns the list. This older example omits <code>na</code>; use the commands above.</figcaption>
 </figure>
 
 <figure class="scp-shot" markdown>
-[![Command line showing region put commands on firmware 1.15](../assets/images/onqc-scopes/repeater-07-region-put-115.webp){ loading=lazy width="600" height="1304" }](../assets/images/onqc-scopes/repeater-07-region-put-115.webp)
-<figcaption markdown="span"><span class="scp-shot__num">2</span> Firmware 1.15: each <code>region put</code> answers <code>OK - (flood allowed)</code>.</figcaption>
+[![Earlier region put example on firmware 1.15, without the reserved na scope](../assets/images/onqc-scopes/repeater-07-region-put-115.webp){ loading=lazy width="600" height="1304" }](../assets/images/onqc-scopes/repeater-07-region-put-115.webp)
+<figcaption markdown="span"><span class="scp-shot__num">2</span> Firmware 1.15: each <code>region put</code> answers <code>OK - (flood allowed)</code>. This older example omits <code>na</code>; use the commands above.</figcaption>
 </figure>
 
 </div>
@@ -598,8 +605,8 @@ ignore it.
 <div class="scp-shots" markdown>
 
 <figure class="scp-shot" markdown>
-[![Command line showing the final region list](../assets/images/onqc-scopes/repeater-08-region-result.webp){ loading=lazy width="600" height="1304" }](../assets/images/onqc-scopes/repeater-08-region-result.webp)
-<figcaption markdown="span"><span class="scp-shot__num">1</span> The finished list on an Ottawa repeater.</figcaption>
+[![Earlier Ottawa region list, before the reserved na scope was added](../assets/images/onqc-scopes/repeater-08-region-result.webp){ loading=lazy width="600" height="1304" }](../assets/images/onqc-scopes/repeater-08-region-result.webp)
+<figcaption markdown="span"><span class="scp-shot__num">1</span> Earlier Ottawa example. Your final list should also include <code>na F</code>.</figcaption>
 </figure>
 
 </div>
@@ -890,11 +897,12 @@ locally.
 
 ## Next steps
 
-- Agree on the list of city codes for Ontario and Québec.
-- Add a "find your town" lookup to meshcore.ca that shows your code.
-- Publish clean-up and setup commands for each city.
-- Add a simple Ontario and Québec mode to the [repeater configurator](../config/index.md).
-- Other provinces keep the current setup until the pilot has proven itself.
+- Check your published MeshMapper code in the [IATA region map](../config/map.md).
+- Use the [migration guide](../config/standard.md) and [repeater configurator](../config/index.md) for clean-up and firmware-specific commands.
+- In the configurator, select **Use the proposed ON/QC standard settings** to include Phase 1’s ID, advert and hop settings. They remain opt-in; scope commands alone are not the full Phase 1 setup.
+- Coordinate and test the ON/QC rollout with local operators before changing deployed repeaters.
+- The website now offers IATA zones across Canada. This is not a nationwide rollout of `onqc`: that scope and the pilot settings remain specific to Ontario and Québec. Other provinces coordinate their own migration.
+- Labelled MeshCore Canada planning regions and extensions are separate proposals, not adopted additions to this rollout. Confirm them locally; published MeshMapper boundaries are unchanged.
 
 Have thoughts? Share them on the
 [MeshCore Canada Discord](https://discord.gg/BESFVMt7yk) or the

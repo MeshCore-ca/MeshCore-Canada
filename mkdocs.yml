@@ -42,13 +42,14 @@ theme:
     - toc.follow
 
 extra_css:
-  - assets/styles/tokens.css?v=20260722-2
-  - assets/styles/base.css?v=20260924-1
+  - assets/styles/tokens.css?v=20260926-1
+  - assets/styles/base.css?v=20260925-2
   - assets/styles/shell.css?v=20260821-1
   - assets/styles/components.css?v=20260728-1
   - assets/styles/network-status.css?v=20260905-1
 
 extra_javascript:
+  - assets/javascripts/region-profile.js?v=20260925-3
   - assets/javascripts/i18n-runtime.js?v=20260829-1
   - assets/javascripts/bootstrap.js?v=20260821-1
   - assets/javascripts/network-status.js?v=20260905-1

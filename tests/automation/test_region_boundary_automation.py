@@ -29,6 +29,14 @@ apply_issue = load_script("apply-approved-region-issue.py")
 fetch_sources = load_script("fetch-locked-region-sources.py")
 
 
+class RetiredBoundaryWriterTests(unittest.TestCase):
+    def test_iata_authority_stops_the_old_writer_before_arguments_or_side_effects(self):
+        with mock.patch.object(apply_issue, "parse_args") as parse:
+            with self.assertRaisesRegex(ValueError, "retired"):
+                apply_issue.main()
+            parse.assert_not_called()
+
+
 def encoded_payload(payload: bytes) -> str:
     return base64.urlsafe_b64encode(
         gzip.compress(payload, compresslevel=9, mtime=0)

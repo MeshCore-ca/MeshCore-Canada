@@ -513,7 +513,8 @@ def front_matter(*, title: str, description: str, task: str, metadata: dict[str,
             [
                 "status_notice: false",
                 "page_scripts:",
-                "  - assets/javascripts/communities.js?v=20260905-1",
+                "  - assets/javascripts/place-search.js?v=20260925-2",
+                "  - assets/javascripts/communities.js?v=20260925-2",
             ]
         )
     lines.extend(["---", ""])

@@ -114,6 +114,17 @@ IATA_CHOICES="$(cat <<'EOF'
 Ontario|YYZ|Toronto (Pearson)
 Ontario|YTZ|Toronto (Billy Bishop)
 Ontario|YOW|Ottawa
+Ontario|XCM|Chatham-Kent
+Ontario|XPH|Port Hope
+British Columbia|YBL|Campbell River
+Ontario|YLK|Barrie
+Quebec|YML|La Malbaie
+Ontario|YQA|Muskoka
+Alberta|YQF|Red Deer
+British Columbia|YSE|Squamish
+Quebec|YTF|Saguenay-Lac-Saint-Jean
+British Columbia|YWS|Whistler
+Quebec|YYY|Bas-Saint-Laurent-Gaspesie
 Ontario|YHM|Hamilton
 Ontario|YKF|Kitchener / Waterloo
 Ontario|YXU|London
@@ -123,6 +134,7 @@ Ontario|YAM|Sault Ste. Marie
 Ontario|YQT|Thunder Bay
 Ontario|YSB|Sudbury
 Ontario|YTS|Timmins
+Ontario|YQK|Kenora
 Ontario|YQG|Windsor
 Ontario|YYB|North Bay
 Ontario|YGK|Kingston
@@ -136,6 +148,7 @@ Quebec|YQB|Quebec City
 Quebec|YND|Gatineau (Ottawa area)
 Quebec|YBG|Bagotville / Saguenay
 Quebec|YVO|Val-d'Or
+Quebec|YVP|Kuujjuaq
 Quebec|YHU|Montreal (St-Hubert)
 Quebec|YRJ|Roberval
 Quebec|YGL|La Grande Riviere
@@ -174,6 +187,7 @@ Saskatchewan|YPA|Prince Albert
 Manitoba|YWG|Winnipeg
 Manitoba|YBR|Brandon
 Manitoba|YTH|Thompson
+Manitoba|YYQ|Churchill
 Manitoba|YDN|Dauphin
 Manitoba|YPG|Portage la Prairie
 New Brunswick|YFC|Fredericton

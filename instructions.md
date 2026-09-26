@@ -1,21 +1,37 @@
 # MeshCore Canada anonymous submission service
 
-Give this file to the MeshCore Canada administrator. It activates one
-MeshCore Canada-owned service for both public community ideas and region
-boundary proposals. Contributors do not need GitHub accounts.
+This organization-owned service accepts community ideas without a GitHub account.
+Canadian zone boundaries now come from MeshMapper. The former census boundary
+editor and its approval-to-main workflow are retired.
 
-## Activation order
+## IATA migration: deploy the gateway before merging
 
-Provision and verify the public submission service from the pull-request branch
-before merging. Then enable the repository-owned approval Action:
+The production owner must:
 
-1. Create the organization-owned GitHub App and Turnstile widget.
-2. Deploy the PR branch on the MeshCore Canada production host.
-3. Configure DNS, firewall, Caddy, TLS, health, and CORS.
-4. Create the `boundary-update` label and add the Action verification key.
-5. Merge the reviewed pull request only after the public API checks pass.
-6. Let GitHub Pages publish `main`, switch the host checkout to `main`, and
-   test both forms signed out.
+1. Record the running commit and image. Stop only `submission-gateway` long enough
+   to back up `/var/lib/meshcore-submissions`, including the ledger and previews.
+2. Deploy the reviewed PR commit using the existing service, secrets, GitHub App,
+   Caddy route, DNS, and ports. Do not create a replacement App or host.
+3. Run the health, config, CORS, and preflight checks below. Confirm
+   `boundaryProposals: false` and `communityIdeaOptionalDetails: true`.
+4. Confirm both `mcc-region-editor-proposal/v1` and `/v2` return HTTP 410 with
+   `boundary_editor_retired`, without consuming Turnstile tokens, creating issues,
+   or rendering previews. Unit tests cover these no-side-effect guarantees.
+5. Confirm an existing immutable preview URL still loads. Do not prune historical
+   issues, browser drafts, ledger rows, or preview images.
+6. Test the community form signed out, with approval for any public test issue.
+   Record the candidate SHA and results in the PR before merging.
+
+The retired Action has no issue-closure trigger and no write permission.
+Closing an old boundary issue must not change `main`. Do not enable the former
+boundary publisher or create its push token. Owners may retire
+`MCC_BOUNDARY_PUSH_TOKEN` and the boundary-only verification secret after checking
+that no other workflow uses them; keep the App PEM and Turnstile secret used by
+community submissions.
+
+This PR does not deploy the gateway or alter any repeater. The remaining setup
+sections are for an administrator who needs to provision or recover the existing
+service; they are not permission to change production.
 
 The fixed public endpoint is:
 
@@ -23,91 +39,31 @@ The fixed public endpoint is:
 https://api.meshcore.ca:21323/api/meshcore-canada/submissions
 ```
 
-Do not substitute another hostname, route, or port without changing and
-reviewing both browser clients, tests, Caddy, and deployment configuration.
+## Responsibility and rollback boundary
 
-## Pull-request responsibility split
+Repository work must pass CI on the exact review commit. The production owner
+must separately verify the host, protected mounts, TLS, Turnstile, GitHub App,
+rollback image, and signed-out community journey. Do not infer deployment from
+a green PR.
 
-Use this split for this pull request and later submission, region, or
-configuration pull requests.
+For a failed gateway update, restore the recorded image without deleting state.
+An old image may accept retired boundary schemas again: block those submissions
+or keep the gateway stopped until the retirement fix is restored. Community
+fallback links to GitHub remain available. Reverting the website alone must not
+reactivate boundary publishing.
 
-Before asking for final approval, an organization administrator working from a
-trusted checkout can and should:
+## HTTP behavior
 
-- confirm the exact branch and commit, a clean worktree, and mergeability with
-  current `main`;
-- review the diff for secrets and unintended production or endpoint changes;
-- run the repository validation commands and confirm the required GitHub
-  checks pass;
-- verify the required label, repository secret names, maintainer allowlist,
-  branch protection, and least-privilege Action settings without reading or
-  printing secret values;
-- run the public config, CORS, and preflight checks that do not change
-  production state; and
-- push any corrections and record the tested commit and remaining host checks
-  in the pull request.
-
-The production owner must complete the steps that require MeshCore Canada host
-or provider access:
-
-- deploy and rebuild the pull-request branch when it changes the gateway,
-  container, Caddy route, or public API contract;
-- verify protected files, mounts, loopback isolation, DNS, firewall, TLS,
-  Turnstile, GitHub App installation, logs, health, and rollback on that host;
-- run the signed-out end-to-end tests against that branch deployment; and
-- give final approval, merge, switch the production checkout to clean `main`,
-  rebuild where required, and verify the live service.
-
-Do not merge or change the production checkout merely because repository and
-public read-only checks pass. Record any skipped host test and why in the pull
-request.
-
-## What is being deployed
-
-```text
-meshcore.ca/submit-idea/       community idea (static GitHub Pages form)
-meshcore.ca/config/editor/     boundary proposal (static GitHub Pages editor)
-              | HTTPS POST, Turnstile token, no GitHub login
-              v
-api.meshcore.ca:21323/api/meshcore-canada/submissions
-              | validate cells, save PNG preview, create issue/comment
-              | short-lived repository-restricted installation token
-              v
-MeshCore Canada GitHub App -> MeshCore-ca/MeshCore-Canada issue
-                                      | maintainer closes Completed
-                                      v
-                       repository-owned approval Action
-                                      | verify, regenerate, validate
-                                      v
-                         main -> GitHub Pages deployment
-```
-
-The API accepts three strict schemas:
-
-- `mcc-community-idea/v1` creates a public community-idea issue.
-- `mcc-region-editor-proposal/v1` revalidates moves between existing regions.
-- `mcc-region-editor-proposal/v2` revalidates a proposed new region, including
-  its unique name, short tag, logical catalogue parent, changed cells, and
-  one unprotected anchor cell.
-
-Both region schemas create a current/proposed PNG and a public boundary issue
-with the preview in an App-authored comment.
-
-The public service creates issues only. It has no Contents permission and
-cannot make a boundary live. A separate repository-owned GitHub Action applies
-an approved boundary after a maintainer closes its issue as **Completed**. For an
-approved new region, the Action derives its seed from the official anchor
-census cell before regenerating the complete national partition.
-Cross-province and U.S. forwarding choices are catalog metadata, not boundary
-edits. Operators choose them in `/config/`; the editor and submission service
-never create or modify U.S. geometry.
-The GitHub App, Turnstile account, DNS, host, TLS, secrets, repository
-installation, and Action settings must all be controlled by MeshCore Canada.
+- Community ideas: `mcc-community-idea/v1`, unchanged public review issues.
+- Boundary proposals: HTTP 410, no new issue or preview.
+- Existing preview GET/HEAD URLs: unchanged.
+- Region map/configurator: checked-in MeshMapper snapshot; no runtime gateway call.
+- `/config/editor/`: bilingual retirement page and browser-local draft download.
 
 ## 1. Create the GitHub App
 
 While signed in as a `MeshCore-ca` organization owner or GitHub App manager,
-open the [pre-filled App registration](https://github.com/organizations/MeshCore-ca/settings/apps/new?name=MeshCore%20Canada%20Submissions&description=Creates%20public%20review%20issues%20for%20anonymous%20MeshCore%20Canada%20ideas%20and%20region%20boundary%20proposals&url=https%3A%2F%2Fmeshcore.ca%2F&public=false&issues=write&webhook_active=false).
+open the [pre-filled App registration](https://github.com/organizations/MeshCore-ca/settings/apps/new?name=MeshCore%20Canada%20Submissions&description=Creates%20public%20review%20issues%20for%20anonymous%20MeshCore%20Canada%20ideas&url=https%3A%2F%2Fmeshcore.ca%2F&public=false&issues=write&webhook_active=false).
 
 Confirm:
 
@@ -321,7 +277,8 @@ Required evidence:
 
 - TLS validates for `api.meshcore.ca` on port `21323`.
 - Config returns HTTP 200 with version `1`, the correct public site key, and
-  `turnstileAction` equal to `meshcore_submission`.
+  `turnstileAction` equal to `meshcore_submission`, `boundaryProposals: false`,
+  and `communityIdeaOptionalDetails: true`.
 - The allowed request returns
   `Access-Control-Allow-Origin: https://meshcore.ca`.
 - OPTIONS returns HTTP 204 and allows `POST` plus `Content-Type`.
@@ -351,92 +308,8 @@ curl -fsS \
   'https://api.meshcore.ca:21323/api/meshcore-canada/submissions/config'
 ```
 
-Keep the host checkout synchronized whenever `docs/assets/regions` changes.
-If the static editor and mounted authority differ, boundary proposals fail
-closed as stale; community ideas continue to use their independent schema.
-
-## 10. Enable approved boundary application
-
-Do these one-time repository-owner steps before testing a boundary submission:
-
-1. Create the `boundary-update` issue label. The gateway adds it only to
-   boundary proposals; community ideas remain ordinary `enhancement` issues.
-2. Keep the repository's default workflow permission **Read repository
-   contents and packages permissions**, and keep **Allow GitHub Actions to
-   create and approve pull requests** disabled. The boundary workflow requests
-   only `contents: read` and `issues: write` in its own
-   `permissions` block.
-3. Confirm the maintainer logins in
-   `.github/region-boundary-automation.json`. Only those users may approve a
-   boundary by closing its issue.
-4. Derive a public verification key from the same GitHub App private key used
-   by the gateway, store it as the repository Actions secret
-   `MCC_SUBMISSION_PUBLIC_KEY_PEM`, and remove the temporary file:
-
-```sh
-sudo openssl pkey \
-  -in /etc/meshcore-submissions/github-app.pem \
-  -pubout -out /tmp/mcc-submission-public.pem
-gh secret set MCC_SUBMISSION_PUBLIC_KEY_PEM \
-  --repo MeshCore-ca/MeshCore-Canada \
-  < /tmp/mcc-submission-public.pem
-sudo rm -f /tmp/mcc-submission-public.pem
-```
-
-The public key can verify the gateway signature but cannot create one. The
-GitHub App keeps Issues read/write only; do not grant it Contents access.
-
-5. Create a repository-scoped GitHub access token for a dedicated automation
-   account or allowlisted repository administrator. Grant it only the
-   repository Contents read/write permission needed to push the verified
-   boundary commit. Store it as the repository Actions secret
-   `MCC_BOUNDARY_PUSH_TOKEN`. In the `main` branch protection rule, add that
-   account to **Allow specified actors to bypass required pull requests**.
-   The workflow exposes this secret only to the final publication step, masks
-   its derived authorization header, and does not persist it in the checkout.
-   Do not use the anonymous-submission App or its private key for publication.
-
-For an accepted proposal, an allowlisted maintainer closes the labelled issue
-as **Completed**. The Action verifies the App author, closer, label, payload
-hash, App signature, current membership hash, and province. It records the
-reviewed CSD/DA decision, regenerates the full national layer from locked
-sources, runs the release checks, commits to `main` with the protected
-publication credential, and the resulting push starts the normal site
-deployment. A failed check publishes nothing and reopens the issue.
-
-To reject or close a test without changing the map, choose **Close as not
-planned**. Removing the label also prevents application.
-
-## 11. Test both flows without a GitHub account
-
-Use a signed-out private browser.
-
-### Community idea
-
-1. Open `https://meshcore.ca/submit-idea/`.
-2. Enter an unmistakable test titled `Production anonymous idea test — close`.
-3. Review it, complete Turnstile if prompted, and select **Submit idea**.
-4. Confirm the returned link is a new `MeshCore-ca/MeshCore-Canada` issue
-   created by the GitHub App without a GitHub login.
-5. Confirm the issue contains no secret, then close it as a test.
-
-### Region boundary proposal
-
-1. Open `https://meshcore.ca/config/editor/`.
-2. Make one small valid draft move inside one province or territory. Also test **Create a new region** with a unique tag and a changed anchor cell. Cross-province repeater areas are configuration records, so their map boundaries are edited one side at a time.
-3. Use reason `Production anonymous boundary test — do not apply`.
-4. Complete Turnstile and select **Submit for review**.
-5. Confirm the App-created issue has `enhancement` and `boundary-update`
-   labels, a readable summary, and signed submission markers.
-6. Confirm the App posts one **Boundary preview** comment, the PNG renders
-   directly in GitHub, and it clearly shows **Current**, **Proposed**, and
-   **Preview - not approved**.
-7. Open the image URL and confirm it is under
-   `api.meshcore.ca:21323/api/meshcore-canada/submissions/previews/`.
-8. Choose **Close as not planned** and confirm no boundary commit is created.
-
-Both pages must retain their copy/download or manual fallback when the API is
-unavailable. Neither flow should request a GitHub login for direct submission.
+Community submissions do not depend on changing map boundaries. Keep existing
+read-only historical mounts during this migration; removing them is separate maintenance.
 
 ## Operations and rollback
 
@@ -457,8 +330,6 @@ curl -fsS http://127.0.0.1:8787/healthz
   only `submission-gateway`.
 - To roll back the website, revert the responsible commit on `main` and let the
   normal Pages workflow publish the revert. Do not force-push production.
-- To roll back an approved boundary, revert its `Apply boundary update #N`
-  commit. The source decision and every generated artifact are in that commit.
 - Before migration or ledger maintenance, stop the gateway and back up
   `/var/lib/meshcore-submissions`. This includes the ledger and issue preview
   PNGs. Never delete a confirmed `created` row or a preview referenced by an
@@ -475,29 +346,13 @@ curl -fsS http://127.0.0.1:8787/healthz
 
 ## Administrator completion checklist
 
-- [ ] Host, DNS, GitHub App, Turnstile, and secrets are MeshCore Canada-owned.
-- [ ] `api.meshcore.ca` is DNS-only or intentionally backed by Spectrum.
-- [ ] Provider and host firewalls allow TCP `21323`; `8787` is loopback only.
-- [ ] Caddy presents a valid certificate on `api.meshcore.ca:21323`.
-- [ ] GitHub App is installed only on `MeshCore-ca/MeshCore-Canada` with Issues
-      read/write and no Contents permission.
-- [ ] `boundary-update` exists; the repository workflow default remains
-      read-only and Action pull-request approval remains disabled.
-- [ ] `MCC_SUBMISSION_PUBLIC_KEY_PEM` contains the public key derived from the
-      production App PEM; the App itself still has no Contents permission.
-- [ ] `MCC_BOUNDARY_PUSH_TOKEN` is repository-scoped, belongs to the approved
-      publication identity, and that identity alone may bypass required pull
-      requests for automated boundary commits.
-- [ ] Approved maintainer logins in `.github/region-boundary-automation.json`
-      are current.
-- [ ] Turnstile validates `meshcore.ca`, `config.meshcore.ca`, and action
-      `meshcore_submission`.
-- [ ] Loopback health, public config, allowed CORS, denied CORS, and preflight
-      checks pass before merge.
-- [ ] The reviewed pull request is merged and GitHub Pages publishes
-      successfully.
-- [ ] Signed-out idea and boundary submissions each create a test issue.
-- [ ] The boundary issue has one App-authored Current/Proposed PNG comment and
-      its immutable image URL loads without GitHub authentication.
-- [ ] The boundary test is closed as not planned; no test boundary is applied.
-- [ ] Production checkout is on clean `main` and the ledger is backed up.
+- [ ] Exact PR commit, tests, and rollback image recorded.
+- [ ] State backup verified; historical previews and ledger preserved.
+- [ ] Only the existing submission service rebuilt; no DNS, port, or credential changes.
+- [ ] Health, TLS, CORS, preflight, and least-privilege App checks pass.
+- [ ] Config advertises community ideas and boundary retirement.
+- [ ] Both boundary schemas return 410 without side effects.
+- [ ] Existing preview URL works; unknown preview returns 404.
+- [ ] Signed-out community submission verified with permission.
+- [ ] Retired approval Action cannot push to main.
+- [ ] Merge and Pages publication happen only after owner approval.

@@ -1,6 +1,6 @@
 ---
 title: Find an observer location code
-description: Find the three-letter airport code nearest an observer.
+description: Match your observer location code to its IATA region.
 audience:
   - observer-operators
 task: choose-location-code
@@ -20,9 +20,11 @@ page_scripts:
 
 # Find an observer location code
 
-An observer uses a real three-letter airport code as a broad location label. It does not define a MeshCore region boundary.
+Use the code shown by the [IATA region map](../config/map.md) for your observer's location. The map identifies published MeshMapper zones and MeshCore Canada starter regions; distance to an airport does not determine the code.
 
-Use the nearest sensible code for the observer's actual area. Use the same code in every broker entry.
+Observer settings use uppercase codes such as `YOW`; on-air scopes use lowercase names such as `yow`. Use the same observer code in every broker entry. Coordinate changes to an existing observer with its operator.
+
+If the map has no assigned region at your location, ask your community which code to use. The quick list below is a reference, not a boundary lookup.
 
 <div class="mc-location-tool" id="location-code-tool" data-source="../location-codes.json">
   <div class="mc-location-controls">
@@ -56,12 +58,12 @@ Use the nearest sensible code for the observer's actual area. Use the same code 
 
 The [canonical location-code data](location-codes.json) generates the search tool and the command-builder suggestions. It is a curated Canadian quick list, not a complete official airport-code registry.
 
-If the nearest real airport code is missing:
+If your community's code is missing:
 
-1. verify it against a reliable airport source;
+1. confirm it with the community and MeshMapper;
 2. type the three-letter code into a method that accepts free text; and
 3. ask MeshCore Canada to add the friendly place name.
 
-Do not use `CAN` for Canada; it is an airport code for Guangzhou. Do not use placeholders such as `XXX` or `HOME`.
+Do not use `CAN` for an observer in Canada; it is an airport code for Guangzhou. The reserved on-air scope `can` is a separate setting. Do not use placeholders such as `XXX` or `HOME`.
 
 Return to [Choose an observer method](intro.md).

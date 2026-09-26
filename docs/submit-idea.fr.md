@@ -16,7 +16,7 @@ estimated_time: 3-5 minutes
 page_styles:
   - stylesheets/extra.css?v=20260722-2
 page_scripts:
-  - javascripts/submission-form.js?v=20260904-1
+  - javascripts/submission-form.js?v=20260925-2
 hide:
   - toc
 ---

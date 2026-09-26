@@ -34,7 +34,7 @@
       "Radio network: " + normalizeText(input.radio || "Keep current settings"),
       "Advert ID size: " + normalizeText(input.hashMode || "Keep current settings"),
       "",
-      "Forwarding paths:"
+      "Forwarded scopes:"
     ];
     paths.forEach(function (path) { lines.push("- " + path); });
     lines.push("", "Commands:");
@@ -42,8 +42,8 @@
     lines.push(
       "",
       "Verification:",
-      "1. Run region before saving and compare every path above.",
-      "2. Run region save only after the paths and flood permissions are correct.",
+      "1. Back up and remove obsolete regions before applying a fresh scope list, preferably over USB.",
+      "2. Run region and compare every scope and flood permission above. Some commands save immediately.",
       "3. Run region again after saving.",
       "4. If radio settings changed, reboot and run get radio to confirm them.",
       "5. If the advert ID size changed, run get path.hash.mode to confirm it.",

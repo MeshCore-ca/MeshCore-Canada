@@ -1,30 +1,201 @@
 {
-  "description": "Approximate search reference points, not radio locations or coverage boundaries. Existing community coordinates take precedence. Regional references use the published canada-regions.json seed coordinates; broad communities may have several references.",
+  "description": "Approximate community search reference points, not radio locations, coverage boundaries, or scope assignments. Existing community coordinates take precedence. Historical reference coordinates are retained unchanged through the IATA migration.",
   "communities": {
-    "bc-mesh": ["mvrd", "crd"],
-    "salish-mesh": ["mvrd", "crd"],
-    "alberta-meshcore-networks": ["cal", "edm", "leth"],
+    "bc-mesh": [
+      {
+        "label": "Metro Vancouver",
+        "lat": 49.28173,
+        "lon": -123.11928
+      },
+      {
+        "label": "Capital / Victoria",
+        "lat": 48.43719,
+        "lon": -123.361624
+      }
+    ],
+    "salish-mesh": [
+      {
+        "label": "Metro Vancouver",
+        "lat": 49.28173,
+        "lon": -123.11928
+      },
+      {
+        "label": "Capital / Victoria",
+        "lat": 48.43719,
+        "lon": -123.361624
+      }
+    ],
+    "alberta-meshcore-networks": [
+      {
+        "label": "Calgary region",
+        "lat": 51.016738,
+        "lon": -114.001493
+      },
+      {
+        "label": "Edmonton metro",
+        "lat": 53.551268,
+        "lon": -113.491265
+      },
+      {
+        "label": "Lethbridge & deep south",
+        "lat": 49.684963,
+        "lon": -112.834123
+      }
+    ],
     "airdrie-meshcore-network": [],
-    "calgary-area-meshcore": ["cal"],
+    "calgary-area-meshcore": [
+      {
+        "label": "Calgary region",
+        "lat": 51.016738,
+        "lon": -114.001493
+      }
+    ],
     "calgary-meshcore-network": [],
     "edmonton-meshcore-network": [],
     "yegmesh-ca": [],
     "yqlmesh": [],
-    "southern-alberta": ["leth"],
-    "yyc-meshcore-discord": ["cal"],
-    "stoonmesh": ["stoon"],
-    "yqrmesh": ["regina"],
-    "winnipeg-meshcore": ["wpg"],
-    "greater-ottawa-mesh-enthusiasts": ["ott", "gatout"],
-    "gta-lora-meshes": ["tor"],
-    "quinte-mesh-network": ["has", "pec"],
-    "charlevoix-yml": [{"label": "La Malbaie", "lat": 47.652419, "lon": -70.14951, "source": "https://geolocator.api.geo.ca/?q=La%20Malbaie&lang=en&keys=geonames"}],
-    "mesh-quebec": ["mtl", "capnat", "saglac"],
-    "montreal-mesh": ["mtl"],
-    "reseau-mesh-capitale-yqb": ["capnat"],
-    "reseau-mesh-saguenay-lac-saint-jean-ytf": ["saglac"],
-    "reseau-libre": ["mtl"],
-    "southern-new-brunswick": ["york", "sj", "westm"],
-    "lunenburg-county-mesh": ["lun"]
+    "southern-alberta": [
+      {
+        "label": "Lethbridge & deep south",
+        "lat": 49.684963,
+        "lon": -112.834123
+      }
+    ],
+    "yyc-meshcore-discord": [
+      {
+        "label": "Calgary region",
+        "lat": 51.016738,
+        "lon": -114.001493
+      }
+    ],
+    "stoonmesh": [
+      {
+        "label": "Saskatoon region",
+        "lat": 52.1708,
+        "lon": -106.6997
+      }
+    ],
+    "yqrmesh": [
+      {
+        "label": "Regina region",
+        "lat": 50.4319,
+        "lon": -104.6658
+      }
+    ],
+    "winnipeg-meshcore": [
+      {
+        "label": "Winnipeg",
+        "lat": 49.896517,
+        "lon": -97.130584
+      }
+    ],
+    "greater-ottawa-mesh-enthusiasts": [
+      {
+        "label": "Ottawa",
+        "lat": 45.4215,
+        "lon": -75.6972
+      },
+      {
+        "label": "Outaouais / Gatineau",
+        "lat": 45.48,
+        "lon": -75.65
+      }
+    ],
+    "gta-lora-meshes": [
+      {
+        "label": "Toronto",
+        "lat": 43.6532,
+        "lon": -79.3832
+      }
+    ],
+    "quinte-mesh-network": [
+      {
+        "label": "Hastings / Belleville",
+        "lat": 44.1628,
+        "lon": -77.3832
+      },
+      {
+        "label": "Prince Edward County",
+        "lat": 44.0007,
+        "lon": -77.25
+      }
+    ],
+    "charlevoix-yml": [
+      {
+        "label": "La Malbaie",
+        "lat": 47.652419,
+        "lon": -70.14951,
+        "source": "https://geolocator.api.geo.ca/?q=La%20Malbaie&lang=en&keys=geonames"
+      }
+    ],
+    "mesh-quebec": [
+      {
+        "label": "Montréal",
+        "lat": 45.5017,
+        "lon": -73.5673
+      },
+      {
+        "label": "Capitale-Nationale",
+        "lat": 46.8139,
+        "lon": -71.208
+      },
+      {
+        "label": "Saguenay–Lac-Saint-Jean",
+        "lat": 48.428,
+        "lon": -71.068
+      }
+    ],
+    "montreal-mesh": [
+      {
+        "label": "Montréal",
+        "lat": 45.5017,
+        "lon": -73.5673
+      }
+    ],
+    "reseau-mesh-capitale-yqb": [
+      {
+        "label": "Capitale-Nationale",
+        "lat": 46.8139,
+        "lon": -71.208
+      }
+    ],
+    "reseau-mesh-saguenay-lac-saint-jean-ytf": [
+      {
+        "label": "Saguenay–Lac-Saint-Jean",
+        "lat": 48.428,
+        "lon": -71.068
+      }
+    ],
+    "reseau-libre": [
+      {
+        "label": "Montréal",
+        "lat": 45.5017,
+        "lon": -73.5673
+      }
+    ],
+    "southern-new-brunswick": [
+      {
+        "label": "York / Fredericton",
+        "lat": 45.8689,
+        "lon": -66.5372
+      },
+      {
+        "label": "Saint John",
+        "lat": 45.3161,
+        "lon": -65.8903
+      },
+      {
+        "label": "Westmorland / Moncton",
+        "lat": 46.1122,
+        "lon": -64.6786
+      }
+    ],
+    "lunenburg-county-mesh": [
+      {
+        "label": "Lunenburg",
+        "lat": 44.5070278,
+        "lon": -64.4344556
+      }
+    ]
   }
 }

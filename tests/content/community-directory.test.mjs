@@ -393,7 +393,7 @@ test("issues 94 and 95 keep corrected contacts and Winnipeg status in both langu
   const schema = JSON.parse(readFileSync(join(root, "schemas/community-directory.schema.json"), "utf8"));
   assert.ok(schema.$defs.contact.properties.type.enum.includes("matrix"));
   const anchors = JSON.parse(readFileSync(join(root, "data/community-search-anchors.json"), "utf8"));
-  assert.deepEqual(anchors.communities[winnipeg.id], ["wpg"]);
+  assert.deepEqual(anchors.communities[winnipeg.id], [{ label: "Winnipeg", lat: 49.896517, lon: -97.130584 }]);
 
   for (const suffix of [".md", ".fr.md"]) {
     const index = readFileSync(join(provinceDir, `index${suffix}`), "utf8");

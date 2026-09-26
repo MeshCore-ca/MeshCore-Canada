@@ -11,6 +11,7 @@
   var leafletPromise = null;
   var activeMaps = [];
   var configuratorSupport = window.MeshCoreRegionConfiguratorSupport || {};
+  var iataScopes = window.MeshCoreIataScopes;
   var radioProfiles = window.MeshCoreRadioProfiles;
   var REQUEST_TIMEOUT_MS = 12000;
   var frenchRuntime = /^fr(?:-|$)/i.test(
@@ -18,6 +19,112 @@
   );
 
   var FRENCH_RUNTIME_TEXT = {
+    "Choose the place you mean:": "Choisissez le lieu recherché :",
+    "Place lookup failed": "La recherche de lieux a échoué",
+    "MeshCore Canada starter region": "Région initiale de MeshCore Canada",
+    "MeshCore Canada planning extension": "Extension proposée par MeshCore Canada",
+    "Planning extension": "Extension proposée",
+    "Planning extensions": "Extensions proposées",
+    "MeshCore Canada planning": "Planification MeshCore Canada",
+    "Planning extension details": "Détails des extensions proposées",
+    "This point is outside the published MeshMapper boundary. MeshCore Canada assigns the gap to this nearby IATA region for planning; confirm its use locally.": "Ce point est hors de la limite publiée par MeshMapper. MeshCore Canada attribue cet espace à cette région IATA voisine à des fins de planification; confirmez son utilisation localement.",
+    "Starter regions": "Régions initiales",
+    "Starter region details": "Détails des régions initiales",
+    "This broad starter region is assigned by MeshCore Canada, not yet published by MeshMapper. Confirm its use with local operators; it does not promise radio coverage.": "Cette grande région initiale est attribuée par MeshCore Canada; elle n’est pas encore publiée dans MeshMapper. Confirmez son utilisation avec les opérateurs locaux; elle ne garantit pas la couverture radio.",
+    "Published MeshMapper zones are unchanged. Labelled planning regions fill the remaining gaps across Canada.": "Les zones publiées par MeshMapper restent inchangées. Des régions proposées identifiées comblent les espaces restants partout au Canada.",
+    "Planning regions follow provincial borders and nearby hubs. Newfoundland and Labrador are separate. Published MeshMapper zones take priority.": "Les régions proposées suivent les frontières provinciales et les pôles voisins. Terre-Neuve et le Labrador sont séparés. Les zones publiées par MeshMapper ont priorité.",
+    "IATA boundaries SHA-256": "SHA-256 des limites IATA",
+    "Download IATA boundaries": "Télécharger les limites IATA",
+    "Other IATA regions": "Autres régions IATA",
+    "No IATA region contains this point. Browse the region list or check with your community.": "Aucune région IATA ne contient ce point. Consultez la liste ou votre communauté.",
+    "Review the replacement scope list": "Vérifier la nouvelle liste de scopes",
+    "These saved zones need a new choice:": "Ces zones enregistrées nécessitent un nouveau choix :",
+    "I checked the replacement scope list.": "J’ai vérifié la nouvelle liste de scopes.",
+    "Review the replacement scope list in step 3 before copying commands.": "Vérifiez la nouvelle liste de scopes à l’étape 3 avant de copier les commandes.",
+    "Too many saved zones": "Trop de zones enregistrées",
+    "Choose a supported firmware version.": "Choisissez une version de micrologiciel prise en charge.",
+    "On firmware 1.14, this repeater's adverts stay unscoped. Upgrade to 1.15 or newer to scope its adverts by city.": "Avec le micrologiciel 1.14, les annonces de ce répéteur restent sans scope. Passez à la version 1.15 ou plus récente pour les limiter au scope de ville.",
+    "The saved zone differs from this location. Choose the current IATA region.": "La zone enregistrée ne correspond pas à cet emplacement. Choisissez la région IATA actuelle.",
+    "MeshCore Canada repeater setup summary": "Résumé de configuration du répéteur MeshCore Canada",
+    "Generated": "Généré le",
+    "Location label": "Nom du lieu",
+    "Home region": "Région locale",
+    "Region budget": "Limites de la liste",
+    "Not recorded": "Non indiqué",
+    "1. Back up and remove obsolete regions before applying a fresh scope list, preferably over USB.": "1. Conservez la liste actuelle et retirez les régions obsolètes avant d’appliquer les nouveaux scopes, de préférence par USB.",
+    "2. Run region and compare every scope and flood permission above. Some commands save immediately.": "2. Exécutez region et comparez chaque scope et autorisation ci-dessus. Certaines commandes enregistrent immédiatement les changements.",
+    "3. Run region again after saving.": "3. Exécutez region à nouveau après l’enregistrement.",
+    "4. If radio settings changed, reboot and run get radio to confirm them.": "4. Si les réglages radio ont changé, redémarrez puis exécutez get radio pour les confirmer.",
+    "5. If the advert ID size changed, run get path.hash.mode to confirm it.": "5. Si la taille d’identifiant a changé, exécutez get path.hash.mode pour la confirmer.",
+    "This summary omits exact coordinates, passwords, private keys, and device identifiers.": "Ce résumé exclut les coordonnées exactes, les mots de passe, les clés privées et les identifiants d’appareil.",
+    "Published MeshMapper boundary": "Limite publiée par MeshMapper",
+    "No reply? Check the connection and use Send Again. On 1.15, region put replies OK - (flood allowed).": "Aucune réponse? Vérifiez la connexion et utilisez Send Again. Avec la version 1.15, region put répond OK - (flood allowed).",
+    "MeshMapper zone": "Zone MeshMapper",
+    "Reserved": "Réservée",
+    "Province scope": "Portée provinciale",
+    "ON/QC scope": "Portée ON/QC",
+    "Province or territory of the repeater": "Province ou territoire du répéteur",
+    "Choose a province or territory": "Choisissez une province ou un territoire",
+    "A MeshMapper zone can cross a provincial border. Use the province where this repeater is installed.": "Une zone MeshMapper peut traverser une frontière provinciale. Choisissez la province où ce répéteur est installé.",
+    "Use the proposed ON/QC standard settings": "Utiliser les réglages proposés pour ON/QC",
+    "Leave unchecked for scope commands only. A complete ON/QC Phase 1 setup also needs these standard settings.": "Laissez cette case décochée pour les commandes de portée seulement. Une configuration complète de la phase 1 ON/QC exige aussi ces réglages standard.",
+    "ON/QC rollout: repeaters first": "Déploiement ON/QC : les répéteurs d’abord",
+    "Phase 2 is not open. Personal companions keep their default scope empty and channels unscoped until the rollout is announced: January 2027 at the earliest, after the repeaters are ready.": "La phase 2 n’est pas ouverte. Les compagnons personnels gardent leur portée par défaut vide et leurs canaux sans portée jusqu’à l’annonce du déploiement : janvier 2027 au plus tôt, une fois les répéteurs prêts.",
+    "Rollout phases": "Phases du déploiement",
+    "ON/QC Phase 1 standard settings included": "Réglages standard de la phase 1 ON/QC inclus",
+    "ON/QC Phase 1 standard settings not included": "Réglages standard de la phase 1 ON/QC non inclus",
+    "These commands do not include all of the proposal’s standard ID, advert and hop settings. Select the ON/QC option in step 3 if you want to include them.": "Ces commandes n’incluent pas tous les réglages standard d’identifiants, d’annonces et de sauts de la proposition. Sélectionnez l’option ON/QC à l’étape 3 pour les inclure.",
+    "3-byte IDs, local adverts every 4 hours, flood adverts every 47 hours, and a 16-hop flood limit.": "Identifiants de 3 octets, annonces locales toutes les 4 heures, annonces par inondation toutes les 47 heures et limite de 16 sauts.",
+    "More than one MeshMapper zone contains this point. Choose your community's zone.": "Plusieurs zones MeshMapper contiennent ce point. Choisissez celle de votre communauté.",
+    "More than one MeshMapper zone contains this point. Select your community's zone on the map.": "Plusieurs zones MeshMapper contiennent ce point. Sélectionnez celle de votre communauté sur la carte.",
+    "No published MeshMapper zone contains this point. Browse the zone list or check with your community.": "Aucune zone publiée dans MeshMapper ne contient ce point. Consultez la liste ou votre communauté.",
+    "Zone found. Choose the province where the repeater is installed.": "Zone trouvée. Choisissez la province où le répéteur est installé.",
+    "This saved link used an older region name. Check the MeshMapper zone and province before applying settings.": "Ce lien utilisait un ancien nom de région. Vérifiez la zone MeshMapper et la province avant d’appliquer les réglages.",
+    "IATA scope setup requires firmware v1.16 or newer. Update the repeater first.": "Les portées IATA exigent le micrologiciel 1.16 ou plus récent. Mettez d’abord le répéteur à jour.",
+    "The IATA scope catalog is unavailable or out of date.": "Le catalogue des portées IATA est indisponible ou périmé.",
+    "Confirm the repeater province: it differs from this zone's usual province.": "Confirmez la province du répéteur : elle diffère de celle habituellement associée à cette zone.",
+    "These are published MeshMapper zones, not radio coverage or scope-enforcement boundaries.": "Ce sont les zones publiées par MeshMapper, pas des limites de couverture radio ou d’application des portées.",
+    "Open this zone in MeshMapper": "Ouvrir cette zone dans MeshMapper",
+    "Choose the repeater province in the configurator": "Choisissez la province du répéteur dans le configurateur",
+    "MeshMapper snapshot": "Instantané MeshMapper",
+    "Published zones": "Zones publiées",
+    "Fetched": "Récupéré le",
+    "Flat scopes": "Portées indépendantes",
+    "City, province, mesh scope where defined, can, and na. Each scope is independent.": "Ville, province, réseau partagé s’il est défini, can et na. Chaque portée est indépendante.",
+    "onqc is for Ontario and Québec. can and na are reserved for future use, not companion defaults or active cross-border routes.": "onqc couvre l’Ontario et le Québec. can et na sont réservés pour plus tard, pas comme portées par défaut d’un compagnon ni comme routes transfrontalières actives.",
+    "Map limits": "Limites de la carte",
+    "Only published MeshMapper boundaries are shown. Gaps are not filled with guessed circles or census regions.": "Seules les limites publiées par MeshMapper sont affichées. Les espaces vides ne sont pas comblés par des cercles estimés ou des régions de recensement.",
+    "Province outlines are used only to identify the repeater province. They do not change MeshMapper boundaries.": "Les contours provinciaux servent seulement à identifier la province du répéteur. Ils ne modifient pas les limites de MeshMapper.",
+    "Source files": "Fichiers sources",
+    "MeshMapper boundaries SHA-256": "SHA-256 des limites MeshMapper",
+    "Download MeshMapper boundaries": "Télécharger les limites MeshMapper",
+    "City zone": "Zone locale",
+    "Nearby city zones": "Zones locales à proximité",
+    "Other MeshMapper zones": "Autres zones MeshMapper",
+    "Select only city zones this repeater links. Edge mode blocks unscoped floods.": "Sélectionnez seulement les zones reliées par ce répéteur. Le mode bordure bloque la retransmission sans portée.",
+    "An edge repeater can carry several IATA codes. Its province scope stays the province where it is installed.": "Un répéteur de bordure peut porter plusieurs codes IATA. Sa portée provinciale reste celle de son lieu d’installation.",
+    "Choose the city scopes this repeater should forward.": "Choisissez les portées de ville que ce répéteur doit retransmettre.",
+    "Request a zone change": "Demander une modification de zone",
+    "Uses the same scope list": "Utilise la même liste de portées",
+    "City repeater": "Répéteur de ville",
+    "One IATA region; unscoped messages work locally.": "Une région IATA; les messages sans portée restent utilisables localement.",
+    "Edge repeater": "Répéteur de bordure",
+    "Regularly links repeaters in different IATA regions; blocks unscoped floods.": "Relie régulièrement des répéteurs de régions IATA différentes; bloque la retransmission sans portée.",
+    "A repeater on the outer boundary stays a city repeater unless it regularly links to another IATA region.": "Un répéteur à la limite extérieure reste un répéteur de ville, sauf s’il relie régulièrement une autre région IATA.",
+    "Different cities or map outlines with the same IATA code still count as one region.": "Des villes ou des contours portant le même code IATA comptent toujours comme une seule région.",
+    "Forwarded scopes": "Portées retransmises",
+    "Forwarded scopes:": "Portées retransmises :",
+    "Before applying a new scope list": "Avant d’appliquer une nouvelle liste de portées",
+    "Back up the current region list. Remove old entries before applying this profile; use USB if possible.": "Conservez la liste actuelle. Retirez les anciennes entrées avant d’appliquer ce profil; utilisez une connexion USB si possible.",
+    "Migration instructions": "Consignes de migration",
+    ". Existing regions are not cleared. Some commands save immediately.": ". Les anciennes régions ne sont pas effacées. Certaines commandes enregistrent immédiatement les changements.",
+    "No MeshMapper zones are published here yet.": "Aucune zone MeshMapper n’est encore publiée ici.",
+    "Select this city zone to see its scope options.": "Sélectionnez cette zone locale pour voir ses portées.",
+    "Quebec City": "Québec",
+    "Montreal": "Montréal",
+    "Saguenay Lac-st-jean": "Saguenay–Lac-Saint-Jean",
+    "Cape Breton Island": "Île du Cap-Breton",
+    "Bas-St-Laurent-Gaspésie": "Bas-Saint-Laurent–Gaspésie",
     "Loading regional boundaries…": "Chargement des limites régionales…",
     "Radio network": "Réseau radio",
     "Advert ID size": "Taille de l’identifiant d’annonce",
@@ -349,8 +456,8 @@
       var translatedPrefix = FRENCH_RUNTIME_TEXT[prefix];
       return translatedPrefix ? translatedPrefix + " : " + translateRuntimeText(value) : match;
     }],
-    [/^(\d+) \/ 32 tags, (\d+) \/ 172 bytes$/, function (match, tags, bytes) {
-      return tags + " / 32 identifiants, " + bytes + " / 172 octets";
+    [/^(\d+) \/ 32 tags, (\d+) \/ 160 bytes$/, function (match, tags, bytes) {
+      return tags + " / 32 identifiants, " + bytes + " / 160 octets";
     }],
     [/^That name matches more than one region \((.+)\)\. Add a province or postal code\.$/, function (match, choices) {
       return "Ce nom correspond à plusieurs régions (" + choices + "). Ajoutez une province ou un code postal.";
@@ -367,14 +474,14 @@
     [/^Too many regions: (\d+) tags exceeds the 32-tag limit\.$/, function (match, count) {
       return "Trop de régions : " + count + " identifiants dépassent la limite de 32.";
     }],
-    [/^Region names use (\d+) bytes, above the 172-byte response limit\.$/, function (match, bytes) {
-      return "Les noms de régions utilisent " + bytes + " octets, au-delà de la limite de réponse de 172 octets.";
+    [/^Region names use (\d+) bytes, above the 160-byte response limit\.$/, function (match, bytes) {
+      return "Les noms de régions utilisent " + bytes + " octets, au-delà de la limite de réponse de 160 octets.";
     }],
     [/^(.+) keeps (.+) in one repeater configuration\.$/, function (match, area, members) {
       return area + " regroupe " + members.replace(/ and /g, " et ") + " dans une seule configuration de répéteur.";
     }],
-    [/^This selection uses (\d+) tags and (\d+) bytes\. Remove regions until it fits the 32-tag and 172-byte limits\.$/, function (match, tags, bytes) {
-      return "Cette sélection utilise " + tags + " identifiants et " + bytes + " octets. Retirez des régions jusqu’à respecter les limites de 32 identifiants et de 172 octets.";
+    [/^This selection uses (\d+) tags and (\d+) bytes\. Remove regions until it fits the 32-tag and 160-byte limits\.$/, function (match, tags, bytes) {
+      return "Cette sélection utilise " + tags + " identifiants et " + bytes + " octets. Retirez des régions jusqu’à respecter les limites de 32 identifiants et de 160 octets.";
     }],
     [/^(.+) combines (.+) in one repeater setup\. All map boundaries remain separate\.$/, function (match, area, members) {
       return area + " regroupe " + members.replace(/ and /g, " et ") + " dans une seule configuration de répéteur. Toutes les limites cartographiques demeurent distinctes.";
@@ -412,8 +519,8 @@
     [/^(\d+) regions$/, function (match, count) {
       return count + " régions";
     }],
-    [/^(\d+) \/ 32 tags · (\d+) \/ 172 bytes$/, function (match, tags, bytes) {
-      return tags + " / 32 identifiants · " + bytes + " / 172 octets";
+    [/^(\d+) \/ 32 tags · (\d+) \/ 160 bytes$/, function (match, tags, bytes) {
+      return tags + " / 32 identifiants · " + bytes + " / 160 octets";
     }],
     [/^(.+) region$/, function (match, label) {
       return "Région de " + label;
@@ -509,7 +616,7 @@
   }
 
   function fetchJsonAsset(filename, errorMessage, retrying) {
-    return fetchWithTimeout(new URL(filename, assetBase), {}, REQUEST_TIMEOUT_MS).then(function (response) {
+    return fetchWithTimeout(new URL(filename, assetBase), { cache: filename === "iata-regions.json" ? "no-cache" : "default" }, REQUEST_TIMEOUT_MS).then(function (response) {
       if (!response.ok) throw new Error(errorMessage);
       return response.json();
     }).catch(function (error) {
@@ -522,7 +629,7 @@
 
   function loadCatalog() {
     if (!catalogPromise) {
-      catalogPromise = fetchJsonAsset("canada-regions.json", "Unable to load MeshCore Canada region data")
+      catalogPromise = fetchJsonAsset("iata-regions.json", "Unable to load MeshCore Canada region data")
         .then(prepareCatalog)
         .catch(function (error) {
           catalogPromise = null;
@@ -532,10 +639,10 @@
     return catalogPromise;
   }
 
-  function loadDisplayPartition() {
+  function loadDisplayPartition(data) {
     if (!displayPartitionPromise) {
       displayPartitionPromise = fetchJsonAsset(
-        "canada-region-partition.geojson",
+        "iata-boundaries.geojson?v=" + data.source.boundarySha256,
         "Unable to load the Canadian map layer"
       ).catch(function (error) {
         displayPartitionPromise = null;
@@ -545,10 +652,10 @@
     return displayPartitionPromise;
   }
 
-  function loadResolverPartition() {
+  function loadResolverPartition(data) {
     if (!resolverPartitionPromise) {
       resolverPartitionPromise = fetchJsonAsset(
-        "canada-region-partition-digital.geojson",
+        "scope-jurisdictions.geojson?v=" + data.source.jurisdictionSha256,
         "Unable to load the Canadian location layer"
       ).catch(function (error) {
         resolverPartitionPromise = null;
@@ -564,21 +671,23 @@
   }
 
   function ensureResolverData(data) {
-    if (data.resolverRegions) return Promise.resolve(data);
-    return loadResolverPartition().then(function (partition) {
-      return applyGeneratedPartition(data, null, partition);
+    if (data.resolverRegions && data.jurisdictions) return Promise.resolve(data);
+    return Promise.all([loadDisplayPartition(data), loadResolverPartition(data)]).then(function (layers) {
+      return applyGeneratedPartition(data, layers[0], layers[1]);
     });
   }
 
   function prepareCatalog(data) {
     if (data.__mccPrepared) return data;
+    if (!iataScopes || data.schema !== "meshcore-canada-iata-scopes/v1" || !Array.isArray(data.policy && data.policy.reservedScopes)) throw new Error("The IATA scope catalog is unavailable or out of date.");
+    if (!/^[0-9a-f]{64}$/.test(data.source.boundarySha256) || !/^[0-9a-f]{64}$/.test(data.source.jurisdictionSha256)) throw new Error("The IATA scope catalog is unavailable or out of date.");
     var suppliedAliases = data.aliases || {};
     var previousAliases = data.regionAliases || {};
     var strategySeeds = (data.seeds || []).map(function (seed) {
       return Object.assign({}, seed, {
         tag: slug(seed.tag),
-        sourceTier: "generated",
-        boundaryType: "generated-partition"
+        sourceTier: seed.regionSource,
+        boundaryType: seed.regionSource === "meshmapper" ? "meshmapper-zone" : "starter-region"
       });
     });
     var seedTags = {};
@@ -595,6 +704,11 @@
         .concat(previousAliases[tag] || [])
         .filter(Boolean));
     });
+    Object.keys(data.legacyAliases || {}).forEach(function (oldTag) {
+      data.legacyAliases[oldTag].forEach(function (tag) {
+        if (seedTags[tag]) data.regionAliases[tag] = unique(data.regionAliases[tag].concat([oldTag]));
+      });
+    });
     var partitionTags = Object.keys(seedTags).sort();
     data.strategySeeds = strategySeeds;
     data.strategyFallbackSeeds = [];
@@ -603,7 +717,9 @@
     data.consolidatedRegionTags = partitionTags;
     data.regionCounts = {
       total: partitionTags.length,
-      generated: partitionTags.length,
+      meshmapper: strategySeeds.filter(function (seed) { return seed.regionSource === "meshmapper"; }).length,
+      starters: strategySeeds.filter(function (seed) { return seed.regionSource === "meshcore-canada"; }).length,
+      extensions: data.source.planningExtensionCount || 0,
       strategy: strategySeeds.length
     };
     data.metroGroups = (data.metroGroups || []).map(function (group) {
@@ -681,22 +797,28 @@
     (data.consolidatedRegionTags || []).forEach(function (tag) { expected[tag] = true; });
 
     if (collection) {
-      if (!Array.isArray(collection.features) || !collection.features.length) {
+      if (collection.schema !== "meshcore-canada-iata-boundaries/v2" || !Array.isArray(collection.features) || !collection.features.length) {
         throw new Error("Canadian map layer is invalid");
       }
       var displaySeen = {};
+      var partsSeen = {};
       var normalizedFeatures = collection.features.map(function (feature) {
         var tag = slug(feature.properties && feature.properties.tag);
-        if (!tag || displaySeen[tag] || !expected[tag]) {
+        var source = feature.properties && feature.properties.regionSource;
+        var partId = tag + ":" + source;
+        if (!tag || partsSeen[partId] || !expected[tag] || ["meshmapper", "meshcore-canada"].indexOf(source) === -1) {
           throw new Error("Canadian map layer contains an invalid or duplicate region: " + (tag || "unknown"));
         }
         displaySeen[tag] = true;
+        partsSeen[partId] = true;
+        if (source === "meshcore-canada" && feature.properties.planningKind !== (data.status[tag].state === "published" ? "extension" : "starter")) throw new Error("Canadian map layer is invalid");
         return Object.assign({}, feature, {
           properties: Object.assign({}, feature.properties, {
             tag: tag,
+            label: labelFor(data, tag),
             canonicalTag: tag,
-            sourceTier: "generated",
-            boundaryType: "generated-partition"
+            sourceTier: feature.properties.regionSource,
+            boundaryType: feature.properties.planningKind === "extension" ? "planning-extension" : feature.properties.regionSource === "meshmapper" ? "meshmapper-zone" : "starter-region"
           })
         });
       });
@@ -705,29 +827,23 @@
       }
       data.partitionRegions = Object.assign({}, collection, { features: normalizedFeatures });
       data.partitionByTag = {};
-      normalizedFeatures.forEach(function (feature) { data.partitionByTag[feature.properties.tag] = feature; });
+      normalizedFeatures.forEach(function (feature) {
+        var tag = feature.properties.tag;
+        if (!data.partitionByTag[tag] || feature.properties.regionSource === "meshmapper") data.partitionByTag[tag] = feature;
+      });
+      data.resolverRegions = data.partitionRegions;
+      data.resolverByTag = data.partitionByTag;
     }
 
     if (resolverCollection) {
       if (!Array.isArray(resolverCollection.features) || !resolverCollection.features.length) {
         throw new Error("Canadian location layer is invalid");
       }
-      data.resolverByTag = {};
-      var normalizedResolverFeatures = resolverCollection.features.map(function (feature) {
-        var tag = slug(feature.properties && feature.properties.tag);
-        if (!tag || !expected[tag] || data.resolverByTag[tag]) {
-          throw new Error("Canadian location layer contains an invalid or duplicate region: " + (tag || "unknown"));
-        }
-        var normalized = Object.assign({}, feature, {
-          properties: Object.assign({}, feature.properties, { tag: tag, canonicalTag: tag })
-        });
-        data.resolverByTag[tag] = normalized;
-        return normalized;
-      });
-      if (Object.keys(data.resolverByTag).length !== Object.keys(expected).length) {
-        throw new Error("Canadian location layer does not match the region catalog");
+      var provinceTags = resolverCollection.features.map(function (feature) { return feature.properties.tag; });
+      if (unique(provinceTags).length !== 13 || provinceTags.some(function (tag) { return !data.policy.provinces[tag]; })) {
+        throw new Error("Canadian province lookup data is invalid");
       }
-      data.resolverRegions = Object.assign({}, resolverCollection, { features: normalizedResolverFeatures });
+      data.jurisdictions = resolverCollection;
     }
     return data;
   }
@@ -824,6 +940,11 @@
   }
 
   function statusLabel(state) {
+    if (state === "starter") return "MeshCore Canada starter region";
+    if (state === "published") return "MeshMapper zone";
+    if (state === "reserved") return "Reserved";
+    if (state === "scope") return "Province scope";
+    if (state === "pilot") return "ON/QC scope";
     if (state === "draft") return "Needs review";
     if (state === "proposal") return "Draft";
     if (state === "reviewed") return "Reviewed";
@@ -839,7 +960,7 @@
 
   function labelFor(data, tag) {
     var label = tag;
-    if (data.hierarchy[tag]) label = data.hierarchy[tag].label;
+    if (data.hierarchy[tag]) label = frenchRuntime && data.hierarchy[tag].labelFr ? data.hierarchy[tag].labelFr : data.hierarchy[tag].label;
     else if (data.externalTagLabels && data.externalTagLabels[tag]) label = data.externalTagLabels[tag];
     return translateRuntimeText(label);
   }
@@ -853,6 +974,10 @@
   }
 
   function childrenFor(data, tag) {
+    if (data.policy.provinces[tag]) {
+      return data.seeds.filter(function (seed) { return seed.provinces.indexOf(tag) !== -1; })
+        .map(function (seed) { return seed.tag; }).sort(function (a, b) { return labelFor(data, a).localeCompare(labelFor(data, b)); });
+    }
     return Object.keys(data.hierarchy || {}).filter(function (candidate) {
       return parentFor(data, candidate) === tag;
     }).sort(function (a, b) {
@@ -872,11 +997,12 @@
     var leaves = leafDescendants(data, tag);
     return {
       type: "FeatureCollection",
-      features: leaves.map(function (leaf) { return data.partitionByTag[leaf]; }).filter(Boolean)
+      features: (data.partitionRegions && data.partitionRegions.features || []).filter(function (feature) { return leaves.indexOf(feature.properties.tag) !== -1; })
     };
   }
 
-  function ancestryFor(data, tag) {
+  function ancestryFor(data, tag, province) {
+    if (data.hierarchy[tag] && data.hierarchy[tag].kind === "city" && data.policy.provinces[province]) return ["can", province, tag];
     var chain = [];
     var seen = {};
     var cur = tag;
@@ -958,15 +1084,29 @@
   }
 
   function provinceOptions(data) {
-    var regionTags = data.consolidatedRegionTags || data.meshMapperTags;
-    var tags = regionTags ? unique(regionTags.map(function (tag) {
-      return provinceTagFor(data, tag);
-    }).filter(Boolean)) : Object.keys(data.hierarchy).filter(function (tag) {
-      return parentFor(data, tag) === data.meta.rootTag;
-    });
+    var tags = Object.keys(data.policy.provinces);
     return tags.sort(function (a, b) {
       return labelFor(data, a).localeCompare(labelFor(data, b));
     });
+  }
+
+  function knownProvince(data, tag) {
+    return typeof tag === "string" && Object.prototype.hasOwnProperty.call(data.policy.provinces, tag);
+  }
+
+  function migratedCitySelection(data, value) {
+    var names = String(value || "").split(",").map(slug).filter(Boolean);
+    if (names.length > 64) return { tags: [], unresolved: ["Too many saved zones"] };
+    var tags = [], unresolved = [];
+    names.forEach(function (name) {
+      if (seedForTag(data, name)) tags.push(name);
+      else {
+        var aliases = data.legacyAliases[name];
+        if (Array.isArray(aliases) && aliases.length === 1 && seedForTag(data, aliases[0])) tags.push(aliases[0]);
+        else unresolved.push(name);
+      }
+    });
+    return { tags: unique(tags), unresolved: unique(unresolved) };
   }
 
   function regionPageHref(page) {
@@ -981,15 +1121,16 @@
 
   function mapHrefForState(state) {
     var params = new URLSearchParams();
-    if (Number.isFinite(state.lat)) params.set("lat", state.lat.toFixed(6));
-    if (Number.isFinite(state.lon)) params.set("lon", state.lon.toFixed(6));
+    if (!state.manualSelection && Number.isFinite(state.lat)) params.set("lat", state.lat.toFixed(6));
+    if (!state.manualSelection && Number.isFinite(state.lon)) params.set("lon", state.lon.toFixed(6));
     if (state.name) params.set("name", state.name);
     if (state.resolution && state.resolution.primary) {
       params.set("tag", state.forcedTag || state.resolution.primary.seed.tag);
     }
     if (state.type === "high-site") params.set("type", "large");
-    if (state.selectedMetros && state.selectedMetros.length) {
-      params.set("regions", state.selectedMetros.join(","));
+    var savedRegions = (state.selectedMetros || []).concat(state.unresolvedRegions || []);
+    if (savedRegions.length) {
+      params.set("regions", savedRegions.join(","));
     }
     if (state.selectedExternalPaths && state.selectedExternalPaths.length) {
       params.set("external", state.selectedExternalPaths.join(","));
@@ -997,6 +1138,8 @@
     if (state.firmware) params.set("firmware", state.firmware);
     if (state.radioProfile) params.set("radio", state.radioProfile);
     if (state.hashMode) params.set("hash", state.hashMode);
+    if (state.jurisdictionTag) params.set("province", state.jurisdictionTag);
+    if (state.standardDefaults) params.set("defaults", "onqc");
     if (state.deviceRole) params.set("role", state.deviceRole);
     if (state.wizardStep) params.set("step", state.wizardStep);
     if (state.finishPath) params.set("instructions", state.finishPath);
@@ -1015,14 +1158,22 @@
   }
 
   function initialLocation(data, params) {
-    var tag = params.get("tag");
+    var originalTag = slug(params.get("tag") || "");
+    var tag = originalTag;
+    var legacy = Array.isArray(data.legacyAliases[tag]) ? data.legacyAliases[tag] : [];
+    if (!seedForTag(data, tag) && legacy.length === 1) tag = legacy[0];
     var seed = tag && seedForTag(data, tag);
-    if (tag && (!seed || statusFor(data, tag).state === "retired")) return null;
-    var point = params.has("lat") || params.has("lon")
+    var hasCoordinates = params.has("lat") || params.has("lon");
+    if (!seed && !hasCoordinates) return null;
+    if (!seed) tag = null;
+    var point = hasCoordinates
       ? configuratorSupport.parseCoordinates(params.get("lat"), params.get("lon"))
       : seed;
     if (!point) return null;
     return { lat: point.lat, lon: point.lon, tag: tag || null, countryCode: "ca",
+      source: hasCoordinates ? "coordinates" : "region",
+      provinceTag: knownProvince(data, params.get("province")) ? params.get("province") : null,
+      legacyTag: originalTag && originalTag !== tag ? originalTag : null,
       name: String(params.get("name") || (tag && labelFor(data, tag)) || "").slice(0, 160) };
   }
 
@@ -1042,14 +1193,14 @@
 
   function rankSeeds(data, lat, lon, jurisdictionTag) {
     return data.seeds.filter(function (seed) {
-      return seed.resolve !== false && (!jurisdictionTag || provinceTagFor(data, seed.tag) === jurisdictionTag);
+      return seed.resolve !== false;
     }).map(function (seed) {
       var km = haversineKm(lat, lon, seed.lat, seed.lon);
       return {
         seed: seed,
         km: km,
-        score: km - (seed.r || 0),
-        ancestry: ancestryFor(data, seed.tag)
+        score: km,
+        ancestry: ancestryFor(data, seed.tag, jurisdictionTag)
       };
     }).sort(function (a, b) {
       return a.score - b.score;
@@ -1084,35 +1235,28 @@
   function boundaryFeatureAt(data, lat, lon, forcedTag, jurisdictionTag) {
     var features = data.resolverRegions && data.resolverRegions.features ||
       data.partitionRegions && data.partitionRegions.features || [];
-    features = features.filter(function (feature) {
-      return !jurisdictionTag || provinceTagFor(data, feature.properties.tag) === jurisdictionTag;
-    });
-    function deterministic(featuresAtPoint) {
-      return featuresAtPoint.sort(function (a, b) {
-        var aId = String(a.properties.registryId || a.properties.tag);
-        var bId = String(b.properties.registryId || b.properties.tag);
-        return aId.localeCompare(bId);
-      })[0] || null;
-    }
+    features = features.filter(function (feature) { return featureContainsPoint(feature, lat, lon); });
+    var published = features.filter(function (feature) { return feature.properties.regionSource === "meshmapper"; });
+    if (published.length) features = published;
     if (forcedTag) {
-      var forced = deterministic(features.filter(function (feature) {
-        return String(feature.properties.tag).toLowerCase() === String(forcedTag).toLowerCase() &&
-          featureContainsPoint(feature, lat, lon);
-      }));
-      if (forced) return forced;
+      var forced = features.find(function (feature) { return feature.properties.tag === slug(forcedTag); });
+      return forced || null;
     }
-    return deterministic(features.filter(function (feature) {
-      return featureContainsPoint(feature, lat, lon);
-    }));
+    return features.length === 1 ? features[0] : null;
   }
 
-  function resolveLocation(data, lat, lon, forcedTag, jurisdictionTag) {
+  function resolveLocation(data, lat, lon, forcedTag, jurisdictionTag, manualSelection) {
     var ranked = rankSeeds(data, lat, lon, jurisdictionTag);
     var boundary = boundaryFeatureAt(data, lat, lon, forcedTag, jurisdictionTag);
     var boundaryTag = boundary ? String(boundary.properties.tag).toLowerCase() : null;
     var primary = boundaryTag
       ? ranked.find(function (entry) { return entry.seed.tag === boundaryTag; }) || null
       : null;
+    var matches = data.resolverRegions ? iataScopes.matches(data.resolverRegions, lat, lon) : [];
+    var physicalProvince = data.jurisdictions ? iataScopes.provinceAt(data.jurisdictions, lat, lon) : null;
+    var province = !manualSelection && physicalProvince ? physicalProvince :
+      knownProvince(data, jurisdictionTag) ? jurisdictionTag :
+        manualSelection && forcedTag && primary && primary.seed.provinces.length > 1 ? null : physicalProvince;
     if (primary) {
       ranked = [primary].concat(ranked.filter(function (entry) { return entry.seed.tag !== primary.seed.tag; }));
     }
@@ -1126,81 +1270,26 @@
       top5: ranked.slice(0, 5),
       nearestKm: ranked[0] ? ranked[0].km : Infinity,
       boundary: boundary,
-      displayBoundary: boundaryTag && data.partitionByTag ? data.partitionByTag[boundaryTag] : null,
+      displayBoundary: boundary,
       insideBoundary: Boolean(boundary),
       hasMatch: Boolean(primary),
-      sourceTier: boundary ? "generated" : null,
+      matches: matches,
+      province: province,
+      sourceTier: boundary ? boundary.properties.regionSource : null,
+      planningKind: boundary ? boundary.properties.planningKind || null : null,
       coverageKm: 0
     };
   }
 
   function recommend(data, resolution, type, selectedMetros, selectedExternalPaths) {
-    if (!resolution || !resolution.primary) return null;
-    var primaryTag = resolution.primary.seed.tag;
-    var carryTags = type === "high-site" && selectedMetros && selectedMetros.length
-      ? selectedMetros
-      : defaultRepeaterLeaves(data, primaryTag);
-    carryTags = expandSharedRepeaterLeaves(data, carryTags);
-    var externalPaths = type === "high-site"
-      ? selectedExternalRegionPaths(data, selectedExternalPaths)
-      : [];
-    var tags = [];
-    var parentOverrides = {};
-    var notes = [];
-
-    carryTags.forEach(function (tag) {
-      tags = tags.concat(ancestryFor(data, tag));
+    if (!resolution || !resolution.primary || !resolution.province) return null;
+    return iataScopes.profile(data, {
+      home: resolution.primary.seed.tag,
+      province: resolution.province,
+      bridge: type === "high-site",
+      cities: type === "high-site" ? selectedMetros || [] : [],
+      external: type === "high-site" ? selectedExternalPaths || [] : []
     });
-    externalPaths.forEach(function (record) {
-      tags = tags.concat(record.path);
-      record.path.forEach(function (tag) {
-        parentOverrides[tag] = data.externalTagParents[tag];
-      });
-      if (record.status !== "documented") {
-        notes.push("Confirm " + record.label + " tags with neighbouring operators before applying them.");
-      }
-    });
-    tags = unique(tags);
-    var paths = carryTags.map(function (tag) { return ancestryFor(data, tag); })
-      .concat(externalPaths.map(function (record) { return record.path; }));
-    var jurisdictions = unique(carryTags.map(function (tag) { return provinceTagFor(data, tag); }));
-    var sharedArea = sharedRepeaterAreaForTag(data, primaryTag);
-
-    var reviewTags = tags.filter(function (tag) {
-      if (data.externalTagLabels && data.externalTagLabels[tag]) return false;
-      var state = statusFor(data, tag).state;
-      return state === "draft";
-    });
-    var deprecatedTags = tags.filter(function (tag) {
-      if (data.externalTagLabels && data.externalTagLabels[tag]) return false;
-      return statusFor(data, tag).state === "deprecated";
-    });
-    if (reviewTags.length) {
-      notes.push("Check locally before using: " + reviewTags.join(", ") + ".");
-    }
-    if (deprecatedTags.length) {
-      notes.push("Do not use: " + deprecatedTags.join(", ") + ".");
-    }
-
-    var budget = regionBudget(tags);
-    if (budget.tagCount > 32) {
-      notes.push("Too many regions: " + budget.tagCount + " tags exceeds the 32-tag limit.");
-    }
-    if (budget.responseBytes > 172) {
-      notes.push("Region names use " + budget.responseBytes + " bytes, above the 172-byte response limit.");
-    }
-
-    return {
-      tags: tags,
-      leaves: carryTags,
-      paths: paths,
-      jurisdictions: jurisdictions,
-      sharedArea: sharedArea,
-      externalPaths: externalPaths,
-      parentOverrides: parentOverrides,
-      budget: budget,
-      notes: notes
-    };
   }
 
   function utf8Bytes(value) {
@@ -1232,28 +1321,13 @@
     });
   }
 
-  function buildCommands(data, tags, firmware, settings, parentOverrides) {
+  function buildCommands(data, recommendation, settings) {
+    if (["1.14", "1.15", "1.16"].indexOf(settings.firmware) === -1) throw new Error("Choose a supported firmware version.");
     var lines = radioProfiles ? radioProfiles.commands(settings.radioProfile, settings.hashMode) : [];
-
-    if (firmware === "1.16") {
-      var regionDefLine = "region def " + regionDefTokens(data, tags, parentOverrides).join(" ");
-      if (regionDefLine.length <= 160) {
-        lines.push(regionDefLine);
-      } else {
-        tags.forEach(function (tag) {
-          var parent = effectiveParentFor(data, tag, parentOverrides);
-          lines.push(parent ? "region put " + tag + " " + parent : "region put " + tag);
-        });
-      }
-      return lines;
+    if (settings.standardDefaults && recommendation.companionDefault === "onqc") {
+      lines = lines.concat(iataScopes.standardCommands(settings.firmware, false));
     }
-
-    tags.forEach(function (tag) {
-      var parent = effectiveParentFor(data, tag, parentOverrides);
-      lines.push(parent ? "region put " + tag + " " + parent : "region put " + tag);
-      if (firmware === "1.14") lines.push("region allowf " + tag);
-    });
-    return lines;
+    return lines.concat(iataScopes.commands(recommendation, settings.firmware));
   }
 
   function hueForTag(tag) {
@@ -1352,6 +1426,10 @@
   function localGeocode(data, query) {
     var needle = normalizeLocationSearch(query);
     if (needle.length < 2) return null;
+    // Only codes identify a region. Town aliases must resolve their own location,
+    // not the seed of a large zone (for example Gatineau, QC versus Ottawa, ON).
+    if (!data.seeds.some(function (seed) { return seed.tag === needle; }) &&
+        !Object.prototype.hasOwnProperty.call(data.legacyAliases || {}, needle)) return null;
     var matches = (data.seeds || []).filter(function (seed) {
       return seed.resolve !== false;
     }).map(function (seed) {
@@ -1378,39 +1456,26 @@
         ambiguous: true,
         choices: tied.map(function (item) {
           var province = provinceTagFor(data, item.seed.tag);
-          return { tag: item.seed.tag, lat: item.seed.lat, lon: item.seed.lon, countryCode: "ca",
-            name: labelFor(data, item.seed.tag) + (province ? ", " + province.toUpperCase() : "") };
+          return { tag: item.seed.tag, lat: item.seed.lat, lon: item.seed.lon, countryCode: "ca", source: "region",
+            name: labelFor(data, item.seed.tag) + " (" + item.seed.provinces.map(function (value) { return value.toUpperCase(); }).join("/") + ")" };
         })
       };
     }
     var displayName = best.names.find(function (name) {
       return normalizeLocationSearch(name) === needle;
     }) || labelFor(data, best.seed.tag);
+    if (normalizeLocationSearch(displayName) === normalizeLocationSearch(best.seed.tag)) displayName = best.seed.tag.toUpperCase() + " — " + labelFor(data, best.seed.tag);
     var provinceTag = provinceTagFor(data, best.seed.tag);
     return {
       lat: Number(best.seed.lat),
       lon: Number(best.seed.lon),
-      name: [displayName, provinceTag && labelFor(data, provinceTag)].filter(Boolean).join(", "),
+      name: [displayName, best.seed.provinces.length === 1 && provinceTag && labelFor(data, provinceTag)].filter(Boolean).join(", "),
       countryCode: "ca",
-      province: provinceTag && labelFor(data, provinceTag),
+      province: best.seed.provinces.length === 1 && provinceTag ? labelFor(data, provinceTag) : null,
       tag: best.seed.tag,
+      source: "region",
       exactLocalMatch: best.score <= 1
     };
-  }
-
-  function geocoderCaSearch(query, signal) {
-    return fetchWithTimeout(
-      "https://geocoder.ca/?locate=" + encodeURIComponent(query) + "&json=1",
-      { signal: signal },
-      REQUEST_TIMEOUT_MS
-    )
-      .then(function (res) {
-        if (!res.ok) throw new Error("Geocoding service error");
-        return res.json();
-      })
-      .then(function (body) {
-        return parseGeocoderCaHit(body, query);
-      });
   }
 
   function nominatimSearch(params, signal) {
@@ -1462,7 +1527,7 @@
       var button = document.createElement("button");
       button.type = "button";
       button.className = "mcc-button mcc-button-secondary";
-      button.textContent = geo.name + " (" + geo.tag + ")";
+      button.textContent = geo.name + (geo.tag ? " (" + geo.tag.toUpperCase() + ")" : "");
       button.addEventListener("click", function () { choose(geo); });
       target.appendChild(button);
     });
@@ -1477,21 +1542,21 @@
     }
     if (localMatch && localMatch.exactLocalMatch) return Promise.resolve(localMatch);
     var postal = parseCanadianPostalCode(query);
-    var primaryLookup = postal
-      ? geocodeCanadianPostal(postal, signal)
-      : nominatimSearch({ q: query, countrycodes: "ca" }, signal).then(function (hit) {
-        if (hit) return hit;
-        return nominatimSearch({ q: query }, signal);
+    if (postal) return geocodeCanadianPostal(postal, signal);
+    var places = window.MeshCorePlaceSearch;
+    return places.lookup(query, frenchRuntime ? "fr" : "en", function (url) {
+      return fetchWithTimeout(url, { signal: signal, credentials: "omit" }, REQUEST_TIMEOUT_MS);
+    }).then(function (results) {
+        var choices = results.map(function (place) {
+          return { lat: place.lat, lon: place.lon, name: place.name + ", " + place.province,
+            countryCode: "ca", province: places.provinceCode(place.province).toLowerCase() };
+        });
+        if (choices.length === 1) return choices[0];
+        if (!choices.length) throw new Error("Online place lookup is unavailable. Enter coordinates or browse the region list.");
+        var error = new Error("Choose the place you mean:");
+        error.choices = choices;
+        throw error;
       });
-
-    return primaryLookup.catch(function () {
-      if (signal && signal.aborted) throw new DOMException("Request cancelled", "AbortError");
-      return geocoderCaSearch(postal ? postal.formatted : query, signal).catch(function () { return null; });
-    }).then(function (hit) {
-      if (hit) return hit;
-      if (localMatch) return localMatch;
-      throw new Error("Online place lookup is unavailable. Enter coordinates or browse the region list.");
-    });
   }
 
   function isCanada(geo) {
@@ -1551,18 +1616,8 @@
       return entry.seed.tag;
     });
     var visibleTags = canonicalLeafOrder(data, state.selectedMetros.concat(nearbyTags));
-    var groups = (data.metroGroups || []).map(function (group) {
-      return {
-        label: group.label,
-        tags: group.tags.filter(function (tag) { return visibleTags.indexOf(tag) !== -1; })
-      };
-    }).filter(function (group) { return group.tags.length; });
-    var allGroups = (data.metroGroups || []).map(function (group) {
-      return {
-        label: group.label,
-        tags: group.tags.filter(function (tag) { return visibleTags.indexOf(tag) === -1; })
-      };
-    }).filter(function (group) { return group.tags.length; });
+    var groups = [{ label: "Nearby city zones", tags: visibleTags }];
+    var allGroups = [{ label: "Other IATA regions", tags: data.seeds.map(function (seed) { return seed.tag; }).filter(function (tag) { return visibleTags.indexOf(tag) === -1; }) }];
     var sharedNote = sharedArea
       ? '<div class="mcc-shared-area-note"><strong>Shared repeater area</strong><span>' +
         esc(sharedArea.label) + " keeps " + esc(sharedArea.members.map(function (tag) {
@@ -1577,10 +1632,13 @@
         esc(record.path.join(" › ")) + "</code> · " + esc(status) + "</small></span></label>";
     }).join("");
 
-    target.innerHTML = '<p class="mcc-hint">Add only the paths this repeater should forward. Different repeaters can carry different paths to spread traffic.</p>' +
+    target.innerHTML = (state.migrationNeedsReview
+      ? '<div class="mcc-note mcc-note-warning"><strong>Review the replacement scope list</strong><p>These saved zones need a new choice:</p><p><code>' + esc((state.unresolvedRegions || []).join(", ")) + '</code></p><label class="mcc-choice"><input type="checkbox" data-action="confirm-scope-migration"><span>I checked the replacement scope list.</span></label></div>'
+      : '') +
+      '<p class="mcc-hint">Select only city zones this repeater links. Edge mode blocks unscoped floods.</p>' +
       sharedNote +
       '<h3 class="mcc-picker-heading">Canadian regions</h3>' +
-      '<p class="mcc-hint">Provinces and territories may be mixed.</p>' +
+      '<p class="mcc-hint">An edge repeater can carry several IATA codes. Its province scope stays the province where it is installed.</p>' +
       '<div class="mcc-served-region-groups">' +
       groups.map(function (group) {
         return '<div class="mcc-chip-group"><strong>' + esc(group.label) + '</strong><div class="mcc-chip-list">' +
@@ -1642,10 +1700,41 @@
         onChange();
       });
     }
+    var confirm = target.querySelector("[data-action='confirm-scope-migration']");
+    var nextButton = target.closest("[data-wizard-step]") && target.closest("[data-wizard-step]").querySelector("[data-next-step]");
+    if (nextButton) nextButton.disabled = Boolean(state.migrationNeedsReview);
+    if (confirm) confirm.addEventListener("change", function () {
+      if (!confirm.checked) return;
+      state.migrationNeedsReview = false;
+      state.unresolvedRegions = [];
+      confirm.disabled = true;
+      if (nextButton) nextButton.disabled = false;
+      onChange();
+    });
+  }
+
+  function planningNotice(resolution) {
+    if (resolution.sourceTier !== "meshcore-canada") return "";
+    var extension = resolution.planningKind === "extension";
+    return '<div class="mcc-note mcc-note-warning"><strong>' + (extension ? 'MeshCore Canada planning extension' : 'MeshCore Canada starter region') + '</strong><p>' +
+      (extension ? 'This point is outside the published MeshMapper boundary. MeshCore Canada assigns the gap to this nearby IATA region for planning; confirm its use locally.' : 'This broad starter region is assigned by MeshCore Canada, not yet published by MeshMapper. Confirm its use with local operators; it does not promise radio coverage.') +
+      '</p><a href="' + esc(regionPageHref("standard") + (extension ? '#planning-extensions' : '#starter-regions')) + '">' + (extension ? 'Planning extension details' : 'Starter region details') + '</a></div>';
+  }
+
+  function onqcRolloutNotice() {
+    var href = new URL("../proposals/onqc-scopes/", regionPageHref("config")).href +
+      (frenchRuntime ? "#ordre-de-deploiement" : "#rollout-order");
+    return '<div class="mcc-note mcc-note-warning" data-onqc-rollout><strong>ON/QC rollout: repeaters first</strong>' +
+      '<p>Phase 2 is not open. Personal companions keep their default scope empty and channels unscoped until the rollout is announced: January 2027 at the earliest, after the repeaters are ready.</p>' +
+      '<a href="' + esc(href) + '">Rollout phases</a></div>';
   }
 
   function renderResult(data, target, state) {
     if (!target) return;
+    if (state.migrationNeedsReview) {
+      target.innerHTML = '<div class="mcc-status mcc-status-warning" role="status">Review the replacement scope list in step 3 before copying commands.</div>';
+      return;
+    }
     if (!state.canGenerate) {
       target.innerHTML = '<div class="mcc-empty-state">' +
         icon("radio-tower") +
@@ -1660,16 +1749,20 @@
       target.innerHTML = '<div class="mcc-empty-state">' + icon("radio-tower") + '<strong>No region yet</strong></div>';
       return;
     }
-    if (rec.budget.tagCount > 32 || rec.budget.responseBytes > 172) {
+    if (rec.budget.tagCount > 32 || rec.budget.responseBytes > 160) {
       target.innerHTML = '<div class="mcc-empty-state">' +
         icon("triangle-alert") +
         '<strong>Too many regions selected</strong>' +
-        '<span>This selection uses ' + esc(rec.budget.tagCount) + ' tags and ' + esc(rec.budget.responseBytes) + ' bytes. Remove regions until it fits the 32-tag and 172-byte limits.</span>' +
+        '<span>This selection uses ' + esc(rec.budget.tagCount) + ' tags and ' + esc(rec.budget.responseBytes) + ' bytes. Remove regions until it fits the 32-tag and 160-byte limits.</span>' +
         '</div>';
       return;
     }
     var firmware = state.firmware || data.meta.defaultFirmware || "1.16";
-    var commands = buildCommands(data, rec.tags, firmware, state, rec.parentOverrides);
+    if (["1.14", "1.15", "1.16"].indexOf(firmware) === -1) {
+      target.innerHTML = '<div class="mcc-status mcc-status-warning" role="status">Choose a supported firmware version.</div>';
+      return;
+    }
+    var commands = buildCommands(data, rec, state);
     var technicalCommands = commands.concat(["region", "region save", "region"]);
     var titleTag = state.resolution.primary.seed.tag;
     var statusNotes = rec.notes.map(function (note) {
@@ -1683,12 +1776,19 @@
     var verificationCommands = ["region"];
     if (state.radioProfile !== "keep") verificationCommands.push("get radio");
     if (state.hashMode !== "keep") verificationCommands.push("get path.hash.mode");
-    var expectedPaths = rec.paths.map(function (path) { return labelledPath(data, path); });
+    var expectedPaths = rec.paths.map(function (path) { return path.join(" / ") + " — " + labelledPath(data, path); });
     var expectedPathMarkup = '<div class="mcc-region-path-list">' + expectedPaths.map(function (path) {
       return "<span>" + esc(path) + "</span>";
     }).join("") + "</div>";
     var multiProvince = rec.jurisdictions.length > 1;
     var scopeNotices = [];
+    if (rec.companionDefault === "onqc") {
+      scopeNotices.push(onqcRolloutNotice());
+      scopeNotices.push('<div class="mcc-note" data-onqc-settings-summary><strong>' +
+        (state.standardDefaults ? 'ON/QC Phase 1 standard settings included' : 'ON/QC Phase 1 standard settings not included') +
+        '</strong><p>' + (state.standardDefaults ? '3-byte IDs, local adverts every 4 hours, flood adverts every 47 hours, and a 16-hop flood limit.' :
+          'These commands do not include all of the proposal’s standard ID, advert and hop settings. Select the ON/QC option in step 3 if you want to include them.') + '</p></div>');
+    }
     if (rec.sharedArea) {
       scopeNotices.push('<div class="mcc-shared-area-note"><strong>Shared repeater area</strong><span>' +
         esc(rec.sharedArea.label) + " combines " + esc(rec.sharedArea.members.map(function (tag) {
@@ -1721,21 +1821,21 @@
         '<p class="mcc-connect-note">If the repeater is missing, open Tools → Discover Nearby Nodes. If a wait timer appears, let it finish before logging in.</p></section>' +
         '</div></div></li>' +
         '<li><div><h4>Confirm the command line</h4><p>Run <code>ver</code> and check the version.</p>' +
-        '<button type="button" class="mcc-command-line" data-cmd="ver"><span>ver</span><em>' + icon("copy") + 'Copy</em></button></div></li>' +
-        '<li><div><h4>Apply the settings</h4><p>Run each line in order. Wait for a reply.</p>' +
+        '<button type="button" class="mcc-command-line" data-cmd="ver"><span>ver</span><em>' + icon("copy") + '<span class="mcc-visually-hidden">Copy</span></em></button></div></li>' +
+        '<li><div><h4>Apply the settings</h4><p>Run each line in order. Wait for a reply.</p><p>No reply? Check the connection and use Send Again. On 1.15, region put replies OK - (flood allowed).</p>' +
         '<div class="mcc-guide-command-list">' + commands.map(function (line) {
-          return '<button type="button" class="mcc-command-line" data-cmd="' + esc(line) + '"><span>' + esc(line) + '</span><em>' + icon("copy") + 'Copy</em></button>';
-        }).join("") + '</div><p class="mcc-guide-stop">Stop on <code>Err</code>. Existing regions are not cleared.</p></div></li>' +
+          return '<button type="button" class="mcc-command-line" data-cmd="' + esc(line) + '"><span>' + esc(line) + '</span><em>' + icon("copy") + '<span class="mcc-visually-hidden">Copy</span></em></button>';
+        }).join("") + '</div><p class="mcc-guide-stop">Stop on <code>Err</code>. Existing regions are not cleared. Some commands save immediately.</p></div></li>' +
         '<li><div><h4>Check and save</h4><p>Run <code>region</code> and confirm each path:</p>' +
         expectedPathMarkup +
-        '<div class="mcc-guide-command-list"><button type="button" class="mcc-command-line" data-cmd="region"><span>region</span><em>' + icon("copy") + 'Copy</em></button></div>' +
+        '<div class="mcc-guide-command-list"><button type="button" class="mcc-command-line" data-cmd="region"><span>region</span><em>' + icon("copy") + '<span class="mcc-visually-hidden">Copy</span></em></button></div>' +
         '<p>Save:</p>' +
-        '<div class="mcc-guide-command-list"><button type="button" class="mcc-command-line" data-cmd="region save"><span>region save</span><em>' + icon("copy") + 'Copy</em></button></div>' +
+        '<div class="mcc-guide-command-list"><button type="button" class="mcc-command-line" data-cmd="region save"><span>region save</span><em>' + icon("copy") + '<span class="mcc-visually-hidden">Copy</span></em></button></div>' +
         '<p>' + (state.radioProfile !== "keep"
           ? 'Restart the device, reconnect, then run these final checks:'
           : 'Run this once more to confirm the saved region:') + '</p>' +
         '<div class="mcc-guide-command-list">' + verificationCommands.map(function (line) {
-          return '<button type="button" class="mcc-command-line" data-cmd="' + esc(line) + '"><span>' + esc(line) + '</span><em>' + icon("copy") + 'Copy</em></button>';
+          return '<button type="button" class="mcc-command-line" data-cmd="' + esc(line) + '"><span>' + esc(line) + '</span><em>' + icon("copy") + '<span class="mcc-visually-hidden">Copy</span></em></button>';
         }).join("") + '</div></div></li>' +
         '</ol>' +
         '<a class="mcc-guide-docs" href="https://docs.meshcore.io/cli_commands/" target="_blank" rel="noopener noreferrer">MeshCore command help ' + icon("external-link") + '</a>' +
@@ -1744,25 +1844,28 @@
         '<div class="mcc-command-toolbar"><span>Commands</span></div>' +
         '<pre><code>' +
         technicalCommands.map(function (line) {
-          return '<button type="button" class="mcc-command-line" data-cmd="' + esc(line) + '"><span>' + esc(line) + '</span><em>' + icon("copy") + 'Copy</em></button>';
+          return '<button type="button" class="mcc-command-line" data-cmd="' + esc(line) + '"><span>' + esc(line) + '</span><em>' + icon("copy") + '<span class="mcc-visually-hidden">Copy</span></em></button>';
         }).join("") +
         '</code></pre>' +
         '</div>';
 
     var sourceBadge = '<span class="mcc-source-tier mcc-source-tier-' + esc(state.resolution.sourceTier || "unknown") + '">' +
-      (state.resolution.sourceTier === "generated" ? "Canada-wide region boundary" : "Boundary unavailable") + '</span>';
+      (state.resolution.sourceTier === "meshmapper" ? "Published MeshMapper boundary" : state.resolution.planningKind === "extension" ? "MeshCore Canada planning extension" : "MeshCore Canada starter region") + '</span>';
     var ancestryMarkup = '<div class="mcc-ancestry" aria-label="Region tags">' +
       rec.tags.map(function (tag) {
         var external = Boolean(data.externalTagLabels && data.externalTagLabels[tag]);
         var stateName = external ? "external" : statusFor(data, tag).state || "draft";
+        var kind = data.hierarchy[tag] && data.hierarchy[tag].kind;
+        var level = external ? "any" : data.policy.reservedScopes.indexOf(tag) !== -1 ? "future" :
+          kind === "province" ? "prov" : kind === "mesh-scope" ? "mesh" : "city";
         return '<span class="mcc-tag-pill' + (stateName === "draft" ? " is-draft" : "") +
-          (external ? " is-external" : "") + '"><code>' + esc(tag) + "</code></span>";
+          (external ? " is-external" : "") + '" data-level="' + level + '"><code>' + esc(tag) + "</code></span>";
       }).join("") +
       "</div>";
     var metaMarkup = '<dl class="mcc-result-meta">' +
       '<div><dt>Firmware</dt><dd>' + esc(firmwareLabel) + '</dd></div>' +
       '<div><dt>Region budget</dt><dd>' + esc(rec.budget.tagCount) + ' / 32 tags · ' +
-      esc(rec.budget.responseBytes) + ' / 172 bytes</dd></div>' +
+      esc(rec.budget.responseBytes) + ' / 160 bytes</dd></div>' +
       '</dl>';
     var technicalDetails = guided
       ? '<details class="mcc-advanced-options mcc-result-advanced"><summary>Advanced details</summary>' + sourceBadge + ancestryMarkup + metaMarkup + '</details>'
@@ -1770,11 +1873,14 @@
 
     target.innerHTML =
       '<div class="mcc-result-console">' +
+      planningNotice(state.resolution) +
+      (firmware === "1.14" ? '<div class="mcc-note mcc-note-warning">On firmware 1.14, this repeater\'s adverts stay unscoped. Upgrade to 1.15 or newer to scope its adverts by city.</div>' : '') +
+      '<div class="mcc-note mcc-note-warning"><strong>Before applying a new scope list</strong><p>Back up the current region list. Remove old entries before applying this profile; use USB if possible.</p><a href="' + esc(regionPageHref("standard") + '#existing-devices') + '">Migration instructions</a></div>' +
       '<div class="mcc-result-head">' +
       '<div>' +
       '<h3 class="mcc-result-title"><code>' + esc(titleTag.toUpperCase()) + "</code> — " + esc(labelFor(data, titleTag)) + "</h3>" +
       '<div class="mcc-result-sub">' + esc(state.name || labelFor(data, titleTag)) + "</div>" +
-      '<div class="mcc-region-path"><strong>' + (rec.paths.length > 1 ? "Repeater regions:" : "Your region:") + "</strong>" +
+      '<div class="mcc-region-path"><strong>Forwarded scopes:</strong>' +
       expectedPathMarkup + "</div>" +
       '</div>' +
       (!guided ? '<button type="button" class="mcc-button mcc-copy-all">' + icon("copy") + 'Copy commands</button>' : '') +
@@ -1783,6 +1889,8 @@
       '<p class="mcc-note">' + esc(radioProfiles ? radioProfiles.label(state.radioProfile) : "Keep current settings") +
       (state.radioProfile !== "keep" ? ' — <span>Radio changes take effect after reboot.</span>' : '') + '</p>' +
       technicalDetails +
+      (window.MeshCoreRegionProfile ? window.MeshCoreRegionProfile.render(data, titleTag, state.jurisdictionTag, new URL("../", regionPageHref("config")), state.resolution) : '') +
+      '<div data-scope-migration></div>' +
       resultBody +
       '<section class="mcc-record-actions" aria-labelledby="mcc-record-heading">' +
       '<div><h4 id="mcc-record-heading">Setup summary</h4><p>Download or print a summary without exact coordinates, credentials, or device identifiers.</p></div>' +
@@ -1792,6 +1900,7 @@
       (statusNotes ? '<div class="mcc-notes">' + statusNotes + "</div>" : "") +
       "</div>";
 
+    if (window.MeshCoreScopeMigration) window.MeshCoreScopeMigration.mount(target.querySelector("[data-scope-migration]"), rec, firmware, copyText);
     var copy = target.querySelector(".mcc-copy-all");
     if (copy) {
       copy.addEventListener("click", function () {
@@ -1825,6 +1934,7 @@
 
   function sourceUrlFor(data, tag) {
     var st = statusFor(data, tag);
+    if (st.state === "starter") return regionPageHref("standard") + '#starter-regions';
     if (st.sourceUrl) return st.sourceUrl;
     var meshMapperSource = data.meshMapperSources && data.meshMapperSources[tag] && data.meshMapperSources[tag][0];
     if (meshMapperSource && meshMapperSource.sourceUrl) return meshMapperSource.sourceUrl;
@@ -1835,12 +1945,13 @@
   }
 
   function currentCommands(data, state) {
-    if (!state || !state.canGenerate || !state.resolution) return null;
+    if (!state || !state.canGenerate || !state.resolution || state.migrationNeedsReview) return null;
     var rec = recommend(data, state.resolution, state.type, state.selectedMetros, state.selectedExternalPaths);
     if (!rec) return null;
-    if (rec.budget.tagCount > 32 || rec.budget.responseBytes > 172) return null;
+    if (rec.budget.tagCount > 32 || rec.budget.responseBytes > 160) return null;
     var firmware = state.firmware || data.meta.defaultFirmware || "1.16";
-    return buildCommands(data, rec.tags, firmware, state, rec.parentOverrides)
+    if (["1.14", "1.15", "1.16"].indexOf(firmware) === -1) return null;
+    return buildCommands(data, rec, state)
       .concat(["region", "region save", "region"]);
   }
 
@@ -1853,12 +1964,12 @@
     var summary = configuratorSupport.commissioningRecord({
       generatedAt: new Date().toISOString(),
       locationLabel: labelFor(data, homeTag),
-      homeRegion: labelledPath(data, ancestryFor(data, homeTag)),
+      homeRegion: homeTag + " — " + labelFor(data, homeTag) + " (" + state.jurisdictionTag + ")",
       firmware: state.firmware === "1.16" ? "v1.16+" : "v" + state.firmware + ".x",
-      budget: rec.budget.tagCount + " / 32 tags, " + rec.budget.responseBytes + " / 172 bytes",
+      budget: rec.budget.tagCount + " / 32 tags, " + rec.budget.responseBytes + " / 160 bytes",
       radio: radioProfiles ? radioProfiles.label(state.radioProfile) : "Keep current settings",
       hashMode: state.hashMode === "keep" ? "Keep current settings" : (state.hashMode === "0" ? "1 byte" : String(Number(state.hashMode) + 1) + " bytes"),
-      paths: rec.paths.map(function (path) { return labelledPath(data, path); }),
+      paths: rec.paths.map(function (path) { return path.join(" / ") + " — " + labelledPath(data, path); }),
       commands: commands
     });
     return frenchRuntime
@@ -1982,7 +2093,7 @@
     if (els.candidatesSection) els.candidatesSection.hidden = !state.canGenerate;
     if (els.resultSection) els.resultSection.hidden = !state.canGenerate;
     if (!state.canGenerate) {
-      state.resolution = null;
+      if (!state.awaitingProvince) state.resolution = null;
       if (els.candidates) els.candidates.innerHTML = "";
       if (els.metro) els.metro.innerHTML = "";
       renderResult(data, els.result, state);
@@ -1991,7 +2102,7 @@
       return;
     }
     if (state.canGenerate) {
-      state.resolution = resolveLocation(data, state.lat, state.lon, state.forcedTag, state.jurisdictionTag);
+      state.resolution = resolveLocation(data, state.lat, state.lon, state.forcedTag, state.jurisdictionTag, state.manualSelection);
       if (state.resolution && state.resolution.primary) {
         state.detailTag = state.resolution.primary.seed.tag;
       }
@@ -2025,12 +2136,12 @@
       '<section class="mcc-card mcc-wizard-step" data-wizard-step="1">' +
       '<p class="mcc-step-label">Step 1 of 4</p>' +
       '<h2>What are you configuring?</h2>' +
-      '<p class="mcc-step-intro">We will recommend forwarding paths, then show how to apply them.</p>' +
+      '<p class="mcc-step-intro">Choose the city scopes this repeater should forward.</p>' +
       '<p class="mcc-step-browse"><a data-action="view-map" href="' + esc(regionPageHref("map")) + '">Browse the region map</a> · ' +
-      '<a href="' + esc(new URL("editor/", regionPageHref("config")).href) + '">Open the region editor</a></p>' +
+      '<a href="' + esc(new URL("editor/", regionPageHref("config")).href) + '">Request a zone change</a></p>' +
       '<div class="mcc-choice-list mcc-choice-list-large" role="radiogroup" aria-label="Device and experience">' +
       '<label class="mcc-choice"><input type="radio" name="mcc-device-role" value="repeater" checked><span><strong>Repeater</strong><small>Recommended for most operators</small></span></label>' +
-      '<label class="mcc-choice"><input type="radio" name="mcc-device-role" value="room"><span><strong>Room server with repeating</strong><small>Uses the same region paths</small></span></label>' +
+      '<label class="mcc-choice"><input type="radio" name="mcc-device-role" value="room"><span><strong>Room server with repeating</strong><small>Uses the same scope list</small></span></label>' +
       '<label class="mcc-choice"><input type="radio" name="mcc-device-role" value="advanced"><span><strong>Advanced operator</strong><small>Review wide and cross-border paths</small></span></label>' +
       '</div>' +
       '<div class="mcc-wizard-actions"><button class="mcc-button" type="button" data-next-step>Next' + icon("arrow-right") + '</button></div>' +
@@ -2064,6 +2175,10 @@
       '</div>' +
       '<div data-role="status"></div>' +
       '<div class="mcc-selected-region" data-role="selected-region" hidden></div>' +
+      '<div data-role="location-zone-options"></div>' +
+      '<label class="mcc-label" for="mcc-home-province">Province or territory of the repeater</label>' +
+      '<select class="mcc-select" id="mcc-home-province" disabled><option value="">Choose a province or territory</option></select>' +
+      '<p class="mcc-hint">A MeshMapper zone can cross a provincial border. Use the province where this repeater is installed.</p>' +
       '<details class="mcc-alternate-regions" data-role="region-browser" open>' +
       '<summary>Browse regions without search or a map</summary>' +
       '<div class="mcc-region-breadcrumbs" data-role="config-region-breadcrumbs"></div>' +
@@ -2079,9 +2194,11 @@
       '<p class="mcc-step-label">Step 3 of 4</p>' +
       '<h2>What should this node serve?</h2>' +
       '<div class="mcc-choice-list mcc-choice-list-large" data-role="types" role="radiogroup" aria-label="Repeater forwarding coverage">' +
-      '<label class="mcc-choice"><input type="radio" name="mcc-type" value="residential" checked><span><strong>Recommended local area</strong><small>Use the home region and any registered shared area</small></span></label>' +
-      '<label class="mcc-choice"><input type="radio" name="mcc-type" value="high-site"><span><strong>Add nearby or cross-border paths</strong><small>For bridge, wide-coverage, mountain, or water-path repeaters</small></span></label>' +
+      '<label class="mcc-choice"><input type="radio" name="mcc-type" value="residential" checked><span><strong>City repeater</strong><small>One IATA region; unscoped messages work locally.</small></span></label>' +
+      '<label class="mcc-choice"><input type="radio" name="mcc-type" value="high-site"><span><strong>Edge repeater</strong><small>Regularly links repeaters in different IATA regions; blocks unscoped floods.</small></span></label>' +
       '</div>' +
+      '<p class="mcc-hint" data-role="repeater-type-help">A repeater on the outer boundary stays a city repeater unless it regularly links to another IATA region.</p>' +
+      '<p class="mcc-hint">Different cities or map outlines with the same IATA code still count as one region.</p>' +
       '<div data-role="metro"></div>' +
       '<label class="mcc-label" for="mcc-radio-profile">Radio network</label>' +
       '<select class="mcc-select" id="mcc-radio-profile"><option value="keep">Keep current settings</option></select>' +
@@ -2089,6 +2206,8 @@
       '<label class="mcc-label" for="mcc-hash-mode">Advert ID size</label>' +
       '<select class="mcc-select" id="mcc-hash-mode"><option value="keep">Keep current settings</option><option value="2">3 bytes</option><option value="1">2 bytes</option><option value="0">1 byte</option></select>' +
       '<p class="mcc-hint" data-role="canada-preset-note">The Canada app preset uses 3-byte paths. Here, choose radio and advert ID settings separately. <a href="' + esc(new URL("../provinces/#canada-baseline", regionPageHref("config")).href) + '">Canada preset details</a></p>' +
+      '<label class="mcc-choice" data-role="standard-settings"><input type="checkbox" data-action="standard-defaults"><span><strong>Use the proposed ON/QC standard settings</strong><small>3-byte IDs, local adverts every 4 hours, flood adverts every 47 hours, and a 16-hop flood limit.</small></span></label>' +
+      '<div data-role="onqc-guidance" hidden><p class="mcc-hint">Leave unchecked for scope commands only. A complete ON/QC Phase 1 setup also needs these standard settings.</p>' + onqcRolloutNotice() + '</div>' +
       '<details class="mcc-advanced-options" data-role="technical-settings">' +
       '<summary>Firmware version</summary>' +
       '<p class="mcc-label">Firmware version</p>' +
@@ -2128,6 +2247,11 @@
       firmware: data.meta.defaultFirmware || "1.16",
       radioProfile: "keep",
       hashMode: "keep",
+      standardDefaults: false,
+      manualSelection: false,
+      awaitingProvince: false,
+      migrationNeedsReview: false,
+      unresolvedRegions: [],
       selectedMetros: [],
       selectedExternalPaths: [],
       canGenerate: false,
@@ -2162,6 +2286,14 @@
     };
     var activeGeocodeController = null;
     var locationRequestId = 0;
+    var provinceSelect = el.querySelector("#mcc-home-province");
+    var standardCheckbox = el.querySelector("[data-action='standard-defaults']");
+    var standardSection = el.querySelector("[data-role='standard-settings']");
+    var onqcGuidance = el.querySelector("[data-role='onqc-guidance']");
+    provinceSelect.innerHTML += provinceOptions(data).map(function (tag) {
+      return '<option value="' + esc(tag) + '">' + esc(labelFor(data, tag)) + '</option>';
+    }).join("");
+    standardSection.hidden = true;
 
     var firmwareInput = el.querySelector("input[name='mcc-firmware'][value='" + state.firmware + "']");
     if (firmwareInput) firmwareInput.checked = true;
@@ -2183,19 +2315,19 @@
         advanced: "Advanced operator"
       };
       var paths = rec.paths.map(function (path) {
-        return '<li>' + esc(labelledPath(data, path)) + '</li>';
+        return '<li><code>' + esc(path.join(" / ")) + '</code> — ' + esc(labelledPath(data, path)) + '</li>';
       }).join("");
       els.reviewSummary.innerHTML =
         '<h3>Selection</h3>' +
         '<dl class="mcc-review-list">' +
         '<div><dt>Node</dt><dd>' + esc(deviceLabels[state.deviceRole] || deviceLabels.repeater) + '</dd></div>' +
         '<div><dt>Place</dt><dd>' + esc(state.name || labelFor(data, state.resolution.primary.seed.tag)) + '</dd></div>' +
-        '<div><dt>Home region</dt><dd>' + esc(labelledPath(data, ancestryFor(data, state.resolution.primary.seed.tag))) + '</dd></div>' +
+        '<div><dt>Home region</dt><dd><code>' + esc(rec.home) + '</code> — ' + esc(labelFor(data, rec.home)) + ' (' + esc(labelFor(data, rec.province)) + ')</dd></div>' +
         '<div><dt>Radio network</dt><dd>' + esc(radioProfiles ? radioProfiles.label(state.radioProfile) : "Keep current settings") + '</dd></div>' +
         '<div><dt>Advert ID size</dt><dd>' + (state.hashMode === "keep" ? 'Keep current settings' : state.hashMode === "0" ? '1 byte' : esc(Number(state.hashMode) + 1) + ' bytes') + '</dd></div>' +
-        '<div><dt>Budget</dt><dd>' + esc(rec.budget.tagCount) + ' / 32 tags · ' + esc(rec.budget.responseBytes) + ' / 172 bytes</dd></div>' +
+        '<div><dt>Budget</dt><dd>' + esc(rec.budget.tagCount) + ' / 32 tags · ' + esc(rec.budget.responseBytes) + ' / 160 bytes</dd></div>' +
         '</dl>' +
-        '<h3>Forwarding paths</h3><ul class="mcc-review-paths">' + paths + '</ul>' +
+        '<h3>Forwarded scopes</h3><ul class="mcc-review-paths">' + paths + '</ul>' +
         (rec.externalPaths.length
           ? '<p class="mcc-note mcc-note-warning">Neighbouring paths are included only on this repeater. Confirm provisional paths with the neighbouring operators.</p>'
           : '');
@@ -2246,6 +2378,7 @@
     }
 
     function advanceStep() {
+      if (state.wizardStep === 3 && state.migrationNeedsReview) return;
       if (state.wizardStep === 2 && !state.canGenerate) {
         setStatus(els.status, "Choose a location or browse to a region first.", "error");
         return;
@@ -2264,7 +2397,7 @@
       if (els.selectedRegion) {
         els.selectedRegion.hidden = !selectedTag;
         els.selectedRegion.innerHTML = selectedTag
-          ? '<strong>Your home region</strong><span>' + esc(ancestryFor(data, selectedTag).map(function (item) {
+          ? '<strong>Your home region</strong><span>' + esc(ancestryFor(data, selectedTag, state.jurisdictionTag).map(function (item) {
             return labelFor(data, item);
           }).join(" › ")) + '</span>' +
             (sharedArea ? '<span class="mcc-selected-shared-area">Shared repeater area: ' + esc(sharedArea.label) + "</span>" : "")
@@ -2273,7 +2406,7 @@
       if (els.regionBrowser) els.regionBrowser.hidden = false;
       if (!els.breadcrumbs || !els.children) return;
 
-      var path = ancestryFor(data, tag);
+      var path = ancestryFor(data, tag, state.jurisdictionTag);
       els.breadcrumbs.innerHTML = path.map(function (item, index) {
         var current = index === path.length - 1;
         return '<button type="button" class="mcc-region-crumb' + (current ? ' is-current' : '') + '" data-config-region-node="' + esc(item) + '"' + (current ? ' aria-current="page"' : '') + '>' + esc(labelFor(data, item)) + '</button>';
@@ -2282,18 +2415,19 @@
       var children = childrenFor(data, tag);
       els.children.innerHTML = children.length
         ? children.map(function (child) {
-          var nested = childrenFor(data, child).length > 0;
+          var nested = Boolean(data.policy.provinces[child]) || childrenFor(data, child).length > 0;
           var leafCount = leafDescendants(data, child).length;
           return '<button type="button" class="mcc-region-child" data-config-region-node="' + esc(child) + '">' +
             '<span><strong>' + esc(labelFor(data, child)) + '</strong><small>' +
-            (nested ? leafCount + ' subregions' : child.toUpperCase() + ' · region') +
+            (nested ? leafCount + ' zones' : child.toUpperCase() + ' · zone') +
             '</small></span><span aria-hidden="true">' + (nested ? '›' : '✓') + '</span></button>';
         }).join("")
-        : '<p class="mcc-help">Select this region to use it as the home region.</p>';
+        : '<p class="mcc-help">' + (data.policy.provinces[tag] ? 'No MeshMapper zones are published here yet.' : 'Select this region to use it as the home region.') + '</p>';
     }
 
     function chooseConfigRegionNode(tag) {
       var children = childrenFor(data, tag);
+      var province = data.policy.provinces[state.browseTag] ? state.browseTag : null;
       renderConfigRegionBrowser(tag);
       if (!children.length) {
         var seed = seedForTag(data, tag);
@@ -2304,6 +2438,7 @@
             name: labelFor(data, tag),
             countryCode: "ca",
             tag: tag,
+            provinceTag: province,
             source: "region"
           });
         }
@@ -2312,16 +2447,17 @@
 
     function finishGeo(geo, requestId) {
       if (requestId !== locationRequestId) return;
+      var previousTag = state.resolution && state.resolution.primary && state.resolution.primary.seed.tag;
       state.lat = Number(geo.lat);
       state.lon = Number(geo.lon);
       state.name = geo.name || (state.lat.toFixed(4) + ", " + state.lon.toFixed(4));
       state.locationSource = geo.source || "search";
+      state.manualSelection = geo.source === "region";
+      state.awaitingProvince = false;
       state.forcedTag = geo.tag || null;
-      state.jurisdictionTag = state.forcedTag
-        ? provinceTagFor(data, state.forcedTag)
-        : jurisdictionTagFromGeo(geo);
-      state.selectedMetros = [];
-      state.selectedExternalPaths = [];
+      state.jurisdictionTag = geo.provinceTag || jurisdictionTagFromGeo(geo);
+      var choices = el.querySelector("[data-role='location-zone-options']");
+      choices.innerHTML = "";
       if (!isCanada(geo)) {
         state.canGenerate = false;
         state.resolution = null;
@@ -2330,15 +2466,47 @@
         refreshTool(data, els, state);
         return;
       }
-      state.resolution = resolveLocation(data, state.lat, state.lon, state.forcedTag, state.jurisdictionTag);
+      state.resolution = resolveLocation(data, state.lat, state.lon, state.forcedTag, state.jurisdictionTag, state.manualSelection);
+      var nextTag = state.resolution.primary && state.resolution.primary.seed.tag;
+      if (previousTag !== nextTag) {
+        state.selectedMetros = [];
+        state.selectedExternalPaths = [];
+        state.unresolvedRegions = [];
+        state.migrationNeedsReview = false;
+      }
+      state.jurisdictionTag = state.resolution.province;
+      provinceSelect.value = state.jurisdictionTag || "";
+      provinceSelect.disabled = !state.resolution.hasMatch;
+      standardSection.hidden = ["on", "qc"].indexOf(state.jurisdictionTag) === -1;
+      onqcGuidance.hidden = standardSection.hidden;
+      if (standardSection.hidden) {
+        if (state.standardDefaults) state.hashMode = state.hashBeforeDefaults || "keep";
+        state.standardDefaults = standardCheckbox.checked = false;
+        el.querySelector("#mcc-hash-mode").value = state.hashMode;
+      }
       if (!state.resolution.hasMatch) {
         state.canGenerate = false;
         if (els.selectedRegion) els.selectedRegion.hidden = true;
-        setStatus(els.status, "No Canadian region contains that point. Browse the region list instead.", "warning");
+        if (state.resolution.matches.length) {
+          setStatus(els.status, state.resolution.matches.length > 1
+            ? "More than one MeshMapper zone contains this point. Choose your community's zone."
+            : "The saved zone differs from this location. Choose the current IATA region.", "warning");
+          choices.innerHTML = state.resolution.matches.map(function (feature) {
+            return '<button type="button" class="mcc-button mcc-button-secondary" data-zone-choice="' + esc(feature.properties.tag) + '">' + esc(feature.properties.tag.toUpperCase() + " — " + labelFor(data, feature.properties.tag)) + '</button>';
+          }).join("");
+        } else {
+          setStatus(els.status, "No IATA region contains this point. Browse the region list or check with your community.", "warning");
+        }
+      } else if (!state.resolution.province) {
+        state.canGenerate = false;
+        state.awaitingProvince = true;
+        state.detailTag = state.resolution.primary.seed.tag;
+        setStatus(els.status, "Zone found. Choose the province where the repeater is installed.", "warning");
       } else {
         state.canGenerate = true;
         state.maxStep = Math.max(state.maxStep, 3);
         setStatus(els.status, "Region found.", "info");
+        if (geo.legacyTag) setStatus(els.status, "This saved link used an older region name. Check the MeshMapper zone and province before applying settings.", "warning");
         renderConfigRegionBrowser(state.resolution.primary.seed.tag);
         document.dispatchEvent(new CustomEvent("meshcore:region-selected", {
           detail: {
@@ -2358,6 +2526,11 @@
 
     function useGeo(geo) {
       var requestId = ++locationRequestId;
+      provinceSelect.disabled = true;
+      state.maxStep = Math.max(state.maxStep, 2);
+      state.canGenerate = false;
+      renderResult(data, els.result, state);
+      showStep(2);
       setStatus(els.status, "Checking the Canadian region data…", "info");
       return ensureResolverData(data).then(function () {
         finishGeo(geo, requestId);
@@ -2380,7 +2553,7 @@
       els.locate.disabled = true;
       els.locate.textContent = "Finding";
       geocode(data, query, thisController && thisController.signal).then(function (geo) {
-        geo.source = "search";
+        geo.source = geo.source || "search";
         return useGeo(geo);
       }).catch(function (err) {
         if (err && err.name === "AbortError") return;
@@ -2400,6 +2573,10 @@
         ? configuratorSupport.parseCoordinates(els.latitude.value, els.longitude.value)
         : null;
       if (!coordinates) {
+        state.canGenerate = false;
+        state.maxStep = 2;
+        refreshTool(data, els, state, updateMapLinks);
+        el.querySelector("[data-wizard-step='2'] [data-next-step]").disabled = true;
         setStatus(els.status, "Enter a latitude from -90 to 90 and a longitude from -180 to 180.", "error");
         return;
       }
@@ -2477,13 +2654,40 @@
     });
     var profileSelect = el.querySelector("#mcc-radio-profile");
     var hashSelect = el.querySelector("#mcc-hash-mode");
+    provinceSelect.addEventListener("change", function () {
+      if (!state.resolution || !state.resolution.primary) return;
+      useGeo({ lat: state.lat, lon: state.lon, name: state.name, countryCode: "ca",
+        tag: state.resolution.primary.seed.tag, provinceTag: provinceSelect.value, source: state.locationSource });
+    });
+    el.querySelector("[data-role='location-zone-options']").addEventListener("click", function (event) {
+      var button = event.target.closest("[data-zone-choice]");
+      if (button) useGeo({ lat: state.lat, lon: state.lon, name: state.name, countryCode: "ca",
+        tag: button.getAttribute("data-zone-choice"), provinceTag: state.jurisdictionTag, source: "coordinates" });
+    });
+    standardCheckbox.addEventListener("change", function () {
+      state.standardDefaults = standardCheckbox.checked;
+      if (state.standardDefaults) {
+        state.hashBeforeDefaults = state.hashMode;
+        state.hashMode = hashSelect.value = "2";
+      } else {
+        state.hashMode = hashSelect.value = state.hashBeforeDefaults || "keep";
+      }
+      updateMapLinks();
+    });
     profileSelect.addEventListener("change", function () { state.radioProfile = profileSelect.value; updateMapLinks(); });
-    hashSelect.addEventListener("change", function () { state.hashMode = hashSelect.value; updateMapLinks(); });
+    hashSelect.addEventListener("change", function () {
+      state.hashMode = hashSelect.value;
+      if (state.hashMode !== "2") state.standardDefaults = standardCheckbox.checked = false;
+      updateMapLinks();
+    });
     el.querySelectorAll("input[name='mcc-type']").forEach(function (input) {
       input.addEventListener("change", function () {
         state.type = input.value;
         state.selectedMetros = [];
         state.selectedExternalPaths = [];
+        state.unresolvedRegions = [];
+        state.migrationNeedsReview = false;
+        el.querySelector("[data-wizard-step='3'] [data-next-step]").disabled = false;
         refreshTool(data, els, state, updateMapLinks);
         updateMapLinks();
       });
@@ -2513,6 +2717,9 @@
       if (entry[2].indexOf(value) !== -1) {
         state[entry[0]] = value;
         el.querySelector("input[name='" + entry[1] + "'][value='" + value + "']").checked = true;
+      } else if (entry[0] === "firmware" && value !== null) {
+        state.firmware = "unsupported";
+        el.querySelectorAll("input[name='mcc-firmware']").forEach(function (input) { input.checked = false; });
       }
     });
     if (["0", "1", "2"].indexOf(initialParams.get("hash")) !== -1) state.hashMode = hashSelect.value = initialParams.get("hash");
@@ -2522,16 +2729,24 @@
     if (location) {
       els.input.value = location.name;
       useGeo(location).then(function () {
-        if (!state.canGenerate) return;
+        if (initialParams.get("defaults") === "onqc" && !standardSection.hidden) {
+          state.standardDefaults = standardCheckbox.checked = true;
+          state.hashBeforeDefaults = "keep";
+          state.hashMode = hashSelect.value = "2";
+        }
         if (initialParams.get("type") === "large") {
           state.type = "high-site";
           el.querySelector("input[name='mcc-type'][value='high-site']").checked = true;
-          state.selectedMetros = String(initialParams.get("regions") || "").split(",").filter(function (tag) { return Boolean(seedForTag(data, tag)); });
+          var saved = migratedCitySelection(data, initialParams.get("regions"));
+          state.selectedMetros = saved.tags;
+          state.unresolvedRegions = saved.unresolved;
+          state.migrationNeedsReview = saved.unresolved.length > 0;
           state.selectedExternalPaths = selectedExternalRegionPaths(data, String(initialParams.get("external") || "").split(",")).map(function (record) { return record.id; });
         }
-        state.maxStep = 4;
+        if (!state.canGenerate) return;
+        state.maxStep = state.migrationNeedsReview ? 3 : 4;
         refreshTool(data, els, state, updateMapLinks);
-        showStep(/^[1-4]$/.test(initialParams.get("step")) ? Number(initialParams.get("step")) : 3);
+        showStep(state.migrationNeedsReview ? 3 : /^[1-4]$/.test(initialParams.get("step")) ? Number(initialParams.get("step")) : 3);
       });
     } else if (initialParams.has("tag") || initialParams.has("lat") || initialParams.has("lon")) {
       state.maxStep = 2;
@@ -2613,7 +2828,7 @@
       '</div>' +
       '<div class="mcc-map-area" data-role="map-area" hidden>' +
       '<div class="mcc-map-canvas" data-role="map-canvas" role="region" aria-label="Interactive Canadian region map" tabindex="0"></div>' +
-      '<details class="mcc-map-legend"><summary>Map legend</summary><p><span><i class="mcc-legend-selected"></i>Selected boundary</span><span><i class="mcc-legend-browse"></i>Browsed group outline</span></p></details>' +
+      '<details class="mcc-map-legend"><summary>Map legend</summary><p><span><i class="mcc-legend-published"></i>Published MeshMapper boundary</span><span><i class="mcc-legend-starter"></i>MeshCore Canada planning</span></p></details>' +
       '</div>' +
       '</div>' +
       '</div>' +
@@ -2631,12 +2846,8 @@
 
     var mapParams = new URLSearchParams(window.location.search);
     var requestedLargeCoverage = mapParams.get("type") === "large";
-    var requestedCanadianRegions = expandSharedRepeaterLeaves(
-      data,
-      String(mapParams.get("regions") || "").split(",").map(slug).filter(function (tag) {
-        return Boolean(data.hierarchy[tag] && seedForTag(data, tag));
-      })
-    );
+    var requestedCitySelection = migratedCitySelection(data, mapParams.get("regions"));
+    var requestedCanadianRegions = requestedCitySelection.tags;
     var requestedExternalPaths = selectedExternalRegionPaths(
       data,
       String(mapParams.get("external") || "").split(",").map(slug).filter(Boolean)
@@ -2651,7 +2862,10 @@
       firmware: data.meta.defaultFirmware || "1.16",
       radioProfile: "keep",
       hashMode: ["0", "1", "2"].indexOf(mapParams.get("hash")) !== -1 ? mapParams.get("hash") : "keep",
+      standardDefaults: mapParams.get("defaults") === "onqc",
+      manualSelection: false,
       selectedMetros: requestedLargeCoverage ? requestedCanadianRegions : [],
+      unresolvedRegions: requestedLargeCoverage ? requestedCitySelection.unresolved : [],
       selectedExternalPaths: requestedLargeCoverage ? requestedExternalPaths : [],
       canGenerate: false,
       resolution: null,
@@ -2704,51 +2918,29 @@
     }
 
     function renderAudit() {
-      Promise.all([
-        fetchJsonAsset("canada-region-partition.qa.json", "Unable to load release QA"),
-        fetchJsonAsset("sources.lock.json", "Unable to load the source lock")
-      ]).then(function (loaded) {
-        var qa = loaded[0];
-        var sourceLock = loaded[1];
-        var invariantValues = Object.keys(qa.invariants || {}).map(function (key) {
-          return qa.invariants[key];
-        });
-        var passed = invariantValues.filter(function (value) {
-          return value === true || value === 0;
-        }).length;
-        var total = invariantValues.length;
-        var hashes = qa.artifactHashes || {};
         els.auditStatus.hidden = true;
         els.auditContent.innerHTML =
           '<div class="mcc-audit-grid">' +
-          '<section class="mcc-card"><p class="mcc-eyebrow">Release</p><h3>' + esc(data.version) + '</h3>' +
-          '<dl class="mcc-audit-list"><div><dt>Status</dt><dd>' + esc(data.authority.currentBoundaryStatus) + '</dd></div>' +
-          '<div><dt>Standard</dt><dd>' + esc(data.authority.standard) + ' · ' + esc(data.authority.version) + '</dd></div>' +
-          '<div><dt>Connectivity</dt><dd>' + (navigator.onLine ? 'Online' : 'Offline; showing cached static data when available') + '</dd></div></dl></section>' +
-          '<section class="mcc-card"><p class="mcc-eyebrow">Coverage</p><h3>' + esc(data.regionCounts.generated) + ' leaf regions</h3>' +
-          '<dl class="mcc-audit-list"><div><dt>Digital census cells</dt><dd>' + esc(qa.digitalCoverage.sourceAtomCount) + '</dd></div>' +
-          '<div><dt>Census subdivisions</dt><dd>' + esc(qa.censusCoherence.officialCensusSubdivisions) + '</dd></div>' +
-          '<div><dt>Positive-area overlaps</dt><dd>' + esc(qa.digitalGeometry.positiveAreaOverlapPairs) + '</dd></div></dl></section>' +
-          '<section class="mcc-card"><p class="mcc-eyebrow">Quality checks</p><h3>' + passed + ' of ' + total + ' reported invariants pass</h3>' +
-          '<p>Source lock: ' + esc(sourceLock.censusVintage) + ' census vintage · ' + esc((sourceLock.sources || []).length) + ' locked sources.</p></section>' +
+          '<section class="mcc-card"><h3>MeshMapper snapshot</h3><p>' + esc(data.version) + '</p>' +
+          '<dl class="mcc-audit-list"><div><dt>Published zones</dt><dd>' + data.regionCounts.meshmapper + '</dd></div>' +
+          '<div><dt>Starter regions</dt><dd>' + data.regionCounts.starters + '</dd></div>' +
+          '<div><dt>Planning extensions</dt><dd>' + data.regionCounts.extensions + '</dd></div>' +
+          '<div><dt>Fetched</dt><dd>' + esc(data.source.fetchedAt) + '</dd></div></dl>' +
+          '<p><a href="https://meshmapper.net/" target="_blank" rel="noopener noreferrer">Open MeshMapper</a></p></section>' +
+          '<section class="mcc-card"><h3>Flat scopes</h3><p>City, province, mesh scope where defined, can, and na. Each scope is independent.</p>' +
+          '<p>onqc is for Ontario and Québec. can and na are reserved for future use, not companion defaults or active cross-border routes.</p></section>' +
+          '<section class="mcc-card"><h3>Map limits</h3><p>Published MeshMapper zones are unchanged. Labelled planning regions fill the remaining gaps across Canada.</p>' +
+          '<p>Planning regions follow provincial borders and nearby hubs. Newfoundland and Labrador are separate. Published MeshMapper zones take priority.</p></section>' +
           '</div>' +
-          '<section class="mcc-card mcc-audit-artifacts"><h3>Release artifacts</h3>' +
-          '<dl class="mcc-hash-list"><div><dt>Public partition SHA-256</dt><dd><code>' + esc(hashes.partitionSha256 || "Unavailable") + '</code></dd></div>' +
-          '<div><dt>Resolver partition SHA-256</dt><dd><code>' + esc(hashes.digitalPartitionSha256 || "Unavailable") + '</code></dd></div>' +
-          '<div><dt>Membership SHA-256</dt><dd><code>' + esc(hashes.membershipSha256 || "Unavailable") + '</code></dd></div></dl>' +
+          '<section class="mcc-card mcc-audit-artifacts"><h3>Source files</h3>' +
+          '<dl class="mcc-hash-list"><div><dt>IATA boundaries SHA-256</dt><dd><code>' + esc(data.source.boundarySha256) + '</code></dd></div></dl>' +
           '<div class="mcc-detail-actions">' +
-          '<a class="mcc-button mcc-button-secondary" href="' + esc(new URL("canada-region-partition.qa.json", assetBase).href) + '" download>Download QA JSON</a>' +
-          '<a class="mcc-button mcc-button-secondary" href="' + esc(new URL("canada-regions.json", assetBase).href) + '" download>Download catalog</a>' +
+          '<a class="mcc-button mcc-button-secondary" href="' + esc(new URL("meshmapper-iata-boundaries.geojson", assetBase).href) + '" download>Download MeshMapper boundaries</a>' +
+          '<a class="mcc-button mcc-button-secondary" href="' + esc(new URL("iata-boundaries.geojson", assetBase).href) + '" download>Download IATA boundaries</a>' +
+          '<a class="mcc-button mcc-button-secondary" href="' + esc(new URL("iata-regions.json", assetBase).href) + '" download>Download catalog</a>' +
           '<a class="mcc-button mcc-button-secondary" href="' + esc(regionPageHref("standard")) + '">Open standard and change process</a>' +
           '</div></section>';
         auditLoaded = true;
-      }).catch(function (error) {
-        els.auditStatus.hidden = false;
-        els.auditStatus.className = "mcc-status mcc-status-error";
-        els.auditStatus.innerHTML = '<p>' + esc(error.message) + '</p><button type="button" class="mcc-button mcc-button-secondary" data-action="retry-audit">Try again</button>';
-        var retry = els.auditStatus.querySelector("[data-action='retry-audit']");
-        if (retry) retry.addEventListener("click", renderAudit, { once: true });
-      });
     }
 
     function loadAudit() {
@@ -2760,20 +2952,20 @@
     function renderRegionBrowser(tag, fitSelection) {
       if (!data.hierarchy[tag]) tag = data.meta.rootTag || "can";
       state.browseTag = tag;
-      var path = ancestryFor(data, tag);
+      var path = ancestryFor(data, tag, state.jurisdictionTag);
       els.breadcrumbs.innerHTML = path.map(function (item, index) {
         var current = index === path.length - 1;
         return '<button type="button" class="mcc-region-crumb' + (current ? ' is-current' : '') + '" data-region-node="' + esc(item) + '"' + (current ? ' aria-current="page"' : '') + '>' + esc(labelFor(data, item)) + '</button>';
       }).join('<span aria-hidden="true">›</span>');
       var children = childrenFor(data, tag);
       els.children.innerHTML = children.length ? children.map(function (child) {
-        var nested = childrenFor(data, child).length > 0;
+        var nested = Boolean(data.policy.provinces[child]) || childrenFor(data, child).length > 0;
         var leafCount = leafDescendants(data, child).length;
         return '<button type="button" class="mcc-region-child" data-region-node="' + esc(child) + '">' +
           '<span><strong>' + esc(labelFor(data, child)) + '</strong><small>' +
-          (nested ? leafCount + ' subregions' : child.toUpperCase() + ' · region') +
+          (nested ? leafCount + ' zones' : child.toUpperCase() + ' · zone') +
           '</small></span><span aria-hidden="true">' + (nested ? '›' : '✓') + '</span></button>';
-      }).join("") : '<p class="mcc-help">Select this region to see its full path.</p>';
+      }).join("") : '<p class="mcc-help">' + (data.policy.provinces[tag] ? 'No MeshMapper zones are published here yet.' : 'Select this city zone to see its scope options.') + '</p>';
       if (!map || !browseLayer) return;
       browseLayer.clearLayers();
       if (tag !== (data.meta.rootTag || "can") && data.partitionByTag) {
@@ -2793,10 +2985,11 @@
       selectedLayer.clearLayers();
       if (state.canGenerate) {
         var rec = recommend(data, state.resolution, state.type, state.selectedMetros, state.selectedExternalPaths);
-        if (rec && data.partitionByTag) {
+        if (data.partitionByTag) {
+          var selectedTags = rec ? rec.leaves : [state.resolution.primary.seed.tag];
           selectedLayer.addData({
             type: "FeatureCollection",
-            features: rec.leaves.map(function (tag) { return data.partitionByTag[tag]; }).filter(Boolean)
+            features: data.partitionRegions.features.filter(function (feature) { return selectedTags.indexOf(feature.properties.tag) !== -1; })
           });
           selectedLayer.bringToFront();
           if (recenter && selectedLayer.getBounds().isValid()) {
@@ -2824,16 +3017,19 @@
         return aliases.findIndex(function (item) { return normalizeLocationSearch(item) === normalizeLocationSearch(alias); }) === index;
       });
       var communityUrl = new URL("../provinces/", regionPageHref("config"));
-      communityUrl.searchParams.set("community", labelFor(data, provinceTagFor(data, tag)));
+      communityUrl.searchParams.set("region", tag);
       els.resultSection.hidden = false;
       els.textResult.innerHTML =
         '<p class="mcc-deterministic-result"><strong>' + esc(state.name) + '</strong> resolves to <strong>' +
         esc(labelFor(data, tag)) + '</strong> (<code>' + esc(tag) + '</code>).</p>' +
-        '<p class="mcc-region-path">' + esc(labelledPath(data, ancestryFor(data, tag))) + '</p>' +
-        '<p>These are routing regions, not radio coverage boundaries.</p>' +
+        '<p class="mcc-region-path">' + esc(data.hierarchy[tag].provinces.map(function (province) { return labelFor(data, province); }).join(" / ")) + '</p>' +
+        (state.resolution.sourceTier === "meshcore-canada"
+          ? planningNotice(state.resolution)
+          : '<p>These are published MeshMapper zones, not radio coverage or scope-enforcement boundaries.</p><p><a href="' + esc(seedForTag(data, tag).sourceUrl) + '" target="_blank" rel="noopener noreferrer">Open this zone in MeshMapper</a></p>') +
+        (window.MeshCoreRegionProfile ? window.MeshCoreRegionProfile.render(data, tag, state.jurisdictionTag, new URL("../", regionPageHref("config")), state.resolution) : '') +
         '<p><a href="' + esc(communityUrl.href) + '">Find a community</a></p>' +
-        '<details><summary>Region details</summary><dl class="mcc-review-list"><div><dt>Province or territory</dt><dd>' + esc(labelFor(data, provinceTagFor(data, tag))) + '</dd></div>' +
-        '<div><dt>Status</dt><dd>' + esc(statusLabel(statusFor(data, tag).state || "draft")) + '</dd></div>' +
+        '<details><summary>Region details</summary><dl class="mcc-review-list"><div><dt>Province or territory</dt><dd>' + esc(state.jurisdictionTag ? labelFor(data, state.jurisdictionTag) : "Choose the repeater province in the configurator") + '</dd></div>' +
+        '<div><dt>Status</dt><dd>' + esc(state.resolution.planningKind === "extension" ? "Planning extension" : statusLabel(statusFor(data, tag).state || "draft")) + '</dd></div>' +
         '<div><dt>Aliases</dt><dd>' + esc(aliases.length ? aliases.join(", ") : "None recorded") + '</dd></div>' +
         '<div><dt>Repeater paths</dt><dd>' + esc(rec ? rec.paths.length : 1) + '</dd></div></dl></details>' +
         '<div class="mcc-detail-actions"><a class="mcc-button" href="' + esc(configHrefForState(state)) + '">Configure this region</a>' +
@@ -2850,9 +3046,8 @@
       state.lon = Number(geo.lon);
       state.name = geo.name || (state.lat.toFixed(4) + ", " + state.lon.toFixed(4));
       state.forcedTag = forcedTag || geo.tag || null;
-      state.jurisdictionTag = state.forcedTag
-        ? provinceTagFor(data, state.forcedTag)
-        : jurisdictionTagFromGeo(geo);
+      state.manualSelection = geo.source === "region";
+      state.jurisdictionTag = geo.provinceTag || jurisdictionTagFromGeo(geo);
       if (!isCanada(geo)) {
         state.canGenerate = false;
         state.resolution = null;
@@ -2860,11 +3055,16 @@
         renderTextResult();
         return;
       }
-      state.resolution = resolveLocation(data, state.lat, state.lon, state.forcedTag, state.jurisdictionTag);
+      state.resolution = resolveLocation(data, state.lat, state.lon, state.forcedTag, state.jurisdictionTag, state.manualSelection);
+      state.jurisdictionTag = state.resolution.province;
       state.canGenerate = state.resolution.hasMatch;
       state.detailTag = state.canGenerate ? state.resolution.primary.seed.tag : null;
       if (!state.canGenerate) {
-        setStatus(els.status, "No Canadian region contains that point. Browse the list instead.", "warning");
+        setStatus(els.status, state.resolution.matches.length > 1
+          ? "More than one MeshMapper zone contains this point. Select your community's zone on the map."
+          : state.resolution.matches.length
+            ? "The saved zone differs from this location. Choose the current IATA region."
+            : "No IATA region contains this point. Browse the region list or check with your community.", "warning");
       } else {
         setStatus(els.status, "Region found.", "info");
         renderRegionBrowser(state.detailTag, false);
@@ -2875,6 +3075,8 @@
 
     function useGeo(geo, recenter, forcedTag) {
       var requestId = ++locationRequestId;
+      state.canGenerate = false;
+      renderTextResult();
       setStatus(els.status, "Checking the Canadian region data…", "info");
       return ensureResolverData(data).then(function () {
         finishGeo(geo, forcedTag, recenter, requestId);
@@ -2886,10 +3088,11 @@
 
     function chooseRegionNode(tag) {
       var children = childrenFor(data, tag);
+      var province = data.policy.provinces[state.browseTag] ? state.browseTag : null;
       renderRegionBrowser(tag, true);
       if (!children.length) {
         var seed = seedForTag(data, tag);
-        if (seed) useGeo({ lat: seed.lat, lon: seed.lon, name: labelFor(data, tag), countryCode: "ca", tag: tag }, true, tag);
+        if (seed) useGeo({ lat: seed.lat, lon: seed.lon, name: labelFor(data, tag), countryCode: "ca", tag: tag, source: "region", provinceTag: province }, true, tag);
       }
     }
 
@@ -2908,6 +3111,8 @@
         .then(function (geo) { return useGeo(geo, true, geo.tag); })
         .catch(function (error) {
           if (error && error.name === "AbortError") return;
+          state.canGenerate = false;
+          renderTextResult();
           setStatus(els.status, esc(error.message || "Location lookup failed"), "error");
           showLocationChoices(els.status, error.choices, function (geo) { return useGeo(geo, true, geo.tag); });
         }).finally(function () {
@@ -2944,12 +3149,12 @@
       loadLeaflet().then(function (L) {
         L.Icon.Default.imagePath = new URL("vendor/leaflet/images/", assetBase).href;
         els.mapArea.hidden = false;
-        map = L.map(els.canvas, { minZoom: 3, maxZoom: 13 });
+        map = L.map(els.canvas, { minZoom: 1, maxZoom: 13 });
         var loadingMap = map;
         activeMaps.push({ container: el, map: map });
         var initialRec = state.canGenerate && recommend(data, state.resolution, state.type, state.selectedMetros, state.selectedExternalPaths);
-        var initialFeatures = initialRec && data.resolverByTag
-          ? initialRec.leaves.map(function (tag) { return data.resolverByTag[tag]; }).filter(Boolean) : [];
+        var initialFeatures = initialRec && data.partitionRegions
+          ? data.partitionRegions.features.filter(function (feature) { return initialRec.leaves.indexOf(feature.properties.tag) !== -1; }) : [];
         var initialBounds = initialFeatures.length ? L.geoJSON(initialFeatures).getBounds() : null;
         map.fitBounds(initialBounds && initialBounds.isValid() ? initialBounds : data.meta.map.bounds || [[41.5, -141.5], [83.5, -52]],
           { padding: [28, 28], maxZoom: initialFeatures.length ? 9 : 4, animate: false });
@@ -2957,22 +3162,31 @@
           maxZoom: 19,
           attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" rel="noopener noreferrer">OpenStreetMap</a> contributors'
         }).addTo(map);
-        browseLayer = L.geoJSON(null, { interactive: false, style: { color: "#ffd166", opacity: 1, weight: 3, fillOpacity: 0 } }).addTo(map);
-        selectedLayer = L.geoJSON(null, { interactive: false, style: { color: "#ffffff", opacity: 1, weight: 4, dashArray: "8 5", fillColor: "#4287ff", fillOpacity: 0.34 } }).addTo(map);
+        browseLayer = L.geoJSON(null, { interactive: false, style: function (feature) {
+          return { color: "#ffd166", opacity: 1, weight: 3, fillOpacity: 0, dashArray: feature.properties.regionSource === "meshcore-canada" ? "8 5" : null };
+        } }).addTo(map);
+        selectedLayer = L.geoJSON(null, { interactive: false, style: function (feature) {
+          var planning = feature.properties.regionSource === "meshcore-canada";
+          return { color: "#ffffff", opacity: 1, weight: 4, dashArray: planning ? "8 5" : null, fillColor: "#4287ff", fillOpacity: 0.3 };
+        } }).addTo(map);
         updateMapVisuals(false);
         // Paint tiles first; the much larger boundary overlay can arrive independently.
-        var boundariesReady = loadDisplayPartition().then(function (partition) {
+        var boundariesReady = loadDisplayPartition(data).then(function (partition) {
           if (map !== loadingMap) return;
           applyGeneratedPartition(data, partition, null);
           L.geoJSON(data.partitionRegions, {
+            bubblingMouseEvents: false,
             style: function (feature) {
-              return { color: "#aeb8ff", opacity: 0.8, weight: 1, fillColor: colorForTag(feature.properties.tag), fillOpacity: 0.2 };
+              var starter = feature.properties.regionSource === "meshcore-canada";
+              return { color: starter ? "#ffd166" : "#aeb8ff", opacity: 0.8, weight: starter ? 2 : 1,
+                dashArray: starter ? "6 4" : null, fillColor: colorForTag(feature.properties.tag), fillOpacity: 0.2 };
             },
             onEachFeature: function (feature, layer) {
-              layer.bindTooltip('<strong>' + esc(feature.properties.tag.toUpperCase()) + '</strong> - ' + esc(feature.properties.label));
+              var label = (frenchRuntime && feature.properties.nameFr) || feature.properties.label || feature.properties.name || feature.properties.tag.toUpperCase();
+              layer.bindTooltip('<strong>' + esc(feature.properties.tag.toUpperCase()) + '</strong> - ' + esc(label) + (feature.properties.regionSource === "meshcore-canada" ? '<br>' + (frenchRuntime ? 'Planification MeshCore Canada' : 'MeshCore Canada planning') : ''));
               layer.on("click", function (event) {
                 if (event.originalEvent) L.DomEvent.stopPropagation(event.originalEvent);
-                useGeo({ lat: event.latlng.lat, lon: event.latlng.lng, name: feature.properties.label, countryCode: "ca", tag: feature.properties.tag }, false, feature.properties.tag);
+                useGeo({ lat: event.latlng.lat, lon: event.latlng.lng, name: label, countryCode: "ca", tag: feature.properties.tag }, false, feature.properties.tag);
               });
             }
           }).addTo(map);
@@ -3089,14 +3303,15 @@
       } catch (_) { state.radioProfile = "keep"; }
       renderTextResult();
     });
-    if (["1.14", "1.15", "1.16"].indexOf(mapParams.get("firmware")) !== -1) state.firmware = mapParams.get("firmware");
+    if (mapParams.has("firmware")) state.firmware = ["1.14", "1.15", "1.16"].indexOf(mapParams.get("firmware")) !== -1 ? mapParams.get("firmware") : "unsupported";
     if (["repeater", "room", "advanced"].indexOf(mapParams.get("role")) !== -1) state.deviceRole = mapParams.get("role");
     if (["guided", "technical"].indexOf(mapParams.get("instructions")) !== -1) state.finishPath = mapParams.get("instructions");
     var initialGeo = initialLocation(data, mapParams);
     if (initialGeo) {
       els.input.value = initialGeo.name;
-      // Let the result card settle before measuring whether the map is on screen.
-      useGeo(initialGeo, false, initialGeo.tag).then(observeInteractiveMap);
+      // Text lookup and visible map tiles must not wait on each other's data.
+      useGeo(initialGeo, true, initialGeo.tag);
+      observeInteractiveMap();
     } else {
       if (mapParams.has("tag") || mapParams.has("lat") || mapParams.has("lon")) {
         setStatus(els.status, "This saved location is invalid or no longer available. Choose a region again.", "warning");
@@ -3114,17 +3329,20 @@
       var hasGeneratedBoundary = Boolean(seed);
       return {
         tag: tag,
-        label: item.label,
+        label: labelFor(data, tag),
         parent: item.parent || "",
         ancestry: ancestryText(data, tag),
         province: provinceTagFor(data, tag),
+        provinces: item.provinces || [],
         state: st.state || "draft",
         statusLabel: statusLabel(st.state || "draft"),
         source: st.source || "",
         reviewer: st.reviewer || "",
         seed: seedText(seed),
-        sourceTier: hasGeneratedBoundary ? "generated" : "grouping",
-        boundaryType: hasGeneratedBoundary ? "generated-partition" : "derived-parent",
+        sourceTier: seed.regionSource,
+        boundaryType: seed.regionSource === "meshmapper" ? "meshmapper-zone" : "starter-region",
+        planningExtension: st.planningExtension === true,
+        sourceUrl: sourceUrlFor(data, tag),
         basis: st.basis || item.basis || "proposed"
       };
     });
@@ -3145,7 +3363,7 @@
       '<span class="mcc-table-count" data-role="table-count" role="status" aria-live="polite"></span>' +
       '</div>' +
       '<div class="mcc-table-layout">' +
-      '<div class="mcc-region-table-wrap" role="region" aria-label="Region directory table" tabindex="0"><table class="mcc-region-table"><thead><tr><th scope="col">Region</th><th scope="col">Area</th><th scope="col">Boundary</th><th scope="col">Basis</th></tr></thead><tbody></tbody></table></div>' +
+      '<div class="mcc-region-table-wrap" role="region" aria-label="Region directory table" tabindex="0"><table class="mcc-region-table"><thead><tr><th scope="col">City zone</th><th scope="col">Province or territory</th><th scope="col">Source</th></tr></thead><tbody></tbody></table></div>' +
       '</div>' +
       '</div>';
     var input = el.querySelector("[data-role='table-filter']");
@@ -3160,16 +3378,16 @@
       var shown = rows.filter(function (row) {
         var haystack = slug([row.tag, row.label, row.parent, row.ancestry].join(" "));
         if (filter && haystack.indexOf(filter) === -1) return false;
-        if (provinceFilter && row.province !== provinceFilter && row.tag !== provinceFilter) return false;
+        if (provinceFilter && row.provinces.indexOf(provinceFilter) === -1) return false;
         return true;
       });
       count.textContent = shown.length === rows.length ? rows.length + " regions" : shown.length + " of " + rows.length + " regions";
       body.innerHTML = shown.map(function (row) {
         return "<tr>" +
           '<td><code>' + esc(row.tag) + "</code> " + esc(row.label) + "</td>" +
-          "<td>" + esc(row.province ? labelFor(data, row.province) : "Canada") + "</td>" +
-          "<td>Canada-wide</td>" +
-          "<td>" + (row.basis === "established" ? "Established" : "Proposed") + "</td>" +
+          "<td>" + esc(row.provinces.map(function (province) { return labelFor(data, province); }).join(" / ")) + "</td>" +
+          '<td><a href="' + esc(row.sourceUrl) + '">' + esc(row.sourceTier === "meshmapper" ? "MeshMapper" : "MeshCore Canada starter region") + '</a>' +
+          (row.planningExtension ? '<br><a href="' + esc(regionPageHref("standard") + '#planning-extensions') + '">Planning extension</a>' : '') + '</td>' +
           "</tr>";
       }).join("");
     }
@@ -3191,7 +3409,7 @@
       '</section>' +
       '<section class="mcc-stat-grid" aria-label="Region status summary">' +
       '<div class="mcc-stat"><span>Regions</span><strong>' + data.regionCounts.total + '</strong></div>' +
-      '<div class="mcc-stat"><span>Local regions</span><strong>' + data.regionCounts.generated + '</strong></div>' +
+      '<div class="mcc-stat"><span>Local regions</span><strong>' + data.regionCounts.meshmapper + '</strong></div>' +
       '<div class="mcc-stat"><span>Provinces &amp; territories</span><strong>' + provinceOptions(data).length + '</strong></div>' +
       '</section>' +
       '<section class="mcc-card mcc-dashboard-table">' +
@@ -3203,6 +3421,7 @@
   }
 
   function initRegions() {
+    frenchRuntime = /^fr(?:-|$)/i.test(document.documentElement.lang || "");
     activeMaps = activeMaps.filter(function (entry) {
       if (entry.container.isConnected) return true;
       try { entry.map.remove(); } catch (error) { /* The old document is already gone. */ }

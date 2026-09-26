@@ -180,3 +180,15 @@ input:not([type="checkbox"]):not([type="radio"]):not(.md-search__input) {
     transition-duration: 0.01ms !important;
   }
 }
+/* Region context also appears on ordinary guides, without loading the map. */
+.mc-region-profile {
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: .4rem;
+  padding: 1rem;
+  margin: 1.25rem 0;
+  overflow-wrap: anywhere;
+}
+.mc-region-profile h3 { margin-top: 0; }
+.mc-region-profile dl { display: grid; grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); gap: .6rem; }
+.mc-region-profile dt { font-weight: 600; }
+.mc-region-profile dd { margin: .15rem 0 0; }
