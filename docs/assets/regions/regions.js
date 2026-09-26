@@ -3147,16 +3147,18 @@
           if (map !== loadingMap) return;
           applyGeneratedPartition(data, partition, null);
           L.geoJSON(data.partitionRegions, {
+            bubblingMouseEvents: false,
             style: function (feature) {
               var starter = feature.properties.regionSource === "meshcore-canada";
               return { color: starter ? "#ffd166" : "#aeb8ff", opacity: 0.8, weight: starter ? 2 : 1,
                 dashArray: starter ? "6 4" : null, fillColor: colorForTag(feature.properties.tag), fillOpacity: 0.2 };
             },
             onEachFeature: function (feature, layer) {
-              layer.bindTooltip('<strong>' + esc(feature.properties.tag.toUpperCase()) + '</strong> - ' + esc(feature.properties.label) + (feature.properties.regionSource === "meshcore-canada" ? '<br>' + (frenchRuntime ? 'Planification MeshCore Canada' : 'MeshCore Canada planning') : ''));
+              var label = (frenchRuntime && feature.properties.nameFr) || feature.properties.label || feature.properties.name || feature.properties.tag.toUpperCase();
+              layer.bindTooltip('<strong>' + esc(feature.properties.tag.toUpperCase()) + '</strong> - ' + esc(label) + (feature.properties.regionSource === "meshcore-canada" ? '<br>' + (frenchRuntime ? 'Planification MeshCore Canada' : 'MeshCore Canada planning') : ''));
               layer.on("click", function (event) {
                 if (event.originalEvent) L.DomEvent.stopPropagation(event.originalEvent);
-                useGeo({ lat: event.latlng.lat, lon: event.latlng.lng, name: feature.properties.label, countryCode: "ca", tag: feature.properties.tag }, false, feature.properties.tag);
+                useGeo({ lat: event.latlng.lat, lon: event.latlng.lng, name: label, countryCode: "ca", tag: feature.properties.tag }, false, feature.properties.tag);
               });
             }
           }).addTo(map);

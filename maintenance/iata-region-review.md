@@ -6,10 +6,30 @@ map or sends commands to repeaters.
 ## Review a MeshMapper update
 
 The **Review MeshMapper changes** Action runs weekly on `main` and can also be
-started manually there. It fetches the public Canadian zones, validates their
-geometry, and compares names, centres and boundaries. No change means no issue
+started manually there. It uses the [official Zones API](https://wiki.meshmapper.net/zones-api/),
+not the homepage or its private map endpoints. It validates drawn geometry and
+compares names, centres, URLs, groups and boundaries. No change means no issue
 update. A change opens or updates one bot-owned review issue and saves the
 candidate GeoJSON and comparison as a 30-day artifact.
+
+The importer uses `get_zones.php?country=CA`, followed by each returned site's
+`get_geojson.php`. It accepts the API's 2–6-character region codes, preserves
+GeoJSON coordinates, and keeps `geometry: null` for regions without a drawn
+boundary. Disabled regions are absent from the directory. API groups are metadata,
+not instructions to add new on-air scopes.
+
+Responses are cached for one hour in `.tmp/meshmapper-api-cache.json`; later
+requests use `If-None-Match` and reuse the body on HTTP 304. The weekly workflow
+retains this public-response cache between runs. Requests are spaced below the
+shared 60-per-minute limit. HTTP errors stop the run without replacing the candidate;
+429 reports `Retry-After` rather than immediately retrying.
+
+The API candidate uses snapshot schema v2; the reviewer also accepts the older
+v1 approved snapshot. An enabled region with no boundary remains visible in the
+review report, but is not a polygon to publish. Do not copy a null geometry into
+the active polygon-only map input or invent a circle for it. Coordinate with the
+region's owner before promoting its boundary. The existing approved map stays
+unchanged until a separate boundary review is completed.
 
 Gap assignments consider every eligible published regional centre as well as
 starter hubs. Never distribute all leftover land among only newly added hubs.

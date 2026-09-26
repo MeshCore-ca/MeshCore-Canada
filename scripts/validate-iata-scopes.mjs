@@ -32,7 +32,7 @@ assert.deepEqual(provinces.features.map(feature => feature.properties.tag).sort(
 assert.equal(data.source.boundarySha256, createHash("sha256").update(read("docs/assets/regions/iata-boundaries.geojson")).digest("hex"));
 assert.equal(data.source.meshmapperBoundarySha256, createHash("sha256").update(read("docs/assets/regions/meshmapper-iata-boundaries.geojson")).digest("hex"));
 assert.equal(provinces.sourceSha256, createHash("sha256").update(read("docs/assets/regions/canada-region-partition-digital.geojson")).digest("hex"));
-assert.equal(published.source.endpoint, "https://meshmapper.net/?ajax=zones_bbox");
+assert.ok(["https://meshmapper.net/?ajax=zones_bbox", "https://meshmapper.net/get_zones.php?country=CA"].includes(published.source.endpoint));
 assert.ok(Number.isFinite(Date.parse(published.fetchedAt)));
 assert.equal(zones.publishedCount, published.features.length);
 assert.equal(zones.starterCount, starters.regions.length);
@@ -49,7 +49,7 @@ for (const [name, path] of Object.entries({ meshmapper: "docs/assets/regions/mes
 }
 for (const feature of zones.features) {
   const { tag, code, country, name, center, sourceUrl } = feature.properties;
-  assert.match(tag, /^[a-z]{3}$/);
+  assert.match(tag, /^[a-z0-9]{2,6}$/);
   assert.equal(code, tag.toUpperCase());
   assert.equal(country, "CA");
   assert.ok(typeof name === "string" && name.trim());

@@ -2,6 +2,22 @@ import { expect, test } from "./site-fixtures.mjs";
 import { siteRoute } from "./site-route.mjs";
 
 for (const locale of ["", "fr/"]) {
+  test(`${locale || "en/"} map polygons use their published name for hover and selection`, async ({ page }) => {
+    await page.goto(siteRoute(`/${locale}config/map/?lat=42.406519&lon=-82.188273`));
+    const stage = page.locator('.mcc-map-stage');
+    await stage.scrollIntoViewIfNeeded();
+    await expect(stage).toHaveAttribute("aria-busy", "false");
+    const pin = await page.locator('.leaflet-marker-icon').first().boundingBox();
+    expect(pin).not.toBeNull();
+    const atPin = { clientX: pin.x + 12, clientY: pin.y + 41 };
+    const polygon = page.locator('path.leaflet-interactive').first();
+    await polygon.dispatchEvent("mouseover", atPin);
+    await expect(page.locator('.leaflet-tooltip')).toContainText("XCM - Chatham-Kent");
+    await expect(page.locator('.leaflet-tooltip')).not.toContainText("undefined");
+    await polygon.dispatchEvent("click", atPin);
+    await expect(page.locator('[data-role="map-text-result"] .mcc-deterministic-result')).toHaveText(/^Chatham-Kent /);
+  });
+
   for (const [town,tag,lat,lon] of [["reported Wingham point","ykf",43.8678,-81.2619],["Goderich","yxu",43.743,-81.71],["Kincardine","ylk",44.176,-81.636]]) {
     test(`${locale || "en/"} ${town} uses a labelled local extension, not YSB`, async ({page}) => {
       await page.goto(siteRoute(`/${locale}config/map/?lat=${lat}&lon=${lon}`));

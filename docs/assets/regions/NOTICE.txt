@@ -13,11 +13,15 @@ scripts/build-iata-boundaries.py and scripts/build-iata-catalog.mjs.
 All changes require a reviewed pull request.
 
 MeshMapper source: https://meshmapper.net/
-Public boundary feed: https://meshmapper.net/?ajax=zones_bbox
+Current API: https://meshmapper.net/get_zones.php?country=CA
+Per-region boundary: append get_geojson.php to the API's region URL.
+API documentation: https://wiki.meshmapper.net/zones-api/
 
-The importer changes coordinate order to GeoJSON and closes open rings. It
-does not clip, simplify, or replace published polygons with radius circles.
-meshmapper-iata-boundaries.geojson retains that unchanged source snapshot.
+The current importer preserves the API's GeoJSON coordinates and closed rings.
+It does not scrape pages, simplify polygons or invent boundaries for undrawn zones.
+The approved meshmapper-iata-boundaries.geojson snapshot predates the API: its
+historical provenance records the old feed and coordinate conversion. It stays
+unchanged until API boundary changes have been reviewed.
 Credit MeshMapper zone owners, OpenStreetMap contributors (ODbL), and
 geoBoundaries (CC BY 4.0) where those sources are used by MeshMapper.
 

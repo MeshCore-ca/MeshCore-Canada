@@ -103,3 +103,20 @@ test("source review detects renames, geometry changes, removals and starter coll
   assert.match(workflow,/refs\/heads\/main/); assert.match(workflow,/issues: write/);
   assert.doesNotMatch(workflow,/contents: write|git push|ssh |deploy|pull_request_target/);
 });
+
+test("API snapshot review keeps undrawn and non-three-letter regions visible", () => {
+  const next = structuredClone(snapshot);
+  next.schema = "meshcore-canada-meshmapper-zones/v2";
+  const unmapped = structuredClone(next.features[0]);
+  unmapped.properties.tag = "ab12";
+  unmapped.properties.hasBoundary = false;
+  unmapped.geometry = null;
+  next.features.push(unmapped);
+  next.features[0].properties.group = "ONQC";
+  const result = compareSnapshots(snapshot, next);
+  assert.deepEqual(result.added, ["ab12"]);
+  assert.deepEqual(result.unmapped, ["ab12"]);
+  assert.deepEqual(result.changed[0].fields, ["group"]);
+  assert.match(reviewText(result), /without a drawn boundary: `ab12`/);
+  assert.equal(compareSnapshots(next, { ...next, fetchedAt: "2099-01-01" }).needsReview, false);
+});

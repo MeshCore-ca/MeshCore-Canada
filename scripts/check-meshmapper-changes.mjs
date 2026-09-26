@@ -7,15 +7,16 @@ import { fileURLToPath } from "node:url";
 
 export function compareSnapshots(before, after, starterTags = []) {
   function index(snapshot) {
-    assert.equal(snapshot.schema, "meshcore-canada-meshmapper-zones/v1");
+    assert.ok(["meshcore-canada-meshmapper-zones/v1", "meshcore-canada-meshmapper-zones/v2"].includes(snapshot.schema));
     assert.ok(snapshot.features.length > 0 && snapshot.features.length <= 500);
     const entries = new Map();
     for (const feature of snapshot.features) {
       const { tag, name, center } = feature.properties;
-      assert.match(tag, /^[a-z]{3}$/);
+      assert.match(tag, /^[a-z0-9]{2,6}$/);
       assert.ok(!entries.has(tag) && typeof name === "string" && name.length < 200);
       assert.ok(center.length === 2 && center.every(Number.isFinite));
-      assert.ok(["Polygon", "MultiPolygon"].includes(feature.geometry.type));
+      if (feature.geometry === null) assert.equal(feature.properties.hasBoundary, false);
+      else assert.ok(["Polygon", "MultiPolygon"].includes(feature.geometry.type));
       entries.set(tag, feature);
     }
     return entries;
@@ -29,14 +30,17 @@ export function compareSnapshots(before, after, starterTags = []) {
       if (previous.properties.name !== feature.properties.name) fields.push("name");
       if (JSON.stringify(previous.properties.center) !== JSON.stringify(feature.properties.center)) fields.push("centre");
       if (JSON.stringify(previous.geometry) !== JSON.stringify(feature.geometry)) fields.push("boundary");
+      if (previous.properties.sourceUrl !== feature.properties.sourceUrl) fields.push("URL");
+      if ((previous.properties.group || null) !== (feature.properties.group || null)) fields.push("group");
       if (fields.length) changed.push({ tag, fields });
     }
   }
   for (const tag of old.keys()) if (!current.has(tag)) removed.push(tag);
   const collisions = [...current.keys()].filter(tag => starterTags.includes(tag)).sort();
-  const changes = { added: added.sort(), removed: removed.sort(), changed: changed.sort((a, b) => a.tag.localeCompare(b.tag)), collisions };
+  const unmapped = [...current].filter(([, feature]) => feature.geometry === null).map(([tag]) => tag).sort();
+  const changes = { added: added.sort(), removed: removed.sort(), changed: changed.sort((a, b) => a.tag.localeCompare(b.tag)), collisions, unmapped };
   // Ignore fetch time and object ordering; include the candidate shapes in the digest.
-  const digest = createHash("sha256").update(JSON.stringify([...current].sort(([a], [b]) => a.localeCompare(b)).map(([tag, feature]) => [tag, feature.properties.name, feature.properties.center, feature.geometry]))).digest("hex");
+  const digest = createHash("sha256").update(JSON.stringify([...current].sort(([a], [b]) => a.localeCompare(b)).map(([tag, feature]) => [tag, feature.properties.name, feature.properties.center, feature.geometry, feature.properties.sourceUrl, feature.properties.group || null]))).digest("hex");
   return { ...changes, digest, needsReview: added.length + removed.length + changed.length + collisions.length > 0 };
 }
 
@@ -45,6 +49,7 @@ export function reviewText(result) {
   return `<!-- meshmapper-review:start -->\n<!-- digest:${result.digest} -->\n## MeshMapper snapshot needs review\n\n` +
     `Added: ${list(result.added)}\n\nRemoved: ${list(result.removed)}\n\nChanged: ${result.changed.map(item => "`" + item.tag + "` (" + item.fields.join(", ") + ")").join(", ") || "None"}\n\n` +
     `Starter-code collisions: ${list(result.collisions)}\n\n` +
+    `Enabled regions without a drawn boundary: ${list(result.unmapped)}\n\n` +
     "Download the candidate snapshot from this workflow's artifacts. Review its boundaries, province metadata, local contacts, and any starter replacements in a PR. Regenerate the combined map and catalogue, run the region and browser tests, and verify both languages on the preview. Nothing has been published automatically.\n<!-- meshmapper-review:end -->";
 }
 
