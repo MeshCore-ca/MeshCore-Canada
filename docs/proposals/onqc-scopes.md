@@ -570,13 +570,13 @@ These follow your answers in step 1. Run them in order.
 <div class="scp-shots" markdown>
 
 <figure class="scp-shot" markdown>
-[![Command line showing region def and its reply on firmware 1.16](../assets/images/onqc-scopes/repeater-region-def-116.webp){ loading=lazy width="600" height="1304" }](../assets/images/onqc-scopes/repeater-region-def-116.webp)
-<figcaption markdown="span"><span class="scp-shot__num">1</span> Firmware 1.16 or newer: <code>region def</code> answers with the finished list.</figcaption>
+[![Earlier region def example on firmware 1.16, without the reserved na scope](../assets/images/onqc-scopes/repeater-region-def-116.webp){ loading=lazy width="600" height="1304" }](../assets/images/onqc-scopes/repeater-region-def-116.webp)
+<figcaption markdown="span"><span class="scp-shot__num">1</span> Firmware 1.16+: <code>region def</code> returns the list. This older example omits <code>na</code>; use the commands above.</figcaption>
 </figure>
 
 <figure class="scp-shot" markdown>
-[![Command line showing region put commands on firmware 1.15](../assets/images/onqc-scopes/repeater-07-region-put-115.webp){ loading=lazy width="600" height="1304" }](../assets/images/onqc-scopes/repeater-07-region-put-115.webp)
-<figcaption markdown="span"><span class="scp-shot__num">2</span> Firmware 1.15: each <code>region put</code> answers <code>OK - (flood allowed)</code>.</figcaption>
+[![Earlier region put example on firmware 1.15, without the reserved na scope](../assets/images/onqc-scopes/repeater-07-region-put-115.webp){ loading=lazy width="600" height="1304" }](../assets/images/onqc-scopes/repeater-07-region-put-115.webp)
+<figcaption markdown="span"><span class="scp-shot__num">2</span> Firmware 1.15: each <code>region put</code> answers <code>OK - (flood allowed)</code>. This older example omits <code>na</code>; use the commands above.</figcaption>
 </figure>
 
 </div>
@@ -605,8 +605,8 @@ ignore it.
 <div class="scp-shots" markdown>
 
 <figure class="scp-shot" markdown>
-[![Command line showing the final region list](../assets/images/onqc-scopes/repeater-08-region-result.webp){ loading=lazy width="600" height="1304" }](../assets/images/onqc-scopes/repeater-08-region-result.webp)
-<figcaption markdown="span"><span class="scp-shot__num">1</span> The finished list on an Ottawa repeater.</figcaption>
+[![Earlier Ottawa region list, before the reserved na scope was added](../assets/images/onqc-scopes/repeater-08-region-result.webp){ loading=lazy width="600" height="1304" }](../assets/images/onqc-scopes/repeater-08-region-result.webp)
+<figcaption markdown="span"><span class="scp-shot__num">1</span> Earlier Ottawa example. Your final list should also include <code>na F</code>.</figcaption>
 </figure>
 
 </div>

@@ -599,13 +599,13 @@ Ces commandes suivent vos réponses de l’étape 1. Lancez-les dans l’ordre.
 <div class="scp-shots" markdown>
 
 <figure class="scp-shot" markdown>
-[![Ligne de commande avec region def et sa réponse sur le micrologiciel 1.16](../assets/images/onqc-scopes/repeater-region-def-116.webp){ loading=lazy width="600" height="1304" }](../assets/images/onqc-scopes/repeater-region-def-116.webp)
-<figcaption markdown="span"><span class="scp-shot__num">1</span> Micrologiciel 1.16 ou plus récent : <code>region def</code> répond avec la liste terminée.</figcaption>
+[![Ancien exemple de region def sur le micrologiciel 1.16, sans la portée réservée na](../assets/images/onqc-scopes/repeater-region-def-116.webp){ loading=lazy width="600" height="1304" }](../assets/images/onqc-scopes/repeater-region-def-116.webp)
+<figcaption markdown="span"><span class="scp-shot__num">1</span> Micrologiciel 1.16+ : <code>region def</code> renvoie la liste. Cet ancien exemple omet <code>na</code>; utilisez les commandes ci-dessus.</figcaption>
 </figure>
 
 <figure class="scp-shot" markdown>
-[![Ligne de commande avec les commandes region put sur le micrologiciel 1.15](../assets/images/onqc-scopes/repeater-07-region-put-115.webp){ loading=lazy width="600" height="1304" }](../assets/images/onqc-scopes/repeater-07-region-put-115.webp)
-<figcaption markdown="span"><span class="scp-shot__num">2</span> Micrologiciel 1.15 : chaque <code>region put</code> répond <code>OK - (flood allowed)</code>.</figcaption>
+[![Ancien exemple de region put sur le micrologiciel 1.15, sans la portée réservée na](../assets/images/onqc-scopes/repeater-07-region-put-115.webp){ loading=lazy width="600" height="1304" }](../assets/images/onqc-scopes/repeater-07-region-put-115.webp)
+<figcaption markdown="span"><span class="scp-shot__num">2</span> Micrologiciel 1.15 : chaque <code>region put</code> répond <code>OK - (flood allowed)</code>. Cet ancien exemple omet <code>na</code>; utilisez les commandes ci-dessus.</figcaption>
 </figure>
 
 </div>
@@ -634,8 +634,8 @@ se place sur `*`. Vous pouvez l’ignorer.
 <div class="scp-shots" markdown>
 
 <figure class="scp-shot" markdown>
-[![Ligne de commande affichant la liste finale des régions](../assets/images/onqc-scopes/repeater-08-region-result.webp){ loading=lazy width="600" height="1304" }](../assets/images/onqc-scopes/repeater-08-region-result.webp)
-<figcaption markdown="span"><span class="scp-shot__num">1</span> La liste terminée sur un répéteur d’Ottawa.</figcaption>
+[![Ancienne liste des régions d’Ottawa, avant l’ajout de la portée réservée na](../assets/images/onqc-scopes/repeater-08-region-result.webp){ loading=lazy width="600" height="1304" }](../assets/images/onqc-scopes/repeater-08-region-result.webp)
+<figcaption markdown="span"><span class="scp-shot__num">1</span> Ancien exemple d’Ottawa. Votre liste finale doit aussi contenir <code>na F</code>.</figcaption>
 </figure>
 
 </div>
