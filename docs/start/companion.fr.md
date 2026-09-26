@@ -64,7 +64,19 @@ une annonce.
 
 ## Choisir un scope
 
-Trouvez votre code de ville sur la [carte des régions IATA](../config/map.md). En Ontario et au Québec, le scope partagé proposé est `onqc` : utilisez-le par défaut et pour le canal Public. Gardez les canaux de test et les robots sur le scope local en minuscules, par exemple `yow`. Réservez `can` à un usage futur.
+!!! warning "ON/QC : attendez la phase 2"
+    Pour un compagnon personnel, laissez **Default Region Scope** vide et les
+    canaux **sans portée** pour le moment. La phase 2 n’est pas ouverte. Elle ne
+    peut commencer avant **janvier 2027**, lorsque les répéteurs seront prêts et
+    que le déploiement sera annoncé. Un changement trop tôt peut empêcher vos
+    messages de joindre les autres utilisateurs.
+
+Trouvez votre code de ville sur la [carte des régions IATA](../config/map.md).
+**Quand la phase 2 sera annoncée**, utilisez `onqc` par défaut et pour le canal
+Public, et votre code de ville, comme `yow`, pour les canaux de test. Réservez
+`can` à un usage futur.
+
+Les responsables de robots et de MeshMapper suivent les [consignes de fin de phase 1](../proposals/onqc-scopes.md#robots-et-meshmapper), une fois les répéteurs locaux prêts. Consultez l’[ordre de déploiement](../proposals/onqc-scopes.md#ordre-de-deploiement) avant de changer les portées.
 
 Ailleurs, utilisez le scope convenu avec votre communauté. Le [guide des scopes](../config/standard.md) présente les versions d’application requises et des exemples. Les scopes ne changent pas les réglages radio.
 

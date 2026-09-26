@@ -105,7 +105,19 @@ sauf si votre méthode d’essai locale exige un autre réglage.
 
 ## Choisir votre scope
 
-Après l’installation, [choisissez votre scope local](../start/companion.md#choisir-un-scope). La [carte des régions IATA](../config/map.md) utilise les zones MeshMapper. En Ontario et au Québec, `onqc` est proposé par défaut et pour le canal Public; utilisez le scope de ville pour les tests et les robots. Ailleurs, consultez votre communauté; `can` est réservé à un usage futur.
+!!! warning "ON/QC : attendez la phase 2"
+    Pour un compagnon personnel, laissez **Default Region Scope** vide et les
+    canaux **sans portée** pour le moment. La phase 2 n’est pas ouverte. Elle ne
+    peut commencer avant **janvier 2027**, lorsque les répéteurs seront prêts et
+    que le déploiement sera annoncé.
+
+Installer le micrologiciel ne signifie pas qu’il faut changer les portées.
+Vous pouvez toujours [trouver votre région IATA](../config/map.md).
+Consultez le [guide des portées du compagnon](../start/companion.md#choisir-un-scope)
+et l’[ordre de déploiement](../proposals/onqc-scopes.md#ordre-de-deploiement).
+**Quand la phase 2 sera annoncée**, utilisez `onqc` par défaut et pour le canal
+Public, et votre code de ville pour les tests. Les robots suivent les [consignes de fin de phase 1](../proposals/onqc-scopes.md#robots-et-meshmapper).
+Ailleurs, suivez les réglages de votre communauté; `can` reste réservé à un usage futur.
 
 ## Vérifier avant l’utilisation courante
 

@@ -67,6 +67,13 @@
     "Choose a province or territory": "Choisissez une province ou un territoire",
     "A MeshMapper zone can cross a provincial border. Use the province where this repeater is installed.": "Une zone MeshMapper peut traverser une frontière provinciale. Choisissez la province où ce répéteur est installé.",
     "Use the proposed ON/QC standard settings": "Utiliser les réglages proposés pour ON/QC",
+    "Leave unchecked for scope commands only. A complete ON/QC Phase 1 setup also needs these standard settings.": "Laissez cette case décochée pour les commandes de portée seulement. Une configuration complète de la phase 1 ON/QC exige aussi ces réglages standard.",
+    "ON/QC rollout: repeaters first": "Déploiement ON/QC : les répéteurs d’abord",
+    "Phase 2 is not open. Personal companions keep their default scope empty and channels unscoped until the rollout is announced: January 2027 at the earliest, after the repeaters are ready.": "La phase 2 n’est pas ouverte. Les compagnons personnels gardent leur portée par défaut vide et leurs canaux sans portée jusqu’à l’annonce du déploiement : janvier 2027 au plus tôt, une fois les répéteurs prêts.",
+    "Rollout phases": "Phases du déploiement",
+    "ON/QC Phase 1 standard settings included": "Réglages standard de la phase 1 ON/QC inclus",
+    "ON/QC Phase 1 standard settings not included": "Réglages standard de la phase 1 ON/QC non inclus",
+    "These commands do not include all of the proposal’s standard ID, advert and hop settings. Select the ON/QC option in step 3 if you want to include them.": "Ces commandes n’incluent pas tous les réglages standard d’identifiants, d’annonces et de sauts de la proposition. Sélectionnez l’option ON/QC à l’étape 3 pour les inclure.",
     "3-byte IDs, local adverts every 4 hours, flood adverts every 47 hours, and a 16-hop flood limit.": "Identifiants de 3 octets, annonces locales toutes les 4 heures, annonces par inondation toutes les 47 heures et limite de 16 sauts.",
     "More than one MeshMapper zone contains this point. Choose your community's zone.": "Plusieurs zones MeshMapper contiennent ce point. Choisissez celle de votre communauté.",
     "More than one MeshMapper zone contains this point. Select your community's zone on the map.": "Plusieurs zones MeshMapper contiennent ce point. Sélectionnez celle de votre communauté sur la carte.",
@@ -1714,6 +1721,14 @@
       '</p><a href="' + esc(regionPageHref("standard") + (extension ? '#planning-extensions' : '#starter-regions')) + '">' + (extension ? 'Planning extension details' : 'Starter region details') + '</a></div>';
   }
 
+  function onqcRolloutNotice() {
+    var href = new URL("../proposals/onqc-scopes/", regionPageHref("config")).href +
+      (frenchRuntime ? "#ordre-de-deploiement" : "#rollout-order");
+    return '<div class="mcc-note mcc-note-warning" data-onqc-rollout><strong>ON/QC rollout: repeaters first</strong>' +
+      '<p>Phase 2 is not open. Personal companions keep their default scope empty and channels unscoped until the rollout is announced: January 2027 at the earliest, after the repeaters are ready.</p>' +
+      '<a href="' + esc(href) + '">Rollout phases</a></div>';
+  }
+
   function renderResult(data, target, state) {
     if (!target) return;
     if (state.migrationNeedsReview) {
@@ -1767,6 +1782,13 @@
     }).join("") + "</div>";
     var multiProvince = rec.jurisdictions.length > 1;
     var scopeNotices = [];
+    if (rec.companionDefault === "onqc") {
+      scopeNotices.push(onqcRolloutNotice());
+      scopeNotices.push('<div class="mcc-note" data-onqc-settings-summary><strong>' +
+        (state.standardDefaults ? 'ON/QC Phase 1 standard settings included' : 'ON/QC Phase 1 standard settings not included') +
+        '</strong><p>' + (state.standardDefaults ? '3-byte IDs, local adverts every 4 hours, flood adverts every 47 hours, and a 16-hop flood limit.' :
+          'These commands do not include all of the proposal’s standard ID, advert and hop settings. Select the ON/QC option in step 3 if you want to include them.') + '</p></div>');
+    }
     if (rec.sharedArea) {
       scopeNotices.push('<div class="mcc-shared-area-note"><strong>Shared repeater area</strong><span>' +
         esc(rec.sharedArea.label) + " combines " + esc(rec.sharedArea.members.map(function (tag) {
@@ -2182,6 +2204,7 @@
       '<select class="mcc-select" id="mcc-hash-mode"><option value="keep">Keep current settings</option><option value="2">3 bytes</option><option value="1">2 bytes</option><option value="0">1 byte</option></select>' +
       '<p class="mcc-hint" data-role="canada-preset-note">The Canada app preset uses 3-byte paths. Here, choose radio and advert ID settings separately. <a href="' + esc(new URL("../provinces/#canada-baseline", regionPageHref("config")).href) + '">Canada preset details</a></p>' +
       '<label class="mcc-choice" data-role="standard-settings"><input type="checkbox" data-action="standard-defaults"><span><strong>Use the proposed ON/QC standard settings</strong><small>3-byte IDs, local adverts every 4 hours, flood adverts every 47 hours, and a 16-hop flood limit.</small></span></label>' +
+      '<div data-role="onqc-guidance" hidden><p class="mcc-hint">Leave unchecked for scope commands only. A complete ON/QC Phase 1 setup also needs these standard settings.</p>' + onqcRolloutNotice() + '</div>' +
       '<details class="mcc-advanced-options" data-role="technical-settings">' +
       '<summary>Firmware version</summary>' +
       '<p class="mcc-label">Firmware version</p>' +
@@ -2263,6 +2286,7 @@
     var provinceSelect = el.querySelector("#mcc-home-province");
     var standardCheckbox = el.querySelector("[data-action='standard-defaults']");
     var standardSection = el.querySelector("[data-role='standard-settings']");
+    var onqcGuidance = el.querySelector("[data-role='onqc-guidance']");
     provinceSelect.innerHTML += provinceOptions(data).map(function (tag) {
       return '<option value="' + esc(tag) + '">' + esc(labelFor(data, tag)) + '</option>';
     }).join("");
@@ -2451,6 +2475,7 @@
       provinceSelect.value = state.jurisdictionTag || "";
       provinceSelect.disabled = !state.resolution.hasMatch;
       standardSection.hidden = ["on", "qc"].indexOf(state.jurisdictionTag) === -1;
+      onqcGuidance.hidden = standardSection.hidden;
       if (standardSection.hidden) {
         if (state.standardDefaults) state.hashMode = state.hashBeforeDefaults || "keep";
         state.standardDefaults = standardCheckbox.checked = false;

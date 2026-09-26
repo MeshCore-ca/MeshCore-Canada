@@ -69,6 +69,9 @@ MeshMapper. Elles utilisent de vrais codes IATA et les mêmes scopes indépendan
 mais **ne sont ni des zones publiées dans MeshMapper ni des garanties de couverture**.
 La carte les identifie par des limites dorées en pointillé.
 
+Ces attributions sont des propositions distinctes, pas une extension approuvée
+du déploiement ON/QC. Confirmez leur utilisation localement.
+
 | Secteur | Scope | Référence du code |
 | --- | --- | --- |
 | Île-du-Prince-Édouard | `yyg` | [Charlottetown](https://flyyyg.com/) |
@@ -239,11 +242,13 @@ Les chemins américains restent des choix explicites, identifiés séparément.
 Confirmez-les auprès du réseau voisin. Cette migration ne les renomme pas
 et n’ajoute pas de polygones américains.
 
-### Réglages ON/QC facultatifs
+### Réglages de la phase 1 ON/QC {#reglages-onqc-facultatifs}
 
 Le configurateur propose ces réglages sur demande. Il conserve la fréquence
 radio et la taille d’identifiant actuelles tant que vous ne choisissez pas
 de changement. L’option ON/QC sélectionne aussi les identifiants de 3 octets.
+Sans cette option, l’outil produit les commandes de portée sans ces réglages;
+ce n’est pas une configuration complète de la phase 1.
 
 ```text
 set path.hash.mode 2
@@ -255,8 +260,8 @@ set flood.max 16
 Ces valeurs donnent des identifiants de 3 octets, des annonces locales toutes
 les quatre heures, des annonces par inondation toutes les 47 heures et une
 limite de 16 sauts. Vérifiez que cette limite suffit au plus long trajet voulu.
-`set flood.max.unscoped 3` est une limite locale facultative, pas un réglage
-ajouté par défaut par l’outil.
+`set flood.max.unscoped 3` appartient à la **phase 3**, seulement au besoin,
+après la phase 2 et une annonce locale. L’outil ne l’ajoute pas par défaut.
 
 Les commandes peuvent prendre effet ou être enregistrées dès leur saisie.
 Conservez une sauvegarde : un redémarrage ne suffit pas nécessairement à les
@@ -266,16 +271,26 @@ Sur un répéteur de bordure, `*` ne doit pas porter `F`.
 
 ## Compagnons et canaux
 
-Avec l’application MeshCore **1.43 ou plus récente**, ouvrez **Settings →
-Network Settings → Default Region Scope**. Sur le réseau ON/QC, choisissez
-`onqc`. Le premier message direct envoyé par inondation et sa réponse de
+!!! warning "ON/QC : attendez la phase 2"
+    Pour un compagnon personnel, laissez **Default Region Scope** vide et les
+    canaux **sans portée** pour le moment. La phase 2 n’est pas ouverte. Elle ne
+    peut commencer avant **janvier 2027**, lorsque les répéteurs seront prêts et
+    que le déploiement sera annoncé. Un changement trop tôt peut bloquer les
+    messages sur un répéteur qui n’est pas encore configuré.
+
+Suivez l’[ordre de déploiement](../proposals/onqc-scopes.md#ordre-de-deploiement).
+Les robots et MeshMapper utilisent leur portée de ville à la **fin de la phase 1**,
+une fois les répéteurs locaux prêts. Les compagnons personnels attendent la phase 2.
+
+**Quand la phase 2 sera annoncée**, avec l’application MeshCore **1.43 ou plus
+récente**, ouvrez **Settings → Network Settings → Default Region Scope** et
+choisissez `onqc`. Le premier message direct envoyé par inondation et sa réponse de
 découverte de chemin peuvent ainsi traverser le réseau partagé.
 
 | Trafic ON/QC | Portée |
 | --- | --- |
 | Portée par défaut du compagnon et canal Public | `onqc` |
-| Canaux de test et de robots | Votre ville, par exemple `yow` |
-| Portée par défaut d’un robot | Sa ville |
+| Canaux de test personnels | Votre ville, par exemple `yow` |
 | Autres canaux | Ville, province ou `onqc`, selon l’entente locale |
 
 Définissez chaque canal : sans portée propre, il utilise celle du compagnon.

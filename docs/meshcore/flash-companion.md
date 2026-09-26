@@ -89,7 +89,15 @@ The optional **Message Settings → Auto Reset Path** preference affects how the
 
 ## Choose your scope
 
-After flashing, [choose your local scope](../start/companion.md#choose-a-scope). The [IATA region map](../config/map.md) uses MeshMapper zones. In Ontario and Québec, use `onqc` for the proposed default and Public channel scope, and your city scope for tests and bots. Elsewhere, check with your community; `can` is reserved for future use.
+!!! warning "ON/QC: wait for Phase 2"
+    For personal companions, leave **Default Region Scope** empty and channels
+    **unscoped** for now. Phase 2 is not open. It can start no earlier than
+    **January 2027**, after the repeaters are ready and the rollout is announced.
+
+Flashing does not mean you should change scopes. You can still [find your IATA region](../config/map.md). Read the [companion scope guide](../start/companion.md#choose-a-scope) and [rollout order](../proposals/onqc-scopes.md#rollout-order) before changing settings.
+**When Phase 2 is announced**, use `onqc` for the default and Public channel,
+and your city scope for tests. Bots follow the separate [end-of-Phase-1 guidance](../proposals/onqc-scopes.md#bots-and-meshmapper).
+Elsewhere, follow your community’s settings; `can` remains reserved for future use.
 
 ## Verify before regular use
 
