@@ -100,7 +100,8 @@ for (const locale of ["", "fr/"]) {
       const results = await new AxeBuilder({ page }).include("[data-mcc-regions]").withRules(["color-contrast"]).analyze();
       expect(results.violations).toEqual([]);
       const background = await page.locator(".md-main").evaluate((element) => getComputedStyle(element).backgroundColor);
-      expect(background).toBe(scheme === "default" ? "rgb(255, 255, 255)" : "rgb(15, 22, 35)");
+      // Region tools now use the shared site background, like the proposal.
+      expect(background).toBe(scheme === "default" ? "rgb(246, 248, 251)" : "rgb(15, 22, 35)");
     });
   }
 
