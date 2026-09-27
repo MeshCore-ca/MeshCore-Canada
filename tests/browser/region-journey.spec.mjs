@@ -24,7 +24,7 @@ for (const locale of ["", "fr/"]) {
     await page.locator('[data-scp-message]').selectOption("*");
     await expect(page.locator('[data-scp-decision]')).toContainText(locale ? "Inchangé" : "Unchanged");
     await page.locator('[data-scp-message]').selectOption("yul");
-    await expect(page.locator('[data-scp-decision]')).toContainText(locale ? "Non relayé" : "Not forwarded");
+    await expect(page.locator('[data-scp-decision]')).toContainText(locale ? "Inconnu" : "Unknown");
     await page.locator('[data-scp-activation]').selectOption("activate");
     await page.locator('[data-scp-activate]').check();
     await expect(commands.locator("code")).toHaveCount(0); // Unknown type cannot activate.

@@ -16,7 +16,7 @@ test("preparation never changes wildcard/default or removes legacy scopes", () =
     assert.doesNotMatch(scope.commands(prep,firmware).join("\n"), /region (?:denyf|allowf) \*|region default|region remove/);
     assert.equal(scope.forwards(prep,"*"),null);
     assert.equal(scope.forwards(prep,"ytr"),true);
-    assert.equal(scope.forwards(prep,"yul"),false);
+    assert.equal(scope.forwards(prep,"yul"),null);
     if (firmware === "1.10") continue;
     const old = migration.parse("*^ F\n ott F\n on F", "on");
     const plan = migration.plan(old,prep,firmware);

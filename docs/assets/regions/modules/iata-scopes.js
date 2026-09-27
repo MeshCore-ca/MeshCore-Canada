@@ -128,6 +128,7 @@
 
   function forwards(result, tag) {
     if (tag === "*") return result.activation === "prepare" ? null : !result.bridge;
+    if (result.activation === "prepare" && result.tags.indexOf(tag) === -1) return null;
     return result.tags.indexOf(tag) !== -1;
   }
 

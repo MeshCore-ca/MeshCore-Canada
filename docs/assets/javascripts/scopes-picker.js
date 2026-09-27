@@ -205,7 +205,7 @@
     var verification = document.querySelector("[data-scp-verification]");
     if (verification) verification.textContent = "";
     selectedProfile = null;
-    picker.querySelector("[data-scp-simulator]").hidden = !canGenerate;
+    picker.querySelector("[data-scp-simulator]").hidden = !city || !operator || (activating && type.value === "unknown");
 
     if (city) {
       picker.querySelector("[data-scp-region-name]").textContent = name(city) + " (" + city.toUpperCase() + ") · " + provinceName(province);
@@ -282,7 +282,7 @@
   function showDecision() {
     if (!selectedProfile) return;
     var forward = scopeEngine.forwards(selectedProfile, messageScope.value);
-    picker.querySelector("[data-scp-decision]").textContent = forward === null ? t("Unchanged during preparation: the current * flag decides whether unscoped floods pass. Check the actual region list.", "Inchangé pendant la préparation : le réglage actuel de * décide si les diffusions sans portée passent. Vérifiez la liste réelle.") : forward ?
+    picker.querySelector("[data-scp-decision]").textContent = forward === null ? (messageScope.value === "*" ? t("Unchanged during preparation: the current * flag decides whether unscoped floods pass. Check the actual region list.", "Inchangé pendant la préparation : le réglage actuel de * décide si les diffusions sans portée passent. Vérifiez la liste réelle.") : t("Unknown during preparation: this scope may already exist. Preparation does not remove it; check the current region list.", "Inconnu pendant la préparation : cette portée peut déjà exister. La préparation ne la supprime pas; vérifiez la liste actuelle.")) : forward ?
       t("Forwarded by this configuration. This does not guarantee delivery or a radio link.", "Relayé par cette configuration. Cela ne garantit ni la livraison ni une liaison radio.") :
       t("Not forwarded by this configuration: the matching scope is absent, or unscoped floods are blocked at activation.", "Non relayé par cette configuration : la portée correspondante est absente, ou les diffusions sans portée sont bloquées à l’activation.");
   }
