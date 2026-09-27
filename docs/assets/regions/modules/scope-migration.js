@@ -87,7 +87,7 @@
       try {
         var result = verify(parse(list.value, def ? def.value : ""), desired, firmware);
         status.textContent = !result.matches ? t("Settings differ. Review the details before continuing.", "Les réglages diffèrent. Examinez les détails avant de continuer.") : result.complete ?
-          t("The pasted scope settings match this selection. Complete the radio tests below.", "Les réglages de portée collés correspondent à ce choix. Effectuez les essais radio ci-dessous.") :
+          (desired.activation === "prepare" ? t("Prepared scope names and permissions match. Compare * and the default scope with your backup; this check does not establish that they stayed unchanged.", "Les noms et autorisations préparés correspondent. Comparez * et la portée par défaut avec votre sauvegarde; cette vérification ne prouve pas qu’ils sont restés inchangés.") : t("The pasted scope settings match this selection. Complete the radio tests below.", "Les réglages de portée collés correspondent à ce choix. Effectuez les essais radio ci-dessous.")) :
           t("The region list matches; paste region default to finish checking the default scope.", "La liste correspond; collez region default pour terminer la vérification de la portée par défaut.");
         var findings = [];
         [["missing", t("Missing: ", "Manquants : ")], ["incorrect", t("Parent or forwarding differs: ", "Parent ou retransmission différent : ")], ["unexpected", t("Unexpected: ", "Non prévus : ")]].forEach(function (field) { if (result[field[0]].length) findings.push(field[1] + result[field[0]].join(", ")); });

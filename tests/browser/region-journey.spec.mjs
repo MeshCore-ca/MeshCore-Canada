@@ -76,6 +76,11 @@ for (const locale of ["", "fr/"]) {
     await box.locator('[data-verify-list]').fill("bad reply");
     await box.locator('[data-verify-check]').click();
     await expect(box.locator('[data-verify-details]')).toBeHidden();
+    await page.locator('[data-scp-activation]').selectOption("prepare");
+    await box.locator("summary").click();
+    await box.locator('[data-verify-list]').fill(list);
+    await box.locator('[data-verify-check]').click();
+    await expect(box.locator('[data-verify-status]')).toContainText(locale ? "sauvegarde" : "backup");
     expect(requests.some(r=>r.includes("local-private"))).toBe(false);
   });
 
