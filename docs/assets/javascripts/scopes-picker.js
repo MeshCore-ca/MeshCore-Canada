@@ -433,8 +433,8 @@
   });
 
   area.addEventListener("change", function () { cancel(); confirmed.checked = false; origin = null; extra.value = ""; query.value = ""; places.textContent = ""; status.textContent = ""; update(); });
-  [role, type, activation].forEach(function (select) { select.addEventListener("change", function () { confirmed.checked = false; update(); }); });
-  [firmware, extra, confirmed].forEach(function (select) {
+  [role, type, activation, extra].forEach(function (select) { select.addEventListener("change", function () { confirmed.checked = false; update(); }); });
+  [firmware, confirmed].forEach(function (select) {
     select.addEventListener("change", update);
   });
   fetch(catalogUrl, { cache: "no-cache" }).then(function (response) {

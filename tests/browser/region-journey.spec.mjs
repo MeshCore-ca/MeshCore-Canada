@@ -30,6 +30,10 @@ for (const locale of ["", "fr/"]) {
     await expect(commands.locator("code")).toHaveCount(0); // Unknown type cannot activate.
     await proposalOperator(page,{type:"edge"});
     await expect(commands).toContainText("region denyf *");
+    await page.locator('[data-scp-extra]').selectOption("ygk");
+    await expect(page.locator('[data-scp-activate]')).not.toBeChecked();
+    await expect(commands.locator("code")).toHaveCount(0);
+    await page.locator('[data-scp-activate]').check();
     await page.locator('[data-scp-message]').selectOption("*");
     await expect(page.locator('[data-scp-decision]')).toContainText(locale ? "Non relayé" : "Not forwarded");
     const share=await page.locator('[data-scp-share]').getAttribute("href");

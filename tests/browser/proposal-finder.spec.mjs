@@ -49,6 +49,7 @@ for (const locale of ["", "fr/"]) {
     await page.locator('[data-scp-activate]').check();
     await expect(page.locator('[data-scp-extra] option[value="ytr"]')).toHaveJSProperty("disabled", true);
     await page.locator('[data-scp-extra]').selectOption("ygk");
+    await page.locator('[data-scp-activate]').check();
     const commands = engine.commands(engine.profile(catalog, { activation: "activate", home:"ytr",province:"on",bridge:true,cities:["ygk"]}), "1.16").concat("region save");
     await expect(page.locator('[data-scp-output="region"] code')).toHaveText(commands);
     await expect(page.locator('[data-scp-map]')).toHaveAttribute("href", new RegExp(`/${locale}config/map/\\?tag=ytr&province=on$`));

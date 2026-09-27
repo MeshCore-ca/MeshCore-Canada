@@ -104,6 +104,7 @@ for (const locale of ["", "fr/"]) {
         await picker.locator('[data-scp-type]').selectOption(bridge ? "edge" : "city");
         await picker.locator('[data-scp-activate]').check();
         if (bridge) await picker.locator('[data-scp-extra]').selectOption("");
+        await picker.locator('[data-scp-activate]').check();
         const expected=globalThis.MeshCoreIataScopes.commands(globalThis.MeshCoreIataScopes.profile(catalog,{ activation: "activate", ...home,bridge}),firmware).concat(["region save"]);
         await expect(page.locator('[data-scp-output="region"]').first().locator("code")).toHaveText(expected);
       }
