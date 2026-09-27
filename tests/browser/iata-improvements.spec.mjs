@@ -1,13 +1,12 @@
 import { test, expect } from "./site-fixtures.mjs";
 import { siteRoute } from "./site-route.mjs";
-import { proposalOperator, activateConfig } from "./activation-helpers.mjs";
+import { activateConfig } from "./activation-helpers.mjs";
 import { readFileSync } from "node:fs";
 import "../../docs/assets/regions/modules/iata-scopes.js";
 const catalog = JSON.parse(readFileSync("docs/assets/regions/iata-regions.json", "utf8"));
 
 for (const locale of ["", "fr/"]) {
-  test(`${locale || "en/"} city or edge is an explicit choice, not a map boundary inference`, async ({ page }) => {
-    for (const [lat, lon, tag] of [[43.8678, -81.2619, "ykf"], [45.4765, -75.7013, "yow"]]) {
+  for (const [lat, lon, tag] of [[43.8678, -81.2619, "ykf"], [45.4765, -75.7013, "yow"]]) test(`${locale || "en/"} ${tag} boundary location stays city mode unless explicitly changed`, async ({ page }) => {
       await page.goto(siteRoute(`/${locale}config/?lat=${lat}&lon=${lon}&step=3&instructions=technical`));
       const step = page.locator('[data-wizard-step="3"]');
       await expect(step).toBeVisible();
@@ -20,7 +19,8 @@ for (const locale of ["", "fr/"]) {
       await expect(result).toContainText(`region def ${tag}|*`);
       await expect(result).toContainText("region allowf *");
       await expect(result).not.toContainText("region denyf *");
-    }
+  });
+  test(`${locale || "en/"} edge bookmarks retain their role and require coordinated activation`, async ({ page }) => {
     // Preserve existing edge-mode bookmarks; an extra city scope is optional.
     await page.goto(siteRoute(`/${locale}config/?tag=yow&province=on&type=large&step=3&instructions=technical`));
     const step = page.locator('[data-wizard-step="3"]');
@@ -88,27 +88,28 @@ for (const locale of ["", "fr/"]) {
     await expect(page.locator('#submission-category')).toHaveValue("Regional community information");
   });
 
-  test(`${locale || "en/"} proposal picker shares commands and keeps static examples on failure`, async ({ page }) => {
+  for(const [value,firmware] of [["116","1.16"],["115","1.15"],["114","1.14"],["110","1.10"]]) for(const bridge of [false,true]) test(`${locale || "en/"} proposal ${firmware} ${bridge ? "edge" : "city"} commands use the shared generator`, async ({ page }) => {
+    await page.goto(siteRoute(`/${locale}proposals/onqc-scopes/?tag=yow&province=on&role=repeater&firmware=${value}&type=${bridge ? "edge" : "city"}&activation=activate`));
+    const picker=page.locator('[data-scp-picker]'); await expect(picker).toBeVisible();
+    await expect(picker.locator('[data-scp-area]')).toHaveValue("yow:on");
+    await expect(picker.locator('[data-scp-firmware]')).toHaveValue(value);
+    await expect(picker.locator('[data-scp-type]')).toHaveValue(bridge ? "edge" : "city");
+    await expect(picker.locator('[data-scp-activate]')).not.toBeChecked();
+    await expect(page.locator('[data-scp-output="region"] code')).toHaveCount(0);
+    const home=await picker.locator('[data-scp-area]').evaluate(select=>({home:select.selectedOptions[0].dataset.city,province:select.selectedOptions[0].dataset.province}));
+    if (bridge) await expect(picker.locator('[data-scp-extra]')).toHaveValue("");
+    await picker.locator('[data-scp-activate]').check();
+    const expected=globalThis.MeshCoreIataScopes.commands(globalThis.MeshCoreIataScopes.profile(catalog,{ activation: "activate", ...home,bridge}),firmware).concat(["region save"]);
+    await expect(page.locator('[data-scp-output="region"]').first().locator("code")).toHaveText(expected);
+  });
+
+  test(`${locale || "en/"} proposal keeps role guidance and static examples on catalogue failure`, async ({ page }) => {
     await page.goto(siteRoute(`/${locale}proposals/onqc-scopes/`));
     const picker=page.locator('[data-scp-picker]'); await expect(picker).toBeVisible();
     await expect(picker.locator('[data-scp-type]')).toContainText(locale ? "répéteur de bordure" : "edge repeater");
     const guidance = page.locator('.mc-callout').filter({ hasText: locale ? "Ville ou bordure?" : "City or edge?" });
     await expect(guidance).toContainText(locale ? "limite extérieure" : "outer edge");
     await expect(guidance).toContainText(locale ? "même code IATA" : "same IATA code");
-    await picker.locator('[data-scp-area]').selectOption("yow:on");
-    await proposalOperator(page);
-    const home=await picker.locator('[data-scp-area]').evaluate(select=>({home:select.selectedOptions[0].dataset.city,province:select.selectedOptions[0].dataset.province}));
-    for(const [value,firmware] of [["116","1.16"],["115","1.15"],["114","1.14"],["110","1.10"]]) {
-      await picker.locator('[data-scp-firmware]').selectOption(value);
-      for(const bridge of [false,true]) {
-        await picker.locator('[data-scp-type]').selectOption(bridge ? "edge" : "city");
-        await picker.locator('[data-scp-activate]').check();
-        if (bridge) await picker.locator('[data-scp-extra]').selectOption("");
-        await picker.locator('[data-scp-activate]').check();
-        const expected=globalThis.MeshCoreIataScopes.commands(globalThis.MeshCoreIataScopes.profile(catalog,{ activation: "activate", ...home,bridge}),firmware).concat(["region save"]);
-        await expect(page.locator('[data-scp-output="region"]').first().locator("code")).toHaveText(expected);
-      }
-    }
     await page.route("**/iata-regions.json",route=>route.abort());
     await page.reload(); await expect(page.locator("html")).not.toHaveClass(/scp-js/);
     await expect(page.locator('[data-scp-nojs]').first()).toBeVisible();

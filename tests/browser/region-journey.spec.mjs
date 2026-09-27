@@ -4,7 +4,7 @@ import { siteRoute } from "./site-route.mjs";
 import { proposalOperator, activateConfig } from "./activation-helpers.mjs";
 
 for (const locale of ["", "fr/"]) {
-  test(`${locale || "en/"} role guidance prepares first and requires a new activation confirmation`, async ({ page }) => {
+  test(`${locale || "en/"} role guidance prepares first and explains independent forwarding`, async ({ page }) => {
     const errors=[]; page.on("pageerror",e=>errors.push(e.message));
     await page.goto(siteRoute(`/${locale}proposals/onqc-scopes/?tag=ytr&province=on`));
     await expect(page.locator('[data-scp-picker]')).toBeVisible();
@@ -28,12 +28,22 @@ for (const locale of ["", "fr/"]) {
     await page.locator('[data-scp-activation]').selectOption("activate");
     await page.locator('[data-scp-activate]').check();
     await expect(commands.locator("code")).toHaveCount(0); // Unknown type cannot activate.
+    expect(errors).toEqual([]);
+    expect((await new AxeBuilder({page}).include('[data-scp-picker]').analyze()).violations).toEqual([]);
+  });
+
+  test(`${locale || "en/"} activation confirmation is not shared or carried to different neighbours`, async ({ page }) => {
+    const errors=[]; page.on("pageerror",e=>errors.push(e.message));
+    await page.goto(siteRoute(`/${locale}proposals/onqc-scopes/?tag=ytr&province=on`));
+    await expect(page.locator('[data-scp-picker]')).toBeVisible();
+    const commands=page.locator('[data-scp-output="region"]');
     await proposalOperator(page,{type:"edge"});
     await expect(commands).toContainText("region denyf *");
     await page.locator('[data-scp-extra]').selectOption("ygk");
     await expect(page.locator('[data-scp-activate]')).not.toBeChecked();
     await expect(commands.locator("code")).toHaveCount(0);
     await page.locator('[data-scp-activate]').check();
+    await page.locator('[data-scp-simulator] summary').click();
     await page.locator('[data-scp-message]').selectOption("*");
     await expect(page.locator('[data-scp-decision]')).toContainText(locale ? "Non relayé" : "Not forwarded");
     const share=await page.locator('[data-scp-share]').getAttribute("href");
@@ -54,13 +64,12 @@ for (const locale of ["", "fr/"]) {
     expect((await new AxeBuilder({page}).include('[data-scp-picker]').analyze()).violations).toEqual([]);
   });
 
-  test(`${locale || "en/"} saved-list verification is local and reports incomplete or wrong settings`, async ({ page }) => {
+  test(`${locale || "en/"} saved-list verification requires the default and clears stale results on edit`, async ({ page }) => {
     await page.goto(siteRoute(`/${locale}proposals/onqc-scopes/?tag=ytr&province=on`));
     await expect(page.locator('[data-scp-picker]')).toBeVisible();
     await proposalOperator(page,{type:"edge"});
     const box=page.locator('[data-scp-verification]');
     await box.locator("summary").click();
-    const requests=[];page.on("request",r=>requests.push(r.url()+" "+(r.postData()||"")));
     const list="*^\n ytr F\n on F\n onqc F\n can F\n na F";
     await box.locator('[data-verify-list]').fill(list);
     await box.locator('[data-verify-check]').click();
@@ -69,6 +78,15 @@ for (const locale of ["", "fr/"]) {
     await expect(box.locator('[data-verify-status]')).toBeEmpty();
     await box.locator('[data-verify-check]').click();
     await expect(box.locator('[data-verify-status]')).toContainText(locale ? "correspondent" : "settings match");
+  });
+
+  test(`${locale || "en/"} verification flags wrong permissions and unexpected scopes without uploading them`, async ({ page }) => {
+    await page.goto(siteRoute(`/${locale}proposals/onqc-scopes/?tag=ytr&province=on`));
+    await expect(page.locator('[data-scp-picker]')).toBeVisible();
+    await proposalOperator(page,{type:"edge"});
+    const box=page.locator('[data-scp-verification]'); await box.locator("summary").click();
+    const requests=[];page.on("request",r=>requests.push(r.url()+" "+(r.postData()||"")));
+    const list="*^\n ytr F\n on F\n onqc F\n can F\n na F";
     await box.locator('[data-verify-list]').fill(list.replace("*^","*^ F")+"\n local-private F");
     await box.locator('[data-verify-check]').click();
     await expect(box.locator('[data-verify-details]')).toContainText("local-private");
@@ -76,12 +94,18 @@ for (const locale of ["", "fr/"]) {
     await box.locator('[data-verify-list]').fill("bad reply");
     await box.locator('[data-verify-check]').click();
     await expect(box.locator('[data-verify-details]')).toBeHidden();
-    await page.locator('[data-scp-activation]').selectOption("prepare");
-    await box.locator("summary").click();
-    await box.locator('[data-verify-list]').fill(list);
+    expect(requests.some(r=>r.includes("local-private"))).toBe(false);
+  });
+
+  test(`${locale || "en/"} preparation verification keeps its claim limited to named scopes`, async ({ page }) => {
+    await page.goto(siteRoute(`/${locale}proposals/onqc-scopes/?tag=ytr&province=on`));
+    await expect(page.locator('[data-scp-picker]')).toBeVisible();
+    await proposalOperator(page,{activate:false,type:"edge"});
+    const box=page.locator('[data-scp-verification]'); await box.locator("summary").click();
+    await expect(box.locator('[data-verify-default]')).toHaveCount(0);
+    await box.locator('[data-verify-list]').fill("*^\n ytr F\n on F\n onqc F\n can F\n na F\n old-scope F");
     await box.locator('[data-verify-check]').click();
     await expect(box.locator('[data-verify-status]')).toContainText(locale ? "sauvegarde" : "backup");
-    expect(requests.some(r=>r.includes("local-private"))).toBe(false);
   });
 
   test(`${locale || "en/"} configurator separates preparation, activation and regional readiness`, async ({ page }) => {
@@ -101,6 +125,12 @@ for (const locale of ["", "fr/"]) {
     await activateConfig(page);
     await result.locator('[data-scope-verification] summary').click();
     await expect(result.locator('[data-verify-list]')).toBeVisible();
+  });
+
+  test(`${locale || "en/"} unknown forwarding roles cannot activate and other provinces keep local policy`, async ({ page }) => {
+    await page.goto(siteRoute(`/${locale}config/?tag=ytr&province=on&type=large&step=4&instructions=technical`));
+    const result=page.locator('[data-role="result"]');
+    await activateConfig(page);
     await page.locator('[data-go-step="3"]').click();
     await page.locator('input[name="mcc-type"][value="unknown"]').check();
     await page.locator('[data-action="confirm-activation"]').check();
