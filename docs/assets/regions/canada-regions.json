@@ -2689,12 +2689,22 @@
         "checkedAt": null,
         "evidence": null
       },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
       "communities": []
     },
     "xph": {
       "maintainer": null,
       "settingsReview": {
         "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
         "checkedAt": null,
         "evidence": null
       },
@@ -2707,6 +2717,11 @@
         "checkedAt": null,
         "evidence": null
       },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
       "communities": []
     },
     "ycd": {
@@ -2716,12 +2731,22 @@
         "checkedAt": null,
         "evidence": null
       },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
       "communities": []
     },
     "yeg": {
       "maintainer": null,
       "settingsReview": {
         "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
         "checkedAt": null,
         "evidence": null
       },
@@ -2771,12 +2796,22 @@
         "checkedAt": null,
         "evidence": null
       },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
       "communities": []
     },
     "yka": {
       "maintainer": null,
       "settingsReview": {
         "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
         "checkedAt": null,
         "evidence": null
       },
@@ -2789,6 +2824,11 @@
         "checkedAt": null,
         "evidence": null
       },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
       "communities": []
     },
     "ylk": {
@@ -2798,12 +2838,22 @@
         "checkedAt": null,
         "evidence": null
       },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
       "communities": []
     },
     "yml": {
       "maintainer": null,
       "settingsReview": {
         "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
         "checkedAt": null,
         "evidence": null
       },
@@ -2829,6 +2879,11 @@
         "checkedAt": null,
         "evidence": null
       },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
       "communities": [
         {
           "id": "greater-ottawa-mesh-enthusiasts",
@@ -2851,6 +2906,11 @@
         "checkedAt": null,
         "evidence": null
       },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
       "communities": []
     },
     "yqa": {
@@ -2860,12 +2920,22 @@
         "checkedAt": null,
         "evidence": null
       },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
       "communities": []
     },
     "yqb": {
       "maintainer": null,
       "settingsReview": {
         "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
         "checkedAt": null,
         "evidence": null
       },
@@ -2903,12 +2973,22 @@
         "checkedAt": null,
         "evidence": null
       },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
       "communities": []
     },
     "yql": {
       "maintainer": null,
       "settingsReview": {
         "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
         "checkedAt": null,
         "evidence": null
       },
@@ -2958,12 +3038,22 @@
         "checkedAt": null,
         "evidence": null
       },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
       "communities": []
     },
     "yqt": {
       "maintainer": null,
       "settingsReview": {
         "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
         "checkedAt": null,
         "evidence": null
       },
@@ -2976,6 +3066,11 @@
         "checkedAt": null,
         "evidence": null
       },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
       "communities": []
     },
     "yse": {
@@ -2985,12 +3080,22 @@
         "checkedAt": null,
         "evidence": null
       },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
       "communities": []
     },
     "ytf": {
       "maintainer": null,
       "settingsReview": {
         "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
         "checkedAt": null,
         "evidence": null
       },
@@ -3028,6 +3133,11 @@
         "checkedAt": null,
         "evidence": null
       },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
       "communities": [
         {
           "id": "quinte-mesh-network",
@@ -3047,6 +3157,11 @@
       "maintainer": null,
       "settingsReview": {
         "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
         "checkedAt": null,
         "evidence": null
       },
@@ -3096,6 +3211,11 @@
         "checkedAt": null,
         "evidence": null
       },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
       "communities": [
         {
           "id": "bc-mesh",
@@ -3138,6 +3258,11 @@
         "checkedAt": null,
         "evidence": null
       },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
       "communities": [
         {
           "id": "winnipeg-meshcore",
@@ -3160,12 +3285,22 @@
         "checkedAt": null,
         "evidence": null
       },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
       "communities": []
     },
     "yxu": {
       "maintainer": null,
       "settingsReview": {
         "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
         "checkedAt": null,
         "evidence": null
       },
@@ -3178,6 +3313,11 @@
         "checkedAt": null,
         "evidence": null
       },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
       "communities": []
     },
     "yyb": {
@@ -3187,12 +3327,22 @@
         "checkedAt": null,
         "evidence": null
       },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
       "communities": []
     },
     "yyc": {
       "maintainer": null,
       "settingsReview": {
         "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
         "checkedAt": null,
         "evidence": null
       },
@@ -3266,6 +3416,11 @@
         "checkedAt": null,
         "evidence": null
       },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
       "communities": [
         {
           "id": "bc-mesh",
@@ -3308,12 +3463,22 @@
         "checkedAt": null,
         "evidence": null
       },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
       "communities": []
     },
     "yyz": {
       "maintainer": null,
       "settingsReview": {
         "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
         "checkedAt": null,
         "evidence": null
       },
@@ -3339,12 +3504,22 @@
         "checkedAt": null,
         "evidence": null
       },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
       "communities": []
     },
     "yyt": {
       "maintainer": null,
       "settingsReview": {
         "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
         "checkedAt": null,
         "evidence": null
       },
@@ -3357,12 +3532,22 @@
         "checkedAt": null,
         "evidence": null
       },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
       "communities": []
     },
     "yxy": {
       "maintainer": null,
       "settingsReview": {
         "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
         "checkedAt": null,
         "evidence": null
       },
@@ -3375,12 +3560,22 @@
         "checkedAt": null,
         "evidence": null
       },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
       "communities": []
     },
     "yfb": {
       "maintainer": null,
       "settingsReview": {
         "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
         "checkedAt": null,
         "evidence": null
       },
@@ -3393,12 +3588,22 @@
         "checkedAt": null,
         "evidence": null
       },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
       "communities": []
     },
     "yxs": {
       "maintainer": null,
       "settingsReview": {
         "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
         "checkedAt": null,
         "evidence": null
       },
@@ -3411,12 +3616,22 @@
         "checkedAt": null,
         "evidence": null
       },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
       "communities": []
     },
     "yxc": {
       "maintainer": null,
       "settingsReview": {
         "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
         "checkedAt": null,
         "evidence": null
       },
@@ -3429,6 +3644,11 @@
         "checkedAt": null,
         "evidence": null
       },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
       "communities": []
     },
     "yqu": {
@@ -3438,12 +3658,22 @@
         "checkedAt": null,
         "evidence": null
       },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
       "communities": []
     },
     "yxe": {
       "maintainer": null,
       "settingsReview": {
         "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
         "checkedAt": null,
         "evidence": null
       },
@@ -3469,6 +3699,11 @@
         "checkedAt": null,
         "evidence": null
       },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
       "communities": [
         {
           "id": "yqrmesh",
@@ -3491,12 +3726,22 @@
         "checkedAt": null,
         "evidence": null
       },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
       "communities": []
     },
     "yth": {
       "maintainer": null,
       "settingsReview": {
         "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
         "checkedAt": null,
         "evidence": null
       },
@@ -3509,12 +3754,22 @@
         "checkedAt": null,
         "evidence": null
       },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
       "communities": []
     },
     "ysb": {
       "maintainer": null,
       "settingsReview": {
         "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
         "checkedAt": null,
         "evidence": null
       },
@@ -3527,12 +3782,22 @@
         "checkedAt": null,
         "evidence": null
       },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
       "communities": []
     },
     "yts": {
       "maintainer": null,
       "settingsReview": {
         "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
         "checkedAt": null,
         "evidence": null
       },
@@ -3545,12 +3810,22 @@
         "checkedAt": null,
         "evidence": null
       },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
       "communities": []
     },
     "yvo": {
       "maintainer": null,
       "settingsReview": {
         "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
         "checkedAt": null,
         "evidence": null
       },
@@ -3563,6 +3838,11 @@
         "checkedAt": null,
         "evidence": null
       },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
       "communities": []
     },
     "yvp": {
@@ -3572,12 +3852,22 @@
         "checkedAt": null,
         "evidence": null
       },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
       "communities": []
     },
     "yqm": {
       "maintainer": null,
       "settingsReview": {
         "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
         "checkedAt": null,
         "evidence": null
       },
@@ -3603,6 +3893,11 @@
         "checkedAt": null,
         "evidence": null
       },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
       "communities": [
         {
           "id": "southern-new-brunswick",
@@ -3622,6 +3917,11 @@
       "maintainer": null,
       "settingsReview": {
         "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
         "checkedAt": null,
         "evidence": null
       },
@@ -3647,6 +3947,11 @@
         "checkedAt": null,
         "evidence": null
       },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
       "communities": [
         {
           "id": "lunenburg-county-mesh",
@@ -3666,6 +3971,11 @@
       "maintainer": null,
       "settingsReview": {
         "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
         "checkedAt": null,
         "evidence": null
       },

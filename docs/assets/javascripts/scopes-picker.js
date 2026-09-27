@@ -83,6 +83,13 @@
   var type = picker.querySelector("[data-scp-type]");
   var extra = picker.querySelector("[data-scp-extra]");
   var extraField = picker.querySelector("[data-scp-extra-field]");
+  var role = picker.querySelector("[data-scp-role]");
+  var activation = picker.querySelector("[data-scp-activation]");
+  var confirmed = picker.querySelector("[data-scp-activate]");
+  confirmed.checked = false;
+  confirmed.autocomplete = "off";
+  var messageScope = picker.querySelector("[data-scp-message]");
+  var selectedProfile;
   var placeSearch = window.MeshCorePlaceSearch;
   var language = root.lang === "fr" ? "fr" : "en";
   var form = picker.querySelector("[data-scp-search]");
@@ -94,6 +101,10 @@
   var controller;
   var requestId = 0;
   var geometry;
+  var detailsKey = "";
+  window.addEventListener("pageshow", function (event) {
+    if (event.persisted) { confirmed.checked = false; if (catalog) update(); }
+  });
 
   function t(en, fr) { return language === "fr" ? fr : en; }
   function name(tag) { var item = catalog.hierarchy[tag]; return language === "fr" && item.labelFr || item.label; }
@@ -127,9 +138,9 @@
     return { "110": "1.10", "114": "1.14", "115": "1.15", "116": "1.16" }[version];
   }
 
-  function regionCommands(version, city, province, neighbour, edge) {
+  function regionCommands(version, city, province, neighbour, edge, stage) {
     var profile = scopeEngine.profile(catalog, {
-      home: city, province: province, bridge: edge, cities: neighbour ? [neighbour] : []
+      home: city, province: province, bridge: edge, cities: neighbour ? [neighbour] : [], activation: stage
     });
     return scopeEngine.commands(profile, firmwareId(version)).concat(["region save"]);
   }
@@ -163,8 +174,15 @@
     var province = option.getAttribute("data-province");
     var version = firmware.value;
     var edge = type.value === "edge";
+    var operator = role.value === "repeater";
+    var activating = activation.value === "activate";
+    var canGenerate = Boolean(city && operator && (!activating || (confirmed.checked && type.value !== "unknown")));
+    picker.querySelectorAll("[data-scp-operator]").forEach(function (field) { field.hidden = !operator; });
+    picker.querySelector("[data-scp-confirm-field]").hidden = !operator || !activating;
+    picker.querySelector("[data-scp-command-link]").hidden = !canGenerate;
+    document.querySelectorAll("[data-scp-activation-only]").forEach(function (field) { field.hidden = !operator || !activating; });
 
-    extraField.hidden = !edge;
+    extraField.hidden = !operator || !edge;
     Array.prototype.forEach.call(extra.options, function (choice) {
       choice.disabled = choice.value === city;
     });
@@ -172,18 +190,22 @@
     var neighbour = edge ? extra.value : "";
     result.hidden = !city;
 
-    var summary = city ? [shortText(area), shortText(firmware), shortText(type)] : [t("Choose your area in the finder above.", "Choisissez votre secteur dans l’outil ci-dessus.")];
+    var summary = canGenerate ? [shortText(area), shortText(firmware), shortText(type), shortText(activation)] : [t("Choose your area and role above. Activation also needs a confirmed repeater type and local cutover.", "Choisissez votre secteur et votre rôle ci-dessus. L’activation exige aussi un type de répéteur confirmé et une transition locale.")];
     if (neighbour) summary.push("+ " + neighbour);
     document.querySelectorAll("[data-scp-summary]").forEach(function (label) {
       label.textContent = summary.join(" · ");
     });
 
     document.querySelectorAll('[data-scp-output="standard"]').forEach(function (list) {
-      render(list, city ? standardCommands(version) : []);
+      render(list, canGenerate ? standardCommands(version) : []);
     });
     document.querySelectorAll('[data-scp-output="region"]').forEach(function (list) {
-      render(list, city ? regionCommands(version, city, province, neighbour, edge) : []);
+      render(list, canGenerate ? regionCommands(version, city, province, neighbour, edge, activation.value) : []);
     });
+    var verification = document.querySelector("[data-scp-verification]");
+    if (verification) verification.textContent = "";
+    selectedProfile = null;
+    picker.querySelector("[data-scp-simulator]").hidden = !canGenerate;
 
     if (city) {
       picker.querySelector("[data-scp-region-name]").textContent = name(city) + " (" + city.toUpperCase() + ") · " + provinceName(province);
@@ -194,19 +216,45 @@
       picker.querySelector("[data-scp-region-source]").textContent = source;
       var tags = picker.querySelector("[data-scp-tags]");
       tags.textContent = "";
-      var profile = scopeEngine.profile(catalog, { home: city, province: province, bridge: edge, cities: neighbour ? [neighbour] : [] });
+      var profile = scopeEngine.profile(catalog, { home: city, province: province, bridge: edge, cities: neighbour ? [neighbour] : [], activation: activation.value });
+      selectedProfile = profile;
+      var roleText = role.value === "companion" ? t("Companion user: no changes yet. Leave your default scope and channels unscoped until Phase 2 is announced locally (January 2027 at the earliest).", "Utilisateur d’un compagnon : aucun changement pour l’instant. Laissez la portée par défaut et les canaux sans portée jusqu’à l’annonce locale de la phase 2 (janvier 2027 au plus tôt).") :
+        role.value === "bot" ? t("Bot / MeshMapper: coordinate your local-region scope with operators near the end of preparation. Do not switch before the surrounding repeaters are ready.", "Robot / MeshMapper : coordonnez votre portée locale avec les opérateurs vers la fin de la préparation. Ne changez rien avant que les répéteurs voisins soient prêts.") :
+        operator ? (activating ? t("Activation instructions: use only at the locally announced cutover. Confirm the regular cross-region links and the cutover below.", "Consignes d’activation : à utiliser seulement lors de la transition annoncée localement. Confirmez les liens interrégionaux réguliers et la transition ci-dessous.") :
+          t("Prepare the scope names first. No scopes are removed; wildcard forwarding (*) and the default scope stay unchanged. Activate at the agreed local cutover.", "Préparez d’abord les portées nommées. Aucune portée n’est supprimée; le joker (*) et la portée par défaut restent inchangés. Activez lors de la transition locale convenue.")) :
+        t("Choose your role to see what applies now.", "Choisissez votre rôle pour voir les consignes qui s’appliquent maintenant.");
+      picker.querySelector("[data-scp-role-summary]").textContent = roleText;
+      var nextDetailsKey = [city, province, origin && origin.regionSource, origin && origin.planningKind].join(":");
+      if (window.MeshCoreRegionProfile && detailsKey !== nextDetailsKey) {
+        picker.querySelector("[data-scp-readiness]").innerHTML = window.MeshCoreRegionProfile.readiness(catalog.profiles[city]);
+        picker.querySelector("[data-scp-profile]").innerHTML = window.MeshCoreRegionProfile.render(catalog, city, province, new URL("../../", location.href), origin ? { sourceTier: origin.regionSource } : null);
+        detailsKey = nextDetailsKey;
+      }
       profile.tags.forEach(function (tag) {
+        if (tag === profile.tags[0] || tag === catalog.policy.reservedScopes[0]) {
+          var label = document.createElement("strong"); label.className = "scp-finder__tag-label";
+          label.textContent = tag === profile.tags[0] ? t("Independent scope labels", "Étiquettes de portée indépendantes") : t("Reserved — do not use yet", "Réservées — ne pas utiliser pour l’instant");
+          tags.appendChild(label);
+        }
         var badge = document.createElement("span");
         badge.className = "scp-tag";
         badge.dataset.level = tag === province ? "prov" : tag === "onqc" ? "mesh" : catalog.policy.reservedScopes.includes(tag) ? "future" : "city";
         badge.textContent = tag;
         tags.appendChild(badge);
       });
+      if (canGenerate && window.MeshCoreScopeMigration) window.MeshCoreScopeMigration.mountVerification(verification, profile, firmwareId(version));
+      var previousMessage = messageScope.value;
+      messageScope.textContent = "";
+      messageScope.add(new Option(t("No scope (*)", "Sans portée (*)"), "*"));
+      [city, province, "onqc"].concat(catalog.seeds.filter(function (seed) { return seed.provinces.some(function (p) { return catalog.policy.meshScopes.onqc.includes(p); }); }).map(function (seed) { return seed.tag; }))
+        .filter(function (tag, index, all) { return all.indexOf(tag) === index; }).forEach(function (tag) { messageScope.add(new Option(tag + " — " + (catalog.hierarchy[tag].labelFr && language === "fr" ? catalog.hierarchy[tag].labelFr : catalog.hierarchy[tag].label), tag)); });
+      if (Array.from(messageScope.options).some(function (o) { return o.value === previousMessage; })) messageScope.value = previousMessage;
+      showDecision();
       var map = new URL("../../config/map/", location.href);
       map.search = new URLSearchParams({ tag: city, province: province });
       picker.querySelector("[data-scp-map]").href = map.href;
       var share = new URL(location.href);
-      share.search = new URLSearchParams({ tag: city, province: province, firmware: version, type: type.value });
+      share.search = new URLSearchParams({ tag: city, province: province, role: role.value, firmware: version, type: type.value, activation: activation.value });
       if (neighbour) share.searchParams.set("neighbour", neighbour);
       share.hash = "your-region";
       picker.querySelector("[data-scp-share]").href = share.href;
@@ -214,22 +262,31 @@
       history.replaceState(history.state, "", share.href);
     } else {
       var address = new URL(location.href);
-      ["tag", "province", "firmware", "type", "neighbour"].forEach(function (key) { address.searchParams.delete(key); });
+      ["tag", "province", "role", "firmware", "type", "neighbour", "activation"].forEach(function (key) { address.searchParams.delete(key); });
       history.replaceState(history.state, "", address.href);
     }
 
     var active = {
       "fw-116": version === "116",
-      "fw-115": version === "115",
+      "fw-115": version === "115" && activating,
       "fw-put-allow": version === "114" || version === "110",
       "no-hash": version === "110",
-      edge: edge,
+      edge: edge && activating,
       extra: Boolean(neighbour)
     };
     document.querySelectorAll("[data-scp-note]").forEach(function (note) {
-      note.hidden = !city || !active[note.getAttribute("data-scp-note")];
+      note.hidden = !canGenerate || !active[note.getAttribute("data-scp-note")];
     });
   }
+
+  function showDecision() {
+    if (!selectedProfile) return;
+    var forward = scopeEngine.forwards(selectedProfile, messageScope.value);
+    picker.querySelector("[data-scp-decision]").textContent = forward === null ? t("Unchanged during preparation: the current * flag decides whether unscoped floods pass. Check the actual region list.", "Inchangé pendant la préparation : le réglage actuel de * décide si les diffusions sans portée passent. Vérifiez la liste réelle.") : forward ?
+      t("Forwarded by this configuration. This does not guarantee delivery or a radio link.", "Relayé par cette configuration. Cela ne garantit ni la livraison ni une liaison radio.") :
+      t("Not forwarded by this configuration: the matching scope is absent, or unscoped floods are blocked at activation.", "Non relayé par cette configuration : la portée correspondante est absente, ou les diffusions sans portée sont bloquées à l’activation.");
+  }
+  messageScope.addEventListener("change", showDecision);
 
   function cancel() {
     requestId++;
@@ -241,6 +298,7 @@
     area.value = "";
     origin = null;
     extra.value = "";
+    confirmed.checked = false;
     places.textContent = "";
     status.textContent = "";
     update();
@@ -374,8 +432,9 @@
     }
   });
 
-  area.addEventListener("change", function () { cancel(); origin = null; extra.value = ""; query.value = ""; places.textContent = ""; status.textContent = ""; update(); });
-  [firmware, type, extra].forEach(function (select) {
+  area.addEventListener("change", function () { cancel(); confirmed.checked = false; origin = null; extra.value = ""; query.value = ""; places.textContent = ""; status.textContent = ""; update(); });
+  [role, type, activation].forEach(function (select) { select.addEventListener("change", function () { confirmed.checked = false; update(); }); });
+  [firmware, extra, confirmed].forEach(function (select) {
     select.addEventListener("change", update);
   });
   fetch(catalogUrl, { cache: "no-cache" }).then(function (response) {
@@ -384,10 +443,14 @@
   }).then(function (data) {
     if (!scopeEngine || !placeSearch || data.schema !== "meshcore-canada-iata-scopes/v1") throw new Error("Region catalogue unavailable");
     catalog = data;
+    confirmed.checked = false;
     populate();
     var params = new URLSearchParams(location.search);
+    if (["companion", "repeater", "bot"].includes(params.get("role"))) role.value = params.get("role");
+    else if (!params.has("role") && (params.has("firmware") || params.has("type"))) role.value = "repeater";
+    if (params.get("activation") === "activate") activation.value = "activate";
     if (firmwareId(params.get("firmware"))) firmware.value = params.get("firmware");
-    if (params.get("type") === "edge") type.value = "edge";
+    if (["city", "edge"].includes(params.get("type"))) type.value = params.get("type");
     if (Array.from(extra.options).some(function (o) { return o.value === params.get("neighbour"); })) extra.value = params.get("neighbour");
     if (params.has("tag")) selectCode(params.get("tag").toLowerCase(), params.get("province"));
     update();

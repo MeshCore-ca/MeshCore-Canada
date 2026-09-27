@@ -1,6 +1,7 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "./site-fixtures.mjs";
 import { siteRoute } from "./site-route.mjs";
+import { proposalOperator } from "./activation-helpers.mjs";
 
 const skin = locator => locator.evaluate(element => {
   const style = getComputedStyle(element);
@@ -18,6 +19,7 @@ for (const locale of ["", "fr/"]) for (const scheme of ["default", "slate"]) {
     };
     await page.goto(siteRoute(`/${locale}proposals/onqc-scopes/`));
     await expect(page.locator('[data-scp-picker]')).toBeVisible();
+    await proposalOperator(page);
     await setTheme();
     await expect(page.locator('.scp-tag[data-level="city"]').first()).toHaveCSS("color", scheme === "slate" ? "rgb(125, 183, 255)" : "rgb(20, 88, 176)");
     const tags = {};

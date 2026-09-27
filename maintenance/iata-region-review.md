@@ -55,8 +55,18 @@ reviewed PR. Never reactivate the retired census-boundary publisher.
 ## Region contacts and settings
 
 `data/iata-region-profiles.json` contains optional records keyed by lowercase IATA
-code. Missing records mean **no maintainer listed** and **settings unconfirmed**.
+code. Missing records mean **no maintainer listed**, **settings unconfirmed** and
+**local rollout unconfirmed**. A published MeshMapper zone is not an adoption announcement.
 Community links come from public directory reference points, not appointments.
+
+To record local rollout, add a separate `rollout` record with `phase` (`preparing`,
+`cutover-announced` or `active`), `checkedAt` (`YYYY-MM-DD`) and an HTTPS `evidence`
+link to the local announcement. The date records the check, not an automatic
+activation time; the announcement must explain timing and neighbouring-operator
+coordination. Unknown regions keep `phase: unconfirmed` with null date/evidence.
+Never infer rollout from map publication, radio adverts or directory contact checks.
+The ON/QC timetable does not apply to other provinces. Update English/French
+guidance together, and test the exact PR candidate on preview before publication.
 
 To record a volunteer, use `maintainer` with `name`, an HTTPS `contact`, and an
 HTTPS `evidence` link showing their public consent. To confirm local settings,

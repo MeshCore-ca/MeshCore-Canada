@@ -17,18 +17,19 @@ destructive: false
 search:
   exclude: true
 page_styles:
-  - assets/styles/scopes-proposal.css?v=20260926-2
+  - assets/styles/scopes-proposal.css?v=20260926-3
 page_scripts:
-  - assets/regions/modules/iata-scopes.js?v=20260926-1
+  - assets/regions/modules/iata-scopes.js?v=20260926-2
+  - assets/regions/modules/scope-migration.js?v=20260926-2
   - assets/javascripts/place-search.js?v=20260925-2
-  - assets/javascripts/scopes-picker.js?v=20260926-3
+  - assets/javascripts/scopes-picker.js?v=20260926-4
 ---
 
 # Proposition de portées de région ON/QC
 
 <div class="scp-hero">
   <p class="mc-eyebrow">Proposition à discuter</p>
-  <p class="mc-lede">Les portées de région empêchent les échanges locaux d’inonder tout le réseau. La configuration actuelle est difficile à suivre. Cette proposition la ramène à cinq niveaux de codes faciles à retenir partout en Ontario et au Québec.</p>
+  <p class="mc-lede">Utilisez les codes de région locale de MeshMapper, un code de province et <code>onqc</code> pour contrôler la retransmission par diffusion. Préparez les répéteurs, puis coordonnez l’activation localement. <code>can</code> et <code>na</code> sont réservés pour plus tard.</p>
   <ul class="scp-hero__badges">
     <li data-kind="proposal">Pas encore adoptée</li>
     <li>Projet pilote Ontario + Québec</li>
@@ -50,13 +51,14 @@ Chaque phase est annoncée sur le
 tout fonctionne. Vous n’avez pas besoin de le comprendre pour suivre les
 étapes.
 
-## Trouver les réglages de votre répéteur { #your-region }
+## Trouver votre prochaine étape { #your-region }
 
 Cherchez votre ville ou votre code IATA, ou choisissez une région ci-dessous.
 **Quinte / Belleville / Trenton (`ytr`)**, Kingston (`ygk`), Port Hope (`xph`)
 et les autres régions ON/QC de la [carte des régions](../config/map.md) y figurent.
 Les secteurs proposés sont indiqués; un contour sur la carte ne garantit pas
 la couverture radio.
+**Trouver votre secteur → choisir votre rôle → examiner les consignes → vérifier.**
 
 <div class="scp-picker" data-scp-picker data-copy-label="Copier" data-copied-label="Copié" hidden>
   <form class="scp-finder" data-scp-search>
@@ -68,16 +70,23 @@ la couverture radio.
     <p class="scp-picker__hint"><a href="../../config/map/">Consulter la carte de toutes les régions canadiennes</a></p>
   </form>
   <label class="scp-picker__field"><span>Région · province du répéteur</span><select data-scp-area><option value="">Choisissez votre secteur</option></select></label>
-  <label class="scp-picker__field"><span>Micrologiciel</span><select data-scp-firmware><option value="116">1.16 ou plus récent</option><option value="115">1.15</option><option value="114">1.14</option><option value="110">1.10 à 1.13</option></select></label>
-  <label class="scp-picker__field"><span>Type de répéteur</span><select data-scp-type><option value="city">Répéteur de ville</option><option value="edge">Répéteur de bordure</option></select><small class="scp-picker__hint">Choisissez bordure seulement s’il communique régulièrement avec des répéteurs d’une autre zone MeshMapper.</small></label>
+  <label class="scp-picker__field"><span>Votre rôle</span><select data-scp-role><option value="">Choisissez votre rôle</option><option value="companion">Utilisateur d’un compagnon</option><option value="repeater">Opérateur de répéteur</option><option value="bot">Opérateur de robot / MeshMapper</option></select></label>
+  <label class="scp-picker__field" data-scp-operator hidden><span>Micrologiciel</span><select data-scp-firmware><option value="116">1.16 ou plus récent</option><option value="115">1.15</option><option value="114">1.14</option><option value="110">1.10 à 1.13</option></select><small class="scp-picker__hint">En cas de doute, lancez d’abord <code>ver</code>.</small></label>
+  <label class="scp-picker__field" data-scp-operator hidden><span>Liens réguliers vers une autre région IATA?</span><select data-scp-type><option value="unknown">Pas encore certain</option><option value="city">Non — répéteur de ville</option><option value="edge">Oui — répéteur de bordure</option></select><small class="scp-picker__hint">Une limite sur la carte ne suffit pas. <a href="https://onqc.meshmapper.net/?preset=all&l=rep.nbr.nz.nzb.rb">Vérifiez les répéteurs voisins</a>. Si c’est le seul répéteur local, convenez du service aux utilisateurs sans portée avant de les bloquer.</small></label>
+  <label class="scp-picker__field" data-scp-operator hidden><span>Étape</span><select data-scp-activation><option value="prepare">Préparer les portées</option><option value="activate">Activation coordonnée</option></select></label>
+  <label class="scp-finder__wide scp-picker__hint" data-scp-confirm-field hidden><input type="checkbox" data-scp-activate> J’ai vérifié l’annonce de transition locale et coordonné l’activation avec les opérateurs voisins. La phase 2 n’est pas automatique.</label>
   <label class="scp-picker__field" data-scp-extra-field hidden><span>Ville voisine (facultatif)</span><select data-scp-extra><option value="">Aucune</option></select></label>
   <div class="scp-finder__result" data-scp-result hidden>
     <p><strong data-scp-region-name></strong></p>
+    <p data-scp-role-summary role="status"></p>
+    <dl data-scp-readiness></dl>
     <p data-scp-region-source></p>
     <p class="scp-finder__tags" data-scp-tags></p>
     <p class="scp-picker__hint"><code>can</code> et <code>na</code> sont réservés. Les réglages des appareils compagnons attendent la phase 2.</p>
-    <p class="scp-finder__links"><a class="md-button md-button--primary" href="#etape-4-reglages-de-region">Voir les commandes de région</a><a data-scp-map href="../../config/map/">Vérifier sur la carte</a><a data-scp-share href="#your-region">Lien vers ces réglages</a></p>
-    <p class="scp-picker__hint">Avant d’appliquer les commandes, sauvegardez vos réglages et suivez <a href="#etape-2-effacer-les-anciennes-regions">l’étape de nettoyage</a>.</p>
+    <p class="scp-finder__links"><a class="md-button md-button--primary" data-scp-command-link href="#etape-4-reglages-de-region" hidden>Voir les commandes de région</a><a data-scp-map href="../../config/map/">Vérifier sur la carte</a><a data-scp-share href="#your-region">Lien vers ces réglages</a></p>
+    <p class="scp-picker__hint" data-scp-operator hidden>Sauvegardez vos réglages et <a href="#etape-2-effacer-les-anciennes-regions">examinez la liste existante</a> avant d’appliquer les commandes.</p>
+    <details class="scp-finder__details"><summary>Contacts locaux et confirmation</summary><div data-scp-profile></div></details>
+    <details class="scp-finder__details" data-scp-simulator hidden><summary>Ce répéteur relaierait-il le message?</summary><label class="scp-picker__field">Portée du message<select data-scp-message></select></label><p data-scp-decision role="status"></p><p class="scp-picker__hint">Cet exemple illustre la retransmission par diffusion selon votre configuration, pas un trajet radio ni une couverture. Les portées sont des étiquettes indépendantes; les plus grandes n’incluent pas automatiquement les plus petites.</p></details>
   </div>
 </div>
 
@@ -85,27 +94,28 @@ la couverture radio.
 
 ## En bref
 
-Il y a cinq niveaux de portée. Chaque répéteur porte un code de chacun :
-sa ville, sa province, `onqc`, `can` et `na`. Quand vous envoyez un message, la
-portée décide jusqu’où il va. `can`
-et `na` sont réservés pour plus tard; pour l’instant, vous choisissez parmi
-les trois premiers.
+Les portées sont des **étiquettes indépendantes**, pas des secteurs imbriqués.
+Un répéteur relaie une diffusion avec portée seulement s’il porte l’étiquette
+correspondante et autorise sa retransmission. Après l’activation, utilisez le
+code local, celui de la province ou `onqc` selon l’entente locale. `can` et `na`
+sont préparés maintenant, mais réservés pour plus tard. Une portée ne garantit
+ni distance, ni couverture, ni livraison.
 
 <div class="scp-levels-cards">
   <div class="scp-level-card" data-level="city">
-    <h3>Ville</h3>
+    <h3>Région locale</h3>
     <span class="scp-tag" data-level="city">yow</span> <span class="scp-tag" data-level="city">yul</span> <span class="scp-tag" data-level="city">yqb</span>
     <p>Votre secteur. Les mêmes codes que <a href="https://meshmapper.net/">MeshMapper</a>.</p>
   </div>
   <div class="scp-level-card" data-level="prov">
     <h3>Province</h3>
     <span class="scp-tag" data-level="prov">on</span> <span class="scp-tag" data-level="prov">qc</span>
-    <p>Tous les répéteurs de la province.</p>
+    <p>Les répéteurs participants configurés pour cette province.</p>
   </div>
   <div class="scp-level-card" data-level="mesh">
     <h3>Réseau</h3>
     <span class="scp-tag" data-level="mesh">onqc</span>
-    <p>Tous les répéteurs de l’Ontario et du Québec.</p>
+    <p>Les répéteurs participants configurés pour le réseau ON/QC.</p>
   </div>
   <div class="scp-level-card" data-level="future">
     <h3>Canada</h3>
@@ -229,7 +239,7 @@ Quatre détails piègent souvent :
 </details>
 
 
-## Les cinq niveaux
+## Les étiquettes de portée { #les-cinq-niveaux }
 
 <figure class="scp-figure">
   <div class="scp-zone" data-level="future">
@@ -278,12 +288,12 @@ fonctionne plus tard sans que personne n’ait à reconfigurer son répéteur. B
 des répéteurs configurés avec le configurateur actuel le portent déjà.
 
 **N’utilisez pas encore `can` sur votre appareil compagnon ni dans vos canaux.**
-Aujourd’hui, il joint les mêmes répéteurs que `onqc`. Continuez d’utiliser
-`onqc`. Quand d’autres provinces porteront aussi `can`, il deviendra la façon
+C’est une étiquette réservée, pas une invitation à changer votre compagnon
+à l’avance. Quand d’autres provinces porteront aussi `can`, il deviendra la façon
 d’aller plus loin, et `onqc` restera « seulement le réseau de l’Ontario et du
 Québec ».
 
-`na` (Amérique du Nord) suit la même idée, un niveau plus haut. Il est là
+`na` (Amérique du Nord) est une autre étiquette indépendante réservée. Il est là
 pour que le réseau puisse un jour se relier aux États-Unis, encore une fois sans
 que personne ait à reconfigurer son répéteur. **N’utilisez pas encore `na` non
 plus.**
@@ -397,8 +407,8 @@ encore les réglages de votre appareil compagnon.** La phase 2 n’est pas
 ouverte.
 
 <ol class="scp-timeline">
-  <li data-phase="Phase 1"><h3>Répéteurs</h3><p>Maintenant. Les propriétaires effacent les anciennes régions et ajoutent leurs codes. Les répéteurs de ville gardent <code>*</code> permis; les répéteurs de bordure le rejettent. Vers la fin, les robots et MeshMapper reçoivent la portée de leur ville. Testez les messages locaux après le changement.</p></li>
-  <li data-phase="Phase 2"><h3>Appareils compagnons</h3><p>Janvier 2027 au plus tôt, une fois les répéteurs autour d’eux configurés. Les utilisateurs règlent leur portée par défaut et <code>Public</code> sur <code>onqc</code>, et leurs canaux de test sur leur ville.</p></li>
+  <li data-phase="Phase 1"><h3>Préparer</h3><p>Sauvegardez la configuration, puis ajoutez et vérifiez les portées nommées. Conservez les anciennes portées, la retransmission du joker et la portée par défaut. Testez les messages locaux sans portée. Vers la fin, coordonnez les portées locales des robots et de MeshMapper avec les opérateurs.</p></li>
+  <li data-phase="Phase 2"><h3>Coordonner l’activation</h3><p>Janvier 2027 au plus tôt, après une annonce locale et les vérifications nécessaires. Coordonnez le blocage en bordure, les portées d’annonces des répéteurs et les changements des compagnons. Les répéteurs de ville autorisent <code>*</code>; ceux de bordure le bloquent. Les compagnons utilisent <code>onqc</code> par défaut et pour <code>Public</code>, et leur région locale pour les canaux de test.</p></li>
   <li data-phase="Phase 3"><h3>Seulement au besoin</h3><p>Si les messages sans portée sont encore trop bruyants dans une ville, les répéteurs peuvent aussi lancer <code>set flood.max.unscoped 3</code>. Les messages avec portée atteignent encore 16 sauts.</p></li>
 </ol>
 
@@ -408,9 +418,9 @@ La phase 1 a trois objectifs :
 
 1. **Mettre la nouvelle configuration de région sur chaque répéteur**, pour
    que chacun porte sa ville, sa province, `onqc`, `can` et `na`.
-2. **Limiter le trafic sans portée entre les villes.** Les répéteurs de
-   bordure rejettent les messages sans portée, pour que les échanges locaux
-   restent dans leur ville.
+2. **Préserver le fonctionnement du réseau pendant la préparation.** Ne
+   supprimez pas les anciennes portées et ne bloquez pas encore les messages
+   sans portée. Convenez de la transition et des tests avec les opérateurs voisins.
 3. **Vers la fin, donner aux robots et à MeshMapper la portée de leur ville**,
    une fois que les répéteurs autour d’eux portent le code de la ville. Voir
    [Robots et MeshMapper](#robots-et-meshmapper).
@@ -492,15 +502,21 @@ utilisés souvent et récemment, faites-en un répéteur de bordure. Un seul lie
 vu quelques fois, ou pas depuis des semaines, ne compte pas.
 
 
-### Étape 2 : Effacer les anciennes régions
+### Étape 2 : Sauvegarder et examiner { #etape-2-effacer-les-anciennes-regions }
 
-Les nouvelles commandes ne suppriment pas les régions déjà présentes sur le
-répéteur. Pour éviter les conflits, retirez d’abord les anciennes. Commencez
-par afficher ce qui s’y trouve :
+Gardez la liste complète actuelle et, avec le micrologiciel 1.15+, la réponse à
+`region default`. Utilisez USB si possible. La préparation conserve les anciennes
+portées; examinez leur suppression **seulement lors de la transition coordonnée**.
+Commencez par :
 
 <div class="scp-card">
 <ol class="scp-cmds"><li class="scp-cmd"><code>region</code><button type="button" class="scp-copy" title="Copier" aria-label="Copier: region"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li></ol>
 </div>
+
+<div data-scp-activation-only markdown>
+
+**À l’activation seulement :** examinez ce nettoyage avec votre sauvegarde.
+Ne supprimez pas de portées fonctionnelles pendant la préparation.
 
 <div class="scp-ask" data-scp-ask hidden>
 <p class="scp-ask__q">La réponse affiche-t-elle d’autres noms que <code>*</code>?</p>
@@ -561,6 +577,8 @@ Quand vous avez terminé, `region` devrait afficher seulement `*^ F`.
 
 </div>
 
+</div>
+
 ### Étape 3 : Réglages standard de MeshCore Canada
 
 <div class="scp-card">
@@ -597,11 +615,14 @@ commande répond `Err - ??`, votre micrologiciel n’a pas ce réglage; passez-l
 ### Étape 4 : Réglages de région
 
 Ces commandes correspondent à vos choix dans [l’outil de recherche](#your-region).
-Lancez-les dans l’ordre.
+La préparation ajoute ou modifie les portées nommées, sans supprimer d’autres
+entrées, modifier `*` ou régler la portée par défaut. L’activation ajoute les
+commandes de retransmission et de portée par défaut après confirmation de la
+transition locale. Lancez une ligne à la fois et arrêtez sur `Err`.
 
 <div class="scp-card">
 <p class="scp-variant__label" data-scp-summary>Ottawa et environs · 1.16 ou plus récent · Répéteur de ville</p>
-<ol class="scp-cmds" data-scp-output="region"><li class="scp-cmd"><code>region def yow|* on|* onqc|* can|* na</code><button type="button" class="scp-copy" title="Copier" aria-label="Copier: region def yow|* on|* onqc|* can|* na"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li><li class="scp-cmd"><code>region allowf *</code><button type="button" class="scp-copy" title="Copier" aria-label="Copier: region allowf *"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li><li class="scp-cmd"><code>region default yow</code><button type="button" class="scp-copy" title="Copier" aria-label="Copier: region default yow"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li><li class="scp-cmd"><code>region save</code><button type="button" class="scp-copy" title="Copier" aria-label="Copier: region save"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li></ol>
+<ol class="scp-cmds" data-scp-output="region"><li class="scp-cmd"><code>region def yow|* on|* onqc|* can|* na</code><button type="button" class="scp-copy" title="Copier" aria-label="Copier: region def yow|* on|* onqc|* can|* na"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li><li class="scp-cmd"><code>region save</code><button type="button" class="scp-copy" title="Copier" aria-label="Copier: region save"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li></ol>
 <p class="scp-note scp-note--info" data-scp-note="fw-116" hidden><code>region def</code> répond avec la liste terminée, donc vous voyez tout de suite que ça a fonctionné.</p>
 <p class="scp-note scp-note--info" data-scp-note="fw-115" hidden>Chaque <code>region put</code> répond <code>OK - (flood allowed)</code>, et <code>region default</code> répond <code>default scope is now …</code>.</p>
 <p class="scp-note scp-note--info" data-scp-note="fw-put-allow" hidden>Avec ce micrologiciel, une nouvelle région commence avec la diffusion <strong>désactivée</strong>, donc chacune a aussi besoin de <code>region allowf</code>. Il n’y a pas de <code>region default</code>, donc les annonces du répéteur restent sans portée. Une mise à jour du micrologiciel vaut la peine.</p>
@@ -622,6 +643,9 @@ Lancez-les dans l’ordre.
 
 </details>
 
+Les captures ci-dessous montrent d’anciens **exemples d’activation**, pas des
+consignes de préparation. Utilisez les commandes générées pour votre région et votre étape.
+
 <div class="scp-shots" markdown>
 
 <figure class="scp-shot" markdown>
@@ -638,13 +662,16 @@ Lancez-les dans l’ordre.
 
 ### Étape 5 : Vérifier le résultat
 
+<div data-scp-verification></div>
+
 <div class="scp-card">
 <ol class="scp-cmds"><li class="scp-cmd"><code>region</code><button type="button" class="scp-copy" title="Copier" aria-label="Copier: region"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li></ol>
 </div>
 
-Vérifiez que votre ville, votre province, `onqc`, `can` et `na` portent chacun
-`F`, ainsi que toute ville voisine choisie. Pour un répéteur de bordure, `*`
-ne doit **pas** porter `F`. Voici un exemple pour un répéteur de ville à Ottawa :
+Vérifiez que votre région locale, votre province, `onqc`, `can` et `na` portent
+chacun `F`, ainsi que tout voisin choisi. Pendant la préparation, conservez le
+réglage de `*` et la portée par défaut. **Après l’activation**, `*` ne doit pas
+porter `F` sur un répéteur de bordure. Voici un exemple à Ottawa après activation :
 
 ```text
 *^ F
@@ -706,7 +733,10 @@ MeshMapper garde leur trafic hors des autres villes.
 Si vous réglez votre portée par défaut sur `onqc` avant que les répéteurs de
 vos trajets la portent, vos messages de canal et vos premiers MP n’iront pas
 loin. Tant que la phase 2 n’est pas annoncée, laissez **Default Region Scope**
-vide et vos canaux sans portée. Vous recevrez quand même tout.
+vide et vos canaux sans portée. Ce qui vous parvient dépend des liaisons radio
+et des règles de retransmission. Un répéteur de bordure qui bloque `*` peut
+empêcher la découverte interrégionale sans portée : ce blocage et les changements
+des compagnons doivent donc être coordonnés lors de la transition locale.
 </div>
 
 Quand la phase 2 ouvrira, voici tout ce que vous aurez à faire : régler une

@@ -42,7 +42,7 @@ test("migration compares permissions and default separately from the home marker
   const current=migration.parse("* F\n can F\n  on F\n   on-alg F\n    ott^ F\n yow", "default scope is on");
   assert.equal(current.home,"ott");
   assert.equal(current.defaultScope,"on");
-  const desired=scope.profile(catalog,{home:"yow",province:"on",bridge:true});
+  const desired=scope.profile(catalog,{ activation: "activate", home:"yow",province:"on",bridge:true});
   const plan=plain(migration.plan(current,desired,"1.16"));
   assert.deepEqual(plan.kept,["yow","on","can"]);
   assert.deepEqual(plan.added,["onqc","na"]);
@@ -59,7 +59,7 @@ test("migration compares permissions and default separately from the home marker
 
 test("migration detaches retained children before removing obsolete parents", () => {
   const old=migration.parse("* F\n old F\n  yow F");
-  const desired=scope.profile(catalog,{home:"yow",province:"on"});
+  const desired=scope.profile(catalog,{ activation: "activate", home:"yow",province:"on"});
   for (const firmware of ["1.14","1.15","1.16"]) {
     const result=migration.plan(old,desired,firmware);
     assert.equal(result.commands[0],"region put yow");

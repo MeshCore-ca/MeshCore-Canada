@@ -26,7 +26,7 @@ assert.ok(Object.keys(profileRecords.regions).every(tag => tags.includes(tag)), 
 const profiles = Object.fromEntries(canonicalFeatures.map(feature => {
   const tag = feature.properties.tag;
   const record = profileRecords.regions[tag] || {};
-  assert.ok(Object.keys(record).every(key => ["maintainer", "settingsReview"].includes(key)), `Unknown profile field: ${tag}`);
+  assert.ok(Object.keys(record).every(key => ["maintainer", "settingsReview", "rollout"].includes(key)), `Unknown profile field: ${tag}`);
   const maintainer = record.maintainer || null;
   const safeUrl = value => { try { const url = new URL(value); return url.protocol === "https:" && !url.username && !url.password; } catch { return false; } };
   if (maintainer) {
@@ -43,13 +43,23 @@ const profiles = Object.fromEntries(canonicalFeatures.map(feature => {
   } else {
     assert.ok(!settingsReview.checkedAt && !settingsReview.evidence, "An unconfirmed record must not imply a completed review");
   }
+  const rollout = record.rollout || { phase: "unconfirmed", checkedAt: null, evidence: null };
+  assert.ok(Object.keys(rollout).every(key => ["phase", "checkedAt", "evidence"].includes(key)), "Unknown rollout field");
+  assert.ok(["unconfirmed", "preparing", "cutover-announced", "active"].includes(rollout.phase), "Unknown rollout phase");
+  if (rollout.phase === "unconfirmed") {
+    assert.ok(!rollout.checkedAt && !rollout.evidence, "Unconfirmed rollout must not imply local adoption");
+  } else {
+    assert.match(rollout.checkedAt, /^\d{4}-\d{2}-\d{2}$/);
+    assert.equal(new Date(rollout.checkedAt).toISOString().slice(0, 10), rollout.checkedAt, "Invalid rollout review date");
+    assert.ok(Date.parse(rollout.checkedAt) <= Date.now() && safeUrl(rollout.evidence), "Rollout needs a dated public announcement");
+  }
   const local = communities.communities.filter(community => {
     const points = Number.isFinite(community.location?.latitude) && Number.isFinite(community.location?.longitude) ? [{ lat: community.location.latitude, lon: community.location.longitude }] : anchors[community.id];
     return points.some(point => zones.features.some(part => part.properties.tag === tag && globalThis.MeshCoreIataScopes.contains(part, point.lat, point.lon)));
   }).map(community => ({ id: community.id, name: community.name, nameFr: communityFr[community.id]?.name || community.name,
     route: community.canonical_route, override: !community.settings.inherit_national,
     settings: community.settings, listingReviewed: community.verified_at }));
-  return [tag, { maintainer, settingsReview, communities: local }];
+  return [tag, { maintainer, settingsReview, rollout, communities: local }];
 }));
 assert.deepEqual([...tags].sort(), Object.keys(policy.zoneProvinces).sort(), "Review province metadata for every IATA region");
 const hierarchy = {

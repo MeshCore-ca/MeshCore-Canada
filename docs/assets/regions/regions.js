@@ -19,6 +19,20 @@
   );
 
   var FRENCH_RUNTIME_TEXT = {
+    "Prepare scopes": "Préparer les portées",
+    "Coordinated activation": "Activation coordonnée",
+    "Stage": "Étape",
+    "1. At the coordinated cutover: back up and review removal of obsolete regions, preferably over USB.": "1. Lors de la transition coordonnée : sauvegardez et examinez la suppression des régions obsolètes, de préférence par USB.",
+    "1. Preparation: back up first; keep old scopes, wildcard forwarding (*) and the default scope unchanged.": "1. Préparation : sauvegardez d’abord; conservez les anciennes portées, la retransmission du joker (*) et la portée par défaut.",
+    "Not sure yet": "Pas encore certain",
+    "Preparation only until regular cross-region links are confirmed.": "Préparation seulement tant que les liens interrégionaux réguliers ne sont pas confirmés.",
+    "Does this repeater regularly link another IATA region?": "Ce répéteur communique-t-il régulièrement avec une autre région IATA?",
+    "Check neighbours in MeshMapper": "Vérifier les voisins dans MeshMapper",
+    "If this is the only local repeater, agree on support for unscoped users before blocking them.": "Si c’est le seul répéteur local, convenez du service aux utilisateurs sans portée avant de les bloquer.",
+    "I checked the local cutover announcement and coordinated activation with neighbouring operators.": "J’ai vérifié l’annonce de transition locale et coordonné l’activation avec les opérateurs voisins.",
+    "Preparation keeps existing scopes, wildcard forwarding (*) and the default scope. Review the current list before adding names.": "La préparation conserve les anciennes portées, la retransmission du joker (*) et la portée par défaut. Examinez la liste actuelle avant d’ajouter des noms.",
+    "Confirm the repeater type and local cutover in step 3 before generating activation commands.": "Confirmez le type de répéteur et la transition locale à l’étape 3 avant de générer les commandes d’activation.",
+    "At the coordinated cutover only": "Seulement lors de la transition coordonnée",
     "Choose the place you mean:": "Choisissez le lieu recherché :",
     "Place lookup failed": "La recherche de lieux a échoué",
     "MeshCore Canada starter region": "Région initiale de MeshCore Canada",
@@ -101,7 +115,7 @@
     "City zone": "Zone locale",
     "Nearby city zones": "Zones locales à proximité",
     "Other MeshMapper zones": "Autres zones MeshMapper",
-    "Select only city zones this repeater links. Edge mode blocks unscoped floods.": "Sélectionnez seulement les zones reliées par ce répéteur. Le mode bordure bloque la retransmission sans portée.",
+    "Select only city zones this repeater links. Edge mode blocks unscoped floods only at coordinated activation.": "Sélectionnez seulement les zones reliées par ce répéteur. Le mode bordure bloque les diffusions sans portée seulement à l’activation coordonnée.",
     "An edge repeater can carry several IATA codes. Its province scope stays the province where it is installed.": "Un répéteur de bordure peut porter plusieurs codes IATA. Sa portée provinciale reste celle de son lieu d’installation.",
     "Choose the city scopes this repeater should forward.": "Choisissez les portées de ville que ce répéteur doit retransmettre.",
     "Request a zone change": "Demander une modification de zone",
@@ -1128,6 +1142,8 @@
       params.set("tag", state.forcedTag || state.resolution.primary.seed.tag);
     }
     if (state.type === "high-site") params.set("type", "large");
+    if (state.type === "unknown") params.set("type", "unknown");
+    if (state.activation) params.set("activation", state.activation);
     var savedRegions = (state.selectedMetros || []).concat(state.unresolvedRegions || []);
     if (savedRegions.length) {
       params.set("regions", savedRegions.join(","));
@@ -1281,11 +1297,12 @@
     };
   }
 
-  function recommend(data, resolution, type, selectedMetros, selectedExternalPaths) {
+  function recommend(data, resolution, type, selectedMetros, selectedExternalPaths, activation) {
     if (!resolution || !resolution.primary || !resolution.province) return null;
     return iataScopes.profile(data, {
       home: resolution.primary.seed.tag,
       province: resolution.province,
+      activation: activation,
       bridge: type === "high-site",
       cities: type === "high-site" ? selectedMetros || [] : [],
       external: type === "high-site" ? selectedExternalPaths || [] : []
@@ -1635,7 +1652,7 @@
     target.innerHTML = (state.migrationNeedsReview
       ? '<div class="mcc-note mcc-note-warning"><strong>Review the replacement scope list</strong><p>These saved zones need a new choice:</p><p><code>' + esc((state.unresolvedRegions || []).join(", ")) + '</code></p><label class="mcc-choice"><input type="checkbox" data-action="confirm-scope-migration"><span>I checked the replacement scope list.</span></label></div>'
       : '') +
-      '<p class="mcc-hint">Select only city zones this repeater links. Edge mode blocks unscoped floods.</p>' +
+      '<p class="mcc-hint">Select only city zones this repeater links. Edge mode blocks unscoped floods only at coordinated activation.</p>' +
       sharedNote +
       '<h3 class="mcc-picker-heading">Canadian regions</h3>' +
       '<p class="mcc-hint">An edge repeater can carry several IATA codes. Its province scope stays the province where it is installed.</p>' +
@@ -1729,6 +1746,11 @@
       '<a href="' + esc(href) + '">Rollout phases</a></div>';
   }
 
+  function activationKey(state) {
+    return JSON.stringify([state.resolution && state.resolution.primary.seed.tag, state.jurisdictionTag, state.type,
+      (state.selectedMetros || []).slice().sort(), (state.selectedExternalPaths || []).slice().sort()]);
+  }
+
   function renderResult(data, target, state) {
     if (!target) return;
     if (state.migrationNeedsReview) {
@@ -1743,8 +1765,17 @@
         '</div>';
       return;
     }
+    if (state.activationConfirmed && state.activationRegion !== activationKey(state)) {
+      state.activationConfirmed = false;
+      var confirmation = target.closest("[data-mcc-regions]").querySelector("[data-action='confirm-activation']");
+      if (confirmation) confirmation.checked = false;
+    }
+    if (state.activation === "activate" && (state.type === "unknown" || !state.activationConfirmed)) {
+      target.innerHTML = '<p class="mcc-status mcc-status-warning" role="status">Confirm the repeater type and local cutover in step 3 before generating activation commands.</p>';
+      return;
+    }
 
-    var rec = recommend(data, state.resolution, state.type, state.selectedMetros, state.selectedExternalPaths);
+    var rec = recommend(data, state.resolution, state.type, state.selectedMetros, state.selectedExternalPaths, state.activation);
     if (!rec) {
       target.innerHTML = '<div class="mcc-empty-state">' + icon("radio-tower") + '<strong>No region yet</strong></div>';
       return;
@@ -1875,7 +1906,7 @@
       '<div class="mcc-result-console">' +
       planningNotice(state.resolution) +
       (firmware === "1.14" ? '<div class="mcc-note mcc-note-warning">On firmware 1.14, this repeater\'s adverts stay unscoped. Upgrade to 1.15 or newer to scope its adverts by city.</div>' : '') +
-      '<div class="mcc-note mcc-note-warning"><strong>Before applying a new scope list</strong><p>Back up the current region list. Remove old entries before applying this profile; use USB if possible.</p><a href="' + esc(regionPageHref("standard") + '#existing-devices') + '">Migration instructions</a></div>' +
+      '<div class="mcc-note mcc-note-warning"><strong>' + (rec.activation === "prepare" ? 'Prepare scopes' : 'At the coordinated cutover only') + '</strong><p>' + (rec.activation === "prepare" ? 'Preparation keeps existing scopes, wildcard forwarding (*) and the default scope. Review the current list before adding names.' : 'Back up the current region list. Remove old entries before applying this profile; use USB if possible.') + '</p><a href="' + esc(regionPageHref("standard") + '#existing-devices') + '">Migration instructions</a></div>' +
       '<div class="mcc-result-head">' +
       '<div>' +
       '<h3 class="mcc-result-title"><code>' + esc(titleTag.toUpperCase()) + "</code> — " + esc(labelFor(data, titleTag)) + "</h3>" +
@@ -1892,6 +1923,7 @@
       (window.MeshCoreRegionProfile ? window.MeshCoreRegionProfile.render(data, titleTag, state.jurisdictionTag, new URL("../", regionPageHref("config")), state.resolution) : '') +
       '<div data-scope-migration></div>' +
       resultBody +
+      '<div data-scope-verification></div>' +
       '<section class="mcc-record-actions" aria-labelledby="mcc-record-heading">' +
       '<div><h4 id="mcc-record-heading">Setup summary</h4><p>Download or print a summary without exact coordinates, credentials, or device identifiers.</p></div>' +
       '<div><button type="button" class="mcc-button mcc-button-secondary" data-action="download-commissioning">' + icon("download") + 'Download</button>' +
@@ -1901,6 +1933,7 @@
       "</div>";
 
     if (window.MeshCoreScopeMigration) window.MeshCoreScopeMigration.mount(target.querySelector("[data-scope-migration]"), rec, firmware, copyText);
+    if (window.MeshCoreScopeMigration) window.MeshCoreScopeMigration.mountVerification(target.querySelector("[data-scope-verification]"), rec, firmware);
     var copy = target.querySelector(".mcc-copy-all");
     if (copy) {
       copy.addEventListener("click", function () {
@@ -1946,7 +1979,7 @@
 
   function currentCommands(data, state) {
     if (!state || !state.canGenerate || !state.resolution || state.migrationNeedsReview) return null;
-    var rec = recommend(data, state.resolution, state.type, state.selectedMetros, state.selectedExternalPaths);
+    var rec = recommend(data, state.resolution, state.type, state.selectedMetros, state.selectedExternalPaths, state.activation);
     if (!rec) return null;
     if (rec.budget.tagCount > 32 || rec.budget.responseBytes > 160) return null;
     var firmware = state.firmware || data.meta.defaultFirmware || "1.16";
@@ -1957,7 +1990,7 @@
 
   function commissioningSummary(data, state) {
     if (!state || !state.canGenerate || !state.resolution || !configuratorSupport.commissioningRecord) return null;
-    var rec = recommend(data, state.resolution, state.type, state.selectedMetros, state.selectedExternalPaths);
+    var rec = recommend(data, state.resolution, state.type, state.selectedMetros, state.selectedExternalPaths, state.activation);
     var commands = currentCommands(data, state);
     if (!rec || !commands) return null;
     var homeTag = state.resolution.primary.seed.tag;
@@ -1966,6 +1999,7 @@
       locationLabel: labelFor(data, homeTag),
       homeRegion: homeTag + " — " + labelFor(data, homeTag) + " (" + state.jurisdictionTag + ")",
       firmware: state.firmware === "1.16" ? "v1.16+" : "v" + state.firmware + ".x",
+      activation: state.activation,
       budget: rec.budget.tagCount + " / 32 tags, " + rec.budget.responseBytes + " / 160 bytes",
       radio: radioProfiles ? radioProfiles.label(state.radioProfile) : "Keep current settings",
       hashMode: state.hashMode === "keep" ? "Keep current settings" : (state.hashMode === "0" ? "1 byte" : String(Number(state.hashMode) + 1) + " bytes"),
@@ -2192,13 +2226,17 @@
       '</section>' +
       '<section class="mcc-card mcc-wizard-step" data-wizard-step="3" hidden>' +
       '<p class="mcc-step-label">Step 3 of 4</p>' +
-      '<h2>What should this node serve?</h2>' +
+      '<h2>Does this repeater regularly link another IATA region?</h2>' +
       '<div class="mcc-choice-list mcc-choice-list-large" data-role="types" role="radiogroup" aria-label="Repeater forwarding coverage">' +
       '<label class="mcc-choice"><input type="radio" name="mcc-type" value="residential" checked><span><strong>City repeater</strong><small>One IATA region; unscoped messages work locally.</small></span></label>' +
       '<label class="mcc-choice"><input type="radio" name="mcc-type" value="high-site"><span><strong>Edge repeater</strong><small>Regularly links repeaters in different IATA regions; blocks unscoped floods.</small></span></label>' +
+      '<label class="mcc-choice"><input type="radio" name="mcc-type" value="unknown"><span><strong>Not sure yet</strong><small>Preparation only until regular cross-region links are confirmed.</small></span></label>' +
       '</div>' +
       '<p class="mcc-hint" data-role="repeater-type-help">A repeater on the outer boundary stays a city repeater unless it regularly links to another IATA region.</p>' +
       '<p class="mcc-hint">Different cities or map outlines with the same IATA code still count as one region.</p>' +
+      '<p class="mcc-hint"><a href="https://onqc.meshmapper.net/?preset=all&l=rep.nbr.nz.nzb.rb">Check neighbours in MeshMapper</a>. If this is the only local repeater, agree on support for unscoped users before blocking them.</p>' +
+      '<label class="mcc-label" for="mcc-activation">Stage</label><select class="mcc-select" id="mcc-activation"><option value="prepare">Prepare scopes</option><option value="activate">Coordinated activation</option></select>' +
+      '<label class="mcc-choice" data-activation-confirm hidden><input type="checkbox" data-action="confirm-activation"><span>I checked the local cutover announcement and coordinated activation with neighbouring operators.</span></label>' +
       '<div data-role="metro"></div>' +
       '<label class="mcc-label" for="mcc-radio-profile">Radio network</label>' +
       '<select class="mcc-select" id="mcc-radio-profile"><option value="keep">Keep current settings</option></select>' +
@@ -2244,6 +2282,9 @@
       jurisdictionTag: null,
       deviceRole: "repeater",
       type: "residential",
+      activation: "prepare",
+      activationConfirmed: false,
+      activationRegion: null,
       firmware: data.meta.defaultFirmware || "1.16",
       radioProfile: "keep",
       hashMode: "keep",
@@ -2307,7 +2348,7 @@
 
     function renderReviewSummary() {
       if (!els.reviewSummary || !state.canGenerate || !state.resolution) return;
-      var rec = recommend(data, state.resolution, state.type, state.selectedMetros, state.selectedExternalPaths);
+      var rec = recommend(data, state.resolution, state.type, state.selectedMetros, state.selectedExternalPaths, state.activation);
       if (!rec) return;
       var deviceLabels = {
         repeater: "Repeater",
@@ -2683,6 +2724,8 @@
     el.querySelectorAll("input[name='mcc-type']").forEach(function (input) {
       input.addEventListener("change", function () {
         state.type = input.value;
+        state.activationConfirmed = false;
+        el.querySelector("[data-action='confirm-activation']").checked = false;
         state.selectedMetros = [];
         state.selectedExternalPaths = [];
         state.unresolvedRegions = [];
@@ -2691,6 +2734,23 @@
         refreshTool(data, els, state, updateMapLinks);
         updateMapLinks();
       });
+    });
+    var activationSelect = el.querySelector("#mcc-activation");
+    var activationCheck = el.querySelector("[data-action='confirm-activation']");
+    activationCheck.autocomplete = "off";
+    window.addEventListener("pageshow", function (event) {
+      if (event.persisted) { state.activationConfirmed = activationCheck.checked = false; renderResult(data, els.result, state); }
+    });
+    activationSelect.addEventListener("change", function () {
+      state.activation = activationSelect.value;
+      state.activationConfirmed = activationCheck.checked = false;
+      el.querySelector("[data-activation-confirm]").hidden = state.activation !== "activate";
+      renderResult(data, els.result, state); updateMapLinks();
+    });
+    activationCheck.addEventListener("change", function () {
+      state.activationConfirmed = activationCheck.checked;
+      state.activationRegion = activationKey(state);
+      renderResult(data, els.result, state); updateMapLinks();
     });
     el.querySelectorAll("input[name='mcc-firmware']").forEach(function (input) {
       input.addEventListener("change", function () {
@@ -2702,6 +2762,14 @@
     renderConfigRegionBrowser(state.browseTag);
     updateMapLinks();
     var initialParams = new URLSearchParams(window.location.search);
+    if (initialParams.get("type") === "unknown") {
+      state.type = "unknown";
+      el.querySelector("input[name='mcc-type'][value='unknown']").checked = true;
+    }
+    if (initialParams.get("activation") === "activate") {
+      state.activation = activationSelect.value = "activate";
+      el.querySelector("[data-activation-confirm]").hidden = false;
+    }
     keepLanguageSelection(state);
     var profileReady = radioProfiles ? radioProfiles.populate(profileSelect) : Promise.resolve();
     profileReady.then(function () {
@@ -2858,7 +2926,8 @@
       name: "",
       forcedTag: null,
       jurisdictionTag: null,
-      type: requestedLargeCoverage ? "high-site" : "residential",
+      type: requestedLargeCoverage ? "high-site" : mapParams.get("type") === "unknown" ? "unknown" : "residential",
+      activation: mapParams.get("activation") === "activate" ? "activate" : "prepare",
       firmware: data.meta.defaultFirmware || "1.16",
       radioProfile: "keep",
       hashMode: ["0", "1", "2"].indexOf(mapParams.get("hash")) !== -1 ? mapParams.get("hash") : "keep",
@@ -2984,7 +3053,7 @@
       if (!map || !selectedLayer) return;
       selectedLayer.clearLayers();
       if (state.canGenerate) {
-        var rec = recommend(data, state.resolution, state.type, state.selectedMetros, state.selectedExternalPaths);
+        var rec = recommend(data, state.resolution, state.type, state.selectedMetros, state.selectedExternalPaths, state.activation);
         if (data.partitionByTag) {
           var selectedTags = rec ? rec.leaves : [state.resolution.primary.seed.tag];
           selectedLayer.addData({
@@ -3008,7 +3077,7 @@
         return;
       }
       var tag = state.resolution.primary.seed.tag;
-      var rec = recommend(data, state.resolution, state.type, state.selectedMetros, state.selectedExternalPaths);
+      var rec = recommend(data, state.resolution, state.type, state.selectedMetros, state.selectedExternalPaths, state.activation);
       var aliases = (data.regionAliases[tag] || []).filter(function (alias) {
         return normalizeLocationSearch(alias) !== normalizeLocationSearch(tag) &&
           normalizeLocationSearch(alias) !== normalizeLocationSearch(labelFor(data, tag));
@@ -3152,7 +3221,7 @@
         map = L.map(els.canvas, { minZoom: 1, maxZoom: 13 });
         var loadingMap = map;
         activeMaps.push({ container: el, map: map });
-        var initialRec = state.canGenerate && recommend(data, state.resolution, state.type, state.selectedMetros, state.selectedExternalPaths);
+        var initialRec = state.canGenerate && recommend(data, state.resolution, state.type, state.selectedMetros, state.selectedExternalPaths, state.activation);
         var initialFeatures = initialRec && data.partitionRegions
           ? data.partitionRegions.features.filter(function (feature) { return initialRec.leaves.indexOf(feature.properties.tag) !== -1; }) : [];
         var initialBounds = initialFeatures.length ? L.geoJSON(initialFeatures).getBounds() : null;

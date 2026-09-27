@@ -147,6 +147,20 @@ PR. Une vérification hebdomadaire regroupe les changements de MeshMapper dans u
 ticket à examiner; rien n’est publié automatiquement. Les réglages confirmés sont
 à revérifier après six mois.
 
+### Préparer, puis activer localement
+
+Le configurateur commence en mode **Préparer les portées**. Il ajoute ou
+modifie les portées nommées sans supprimer les anciennes ni changer `*` ou
+la portée par défaut. Sauvegardez d’abord et vérifiez les limites du
+micrologiciel. Les parents des noms correspondants peuvent être ramenés à
+la racine pour la nouvelle structure sans hiérarchie.
+
+Choisissez **Activation coordonnée** seulement après avoir vérifié l’annonce
+locale et la préparation des opérateurs voisins. En ON/QC, cette transition
+se coordonne avec la phase 2, janvier 2027 au plus tôt; la date ne suffit pas.
+Les autres provinces fixent leur calendrier. Le nettoyage et les exemples
+ville/bordure ci-dessous concernent l’activation, pas la préparation.
+
 ### Comparer une configuration existante
 
 À la dernière étape du configurateur, ouvrez **Vérifier une liste de régions
@@ -173,6 +187,9 @@ configuration ne répond pas, vérifiez la connexion et renvoyez-la avec
 anciennes à jour avant d’utiliser les identifiants canadiens de 3 octets.
 
 ### Retirer les anciennes entrées {#existing-devices}
+
+**À la transition coordonnée seulement.** Gardez les anciennes portées pendant
+la préparation. Les étapes de suppression ci-dessous ne s’appliquent pas encore.
 
 Utilisez de préférence une connexion USB pour éviter de perdre l’accès de
 gestion pendant le changement. Exécutez `region` et conservez une copie.
@@ -273,7 +290,11 @@ Les commandes peuvent prendre effet ou être enregistrées dès leur saisie.
 Conservez une sauvegarde : un redémarrage ne suffit pas nécessairement à les
 annuler. Vérifiez chaque réponse et arrêtez-vous en cas d’erreur.
 Après `region save`, vérifiez les noms et les indicateurs `F` avec `region`.
-Sur un répéteur de bordure, `*` ne doit pas porter `F`.
+Après l’activation, `*` ne doit pas porter `F` sur un répéteur de bordure.
+Pendant la préparation, conservez son indicateur précédent. Utilisez
+**Vérifier le résultat**, puis testez les messages locaux et, lors de la
+transition, de nouveaux MP interrégionaux dans les deux sens. Une concordance
+du texte ne prouve pas la livraison radio.
 
 ## Compagnons et canaux
 

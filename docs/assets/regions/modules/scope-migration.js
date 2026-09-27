@@ -27,7 +27,16 @@
     var old = new Map(current.nodes.map(function (node) { return [node.name, node]; }));
     var kept = desired.tags.filter(function (tag) { return old.has(tag); });
     var added = desired.tags.filter(function (tag) { return !old.has(tag); });
-    var removed = current.nodes.filter(function (node) { return node.name !== "*" && desired.tags.indexOf(node.name) === -1; });
+    var preparing = desired.activation === "prepare";
+    var removed = preparing ? [] : current.nodes.filter(function (node) { return node.name !== "*" && desired.tags.indexOf(node.name) === -1; });
+    if (preparing && current.nodes.length - 1 + added.length > scope.maxTags) throw new Error("Region table would be full");
+    if (preparing) {
+      var union = current.nodes.filter(function (node) { return node.name !== "*"; }).map(function (node) { return node.name; }).concat(added);
+      var parents = {};
+      current.nodes.forEach(function (node) { if (node.name !== "*") parents[node.name] = node.parent === "*" ? null : node.parent; });
+      desired.tags.forEach(function (tag) { parents[tag] = desired.parentOverrides[tag] || null; });
+      if (scope.budget(union, parents).responseBytes > scope.maxResponseBytes) throw new Error("Combined region list would be truncated");
+    }
     var changes = kept.filter(function (tag) { var node = old.get(tag); return !node.forward || node.parent !== (desired.parentOverrides[tag] || "*"); });
     var commands = [];
     // Detach retained children before removing their obsolete ancestors.
@@ -37,8 +46,56 @@
     if (current.home && current.home !== "*" && removed.some(function (node) { return node.name === current.home; })) commands.push("region home " + desired.home);
     commands.push("region", "region save", "region");
     return { kept: kept, added: added, removed: removed.map(function (node) { return node.name; }), changed: changes,
-      wildcard: { before: old.get("*").forward, after: !desired.bridge },
-      defaultScope: { before: current.defaultScope, after: firmware === "1.14" ? null : desired.home }, commands: commands };
+      wildcard: { before: old.get("*").forward, after: preparing ? old.get("*").forward : !desired.bridge },
+      defaultScope: { before: current.defaultScope, after: preparing ? current.defaultScope : firmware === "1.14" ? null : desired.home }, commands: commands };
+  }
+
+  function verify(current, desired, firmware) {
+    var nodes = new Map(current.nodes.map(function (node) { return [node.name, node]; }));
+    var missing = desired.tags.filter(function (tag) { return !nodes.has(tag); });
+    var incorrect = desired.tags.filter(function (tag) { var node = nodes.get(tag); return node && (!node.forward || node.parent !== (desired.parentOverrides[tag] || "*")); });
+    var preparing = desired.activation === "prepare";
+    var unexpected = preparing ? [] : current.nodes.filter(function (node) { return node.name !== "*" && !desired.tags.includes(node.name); }).map(function (node) { return node.name; });
+    var wildcard = preparing || nodes.get("*").forward === !desired.bridge;
+    var hasDefault = !preparing && (firmware === "1.15" || firmware === "1.16");
+    var defaultMatches = !hasDefault || (current.defaultScope ? current.defaultScope === desired.home : null);
+    return { missing: missing, incorrect: incorrect, unexpected: unexpected, wildcard: wildcard, defaultMatches: defaultMatches,
+      matches: !missing.length && !incorrect.length && !unexpected.length && wildcard && defaultMatches !== false,
+      complete: defaultMatches !== null };
+  }
+
+  function mountVerification(root, desired, firmware) {
+    if (!root) return;
+    var fr = document.documentElement.lang.startsWith("fr");
+    var t = function (en, french) { return fr ? french : en; };
+    var hasDefault = desired.activation !== "prepare" && (firmware === "1.15" || firmware === "1.16");
+    root.className = "mc-scope-check";
+    root.innerHTML = '<details><summary>' + t("Verify the result", "Vérifier le résultat") + '</summary><p>' +
+      t("After applying and saving, run region and paste the complete reply. This checks text only, not the radio or coverage. Nothing leaves this tab.", "Après l’application et l’enregistrement, lancez region et collez la réponse complète. Cette vérification porte sur le texte, pas sur la radio ni la couverture. Rien ne quitte cet onglet.") + '</p>' +
+      '<label>' + t("Result of region", "Réponse de region") + '<textarea data-verify-list rows="7" maxlength="4096" spellcheck="false" autocomplete="off"></textarea></label>' +
+      (hasDefault ? '<label>' + t("Result of region default", "Réponse de region default") + '<input data-verify-default maxlength="60" autocomplete="off"></label>' : '') +
+      '<button type="button" class="md-button mcc-button" data-verify-check>' + t("Check these settings", "Vérifier ces réglages") + '</button><p data-verify-status role="status"></p><pre data-verify-details hidden></pre>' +
+      '<p>' + (desired.activation === "prepare" ? t("Preparation: test local unscoped messaging. Keep existing wildcard and default-scope settings; coordinate any change with local operators.", "Préparation : testez les messages locaux sans portée. Conservez les réglages actuels du joker et de la portée par défaut; coordonnez tout changement avec les opérateurs locaux.") : t("After coordinated activation: test a local channel, then a new cross-region DM and its reply using the agreed scopes. A saved DM path alone does not test discovery.", "Après l’activation coordonnée : testez un canal local, puis un nouveau MP interrégional et sa réponse avec les portées convenues. Un chemin de MP déjà enregistré ne teste pas la découverte.")) + '</p>' +
+      '<p>' + t("Stop on Err or a failed test. Use USB and your saved configuration to restore the known-working settings. A saved region list is not a full device backup.", "Arrêtez sur Err ou en cas d’échec. Utilisez USB et votre sauvegarde pour rétablir les réglages fonctionnels. Une liste de régions n’est pas une sauvegarde complète de l’appareil.") + '</p></details>';
+    var list = root.querySelector("[data-verify-list]"), def = root.querySelector("[data-verify-default]");
+    var status = root.querySelector("[data-verify-status]"), details = root.querySelector("[data-verify-details]");
+    function clear() { status.textContent = ""; details.textContent = ""; details.hidden = true; }
+    list.addEventListener("input", clear);
+    if (def) def.addEventListener("input", clear);
+    root.querySelector("[data-verify-check]").addEventListener("click", function () {
+      clear();
+      try {
+        var result = verify(parse(list.value, def ? def.value : ""), desired, firmware);
+        status.textContent = !result.matches ? t("Settings differ. Review the details before continuing.", "Les réglages diffèrent. Examinez les détails avant de continuer.") : result.complete ?
+          t("The pasted scope settings match this selection. Complete the radio tests below.", "Les réglages de portée collés correspondent à ce choix. Effectuez les essais radio ci-dessous.") :
+          t("The region list matches; paste region default to finish checking the default scope.", "La liste correspond; collez region default pour terminer la vérification de la portée par défaut.");
+        var findings = [];
+        [["missing", t("Missing: ", "Manquants : ")], ["incorrect", t("Parent or forwarding differs: ", "Parent ou retransmission différent : ")], ["unexpected", t("Unexpected: ", "Non prévus : ")]].forEach(function (field) { if (result[field[0]].length) findings.push(field[1] + result[field[0]].join(", ")); });
+        if (!result.wildcard) findings.push(t("Wildcard forwarding (*) differs.", "La retransmission du joker (*) diffère."));
+        if (result.defaultMatches === false) findings.push(t("Default scope differs.", "La portée par défaut diffère."));
+        details.textContent = findings.join("\n"); details.hidden = !findings.length;
+      } catch (_) { status.textContent = t("Cannot read this reply. Paste the complete region list with indentation, without prompts or other commands.", "Impossible de lire cette réponse. Collez la liste complète avec ses retraits, sans invite ni autre commande."); }
+    });
   }
 
   function mount(root, desired, firmware, copy) {
@@ -74,9 +131,14 @@
         find("report").textContent = t("Keep: ", "Conserver : ") + list(result.kept) + "\n" + t("Add: ", "Ajouter : ") + list(result.added) + "\n" +
           t("Change parent/forwarding: ", "Changer le parent/la retransmission : ") + list(result.changed) + "\n" + t("Remove: ", "Supprimer : ") + list(result.removed) + "\n" +
           "* : " + forwarding(result.wildcard.before) + " → " + forwarding(result.wildcard.after) + "\n" +
-          t("Default scope: ", "Scope par défaut : ") + (result.defaultScope.before || t("unknown", "inconnu")) + " → " + (result.defaultScope.after || t("unchanged (1.14)", "inchangé (1.14)"));
+          t("Default scope: ", "Scope par défaut : ") + (result.defaultScope.before || t("unknown", "inconnu")) + " → " + (desired.activation === "prepare" ? t("unchanged", "inchangé") : result.defaultScope.after || t("unchanged (1.14)", "inchangé (1.14)"));
         ["report", "review", "backup"].forEach(function (name) { find(name).hidden = false; });
-      } catch (_) { find("status").textContent = t("Cannot safely read this list. Paste the complete region response with its indentation, without prompts or other commands. Check the optional default value too.", "Impossible de lire cette liste de façon sûre. Collez la réponse complète de region avec ses retraits, sans invite ni autre commande. Vérifiez aussi la valeur facultative du scope par défaut."); }
+      } catch (error) {
+        if (current && /full|truncated/.test(error.message)) {
+          find("backup").hidden = false;
+          find("status").textContent = t("The combined preparation list would exceed the firmware limits. Keep the working configuration and coordinate a reviewed migration; no removal commands were generated.", "La liste combinée dépasserait les limites du micrologiciel. Gardez la configuration fonctionnelle et coordonnez une migration révisée; aucune commande de suppression n’a été générée.");
+        } else find("status").textContent = t("Cannot safely read this list. Paste the complete region response with its indentation, without prompts or other commands. Check the optional default value too.", "Impossible de lire cette liste de façon sûre. Collez la réponse complète de region avec ses retraits, sans invite ni autre commande. Vérifiez aussi la valeur facultative du scope par défaut.");
+      }
     });
     find("review").querySelector("input").addEventListener("change", function (event) {
       var approved = !!result && event.target.checked;
@@ -93,5 +155,5 @@
       setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
     });
   }
-  globalThis.MeshCoreScopeMigration = { parse: parse, plan: plan, mount: mount };
+  globalThis.MeshCoreScopeMigration = { parse: parse, plan: plan, verify: verify, mount: mount, mountVerification: mountVerification };
 })();

@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "./site-fixtures.mjs";
 import { siteRoute } from "./site-route.mjs";
+import { proposalOperator } from "./activation-helpers.mjs";
 import "../../docs/assets/regions/modules/iata-scopes.js";
 
 const catalog = JSON.parse(readFileSync("docs/assets/regions/iata-regions.json", "utf8"));
@@ -37,21 +38,25 @@ for (const locale of ["", "fr/"]) {
     await expect(page.locator('[data-scp-area]')).toHaveValue("ytr:on");
     await expect(page.locator('[data-scp-region-name]')).toHaveText("Quinte West (YTR) · Ontario");
     await expect(page.locator('[data-scp-tags] .scp-tag')).toHaveText(["ytr", "on", "onqc", "can", "na"]);
+    await proposalOperator(page);
     for (const version of ["110", "114", "115", "116"]) {
       await page.locator('[data-scp-firmware]').selectOption(version);
       const fw = {110:"1.10",114:"1.14",115:"1.15",116:"1.16"}[version];
-      await expect(page.locator('[data-scp-output="region"] code')).toHaveText(engine.commands(engine.profile(catalog, {home:"ytr",province:"on"}), fw).concat("region save"));
+      await expect(page.locator('[data-scp-output="region"] code')).toHaveText(engine.commands(engine.profile(catalog, { activation: "activate", home:"ytr",province:"on"}), fw).concat("region save"));
       await expect(page.locator('[data-scp-output="standard"] code')).toHaveText(engine.standardCommands(fw));
     }
     await page.locator('[data-scp-type]').selectOption("edge");
+    await page.locator('[data-scp-activate]').check();
     await expect(page.locator('[data-scp-extra] option[value="ytr"]')).toHaveJSProperty("disabled", true);
     await page.locator('[data-scp-extra]').selectOption("ygk");
-    const commands = engine.commands(engine.profile(catalog, {home:"ytr",province:"on",bridge:true,cities:["ygk"]}), "1.16").concat("region save");
+    const commands = engine.commands(engine.profile(catalog, { activation: "activate", home:"ytr",province:"on",bridge:true,cities:["ygk"]}), "1.16").concat("region save");
     await expect(page.locator('[data-scp-output="region"] code')).toHaveText(commands);
     await expect(page.locator('[data-scp-map]')).toHaveAttribute("href", new RegExp(`/${locale}config/map/\\?tag=ytr&province=on$`));
     const share = await page.locator('[data-scp-share]').getAttribute("href");
-    expect(share).toContain("tag=ytr&province=on&firmware=116&type=edge&neighbour=ygk#your-region");
+    expect(Object.fromEntries(new URL(share).searchParams)).toEqual({tag:"ytr",province:"on",role:"repeater",firmware:"116",type:"edge",activation:"activate",neighbour:"ygk"});
+    expect(new URL(share).hash).toBe("#your-region");
     await page.goto(share);
+    await page.locator('[data-scp-activate]').check();
     await expect(page.locator('[data-scp-output="region"] code')).toHaveText(commands);
     await page.locator('[data-scp-result] a.md-button').click();
     await expect(page).toHaveURL(new RegExp(locale ? "#etape-4-reglages-de-region$" : "#step-4-region-settings$"));
@@ -68,6 +73,7 @@ for (const locale of ["", "fr/"]) {
     });
     await page.goto(route);
     await expect(page.locator('[data-scp-picker]')).toBeVisible();
+    await proposalOperator(page,{activate:false});
     for (const [name, selection] of [["Belleville","ytr:on"],["Trenton","ytr:on"],["Gatineau","yow:qc"],["Wingham","ykf:on"]]) {
       await search(page, name);
       await expect(page.locator('[data-scp-area]')).toHaveValue(selection);
@@ -89,6 +95,7 @@ for (const locale of ["", "fr/"]) {
     await noCommands(page);
     await expect(page.locator('[data-scp-places] button')).toHaveCount(2);
     await page.locator('[data-scp-places] button').filter({hasText:"QC"}).click();
+    await proposalOperator(page,{activate:false});
     await expect(page.locator('[data-scp-output="region"] code').first()).toContainText("yow|* qc|* onqc");
     await search(page, "Camb");
     await expect(page.locator('[data-scp-places] button')).toHaveCount(2);
@@ -113,6 +120,7 @@ for (const locale of ["", "fr/"]) {
     await noCommands(page);
     await page.locator('[data-scp-places] button').click();
     await expect(page.locator('[data-scp-area]')).toHaveValue("ytr:on");
+    await proposalOperator(page,{activate:false});
     await page.unroute(geocoder);
     let release;
     const held = new Promise(resolve => { release = resolve; });

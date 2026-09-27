@@ -85,6 +85,7 @@
     });
     return {
       home: home, province: province, bridge: bridge,
+      activation: selection.activation === "activate" ? "activate" : "prepare",
       tags: tags, leaves: cities, jurisdictions: [province],
       paths: canadianTags.map(function (tag) { return [tag]; })
         .concat(external.map(function (record) { return record.path; })),
@@ -117,9 +118,17 @@
   function commands(result, firmware) {
     firmware = firmware || "1.16";
     if (["1.10", "1.14", "1.15", "1.16"].indexOf(firmware) === -1) throw new Error("Choose a supported firmware version.");
-    var lines = definitionCommands(result, firmware).concat([result.bridge ? "region denyf *" : "region allowf *"]);
+    var lines = definitionCommands(result, firmware);
+    // Preparation adds/updates named scopes, never the wildcard or default.
+    if (result.activation === "prepare") return lines;
+    lines.push(result.bridge ? "region denyf *" : "region allowf *");
     if (firmware === "1.15" || firmware === "1.16") lines.push("region default " + result.home);
     return lines;
+  }
+
+  function forwards(result, tag) {
+    if (tag === "*") return result.activation === "prepare" ? null : !result.bridge;
+    return result.tags.indexOf(tag) !== -1;
   }
 
   function standardCommands(firmware, includeHash) {
@@ -156,6 +165,6 @@
     return found.length === 1 ? found[0].properties.tag : null;
   }
 
-  return { profile: profile, commands: commands, standardCommands: standardCommands, budget: budget, contains: contains, matches: matches, provinceAt: provinceAt,
+  return { profile: profile, commands: commands, forwards: forwards, standardCommands: standardCommands, budget: budget, contains: contains, matches: matches, provinceAt: provinceAt,
     maxTags: MAX_REGIONS, maxResponseBytes: MAX_RESPONSE_BYTES, maxCommandBytes: MAX_COMMAND_BYTES };
 }));

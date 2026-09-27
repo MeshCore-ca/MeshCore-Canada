@@ -1,5 +1,6 @@
 import { expect, test } from "./site-fixtures.mjs";
 import { siteRoute } from "./site-route.mjs";
+import { activateConfig } from "./activation-helpers.mjs";
 import { readFile } from "node:fs/promises";
 
 for (const locale of ["", "fr/"]) {
@@ -27,6 +28,7 @@ for (const locale of ["", "fr/"]) {
   test(`${locale || "en/"} older firmware gets explicit permissions and no unsupported advert command`, async ({ page }) => {
     for (const firmware of ["1.14", "1.15"]) {
       await page.goto(siteRoute(`/${locale}config/?tag=yow&province=on&step=4&firmware=${firmware}&instructions=technical`));
+      await activateConfig(page);
       const result = page.locator('[data-role="result"]');
       await expect(result).toContainText("region put yow");
       await expect(result).toContainText("region allowf *");
@@ -73,6 +75,7 @@ for (const locale of ["", "fr/"]) {
     const errors = [];
     page.on("pageerror", error => errors.push(error.message));
     await page.goto(siteRoute(`/${locale}config/?tag=yow&province=qc&type=large&regions=yul&step=4&instructions=technical`));
+    await activateConfig(page);
     const result = page.locator('[data-role="result"]');
     await expect(result).toContainText("region def yow|* yul|* qc|* onqc|* can|* na");
     await expect(result).toContainText("region denyf *");
@@ -84,6 +87,7 @@ for (const locale of ["", "fr/"]) {
 
   test(`${locale || "en/"} Gatineau coordinates select yow with qc, not a separate legacy region`, async ({ page }) => {
     await page.goto(siteRoute(`/${locale}config/?lat=45.4765&lon=-75.7013&province=on&step=4&instructions=technical`));
+    await activateConfig(page);
     await expect(page.locator('[data-role="result"]')).toContainText("region def yow|* qc|* onqc|* can|* na");
     await expect(page.locator('[data-role="result"]')).toContainText("region allowf *");
     await expect(page.locator("#mcc-home-province")).toHaveValue("qc");

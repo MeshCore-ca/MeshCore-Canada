@@ -86,7 +86,7 @@ vm.runInContext(read("docs/assets/regions/modules/iata-scopes.js"), context);
 const api = context.MeshCoreIataScopes;
 for (const seed of data.seeds) {
   for (const province of seed.provinces) {
-    const result = api.profile(data, { home: seed.tag, province });
+    const result = api.profile(data, { activation: "activate",  home: seed.tag, province });
     assert.ok(result.tags.every(tag => result.parentOverrides[tag] === null));
     assert.ok(api.commands(result).every(line => Buffer.byteLength(line) <= 160));
     assert.ok(result.budget.tagCount <= 32 && result.budget.responseBytes <= 160);

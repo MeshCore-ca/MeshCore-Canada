@@ -121,7 +121,7 @@ test("neighbouring network paths remain explicit and do not become Canadian geom
   const result = api.resolveLocation(data, 43.6532, -79.3832);
   const local = api.recommend(data, result, "residential", [], []);
   assert.ok(!local.tags.includes("us"));
-  const bridge = api.recommend(data, result, "high-site", ["yyz", "ykf"], [wny]);
+  const bridge = api.recommend(data, result, "high-site", ["yyz", "ykf"], [wny], "activate");
   assert.equal(scopes.commands(bridge)[0], "region def yyz|* ykf|* on|* onqc|* can|* na|* us us-ny");
   assert.equal(scopes.commands(bridge)[1], "region denyf *");
   assert.ok(bridge.notes.every(note => !note.includes("before applying")));

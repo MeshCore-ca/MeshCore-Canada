@@ -1,5 +1,6 @@
 import { expect, test } from "./site-fixtures.mjs";
 import { siteRoute } from "./site-route.mjs";
+import { proposalOperator } from "./activation-helpers.mjs";
 
 const removals = ["region remove ott", "region remove on-alg", "region remove on", "region remove can", "region save", "region"];
 
@@ -9,6 +10,7 @@ for (const locale of ["", "fr/"]) {
     await expect(page.locator('.scp-level-card')).toHaveCount(5);
     await expect(page.locator('.scp-level-card[data-level="future"] .scp-tag')).toHaveText(["can", "na"]);
     await page.locator('[data-scp-area]').selectOption("yow:on");
+    await proposalOperator(page);
     const codes = ["yow", "on", "onqc", "can", "na"];
     for (const version of ["110", "114", "115", "116"]) {
       await page.locator('[data-scp-firmware]').selectOption(version);
@@ -20,6 +22,7 @@ for (const locale of ["", "fr/"]) {
       await expect(page.locator('[data-scp-output="region"] code')).toHaveText(expected);
     }
     await page.locator('[data-scp-type]').selectOption("edge");
+    await page.locator('[data-scp-activate]').check();
     await expect(page.locator('[data-scp-output="region"] code')).toHaveText([
       "region def yow|* on|* onqc|* can|* na", "region denyf *", "region default yow", "region save"
     ]);
@@ -30,6 +33,8 @@ for (const locale of ["", "fr/"]) {
     const errors = [];
     page.on("pageerror", error => errors.push(error.message));
     await page.goto(siteRoute(`/${locale}proposals/onqc-scopes/`));
+    await expect(page.locator('[data-scp-picker]')).toBeVisible();
+    await proposalOperator(page);
     const ask = page.locator('[data-scp-ask]');
     const old = page.locator('[data-scp-branch="old"]');
     const clean = page.locator('[data-scp-branch="clean"]');
@@ -63,8 +68,8 @@ for (const locale of ["", "fr/"]) {
     await explanation.locator('summary').click();
     await expect(explanation.locator('figure')).toBeHidden();
     const neighbours = page.locator('a[href^="https://onqc.meshmapper.net/?preset=all"]');
-    await expect(neighbours).toHaveCount(1);
-    expect(new URL(await neighbours.getAttribute("href")).searchParams.get("l")).toBe("rep.nbr.nz.nzb.rb");
+    await expect(neighbours).toHaveCount(2);
+    expect(new URL(await neighbours.first().getAttribute("href")).searchParams.get("l")).toBe("rep.nbr.nz.nzb.rb");
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1)).toBeTruthy();
 
     // The independent cleanup question must survive a catalogue outage too.

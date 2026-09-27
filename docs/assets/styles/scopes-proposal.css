@@ -970,6 +970,16 @@
 .md-typeset .scp-finder__result { border-top: 1px solid var(--mc-color-border); }
 .md-typeset .scp-finder__links { gap: var(--mc-space-3); }
 
+.md-typeset .scp-finder__wide,
+.md-typeset .scp-finder__tag-label { grid-column: 1 / -1; flex-basis: 100%; }
+.md-typeset .scp-finder__tag-label { font-size: 0.8rem; }
+.md-typeset .scp-finder__details { margin-top: var(--mc-space-3); }
+.md-typeset .scp-finder__details summary { cursor: pointer; font-weight: 600; min-height: 44px; }
+.md-typeset [data-scp-readiness] > div { display: flex; flex-wrap: wrap; gap: 0.3rem 0.65rem; }
+.md-typeset [data-scp-readiness] dt { font-weight: 600; }
+.md-typeset [data-scp-readiness] dd { margin: 0; }
+.md-typeset .scp-finder__details .mc-region-profile { margin: var(--mc-space-3) 0 0; }
+
 /* ---------- Command cards ---------- */
 
 .md-typeset .scp-card {

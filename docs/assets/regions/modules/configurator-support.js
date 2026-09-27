@@ -30,6 +30,7 @@
       "Location label: " + (normalizeText(input.locationLabel) || "Not recorded"),
       "Home region: " + normalizeText(input.homeRegion),
       "Firmware: " + normalizeText(input.firmware),
+      "Stage: " + (input.activation === "activate" ? "Coordinated activation" : "Prepare scopes"),
       "Region budget: " + normalizeText(input.budget),
       "Radio network: " + normalizeText(input.radio || "Keep current settings"),
       "Advert ID size: " + normalizeText(input.hashMode || "Keep current settings"),
@@ -42,7 +43,7 @@
     lines.push(
       "",
       "Verification:",
-      "1. Back up and remove obsolete regions before applying a fresh scope list, preferably over USB.",
+      input.activation === "activate" ? "1. At the coordinated cutover: back up and review removal of obsolete regions, preferably over USB." : "1. Preparation: back up first; keep old scopes, wildcard forwarding (*) and the default scope unchanged.",
       "2. Run region and compare every scope and flood permission above. Some commands save immediately.",
       "3. Run region again after saving.",
       "4. If radio settings changed, reboot and run get radio to confirm them.",

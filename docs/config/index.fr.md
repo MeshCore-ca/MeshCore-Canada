@@ -18,19 +18,21 @@ page_styles:
 page_scripts:
   - assets/javascripts/place-search.js?v=20260925-2
   - assets/javascripts/radio-profiles.js?v=20260904-1
-  - assets/regions/modules/configurator-support.js?v=20260925-1
-  - assets/regions/modules/iata-scopes.js?v=20260926-1
-  - assets/regions/modules/scope-migration.js?v=20260925-2
-  - assets/regions/regions.js?v=20260926-4
+  - assets/regions/modules/configurator-support.js?v=20260926-1
+  - assets/regions/modules/iata-scopes.js?v=20260926-2
+  - assets/regions/modules/scope-migration.js?v=20260926-2
+  - assets/regions/regions.js?v=20260926-5
 hide:
   - navigation
   - toc
 ---
 # Configurer les portées d’un répéteur
 
-Choisissez les régions IATA desservies par ce répéteur. Un répéteur de ville
-laisse passer les messages sans portée; un répéteur de bordure les bloque.
-Vérifiez les anciennes régions avant d’appliquer un nouveau profil.
+Choisissez les régions IATA desservies par ce répéteur. La préparation conserve
+la retransmission du joker et la portée par défaut. Lors d’une transition
+coordonnée localement, les répéteurs de ville autorisent les messages sans
+portée et ceux de bordure les bloquent. Examinez la configuration actuelle
+avant d’appliquer des commandes.
 
 <div data-mcc-regions="config" data-mcc-root="./"></div>
 

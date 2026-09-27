@@ -1,5 +1,6 @@
 import { test, expect } from "./site-fixtures.mjs";
 import { siteRoute } from "./site-route.mjs";
+import { proposalOperator, activateConfig } from "./activation-helpers.mjs";
 import { readFileSync } from "node:fs";
 import "../../docs/assets/regions/modules/iata-scopes.js";
 const catalog = JSON.parse(readFileSync("docs/assets/regions/iata-regions.json", "utf8"));
@@ -13,6 +14,7 @@ for (const locale of ["", "fr/"]) {
       await expect(step.getByRole("radio", { name: locale ? "Répéteur de ville" : "City repeater" })).toBeChecked();
       await expect(step.locator('[data-role="repeater-type-help"]')).toContainText(locale ? "limite extérieure" : "outer boundary");
       await expect(step).toContainText(locale ? "même code IATA" : "same IATA code");
+      await activateConfig(page);
       await step.locator('[data-next-step]').click();
       const result = page.locator('[data-role="result"]');
       await expect(result).toContainText(`region def ${tag}|*`);
@@ -23,6 +25,7 @@ for (const locale of ["", "fr/"]) {
     await page.goto(siteRoute(`/${locale}config/?tag=yow&province=on&type=large&step=3&instructions=technical`));
     const step = page.locator('[data-wizard-step="3"]');
     await expect(step.getByRole("radio", { name: locale ? "Répéteur de bordure" : "Edge repeater" })).toBeChecked();
+    await activateConfig(page);
     await step.locator('[data-next-step]').click();
     await expect(page.locator('[data-role="result"]')).toContainText("region def yow|* on|* onqc|* can|* na");
     await expect(page.locator('[data-role="result"]')).toContainText("region denyf *");
@@ -48,6 +51,7 @@ for (const locale of ["", "fr/"]) {
 
   test(`${locale || "en/"} migration requires removal review, stays local and clears on edit`, async ({ page }) => {
     await page.goto(siteRoute(`/${locale}config/?tag=yow&province=on&step=4&instructions=technical`));
+    await activateConfig(page);
     const panel=page.locator('[data-scope-migration]');
     await panel.locator("summary").click();
     const requests=[]; page.on("request", request=>requests.push(request.url()+" "+(request.postData()||"")));
@@ -87,18 +91,20 @@ for (const locale of ["", "fr/"]) {
   test(`${locale || "en/"} proposal picker shares commands and keeps static examples on failure`, async ({ page }) => {
     await page.goto(siteRoute(`/${locale}proposals/onqc-scopes/`));
     const picker=page.locator('[data-scp-picker]'); await expect(picker).toBeVisible();
-    await expect(picker.locator('[data-scp-type]')).toContainText(locale ? "Répéteur de bordure" : "Edge repeater");
+    await expect(picker.locator('[data-scp-type]')).toContainText(locale ? "répéteur de bordure" : "edge repeater");
     const guidance = page.locator('.mc-callout').filter({ hasText: locale ? "Ville ou bordure?" : "City or edge?" });
     await expect(guidance).toContainText(locale ? "limite extérieure" : "outer edge");
     await expect(guidance).toContainText(locale ? "même code IATA" : "same IATA code");
     await picker.locator('[data-scp-area]').selectOption("yow:on");
+    await proposalOperator(page);
     const home=await picker.locator('[data-scp-area]').evaluate(select=>({home:select.selectedOptions[0].dataset.city,province:select.selectedOptions[0].dataset.province}));
     for(const [value,firmware] of [["116","1.16"],["115","1.15"],["114","1.14"],["110","1.10"]]) {
       await picker.locator('[data-scp-firmware]').selectOption(value);
       for(const bridge of [false,true]) {
         await picker.locator('[data-scp-type]').selectOption(bridge ? "edge" : "city");
+        await picker.locator('[data-scp-activate]').check();
         if (bridge) await picker.locator('[data-scp-extra]').selectOption("");
-        const expected=globalThis.MeshCoreIataScopes.commands(globalThis.MeshCoreIataScopes.profile(catalog,{...home,bridge}),firmware).concat(["region save"]);
+        const expected=globalThis.MeshCoreIataScopes.commands(globalThis.MeshCoreIataScopes.profile(catalog,{ activation: "activate", ...home,bridge}),firmware).concat(["region save"]);
         await expect(page.locator('[data-scp-output="region"]').first().locator("code")).toHaveText(expected);
       }
     }

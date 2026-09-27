@@ -18,19 +18,20 @@ page_styles:
 page_scripts:
   - assets/javascripts/place-search.js?v=20260925-2
   - assets/javascripts/radio-profiles.js?v=20260904-1
-  - assets/regions/modules/configurator-support.js?v=20260925-1
-  - assets/regions/modules/iata-scopes.js?v=20260926-1
-  - assets/regions/modules/scope-migration.js?v=20260925-2
-  - assets/regions/regions.js?v=20260926-4
+  - assets/regions/modules/configurator-support.js?v=20260926-1
+  - assets/regions/modules/iata-scopes.js?v=20260926-2
+  - assets/regions/modules/scope-migration.js?v=20260926-2
+  - assets/regions/regions.js?v=20260926-5
 hide:
   - navigation
   - toc
 ---
 # Set up repeater scopes
 
-Choose the IATA regions this repeater serves. City repeaters allow
-unscoped messages; edge repeaters block them. Review existing regions before
-applying a new profile.
+Choose the IATA regions this repeater serves. Start with preparation, which
+keeps existing wildcard forwarding and the default scope. At a coordinated
+local cutover, city repeaters allow unscoped messages and edge repeaters block
+them. Review the current configuration before applying any commands.
 
 <div data-mcc-regions="config" data-mcc-root="./"></div>
 
