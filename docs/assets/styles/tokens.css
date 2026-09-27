@@ -15,6 +15,20 @@
   --mc-color-info: #1458b0;
   --mc-color-brand: #c52233;
 
+  /* Shared by the ON/QC proposal and the region tools. */
+  --scp-city: #1458b0;
+  --scp-city-bg: #e8f0fb;
+  --scp-prov: #146c43;
+  --scp-prov-bg: #e5f4ec;
+  --scp-mesh: #6b36a8;
+  --scp-mesh-bg: #f1e8fb;
+  --scp-any: #526174;
+  --scp-any-bg: #eef3f8;
+  --scp-ok: var(--mc-color-success);
+  --scp-ok-bg: #e5f4ec;
+  --scp-drop: var(--mc-color-danger);
+  --scp-drop-bg: #fdecea;
+
   --mc-space-1: 0.25rem;
   --mc-space-2: 0.5rem;
   --mc-space-3: 0.75rem;
@@ -61,6 +75,18 @@
   --mc-color-danger: #ffaaa3;
   --mc-color-info: #8ec1ff;
   --mc-color-brand: #ff7b88;
+  --scp-city: #7db7ff;
+  --scp-city-bg: rgb(125 183 255 / 14%);
+  --scp-prov: #78dfa7;
+  --scp-prov-bg: rgb(120 223 167 / 12%);
+  --scp-mesh: #c9a4ff;
+  --scp-mesh-bg: rgb(201 164 255 / 14%);
+  --scp-any: #b6c0ce;
+  --scp-any-bg: rgb(182 192 206 / 12%);
+  --scp-ok: #78dfa7;
+  --scp-ok-bg: rgb(120 223 167 / 12%);
+  --scp-drop: #ffaaa3;
+  --scp-drop-bg: rgb(255 170 163 / 12%);
   --mc-shadow-1: 0 1px 2px rgb(0 0 0 / 35%), 0 5px 18px rgb(0 0 0 / 18%);
   --mc-shadow-2: 0 14px 34px rgb(0 0 0 / 38%);
 

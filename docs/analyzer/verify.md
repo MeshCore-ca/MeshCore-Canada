@@ -49,7 +49,7 @@ Do not generate unnecessary traffic on a busy mesh. A normal advert or existing 
 | Check | What you should see |
 |---|---|
 | Name | A clear service name such as `YOW-Repeater-01`, without a home address |
-| Location | The nearest real three-letter airport code, not `CAN`, `XXX`, or `HOME` |
+| Location | The uppercase code from the [IATA region map](../config/map.md), or a community-agreed code where no zone is published |
 | Primary path | Connected to `mqtt1.meshcore.ca` with TLS certificate verification |
 | Backup path | Connected to `mqtt2.meshcore.ca` where the method supports two entries |
 | Packet mode | Packet publishing is enabled, not status-only |

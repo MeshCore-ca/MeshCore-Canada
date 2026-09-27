@@ -26,12 +26,12 @@ Vous pouvez consulter ce site sans compte MeshCore Canada ni compte GitHub.
 | Rechercher dans cette documentation | Vos mots de recherche restent dans le navigateur | Nulle part |
 | Trouver des communautés à proximité | La ville recherchée | API Géolocalisateur de Ressources naturelles Canada; les distances sont calculées dans votre navigateur |
 | Charger les totaux du réseau dans l’en-tête | Votre adresse IP et les renseignements habituels d’une requête Web, sans texte de recherche | Beacon à dev.meshcore.ca |
-| Rechercher un lieu dans les outils de région | Le lieu, le code d’aéroport ou le code postal saisi | Vérification locale d’abord, puis OpenStreetMap ou geocoder.ca au besoin |
+| Rechercher un lieu dans les outils de région | Le lieu, le code d’aéroport ou le code postal saisi | Codes IATA vérifiés localement. Noms de lieux transmis à l’API Géolocalisateur de Ressources naturelles Canada; codes postaux transmis à OpenStreetMap ou geocoder.ca |
 | Ouvrir la carte interactive des régions | Votre adresse IP et la partie visible de la carte | OpenStreetMap |
 | Vérifier un identifiant de parcours de répéteur | Le premier octet de la clé publique | Beacon à dev.meshcore.ca; les comparaisons régionales et des préfixes plus longs restent dans votre navigateur |
 | Charger le nombre d’étoiles GitHub | Votre adresse IP et les renseignements habituels d’une requête Web | GitHub |
 | Ouvrir un lien externe | Les renseignements habituels d’une requête Web | Le service externe indiqué |
-| Soumettre une idée ou une proposition de région | Le texte et les détails affichés lors de la révision, ainsi que la vérification antipourriel | Le service de soumission de MeshCore Canada, Cloudflare Turnstile et un billet GitHub public |
+| Soumettre une idée communautaire | Le texte et les détails affichés lors de la révision, ainsi que la vérification antipourriel | Le service de soumission de MeshCore Canada, Cloudflare Turnstile et un billet GitHub public |
 
 ## Soumissions publiques
 
@@ -47,7 +47,7 @@ limitation du débit. Aucune période de conservation n’a encore été publié
 
 Changer de langue ou passer entre la carte et le configurateur conserve votre
 sélection dans l’URL de destination. Elle peut contenir les coordonnées saisies,
-un lieu, des chemins régionaux et un profil radio. Ces URL peuvent apparaître dans
+un lieu, des scopes de ville et de province et un profil radio. Ces URL peuvent apparaître dans
 l’historique du navigateur et les journaux du serveur. Ne partagez pas un lien qui
 contient un emplacement privé. Les résumés téléchargés omettent les coordonnées
 exactes et les identifiants de connexion.
@@ -64,6 +64,10 @@ La ville recherchée dans le répertoire apparaît dans l’URL pour partager ou
 Vous pouvez effacer les données enregistrées par ce site dans les paramètres de
 votre navigateur. Le formulaire d’idée offre aussi l’action
 **Effacer le brouillon enregistré**.
+
+L’ancien éditeur de régions peut télécharger les brouillons conservés dans ce
+navigateur. Le téléchargement ne les envoie ni ne les supprime; ces brouillons
+ne sont pas des limites approuvées dans MeshMapper.
 
 ## Services externes
 

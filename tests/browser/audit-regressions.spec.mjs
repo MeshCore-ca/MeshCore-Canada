@@ -7,7 +7,7 @@ for (const locale of ["", "fr/"]) {
   test(`${locale || "en/"} region setup preserves radio until explicitly selected`, async ({ page }) => {
     await page.goto(siteRoute(`/${locale}config/?tag=mvrd&step=4`));
     const result = page.locator('[data-role="result"]');
-    await expect(result).toContainText("region def can bc mvrd");
+    await expect(result).toContainText("region def yvr|* bc|* can|* na");
     await expect(result).not.toContainText("set radio");
     await expect(result).not.toContainText("set path.hash.mode");
     await page.locator('[data-go-step="3"]').click();
@@ -24,17 +24,17 @@ for (const locale of ["", "fr/"]) {
     await expect(result).toContainText("set radio 910.525,62.5,7,5");
   });
 
-  test(`${locale || "en/"} map handoff retains shared and extra region paths`, async ({ page }) => {
-    await page.goto(siteRoute(`/${locale}config/map/?tag=ott&type=large&regions=mtl&firmware=1.15`));
+  test(`${locale || "en/"} map handoff migrates legacy city aliases without adding a second province`, async ({ page }) => {
+    await page.goto(siteRoute(`/${locale}config/map/?tag=ott&province=on&type=large&regions=mtl&firmware=1.15`));
     const link = page.locator('[data-role="map-text-result"] .mcc-detail-actions a');
     await expect(link).toBeVisible();
     await link.click();
     await expect(page.locator('[data-role="selected-region"]')).toContainText("Ottawa");
     await page.locator('[data-wizard-step="3"] [data-next-step]').click();
     const result = page.locator('[data-role="result"]');
-    await expect(result).toContainText("region put ott");
-    await expect(result).toContainText("region put gatout");
-    await expect(result).toContainText("region put mtl");
+    await expect(result).toContainText("region put yow");
+    await expect(result).not.toContainText("region put qc");
+    await expect(result).toContainText("region put yul");
     await expect(result).not.toContainText("set radio");
   });
 
@@ -47,7 +47,7 @@ for (const locale of ["", "fr/"]) {
   test(`${locale || "en/"} map loads when visible and its keyboard shortcut stays out of the way`, async ({ page }, testInfo) => {
     const displayRequests = [];
     page.on("request", (request) => {
-      if (request.url().endsWith("/canada-region-partition.geojson")) displayRequests.push(request.url());
+      if (request.url().includes("/iata-boundaries.geojson")) displayRequests.push(request.url());
     });
     await page.route("https://tile.openstreetmap.org/**", (route) => route.fulfill({
       contentType: "image/png",
@@ -62,7 +62,7 @@ for (const locale of ["", "fr/"]) {
     expect(await panel.evaluate((element) => element.scrollHeight <= element.clientHeight + 1)).toBeTruthy();
     if (testInfo.project.name.startsWith("mobile-")) {
       await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))));
-      expect(displayRequests).toHaveLength(0);
+      expect(displayRequests).toHaveLength(1); // Point lookup and map share one boundary download.
     }
     await page.locator(".mcc-map-stage").scrollIntoViewIfNeeded();
     await expect(page.locator('[data-role="map-loading"]')).toBeHidden();
@@ -100,7 +100,8 @@ for (const locale of ["", "fr/"]) {
       const results = await new AxeBuilder({ page }).include("[data-mcc-regions]").withRules(["color-contrast"]).analyze();
       expect(results.violations).toEqual([]);
       const background = await page.locator(".md-main").evaluate((element) => getComputedStyle(element).backgroundColor);
-      expect(background).toBe(scheme === "default" ? "rgb(255, 255, 255)" : "rgb(15, 22, 35)");
+      // Region tools now use the shared site background, like the proposal.
+      expect(background).toBe(scheme === "default" ? "rgb(246, 248, 251)" : "rgb(15, 22, 35)");
     });
   }
 
@@ -122,7 +123,7 @@ test("language switch keeps selected region, firmware, radio, and review step", 
   await page.locator(".md-select > button").click();
   await page.locator('.md-select__link[hreflang="fr"]').click();
   await expect(page.locator('[data-role="result"]')).toContainText("set radio 910.425");
-  await expect(page.locator('[data-role="result"]')).toContainText("region put mvrd bc");
+  await expect(page.locator('[data-role="result"]')).toContainText("region put yvr");
   await expect(page.locator('[data-wizard-step="4"]')).toBeVisible();
   await expect(page.locator("html")).toHaveAttribute("lang", "fr");
 });
@@ -130,7 +131,7 @@ test("language switch keeps selected region, firmware, radio, and review step", 
 test("map tiles appear while a slow boundary overlay is still loading", async ({ page }) => {
   let releaseBoundary;
   const boundaryGate = new Promise(resolve => { releaseBoundary = resolve; });
-  await page.route("**/canada-region-partition.geojson", async route => {
+  await page.route("**/iata-boundaries.geojson?*", async route => {
     await boundaryGate;
     await route.continue();
   });
@@ -167,11 +168,11 @@ test("map retry restores the selected marker after a tile failure", async ({ pag
   await expect(page.locator('[data-role="map-text-result"]')).toContainText("Ottawa");
 });
 
-test("Québec partial matches reach city search and true ambiguity offers buttons", async ({ page }) => {
+test("Québec city uses its actual coordinates and ambiguous legacy region codes offer choices", async ({ page }) => {
   let lookedUp = false;
-  await page.route("https://nominatim.openstreetmap.org/**", async (route) => {
+  await page.route("https://geolocator.api.geo.ca/**", async (route) => {
     lookedUp = true;
-    await route.fulfill({ json: [{ lat: "46.8139", lon: "-71.2080", display_name: "Québec, Québec, Canada", address: { country_code: "ca", state: "Quebec" } }] });
+    await route.fulfill({ json: [{ lat: "46.8139", lng: "-71.2080", name: "Québec", province: "Québec", key: "geonames", category: "Ville" }] });
   });
   await page.goto(siteRoute("/fr/config/map/"));
   const input = page.locator('[data-role="map-input"]');
@@ -179,7 +180,7 @@ test("Québec partial matches reach city search and true ambiguity offers button
   await page.locator('[data-action="map-locate"]').click();
   await expect(page.locator('[data-role="map-text-result"]')).toContainText("Québec");
   expect(lookedUp).toBeTruthy();
-  await input.fill("Victoria");
+  await input.fill("capnat");
   await page.locator('[data-action="map-locate"]').click();
   const choices = page.locator('[data-role="map-status"] button');
   await expect(choices.first()).toBeVisible();

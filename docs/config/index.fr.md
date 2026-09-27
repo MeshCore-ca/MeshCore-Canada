@@ -1,32 +1,38 @@
 ---
-title: Configurer les régions d’un répéteur
-description: Choisissez les chemins régionaux canadiens et générez des commandes MeshCore vérifiées pour votre répéteur.
+title: Configurer les portées d’un répéteur
+description: Choisissez les régions IATA, le mode ville ou bordure et les commandes adaptées au micrologiciel.
 audience:
   - repeater-operator
 task: configure-repeater-regions
 scope: canada-baseline
 status: verified
 owner: region-maintainers
-last_reviewed: 2026-07-19
-review_by: 2026-10-19
+last_reviewed: 2026-09-25
+review_by: 2027-03-24
 tested_with:
-  region_catalog: national-partition-2026-07-19
+  region_catalog: meshcore-canada-iata-scopes-v1
 difficulty: intermediate
 estimated_time: 5-10 minutes
 page_styles:
-  - assets/regions/regions.css?v=20260905-1
+  - assets/regions/regions.css?v=20260926-1
 page_scripts:
+  - assets/javascripts/place-search.js?v=20260925-2
   - assets/javascripts/radio-profiles.js?v=20260904-1
-  - assets/regions/modules/configurator-support.js?v=20260904-1
-  - assets/regions/regions.js?v=20260909-1
+  - assets/regions/modules/configurator-support.js?v=20260926-1
+  - assets/regions/modules/iata-scopes.js?v=20260926-2
+  - assets/regions/modules/scope-migration.js?v=20260926-2
+  - assets/regions/regions.js?v=20260926-5
 hide:
   - navigation
   - toc
 ---
-# Configurer les régions d’un répéteur
+# Configurer les portées d’un répéteur
 
-Choisissez les chemins que ce répéteur doit relayer. Ajoutez des chemins vers
-d’autres provinces ou les États-Unis seulement si votre réseau local les utilise.
+Choisissez les régions IATA desservies par ce répéteur. La préparation conserve
+la retransmission du joker et la portée par défaut. Lors d’une transition
+coordonnée localement, les répéteurs de ville autorisent les messages sans
+portée et ceux de bordure les bloquent. Examinez la configuration actuelle
+avant d’appliquer des commandes.
 
 <div data-mcc-regions="config" data-mcc-root="./"></div>
 

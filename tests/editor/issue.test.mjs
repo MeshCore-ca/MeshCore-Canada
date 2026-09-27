@@ -39,8 +39,8 @@ test("optional community details require an explicit gateway capability", () => 
   assert.equal(validateSubmissionConfig({ ...config, communityIdeaOptionalDetails: "true" }).communityIdeaOptionalDetails, undefined);
   assert.equal(validateSubmissionConfig({ ...config, communityIdeaOptionalDetails: true }).communityIdeaOptionalDetails, true);
 });
-const editorHtml = await readFile(
-  new URL("../../docs/config/editor/index.html", import.meta.url),
+const editorLanding = await readFile(
+  new URL("../../docs/config/editor/index.md", import.meta.url),
   "utf8"
 );
 
@@ -63,9 +63,7 @@ function jsonResponse(body, options = {}) {
 test("uses the shared anonymous submission API by default and allows a trusted page override", () => {
   const productionEndpoint = "https://api.meshcore.ca:21323/api/meshcore-canada/submissions";
   assert.equal(DEFAULT_SUBMISSION_ENDPOINT, productionEndpoint);
-  assert.ok(editorHtml.includes(
-    `name="meshcore-submission-endpoint" content="${productionEndpoint}"`
-  ));
+  assert.ok(!editorLanding.includes(productionEndpoint), "the retired editor must not advertise new boundary submissions");
   assert.equal(configuredSubmissionEndpoint(null), DEFAULT_SUBMISSION_ENDPOINT);
   assert.equal(configuredSubmissionEndpoint({
     querySelector() { return { content: "https://proposals.example.ca/v1/" }; }

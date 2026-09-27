@@ -587,6 +587,14 @@
       if (params.has("source_page")) form.elements.source_page.value = loaded.community.normalizeSourcePage(params.get("source_page"));
     } catch (_) { /* Ignore malformed context; the form remains usable. */ }
     const community = params.get("community");
+    const region = params.get("region");
+    const requests = document.documentElement.lang.startsWith("fr")
+      ? { maintainer: "Devenir responsable (joindre un contact public et le consentement)", settings: "Confirmer les réglages locaux (joindre une date et une preuve publique)", boundary: "Proposer une limite (préciser les communautés voisines et la coordination)" }
+      : { maintainer: "Volunteer as region maintainer (include public contact and consent)", settings: "Confirm local radio settings (include date and public evidence)", boundary: "Propose a boundary refinement (include nearby communities and coordination)" };
+    if (/^[a-z]{3}$/.test(region || "") && Object.prototype.hasOwnProperty.call(requests, params.get("request")) && !document.getElementById("submission-context").value) {
+      document.getElementById("submission-context").value = (document.documentElement.lang.startsWith("fr") ? "Région IATA : " : "IATA region: ") + region + "\n" + requests[params.get("request")];
+      document.getElementById("submission-category").value = "Regional community information";
+    }
     if (community && /^[a-z0-9-]{1,80}$/.test(community) && !document.getElementById("submission-context").value) {
       document.getElementById("submission-context").value = "Community listing: " + community;
       document.getElementById("submission-category").value = "Regional community information";

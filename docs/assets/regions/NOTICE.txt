@@ -1,8 +1,77 @@
 MeshCore Canada region data notice
 ==================================
 
-canada-regions.json
--------------------
+Active map and scope model
+--------------------------
+
+iata-regions.json and iata-boundaries.geojson are the active catalogue and map.
+They combine published MeshMapper zones with labelled MeshCore Canada planning
+regions, using lowercase IATA scope names. The source timestamp and SHA-256 are in the
+catalogue. canada-regions.json is an identical compatibility alias of the
+active IATA catalogue. Refresh using scripts/fetch-meshmapper-regions.mjs,
+scripts/build-iata-boundaries.py and scripts/build-iata-catalog.mjs.
+All changes require a reviewed pull request.
+
+MeshMapper source: https://meshmapper.net/
+Current API: https://meshmapper.net/get_zones.php?country=CA
+Per-region boundary: append get_geojson.php to the API's region URL.
+API documentation: https://wiki.meshmapper.net/zones-api/
+
+The current importer preserves the API's GeoJSON coordinates and closed rings.
+It does not scrape pages, simplify polygons or invent boundaries for undrawn zones.
+The approved meshmapper-iata-boundaries.geojson snapshot predates the API: its
+historical provenance records the old feed and coordinate conversion. It stays
+unchanged until API boundary changes have been reviewed.
+Credit MeshMapper zone owners, OpenStreetMap contributors (ODbL), and
+geoBoundaries (CC BY 4.0) where those sources are used by MeshMapper.
+
+scope-jurisdictions.geojson is a separate province/territory lookup, dissolved
+without simplification from the existing Statistics Canada 2021 digital
+geography snapshot. It determines the repeater's physical province and provides
+outlines for broad starter regions. It never changes published MeshMapper zones.
+
+MeshCore Canada starter regions
+-------------------------------
+
+YYG (PEI), YYT (Newfoundland), YYR (Labrador), YXY (Yukon), YZF (Northwest
+Territories), and YFB (Nunavut) are MeshCore Canada assignments, not zones
+approved or published by MeshMapper. They are broad planning areas, not RF
+coverage claims. Their airport-code sources and labels are recorded in
+data/iata-starter-regions.json and explained in the bilingual scope guide.
+
+The Newfoundland/Labrador split uses official 2021 census divisions 1010 and
+1011 for Labrador, clipped to the existing province outline; Newfoundland is
+the province remainder. data/iata-labrador-outline.geojson records the pinned
+Statistics Canada CD source archive, licence, and SHA-256. The starter regions
+never overlap each other; published MeshMapper geometry is subtracted from
+them. The merged asset records every input hash for reproducibility.
+
+In the other eight provinces, remaining land is divided between ALL eligible
+regional centres: published MeshMapper zones and the explicit community hubs in
+data/iata-starter-regions.json. Province eligibility is in iata-scope-policy.json.
+The partition uses Canada Lambert (EPSG:3347); edges are sampled every 10 km before
+conversion to longitude/latitude. Source coastlines and published polygons remain
+unchanged. Unexplained leftovers fail the build, rather than going to the last hub.
+These planning areas require local review; they are not RF coverage or approval.
+
+The combined GeoJSON uses meshcore-canada-iata-boundaries/v2. An IATA code can
+have one unchanged published feature and one separate planning extension. Use
+(tag, regionSource) as the feature key, not tag alone. planningKind distinguishes
+starter regions from extensions. Source attribution follows the feature containing
+the selected point. The catalogue still has exactly one seed/profile per IATA code.
+
+data/iata-region-profiles.json records consenting public maintainers and local
+settings confirmations separately. Missing records remain unclaimed/unconfirmed.
+Community links use public directory reference points, not radio locations.
+The weekly MeshMapper review workflow prepares an issue and candidate artifact;
+only a reviewed PR can update the shipped map.
+
+The files described below are retained historical source material. The
+public tools no longer use the former census region hierarchy for scopes, and
+the former census boundary editor and automatic publisher are retired.
+
+maintenance/legacy-regions/canada-regions.json
+--------------------------------------------
 
 This file implements the Canada MeshCore Region Strategy v1.1.1. It also
 credits Adam Gessaman's Pacific Northwest MeshCore region tools as an

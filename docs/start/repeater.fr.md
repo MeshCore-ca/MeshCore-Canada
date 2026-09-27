@@ -21,7 +21,7 @@ requires:
 page_styles:
   - assets/styles/repeater-hash-check.css?v=20260820-1
 page_scripts:
-  - assets/javascripts/repeater-hash-check.js?v=20260904-1
+  - assets/javascripts/repeater-hash-check.js?v=20260925-2
 ---
 
 # Commencer avec un répéteur
@@ -64,8 +64,9 @@ Si Canada n’apparaît pas, suivez les [consignes pour l’ancien préréglage]
     personnes responsables doivent s’entendre sur tout changement qui touche
     le trafic partagé.
 
-Utilisez le [configurateur de répéteur](../config/index.md) pour trouver les
-paramètres régionaux. Relisez les commandes avant de les appliquer.
+Utilisez le [configurateur de répéteur](../config/index.md) pour choisir votre zone
+IATA MeshMapper et ses scopes indépendants. Si vous utilisiez l’ancien arbre de
+régions, suivez les [étapes de migration](../config/standard.md) avant d’appliquer la nouvelle liste.
 
 <div data-mc-repeater-hash-check></div>
 

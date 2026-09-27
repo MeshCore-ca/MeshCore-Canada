@@ -15,7 +15,8 @@ OUT = ROOT / "docs/assets/canada-network-motif.svg"
 
 
 def generate():
-    catalog = json.loads((REGIONS / "canada-regions.json").read_text(encoding="utf-8"))
+    # Decorative reference points are not the active radio-scope catalogue.
+    catalog = json.loads((ROOT / "maintenance/legacy-regions/canada-regions.json").read_text(encoding="utf-8"))
     features = json.loads((REGIONS / "canada-region-partition.geojson").read_text(encoding="utf-8"))["features"]
     projection = Transformer.from_crs("EPSG:4326", "EPSG:3347", always_xy=True).transform
     country = transform(projection, unary_union([shape(feature["geometry"]) for feature in features])).simplify(7000, preserve_topology=True)

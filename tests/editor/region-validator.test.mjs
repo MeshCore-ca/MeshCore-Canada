@@ -3,7 +3,7 @@ import { createRequire } from "node:module";
 import test from "node:test";
 
 const require = createRequire(import.meta.url);
-const { newRegionParentJurisdiction } = require("../../scripts/validate-regions.cjs");
+const { newRegionParentJurisdiction } = require("../../scripts/validate-legacy-region-data.cjs");
 
 const data = {
   hierarchy: {

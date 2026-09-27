@@ -25,7 +25,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--catalog",
         type=Path,
-        default=ROOT / "docs" / "assets" / "regions" / "canada-regions.json",
+        default=ROOT / "maintenance" / "legacy-regions" / "canada-regions.json",
     )
     return parser.parse_args()
 

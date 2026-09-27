@@ -461,6 +461,8 @@
     var loadedIatas = null;
     var saved = storedIata();
     if (saved) regionInput.value = saved;
+    var selectedRegion = new URLSearchParams(window.location.search).get("region");
+    if (/^[a-z]{3}$/i.test(selectedRegion || "")) regionInput.value = selectedRegion.toUpperCase();
 
     function loadIatas() {
       if (loadedIatas) return Promise.resolve(loadedIatas);

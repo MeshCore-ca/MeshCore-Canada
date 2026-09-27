@@ -48,9 +48,9 @@ aucune expérience avec Git ou GitHub.
 
 -   **Proposer une modification de région**
 
-    Proposez une nouvelle région ou une modification de ses limites.
+    Demandez à MeshMapper d’ajouter une zone ou de modifier ses limites.
 
-    [:octicons-arrow-right-24: Ouvrir l’éditeur de région](config/editor/index.html)
+    [:octicons-arrow-right-24: Demander une modification de zone](config/editor/index.md)
 
 -   **Contribuer sur GitHub**
 
