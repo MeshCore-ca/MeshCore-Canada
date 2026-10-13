@@ -8,7 +8,25 @@
       "qc"
     ]
   },
-  "reservedScopes": ["can", "na"],
+  "reservedScopes": ["ca", "na"],
+  "optionalNetworks": {
+    "ontario-new-york": {
+      "label": "Ontario–New York (onny, opt-in)",
+      "labelFr": "Ontario–New York (onny, facultatif)",
+      "country": "us",
+      "path": ["onny"],
+      "sharedScope": true,
+      "tagLabels": { "onny": "Ontario–New York" },
+      "geographic": false,
+      "automatic": false,
+      "eligibility": "coordinated-cross-border",
+      "authority": {
+        "status": "proposed",
+        "source": "MeshCore Canada cross-border scope discussion",
+        "sourceUrl": "https://meshcore.ca/proposals/onqc-scopes/#cross-border-scopes"
+      }
+    }
+  },
   "minimumFirmware": "1.14",
   "scopedAdvertFirmware": "1.15",
   "bulkDefinitionFirmware": "1.16",

@@ -40,7 +40,7 @@ for (const locale of ["", "fr/"]) for (const scheme of ["default", "slate"]) {
       await expect(pills).toHaveCount(level === "future" ? 2 : 1);
       for (const pill of await pills.all()) expect(await skin(pill)).toEqual(tags[level]);
     }
-    await expect(result.locator('.mcc-tag-pill[data-level="future"]')).toHaveText(["can", "na"]);
+    await expect(result.locator('.mcc-tag-pill[data-level="future"]')).toHaveText(["ca", "na"]);
     const setupCard = await skin(page.locator('[data-wizard-step="4"]'));
     for (const key of ["backgroundColor", "borderColor", "borderRadius", "boxShadow"]) expect(setupCard[key]).toBe(card[key]);
     const copyAll = result.locator('.mcc-copy-all');

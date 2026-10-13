@@ -18,18 +18,45 @@ GeoJSON coordinates, and keeps `geometry: null` for regions without a drawn
 boundary. Disabled regions are absent from the directory. API groups are metadata,
 not instructions to add new on-air scopes.
 
-Responses are cached for one hour in `.tmp/meshmapper-api-cache.json`; later
-requests use `If-None-Match` and reuse the body on HTTP 304. The weekly workflow
-retains this public-response cache between runs. Requests are spaced below the
-shared 60-per-minute limit. HTTP errors stop the run without replacing the candidate;
-429 reports `Retry-After` rather than immediately retrying.
+The importer requires a Canada-wide integration key in `MESHMAPPER_API_KEY`.
+Configure the same name as a GitHub Actions secret; never put the key in source,
+URLs, site assets or browser code. The v1.5.117 read APIs require `X-API-Key`,
+including conditional requests. A regional key can return only part of Canada:
+the importer stops if approved regions disappear. Use `--allow-region-removals`
+only after checking the key's geographic access and confirming actual removals.
+
+Parsed responses are kept for 24 hours in the private, ignored
+`.tmp/meshmapper-api-cache.json`, bound to a credential fingerprint and `CA`.
+Credential changes discard the old cache; HTTP 401/403 discard authorized data.
+This cache is not uploaded or placed in the shared Actions cache. The weekly job
+fetches a fresh candidate and publishes only that review artifact, never the key.
+
+Requests are spaced by at least 2.2 seconds, below the shared 30-per-minute read
+budget. Every network read, including HTTP 304, counts toward the key's quota
+(normally 1,000 reads per UTC day). Later requests send `If-None-Match`.
+HTTP errors stop without replacing the candidate and retain a `Retry-After`
+cooldown. Timeouts and incomplete JSON retain the previous copy and defer retries
+for 24 hours. Do not scrape pages or use private endpoints as a fallback.
 
 The API candidate uses snapshot schema v2; the reviewer also accepts the older
-v1 approved snapshot. An enabled region with no boundary remains visible in the
-review report, but is not a polygon to publish. Do not copy a null geometry into
+v1 approved snapshot. `has_boundary: true` may still return `geometry: null`
+when a stored boundary cannot be used. Keep that metadata and flag the region
+for review; do not manufacture a polygon. A region without usable geometry remains
+visible in the review report, but is not a polygon to publish. Do not copy a null geometry into
 the active polygon-only map input or invent a circle for it. Coordinate with the
 region's owner before promoting its boundary. The existing approved map stays
 unchanged until a separate boundary review is completed.
+
+Geometry problems are reported in the review issue and its candidate-bound
+`geometry.json` artifact instead of preventing the issue from being created.
+The publication validators remain strict: never promote a candidate with an
+invalid polygon, an unresolved centre, or a missing usable boundary.
+
+The authenticated 2026-10-13 check returned all 33 approved region codes, but
+YQB had a self-intersecting polygon and YUL had a substantial boundary change.
+The approved map is deliberately retained. See
+`maintenance/meshmapper-api-review-2026-10-13.json` for the candidate digest and
+review findings; a successful fetch is not approval to replace the map.
 
 Gap assignments consider every eligible published regional centre as well as
 starter hubs. Never distribute all leftover land among only newly added hubs.
@@ -53,6 +80,17 @@ and verify the exact candidate on the preview in both languages. Merge through a
 reviewed PR. Never reactivate the retired census-boundary publisher.
 
 ## Region contacts and settings
+
+The current country scope is `ca`; the archived census catalogue still uses
+`can`. Preparation preserves existing scopes, and the migration comparison makes
+any later removal explicit. The former optional California `west/ca` suggestion
+is omitted from the current generator because it conflicts with Canada's `ca`.
+Saved selections containing it require review; no U.S. scope is silently renamed.
+
+`onny` is an independent, opt-in Ontario–New York label, available under neighbouring
+networks and in the ON/QC repeater guide. It is never added automatically. Operators
+along the intended path must agree to carry it and test the shared channel both
+ways; adding it neither changes local channels nor announces a rollout.
 
 `data/iata-region-profiles.json` contains optional records keyed by lowercase IATA
 code. Missing records mean **no maintainer listed**, **settings unconfirmed** and

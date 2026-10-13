@@ -16,7 +16,7 @@ const provinces = load("docs/assets/regions/scope-jurisdictions.geojson");
 assert.equal(data.schema, "meshcore-canada-iata-scopes/v1");
 assert.equal(data.policy.scopeModel, "flat");
 assert.deepEqual(data.policy.meshScopes, { onqc: ["on", "qc"] });
-assert.deepEqual(data.policy.reservedScopes, ["can", "na"]);
+assert.deepEqual(data.policy.reservedScopes, ["ca", "na"]);
 for (const tag of data.policy.reservedScopes) {
   assert.equal(data.status[tag].state, "reserved");
   assert.equal(data.hierarchy[tag].parent, null, "Reserved forwarding scopes stay flat");
@@ -91,7 +91,7 @@ for (const seed of data.seeds) {
     assert.ok(api.commands(result).every(line => Buffer.byteLength(line) <= 160));
     assert.ok(result.budget.tagCount <= 32 && result.budget.responseBytes <= 160);
     assert.equal(result.tags.includes("onqc"), ["on", "qc"].includes(province));
-    assert.deepEqual(Array.from(result.tags.slice(-2)), ["can", "na"]);
+    assert.deepEqual(Array.from(result.tags.slice(-2)), ["ca", "na"]);
     assert.ok(!data.policy.reservedScopes.includes(result.companionDefault));
   }
 }

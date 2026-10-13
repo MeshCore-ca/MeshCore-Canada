@@ -19,7 +19,7 @@ for (const locale of ["", "fr/"]) {
       await detail.locator('.mcc-detail-actions a').click();
       await page.locator('[data-wizard-step="3"] [data-next-step]').click();
       const output = page.locator('[data-role="result"]');
-      await expect(output).toContainText(`region def ${tag}|* ${province}|* can|* na`);
+      await expect(output).toContainText(`region def ${tag}|* ${province}|* ca|* na`);
       await expect(output).toContainText(locale ? "pas encore publiée dans MeshMapper" : "not yet published by MeshMapper");
       await expect(output).not.toContainText("onqc");
       await expect(output).not.toContainText("set radio");
@@ -51,7 +51,7 @@ for (const locale of ["", "fr/"]) {
     await expect(page.locator('[data-wizard-step="3"] [data-next-step]')).toBeDisabled();
     await page.locator('[data-action="confirm-scope-migration"]').check();
     await page.locator('[data-wizard-step="3"] [data-next-step]').click();
-    await expect(page.locator('[data-role="result"]')).toContainText("region def yow|* on|* onqc|* can|* na");
+    await expect(page.locator('[data-role="result"]')).toContainText("region def yow|* on|* onqc|* ca|* na");
     await expect(page.locator('[data-role="result"]')).not.toContainText("capnat");
   });
 
@@ -77,7 +77,7 @@ for (const locale of ["", "fr/"]) {
     await page.goto(siteRoute(`/${locale}config/?tag=yow&province=qc&type=large&regions=yul&step=4&instructions=technical`));
     await activateConfig(page);
     const result = page.locator('[data-role="result"]');
-    await expect(result).toContainText("region def yow|* yul|* qc|* onqc|* can|* na");
+    await expect(result).toContainText("region def yow|* yul|* qc|* onqc|* ca|* na");
     await expect(result).toContainText("region denyf *");
     await expect(result).toContainText("region default yow");
     await expect(result).not.toContainText("region def can on");
@@ -88,7 +88,7 @@ for (const locale of ["", "fr/"]) {
   test(`${locale || "en/"} Gatineau coordinates select yow with qc, not a separate legacy region`, async ({ page }) => {
     await page.goto(siteRoute(`/${locale}config/?lat=45.4765&lon=-75.7013&province=on&step=4&instructions=technical`));
     await activateConfig(page);
-    await expect(page.locator('[data-role="result"]')).toContainText("region def yow|* qc|* onqc|* can|* na");
+    await expect(page.locator('[data-role="result"]')).toContainText("region def yow|* qc|* onqc|* ca|* na");
     await expect(page.locator('[data-role="result"]')).toContainText("region allowf *");
     await expect(page.locator("#mcc-home-province")).toHaveValue("qc");
   });

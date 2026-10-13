@@ -15,7 +15,7 @@ export function compareSnapshots(before, after, starterTags = []) {
       assert.match(tag, /^[a-z0-9]{2,6}$/);
       assert.ok(!entries.has(tag) && typeof name === "string" && name.length < 200);
       assert.ok(center.length === 2 && center.every(Number.isFinite));
-      if (feature.geometry === null) assert.equal(feature.properties.hasBoundary, false);
+      if (feature.geometry === null) assert.equal(typeof feature.properties.hasBoundary, "boolean");
       else assert.ok(["Polygon", "MultiPolygon"].includes(feature.geometry.type));
       entries.set(tag, feature);
     }
@@ -32,6 +32,7 @@ export function compareSnapshots(before, after, starterTags = []) {
       if (JSON.stringify(previous.geometry) !== JSON.stringify(feature.geometry)) fields.push("boundary");
       if (previous.properties.sourceUrl !== feature.properties.sourceUrl) fields.push("URL");
       if ((previous.properties.group || null) !== (feature.properties.group || null)) fields.push("group");
+      if (previous.properties.hasBoundary !== feature.properties.hasBoundary) fields.push("boundary availability");
       if (fields.length) changed.push({ tag, fields });
     }
   }
@@ -40,7 +41,7 @@ export function compareSnapshots(before, after, starterTags = []) {
   const unmapped = [...current].filter(([, feature]) => feature.geometry === null).map(([tag]) => tag).sort();
   const changes = { added: added.sort(), removed: removed.sort(), changed: changed.sort((a, b) => a.tag.localeCompare(b.tag)), collisions, unmapped };
   // Ignore fetch time and object ordering; include the candidate shapes in the digest.
-  const digest = createHash("sha256").update(JSON.stringify([...current].sort(([a], [b]) => a.localeCompare(b)).map(([tag, feature]) => [tag, feature.properties.name, feature.properties.center, feature.geometry, feature.properties.sourceUrl, feature.properties.group || null]))).digest("hex");
+  const digest = createHash("sha256").update(JSON.stringify([...current].sort(([a], [b]) => a.localeCompare(b)).map(([tag, feature]) => [tag, feature.properties.name, feature.properties.center, feature.geometry, feature.properties.sourceUrl, feature.properties.group || null, feature.properties.hasBoundary]))).digest("hex");
   return { ...changes, digest, needsReview: added.length + removed.length + changed.length + collisions.length > 0 };
 }
 
@@ -49,7 +50,8 @@ export function reviewText(result) {
   return `<!-- meshmapper-review:start -->\n<!-- digest:${result.digest} -->\n## MeshMapper snapshot needs review\n\n` +
     `Added: ${list(result.added)}\n\nRemoved: ${list(result.removed)}\n\nChanged: ${result.changed.map(item => "`" + item.tag + "` (" + item.fields.join(", ") + ")").join(", ") || "None"}\n\n` +
     `Starter-code collisions: ${list(result.collisions)}\n\n` +
-    `Enabled regions without a drawn boundary: ${list(result.unmapped)}\n\n` +
+    `Enabled regions without a usable boundary: ${list(result.unmapped)}\n\n` +
+    `Geometry requiring review: ${(result.geometryIssues || []).map(item => "`" + item.tag + "` (" + item.kind + ")").join(", ") || "None"}\n\n` +
     "Download the candidate snapshot from this workflow's artifacts. Review its boundaries, province metadata, local contacts, and any starter replacements in a PR. Regenerate the combined map and catalogue, run the region and browser tests, and verify both languages on the preview. Nothing has been published automatically.\n<!-- meshmapper-review:end -->";
 }
 
@@ -84,6 +86,19 @@ async function publish(report, result) {
 async function main() {
   const load = async path => JSON.parse(await readFile(path, "utf8"));
   const result = compareSnapshots(await load("docs/assets/regions/meshmapper-iata-boundaries.geojson"), await load(process.argv[2]), (await load("data/iata-starter-regions.json")).regions.map(region => region.tag));
+  const geometryArgument = process.argv.indexOf("--geometry-report");
+  if (geometryArgument !== -1) {
+    const report = await load(process.argv[geometryArgument + 1]);
+    assert.equal(report.candidateSha256, createHash("sha256").update(await readFile(process.argv[2])).digest("hex"), "Geometry report belongs to another candidate");
+    assert.ok(Array.isArray(report.issues));
+    for (const item of report.issues) {
+      assert.match(item.tag, /^[a-z0-9]{2,6}$/);
+      assert.ok(["unusable-stored-boundary", "invalid-boundary", "center-outside-boundary"].includes(item.kind));
+    }
+    result.geometryIssues = report.issues;
+    result.needsReview ||= report.issues.length > 0;
+    result.digest = createHash("sha256").update(result.digest + JSON.stringify(report.issues)).digest("hex");
+  }
   await mkdir(".tmp/meshmapper-review", { recursive: true });
   await writeFile(".tmp/meshmapper-review/changes.json", JSON.stringify(result, null, 2) + "\n");
   const report = result.needsReview ? reviewText(result) : "No MeshMapper region changes.\n";

@@ -83,6 +83,8 @@
   var type = picker.querySelector("[data-scp-type]");
   var extra = picker.querySelector("[data-scp-extra]");
   var extraField = picker.querySelector("[data-scp-extra-field]");
+  var crossBorder = picker.querySelector("[data-scp-onny]");
+  var crossBorderField = picker.querySelector("[data-scp-onny-field]");
   var role = picker.querySelector("[data-scp-role]");
   var activation = picker.querySelector("[data-scp-activation]");
   var confirmed = picker.querySelector("[data-scp-activate]");
@@ -140,7 +142,8 @@
 
   function regionCommands(version, city, province, neighbour, edge, stage) {
     var profile = scopeEngine.profile(catalog, {
-      home: city, province: province, bridge: edge, cities: neighbour ? [neighbour] : [], activation: stage
+      home: city, province: province, bridge: edge, cities: neighbour ? [neighbour] : [], activation: stage,
+      external: crossBorder.checked ? ["ontario-new-york"] : []
     });
     return scopeEngine.commands(profile, firmwareId(version)).concat(["region save"]);
   }
@@ -183,6 +186,8 @@
     document.querySelectorAll("[data-scp-activation-only]").forEach(function (field) { field.hidden = !operator || !activating; });
 
     extraField.hidden = !operator || !edge;
+    crossBorderField.hidden = !operator;
+    if (!operator) crossBorder.checked = false;
     Array.prototype.forEach.call(extra.options, function (choice) {
       choice.disabled = choice.value === city;
     });
@@ -192,6 +197,7 @@
 
     var summary = canGenerate ? [shortText(area), shortText(firmware), shortText(type), shortText(activation)] : [t("Choose your area and role above. Activation also needs a confirmed repeater type and local cutover.", "Choisissez votre secteur et votre rôle ci-dessus. L’activation exige aussi un type de répéteur confirmé et une transition locale.")];
     if (neighbour) summary.push("+ " + neighbour);
+    if (crossBorder.checked) summary.push("+ onny");
     document.querySelectorAll("[data-scp-summary]").forEach(function (label) {
       label.textContent = summary.join(" · ");
     });
@@ -216,7 +222,8 @@
       picker.querySelector("[data-scp-region-source]").textContent = source;
       var tags = picker.querySelector("[data-scp-tags]");
       tags.textContent = "";
-      var profile = scopeEngine.profile(catalog, { home: city, province: province, bridge: edge, cities: neighbour ? [neighbour] : [], activation: activation.value });
+      var profile = scopeEngine.profile(catalog, { home: city, province: province, bridge: edge, cities: neighbour ? [neighbour] : [], activation: activation.value,
+        external: crossBorder.checked ? ["ontario-new-york"] : [] });
       selectedProfile = profile;
       var roleText = role.value === "companion" ? t("Companion user: no changes yet. Leave your default scope and channels unscoped until Phase 2 is announced locally (January 2027 at the earliest).", "Utilisateur d’un compagnon : aucun changement pour l’instant. Laissez la portée par défaut et les canaux sans portée jusqu’à l’annonce locale de la phase 2 (janvier 2027 au plus tôt).") :
         role.value === "bot" ? t("Bot / MeshMapper: coordinate your local-region scope with operators near the end of preparation. Do not switch before the surrounding repeaters are ready.", "Robot / MeshMapper : coordonnez votre portée locale avec les opérateurs vers la fin de la préparation. Ne changez rien avant que les répéteurs voisins soient prêts.") :
@@ -231,14 +238,14 @@
         detailsKey = nextDetailsKey;
       }
       profile.tags.forEach(function (tag) {
-        if (tag === profile.tags[0] || tag === catalog.policy.reservedScopes[0]) {
+        if (tag === profile.tags[0] || tag === catalog.policy.reservedScopes[0] || tag === "onny") {
           var label = document.createElement("strong"); label.className = "scp-finder__tag-label";
-          label.textContent = tag === profile.tags[0] ? t("Independent scope labels", "Étiquettes de portée indépendantes") : t("Reserved — do not use yet", "Réservées — ne pas utiliser pour l’instant");
+          label.textContent = tag === "onny" ? t("Optional — coordinate with both shores", "Facultative — coordonner avec les deux rives") : tag === profile.tags[0] ? t("Independent scope labels", "Étiquettes de portée indépendantes") : t("Reserved — do not use yet", "Réservées — ne pas utiliser pour l’instant");
           tags.appendChild(label);
         }
         var badge = document.createElement("span");
         badge.className = "scp-tag";
-        badge.dataset.level = tag === province ? "prov" : tag === "onqc" ? "mesh" : catalog.policy.reservedScopes.includes(tag) ? "future" : "city";
+        badge.dataset.level = tag === province ? "prov" : ["onqc", "onny"].includes(tag) ? "mesh" : catalog.policy.reservedScopes.includes(tag) ? "future" : "city";
         badge.textContent = tag;
         tags.appendChild(badge);
       });
@@ -248,6 +255,7 @@
       messageScope.add(new Option(t("No scope (*)", "Sans portée (*)"), "*"));
       [city, province, "onqc"].concat(catalog.seeds.filter(function (seed) { return seed.provinces.some(function (p) { return catalog.policy.meshScopes.onqc.includes(p); }); }).map(function (seed) { return seed.tag; }))
         .filter(function (tag, index, all) { return all.indexOf(tag) === index; }).forEach(function (tag) { messageScope.add(new Option(tag + " — " + (catalog.hierarchy[tag].labelFr && language === "fr" ? catalog.hierarchy[tag].labelFr : catalog.hierarchy[tag].label), tag)); });
+      messageScope.add(new Option("onny — Ontario–New York", "onny"));
       if (Array.from(messageScope.options).some(function (o) { return o.value === previousMessage; })) messageScope.value = previousMessage;
       showDecision();
       var map = new URL("../../config/map/", location.href);
@@ -256,13 +264,14 @@
       var share = new URL(location.href);
       share.search = new URLSearchParams({ tag: city, province: province, role: role.value, firmware: version, type: type.value, activation: activation.value });
       if (neighbour) share.searchParams.set("neighbour", neighbour);
+      if (crossBorder.checked) share.searchParams.set("onny", "1");
       share.hash = "your-region";
       picker.querySelector("[data-scp-share]").href = share.href;
       share.hash = location.hash;
       history.replaceState(history.state, "", share.href);
     } else {
       var address = new URL(location.href);
-      ["tag", "province", "role", "firmware", "type", "neighbour", "activation"].forEach(function (key) { address.searchParams.delete(key); });
+      ["tag", "province", "role", "firmware", "type", "neighbour", "activation", "onny"].forEach(function (key) { address.searchParams.delete(key); });
       history.replaceState(history.state, "", address.href);
     }
 
@@ -298,6 +307,7 @@
     area.value = "";
     origin = null;
     extra.value = "";
+    crossBorder.checked = false;
     confirmed.checked = false;
     places.textContent = "";
     status.textContent = "";
@@ -432,8 +442,8 @@
     }
   });
 
-  area.addEventListener("change", function () { cancel(); confirmed.checked = false; origin = null; extra.value = ""; query.value = ""; places.textContent = ""; status.textContent = ""; update(); });
-  [role, type, activation, extra].forEach(function (select) { select.addEventListener("change", function () { confirmed.checked = false; update(); }); });
+  area.addEventListener("change", function () { cancel(); confirmed.checked = false; origin = null; extra.value = ""; crossBorder.checked = false; query.value = ""; places.textContent = ""; status.textContent = ""; update(); });
+  [role, type, activation, extra, crossBorder].forEach(function (select) { select.addEventListener("change", function () { confirmed.checked = false; update(); }); });
   [firmware, confirmed].forEach(function (select) {
     select.addEventListener("change", update);
   });
@@ -451,6 +461,7 @@
     if (params.get("activation") === "activate") activation.value = "activate";
     if (firmwareId(params.get("firmware"))) firmware.value = params.get("firmware");
     if (["city", "edge"].includes(params.get("type"))) type.value = params.get("type");
+    crossBorder.checked = params.get("onny") === "1";
     if (Array.from(extra.options).some(function (o) { return o.value === params.get("neighbour"); })) extra.value = params.get("neighbour");
     if (params.has("tag")) selectCode(params.get("tag").toLowerCase(), params.get("province"));
     update();

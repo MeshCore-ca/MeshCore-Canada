@@ -6,7 +6,7 @@ import "../../docs/assets/regions/modules/scope-migration.js";
 const catalog = JSON.parse(readFileSync("docs/assets/regions/iata-regions.json", "utf8"));
 const scope = globalThis.MeshCoreIataScopes, migration = globalThis.MeshCoreScopeMigration;
 const profile = (activation, bridge = true) => scope.profile(catalog, {home:"ytr",province:"on",bridge,activation});
-const list = "*^\n ytr F\n on F\n onqc F\n can F\n na F";
+const list = "*^\n ytr F\n on F\n onqc F\n ca F\n na F";
 
 test("preparation never changes wildcard/default or removes legacy scopes", () => {
   assert.equal(profile(undefined).activation,"prepare");

@@ -27,7 +27,7 @@ for (const locale of ["", "fr/"]) {
     await expect(step.getByRole("radio", { name: locale ? "Répéteur de bordure" : "Edge repeater" })).toBeChecked();
     await activateConfig(page);
     await step.locator('[data-next-step]').click();
-    await expect(page.locator('[data-role="result"]')).toContainText("region def yow|* on|* onqc|* can|* na");
+    await expect(page.locator('[data-role="result"]')).toContainText("region def yow|* on|* onqc|* ca|* na");
     await expect(page.locator('[data-role="result"]')).toContainText("region denyf *");
   });
 

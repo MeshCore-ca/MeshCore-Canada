@@ -14,6 +14,16 @@ vm.runInContext(read("docs/assets/javascripts/place-search.js"), context);
 const scope = context.MeshCoreIataScopes, migration = context.MeshCoreScopeMigration, places = context.MeshCorePlaceSearch;
 const plain = value => JSON.parse(JSON.stringify(value));
 
+test("country-scope correction preserves legacy can during preparation", () => {
+  const current = migration.parse("* F\n can F\n on F\n ykf^ F");
+  const target = scope.profile(catalog, { home: "ykf", province: "on" });
+  const plan = plain(migration.plan(current, target, "1.16"));
+  assert.ok(target.tags.includes("ca"));
+  assert.ok(!target.tags.includes("can"));
+  assert.deepEqual(plan.removed, []);
+  assert.ok(!plan.commands.some(command => command.startsWith("region remove ")));
+});
+
 test("remaining city centres have assigned IATA planning regions", () => {
   for (const [tag, lat, lon] of [["yhz",44.648,-63.575],["yqm",46.088,-64.778],["yfc",45.964,-66.643], ["ysj",45.273,-66.063],
     ["yqr",50.445,-104.618],["yxe",52.134,-106.67],["ylw",49.888,-119.496],["yxs",53.9171,-122.7497],["ysb",46.492,-80.993]]) {
@@ -44,9 +54,9 @@ test("migration compares permissions and default separately from the home marker
   assert.equal(current.defaultScope,"on");
   const desired=scope.profile(catalog,{ activation: "activate", home:"yow",province:"on",bridge:true});
   const plan=plain(migration.plan(current,desired,"1.16"));
-  assert.deepEqual(plan.kept,["yow","on","can"]);
-  assert.deepEqual(plan.added,["onqc","na"]);
-  assert.deepEqual(plan.removed,["on-alg","ott"]);
+  assert.deepEqual(plan.kept,["yow","on"]);
+  assert.deepEqual(plan.added,["onqc","ca","na"]);
+  assert.deepEqual(plan.removed,["can","on-alg","ott"]);
   assert.deepEqual(plan.changed,["yow","on"]);
   assert.ok(plan.commands.indexOf("region remove ott")<plan.commands.indexOf("region remove on-alg"));
   assert.ok(plan.commands.includes("region home yow"));
@@ -117,6 +127,16 @@ test("API snapshot review keeps undrawn and non-three-letter regions visible", (
   assert.deepEqual(result.added, ["ab12"]);
   assert.deepEqual(result.unmapped, ["ab12"]);
   assert.deepEqual(result.changed[0].fields, ["group"]);
-  assert.match(reviewText(result), /without a drawn boundary: `ab12`/);
+  assert.match(reviewText(result), /without a usable boundary: `ab12`/);
   assert.equal(compareSnapshots(next, { ...next, fetchedAt: "2099-01-01" }).needsReview, false);
+});
+
+test("source review retains unavailable stored boundaries without inventing a polygon", () => {
+  const next = structuredClone(snapshot);
+  next.schema = "meshcore-canada-meshmapper-zones/v2";
+  next.features[0].geometry = null;
+  next.features[0].properties.hasBoundary = true;
+  const result = compareSnapshots(snapshot, next);
+  assert.ok(result.unmapped.includes(next.features[0].properties.tag));
+  assert.ok(result.changed.some(item => item.fields.includes("boundary")));
 });

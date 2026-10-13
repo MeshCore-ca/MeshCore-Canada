@@ -104,8 +104,9 @@
     "Published zones": "Zones publiées",
     "Fetched": "Récupéré le",
     "Flat scopes": "Portées indépendantes",
-    "City, province, mesh scope where defined, can, and na. Each scope is independent.": "Ville, province, réseau partagé s’il est défini, can et na. Chaque portée est indépendante.",
-    "onqc is for Ontario and Québec. can and na are reserved for future use, not companion defaults or active cross-border routes.": "onqc couvre l’Ontario et le Québec. can et na sont réservés pour plus tard, pas comme portées par défaut d’un compagnon ni comme routes transfrontalières actives.",
+    "City, province, mesh scope where defined, can, and na. Each scope is independent.": "Ville, province, réseau partagé s’il est défini, ca et na. Chaque portée est indépendante.",
+    "onqc is for Ontario and Québec. ca and na are reserved for future use, not companion defaults or active cross-border routes.": "onqc couvre l’Ontario et le Québec. ca et na sont réservés pour plus tard, pas comme portées par défaut d’un compagnon ni comme routes transfrontalières actives.",
+    "Confirm Ontario–New York (onny, opt-in) tags with neighbouring operators before applying them.": "Confirmez la portée facultative onny avec les opérateurs du trajet Ontario–New York avant de l’appliquer.",
     "Map limits": "Limites de la carte",
     "Only published MeshMapper boundaries are shown. Gaps are not filled with guessed circles or census regions.": "Seules les limites publiées par MeshMapper sont affichées. Les espaces vides ne sont pas comblés par des cercles estimés ou des régions de recensement.",
     "Province outlines are used only to identify the repeater province. They do not change MeshMapper boundaries.": "Les contours provinciaux servent seulement à identifier la province du répéteur. Ils ne modifient pas les limites de MeshMapper.",
@@ -790,7 +791,8 @@
       });
       return {
         id: id,
-        label: record.label,
+        label: (frenchRuntime && record.labelFr) || record.label,
+        sharedScope: record.sharedScope === true,
         path: path,
         status: record.authority && record.authority.status || "provisional",
         source: record.authority && record.authority.source || "",
@@ -1016,7 +1018,7 @@
   }
 
   function ancestryFor(data, tag, province) {
-    if (data.hierarchy[tag] && data.hierarchy[tag].kind === "city" && data.policy.provinces[province]) return ["can", province, tag];
+    if (data.hierarchy[tag] && data.hierarchy[tag].kind === "city" && data.policy.provinces[province]) return ["ca", province, tag];
     var chain = [];
     var seen = {};
     var cur = tag;
@@ -1305,7 +1307,7 @@
       activation: activation,
       bridge: type === "high-site",
       cities: type === "high-site" ? selectedMetros || [] : [],
-      external: type === "high-site" ? selectedExternalPaths || [] : []
+      external: selectedExternalPaths || []
     });
   }
 
@@ -1617,8 +1619,22 @@
 
   function renderMetroChips(data, target, state, onChange) {
     if (!target) return;
-    if (state.type !== "high-site" || !state.resolution) {
+    if (!state.resolution) {
       target.innerHTML = "";
+      return;
+    }
+    if (state.type !== "high-site") {
+      target.innerHTML = (data.externalRegionPathList || []).filter(function (record) { return record.sharedScope; }).map(function (record) {
+        return '<label class="mcc-neighbour-path"><input type="checkbox" data-shared-scope value="' + esc(record.id) + '"' +
+          ((state.selectedExternalPaths || []).indexOf(record.id) !== -1 ? " checked" : "") + '><span><strong>' + esc(record.label) +
+          '</strong><small>' + (frenchRuntime ? 'Coordonnez avec les opérateurs du trajet. Ne change pas le rôle de bordure ni le joker *.' : 'Coordinate with operators along the path. Does not change edge mode or wildcard forwarding.') + '</small></span></label>';
+      }).join("");
+      target.querySelectorAll("input[data-shared-scope]").forEach(function (input) {
+        input.addEventListener("change", function () {
+          state.selectedExternalPaths = Array.from(target.querySelectorAll("input[data-shared-scope]:checked")).map(function (item) { return item.value; });
+          onChange();
+        });
+      });
       return;
     }
     var primaryTag = state.resolution.primary.seed.tag;
@@ -2297,7 +2313,7 @@
       selectedExternalPaths: [],
       canGenerate: false,
       resolution: null,
-      browseTag: data.meta.rootTag || "can",
+      browseTag: data.meta.rootTag || "ca",
       finishPath: "guided",
       wizardStep: 1,
       maxStep: 1
@@ -2429,7 +2445,7 @@
     }
 
     function renderConfigRegionBrowser(tag) {
-      if (!data.hierarchy[tag]) tag = data.meta.rootTag || "can";
+      if (!data.hierarchy[tag]) tag = data.meta.rootTag || "ca";
       state.browseTag = tag;
       var selectedTag = state.resolution && state.resolution.primary
         ? state.resolution.primary.seed.tag
@@ -2808,8 +2824,12 @@
           var saved = migratedCitySelection(data, initialParams.get("regions"));
           state.selectedMetros = saved.tags;
           state.unresolvedRegions = saved.unresolved;
-          state.migrationNeedsReview = saved.unresolved.length > 0;
-          state.selectedExternalPaths = selectedExternalRegionPaths(data, String(initialParams.get("external") || "").split(",")).map(function (record) { return record.id; });
+          var externalIds = String(initialParams.get("external") || "").split(",").map(slug).filter(Boolean);
+          state.selectedExternalPaths = selectedExternalRegionPaths(data, externalIds).map(function (record) { return record.id; });
+          state.unresolvedRegions = state.unresolvedRegions.concat(externalIds.filter(function (id) { return state.selectedExternalPaths.indexOf(id) === -1; }).map(function (id) { return "external:" + id; }));
+          state.migrationNeedsReview = state.unresolvedRegions.length > 0;
+        } else {
+          state.selectedExternalPaths = selectedExternalRegionPaths(data, String(initialParams.get("external") || "").split(",")).filter(function (record) { return record.sharedScope; }).map(function (record) { return record.id; });
         }
         if (!state.canGenerate) return;
         state.maxStep = state.migrationNeedsReview ? 3 : 4;
@@ -2920,6 +2940,7 @@
       data,
       String(mapParams.get("external") || "").split(",").map(slug).filter(Boolean)
     ).map(function (record) { return record.id; });
+    requestedCitySelection.unresolved = requestedCitySelection.unresolved.concat(String(mapParams.get("external") || "").split(",").map(slug).filter(function (id) { return id && requestedExternalPaths.indexOf(id) === -1; }).map(function (id) { return "external:" + id; }));
     var state = {
       lat: null,
       lon: null,
@@ -2935,11 +2956,11 @@
       manualSelection: false,
       selectedMetros: requestedLargeCoverage ? requestedCanadianRegions : [],
       unresolvedRegions: requestedLargeCoverage ? requestedCitySelection.unresolved : [],
-      selectedExternalPaths: requestedLargeCoverage ? requestedExternalPaths : [],
+      selectedExternalPaths: requestedLargeCoverage ? requestedExternalPaths : requestedExternalPaths.filter(function (id) { return data.externalRegionPaths[id].sharedScope === true; }),
       canGenerate: false,
       resolution: null,
       detailTag: null,
-      browseTag: data.meta.rootTag || "can"
+      browseTag: data.meta.rootTag || "ca"
     };
     var els = {
       input: el.querySelector("[data-role='map-input']"),
@@ -2997,7 +3018,7 @@
           '<div><dt>Fetched</dt><dd>' + esc(data.source.fetchedAt) + '</dd></div></dl>' +
           '<p><a href="https://meshmapper.net/" target="_blank" rel="noopener noreferrer">Open MeshMapper</a></p></section>' +
           '<section class="mcc-card"><h3>Flat scopes</h3><p>City, province, mesh scope where defined, can, and na. Each scope is independent.</p>' +
-          '<p>onqc is for Ontario and Québec. can and na are reserved for future use, not companion defaults or active cross-border routes.</p></section>' +
+          '<p>onqc is for Ontario and Québec. ca and na are reserved for future use, not companion defaults or active cross-border routes.</p></section>' +
           '<section class="mcc-card"><h3>Map limits</h3><p>Published MeshMapper zones are unchanged. Labelled planning regions fill the remaining gaps across Canada.</p>' +
           '<p>Planning regions follow provincial borders and nearby hubs. Newfoundland and Labrador are separate. Published MeshMapper zones take priority.</p></section>' +
           '</div>' +
@@ -3019,7 +3040,7 @@
     }
 
     function renderRegionBrowser(tag, fitSelection) {
-      if (!data.hierarchy[tag]) tag = data.meta.rootTag || "can";
+      if (!data.hierarchy[tag]) tag = data.meta.rootTag || "ca";
       state.browseTag = tag;
       var path = ancestryFor(data, tag, state.jurisdictionTag);
       els.breadcrumbs.innerHTML = path.map(function (item, index) {
@@ -3037,7 +3058,7 @@
       }).join("") : '<p class="mcc-help">' + (data.policy.provinces[tag] ? 'No MeshMapper zones are published here yet.' : 'Select this city zone to see its scope options.') + '</p>';
       if (!map || !browseLayer) return;
       browseLayer.clearLayers();
-      if (tag !== (data.meta.rootTag || "can") && data.partitionByTag) {
+      if (tag !== (data.meta.rootTag || "ca") && data.partitionByTag) {
         browseLayer.addData(featuresForNode(data, tag));
         browseLayer.bringToFront();
         if (selectedLayer) selectedLayer.bringToFront();

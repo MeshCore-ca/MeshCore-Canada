@@ -22,6 +22,10 @@ It does not scrape pages, simplify polygons or invent boundaries for undrawn zon
 The approved meshmapper-iata-boundaries.geojson snapshot predates the API: its
 historical provenance records the old feed and coordinate conversion. It stays
 unchanged until API boundary changes have been reviewed.
+Authenticated API review on 2026-10-13 found an invalid YQB polygon and a material
+YUL boundary change. The reviewed snapshot is retained; the unapproved candidate
+is not served to visitors. See maintenance/meshmapper-api-review-2026-10-13.json
+in the repository for the review record.
 Credit MeshMapper zone owners, OpenStreetMap contributors (ODbL), and
 geoBoundaries (CC BY 4.0) where those sources are used by MeshMapper.
 

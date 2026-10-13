@@ -1,12 +1,15 @@
 #!/usr/bin/env node
 // Fetch a review candidate, never replace the website's approved boundaries.
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 export const directoryUrl = "https://meshmapper.net/get_zones.php?country=CA";
-const maxAge = 3600_000;
+const maxAge = 24 * 3600_000;
+const requestSpacing = 2200; // Below the shared 30-reads/minute budget.
+const wait = milliseconds => new Promise(resolve => setTimeout(resolve, milliseconds));
 const codePattern = /^[A-Z0-9]{2,6}$/;
 const validCenter = point => Array.isArray(point) && point.length === 2 && point.every(Number.isFinite) &&
   point[0] >= -142 && point[0] <= -52 && point[1] >= 41 && point[1] <= 84;
@@ -50,7 +53,7 @@ export function zoneFeature(zone, data) {
   assert.ok(validCenter(properties.center));
   assert.equal(properties.has_boundary, zone.has_boundary, "Directory and boundary disagree; retry after the cache expires");
   if (!zone.has_boundary) assert.equal(feature.geometry, null, "An undrawn boundary must stay null");
-  else {
+  if (feature.geometry !== null) {
     assert.equal(feature.geometry?.type, "Polygon");
     assert.ok(Array.isArray(feature.geometry.coordinates) && feature.geometry.coordinates.length > 0);
     for (const ring of feature.geometry.coordinates) {
@@ -69,31 +72,81 @@ export function zoneFeature(zone, data) {
   };
 }
 
-export async function requestJson(url, cache, fetcher = fetch) {
-  const previous = Object.hasOwn(cache, url) ? cache[url] : null;
-  const age = Date.now() - previous?.checkedAt;
+export function verifyDirectoryCoverage(zones, approved, allowRemovals = false) {
+  const returned = new Set(zones.map(zone => zone.code.toLowerCase()));
+  const missing = approved.features.map(feature => feature.properties.tag).filter(tag => !returned.has(tag));
+  assert.ok(allowRemovals || !missing.length,
+    "Directory omits approved regions: " + missing.join(", ") +
+    ". Confirm Canada-wide key access; use --allow-region-removals only after reviewing actual removals.");
+  return missing;
+}
+
+export async function requestJson(url, cache, options = {}) {
+  const { apiKey = process.env.MESHMAPPER_API_KEY, fetcher = fetch, now = Date.now, sleep = wait } = options;
+  assert.ok(typeof apiKey === "string" && /^[^\s\r\n]{16,512}$/.test(apiKey),
+    "Configure MESHMAPPER_API_KEY with Canada-wide integration access before fetching");
+  const target = new URL(url);
+  assert.ok(url === directoryUrl || (target.pathname === "/get_geojson.php" && !target.search && !target.hash &&
+    new URL("get_geojson.php", siteUrl(target.origin + "/")).href === url), "Unexpected MeshMapper API target");
+  // Parsed data is private to this credential and geographic assignment, never an HTTP/public cache.
+  const credential = createHash("sha256").update(apiKey + "\0CA").digest("hex");
+  if (cache.schema !== "meshmapper-private-cache/v2" || cache.credential !== credential) {
+    for (const key of Object.keys(cache)) delete cache[key];
+    Object.assign(cache, { schema: "meshmapper-private-cache/v2", credential, responses: {} });
+  }
+  if (Number.isFinite(cache.retryAt) && cache.retryAt > now()) {
+    throw new Error("MeshMapper retry deferred until " + new Date(cache.retryAt).toISOString());
+  }
+  const previous = cache.responses[url];
+  const age = now() - previous?.checkedAt;
   if (previous?.data && Number.isFinite(age) && age >= 0 && age < maxAge) return previous.data;
-  const response = await fetcher(url, {
-    signal: AbortSignal.timeout(30_000), redirect: "error",
-    headers: { "User-Agent": "MeshCore-Canada region review (+https://github.com/MeshCore-ca/MeshCore-Canada)",
-      ...(typeof previous?.etag === "string" ? { "If-None-Match": previous.etag } : {}) },
-  });
+  const delay = Math.max(0, (cache.nextRequestAt || 0) - now());
+  assert.ok(delay <= 10_000, "API cache clock is ahead; check the system clock");
+  if (delay) await sleep(delay);
+  cache.nextRequestAt = now() + requestSpacing;
+  let response;
+  try {
+    response = await fetcher(url, {
+      signal: AbortSignal.timeout(120_000), redirect: "error",
+      headers: { "User-Agent": "MeshCore-Canada region review (+https://github.com/MeshCore-ca/MeshCore-Canada)",
+        "X-API-Key": apiKey,
+        ...(typeof previous?.etag === "string" ? { "If-None-Match": previous.etag } : {}) },
+    });
+  } catch {
+    cache.retryAt = now() + maxAge; // A timeout/reset may already have consumed a read.
+    throw new Error("MeshMapper request did not complete; retained the previous copy and deferred retries for 24 hours");
+  }
   if (response.status === 304) {
     assert.ok(previous?.data, "Received 304 without a cached response");
-    previous.checkedAt = Date.now();
+    previous.checkedAt = now();
     return previous.data;
   }
-  if (!response.ok) throw new Error("MeshMapper HTTP " + response.status + ": " + url +
-    (response.status === 429 ? "; retry after " + (response.headers.get("retry-after") || "60") + " seconds" : ""));
-  const data = await response.json();
-  cache[url] = { checkedAt: Date.now(), etag: response.headers.get("etag"), data };
+  if (!response.ok) {
+    if ([401, 403].includes(response.status)) {
+      cache.responses = {}; // Access changed: discard parsed data. Auth failures do not consume the read quota.
+      delete cache.retryAt;
+      throw new Error("MeshMapper HTTP " + response.status + ": check the integration key and its geographic/API permissions");
+    }
+    const retry = response.headers.get("retry-after");
+    const retryTime = retry && /^\d+$/.test(retry) ? now() + Number(retry) * 1000 : Date.parse(retry || "");
+    cache.retryAt = Number.isFinite(retryTime) && retryTime > now() ? retryTime : now() + maxAge;
+    throw new Error("MeshMapper HTTP " + response.status + ": " + url +
+      "; retry deferred until " + new Date(cache.retryAt).toISOString());
+  }
+  let data;
+  try { data = await response.json(); }
+  catch {
+    cache.retryAt = now() + maxAge;
+    throw new Error("MeshMapper returned incomplete JSON; retained the previous copy and deferred retries for 24 hours");
+  }
+  cache.responses[url] = { checkedAt: now(), etag: response.headers.get("etag"), data };
   return data;
 }
 
 async function saveJson(path, data) {
   await mkdir(dirname(path), { recursive: true });
   const temporary = path + "." + process.pid + ".tmp";
-  await writeFile(temporary, JSON.stringify(data) + "\n");
+  await writeFile(temporary, JSON.stringify(data) + "\n", { mode: 0o600 });
   await rename(temporary, path);
 }
 
@@ -107,13 +160,12 @@ async function main() {
   try {
     const directory = await requestJson(directoryUrl, cache);
     const zones = canadianZones(directory), features = [];
+    const approved = JSON.parse(await readFile("docs/assets/regions/meshmapper-iata-boundaries.geojson", "utf8"));
+    verifyDirectoryCoverage(zones, approved, process.argv.includes("--allow-region-removals"));
     for (const zone of zones) {
-      // The directory and region APIs share a 60 requests/minute limit.
       const url = new URL("get_geojson.php", siteUrl(zone.url)).href;
-      const age = Date.now() - cache[url]?.checkedAt;
-      if (!(age >= 0 && age < maxAge)) await new Promise(resolve => setTimeout(resolve, 1100));
       features.push(zoneFeature(zone, await requestJson(url, cache)));
-      console.log(zone.code + (zone.has_boundary ? ": API boundary verified" : ": no drawn boundary (kept as null)"));
+      console.log(zone.code + (features.at(-1).geometry ? ": API boundary verified" : ": boundary unavailable (kept as null)"));
     }
     await saveJson(output, {
       type: "FeatureCollection", schema: "meshcore-canada-meshmapper-zones/v2",
@@ -127,7 +179,7 @@ async function main() {
     });
     console.log("Wrote " + features.length + " Canadian regions to " + output);
   } finally {
-    // Retain successful public responses even if a later endpoint fails.
+    // Retain private parsed data and cooldowns even if a later endpoint fails. Never publish this cache.
     await saveJson(cachePath, cache);
   }
 }

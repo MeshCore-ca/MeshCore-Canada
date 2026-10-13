@@ -58,7 +58,7 @@ for (const locale of ["", "fr/"]) {
     const result = page.locator('[data-role="result"]');
     await expect(result.locator('[data-onqc-rollout]')).toHaveCount(0);
     await expect(result.locator('[data-onqc-settings-summary]')).toHaveCount(0);
-    await expect(result).toContainText("region def yyc|* ab|* can");
+    await expect(result).toContainText("region def yyc|* ab|* ca");
     for (const command of standardCommands) await expect(result.locator(`[data-cmd="${command}"]`)).toHaveCount(0);
   });
 }

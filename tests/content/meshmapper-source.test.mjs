@@ -1,7 +1,13 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { readFileSync } from "node:fs";
-import { canadianZones, directoryUrl, requestJson, zoneFeature } from "../../scripts/fetch-meshmapper-regions.mjs";
+import { canadianZones, directoryUrl, requestJson, verifyDirectoryCoverage, zoneFeature } from "../../scripts/fetch-meshmapper-regions.mjs";
+
+function client(fetcher) {
+  let clock = Date.now();
+  return { apiKey: "fixture-integration-key-not-a-secret", fetcher, now: () => clock,
+    sleep: async milliseconds => { clock += milliseconds; } };
+}
 
 const yow = { code: "YOW", name: "Ottawa–Gatineau, CA", short_name: "Ottawa–Gatineau", country: "CA",
   lat: 45.41, lon: -75.7, url: "https://yow.meshmapper.net/", has_boundary: true, group: "ONQC" };
@@ -56,9 +62,13 @@ test("an enabled undrawn region keeps null geometry and never becomes a guessed 
   assert.equal(feature.properties.hasBoundary, false);
   assert.throws(() => zoneFeature(yow, data));
   assert.throws(() => zoneFeature(zone, boundary()));
+  const unusable = boundary(); unusable.features[0].geometry = null;
+  const stored = zoneFeature(yow, unusable);
+  assert.equal(stored.geometry, null);
+  assert.equal(stored.properties.hasBoundary, true);
 });
 
-test("API requests reuse the one-hour cache and conditional 304 responses", async () => {
+test("authenticated API requests reuse private daily data and conditional 304 responses", async () => {
   const cache = {}, calls = [];
   const fetcher = async (url, options) => {
     calls.push({ url, options });
@@ -66,29 +76,93 @@ test("API requests reuse the one-hour cache and conditional 304 responses", asyn
       ? new Response(JSON.stringify(directory()), { headers: { ETag: '"zones-v1"' } })
       : new Response(null, { status: 304 });
   };
-  const first = await requestJson(directoryUrl, cache, fetcher);
-  assert.deepEqual(await requestJson(directoryUrl, cache, fetcher), first);
+  const options = client(fetcher);
+  const first = await requestJson(directoryUrl, cache, options);
+  assert.deepEqual(await requestJson(directoryUrl, cache, options), first);
   assert.equal(calls.length, 1);
-  cache[directoryUrl].checkedAt = Date.now() - 3600_001;
-  assert.deepEqual(await requestJson(directoryUrl, cache, fetcher), first);
+  cache.responses[directoryUrl].checkedAt = options.now() - 3600_001;
+  await requestJson(directoryUrl, cache, options);
+  assert.equal(calls.length, 1);
+  cache.responses[directoryUrl].checkedAt = options.now() - 86400_001;
+  assert.deepEqual(await requestJson(directoryUrl, cache, options), first);
   assert.equal(calls.length, 2);
+  assert.ok(calls.every(call => call.options.headers["X-API-Key"] === options.apiKey));
   assert.equal(calls[1].options.headers["If-None-Match"], '"zones-v1"');
   assert.equal(calls[1].options.redirect, "error");
-  await assert.rejects(requestJson(directoryUrl, {}, async () => new Response(null, { status: 304 })), /without a cached response/);
+  assert.ok(!JSON.stringify(cache).includes(options.apiKey));
+  await assert.rejects(requestJson(directoryUrl, {}, client(async () => new Response(null, { status: 304 }))), /without a cached response/);
 });
 
-test("API failures preserve cached data and do not retry through a rate limit", async () => {
+test("HTTP failures preserve previous data and persist Retry-After across reruns", async () => {
   for (const status of [404, 429, 503]) {
-    const cache = { [directoryUrl]: { checkedAt: 1, etag: '"old"', data: directory() } };
-    const previous = structuredClone(cache);
+    const cache = {}, options = client(async () => new Response(JSON.stringify(directory())));
+    await requestJson(directoryUrl, cache, options);
+    cache.responses[directoryUrl].checkedAt = 1;
+    const previous = structuredClone(cache.responses);
     let calls = 0;
-    await assert.rejects(requestJson(directoryUrl, cache, async () => {
-      calls++;
-      return new Response('{"error":"unavailable"}', { status, headers: { "Retry-After": "60" } });
-    }), status === 429 ? /retry after 60 seconds/ : new RegExp("HTTP " + status));
+    options.fetcher = async () => { calls++; return new Response('{"error":"unavailable"}', { status, headers: { "Retry-After": "60" } }); };
+    await assert.rejects(requestJson(directoryUrl, cache, options), new RegExp("HTTP " + status));
+    assert.equal(cache.retryAt, options.now() + 60_000);
+    await assert.rejects(requestJson(directoryUrl, cache, options), /retry deferred/);
     assert.equal(calls, 1);
-    assert.deepEqual(cache, previous);
+    assert.deepEqual(cache.responses, previous);
   }
   const source = readFileSync("scripts/fetch-meshmapper-regions.mjs", "utf8");
   assert.doesNotMatch(source, /zones_bbox|var zones/);
+});
+
+test("request spacing includes the directory and every region and blocks key leakage", async () => {
+  const starts = [], cache = {};
+  const options = client(async () => { starts.push(options.now()); return new Response(JSON.stringify(directory())); });
+  await requestJson(directoryUrl, cache, options);
+  await requestJson("https://yow.meshmapper.net/get_geojson.php", cache, options);
+  await requestJson("https://yul.meshmapper.net/get_geojson.php", cache, options);
+  assert.ok(starts.slice(1).every((start, i) => start - starts[i] >= 2200));
+  for (const url of ["https://evil.test/get_geojson.php", "http://yow.meshmapper.net/get_geojson.php", "https://yow.meshmapper.net/get_geojson.php?key=x", "https://user:pass@yow.meshmapper.net/get_geojson.php"]) {
+    await assert.rejects(requestJson(url, cache, options), /Unexpected/);
+  }
+  await assert.rejects(requestJson(directoryUrl, {}, { ...options, apiKey: "" }), /Configure MESHMAPPER_API_KEY/);
+  assert.equal(starts.length, 3);
+});
+
+test("credential rotation and access failures discard previously authorized data", async () => {
+  const cache = {}, options = client(async () => new Response(JSON.stringify(directory())));
+  await requestJson(directoryUrl, cache, options);
+  const credential = cache.credential;
+  options.apiKey = "another-fixture-integration-key";
+  options.fetcher = async (url, request) => {
+    assert.equal(request.headers["If-None-Match"], undefined);
+    return new Response(JSON.stringify(directory()));
+  };
+  await requestJson(directoryUrl, cache, options);
+  assert.notEqual(cache.credential, credential);
+  cache.responses[directoryUrl].checkedAt = 1;
+  options.fetcher = async () => new Response('{"error":"region_not_allowed"}', { status: 403 });
+  await assert.rejects(requestJson(directoryUrl, cache, options), /HTTP 403/);
+  assert.deepEqual(cache.responses, {});
+});
+
+test("ambiguous timeouts and broken JSON never cause immediate retries or erase the last copy", async () => {
+  for (const failure of [async () => { throw new Error("timeout"); }, async () => new Response('{"zones":')]) {
+    const cache = {}, options = client(async () => new Response(JSON.stringify(directory())));
+    await requestJson(directoryUrl, cache, options);
+    cache.responses[directoryUrl].checkedAt = 1;
+    const previous = structuredClone(cache.responses);
+    let calls = 0;
+    options.fetcher = async () => { calls++; return failure(); };
+    await assert.rejects(requestJson(directoryUrl, cache, options), /24 hours/);
+    await assert.rejects(requestJson(directoryUrl, cache, options), /retry deferred/);
+    assert.equal(calls, 1);
+    assert.deepEqual(cache.responses, previous);
+  }
+});
+
+test("partial geographic authorization cannot masquerade as national region removals", () => {
+  const approved = { features: [{ properties: { tag: "yow" } }, { properties: { tag: "ykf" } }] };
+  assert.throws(() => verifyDirectoryCoverage([yow], approved), /Canada-wide key access/);
+  assert.deepEqual(verifyDirectoryCoverage([yow], approved, true), ["ykf"]);
+  assert.deepEqual(verifyDirectoryCoverage([yow, { ...yow, code: "YKF" }], approved), []);
+  const workflow = readFileSync(".github/workflows/meshmapper-review.yml", "utf8");
+  assert.match(workflow, /secrets\.MESHMAPPER_API_KEY/);
+  assert.doesNotMatch(workflow, /uses: actions\/cache|allow-region-removals|pull_request_target/);
 });

@@ -12,9 +12,31 @@
       ]
     },
     "reservedScopes": [
-      "can",
+      "ca",
       "na"
     ],
+    "optionalNetworks": {
+      "ontario-new-york": {
+        "label": "Ontario–New York (onny, opt-in)",
+        "labelFr": "Ontario–New York (onny, facultatif)",
+        "country": "us",
+        "path": [
+          "onny"
+        ],
+        "sharedScope": true,
+        "tagLabels": {
+          "onny": "Ontario–New York"
+        },
+        "geographic": false,
+        "automatic": false,
+        "eligibility": "coordinated-cross-border",
+        "authority": {
+          "status": "proposed",
+          "source": "MeshCore Canada cross-border scope discussion",
+          "sourceUrl": "https://meshcore.ca/proposals/onqc-scopes/#cross-border-scopes"
+        }
+      }
+    },
     "minimumFirmware": "1.14",
     "scopedAdvertFirmware": "1.15",
     "bulkDefinitionFirmware": "1.16",
@@ -360,13 +382,13 @@
     "starterCount": 29,
     "boundarySchema": "meshcore-canada-iata-boundaries/v2",
     "planningExtensionCount": 33,
-    "boundarySha256": "5c00957d06188d3a36a9af7680997fc7bdbbc940c67e15e80f22def84c7f948b",
+    "boundarySha256": "dc550356a0e86eb7b5881c71808fa9243f708151ad3e90955ec678ea5e9bc01c",
     "meshmapperBoundarySha256": "78e0d08608b82328033b2ba59b22ce08a82a563725e5d59c5059ca0dc119c2d6",
     "jurisdictionSha256": "753d7ad13f089cdeee54cb29c9105706226fa75228193c4eda2d4ecc5ed78349"
   },
   "meta": {
     "name": "MeshCore Canada IATA scopes",
-    "rootTag": "can",
+    "rootTag": "ca",
     "defaultFirmware": "1.16",
     "map": {
       "center": [
@@ -386,7 +408,7 @@
     }
   },
   "hierarchy": {
-    "can": {
+    "ca": {
       "label": "Canada",
       "labelFr": "Canada",
       "parent": null,
@@ -401,79 +423,79 @@
     "bc": {
       "label": "British Columbia",
       "labelFr": "Colombie-Britannique",
-      "parent": "can",
+      "parent": "ca",
       "kind": "province"
     },
     "ab": {
       "label": "Alberta",
       "labelFr": "Alberta",
-      "parent": "can",
+      "parent": "ca",
       "kind": "province"
     },
     "sk": {
       "label": "Saskatchewan",
       "labelFr": "Saskatchewan",
-      "parent": "can",
+      "parent": "ca",
       "kind": "province"
     },
     "mb": {
       "label": "Manitoba",
       "labelFr": "Manitoba",
-      "parent": "can",
+      "parent": "ca",
       "kind": "province"
     },
     "on": {
       "label": "Ontario",
       "labelFr": "Ontario",
-      "parent": "can",
+      "parent": "ca",
       "kind": "province"
     },
     "qc": {
       "label": "Québec",
       "labelFr": "Québec",
-      "parent": "can",
+      "parent": "ca",
       "kind": "province"
     },
     "nb": {
       "label": "New Brunswick",
       "labelFr": "Nouveau-Brunswick",
-      "parent": "can",
+      "parent": "ca",
       "kind": "province"
     },
     "ns": {
       "label": "Nova Scotia",
       "labelFr": "Nouvelle-Écosse",
-      "parent": "can",
+      "parent": "ca",
       "kind": "province"
     },
     "pe": {
       "label": "Prince Edward Island",
       "labelFr": "Île-du-Prince-Édouard",
-      "parent": "can",
+      "parent": "ca",
       "kind": "province"
     },
     "nl": {
       "label": "Newfoundland and Labrador",
       "labelFr": "Terre-Neuve-et-Labrador",
-      "parent": "can",
+      "parent": "ca",
       "kind": "province"
     },
     "yt": {
       "label": "Yukon",
       "labelFr": "Yukon",
-      "parent": "can",
+      "parent": "ca",
       "kind": "province"
     },
     "nt": {
       "label": "Northwest Territories",
       "labelFr": "Territoires du Nord-Ouest",
-      "parent": "can",
+      "parent": "ca",
       "kind": "province"
     },
     "nu": {
       "label": "Nunavut",
       "labelFr": "Nunavut",
-      "parent": "can",
+      "parent": "ca",
       "kind": "province"
     },
     "onqc": {
@@ -1012,7 +1034,7 @@
     }
   },
   "status": {
-    "can": {
+    "ca": {
       "state": "reserved",
       "source": "https://meshcore.ca/proposals/onqc-scopes/"
     },
@@ -4259,32 +4281,24 @@
         "observations": 10
       }
     },
-    "california": {
-      "label": "California",
+    "ontario-new-york": {
+      "label": "Ontario–New York (onny, opt-in)",
+      "labelFr": "Ontario–New York (onny, facultatif)",
       "country": "us",
-      "areaCode": "CA",
       "path": [
-        "west",
-        "ca"
+        "onny"
       ],
+      "sharedScope": true,
       "tagLabels": {
-        "west": "Western mesh",
-        "ca": "California"
+        "onny": "Ontario–New York"
       },
       "geographic": false,
       "automatic": false,
-      "eligibility": "observed-further-route",
+      "eligibility": "coordinated-cross-border",
       "authority": {
-        "status": "provisional",
-        "source": "Pacific Northwest MeshCore Region Strategy future extension",
-        "sourceUrl": "https://gessaman.com/meshcore/regions/"
-      },
-      "trafficEvidence": {
-        "source": "https://dev.meshcore.ca/",
-        "snapshot": "2026-07-18",
-        "method": "mixed-canada-us-resolved-route",
-        "routePatterns": 7,
-        "observations": 12
+        "status": "proposed",
+        "source": "MeshCore Canada cross-border scope discussion",
+        "sourceUrl": "https://meshcore.ca/proposals/onqc-scopes/#cross-border-scopes"
       }
     }
   }

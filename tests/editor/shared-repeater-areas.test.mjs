@@ -69,7 +69,7 @@ test("Ottawa and Gatineau use the same city zone without automatically carrying 
     assert.equal(result.primary.seed.tag, "yow");
     assert.equal(result.province, province);
     const profile = api.recommend(data, result, "residential", [], []);
-    assert.deepEqual(plain(profile.tags), ["yow", province, "onqc", "can", "na"]);
+    assert.deepEqual(plain(profile.tags), ["yow", province, "onqc", "ca", "na"]);
     assert.deepEqual(plain(api.expandSharedRepeaterLeaves(data, ["yow"])), ["yow"]);
   }
 });
@@ -115,14 +115,18 @@ test("neighbouring network paths remain explicit and do not become Canadian geom
   for (const [, record] of entries) {
     assert.equal(record.automatic, false);
     assert.equal(record.geographic, false);
-    assert.ok(record.trafficEvidence);
+    if (record.sharedScope) {
+      assert.equal(record.authority.status, "proposed");
+      assert.equal(record.path.length, 1);
+      assert.equal(record.trafficEvidence, undefined, "Do not invent observations for an opt-in proposal");
+    } else assert.ok(record.trafficEvidence);
   }
   const [wny] = entries.find(([, record]) => record.path.join(" ") === "us us-ny");
   const result = api.resolveLocation(data, 43.6532, -79.3832);
   const local = api.recommend(data, result, "residential", [], []);
   assert.ok(!local.tags.includes("us"));
   const bridge = api.recommend(data, result, "high-site", ["yyz", "ykf"], [wny], "activate");
-  assert.equal(scopes.commands(bridge)[0], "region def yyz|* ykf|* on|* onqc|* can|* na|* us us-ny");
+  assert.equal(scopes.commands(bridge)[0], "region def yyz|* ykf|* on|* onqc|* ca|* na|* us us-ny");
   assert.equal(scopes.commands(bridge)[1], "region denyf *");
   assert.ok(bridge.notes.every(note => !note.includes("before applying")));
   assert.equal(data.partitionByTag["us-ny"], undefined);
@@ -132,7 +136,7 @@ test("extra Canadian city zones never add their provinces automatically", () => 
   const { api, data } = internals();
   const result = api.resolveLocation(data, 43.6532, -79.3832);
   const bridge = api.recommend(data, result, "high-site", ["yyz", "yul"], []);
-  assert.deepEqual(plain(bridge.tags), ["yyz", "yul", "on", "onqc", "can", "na"]);
+  assert.deepEqual(plain(bridge.tags), ["yyz", "yul", "on", "onqc", "ca", "na"]);
 });
 
 test("config-to-map handoff preserves IATA choices, province, and opt-in settings without unrelated fields", () => {
