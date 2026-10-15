@@ -8,7 +8,7 @@ function api(path, name) {
   vm.runInContext(readFileSync(path, "utf8"), context);
   return context[name];
 }
-const community = api("docs/assets/javascripts/communities.js", "MeshCoreCommunitySearch");
+const community = api("docs/assets/javascripts/place-search.js", "MeshCorePlaceSearch");
 const network = api("docs/assets/javascripts/network-status.js", "MeshCoreNetworkStatus");
 
 test("city lookup prefers Cambridge Ontario to Cambridge Bay and rejects non-Canadian coordinates", () => {

@@ -57,7 +57,7 @@ Open **Settings** → **MQTT & Automation**, add **Community MQTT / meshcoretomq
 | Token Audience | `mqtt1.meshcore.ca` |
 | Use TLS | Enabled |
 | Verify TLS certificates | Enabled |
-| Region Code | Your nearest real three-letter location code |
+| Region Code | The uppercase code from the [IATA region map](../config/map.md) |
 | Packet Topic Template | `meshcore/{IATA}/{PUBLIC_KEY}/packets` |
 
 Leave optional owner email blank unless it is operationally needed. Save the entry as enabled.

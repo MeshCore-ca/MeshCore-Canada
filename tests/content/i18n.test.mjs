@@ -58,11 +58,11 @@ test("MkDocs uses the pinned bilingual plugin and a route-preserving switcher", 
   assert.match(alternate, /aria-current="page"/);
 });
 
-test("French interactive UI and standalone editor keep their language context", async () => {
-  const [runtime, editor, editorCss, frenchSubmission] = await Promise.all([
+test("French interactive UI and retired editor landing keep their language context", async () => {
+  const [runtime, editor, editorFr, frenchSubmission] = await Promise.all([
     readFile(join(docs, "assets", "javascripts", "i18n-runtime.js"), "utf8"),
-    readFile(join(docs, "config", "editor", "index.html"), "utf8"),
-    readFile(join(docs, "config", "editor", "editor.css"), "utf8"),
+    readFile(join(docs, "config", "editor", "index.md"), "utf8"),
+    readFile(join(docs, "config", "editor", "index.fr.md"), "utf8"),
     readFile(join(docs, "submit-idea.fr.md"), "utf8"),
   ]);
 
@@ -71,12 +71,13 @@ test("French interactive UI and standalone editor keep their language context", 
   assert.match(runtime, /\/fr\/config\/editor/);
   assert.match(runtime, /"The proposal format is not supported\.": "Le format/);
   assert.match(runtime, /"Spam protection cannot load in this browser\.": "La protection/);
-  assert.match(editor, /data-editor-language="en"/);
-  assert.match(editor, /data-editor-language="fr"/);
-  assert.match(editor, /data-editor-language="en" href="\.\/"/);
-  assert.match(editor, /data-editor-language="fr" href="\.\.\/\.\.\/fr\/config\/editor\/"/);
-  assert.match(editor, /i18n-runtime\.js/);
-  assert.match(editorCss, /\.utility-nav__divider\s*\{[^}]*\}\s*\.lifecycle-list/s);
+  assert.match(editor, /Region changes now use MeshMapper/);
+  assert.match(editorFr, /Les régions se modifient maintenant dans MeshMapper/);
+  assert.match(editorFr, /Télécharger les brouillons/);
+  for (const page of [editor, editorFr]) {
+    assert.match(page, /legacy-draft-export\.js/);
+    assert.doesNotMatch(page, /app\.js|editor-map|proposal-type/);
+  }
   assert.match(frenchSubmission, /name="source_page" value="https:\/\/meshcore\.ca\/fr\/submit-idea\/"/);
 });
 

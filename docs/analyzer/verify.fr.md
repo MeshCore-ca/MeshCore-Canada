@@ -51,7 +51,7 @@ normale ou l’activité déjà présente à proximité suffit.
 | Vérification | Ce que vous devriez voir |
 |---|---|
 | Nom | Un nom de service clair comme `YOW-Repeater-01`, sans adresse résidentielle |
-| Emplacement | Le véritable code d’aéroport à trois lettres le plus près, et non `CAN`, `XXX` ou `HOME` |
+| Emplacement | Le code en majuscules de la [carte des régions IATA](../config/map.md), ou un code convenu avec la communauté si aucune zone n’est publiée |
 | Parcours principal | Connexion à `mqtt1.meshcore.ca` avec validation du certificat TLS |
 | Parcours de secours | Connexion à `mqtt2.meshcore.ca` si la méthode accepte deux entrées |
 | Mode de paquets | Publication des paquets activée, et non seulement celle de l’état |

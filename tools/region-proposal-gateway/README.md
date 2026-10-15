@@ -1,281 +1,96 @@
 # MeshCore Canada anonymous submission service
 
-This server-side service creates public review issues for two MeshCore Canada
-forms without requiring contributors to have GitHub accounts:
+The service creates public review issues for community ideas submitted at
+[meshcore.ca/submit-idea](https://meshcore.ca/submit-idea/), without requiring a
+GitHub account. MeshMapper owns the published zone boundaries; the former census
+boundary submission and approval workflow is retired.
 
-- community ideas from `https://meshcore.ca/submit-idea/`; and
-- region boundary proposals from `https://meshcore.ca/config/editor/`.
-
-Production is owned and operated by MeshCore Canada at exactly:
+Production remains organization-owned at exactly:
 
 ```text
 https://api.meshcore.ca:21323/api/meshcore-canada/submissions
 ```
 
-The service never changes repository contents or region authority. It creates
-fixed-format issues in `MeshCore-ca/MeshCore-Canada`. Boundary proposals also
-receive `boundary-update` and an App-authored PNG preview comment; after public
-review, a repository-owned GitHub Action applies only a proposal closed as
-**Completed** by an allowlisted maintainer.
-
-See the repository-root [`instructions.md`](../../instructions.md) for the
-copyable administrator activation, merge, verification, and rollback runbook.
+See [instructions.md](../../instructions.md) for deployment, backup, verification,
+and rollback. The production owner must deploy this gateway revision before the
+IATA website migration is merged. Repository tests are not deployment evidence.
 
 ## HTTP contract
 
 The base path is `/api/meshcore-canada/submissions`.
 
-- `GET <base>/config` returns:
+- `GET <base>/config`: version, public Turnstile key, action
+  `meshcore_submission`, `communityIdeaOptionalDetails: true`,
+  `boundaryProposals: false`, and `regionAuthority: https://meshmapper.net/`.
+- `POST <base>`: envelope
+  `{"version":1,"submission":{...},"turnstileToken":"...","website":""}`.
+- Accepted schema: `mcc-community-idea/v1`. Required summary, need, and public
+  acknowledgement; optional experience/details retain the short-form contract.
+- Both `mcc-region-editor-proposal/v1` and `/v2` return HTTP **410** with
+  `boundary_editor_retired` before Turnstile verification or external writes.
+- `GET/HEAD <base>/previews/<sha256>.png` still serves existing immutable previews;
+  unknown hashes return 404. No new boundary previews are created.
 
-  ```json
-  {"version":1,"turnstileSiteKey":"...","turnstileAction":"meshcore_submission","communityIdeaOptionalDetails":true}
-  ```
+Successful community submissions return `ok`, `issueNumber`, `issueUrl`,
+`submissionSha256`, and `duplicate`. Canonical UTF-8 JSON uses recursively sorted
+keys, unescaped Unicode, compact separators, and no trailing newline. Its SHA-256
+is the idempotency key.
 
-- `POST <base>` accepts exactly:
+The server rejects unknown fields, invalid Unicode, control characters, invalid
+source-page URLs, excessive lengths, and nonempty honeypots. Contributor HTML and
+mentions are escaped. Browser clients verify the exact GitHub repository URL and
+returned hash. No credentials reach the browser.
 
-  ```json
-  {"version":1,"submission":{...},"turnstileToken":"...","website":""}
-  ```
+## Security and ownership
 
-- `GET <base>/previews/<submission-sha256>.png` serves the immutable,
-  server-generated boundary preview referenced by the GitHub issue comment.
+Keep the existing GitHub App restricted to **Issues: read/write** on
+`MeshCore-ca/MeshCore-Canada`, implicit metadata access, no Contents permission,
+and no webhook. Installation tokens are short-lived and repository-restricted.
 
-- Success returns:
+Turnstile must validate the hostname and `meshcore_submission` action. Exact
+allowlisted origins, POST/Content-Type preflight, no CORS credentials, trusted
+proxy validation, and pre/post-verification rate limits remain unchanged.
+Never log contributor text, request bodies, tokens, or secrets.
 
-  ```json
-  {"ok":true,"issueNumber":123,"issueUrl":"https://github.com/MeshCore-ca/MeshCore-Canada/issues/123","submissionSha256":"...","duplicate":false}
-  ```
-
-`website` is a honeypot and must be empty. POST requires an exact allowlisted
-`Origin`; CORS never uses a wildcard or credentials. The service supports a
-strict OPTIONS preflight for `POST` and `Content-Type`. Browser requests omit
-cookies and referrers, then verify the returned hash and exact GitHub issue URL
-before displaying the link.
-
-`submissionSha256` is computed over UTF-8 canonical JSON with recursively
-sorted object keys, no ASCII escaping, `,` and `:` separators, and no trailing
-newline. It is the idempotency key for both schemas.
-
-## Accepted schemas
-
-### `mcc-community-idea/v1`
-
-The server accepts the fixed category and experience enums plus:
-
-- required `summary`, `need`, and `publicAcknowledged: true`;
-- `category` from the existing enum (the form defaults to other feedback);
-- `experience` and `idea` keys, which may now contain empty strings;
-- optional `region`, `context`, `followUp`, and `sourcePage`; and
-- the browser field limits enforced again server-side.
-
-It normalizes line endings, rejects unknown keys, controls and invalid Unicode,
-escapes contributor HTML, and neutralizes GitHub mentions. The issue contains
-human-readable sections and the exact canonical JSON.
-
-`sourcePage` accepts only an HTTPS `meshcore.ca` page with a simple path and
-optional heading anchor. Credentials, query strings, and external sites are rejected.
-Existing complete v1 submissions retain their canonical representation and hash.
-
-### Short-form rollout order
-
-Deploy this backward-compatible gateway update **before** publishing the shorter
-website form. Follow the activation and rollback steps in `instructions.md`, then
-confirm `/config` returns `communityIdeaOptionalDetails: true` with the expected
-CORS headers. Test old and short payloads against a local mocked GitHub service;
-do not create public test issues without approval.
-
-If the older gateway is still serving, the new form keeps its preview, copy, and
-GitHub fallback available but does not attempt an incompatible anonymous POST.
-The region editor does not require this capability and continues to use its
-existing contract. To roll back the gateway, roll back the site form first.
-
-### `mcc-region-editor-proposal/v1` and `/v2`
-
-The server revalidates every boundary proposal against the mounted authority. Version 1 moves cells between existing regions. Version 2 creates one new region from changed cells and records its name, short tag, nearest shared catalogue parent, and one changed anchor DGUID.
-
-- catalog hierarchy and jurisdiction ancestry must be valid;
-- membership DGUIDs must be unique and match the per-province TopoJSON cells;
-- every leaf must retain exactly one anchor;
-- the submitted base hash and every `from` value must still be current;
-- target leaves must be valid and in the same province or territory; shared cross-province repeater configurations do not move map cells;
-- neighbouring U.S. forwarding paths are catalog metadata and are never boundary-editor geometry;
-- anchors cannot move;
-- a new-region name and tag cannot collide with Canadian, retired, or neighbouring-path authority;
-- a new region has exactly one target, uses the nearest shared parent of its source regions, stays inside one province or territory, and anchors to a changed cell without an existing anchor; and
-- request, proposal, and changed-cell limits must pass.
-
-Changed authority files reload atomically. Invalid or mismatched authority
-fails closed. Large canonical boundary payloads use deterministic gzip plus
-base64url issue-comment chunks; retries resume only missing valid chunks. The
-canonical boundary payload is stored in machine-readable HTML comments instead
-of adding a large JSON block to the public review text.
-
-After validation, the gateway renders a deterministic two-panel **Current /
-Proposed** PNG from the exact per-province census-cell TopoJSON. It uses no
-external map tiles or contributor-controlled URLs. The image is marked
-**Preview - not approved**, stored immutably under the proposal hash, and
-served from the existing API path. The GitHub App posts one visible image
-comment; retries restore a missing comment without duplicating it.
-
-## GitHub App and Turnstile
-
-The organization-owned GitHub App must have only:
-
-- **Issues — Read and write** on `MeshCore-ca/MeshCore-Canada`;
-- implicit metadata read access;
-- no Contents permission; and
-- no webhook.
-
-The service signs a short-lived RS256 App JWT with `openssl`, requests an
-installation token restricted again to that repository and `issues: write`,
-and rejects broader returned scope. No App token or private key reaches a
-browser. Do not replace this with a personal access token.
-
-The approval Action is deliberately separate from the public service. It uses
-the matching public key in the repository secret
-`MCC_SUBMISSION_PUBLIC_KEY_PEM` to verify the signed proposal. The public key
-cannot create signatures, and the App still has no Contents permission.
-`.github/region-boundary-automation.json` contains the exact label, App
-identities, and maintainer allowlist.
-
-An accepted boundary issue must be App-authored, carry `boundary-update`, and
-be closed as **Completed** by an allowlisted maintainer. The Action rechecks the
-signature, current authority, and jurisdiction; records the reviewed census
-override; regenerates and validates the national layer; commits to `main`;
-and explicitly queues the Pages deployment. **Close as not planned** rejects a
-proposal without applying it. Verification or generation failure reopens the
-issue and leaves `main` unchanged.
-
-The Turnstile widget must be held in a MeshCore Canada account and allow
-`meshcore.ca` and `config.meshcore.ca`. Siteverify must return `success`, an
-allowed hostname, and action `meshcore_submission`. Tokens are single-use and
-limited to 2,048 characters.
-
-The default verified limit is five submissions per IP per hour. Separate
-higher pre-verification and global bounds prevent forged requests from turning
-the service into an unlimited Siteverify client. Only the exact Caddy peer is a
-trusted proxy, and only one forwarded client address is accepted.
+The old approval Action is now manual-only and read-only. It cannot apply a
+closed boundary issue. Historical validation/rendering helpers remain available
+for archived evidence and tests, not for new submissions.
 
 ## Production layout
 
-The supplied files use:
-
 ```text
 checkout: /opt/meshcore-canada
-state:    /var/lib/meshcore-submissions
-secrets:  /etc/meshcore-submissions
+state: /var/lib/meshcore-submissions
+secrets: /etc/meshcore-submissions
 compose project: meshcore-submissions
 compose service: submission-gateway
 image: meshcore-canada/submission-gateway:production
-loopback listener: 127.0.0.1:8787
-public listener: api.meshcore.ca:21323 (Caddy)
+loopback: 127.0.0.1:8787
+public: api.meshcore.ca:21323 (Caddy)
 ```
 
-`compose.example.yml` uses host networking so a non-root UID/GID `10001`
-container can bind only to loopback. It has a read-only root filesystem,
-dropped capabilities, resource and log limits, read-only authority/secret
-mounts, and one writable state mount. That mount holds the SQLite ledger and
-immutable preview PNGs under `previews/`.
+Keep `8787` private. Compose runs non-root UID/GID 10001, read-only root and
+secret/legacy-authority mounts, dropped capabilities, bounded resources/logs,
+and one writable state mount. Preserve the protected environment, App PEM, and
+Turnstile files. Leave historical read-only mounts in place during this update.
 
-Copy `environment.example` to `/etc/meshcore-submissions/environment`. Keep
-the Turnstile secret and GitHub App PEM in separate mode-`0600` files owned by
-UID/GID `10001`.
+Port 21323 requires DNS-only Cloudflare or an explicitly configured Spectrum
+service; ordinary orange-cloud HTTPS proxying does not cover it. Do not change
+the production route, TLS configuration, or firewall as part of a code update.
 
-## DNS, TLS, and port 21323
+## Recovery
 
-If Cloudflare hosts DNS, `api.meshcore.ca` must be **DNS only** because ordinary
-orange-cloud HTTPS proxying does not support port `21323`. Cloudflare Spectrum
-may be used only as an intentionally configured TCP/TLS alternative. Turnstile
-does not require the DNS record itself to be proxied.
+Back up the SQLite ledger and `previews/` before changing the deployment.
+Never delete a confirmed `created` row or an image referenced by an old issue.
+Pending rows require checking the signed GitHub hash before manual repair;
+GitHub search indexing can lag. Community retries return the existing issue,
+rather than creating another.
 
-The provider and host firewalls must allow public TCP `21323`. Caddy terminates
-TLS and reverse-proxies only the submission path to `127.0.0.1:8787`. Keep
-`8787` private. Normal Caddy ACME issuance also requires reachability on port
-`80` and/or `443` unless DNS challenge or an existing managed certificate is
-configured. Use `Caddyfile.example`; do not silently move the API to a different
-port.
-
-If a Content-Security-Policy is later added to the GitHub Pages site, allow
-`https://challenges.cloudflare.com` in `script-src`, `frame-src`, and
-`connect-src` while retaining the site's existing map and geocoder sources.
-
-## Lifecycle and verification
-
-Run from `/opt/meshcore-canada/tools/region-proposal-gateway`:
-
-```sh
-sudo docker compose \
-  --env-file /etc/meshcore-submissions/environment \
-  -f compose.example.yml config
-sudo docker compose \
-  --env-file /etc/meshcore-submissions/environment \
-  -f compose.example.yml up -d --build
-sudo docker compose \
-  --env-file /etc/meshcore-submissions/environment \
-  -f compose.example.yml ps
-curl -fsS http://127.0.0.1:8787/healthz
-```
-
-After validating and reloading Caddy:
-
-```sh
-API='https://api.meshcore.ca:21323/api/meshcore-canada/submissions'
-curl -fsS "$API/config"
-curl -si -H 'Origin: https://meshcore.ca' "$API/config"
-curl -si -X OPTIONS \
-  -H 'Origin: https://meshcore.ca' \
-  -H 'Access-Control-Request-Method: POST' \
-  -H 'Access-Control-Request-Headers: content-type' \
-  "$API"
-curl -si -H 'Origin: https://example.invalid' "$API/config"
-MISSING_PREVIEW="$(printf '0%.0s' {1..64})"
-curl -si "$API/previews/$MISSING_PREVIEW.png"
-```
-
-Expect HTTP 200 config, action `meshcore_submission`, exact allowed-origin
-CORS, HTTP 204 preflight, and denial without an allow-origin header for the
-invalid origin. The unknown preview must return HTTP 404. The root runbook
-requires the branch deployment to pass before the reviewed pull request is
-merged, followed by signed-out live tests of both forms and a not-planned
-boundary rejection test.
-
-## Idempotency, recovery, and backups
-
-Before issue creation the service writes a durable `pending` row keyed by the
-canonical submission hash. The hash and an App signature over
-`mcc-submission/v1:<schema>:<hash>` are embedded in the issue. Recovery accepts
-a GitHub search result only when both markers match, preventing a public user
-from forging an idempotency match.
-
-After GitHub returns `201`, the issue number and URL are persisted before any
-comments. A retry with a `created` row returns the same issue and resumes a
-missing exact preview comment or payload chunks. A retry with only a `pending`
-row searches GitHub and fails closed while search indexing catches up; it never
-blindly creates a duplicate.
-
-For migration or manual ledger work:
-
-1. Stop only `submission-gateway`.
-2. Back up `/var/lib/meshcore-submissions`.
-3. Audit GitHub for the signed hash.
-4. Change only a proven orphaned `pending` row.
-5. Never delete a confirmed `created` row.
-
-Do not prune a preview PNG while its issue may still be viewed. Preview URLs
-are immutable and intentionally remain valid for the issue history.
-
-Keep the host checkout synchronized with each published region-data release.
-Rotate App and Turnstile keys through protected files, restart, and verify both
-flows before revoking old credentials. Never log request bodies, contributor
-text, Turnstile tokens, App tokens, or secrets.
+Key rotation and production tests require the service owner. A rollback to an
+old gateway can reopen retired boundary submissions, so keep that route blocked
+until the retirement behavior is restored.
 
 ## Tests
-
-No live credentials are required. The container installs the pinned Pillow
-renderer. The gateway also includes a deterministic standard-library PNG
-renderer so a minimal host Python cannot take the submission API offline; the
-same Current/Proposed boundary contract remains available. Install the pinned
-dependency to exercise both paths, then run:
 
 ```sh
 python -m pip install -r tools/region-proposal-gateway/requirements.txt
@@ -285,10 +100,7 @@ node --test tests/editor/*.test.mjs
 python scripts/validate_community_submission.py
 ```
 
-The suites cover both schemas, authority reload, canonical hashes, exact
-CORS/HTTP behavior, Turnstile hostname/action checks, least-privilege App
-tokens, safe issue rendering, idempotency, URL validation, and resumable
-large-payload comments. They also cover deterministic PNG rendering, immutable
-storage, public cache headers, and retry-safe preview comments. The automation
-suite covers approval gates, signature-bound payload extraction, source
-locking, safe archive extraction, and complete CSD/split decision recording.
+Tests use mocked external services, not live credentials. They cover community
+validation, CORS, Turnstile, App permissions, canonical hashes, idempotency,
+both retired schemas with no side effects, old preview downloads, and historical
+boundary validation/rendering.

@@ -1,5 +1,18 @@
 {% extends "base.html" %}
 
+{% block announce %}
+  {% if config.extra.preview %}
+    <span data-preview-notice>
+    {% if config.theme.language == "fr" %}
+      Aperçu pour révision — pas le site de production ni une annonce de déploiement.
+    {% else %}
+      Review preview — not the production site or a rollout announcement.
+    {% endif %}
+    <a href="https://github.com/MeshCore-ca/MeshCore-Canada/pull/108">PR #108</a>
+    </span>
+  {% else %}{{ super() }}{% endif %}
+{% endblock %}
+
 {% block extrahead %}
   {{ super() }}
   {% if config.extra.preview %}

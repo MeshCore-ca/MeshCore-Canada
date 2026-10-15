@@ -1,0 +1,23 @@
+{
+  "reviewedAt": "2026-10-13T07:22:47.415Z",
+  "endpoint": "https://meshmapper.net/get_zones.php?country=CA",
+  "authentication": "X-API-Key integration access; credential omitted",
+  "returnedRegionCount": 33,
+  "candidateSha256": "1487f4818b4d3de7c1f1ea263cc51481dda729064b64b69c9d48d1bbf54a5809",
+  "geometryIssues": [
+    {
+      "tag": "yqb",
+      "kind": "invalid-boundary",
+      "detail": "Self-intersection[-72.0837122413793 47.999048]"
+    }
+  ],
+  "added": [],
+  "removed": [],
+  "materialGeometryChanges": [
+    {
+      "tag": "yul",
+      "symmetricDifferencePercentOfPreviousArea": 42.453943
+    }
+  ],
+  "decision": "Retain the approved 2026-09-24 snapshot. Request MeshMapper owner review; do not repair or publish invalid upstream coordinates."
+}

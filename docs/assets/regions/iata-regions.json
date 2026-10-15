@@ -1,0 +1,4305 @@
+{
+  "schema": "meshcore-canada-iata-scopes/v1",
+  "version": "meshmapper-iata-2026-09-24-starters-2026-09-25",
+  "policy": {
+    "schema": "meshcore-canada-iata-policy/v1",
+    "proposal": "https://meshcore.ca/proposals/onqc-scopes/",
+    "scopeModel": "flat",
+    "meshScopes": {
+      "onqc": [
+        "on",
+        "qc"
+      ]
+    },
+    "reservedScopes": [
+      "can",
+      "na"
+    ],
+    "optionalNetworks": {
+      "ontario-new-york": {
+        "label": "Ontario–New York (onny, opt-in)",
+        "labelFr": "Ontario–New York (onny, facultatif)",
+        "country": "us",
+        "path": [
+          "onny"
+        ],
+        "sharedScope": true,
+        "tagLabels": {
+          "onny": "Ontario–New York"
+        },
+        "geographic": false,
+        "automatic": false,
+        "eligibility": "coordinated-cross-border",
+        "authority": {
+          "status": "proposed",
+          "source": "MeshCore Canada cross-border scope discussion",
+          "sourceUrl": "https://meshcore.ca/proposals/onqc-scopes/#cross-border-scopes"
+        }
+      }
+    },
+    "minimumFirmware": "1.14",
+    "scopedAdvertFirmware": "1.15",
+    "bulkDefinitionFirmware": "1.16",
+    "minimumApp": "1.43",
+    "provinces": {
+      "bc": {
+        "label": "British Columbia",
+        "labelFr": "Colombie-Britannique"
+      },
+      "ab": {
+        "label": "Alberta",
+        "labelFr": "Alberta"
+      },
+      "sk": {
+        "label": "Saskatchewan",
+        "labelFr": "Saskatchewan"
+      },
+      "mb": {
+        "label": "Manitoba",
+        "labelFr": "Manitoba"
+      },
+      "on": {
+        "label": "Ontario",
+        "labelFr": "Ontario"
+      },
+      "qc": {
+        "label": "Québec",
+        "labelFr": "Québec"
+      },
+      "nb": {
+        "label": "New Brunswick",
+        "labelFr": "Nouveau-Brunswick"
+      },
+      "ns": {
+        "label": "Nova Scotia",
+        "labelFr": "Nouvelle-Écosse"
+      },
+      "pe": {
+        "label": "Prince Edward Island",
+        "labelFr": "Île-du-Prince-Édouard"
+      },
+      "nl": {
+        "label": "Newfoundland and Labrador",
+        "labelFr": "Terre-Neuve-et-Labrador"
+      },
+      "yt": {
+        "label": "Yukon",
+        "labelFr": "Yukon"
+      },
+      "nt": {
+        "label": "Northwest Territories",
+        "labelFr": "Territoires du Nord-Ouest"
+      },
+      "nu": {
+        "label": "Nunavut",
+        "labelFr": "Nunavut"
+      }
+    },
+    "zoneProvinces": {
+      "xcm": [
+        "on"
+      ],
+      "xph": [
+        "on"
+      ],
+      "ybl": [
+        "bc"
+      ],
+      "ycd": [
+        "bc"
+      ],
+      "yeg": [
+        "ab"
+      ],
+      "ygk": [
+        "on"
+      ],
+      "yka": [
+        "bc"
+      ],
+      "ykf": [
+        "on"
+      ],
+      "ylk": [
+        "on"
+      ],
+      "yml": [
+        "qc"
+      ],
+      "yow": [
+        "on",
+        "qc"
+      ],
+      "ypa": [
+        "sk"
+      ],
+      "yqa": [
+        "on"
+      ],
+      "yqb": [
+        "qc"
+      ],
+      "yqf": [
+        "ab"
+      ],
+      "yql": [
+        "ab"
+      ],
+      "yqq": [
+        "bc"
+      ],
+      "yqt": [
+        "on"
+      ],
+      "yqy": [
+        "ns"
+      ],
+      "yse": [
+        "bc"
+      ],
+      "ytf": [
+        "qc"
+      ],
+      "ytr": [
+        "on"
+      ],
+      "yul": [
+        "qc"
+      ],
+      "yvr": [
+        "bc"
+      ],
+      "ywg": [
+        "mb"
+      ],
+      "yws": [
+        "bc"
+      ],
+      "yxu": [
+        "on"
+      ],
+      "yxx": [
+        "bc"
+      ],
+      "yyb": [
+        "on",
+        "qc"
+      ],
+      "yyc": [
+        "ab"
+      ],
+      "yyj": [
+        "bc"
+      ],
+      "yyy": [
+        "qc",
+        "nb"
+      ],
+      "yyz": [
+        "on"
+      ],
+      "yyg": [
+        "pe"
+      ],
+      "yyt": [
+        "nl"
+      ],
+      "yyr": [
+        "nl"
+      ],
+      "yxy": [
+        "yt"
+      ],
+      "yzf": [
+        "nt"
+      ],
+      "yfb": [
+        "nu"
+      ],
+      "ylw": [
+        "bc"
+      ],
+      "yxs": [
+        "bc"
+      ],
+      "yxt": [
+        "bc"
+      ],
+      "yxc": [
+        "bc"
+      ],
+      "ymm": [
+        "ab"
+      ],
+      "yqu": [
+        "ab"
+      ],
+      "yxe": [
+        "sk"
+      ],
+      "yqr": [
+        "sk"
+      ],
+      "ybr": [
+        "mb"
+      ],
+      "yth": [
+        "mb"
+      ],
+      "yyq": [
+        "mb"
+      ],
+      "ysb": [
+        "on"
+      ],
+      "yam": [
+        "on"
+      ],
+      "yts": [
+        "on"
+      ],
+      "yqk": [
+        "on"
+      ],
+      "yvo": [
+        "qc"
+      ],
+      "yzv": [
+        "qc"
+      ],
+      "yvp": [
+        "qc"
+      ],
+      "yqm": [
+        "nb"
+      ],
+      "yfc": [
+        "nb"
+      ],
+      "ysj": [
+        "nb"
+      ],
+      "yhz": [
+        "ns"
+      ],
+      "yqi": [
+        "ns"
+      ]
+    },
+    "searchAliases": {
+      "yow": [
+        "Ottawa",
+        "Gatineau",
+        "NCR",
+        "Rigaud",
+        "Lanark",
+        "Calabogie",
+        "Renfrew",
+        "Alfred",
+        "Hawkesbury"
+      ],
+      "yyz": [
+        "Toronto",
+        "GTA"
+      ],
+      "ykf": [
+        "Waterloo",
+        "Kitchener",
+        "Cambridge"
+      ],
+      "yul": [
+        "Montréal",
+        "Montreal",
+        "Trois-Rivières"
+      ],
+      "yqb": [
+        "Québec City",
+        "Quebec City",
+        "Ville de Québec"
+      ],
+      "ytf": [
+        "Saguenay",
+        "Lac-Saint-Jean"
+      ],
+      "ytr": [
+        "Quinte",
+        "Belleville",
+        "Trenton"
+      ]
+    },
+    "additionalLegacyAliases": {
+      "gatout": [
+        "yow"
+      ],
+      "ncr": [
+        "yow"
+      ],
+      "avalon": [
+        "yyt"
+      ],
+      "burin": [
+        "yyt"
+      ],
+      "bonav": [
+        "yyt"
+      ],
+      "cent": [
+        "yyt"
+      ],
+      "scoast": [
+        "yyt"
+      ],
+      "steph": [
+        "yyt"
+      ],
+      "humber": [
+        "yyt"
+      ],
+      "npen": [
+        "yyr",
+        "yyt"
+      ],
+      "labw": [
+        "yyr"
+      ],
+      "hvgb": [
+        "yyr"
+      ],
+      "nain": [
+        "yyr"
+      ]
+    }
+  },
+  "source": {
+    "label": "MeshMapper Canadian zones",
+    "url": "https://meshmapper.net/",
+    "endpoint": "https://meshmapper.net/?ajax=zones_bbox",
+    "boundaryAttribution": "MeshMapper zone owners; OpenStreetMap contributors (ODbL) and geoBoundaries (CC BY 4.0) where used by MeshMapper.",
+    "conversion": "Published [latitude, longitude] rings converted to GeoJSON [longitude, latitude]. No clipping, simplification, or radius-based replacement.",
+    "fetchedAt": "2026-09-24T23:49:23.116Z",
+    "starterReviewedAt": "2026-09-25",
+    "publishedCount": 33,
+    "starterCount": 29,
+    "boundarySchema": "meshcore-canada-iata-boundaries/v2",
+    "planningExtensionCount": 33,
+    "boundarySha256": "3dc7d4e5c16ad5ca95ce0bf3ae04785691090b61fe8f57764229ddb5cb37a791",
+    "meshmapperBoundarySha256": "78e0d08608b82328033b2ba59b22ce08a82a563725e5d59c5059ca0dc119c2d6",
+    "jurisdictionSha256": "753d7ad13f089cdeee54cb29c9105706226fa75228193c4eda2d4ecc5ed78349"
+  },
+  "meta": {
+    "name": "MeshCore Canada IATA scopes",
+    "rootTag": "can",
+    "defaultFirmware": "1.16",
+    "map": {
+      "center": [
+        56.1304,
+        -106.3468
+      ],
+      "bounds": [
+        [
+          41.5,
+          -141.5
+        ],
+        [
+          83.5,
+          -52
+        ]
+      ]
+    }
+  },
+  "hierarchy": {
+    "can": {
+      "label": "Canada",
+      "labelFr": "Canada",
+      "parent": null,
+      "kind": "country"
+    },
+    "na": {
+      "label": "North America",
+      "labelFr": "Amérique du Nord",
+      "parent": null,
+      "kind": "continent"
+    },
+    "bc": {
+      "label": "British Columbia",
+      "labelFr": "Colombie-Britannique",
+      "parent": "can",
+      "kind": "province"
+    },
+    "ab": {
+      "label": "Alberta",
+      "labelFr": "Alberta",
+      "parent": "can",
+      "kind": "province"
+    },
+    "sk": {
+      "label": "Saskatchewan",
+      "labelFr": "Saskatchewan",
+      "parent": "can",
+      "kind": "province"
+    },
+    "mb": {
+      "label": "Manitoba",
+      "labelFr": "Manitoba",
+      "parent": "can",
+      "kind": "province"
+    },
+    "on": {
+      "label": "Ontario",
+      "labelFr": "Ontario",
+      "parent": "can",
+      "kind": "province"
+    },
+    "qc": {
+      "label": "Québec",
+      "labelFr": "Québec",
+      "parent": "can",
+      "kind": "province"
+    },
+    "nb": {
+      "label": "New Brunswick",
+      "labelFr": "Nouveau-Brunswick",
+      "parent": "can",
+      "kind": "province"
+    },
+    "ns": {
+      "label": "Nova Scotia",
+      "labelFr": "Nouvelle-Écosse",
+      "parent": "can",
+      "kind": "province"
+    },
+    "pe": {
+      "label": "Prince Edward Island",
+      "labelFr": "Île-du-Prince-Édouard",
+      "parent": "can",
+      "kind": "province"
+    },
+    "nl": {
+      "label": "Newfoundland and Labrador",
+      "labelFr": "Terre-Neuve-et-Labrador",
+      "parent": "can",
+      "kind": "province"
+    },
+    "yt": {
+      "label": "Yukon",
+      "labelFr": "Yukon",
+      "parent": "can",
+      "kind": "province"
+    },
+    "nt": {
+      "label": "Northwest Territories",
+      "labelFr": "Territoires du Nord-Ouest",
+      "parent": "can",
+      "kind": "province"
+    },
+    "nu": {
+      "label": "Nunavut",
+      "labelFr": "Nunavut",
+      "parent": "can",
+      "kind": "province"
+    },
+    "onqc": {
+      "label": "Ontario + Québec",
+      "labelFr": "Ontario + Québec",
+      "parent": null,
+      "kind": "mesh-scope"
+    },
+    "xcm": {
+      "label": "Chatham-Kent",
+      "parent": "on",
+      "provinces": [
+        "on"
+      ],
+      "kind": "city"
+    },
+    "xph": {
+      "label": "Port Hope",
+      "parent": "on",
+      "provinces": [
+        "on"
+      ],
+      "kind": "city"
+    },
+    "ybl": {
+      "label": "Campbell River",
+      "parent": "bc",
+      "provinces": [
+        "bc"
+      ],
+      "kind": "city"
+    },
+    "ycd": {
+      "label": "Nanaimo",
+      "parent": "bc",
+      "provinces": [
+        "bc"
+      ],
+      "kind": "city"
+    },
+    "yeg": {
+      "label": "Edmonton",
+      "parent": "ab",
+      "provinces": [
+        "ab"
+      ],
+      "kind": "city"
+    },
+    "ygk": {
+      "label": "Kingston",
+      "parent": "on",
+      "provinces": [
+        "on"
+      ],
+      "kind": "city"
+    },
+    "yka": {
+      "label": "Kamloops",
+      "parent": "bc",
+      "provinces": [
+        "bc"
+      ],
+      "kind": "city"
+    },
+    "ykf": {
+      "label": "Waterloo",
+      "parent": "on",
+      "provinces": [
+        "on"
+      ],
+      "kind": "city"
+    },
+    "ylk": {
+      "label": "Barrie",
+      "parent": "on",
+      "provinces": [
+        "on"
+      ],
+      "kind": "city"
+    },
+    "yml": {
+      "label": "La Malbaie",
+      "parent": "qc",
+      "provinces": [
+        "qc"
+      ],
+      "kind": "city"
+    },
+    "yow": {
+      "label": "Ottawa–Gatineau",
+      "parent": "on",
+      "provinces": [
+        "on",
+        "qc"
+      ],
+      "kind": "city"
+    },
+    "ypa": {
+      "label": "Prince Albert",
+      "parent": "sk",
+      "provinces": [
+        "sk"
+      ],
+      "kind": "city"
+    },
+    "yqa": {
+      "label": "Muskoka",
+      "parent": "on",
+      "provinces": [
+        "on"
+      ],
+      "kind": "city"
+    },
+    "yqb": {
+      "label": "Quebec City",
+      "parent": "qc",
+      "provinces": [
+        "qc"
+      ],
+      "kind": "city"
+    },
+    "yqf": {
+      "label": "Red Deer",
+      "parent": "ab",
+      "provinces": [
+        "ab"
+      ],
+      "kind": "city"
+    },
+    "yql": {
+      "label": "Lethbridge",
+      "parent": "ab",
+      "provinces": [
+        "ab"
+      ],
+      "kind": "city"
+    },
+    "yqq": {
+      "label": "Courtenay",
+      "parent": "bc",
+      "provinces": [
+        "bc"
+      ],
+      "kind": "city"
+    },
+    "yqt": {
+      "label": "Thunder Bay",
+      "parent": "on",
+      "provinces": [
+        "on"
+      ],
+      "kind": "city"
+    },
+    "yqy": {
+      "label": "Cape Breton Island",
+      "parent": "ns",
+      "provinces": [
+        "ns"
+      ],
+      "kind": "city"
+    },
+    "yse": {
+      "label": "Squamish",
+      "parent": "bc",
+      "provinces": [
+        "bc"
+      ],
+      "kind": "city"
+    },
+    "ytf": {
+      "label": "Saguenay Lac-st-jean",
+      "parent": "qc",
+      "provinces": [
+        "qc"
+      ],
+      "kind": "city"
+    },
+    "ytr": {
+      "label": "Quinte West",
+      "parent": "on",
+      "provinces": [
+        "on"
+      ],
+      "kind": "city"
+    },
+    "yul": {
+      "label": "Montreal",
+      "parent": "qc",
+      "provinces": [
+        "qc"
+      ],
+      "kind": "city"
+    },
+    "yvr": {
+      "label": "Vancouver",
+      "parent": "bc",
+      "provinces": [
+        "bc"
+      ],
+      "kind": "city"
+    },
+    "ywg": {
+      "label": "Winnipeg",
+      "parent": "mb",
+      "provinces": [
+        "mb"
+      ],
+      "kind": "city"
+    },
+    "yws": {
+      "label": "Whistler",
+      "parent": "bc",
+      "provinces": [
+        "bc"
+      ],
+      "kind": "city"
+    },
+    "yxu": {
+      "label": "London",
+      "parent": "on",
+      "provinces": [
+        "on"
+      ],
+      "kind": "city"
+    },
+    "yxx": {
+      "label": "Abbotsford",
+      "parent": "bc",
+      "provinces": [
+        "bc"
+      ],
+      "kind": "city"
+    },
+    "yyb": {
+      "label": "North Bay",
+      "parent": "on",
+      "provinces": [
+        "on",
+        "qc"
+      ],
+      "kind": "city"
+    },
+    "yyc": {
+      "label": "Calgary",
+      "parent": "ab",
+      "provinces": [
+        "ab"
+      ],
+      "kind": "city"
+    },
+    "yyj": {
+      "label": "Victoria",
+      "parent": "bc",
+      "provinces": [
+        "bc"
+      ],
+      "kind": "city"
+    },
+    "yyy": {
+      "label": "Bas-St-Laurent-Gaspésie",
+      "parent": "qc",
+      "provinces": [
+        "qc",
+        "nb"
+      ],
+      "kind": "city"
+    },
+    "yyz": {
+      "label": "Toronto",
+      "parent": "on",
+      "provinces": [
+        "on"
+      ],
+      "kind": "city"
+    },
+    "yyg": {
+      "label": "Prince Edward Island",
+      "labelFr": "Île-du-Prince-Édouard",
+      "parent": "pe",
+      "provinces": [
+        "pe"
+      ],
+      "kind": "city"
+    },
+    "yyt": {
+      "label": "Newfoundland",
+      "labelFr": "Terre-Neuve",
+      "parent": "nl",
+      "provinces": [
+        "nl"
+      ],
+      "kind": "city"
+    },
+    "yyr": {
+      "label": "Labrador",
+      "labelFr": "Labrador",
+      "parent": "nl",
+      "provinces": [
+        "nl"
+      ],
+      "kind": "city"
+    },
+    "yxy": {
+      "label": "Yukon",
+      "labelFr": "Yukon",
+      "parent": "yt",
+      "provinces": [
+        "yt"
+      ],
+      "kind": "city"
+    },
+    "yzf": {
+      "label": "Northwest Territories",
+      "labelFr": "Territoires du Nord-Ouest",
+      "parent": "nt",
+      "provinces": [
+        "nt"
+      ],
+      "kind": "city"
+    },
+    "yfb": {
+      "label": "Nunavut",
+      "labelFr": "Nunavut",
+      "parent": "nu",
+      "provinces": [
+        "nu"
+      ],
+      "kind": "city"
+    },
+    "ylw": {
+      "label": "Kelowna",
+      "labelFr": "Kelowna",
+      "parent": "bc",
+      "provinces": [
+        "bc"
+      ],
+      "kind": "city"
+    },
+    "yxs": {
+      "label": "Prince George",
+      "labelFr": "Prince George",
+      "parent": "bc",
+      "provinces": [
+        "bc"
+      ],
+      "kind": "city"
+    },
+    "yxt": {
+      "label": "Terrace",
+      "labelFr": "Terrace",
+      "parent": "bc",
+      "provinces": [
+        "bc"
+      ],
+      "kind": "city"
+    },
+    "yxc": {
+      "label": "Cranbrook",
+      "labelFr": "Cranbrook",
+      "parent": "bc",
+      "provinces": [
+        "bc"
+      ],
+      "kind": "city"
+    },
+    "ymm": {
+      "label": "Fort McMurray",
+      "labelFr": "Fort McMurray",
+      "parent": "ab",
+      "provinces": [
+        "ab"
+      ],
+      "kind": "city"
+    },
+    "yqu": {
+      "label": "Grande Prairie",
+      "labelFr": "Grande Prairie",
+      "parent": "ab",
+      "provinces": [
+        "ab"
+      ],
+      "kind": "city"
+    },
+    "yxe": {
+      "label": "Saskatoon",
+      "labelFr": "Saskatoon",
+      "parent": "sk",
+      "provinces": [
+        "sk"
+      ],
+      "kind": "city"
+    },
+    "yqr": {
+      "label": "Regina",
+      "labelFr": "Regina",
+      "parent": "sk",
+      "provinces": [
+        "sk"
+      ],
+      "kind": "city"
+    },
+    "ybr": {
+      "label": "Brandon",
+      "labelFr": "Brandon",
+      "parent": "mb",
+      "provinces": [
+        "mb"
+      ],
+      "kind": "city"
+    },
+    "yth": {
+      "label": "Thompson",
+      "labelFr": "Thompson",
+      "parent": "mb",
+      "provinces": [
+        "mb"
+      ],
+      "kind": "city"
+    },
+    "yyq": {
+      "label": "Churchill",
+      "labelFr": "Churchill",
+      "parent": "mb",
+      "provinces": [
+        "mb"
+      ],
+      "kind": "city"
+    },
+    "ysb": {
+      "label": "Sudbury",
+      "labelFr": "Sudbury",
+      "parent": "on",
+      "provinces": [
+        "on"
+      ],
+      "kind": "city"
+    },
+    "yam": {
+      "label": "Sault Ste. Marie",
+      "labelFr": "Sault Ste. Marie",
+      "parent": "on",
+      "provinces": [
+        "on"
+      ],
+      "kind": "city"
+    },
+    "yts": {
+      "label": "Timmins",
+      "labelFr": "Timmins",
+      "parent": "on",
+      "provinces": [
+        "on"
+      ],
+      "kind": "city"
+    },
+    "yqk": {
+      "label": "Kenora",
+      "labelFr": "Kenora",
+      "parent": "on",
+      "provinces": [
+        "on"
+      ],
+      "kind": "city"
+    },
+    "yvo": {
+      "label": "Val-d’Or",
+      "labelFr": "Val-d’Or",
+      "parent": "qc",
+      "provinces": [
+        "qc"
+      ],
+      "kind": "city"
+    },
+    "yzv": {
+      "label": "Sept-Îles",
+      "labelFr": "Sept-Îles",
+      "parent": "qc",
+      "provinces": [
+        "qc"
+      ],
+      "kind": "city"
+    },
+    "yvp": {
+      "label": "Kuujjuaq",
+      "labelFr": "Kuujjuaq",
+      "parent": "qc",
+      "provinces": [
+        "qc"
+      ],
+      "kind": "city"
+    },
+    "yqm": {
+      "label": "Moncton",
+      "labelFr": "Moncton",
+      "parent": "nb",
+      "provinces": [
+        "nb"
+      ],
+      "kind": "city"
+    },
+    "yfc": {
+      "label": "Fredericton",
+      "labelFr": "Fredericton",
+      "parent": "nb",
+      "provinces": [
+        "nb"
+      ],
+      "kind": "city"
+    },
+    "ysj": {
+      "label": "Saint John",
+      "labelFr": "Saint John",
+      "parent": "nb",
+      "provinces": [
+        "nb"
+      ],
+      "kind": "city"
+    },
+    "yhz": {
+      "label": "Halifax",
+      "labelFr": "Halifax",
+      "parent": "ns",
+      "provinces": [
+        "ns"
+      ],
+      "kind": "city"
+    },
+    "yqi": {
+      "label": "Yarmouth",
+      "labelFr": "Yarmouth",
+      "parent": "ns",
+      "provinces": [
+        "ns"
+      ],
+      "kind": "city"
+    }
+  },
+  "status": {
+    "can": {
+      "state": "reserved",
+      "source": "https://meshcore.ca/proposals/onqc-scopes/"
+    },
+    "na": {
+      "state": "reserved",
+      "source": "https://meshcore.ca/proposals/onqc-scopes/"
+    },
+    "bc": {
+      "state": "scope",
+      "source": "https://meshcore.ca/proposals/onqc-scopes/"
+    },
+    "ab": {
+      "state": "scope",
+      "source": "https://meshcore.ca/proposals/onqc-scopes/"
+    },
+    "sk": {
+      "state": "scope",
+      "source": "https://meshcore.ca/proposals/onqc-scopes/"
+    },
+    "mb": {
+      "state": "scope",
+      "source": "https://meshcore.ca/proposals/onqc-scopes/"
+    },
+    "on": {
+      "state": "scope",
+      "source": "https://meshcore.ca/proposals/onqc-scopes/"
+    },
+    "qc": {
+      "state": "scope",
+      "source": "https://meshcore.ca/proposals/onqc-scopes/"
+    },
+    "nb": {
+      "state": "scope",
+      "source": "https://meshcore.ca/proposals/onqc-scopes/"
+    },
+    "ns": {
+      "state": "scope",
+      "source": "https://meshcore.ca/proposals/onqc-scopes/"
+    },
+    "pe": {
+      "state": "scope",
+      "source": "https://meshcore.ca/proposals/onqc-scopes/"
+    },
+    "nl": {
+      "state": "scope",
+      "source": "https://meshcore.ca/proposals/onqc-scopes/"
+    },
+    "yt": {
+      "state": "scope",
+      "source": "https://meshcore.ca/proposals/onqc-scopes/"
+    },
+    "nt": {
+      "state": "scope",
+      "source": "https://meshcore.ca/proposals/onqc-scopes/"
+    },
+    "nu": {
+      "state": "scope",
+      "source": "https://meshcore.ca/proposals/onqc-scopes/"
+    },
+    "onqc": {
+      "state": "pilot",
+      "source": "https://meshcore.ca/proposals/onqc-scopes/"
+    },
+    "xcm": {
+      "state": "published",
+      "source": "MeshMapper",
+      "sourceUrl": "https://xcm.meshmapper.net/",
+      "planningExtension": true
+    },
+    "xph": {
+      "state": "published",
+      "source": "MeshMapper",
+      "sourceUrl": "https://xph.meshmapper.net/",
+      "planningExtension": true
+    },
+    "ybl": {
+      "state": "published",
+      "source": "MeshMapper",
+      "sourceUrl": "https://ybl.meshmapper.net/",
+      "planningExtension": true
+    },
+    "ycd": {
+      "state": "published",
+      "source": "MeshMapper",
+      "sourceUrl": "https://ycd.meshmapper.net/",
+      "planningExtension": true
+    },
+    "yeg": {
+      "state": "published",
+      "source": "MeshMapper",
+      "sourceUrl": "https://yeg.meshmapper.net/",
+      "planningExtension": true
+    },
+    "ygk": {
+      "state": "published",
+      "source": "MeshMapper",
+      "sourceUrl": "https://ygk.meshmapper.net/",
+      "planningExtension": true
+    },
+    "yka": {
+      "state": "published",
+      "source": "MeshMapper",
+      "sourceUrl": "https://yka.meshmapper.net/",
+      "planningExtension": true
+    },
+    "ykf": {
+      "state": "published",
+      "source": "MeshMapper",
+      "sourceUrl": "https://ykf.meshmapper.net/",
+      "planningExtension": true
+    },
+    "ylk": {
+      "state": "published",
+      "source": "MeshMapper",
+      "sourceUrl": "https://ylk.meshmapper.net/",
+      "planningExtension": true
+    },
+    "yml": {
+      "state": "published",
+      "source": "MeshMapper",
+      "sourceUrl": "https://yml.meshmapper.net/",
+      "planningExtension": true
+    },
+    "yow": {
+      "state": "published",
+      "source": "MeshMapper",
+      "sourceUrl": "https://yow.meshmapper.net/",
+      "planningExtension": true
+    },
+    "ypa": {
+      "state": "published",
+      "source": "MeshMapper",
+      "sourceUrl": "https://ypa.meshmapper.net/",
+      "planningExtension": true
+    },
+    "yqa": {
+      "state": "published",
+      "source": "MeshMapper",
+      "sourceUrl": "https://yqa.meshmapper.net/",
+      "planningExtension": true
+    },
+    "yqb": {
+      "state": "published",
+      "source": "MeshMapper",
+      "sourceUrl": "https://yqb.meshmapper.net/",
+      "planningExtension": true
+    },
+    "yqf": {
+      "state": "published",
+      "source": "MeshMapper",
+      "sourceUrl": "https://yqf.meshmapper.net/",
+      "planningExtension": true
+    },
+    "yql": {
+      "state": "published",
+      "source": "MeshMapper",
+      "sourceUrl": "https://yql.meshmapper.net/",
+      "planningExtension": true
+    },
+    "yqq": {
+      "state": "published",
+      "source": "MeshMapper",
+      "sourceUrl": "https://yqq.meshmapper.net/",
+      "planningExtension": true
+    },
+    "yqt": {
+      "state": "published",
+      "source": "MeshMapper",
+      "sourceUrl": "https://yqt.meshmapper.net/",
+      "planningExtension": true
+    },
+    "yqy": {
+      "state": "published",
+      "source": "MeshMapper",
+      "sourceUrl": "https://yqy.meshmapper.net/",
+      "planningExtension": true
+    },
+    "yse": {
+      "state": "published",
+      "source": "MeshMapper",
+      "sourceUrl": "https://yse.meshmapper.net/",
+      "planningExtension": true
+    },
+    "ytf": {
+      "state": "published",
+      "source": "MeshMapper",
+      "sourceUrl": "https://ytf.meshmapper.net/",
+      "planningExtension": true
+    },
+    "ytr": {
+      "state": "published",
+      "source": "MeshMapper",
+      "sourceUrl": "https://ytr.meshmapper.net/",
+      "planningExtension": true
+    },
+    "yul": {
+      "state": "published",
+      "source": "MeshMapper",
+      "sourceUrl": "https://yul.meshmapper.net/",
+      "planningExtension": true
+    },
+    "yvr": {
+      "state": "published",
+      "source": "MeshMapper",
+      "sourceUrl": "https://yvr.meshmapper.net/",
+      "planningExtension": true
+    },
+    "ywg": {
+      "state": "published",
+      "source": "MeshMapper",
+      "sourceUrl": "https://ywg.meshmapper.net/",
+      "planningExtension": true
+    },
+    "yws": {
+      "state": "published",
+      "source": "MeshMapper",
+      "sourceUrl": "https://yws.meshmapper.net/",
+      "planningExtension": true
+    },
+    "yxu": {
+      "state": "published",
+      "source": "MeshMapper",
+      "sourceUrl": "https://yxu.meshmapper.net/",
+      "planningExtension": true
+    },
+    "yxx": {
+      "state": "published",
+      "source": "MeshMapper",
+      "sourceUrl": "https://yxx.meshmapper.net/",
+      "planningExtension": true
+    },
+    "yyb": {
+      "state": "published",
+      "source": "MeshMapper",
+      "sourceUrl": "https://yyb.meshmapper.net/",
+      "planningExtension": true
+    },
+    "yyc": {
+      "state": "published",
+      "source": "MeshMapper",
+      "sourceUrl": "https://yyc.meshmapper.net/",
+      "planningExtension": true
+    },
+    "yyj": {
+      "state": "published",
+      "source": "MeshMapper",
+      "sourceUrl": "https://yyj.meshmapper.net/",
+      "planningExtension": true
+    },
+    "yyy": {
+      "state": "published",
+      "source": "MeshMapper",
+      "sourceUrl": "https://yyy.meshmapper.net/",
+      "planningExtension": true
+    },
+    "yyz": {
+      "state": "published",
+      "source": "MeshMapper",
+      "sourceUrl": "https://yyz.meshmapper.net/",
+      "planningExtension": true
+    },
+    "yyg": {
+      "state": "starter",
+      "source": "MeshCore Canada",
+      "sourceUrl": "https://flyyyg.com/",
+      "planningExtension": false
+    },
+    "yyt": {
+      "state": "starter",
+      "source": "MeshCore Canada",
+      "sourceUrl": "https://stjohnsairport.com/",
+      "planningExtension": false
+    },
+    "yyr": {
+      "state": "starter",
+      "source": "MeshCore Canada",
+      "sourceUrl": "https://goosebayairport.com/",
+      "planningExtension": false
+    },
+    "yxy": {
+      "state": "starter",
+      "source": "MeshCore Canada",
+      "sourceUrl": "https://yukonairports.ca/contact-information",
+      "planningExtension": false
+    },
+    "yzf": {
+      "state": "starter",
+      "source": "MeshCore Canada",
+      "sourceUrl": "https://tc.canada.ca/en/aviation/operating-airports-aerodromes/list-airports-owned-transport-canada",
+      "planningExtension": false
+    },
+    "yfb": {
+      "state": "starter",
+      "source": "MeshCore Canada",
+      "sourceUrl": "https://tc.canada.ca/en/aviation/operating-airports-aerodromes/list-airports-owned-transport-canada",
+      "planningExtension": false
+    },
+    "ylw": {
+      "state": "starter",
+      "source": "MeshCore Canada",
+      "sourceUrl": "https://ylw.kelowna.ca/",
+      "planningExtension": false
+    },
+    "yxs": {
+      "state": "starter",
+      "source": "MeshCore Canada",
+      "sourceUrl": "https://www.pgairport.ca/",
+      "planningExtension": false
+    },
+    "yxt": {
+      "state": "starter",
+      "source": "MeshCore Canada",
+      "sourceUrl": "https://yxt.ca/",
+      "planningExtension": false
+    },
+    "yxc": {
+      "state": "starter",
+      "source": "MeshCore Canada",
+      "sourceUrl": "https://flyyxc.com/",
+      "planningExtension": false
+    },
+    "ymm": {
+      "state": "starter",
+      "source": "MeshCore Canada",
+      "sourceUrl": "https://flyymm.com/",
+      "planningExtension": false
+    },
+    "yqu": {
+      "state": "starter",
+      "source": "MeshCore Canada",
+      "sourceUrl": "https://grandeprairieairport.com/",
+      "planningExtension": false
+    },
+    "yxe": {
+      "state": "starter",
+      "source": "MeshCore Canada",
+      "sourceUrl": "https://skyxe.ca/",
+      "planningExtension": false
+    },
+    "yqr": {
+      "state": "starter",
+      "source": "MeshCore Canada",
+      "sourceUrl": "https://www.yqr.ca/",
+      "planningExtension": false
+    },
+    "ybr": {
+      "state": "starter",
+      "source": "MeshCore Canada",
+      "sourceUrl": "https://www.brandon.ca/airport",
+      "planningExtension": false
+    },
+    "yth": {
+      "state": "starter",
+      "source": "MeshCore Canada",
+      "sourceUrl": "https://fly-yth.ca/",
+      "planningExtension": false
+    },
+    "yyq": {
+      "state": "starter",
+      "source": "MeshCore Canada",
+      "sourceUrl": "https://tc.canada.ca/en/aviation/operating-airports-aerodromes/list-airports-owned-transport-canada",
+      "planningExtension": false
+    },
+    "ysb": {
+      "state": "starter",
+      "source": "MeshCore Canada",
+      "sourceUrl": "https://www.flysudbury.ca/",
+      "planningExtension": false
+    },
+    "yam": {
+      "state": "starter",
+      "source": "MeshCore Canada",
+      "sourceUrl": "https://saultairport.com/",
+      "planningExtension": false
+    },
+    "yts": {
+      "state": "starter",
+      "source": "MeshCore Canada",
+      "sourceUrl": "https://www.timminsairport.com/",
+      "planningExtension": false
+    },
+    "yqk": {
+      "state": "starter",
+      "source": "MeshCore Canada",
+      "sourceUrl": "https://www.kenoraairport.ca/",
+      "planningExtension": false
+    },
+    "yvo": {
+      "state": "starter",
+      "source": "MeshCore Canada",
+      "sourceUrl": "https://aeroportvaldor.com/",
+      "planningExtension": false
+    },
+    "yzv": {
+      "state": "starter",
+      "source": "MeshCore Canada",
+      "sourceUrl": "https://tc.canada.ca/en/aviation/operating-airports-aerodromes/list-airports-owned-transport-canada",
+      "planningExtension": false
+    },
+    "yvp": {
+      "state": "starter",
+      "source": "MeshCore Canada",
+      "sourceUrl": "https://tc.canada.ca/en/aviation/operating-airports-aerodromes/list-airports-owned-transport-canada",
+      "planningExtension": false
+    },
+    "yqm": {
+      "state": "starter",
+      "source": "MeshCore Canada",
+      "sourceUrl": "https://cyqm.ca/",
+      "planningExtension": false
+    },
+    "yfc": {
+      "state": "starter",
+      "source": "MeshCore Canada",
+      "sourceUrl": "https://yfcfredericton.ca/",
+      "planningExtension": false
+    },
+    "ysj": {
+      "state": "starter",
+      "source": "MeshCore Canada",
+      "sourceUrl": "https://ysjsaintjohn.ca/",
+      "planningExtension": false
+    },
+    "yhz": {
+      "state": "starter",
+      "source": "MeshCore Canada",
+      "sourceUrl": "https://halifaxstanfield.ca/",
+      "planningExtension": false
+    },
+    "yqi": {
+      "state": "starter",
+      "source": "MeshCore Canada",
+      "sourceUrl": "https://www.yarmouthairport.ca/",
+      "planningExtension": false
+    }
+  },
+  "seeds": [
+    {
+      "tag": "xcm",
+      "lat": 42.406519,
+      "lon": -82.188273,
+      "r": 0,
+      "provinces": [
+        "on"
+      ],
+      "sourceUrl": "https://xcm.meshmapper.net/",
+      "regionSource": "meshmapper"
+    },
+    {
+      "tag": "xph",
+      "lat": 43.972045,
+      "lon": -78.209874,
+      "r": 0,
+      "provinces": [
+        "on"
+      ],
+      "sourceUrl": "https://xph.meshmapper.net/",
+      "regionSource": "meshmapper"
+    },
+    {
+      "tag": "ybl",
+      "lat": 49.99008,
+      "lon": -125.26207,
+      "r": 0,
+      "provinces": [
+        "bc"
+      ],
+      "sourceUrl": "https://ybl.meshmapper.net/",
+      "regionSource": "meshmapper"
+    },
+    {
+      "tag": "ycd",
+      "lat": 49.164167,
+      "lon": -123.936389,
+      "r": 0,
+      "provinces": [
+        "bc"
+      ],
+      "sourceUrl": "https://ycd.meshmapper.net/",
+      "regionSource": "meshmapper"
+    },
+    {
+      "tag": "yeg",
+      "lat": 53.551268,
+      "lon": -113.491265,
+      "r": 0,
+      "provinces": [
+        "ab"
+      ],
+      "sourceUrl": "https://yeg.meshmapper.net/",
+      "regionSource": "meshmapper"
+    },
+    {
+      "tag": "ygk",
+      "lat": 44.264112,
+      "lon": -76.454529,
+      "r": 0,
+      "provinces": [
+        "on"
+      ],
+      "sourceUrl": "https://ygk.meshmapper.net/",
+      "regionSource": "meshmapper"
+    },
+    {
+      "tag": "yka",
+      "lat": 50.686535,
+      "lon": -120.349611,
+      "r": 0,
+      "provinces": [
+        "bc"
+      ],
+      "sourceUrl": "https://yka.meshmapper.net/",
+      "regionSource": "meshmapper"
+    },
+    {
+      "tag": "ykf",
+      "lat": 43.343679,
+      "lon": -80.670063,
+      "r": 0,
+      "provinces": [
+        "on"
+      ],
+      "sourceUrl": "https://ykf.meshmapper.net/",
+      "regionSource": "meshmapper"
+    },
+    {
+      "tag": "ylk",
+      "lat": 44.329265,
+      "lon": -80.186228,
+      "r": 0,
+      "provinces": [
+        "on"
+      ],
+      "sourceUrl": "https://ylk.meshmapper.net/",
+      "regionSource": "meshmapper"
+    },
+    {
+      "tag": "yml",
+      "lat": 47.73137,
+      "lon": -70.240941,
+      "r": 0,
+      "provinces": [
+        "qc"
+      ],
+      "sourceUrl": "https://yml.meshmapper.net/",
+      "regionSource": "meshmapper"
+    },
+    {
+      "tag": "yow",
+      "lat": 45.40638,
+      "lon": -75.698393,
+      "r": 0,
+      "provinces": [
+        "on",
+        "qc"
+      ],
+      "sourceUrl": "https://yow.meshmapper.net/",
+      "regionSource": "meshmapper"
+    },
+    {
+      "tag": "ypa",
+      "lat": 53.204373,
+      "lon": -105.761435,
+      "r": 0,
+      "provinces": [
+        "sk"
+      ],
+      "sourceUrl": "https://ypa.meshmapper.net/",
+      "regionSource": "meshmapper"
+    },
+    {
+      "tag": "yqa",
+      "lat": 45.54754,
+      "lon": -79.069812,
+      "r": 0,
+      "provinces": [
+        "on"
+      ],
+      "sourceUrl": "https://yqa.meshmapper.net/",
+      "regionSource": "meshmapper"
+    },
+    {
+      "tag": "yqb",
+      "lat": 46.894912,
+      "lon": -71.406054,
+      "r": 0,
+      "provinces": [
+        "qc"
+      ],
+      "sourceUrl": "https://yqb.meshmapper.net/",
+      "regionSource": "meshmapper"
+    },
+    {
+      "tag": "yqf",
+      "lat": 52.278035,
+      "lon": -113.813442,
+      "r": 0,
+      "provinces": [
+        "ab"
+      ],
+      "sourceUrl": "https://yqf.meshmapper.net/",
+      "regionSource": "meshmapper"
+    },
+    {
+      "tag": "yql",
+      "lat": 49.684963,
+      "lon": -112.834123,
+      "r": 0,
+      "provinces": [
+        "ab"
+      ],
+      "sourceUrl": "https://yql.meshmapper.net/",
+      "regionSource": "meshmapper"
+    },
+    {
+      "tag": "yqq",
+      "lat": 49.671948,
+      "lon": -125.016697,
+      "r": 0,
+      "provinces": [
+        "bc"
+      ],
+      "sourceUrl": "https://yqq.meshmapper.net/",
+      "regionSource": "meshmapper"
+    },
+    {
+      "tag": "yqt",
+      "lat": 49.478633,
+      "lon": -88.448439,
+      "r": 0,
+      "provinces": [
+        "on"
+      ],
+      "sourceUrl": "https://yqt.meshmapper.net/",
+      "regionSource": "meshmapper"
+    },
+    {
+      "tag": "yqy",
+      "lat": 46.064667,
+      "lon": -60.728121,
+      "r": 0,
+      "provinces": [
+        "ns"
+      ],
+      "sourceUrl": "https://yqy.meshmapper.net/",
+      "regionSource": "meshmapper"
+    },
+    {
+      "tag": "yse",
+      "lat": 49.697058,
+      "lon": -123.152517,
+      "r": 0,
+      "provinces": [
+        "bc"
+      ],
+      "sourceUrl": "https://yse.meshmapper.net/",
+      "regionSource": "meshmapper"
+    },
+    {
+      "tag": "ytf",
+      "lat": 48.503553,
+      "lon": -71.618181,
+      "r": 0,
+      "provinces": [
+        "qc"
+      ],
+      "sourceUrl": "https://ytf.meshmapper.net/",
+      "regionSource": "meshmapper"
+    },
+    {
+      "tag": "ytr",
+      "lat": 44.157979,
+      "lon": -77.368694,
+      "r": 0,
+      "provinces": [
+        "on"
+      ],
+      "sourceUrl": "https://ytr.meshmapper.net/",
+      "regionSource": "meshmapper"
+    },
+    {
+      "tag": "yul",
+      "lat": 45.506474,
+      "lon": -73.583082,
+      "r": 0,
+      "provinces": [
+        "qc"
+      ],
+      "sourceUrl": "https://yul.meshmapper.net/",
+      "regionSource": "meshmapper"
+    },
+    {
+      "tag": "yvr",
+      "lat": 49.28173,
+      "lon": -123.11928,
+      "r": 0,
+      "provinces": [
+        "bc"
+      ],
+      "sourceUrl": "https://yvr.meshmapper.net/",
+      "regionSource": "meshmapper"
+    },
+    {
+      "tag": "ywg",
+      "lat": 49.896517,
+      "lon": -97.130584,
+      "r": 0,
+      "provinces": [
+        "mb"
+      ],
+      "sourceUrl": "https://ywg.meshmapper.net/",
+      "regionSource": "meshmapper"
+    },
+    {
+      "tag": "yws",
+      "lat": 50.317004,
+      "lon": -122.789747,
+      "r": 0,
+      "provinces": [
+        "bc"
+      ],
+      "sourceUrl": "https://yws.meshmapper.net/",
+      "regionSource": "meshmapper"
+    },
+    {
+      "tag": "yxu",
+      "lat": 42.992904,
+      "lon": -81.241093,
+      "r": 0,
+      "provinces": [
+        "on"
+      ],
+      "sourceUrl": "https://yxu.meshmapper.net/",
+      "regionSource": "meshmapper"
+    },
+    {
+      "tag": "yxx",
+      "lat": 49.023309,
+      "lon": -122.368297,
+      "r": 0,
+      "provinces": [
+        "bc"
+      ],
+      "sourceUrl": "https://yxx.meshmapper.net/",
+      "regionSource": "meshmapper"
+    },
+    {
+      "tag": "yyb",
+      "lat": 46.3091,
+      "lon": -79.4608,
+      "r": 0,
+      "provinces": [
+        "on",
+        "qc"
+      ],
+      "sourceUrl": "https://yyb.meshmapper.net/",
+      "regionSource": "meshmapper"
+    },
+    {
+      "tag": "yyc",
+      "lat": 51.016738,
+      "lon": -114.001493,
+      "r": 0,
+      "provinces": [
+        "ab"
+      ],
+      "sourceUrl": "https://yyc.meshmapper.net/",
+      "regionSource": "meshmapper"
+    },
+    {
+      "tag": "yyj",
+      "lat": 48.43719,
+      "lon": -123.361624,
+      "r": 0,
+      "provinces": [
+        "bc"
+      ],
+      "sourceUrl": "https://yyj.meshmapper.net/",
+      "regionSource": "meshmapper"
+    },
+    {
+      "tag": "yyy",
+      "lat": 48.609293,
+      "lon": -68.206893,
+      "r": 0,
+      "provinces": [
+        "qc",
+        "nb"
+      ],
+      "sourceUrl": "https://yyy.meshmapper.net/",
+      "regionSource": "meshmapper"
+    },
+    {
+      "tag": "yyz",
+      "lat": 43.791241,
+      "lon": -79.301717,
+      "r": 0,
+      "provinces": [
+        "on"
+      ],
+      "sourceUrl": "https://yyz.meshmapper.net/",
+      "regionSource": "meshmapper"
+    },
+    {
+      "tag": "yyg",
+      "lat": 46.2382,
+      "lon": -63.1311,
+      "r": 0,
+      "provinces": [
+        "pe"
+      ],
+      "sourceUrl": "https://flyyyg.com/",
+      "regionSource": "meshcore-canada"
+    },
+    {
+      "tag": "yyt",
+      "lat": 47.5605,
+      "lon": -52.7128,
+      "r": 0,
+      "provinces": [
+        "nl"
+      ],
+      "sourceUrl": "https://stjohnsairport.com/",
+      "regionSource": "meshcore-canada"
+    },
+    {
+      "tag": "yyr",
+      "lat": 53.303,
+      "lon": -60.326,
+      "r": 0,
+      "provinces": [
+        "nl"
+      ],
+      "sourceUrl": "https://goosebayairport.com/",
+      "regionSource": "meshcore-canada"
+    },
+    {
+      "tag": "yxy",
+      "lat": 60.7212,
+      "lon": -135.0568,
+      "r": 0,
+      "provinces": [
+        "yt"
+      ],
+      "sourceUrl": "https://yukonairports.ca/contact-information",
+      "regionSource": "meshcore-canada"
+    },
+    {
+      "tag": "yzf",
+      "lat": 62.454,
+      "lon": -114.3774,
+      "r": 0,
+      "provinces": [
+        "nt"
+      ],
+      "sourceUrl": "https://tc.canada.ca/en/aviation/operating-airports-aerodromes/list-airports-owned-transport-canada",
+      "regionSource": "meshcore-canada"
+    },
+    {
+      "tag": "yfb",
+      "lat": 63.7467,
+      "lon": -68.517,
+      "r": 0,
+      "provinces": [
+        "nu"
+      ],
+      "sourceUrl": "https://tc.canada.ca/en/aviation/operating-airports-aerodromes/list-airports-owned-transport-canada",
+      "regionSource": "meshcore-canada"
+    },
+    {
+      "tag": "ylw",
+      "lat": 49.888,
+      "lon": -119.496,
+      "r": 0,
+      "provinces": [
+        "bc"
+      ],
+      "sourceUrl": "https://ylw.kelowna.ca/",
+      "regionSource": "meshcore-canada"
+    },
+    {
+      "tag": "yxs",
+      "lat": 53.9171,
+      "lon": -122.7497,
+      "r": 0,
+      "provinces": [
+        "bc"
+      ],
+      "sourceUrl": "https://www.pgairport.ca/",
+      "regionSource": "meshcore-canada"
+    },
+    {
+      "tag": "yxt",
+      "lat": 54.518,
+      "lon": -128.603,
+      "r": 0,
+      "provinces": [
+        "bc"
+      ],
+      "sourceUrl": "https://yxt.ca/",
+      "regionSource": "meshcore-canada"
+    },
+    {
+      "tag": "yxc",
+      "lat": 49.509,
+      "lon": -115.769,
+      "r": 0,
+      "provinces": [
+        "bc"
+      ],
+      "sourceUrl": "https://flyyxc.com/",
+      "regionSource": "meshcore-canada"
+    },
+    {
+      "tag": "ymm",
+      "lat": 56.727,
+      "lon": -111.381,
+      "r": 0,
+      "provinces": [
+        "ab"
+      ],
+      "sourceUrl": "https://flyymm.com/",
+      "regionSource": "meshcore-canada"
+    },
+    {
+      "tag": "yqu",
+      "lat": 55.171,
+      "lon": -118.795,
+      "r": 0,
+      "provinces": [
+        "ab"
+      ],
+      "sourceUrl": "https://grandeprairieairport.com/",
+      "regionSource": "meshcore-canada"
+    },
+    {
+      "tag": "yxe",
+      "lat": 52.134,
+      "lon": -106.67,
+      "r": 0,
+      "provinces": [
+        "sk"
+      ],
+      "sourceUrl": "https://skyxe.ca/",
+      "regionSource": "meshcore-canada"
+    },
+    {
+      "tag": "yqr",
+      "lat": 50.445,
+      "lon": -104.618,
+      "r": 0,
+      "provinces": [
+        "sk"
+      ],
+      "sourceUrl": "https://www.yqr.ca/",
+      "regionSource": "meshcore-canada"
+    },
+    {
+      "tag": "ybr",
+      "lat": 49.848,
+      "lon": -99.95,
+      "r": 0,
+      "provinces": [
+        "mb"
+      ],
+      "sourceUrl": "https://www.brandon.ca/airport",
+      "regionSource": "meshcore-canada"
+    },
+    {
+      "tag": "yth",
+      "lat": 55.744,
+      "lon": -97.855,
+      "r": 0,
+      "provinces": [
+        "mb"
+      ],
+      "sourceUrl": "https://fly-yth.ca/",
+      "regionSource": "meshcore-canada"
+    },
+    {
+      "tag": "yyq",
+      "lat": 58.769,
+      "lon": -94.164,
+      "r": 0,
+      "provinces": [
+        "mb"
+      ],
+      "sourceUrl": "https://tc.canada.ca/en/aviation/operating-airports-aerodromes/list-airports-owned-transport-canada",
+      "regionSource": "meshcore-canada"
+    },
+    {
+      "tag": "ysb",
+      "lat": 46.492,
+      "lon": -80.993,
+      "r": 0,
+      "provinces": [
+        "on"
+      ],
+      "sourceUrl": "https://www.flysudbury.ca/",
+      "regionSource": "meshcore-canada"
+    },
+    {
+      "tag": "yam",
+      "lat": 46.522,
+      "lon": -84.346,
+      "r": 0,
+      "provinces": [
+        "on"
+      ],
+      "sourceUrl": "https://saultairport.com/",
+      "regionSource": "meshcore-canada"
+    },
+    {
+      "tag": "yts",
+      "lat": 48.475,
+      "lon": -81.33,
+      "r": 0,
+      "provinces": [
+        "on"
+      ],
+      "sourceUrl": "https://www.timminsairport.com/",
+      "regionSource": "meshcore-canada"
+    },
+    {
+      "tag": "yqk",
+      "lat": 49.767,
+      "lon": -94.489,
+      "r": 0,
+      "provinces": [
+        "on"
+      ],
+      "sourceUrl": "https://www.kenoraairport.ca/",
+      "regionSource": "meshcore-canada"
+    },
+    {
+      "tag": "yvo",
+      "lat": 48.099,
+      "lon": -77.793,
+      "r": 0,
+      "provinces": [
+        "qc"
+      ],
+      "sourceUrl": "https://aeroportvaldor.com/",
+      "regionSource": "meshcore-canada"
+    },
+    {
+      "tag": "yzv",
+      "lat": 50.216,
+      "lon": -66.382,
+      "r": 0,
+      "provinces": [
+        "qc"
+      ],
+      "sourceUrl": "https://tc.canada.ca/en/aviation/operating-airports-aerodromes/list-airports-owned-transport-canada",
+      "regionSource": "meshcore-canada"
+    },
+    {
+      "tag": "yvp",
+      "lat": 58.101,
+      "lon": -68.404,
+      "r": 0,
+      "provinces": [
+        "qc"
+      ],
+      "sourceUrl": "https://tc.canada.ca/en/aviation/operating-airports-aerodromes/list-airports-owned-transport-canada",
+      "regionSource": "meshcore-canada"
+    },
+    {
+      "tag": "yqm",
+      "lat": 46.088,
+      "lon": -64.778,
+      "r": 0,
+      "provinces": [
+        "nb"
+      ],
+      "sourceUrl": "https://cyqm.ca/",
+      "regionSource": "meshcore-canada"
+    },
+    {
+      "tag": "yfc",
+      "lat": 45.964,
+      "lon": -66.643,
+      "r": 0,
+      "provinces": [
+        "nb"
+      ],
+      "sourceUrl": "https://yfcfredericton.ca/",
+      "regionSource": "meshcore-canada"
+    },
+    {
+      "tag": "ysj",
+      "lat": 45.273,
+      "lon": -66.063,
+      "r": 0,
+      "provinces": [
+        "nb"
+      ],
+      "sourceUrl": "https://ysjsaintjohn.ca/",
+      "regionSource": "meshcore-canada"
+    },
+    {
+      "tag": "yhz",
+      "lat": 44.648,
+      "lon": -63.575,
+      "r": 0,
+      "provinces": [
+        "ns"
+      ],
+      "sourceUrl": "https://halifaxstanfield.ca/",
+      "regionSource": "meshcore-canada"
+    },
+    {
+      "tag": "yqi",
+      "lat": 43.837,
+      "lon": -66.118,
+      "r": 0,
+      "provinces": [
+        "ns"
+      ],
+      "sourceUrl": "https://www.yarmouthairport.ca/",
+      "regionSource": "meshcore-canada"
+    }
+  ],
+  "aliases": {
+    "xcm": [
+      "xcm",
+      "Chatham-Kent"
+    ],
+    "xph": [
+      "xph",
+      "Port Hope"
+    ],
+    "ybl": [
+      "ybl",
+      "Campbell River"
+    ],
+    "ycd": [
+      "ycd",
+      "Nanaimo"
+    ],
+    "yeg": [
+      "yeg",
+      "Edmonton"
+    ],
+    "ygk": [
+      "ygk",
+      "Kingston"
+    ],
+    "yka": [
+      "yka",
+      "Kamloops"
+    ],
+    "ykf": [
+      "ykf",
+      "Waterloo",
+      "Waterloo",
+      "Kitchener",
+      "Cambridge"
+    ],
+    "ylk": [
+      "ylk",
+      "Barrie"
+    ],
+    "yml": [
+      "yml",
+      "La Malbaie"
+    ],
+    "yow": [
+      "yow",
+      "Ottawa–Gatineau",
+      "Ottawa",
+      "Gatineau",
+      "NCR",
+      "Rigaud",
+      "Lanark",
+      "Calabogie",
+      "Renfrew",
+      "Alfred",
+      "Hawkesbury"
+    ],
+    "ypa": [
+      "ypa",
+      "Prince Albert"
+    ],
+    "yqa": [
+      "yqa",
+      "Muskoka"
+    ],
+    "yqb": [
+      "yqb",
+      "Quebec City",
+      "Québec City",
+      "Quebec City",
+      "Ville de Québec"
+    ],
+    "yqf": [
+      "yqf",
+      "Red Deer"
+    ],
+    "yql": [
+      "yql",
+      "Lethbridge"
+    ],
+    "yqq": [
+      "yqq",
+      "Courtenay"
+    ],
+    "yqt": [
+      "yqt",
+      "Thunder Bay"
+    ],
+    "yqy": [
+      "yqy",
+      "Cape Breton Island"
+    ],
+    "yse": [
+      "yse",
+      "Squamish"
+    ],
+    "ytf": [
+      "ytf",
+      "Saguenay Lac-st-jean",
+      "Saguenay",
+      "Lac-Saint-Jean"
+    ],
+    "ytr": [
+      "ytr",
+      "Quinte West",
+      "Quinte",
+      "Belleville",
+      "Trenton"
+    ],
+    "yul": [
+      "yul",
+      "Montreal",
+      "Montréal",
+      "Montreal",
+      "Trois-Rivières"
+    ],
+    "yvr": [
+      "yvr",
+      "Vancouver"
+    ],
+    "ywg": [
+      "ywg",
+      "Winnipeg"
+    ],
+    "yws": [
+      "yws",
+      "Whistler"
+    ],
+    "yxu": [
+      "yxu",
+      "London"
+    ],
+    "yxx": [
+      "yxx",
+      "Abbotsford"
+    ],
+    "yyb": [
+      "yyb",
+      "North Bay"
+    ],
+    "yyc": [
+      "yyc",
+      "Calgary"
+    ],
+    "yyj": [
+      "yyj",
+      "Victoria"
+    ],
+    "yyy": [
+      "yyy",
+      "Bas-St-Laurent-Gaspésie"
+    ],
+    "yyz": [
+      "yyz",
+      "Toronto",
+      "Toronto",
+      "GTA"
+    ],
+    "yyg": [
+      "yyg",
+      "Prince Edward Island",
+      "Île-du-Prince-Édouard",
+      "Charlottetown",
+      "PEI",
+      "Île-du-Prince-Édouard",
+      "Summerside",
+      "Montague",
+      "Souris"
+    ],
+    "yyt": [
+      "yyt",
+      "Newfoundland",
+      "Terre-Neuve",
+      "St. John's",
+      "St Johns",
+      "Terre-Neuve",
+      "Gander",
+      "Corner Brook",
+      "Deer Lake",
+      "Grand Falls-Windsor",
+      "Stephenville",
+      "St. Anthony"
+    ],
+    "yyr": [
+      "yyr",
+      "Labrador",
+      "Labrador",
+      "Happy Valley-Goose Bay",
+      "Happy Valley–Goose Bay",
+      "Goose Bay",
+      "Labrador City",
+      "Wabush",
+      "Nain",
+      "Hopedale",
+      "L'Anse-au-Clair"
+    ],
+    "yxy": [
+      "yxy",
+      "Yukon",
+      "Yukon",
+      "Whitehorse",
+      "Dawson City",
+      "Watson Lake",
+      "Haines Junction",
+      "Old Crow"
+    ],
+    "yzf": [
+      "yzf",
+      "Northwest Territories",
+      "Territoires du Nord-Ouest",
+      "Yellowknife",
+      "NWT",
+      "Territoires du Nord-Ouest",
+      "Inuvik",
+      "Hay River",
+      "Fort Smith",
+      "Fort Simpson",
+      "Norman Wells",
+      "Tuktoyaktuk"
+    ],
+    "yfb": [
+      "yfb",
+      "Nunavut",
+      "Nunavut",
+      "Iqaluit",
+      "Rankin Inlet",
+      "Cambridge Bay",
+      "Kugluktuk",
+      "Arviat",
+      "Pond Inlet",
+      "Resolute",
+      "Grise Fiord"
+    ],
+    "ylw": [
+      "ylw",
+      "Kelowna",
+      "Kelowna",
+      "Kelowna"
+    ],
+    "yxs": [
+      "yxs",
+      "Prince George",
+      "Prince George",
+      "Prince George"
+    ],
+    "yxt": [
+      "yxt",
+      "Terrace",
+      "Terrace",
+      "Terrace"
+    ],
+    "yxc": [
+      "yxc",
+      "Cranbrook",
+      "Cranbrook",
+      "Cranbrook"
+    ],
+    "ymm": [
+      "ymm",
+      "Fort McMurray",
+      "Fort McMurray",
+      "Fort McMurray"
+    ],
+    "yqu": [
+      "yqu",
+      "Grande Prairie",
+      "Grande Prairie",
+      "Grande Prairie"
+    ],
+    "yxe": [
+      "yxe",
+      "Saskatoon",
+      "Saskatoon",
+      "Saskatoon"
+    ],
+    "yqr": [
+      "yqr",
+      "Regina",
+      "Regina",
+      "Regina"
+    ],
+    "ybr": [
+      "ybr",
+      "Brandon",
+      "Brandon",
+      "Brandon"
+    ],
+    "yth": [
+      "yth",
+      "Thompson",
+      "Thompson",
+      "Thompson"
+    ],
+    "yyq": [
+      "yyq",
+      "Churchill",
+      "Churchill",
+      "Churchill"
+    ],
+    "ysb": [
+      "ysb",
+      "Sudbury",
+      "Sudbury",
+      "Sudbury"
+    ],
+    "yam": [
+      "yam",
+      "Sault Ste. Marie",
+      "Sault Ste. Marie",
+      "Sault Ste. Marie"
+    ],
+    "yts": [
+      "yts",
+      "Timmins",
+      "Timmins",
+      "Timmins"
+    ],
+    "yqk": [
+      "yqk",
+      "Kenora",
+      "Kenora",
+      "Kenora"
+    ],
+    "yvo": [
+      "yvo",
+      "Val-d’Or",
+      "Val-d’Or",
+      "Val-d’Or"
+    ],
+    "yzv": [
+      "yzv",
+      "Sept-Îles",
+      "Sept-Îles",
+      "Sept-Îles"
+    ],
+    "yvp": [
+      "yvp",
+      "Kuujjuaq",
+      "Kuujjuaq",
+      "Kuujjuaq"
+    ],
+    "yqm": [
+      "yqm",
+      "Moncton",
+      "Moncton",
+      "Moncton"
+    ],
+    "yfc": [
+      "yfc",
+      "Fredericton",
+      "Fredericton",
+      "Fredericton"
+    ],
+    "ysj": [
+      "ysj",
+      "Saint John",
+      "Saint John",
+      "Saint John"
+    ],
+    "yhz": [
+      "yhz",
+      "Halifax",
+      "Halifax",
+      "Halifax"
+    ],
+    "yqi": [
+      "yqi",
+      "Yarmouth",
+      "Yarmouth",
+      "Yarmouth"
+    ]
+  },
+  "legacyAliases": {
+    "gatout": [
+      "yow"
+    ],
+    "ncr": [
+      "yow"
+    ],
+    "avalon": [
+      "yyt"
+    ],
+    "burin": [
+      "yyt"
+    ],
+    "bonav": [
+      "yyt"
+    ],
+    "cent": [
+      "yyt"
+    ],
+    "scoast": [
+      "yyt"
+    ],
+    "steph": [
+      "yyt"
+    ],
+    "humber": [
+      "yyt"
+    ],
+    "npen": [
+      "yyr",
+      "yyt"
+    ],
+    "labw": [
+      "yyr"
+    ],
+    "hvgb": [
+      "yyr"
+    ],
+    "nain": [
+      "yyr"
+    ],
+    "chk": [
+      "xcm"
+    ],
+    "nth": [
+      "xph"
+    ],
+    "srd": [
+      "ybl"
+    ],
+    "rdn": [
+      "ycd"
+    ],
+    "edm": [
+      "yeg"
+    ],
+    "frt": [
+      "ygk"
+    ],
+    "tnrd": [
+      "yka"
+    ],
+    "wat": [
+      "ykf"
+    ],
+    "sim": [
+      "ylk"
+    ],
+    "capnat": [
+      "yml",
+      "yqb"
+    ],
+    "ott": [
+      "yow"
+    ],
+    "pa": [
+      "ypa"
+    ],
+    "mus": [
+      "yqa"
+    ],
+    "rd": [
+      "yqf"
+    ],
+    "leth": [
+      "yql"
+    ],
+    "cxrd": [
+      "yqq"
+    ],
+    "slrd": [
+      "yse",
+      "yws"
+    ],
+    "saglac": [
+      "ytf"
+    ],
+    "has": [
+      "ytr"
+    ],
+    "mtl": [
+      "yul"
+    ],
+    "mvrd": [
+      "yvr"
+    ],
+    "wpg": [
+      "ywg"
+    ],
+    "fvrd": [
+      "yxx"
+    ],
+    "cal": [
+      "yyc"
+    ],
+    "crd": [
+      "yyj"
+    ],
+    "tor": [
+      "yyz"
+    ],
+    "pri": [
+      "yyg"
+    ],
+    "qns-pe": [
+      "yyg"
+    ],
+    "kings-pe": [
+      "yyg"
+    ],
+    "whse": [
+      "yxy"
+    ],
+    "kluane": [
+      "yxy"
+    ],
+    "dawson": [
+      "yxy"
+    ],
+    "mayo": [
+      "yxy"
+    ],
+    "watson": [
+      "yxy"
+    ],
+    "oldcrow": [
+      "yxy"
+    ],
+    "nsl": [
+      "yzf"
+    ],
+    "ssl": [
+      "yzf"
+    ],
+    "dehcho": [
+      "yzf"
+    ],
+    "sahtu": [
+      "yzf"
+    ],
+    "inuvik": [
+      "yzf"
+    ],
+    "qik": [
+      "yfb"
+    ],
+    "kiv": [
+      "yfb"
+    ],
+    "kitik": [
+      "yfb"
+    ]
+  },
+  "profiles": {
+    "xcm": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": []
+    },
+    "xph": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": []
+    },
+    "ybl": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": []
+    },
+    "ycd": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": []
+    },
+    "yeg": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": [
+        {
+          "id": "alberta-meshcore-networks",
+          "name": "Alberta MeshCore Networks",
+          "nameFr": "Alberta MeshCore Networks",
+          "route": "/provinces/alberta/#community-alberta-meshcore-networks",
+          "override": false,
+          "settings": {
+            "inherit_national": true,
+            "overrides": {}
+          },
+          "listingReviewed": "2026-08-29"
+        },
+        {
+          "id": "edmonton-meshcore-network",
+          "name": "Edmonton MeshCore Network",
+          "nameFr": "Edmonton MeshCore Network",
+          "route": "/provinces/alberta/#community-edmonton-meshcore-network",
+          "override": false,
+          "settings": {
+            "inherit_national": true,
+            "overrides": {}
+          },
+          "listingReviewed": "2026-08-29"
+        },
+        {
+          "id": "yegmesh-ca",
+          "name": "yegmesh.ca",
+          "nameFr": "yegmesh.ca",
+          "route": "/provinces/alberta/#community-yegmesh-ca",
+          "override": false,
+          "settings": {
+            "inherit_national": true,
+            "overrides": {}
+          },
+          "listingReviewed": "2026-08-29"
+        }
+      ]
+    },
+    "ygk": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": []
+    },
+    "yka": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": []
+    },
+    "ykf": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": []
+    },
+    "ylk": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": []
+    },
+    "yml": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": [
+        {
+          "id": "charlevoix-yml",
+          "name": "Réseau MESH de Charlevoix (YML)",
+          "nameFr": "Réseau MESH de Charlevoix (YML)",
+          "route": "/provinces/quebec/#community-charlevoix-yml",
+          "override": false,
+          "settings": {
+            "inherit_national": true,
+            "overrides": {}
+          },
+          "listingReviewed": "2026-08-29"
+        }
+      ]
+    },
+    "yow": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": [
+        {
+          "id": "greater-ottawa-mesh-enthusiasts",
+          "name": "Greater Ottawa Mesh Enthusiasts",
+          "nameFr": "Greater Ottawa Mesh Enthusiasts",
+          "route": "/provinces/ontario/#community-greater-ottawa-mesh-enthusiasts",
+          "override": false,
+          "settings": {
+            "inherit_national": true,
+            "overrides": {}
+          },
+          "listingReviewed": "2026-08-29"
+        }
+      ]
+    },
+    "ypa": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": []
+    },
+    "yqa": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": []
+    },
+    "yqb": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": [
+        {
+          "id": "mesh-quebec",
+          "name": "Mesh Quebec",
+          "nameFr": "Mesh Quebec",
+          "route": "/provinces/quebec/#community-mesh-quebec",
+          "override": false,
+          "settings": {
+            "inherit_national": true,
+            "overrides": {}
+          },
+          "listingReviewed": "2026-08-29"
+        },
+        {
+          "id": "reseau-mesh-capitale-yqb",
+          "name": "Réseau Mesh de la Capitale YQB",
+          "nameFr": "Réseau Mesh de la Capitale YQB",
+          "route": "/provinces/quebec/#community-reseau-mesh-capitale-yqb",
+          "override": false,
+          "settings": {
+            "inherit_national": true,
+            "overrides": {}
+          },
+          "listingReviewed": "2026-08-29"
+        }
+      ]
+    },
+    "yqf": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": []
+    },
+    "yql": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": [
+        {
+          "id": "alberta-meshcore-networks",
+          "name": "Alberta MeshCore Networks",
+          "nameFr": "Alberta MeshCore Networks",
+          "route": "/provinces/alberta/#community-alberta-meshcore-networks",
+          "override": false,
+          "settings": {
+            "inherit_national": true,
+            "overrides": {}
+          },
+          "listingReviewed": "2026-08-29"
+        },
+        {
+          "id": "yqlmesh",
+          "name": "YQLMesh",
+          "nameFr": "YQLMesh",
+          "route": "/provinces/alberta/#community-yqlmesh",
+          "override": false,
+          "settings": {
+            "inherit_national": true,
+            "overrides": {}
+          },
+          "listingReviewed": "2026-08-29"
+        },
+        {
+          "id": "southern-alberta",
+          "name": "Southern Alberta",
+          "nameFr": "Southern Alberta",
+          "route": "/provinces/alberta/#community-southern-alberta",
+          "override": false,
+          "settings": {
+            "inherit_national": true,
+            "overrides": {}
+          },
+          "listingReviewed": "2026-08-29"
+        }
+      ]
+    },
+    "yqq": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": []
+    },
+    "yqt": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": []
+    },
+    "yqy": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": []
+    },
+    "yse": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": []
+    },
+    "ytf": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": [
+        {
+          "id": "mesh-quebec",
+          "name": "Mesh Quebec",
+          "nameFr": "Mesh Quebec",
+          "route": "/provinces/quebec/#community-mesh-quebec",
+          "override": false,
+          "settings": {
+            "inherit_national": true,
+            "overrides": {}
+          },
+          "listingReviewed": "2026-08-29"
+        },
+        {
+          "id": "reseau-mesh-saguenay-lac-saint-jean-ytf",
+          "name": "Réseau Mesh du Saguenay Lac st-Jean YTF",
+          "nameFr": "Réseau Mesh du Saguenay Lac st-Jean YTF",
+          "route": "/provinces/quebec/#community-reseau-mesh-saguenay-lac-saint-jean-ytf",
+          "override": false,
+          "settings": {
+            "inherit_national": true,
+            "overrides": {}
+          },
+          "listingReviewed": "2026-08-29"
+        }
+      ]
+    },
+    "ytr": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": [
+        {
+          "id": "quinte-mesh-network",
+          "name": "Quinte Mesh Network",
+          "nameFr": "Quinte Mesh Network",
+          "route": "/provinces/ontario/#community-quinte-mesh-network",
+          "override": false,
+          "settings": {
+            "inherit_national": true,
+            "overrides": {}
+          },
+          "listingReviewed": "2026-08-29"
+        }
+      ]
+    },
+    "yul": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": [
+        {
+          "id": "mesh-quebec",
+          "name": "Mesh Quebec",
+          "nameFr": "Mesh Quebec",
+          "route": "/provinces/quebec/#community-mesh-quebec",
+          "override": false,
+          "settings": {
+            "inherit_national": true,
+            "overrides": {}
+          },
+          "listingReviewed": "2026-08-29"
+        },
+        {
+          "id": "montreal-mesh",
+          "name": "Montreal Mesh",
+          "nameFr": "Montreal Mesh",
+          "route": "/provinces/quebec/#community-montreal-mesh",
+          "override": false,
+          "settings": {
+            "inherit_national": true,
+            "overrides": {}
+          },
+          "listingReviewed": "2026-08-29"
+        },
+        {
+          "id": "reseau-libre",
+          "name": "Réseau Libre",
+          "nameFr": "Réseau Libre",
+          "route": "/provinces/quebec/#community-reseau-libre",
+          "override": false,
+          "settings": {
+            "inherit_national": true,
+            "overrides": {}
+          },
+          "listingReviewed": "2026-08-29"
+        }
+      ]
+    },
+    "yvr": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": [
+        {
+          "id": "bc-mesh",
+          "name": "BC Mesh",
+          "nameFr": "BC Mesh",
+          "route": "/provinces/british-columbia/#community-bc-mesh",
+          "override": false,
+          "settings": {
+            "inherit_national": true,
+            "overrides": {
+              "radio_preset": "Custom",
+              "raw_radio": {
+                "frequency_mhz": 910.425,
+                "bandwidth_khz": 62.5,
+                "spreading_factor": 7,
+                "coding_rate": 5
+              }
+            }
+          },
+          "listingReviewed": "2026-08-29"
+        },
+        {
+          "id": "salish-mesh",
+          "name": "Salish Mesh",
+          "nameFr": "Salish Mesh",
+          "route": "/provinces/british-columbia/#community-salish-mesh",
+          "override": false,
+          "settings": {
+            "inherit_national": true,
+            "overrides": {}
+          },
+          "listingReviewed": "2026-08-29"
+        }
+      ]
+    },
+    "ywg": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": [
+        {
+          "id": "winnipeg-meshcore",
+          "name": "Winnipeg MeshCore",
+          "nameFr": "Winnipeg MeshCore",
+          "route": "/provinces/manitoba/#community-winnipeg-meshcore",
+          "override": false,
+          "settings": {
+            "inherit_national": true,
+            "overrides": {}
+          },
+          "listingReviewed": "2026-09-24"
+        }
+      ]
+    },
+    "yws": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": []
+    },
+    "yxu": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": []
+    },
+    "yxx": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": []
+    },
+    "yyb": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": []
+    },
+    "yyc": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": [
+        {
+          "id": "alberta-meshcore-networks",
+          "name": "Alberta MeshCore Networks",
+          "nameFr": "Alberta MeshCore Networks",
+          "route": "/provinces/alberta/#community-alberta-meshcore-networks",
+          "override": false,
+          "settings": {
+            "inherit_national": true,
+            "overrides": {}
+          },
+          "listingReviewed": "2026-08-29"
+        },
+        {
+          "id": "airdrie-meshcore-network",
+          "name": "Airdrie MeshCore Network",
+          "nameFr": "Airdrie MeshCore Network",
+          "route": "/provinces/alberta/#community-airdrie-meshcore-network",
+          "override": false,
+          "settings": {
+            "inherit_national": true,
+            "overrides": {}
+          },
+          "listingReviewed": "2026-08-29"
+        },
+        {
+          "id": "calgary-area-meshcore",
+          "name": "Calgary and Area MeshCore",
+          "nameFr": "Calgary and Area MeshCore",
+          "route": "/provinces/alberta/#community-calgary-area-meshcore",
+          "override": false,
+          "settings": {
+            "inherit_national": true,
+            "overrides": {}
+          },
+          "listingReviewed": "2026-08-29"
+        },
+        {
+          "id": "calgary-meshcore-network",
+          "name": "Calgary MeshCore Network",
+          "nameFr": "Calgary MeshCore Network",
+          "route": "/provinces/alberta/#community-calgary-meshcore-network",
+          "override": false,
+          "settings": {
+            "inherit_national": true,
+            "overrides": {}
+          },
+          "listingReviewed": "2026-08-29"
+        },
+        {
+          "id": "yyc-meshcore-discord",
+          "name": "YYC MeshCore Discord Group",
+          "nameFr": "YYC MeshCore Discord Group",
+          "route": "/provinces/alberta/#community-yyc-meshcore-discord",
+          "override": false,
+          "settings": {
+            "inherit_national": true,
+            "overrides": {}
+          },
+          "listingReviewed": "2026-08-29"
+        }
+      ]
+    },
+    "yyj": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": [
+        {
+          "id": "bc-mesh",
+          "name": "BC Mesh",
+          "nameFr": "BC Mesh",
+          "route": "/provinces/british-columbia/#community-bc-mesh",
+          "override": false,
+          "settings": {
+            "inherit_national": true,
+            "overrides": {
+              "radio_preset": "Custom",
+              "raw_radio": {
+                "frequency_mhz": 910.425,
+                "bandwidth_khz": 62.5,
+                "spreading_factor": 7,
+                "coding_rate": 5
+              }
+            }
+          },
+          "listingReviewed": "2026-08-29"
+        },
+        {
+          "id": "salish-mesh",
+          "name": "Salish Mesh",
+          "nameFr": "Salish Mesh",
+          "route": "/provinces/british-columbia/#community-salish-mesh",
+          "override": false,
+          "settings": {
+            "inherit_national": true,
+            "overrides": {}
+          },
+          "listingReviewed": "2026-08-29"
+        }
+      ]
+    },
+    "yyy": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": []
+    },
+    "yyz": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": [
+        {
+          "id": "gta-lora-meshes",
+          "name": "GTA+-Lora-Meshes",
+          "nameFr": "GTA+-Lora-Meshes",
+          "route": "/provinces/ontario/#community-gta-lora-meshes",
+          "override": false,
+          "settings": {
+            "inherit_national": true,
+            "overrides": {}
+          },
+          "listingReviewed": "2026-08-29"
+        }
+      ]
+    },
+    "yyg": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": []
+    },
+    "yyt": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": []
+    },
+    "yyr": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": []
+    },
+    "yxy": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": []
+    },
+    "yzf": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": []
+    },
+    "yfb": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": []
+    },
+    "ylw": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": []
+    },
+    "yxs": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": []
+    },
+    "yxt": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": []
+    },
+    "yxc": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": []
+    },
+    "ymm": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": []
+    },
+    "yqu": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": []
+    },
+    "yxe": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": [
+        {
+          "id": "stoonmesh",
+          "name": "StoonMesh",
+          "nameFr": "StoonMesh",
+          "route": "/provinces/saskatchewan/#community-stoonmesh",
+          "override": false,
+          "settings": {
+            "inherit_national": true,
+            "overrides": {}
+          },
+          "listingReviewed": "2026-09-24"
+        }
+      ]
+    },
+    "yqr": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": [
+        {
+          "id": "yqrmesh",
+          "name": "YQRMesh",
+          "nameFr": "YQRMesh",
+          "route": "/provinces/saskatchewan/#community-yqrmesh",
+          "override": false,
+          "settings": {
+            "inherit_national": true,
+            "overrides": {}
+          },
+          "listingReviewed": "2026-08-29"
+        }
+      ]
+    },
+    "ybr": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": []
+    },
+    "yth": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": []
+    },
+    "yyq": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": []
+    },
+    "ysb": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": []
+    },
+    "yam": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": []
+    },
+    "yts": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": []
+    },
+    "yqk": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": []
+    },
+    "yvo": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": []
+    },
+    "yzv": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": []
+    },
+    "yvp": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": []
+    },
+    "yqm": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": [
+        {
+          "id": "southern-new-brunswick",
+          "name": "Southern New Brunswick",
+          "nameFr": "Southern New Brunswick",
+          "route": "/provinces/new-brunswick/#community-southern-new-brunswick",
+          "override": false,
+          "settings": {
+            "inherit_national": true,
+            "overrides": {}
+          },
+          "listingReviewed": "2026-08-29"
+        }
+      ]
+    },
+    "yfc": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": [
+        {
+          "id": "southern-new-brunswick",
+          "name": "Southern New Brunswick",
+          "nameFr": "Southern New Brunswick",
+          "route": "/provinces/new-brunswick/#community-southern-new-brunswick",
+          "override": false,
+          "settings": {
+            "inherit_national": true,
+            "overrides": {}
+          },
+          "listingReviewed": "2026-08-29"
+        }
+      ]
+    },
+    "ysj": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": [
+        {
+          "id": "southern-new-brunswick",
+          "name": "Southern New Brunswick",
+          "nameFr": "Southern New Brunswick",
+          "route": "/provinces/new-brunswick/#community-southern-new-brunswick",
+          "override": false,
+          "settings": {
+            "inherit_national": true,
+            "overrides": {}
+          },
+          "listingReviewed": "2026-08-29"
+        }
+      ]
+    },
+    "yhz": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": [
+        {
+          "id": "lunenburg-county-mesh",
+          "name": "Lunenburg County Mesh",
+          "nameFr": "Lunenburg County Mesh",
+          "route": "/provinces/nova-scotia/#community-lunenburg-county-mesh",
+          "override": false,
+          "settings": {
+            "inherit_national": true,
+            "overrides": {}
+          },
+          "listingReviewed": "2026-08-29"
+        }
+      ]
+    },
+    "yqi": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": []
+    }
+  },
+  "metroGroups": [
+    {
+      "label": "British Columbia",
+      "tags": [
+        "ybl",
+        "ycd",
+        "yka",
+        "yqq",
+        "yse",
+        "yvr",
+        "yws",
+        "yxx",
+        "yyj",
+        "ylw",
+        "yxs",
+        "yxt",
+        "yxc"
+      ]
+    },
+    {
+      "label": "Alberta",
+      "tags": [
+        "yeg",
+        "yqf",
+        "yql",
+        "yyc",
+        "ymm",
+        "yqu"
+      ]
+    },
+    {
+      "label": "Saskatchewan",
+      "tags": [
+        "ypa",
+        "yxe",
+        "yqr"
+      ]
+    },
+    {
+      "label": "Manitoba",
+      "tags": [
+        "ywg",
+        "ybr",
+        "yth",
+        "yyq"
+      ]
+    },
+    {
+      "label": "Ontario",
+      "tags": [
+        "xcm",
+        "xph",
+        "ygk",
+        "ykf",
+        "ylk",
+        "yow",
+        "yqa",
+        "yqt",
+        "ytr",
+        "yxu",
+        "yyb",
+        "yyz",
+        "ysb",
+        "yam",
+        "yts",
+        "yqk"
+      ]
+    },
+    {
+      "label": "Québec",
+      "tags": [
+        "yml",
+        "yow",
+        "yqb",
+        "ytf",
+        "yul",
+        "yyb",
+        "yyy",
+        "yvo",
+        "yzv",
+        "yvp"
+      ]
+    },
+    {
+      "label": "New Brunswick",
+      "tags": [
+        "yyy",
+        "yqm",
+        "yfc",
+        "ysj"
+      ]
+    },
+    {
+      "label": "Nova Scotia",
+      "tags": [
+        "yqy",
+        "yhz",
+        "yqi"
+      ]
+    },
+    {
+      "label": "Prince Edward Island",
+      "tags": [
+        "yyg"
+      ]
+    },
+    {
+      "label": "Newfoundland and Labrador",
+      "tags": [
+        "yyt",
+        "yyr"
+      ]
+    },
+    {
+      "label": "Yukon",
+      "tags": [
+        "yxy"
+      ]
+    },
+    {
+      "label": "Northwest Territories",
+      "tags": [
+        "yzf"
+      ]
+    },
+    {
+      "label": "Nunavut",
+      "tags": [
+        "yfb"
+      ]
+    }
+  ],
+  "externalRegionPaths": {
+    "western-new-york": {
+      "label": "Western New York",
+      "country": "us",
+      "areaCode": "NY",
+      "path": [
+        "us",
+        "us-ny"
+      ],
+      "tagLabels": {
+        "us": "United States",
+        "us-ny": "New York"
+      },
+      "geographic": false,
+      "automatic": false,
+      "eligibility": "border-or-shared-water",
+      "authority": {
+        "status": "documented",
+        "source": "WNY MeshCore radio settings",
+        "sourceUrl": "https://wnymeshcore.org/guides/radio-settings"
+      },
+      "trafficEvidence": {
+        "source": "https://dev.meshcore.ca/",
+        "snapshot": "2026-07-18",
+        "method": "mixed-canada-us-resolved-route",
+        "routePatterns": 4508,
+        "observations": 33820
+      }
+    },
+    "washington": {
+      "label": "Washington",
+      "country": "us",
+      "areaCode": "WA",
+      "path": [
+        "west",
+        "pnw",
+        "wa"
+      ],
+      "tagLabels": {
+        "west": "Western mesh",
+        "pnw": "Pacific Northwest",
+        "wa": "Washington"
+      },
+      "geographic": false,
+      "automatic": false,
+      "eligibility": "border-or-shared-water",
+      "authority": {
+        "status": "documented",
+        "source": "Pacific Northwest MeshCore Region Strategy",
+        "sourceUrl": "https://gessaman.com/meshcore/regions/"
+      },
+      "trafficEvidence": {
+        "source": "https://dev.meshcore.ca/",
+        "snapshot": "2026-07-18",
+        "method": "mixed-canada-us-resolved-route",
+        "routePatterns": 5384,
+        "observations": 21596
+      }
+    },
+    "oregon": {
+      "label": "Oregon",
+      "country": "us",
+      "areaCode": "OR",
+      "path": [
+        "west",
+        "pnw",
+        "or"
+      ],
+      "tagLabels": {
+        "west": "Western mesh",
+        "pnw": "Pacific Northwest",
+        "or": "Oregon"
+      },
+      "geographic": false,
+      "automatic": false,
+      "eligibility": "observed-further-route",
+      "authority": {
+        "status": "documented",
+        "source": "Pacific Northwest MeshCore Region Strategy",
+        "sourceUrl": "https://gessaman.com/meshcore/regions/"
+      },
+      "trafficEvidence": {
+        "source": "https://dev.meshcore.ca/",
+        "snapshot": "2026-07-18",
+        "method": "mixed-canada-us-resolved-route",
+        "routePatterns": 903,
+        "observations": 1394
+      }
+    },
+    "pennsylvania": {
+      "label": "Pennsylvania",
+      "country": "us",
+      "areaCode": "PA",
+      "path": [
+        "us",
+        "us-pa"
+      ],
+      "tagLabels": {
+        "us": "United States",
+        "us-pa": "Pennsylvania"
+      },
+      "geographic": false,
+      "automatic": false,
+      "eligibility": "border-or-shared-water",
+      "authority": {
+        "status": "provisional",
+        "source": "RegionMesh state-path convention",
+        "sourceUrl": "https://www.regionmesh.com/meshcore-region-configuration/"
+      },
+      "trafficEvidence": {
+        "source": "https://dev.meshcore.ca/",
+        "snapshot": "2026-07-18",
+        "method": "mixed-canada-us-resolved-route",
+        "routePatterns": 37,
+        "observations": 82
+      }
+    },
+    "ohio": {
+      "label": "Ohio",
+      "country": "us",
+      "areaCode": "OH",
+      "path": [
+        "us",
+        "us-oh"
+      ],
+      "tagLabels": {
+        "us": "United States",
+        "us-oh": "Ohio"
+      },
+      "geographic": false,
+      "automatic": false,
+      "eligibility": "border-or-shared-water",
+      "authority": {
+        "status": "provisional",
+        "source": "RegionMesh state-path convention",
+        "sourceUrl": "https://www.regionmesh.com/meshcore-region-configuration/"
+      },
+      "trafficEvidence": {
+        "source": "https://dev.meshcore.ca/",
+        "snapshot": "2026-07-18",
+        "method": "mixed-canada-us-resolved-route",
+        "routePatterns": 6,
+        "observations": 10
+      }
+    },
+    "ontario-new-york": {
+      "label": "Ontario–New York (onny, opt-in)",
+      "labelFr": "Ontario–New York (onny, facultatif)",
+      "country": "us",
+      "path": [
+        "onny"
+      ],
+      "sharedScope": true,
+      "tagLabels": {
+        "onny": "Ontario–New York"
+      },
+      "geographic": false,
+      "automatic": false,
+      "eligibility": "coordinated-cross-border",
+      "authority": {
+        "status": "proposed",
+        "source": "MeshCore Canada cross-border scope discussion",
+        "sourceUrl": "https://meshcore.ca/proposals/onqc-scopes/#cross-border-scopes"
+      }
+    }
+  }
+}

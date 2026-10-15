@@ -58,6 +58,22 @@ If Canada is not listed, follow the [older-preset instructions](../provinces/ind
 
 Reboot after changing the radio settings, then send an advert.
 
+## Choose a scope
+
+!!! warning "ON/QC: wait for Phase 2"
+    For personal companions, leave **Default Region Scope** empty and channels
+    **unscoped** for now. Phase 2 is not open. It can start no earlier than
+    **January 2027**, after the repeaters are ready and the rollout is announced.
+    Switching early can prevent your messages from reaching other users.
+
+Find your city code on the [IATA region map](../config/map.md). **When Phase 2 is
+announced**, use `onqc` for your default scope and Public channel, and your city
+scope, such as `yow`, for test channels. Leave `can` and `na` for future use.
+
+Bot and MeshMapper operators follow the [end-of-Phase-1 instructions](../proposals/onqc-scopes.md#bots-and-meshmapper), once local repeaters are ready. See the [rollout order](../proposals/onqc-scopes.md#rollout-order) before changing scopes.
+
+Elsewhere, use the scope agreed by your local community. See the [scope setup guide](../config/standard.md) for app requirements and examples. Scopes do not change your radio settings.
+
 ## Test it
 
 The companion is ready when:

@@ -809,7 +809,7 @@ class ServiceTests(unittest.TestCase):
             gateway.RateLimiter(1, 300, now=lambda: 0),
             global_pre,
         )
-        envelope = {"version": 1, "submission": {"schema": gateway.PROPOSAL_SCHEMA}, "turnstileToken": "bad", "website": ""}
+        envelope = {"version": 1, "submission": valid_idea(), "turnstileToken": "bad", "website": ""}
         with self.assertRaises(gateway.GatewayError) as first:
             service.submit(envelope, "192.0.2.1")
         with self.assertRaises(gateway.GatewayError) as second:
@@ -854,7 +854,7 @@ class ServiceTests(unittest.TestCase):
         self.assertEqual(json.loads(github.payload), gateway.validate_idea(valid_idea())[0])
         self.assertIsNone(github.preview_url)
 
-    def test_boundary_submission_persists_and_passes_preview_url(self):
+    def test_retired_boundary_schemas_create_no_issue_or_preview(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
             paths = write_authority(root)
@@ -866,15 +866,12 @@ class ServiceTests(unittest.TestCase):
             )
 
             class Turnstile:
-                def verify(self, _token, _ip): return None
+                def verify(self, _token, _ip):
+                    raise AssertionError("retired proposals must not request human verification")
 
             class Github:
                 def submit(self, canonical, payload, digest, *, preview_url=None):
-                    self.canonical = canonical
-                    self.payload = payload
-                    self.digest = digest
-                    self.preview_url = preview_url
-                    return {"ok": True, "submissionSha256": digest}
+                    raise AssertionError("retired proposals must not create issues")
 
             github = Github()
             service = gateway.GatewayService(
@@ -893,13 +890,13 @@ class ServiceTests(unittest.TestCase):
                 "turnstileToken": "token",
                 "website": "",
             }
-            result = service.submit(envelope, "192.0.2.1")
-            self.assertEqual(result["submissionSha256"], github.digest)
-            self.assertEqual(github.preview_url, preview_store.url(github.digest))
-            preview = preview_store.get(github.digest)
-            self.assertIsNotNone(preview)
-            with Image.open(io.BytesIO(preview)) as image:
-                self.assertEqual(image.size, (1600, 1000))
+            for schema in gateway.BOUNDARY_PROPOSAL_SCHEMAS:
+                envelope["submission"]["schema"] = schema
+                with self.assertRaises(gateway.GatewayError) as raised:
+                    service.submit(envelope, "192.0.2.1")
+                self.assertEqual(raised.exception.status, 410)
+                self.assertEqual(raised.exception.code, "boundary_editor_retired")
+            self.assertEqual(list((root / "previews").glob("*.png")), [])
 
     def test_forwarded_ip_only_from_trusted_private_proxy(self):
         service = object.__new__(gateway.GatewayService)
@@ -995,7 +992,7 @@ class HttpContractTests(unittest.TestCase):
         status, headers, payload = self.request("GET", gateway.DEFAULT_BASE_PATH + "/config", headers={"Origin": "https://meshcore.ca"})
         self.assertEqual(status, 200)
         self.assertEqual(headers["Access-Control-Allow-Origin"], "https://meshcore.ca")
-        self.assertEqual(payload, {"turnstileAction": gateway.TURNSTILE_ACTION, "turnstileSiteKey": "site-key", "version": 1, "communityIdeaOptionalDetails": True})
+        self.assertEqual(payload, {"turnstileAction": gateway.TURNSTILE_ACTION, "turnstileSiteKey": "site-key", "version": 1, "communityIdeaOptionalDetails": True, "boundaryProposals": False, "regionAuthority": "https://meshmapper.net/"})
         status, headers, payload = self.request("GET", gateway.DEFAULT_BASE_PATH + "/config")
         self.assertEqual(status, 200)
         self.assertNotIn("Access-Control-Allow-Origin", headers)

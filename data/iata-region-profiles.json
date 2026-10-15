@@ -1,0 +1,5 @@
+{
+  "schema": "meshcore-canada-iata-profiles/v1",
+  "note": "No region maintainer or local settings confirmation is assumed. Add a consenting public maintainer with an evidence URL, and record settings confirmation separately from boundary publication. Community links are matched from public directory reference points, not appointments or coverage claims.",
+  "regions": {}
+}

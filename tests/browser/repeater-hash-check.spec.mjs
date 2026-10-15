@@ -152,8 +152,8 @@ test("the general region configurator does not show the optional ID checker", as
       beaconRequests.push(url);
     }
   });
-  await page.goto(siteRoute("/config/?place=Ottawa"), { waitUntil: "domcontentloaded" });
-  await expect(page.locator("[data-mcc-regions='config'] [data-role='status']")).toContainText("Region found.");
+  await page.goto(siteRoute("/config/?place=YOW"), { waitUntil: "domcontentloaded" });
+  await expect(page.locator("[data-mcc-regions='config'] [data-role='status']")).toContainText("Zone found. Choose the province");
   await expect(page.locator("[data-mcc-regions='config']")).toBeVisible();
   await expect(page.locator("[data-mc-repeater-hash-check]")).toHaveCount(0);
   expect(beaconRequests).toEqual([]);

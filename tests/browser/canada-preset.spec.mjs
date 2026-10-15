@@ -14,7 +14,7 @@ for (const locale of ["", "fr/"]) {
     await expect(page.locator("article.md-content__inner")).toContainText("USA/Canada (Recommended)");
     await expect(page.locator("article.md-content__inner")).toContainText("1.14");
 
-    await page.goto(siteRoute(`/${locale}config/?tag=ott&step=3`));
+    await page.goto(siteRoute(`/${locale}config/?tag=yow&province=on&step=3`));
     const note = page.locator('[data-role="canada-preset-note"]');
     await expect(note).toBeVisible();
     await expect(note).toContainText(locale ? "3 octets" : "3-byte");

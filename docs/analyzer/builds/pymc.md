@@ -63,7 +63,7 @@ mqtt:
   iata_code: YOW
 ```
 
-Replace `YOW` with the real code nearest the observer.
+Replace `YOW` with your code from the [IATA region map](../../config/map.md).
 
 Under `mqtt.brokers`, add:
 
