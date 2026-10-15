@@ -55,13 +55,13 @@ export function reviewText(result) {
     "Download the candidate snapshot from this workflow's artifacts. Review its boundaries, province metadata, local contacts, and any starter replacements in a PR. Regenerate the combined map and catalogue, run the region and browser tests, and verify both languages on the preview. Nothing has been published automatically.\n<!-- meshmapper-review:end -->";
 }
 
-async function publish(report, result) {
-  assert.match(process.env.GITHUB_REPOSITORY || "", /^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/);
-  assert.ok(process.env.GITHUB_TOKEN);
-  const endpoint = "https://api.github.com/repos/" + process.env.GITHUB_REPOSITORY;
+export async function publish(report, result, { fetcher = fetch, env = process.env } = {}) {
+  assert.match(env.GITHUB_REPOSITORY || "", /^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/);
+  assert.ok(env.GITHUB_TOKEN);
+  const endpoint = "https://api.github.com/repos/" + env.GITHUB_REPOSITORY;
   async function request(path, method = "GET", body) {
-    const response = await fetch(endpoint + path, { method, signal: AbortSignal.timeout(30000), headers: {
-      Accept: "application/vnd.github+json", Authorization: "Bearer " + process.env.GITHUB_TOKEN,
+    const response = await fetcher(endpoint + path, { method, signal: AbortSignal.timeout(30000), headers: {
+      Accept: "application/vnd.github+json", Authorization: "Bearer " + env.GITHUB_TOKEN,
       "X-GitHub-Api-Version": "2022-11-28", "Content-Type": "application/json"
     }, ...(body ? { body: JSON.stringify(body) } : {}) });
     if (!response.ok) throw new Error(`GitHub review issue request failed: ${response.status}`);
@@ -74,8 +74,18 @@ async function publish(report, result) {
     if (found || issues.length < 100) break;
     if (page === 10) throw new Error("Too many review issues; refusing to create a duplicate");
   }
+  const run = `\n\n[Workflow evidence](https://github.com/${env.GITHUB_REPOSITORY}/actions/runs/${env.GITHUB_RUN_ID})`;
+  if (!result.needsReview) {
+    if (found) {
+      const cleared = "<!-- meshmapper-review:start -->\n## No outstanding MeshMapper changes\n\n" +
+        "The latest candidate matches the approved snapshot and has no geometry findings. Nothing was published automatically." +
+        run + "\n<!-- meshmapper-review:end -->";
+      const body = found.body.replace(/<!-- meshmapper-review:start -->[\s\S]*?<!-- meshmapper-review:end -->/, cleared);
+      await request(`/issues/${found.number}`, "PATCH", { body, state: "closed", state_reason: "completed" });
+    }
+    return;
+  }
   if (found?.body.includes(`<!-- digest:${result.digest} -->`)) return;
-  const run = `\n\n[Workflow evidence](https://github.com/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID})`;
   if (found) {
     const body = found.body.replace(/<!-- meshmapper-review:start -->[\s\S]*?<!-- meshmapper-review:end -->/, report);
     await request(`/issues/${found.number}`, "PATCH", { body });
@@ -104,6 +114,6 @@ async function main() {
   const report = result.needsReview ? reviewText(result) : "No MeshMapper region changes.\n";
   await writeFile(".tmp/meshmapper-review/review.md", report);
   console.log(report);
-  if (result.needsReview && process.argv.includes("--publish-issue")) await publish(report, result);
+  if (process.argv.includes("--publish-issue")) await publish(report, result);
 }
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main().catch(error => { console.error(error.message); process.exitCode = 1; });

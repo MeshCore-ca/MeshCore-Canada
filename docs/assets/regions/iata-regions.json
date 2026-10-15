@@ -12,7 +12,7 @@
       ]
     },
     "reservedScopes": [
-      "ca",
+      "can",
       "na"
     ],
     "optionalNetworks": {
@@ -382,13 +382,13 @@
     "starterCount": 29,
     "boundarySchema": "meshcore-canada-iata-boundaries/v2",
     "planningExtensionCount": 33,
-    "boundarySha256": "dc550356a0e86eb7b5881c71808fa9243f708151ad3e90955ec678ea5e9bc01c",
+    "boundarySha256": "3dc7d4e5c16ad5ca95ce0bf3ae04785691090b61fe8f57764229ddb5cb37a791",
     "meshmapperBoundarySha256": "78e0d08608b82328033b2ba59b22ce08a82a563725e5d59c5059ca0dc119c2d6",
     "jurisdictionSha256": "753d7ad13f089cdeee54cb29c9105706226fa75228193c4eda2d4ecc5ed78349"
   },
   "meta": {
     "name": "MeshCore Canada IATA scopes",
-    "rootTag": "ca",
+    "rootTag": "can",
     "defaultFirmware": "1.16",
     "map": {
       "center": [
@@ -408,7 +408,7 @@
     }
   },
   "hierarchy": {
-    "ca": {
+    "can": {
       "label": "Canada",
       "labelFr": "Canada",
       "parent": null,
@@ -423,79 +423,79 @@
     "bc": {
       "label": "British Columbia",
       "labelFr": "Colombie-Britannique",
-      "parent": "ca",
+      "parent": "can",
       "kind": "province"
     },
     "ab": {
       "label": "Alberta",
       "labelFr": "Alberta",
-      "parent": "ca",
+      "parent": "can",
       "kind": "province"
     },
     "sk": {
       "label": "Saskatchewan",
       "labelFr": "Saskatchewan",
-      "parent": "ca",
+      "parent": "can",
       "kind": "province"
     },
     "mb": {
       "label": "Manitoba",
       "labelFr": "Manitoba",
-      "parent": "ca",
+      "parent": "can",
       "kind": "province"
     },
     "on": {
       "label": "Ontario",
       "labelFr": "Ontario",
-      "parent": "ca",
+      "parent": "can",
       "kind": "province"
     },
     "qc": {
       "label": "Québec",
       "labelFr": "Québec",
-      "parent": "ca",
+      "parent": "can",
       "kind": "province"
     },
     "nb": {
       "label": "New Brunswick",
       "labelFr": "Nouveau-Brunswick",
-      "parent": "ca",
+      "parent": "can",
       "kind": "province"
     },
     "ns": {
       "label": "Nova Scotia",
       "labelFr": "Nouvelle-Écosse",
-      "parent": "ca",
+      "parent": "can",
       "kind": "province"
     },
     "pe": {
       "label": "Prince Edward Island",
       "labelFr": "Île-du-Prince-Édouard",
-      "parent": "ca",
+      "parent": "can",
       "kind": "province"
     },
     "nl": {
       "label": "Newfoundland and Labrador",
       "labelFr": "Terre-Neuve-et-Labrador",
-      "parent": "ca",
+      "parent": "can",
       "kind": "province"
     },
     "yt": {
       "label": "Yukon",
       "labelFr": "Yukon",
-      "parent": "ca",
+      "parent": "can",
       "kind": "province"
     },
     "nt": {
       "label": "Northwest Territories",
       "labelFr": "Territoires du Nord-Ouest",
-      "parent": "ca",
+      "parent": "can",
       "kind": "province"
     },
     "nu": {
       "label": "Nunavut",
       "labelFr": "Nunavut",
-      "parent": "ca",
+      "parent": "can",
       "kind": "province"
     },
     "onqc": {
@@ -1034,7 +1034,7 @@
     }
   },
   "status": {
-    "ca": {
+    "can": {
       "state": "reserved",
       "source": "https://meshcore.ca/proposals/onqc-scopes/"
     },

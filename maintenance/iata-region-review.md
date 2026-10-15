@@ -8,8 +8,10 @@ map or sends commands to repeaters.
 The **Review MeshMapper changes** Action runs weekly on `main` and can also be
 started manually there. It uses the [official Zones API](https://wiki.meshmapper.net/zones-api/),
 not the homepage or its private map endpoints. It validates drawn geometry and
-compares names, centres, URLs, groups and boundaries. No change means no issue
-update. A change opens or updates one bot-owned review issue and saves the
+compares names, centres, URLs, groups and boundaries. A clean comparison closes
+any matching bot-owned review issue, preserving notes outside its generated
+summary and linking to the resolving check. It creates no issue when nothing
+needs review. A change opens or updates one bot-owned review issue and saves the
 candidate GeoJSON and comparison as a 30-day artifact.
 
 The importer uses `get_zones.php?country=CA`, followed by each returned site's
@@ -81,10 +83,10 @@ reviewed PR. Never reactivate the retired census-boundary publisher.
 
 ## Region contacts and settings
 
-The current country scope is `ca`; the archived census catalogue still uses
-`can`. Preparation preserves existing scopes, and the migration comparison makes
-any later removal explicit. The former optional California `west/ca` suggestion
-is omitted from the current generator because it conflicts with Canada's `ca`.
+The current country scope is `can`, as in the archived census catalogue. An earlier
+preview used `ca`; preparation preserves any such existing entry, and the migration
+comparison makes any later removal explicit. The retired optional California
+`west/ca` suggestion remains outside the current choices pending a separate review.
 Saved selections containing it require review; no U.S. scope is silently renamed.
 
 `onny` is an independent, opt-in Ontario–New York label, available under neighbouring

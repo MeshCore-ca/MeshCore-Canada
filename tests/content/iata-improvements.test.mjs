@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import vm from "node:vm";
 import test from "node:test";
-import { compareSnapshots, reviewText } from "../../scripts/check-meshmapper-changes.mjs";
+import { compareSnapshots, publish, reviewText } from "../../scripts/check-meshmapper-changes.mjs";
 
 const read = name => readFileSync(name, "utf8");
 const catalog = JSON.parse(read("docs/assets/regions/iata-regions.json"));
@@ -14,14 +14,16 @@ vm.runInContext(read("docs/assets/javascripts/place-search.js"), context);
 const scope = context.MeshCoreIataScopes, migration = context.MeshCoreScopeMigration, places = context.MeshCorePlaceSearch;
 const plain = value => JSON.parse(JSON.stringify(value));
 
-test("country-scope correction preserves legacy can during preparation", () => {
-  const current = migration.parse("* F\n can F\n on F\n ykf^ F");
-  const target = scope.profile(catalog, { home: "ykf", province: "on" });
-  const plan = plain(migration.plan(current, target, "1.16"));
-  assert.ok(target.tags.includes("ca"));
-  assert.ok(!target.tags.includes("can"));
-  assert.deepEqual(plan.removed, []);
-  assert.ok(!plan.commands.some(command => command.startsWith("region remove ")));
+test("Canada uses can while preparation preserves existing can and earlier-preview ca", () => {
+  for (const existing of ["can", "ca"]) {
+    const current = migration.parse(`* F\n ${existing} F\n on F\n ykf^ F`);
+    const target = scope.profile(catalog, { home: "ykf", province: "on" });
+    const plan = plain(migration.plan(current, target, "1.16"));
+    assert.ok(target.tags.includes("can"));
+    assert.ok(!target.tags.includes("ca"));
+    assert.deepEqual(plan.removed, []);
+    assert.ok(!plan.commands.some(command => command.startsWith("region remove ")));
+  }
 });
 
 test("remaining city centres have assigned IATA planning regions", () => {
@@ -54,9 +56,9 @@ test("migration compares permissions and default separately from the home marker
   assert.equal(current.defaultScope,"on");
   const desired=scope.profile(catalog,{ activation: "activate", home:"yow",province:"on",bridge:true});
   const plan=plain(migration.plan(current,desired,"1.16"));
-  assert.deepEqual(plan.kept,["yow","on"]);
-  assert.deepEqual(plan.added,["onqc","ca","na"]);
-  assert.deepEqual(plan.removed,["can","on-alg","ott"]);
+  assert.deepEqual(plan.kept,["yow","on","can"]);
+  assert.deepEqual(plan.added,["onqc","na"]);
+  assert.deepEqual(plan.removed,["on-alg","ott"]);
   assert.deepEqual(plan.changed,["yow","on"]);
   assert.ok(plan.commands.indexOf("region remove ott")<plan.commands.indexOf("region remove on-alg"));
   assert.ok(plan.commands.includes("region home yow"));
@@ -139,4 +141,51 @@ test("source review retains unavailable stored boundaries without inventing a po
   const result = compareSnapshots(snapshot, next);
   assert.ok(result.unmapped.includes(next.features[0].properties.tag));
   assert.ok(result.changed.some(item => item.fields.includes("boundary")));
+});
+
+test("source review closes only its stale bot issue when upstream matches the approved snapshot", async () => {
+  const result = compareSnapshots(snapshot, structuredClone(snapshot));
+  assert.equal(result.needsReview, false);
+  const issue = { number: 42, title: "Review MeshMapper region changes", user: { login: "github-actions[bot]" },
+    body: "Maintainer note before.\n<!-- meshmapper-review:start -->\nOutdated changes\n<!-- meshmapper-review:end -->\nKeep this human note and historical evidence." };
+  const unrelated = [{ ...issue, number: 43, user: { login: "maintainer" } },
+    { ...issue, number: 44, pull_request: {} }, { ...issue, number: 45, body: "No bot markers" }];
+  const env = { GITHUB_REPOSITORY: "example/regions", GITHUB_TOKEN: "fixture-token", GITHUB_RUN_ID: "123" };
+  for (const issues of [[...unrelated, issue], unrelated, []]) {
+    const calls = [];
+    await publish("No MeshMapper region changes.\n", result, { env, fetcher: async (url, options) => {
+      calls.push({ url, method: options.method, body: options.body && JSON.parse(options.body) });
+      return new Response(JSON.stringify(options.method === "GET" ? issues : {}));
+    } });
+    assert.equal(calls[0].method, "GET");
+    assert.equal(calls.length, issues.includes(issue) ? 2 : 1);
+    if (issues.includes(issue)) {
+      assert.equal(calls[1].url, "https://api.github.com/repos/example/regions/issues/42");
+      assert.equal(calls[1].method, "PATCH");
+      assert.equal(calls[1].body.state, "closed");
+      assert.equal(calls[1].body.state_reason, "completed");
+      assert.match(calls[1].body.body, /No outstanding MeshMapper changes/);
+      assert.match(calls[1].body.body, /actions\/runs\/123/);
+      assert.match(calls[1].body.body, /Maintainer note before/);
+      assert.match(calls[1].body.body, /Keep this human note and historical evidence/);
+      assert.doesNotMatch(calls[1].body.body, /Outdated changes/);
+    }
+  }
+  assert.match(read("scripts/check-meshmapper-changes.mjs"), /if \(process\.argv\.includes\("--publish-issue"\)\) await publish/);
+});
+
+test("unchanged outstanding review findings neither close nor duplicate the bot issue", async () => {
+  const next = structuredClone(snapshot);
+  next.features[0].properties.name = "Updated name";
+  const result = compareSnapshots(snapshot, next);
+  const calls = [];
+  await publish(reviewText(result), result, {
+    env: { GITHUB_REPOSITORY: "example/regions", GITHUB_TOKEN: "fixture-token", GITHUB_RUN_ID: "123" },
+    fetcher: async (url, options) => {
+      calls.push(options.method);
+      return new Response(JSON.stringify([{ number: 42, title: "Review MeshMapper region changes",
+        user: { login: "github-actions[bot]" }, body: reviewText(result) }]));
+    },
+  });
+  assert.deepEqual(calls, ["GET"]);
 });

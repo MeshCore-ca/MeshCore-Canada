@@ -29,7 +29,7 @@ page_scripts:
 
 <div class="scp-hero">
   <p class="mc-eyebrow">Proposition à discuter</p>
-  <p class="mc-lede">Utilisez les codes de région locale de MeshMapper, un code de province et <code>onqc</code> pour contrôler la retransmission par diffusion. Préparez les répéteurs, puis coordonnez l’activation localement. <code>ca</code> et <code>na</code> sont réservés pour plus tard.</p>
+  <p class="mc-lede">Utilisez les codes de région locale de MeshMapper, un code de province et <code>onqc</code> pour contrôler la retransmission par diffusion. Préparez les répéteurs, puis coordonnez l’activation localement. <code>can</code> et <code>na</code> sont réservés pour plus tard.</p>
   <ul class="scp-hero__badges">
     <li data-kind="proposal">Pas encore adoptée</li>
     <li>Projet pilote Ontario + Québec</li>
@@ -83,7 +83,7 @@ la couverture radio.
     <dl data-scp-readiness></dl>
     <p data-scp-region-source></p>
     <p class="scp-finder__tags" data-scp-tags></p>
-    <p class="scp-picker__hint"><code>ca</code> et <code>na</code> sont réservés. Les réglages des appareils compagnons attendent la phase 2.</p>
+    <p class="scp-picker__hint"><code>can</code> et <code>na</code> sont réservés. Les réglages des appareils compagnons attendent la phase 2.</p>
     <p class="scp-finder__links"><a class="md-button md-button--primary" data-scp-command-link href="#etape-4-reglages-de-region" hidden>Voir les commandes de région</a><a data-scp-map href="../../config/map/">Vérifier sur la carte</a><a data-scp-share href="#your-region">Lien vers ces réglages</a></p>
     <p class="scp-picker__hint" data-scp-operator hidden>Sauvegardez vos réglages et <a href="#etape-2-effacer-les-anciennes-regions">examinez la liste existante</a> avant d’appliquer les commandes.</p>
     <details class="scp-finder__details"><summary>Contacts locaux et confirmation</summary><div data-scp-profile></div></details>
@@ -102,8 +102,9 @@ locaux sur leur portée locale et utilisez `onny` sur le canal partagé convenu.
 Vérifiez les réglages radio et la clé du canal, puis testez dans les deux sens.
 Aucun message n’est réétiqueté automatiquement; aucune couverture n’est garantie.
 
-La portée du Canada est `ca`, et non `can`. La préparation conserve les entrées
-`can` existantes pour ne pas supprimer une liaison qui fonctionne. Coordonnez
+La portée du Canada est `can`. Si votre répéteur utilise déjà `ca` à la suite
+d’un ancien aperçu, la préparation conserve cette entrée pour ne pas supprimer
+une liaison qui fonctionne. Coordonnez
 leur retrait avec les opérateurs locaux et examinez d’abord le plan de migration.
 Les anciennes captures peuvent montrer l’ancien nom; suivez les commandes générées.
 
@@ -112,7 +113,7 @@ Les anciennes captures peuvent montrer l’ancien nom; suivez les commandes gén
 Les portées sont des **étiquettes indépendantes**, pas des secteurs imbriqués.
 Un répéteur relaie une diffusion avec portée seulement s’il porte l’étiquette
 correspondante et autorise sa retransmission. Après l’activation, utilisez le
-code local, celui de la province ou `onqc` selon l’entente locale. `ca` et `na`
+code local, celui de la province ou `onqc` selon l’entente locale. `can` et `na`
 sont préparés maintenant, mais réservés pour plus tard. Une portée ne garantit
 ni distance, ni couverture, ni livraison.
 
@@ -134,7 +135,7 @@ ni distance, ni couverture, ni livraison.
   </div>
   <div class="scp-level-card" data-level="future">
     <h3>Canada</h3>
-    <span class="scp-tag" data-level="future">ca</span>
+    <span class="scp-tag" data-level="future">can</span>
     <p>Tout le Canada. Réservé pour plus tard : porté dès maintenant, pas encore utilisé.</p>
   </div>
   <div class="scp-level-card" data-level="future">
@@ -146,15 +147,15 @@ ni distance, ni couverture, ni livraison.
 
 Une fois toutes les phases terminées :
 
-- **Les répéteurs** portent leur ville, leur province, `onqc`, `ca` et `na`.
-- **Les robots et MeshMapper** utilisent leur ville, pour rester locaux.
+- **Les répéteurs** portent leur ville, leur province, `onqc`, `can` et `na`.
+- **Les robots et MeshMapper** utilisent l’étiquette de leur région locale.
 - **Les appareils compagnons** utilisent `onqc` pour découvrir par diffusion
   les trajets des messages privés à travers les répéteurs participants.
 - **`Public`** utilise `onqc` pour les discussions ON/QC là où des trajets radio fonctionnent.
-- **Les canaux de test** utilisent votre ville, pour rester locaux.
-- **Les messages sans portée** fonctionnent encore dans chaque ville. Les
-  répéteurs de bordure, qui relient régulièrement des régions IATA différentes,
-  les rejettent pour qu’ils restent locaux.
+- **Les canaux de test** utilisent l’étiquette de votre région locale.
+- **Les messages sans portée** peuvent encore être relayés par les répéteurs de
+  ville. Après l’activation coordonnée, les répéteurs de bordure cessent de les
+  retransmettre entre les régions IATA.
 
 <div class="mc-callout" data-kind="warning" markdown>
 Les appareils compagnons viennent en dernier, à la phase 2. Régler une portée
@@ -168,9 +169,9 @@ prêts fait que vos messages joignent **moins** de gens, pas plus.
   sur votre téléphone ou votre ordinateur.
 - **Répéteur :** une radio fixe, souvent sur un toit ou une tour, qui relaie
   les messages.
-- **Diffusion (flood) :** la façon dont un message se propage quand il n’a pas
-  de trajet connu : chaque répéteur qui l’entend le relaie. Les messages de
-  canal sont toujours diffusés, tout comme le premier MP à quelqu’un.
+- **Diffusion (flood) :** l’envoi d’un message par plusieurs répéteurs sans trajet
+  fixe. Chaque répéteur applique ses règles de retransmission et les limites de sauts.
+  Les messages de canal utilisent la diffusion, tout comme un MP sans trajet connu.
 - **Saut :** un répéteur qui relaie un message.
 - **MP :** un message privé à un seul contact.
 - **Annonce (advert) :** une radio qui s’annonce pour que les autres la
@@ -180,15 +181,13 @@ prêts fait que vos messages joignent **moins** de gens, pas plus.
 
 ## Qu’est-ce qu’une portée?
 
-Une portée est un nom court joint à un message, par exemple `yow`. Les
+Une portée (scope) est un nom court joint à un message, par exemple `yow`. Les
 répéteurs s’en servent pour décider s’ils relaient le message.
 
 <div class="mc-callout" markdown>
 Une portée n’est **pas** du chiffrement et **pas** une clôture GPS. Quiconque
-connaît le nom peut l’utiliser, et il n’a rien à voir avec l’endroit où vous
-êtes. C’est
-seulement une étiquette qui dit : « les répéteurs qui portent ce nom, relayez
-ce message ».
+connaît le nom peut l’utiliser; l’étiquette ne vérifie pas votre position GPS.
+Elle demande aux répéteurs qui l’autorisent de relayer le message.
 </div>
 
 Votre application transforme le nom en un petit code et le place dans
@@ -213,7 +212,7 @@ avec cinq messages différents.
         <span class="scp-tag" data-level="city">yow</span>
         <span class="scp-tag" data-level="prov">on</span>
         <span class="scp-tag" data-level="mesh">onqc</span>
-        <span class="scp-tag" data-level="future">ca</span>
+        <span class="scp-tag" data-level="future">can</span>
         <span class="scp-tag" data-level="future">na</span>
       </div>
       <small>Sa liste de noms à relayer</small>
@@ -259,9 +258,9 @@ Quatre détails piègent souvent :
   <div class="scp-zone" data-level="future">
   <p class="scp-zone__title"><span class="scp-tag" data-level="future">na</span> Amérique du Nord <span>Réservé pour plus tard. Porté dès maintenant, pas encore utilisé.</span></p>
   <div class="scp-zone" data-level="future">
-  <p class="scp-zone__title"><span class="scp-tag" data-level="future">ca</span> Canada <span>Réservé pour plus tard. Porté dès maintenant, pas encore utilisé.</span></p>
+  <p class="scp-zone__title"><span class="scp-tag" data-level="future">can</span> Canada <span>Réservé pour plus tard. Porté dès maintenant, pas encore utilisé.</span></p>
   <div class="scp-zone" data-level="mesh">
-    <p class="scp-zone__title"><span class="scp-tag" data-level="mesh">onqc</span> Réseau <span>Tous les répéteurs de l’Ontario et du Québec</span></p>
+    <p class="scp-zone__title"><span class="scp-tag" data-level="mesh">onqc</span> Réseau <span>Répéteurs participants en ON/QC</span></p>
     <div class="scp-zone__row">
       <div class="scp-zone" data-level="prov">
         <p class="scp-zone__title"><span class="scp-tag" data-level="prov">on</span> Ontario</p>
@@ -289,31 +288,31 @@ Quatre détails piègent souvent :
   </div>
   <div class="scp-flat">
     <strong>Ce qu’un répéteur d’Ottawa garde vraiment :</strong>
-    <span class="scp-flat__list"><span class="scp-tag" data-level="any">*</span><span class="scp-tag" data-level="city">yow</span><span class="scp-tag" data-level="prov">on</span><span class="scp-tag" data-level="mesh">onqc</span><span class="scp-tag" data-level="future">ca</span><span class="scp-tag" data-level="future">na</span></span>
+    <span class="scp-flat__list"><span class="scp-tag" data-level="any">*</span><span class="scp-tag" data-level="city">yow</span><span class="scp-tag" data-level="prov">on</span><span class="scp-tag" data-level="mesh">onqc</span><span class="scp-tag" data-level="future">can</span><span class="scp-tag" data-level="future">na</span></span>
     <span>Une simple liste de noms. Les boîtes ci-dessus servent aux gens, pas au répéteur.</span>
   </div>
   <figcaption>La zone <code>yow</code> traverse la rivière des Outaouais. Les répéteurs de Gatineau utilisent <code>yow</code> pour leur ville et <code>qc</code> pour leur province.</figcaption>
 </figure>
 
-### Et `ca` et `na`?
+### Et `can` et `na`?
 
-Chaque répéteur porte `ca` dès maintenant pour qu’une portée pancanadienne
-fonctionne plus tard sans que personne n’ait à reconfigurer son répéteur. Bien
-des répéteurs configurés avec le configurateur actuel le portent déjà.
+Cette proposition ajoute `can` aux répéteurs participants en vue d’un éventuel
+usage pancanadien. Le configurateur l’inclut dans les réglages proposés; cela
+ne prouve pas que cette portée est activée sur un répéteur en service.
 
-**N’utilisez pas encore `ca` sur votre appareil compagnon ni dans vos canaux.**
+**N’utilisez pas encore `can` sur votre appareil compagnon ni dans vos canaux.**
 C’est une étiquette réservée, pas une invitation à changer votre compagnon
-à l’avance. Quand d’autres provinces porteront aussi `ca`, il deviendra la façon
-d’aller plus loin, et `onqc` restera « seulement le réseau de l’Ontario et du
-Québec ».
+à l’avance. Son utilisation future exige une entente entre les opérateurs et des
+trajets radio fonctionnels. `onqc` reste l’étiquette partagée de l’Ontario et du Québec.
 
 `na` (Amérique du Nord) est une autre étiquette indépendante réservée. Il est là
 pour que le réseau puisse un jour se relier aux États-Unis, encore une fois sans
 que personne ait à reconfigurer son répéteur. **N’utilisez pas encore `na` non
 plus.**
 
-Ce nom réservé ne crée pas de liaison radio transfrontalière. Les répéteurs de
-bordure bloquent toujours les messages sans portée.
+Ce nom réservé ne crée pas de liaison radio transfrontalière. Après l’activation
+coordonnée, les répéteurs de bordure bloquent les messages sans portée; la
+préparation conserve leurs règles actuelles.
 
 ### Pourquoi des codes d’aéroport?
 
@@ -339,7 +338,7 @@ La première fois, écrivez toujours le code avec son secteur, par exemple
 </details>
 
 
-## Lire `region def yow|* on|* onqc|* ca|* na`
+## Lire `region def yow|* on|* onqc|* can|* na`
 
 Cette section s’adresse aux propriétaires de répéteurs qui veulent comprendre
 la commande. Vous pouvez la sauter : l’étape 4 de la phase 1 donne les
@@ -353,7 +352,7 @@ commandes exactes à entrer.
 `|*` ramène le curseur au sommet.
 
 <figure class="scp-figure">
-  <div class="scp-tape" aria-label="region def yow|* on|* onqc|* ca|* na">
+  <div class="scp-tape" aria-label="region def yow|* on|* onqc|* can|* na">
     <span class="scp-tape__cmd">region def</span>
     <span class="scp-tape__tok"><b>1</b>yow</span>
     <span class="scp-tape__tok" data-kind="jump"><b>2</b>|*</span>
@@ -361,7 +360,7 @@ commandes exactes à entrer.
     <span class="scp-tape__tok" data-kind="jump"><b>4</b>|*</span>
     <span class="scp-tape__tok"><b>5</b>onqc</span>
     <span class="scp-tape__tok" data-kind="jump"><b>6</b>|*</span>
-    <span class="scp-tape__tok"><b>7</b>ca</span>
+    <span class="scp-tape__tok"><b>7</b>can</span>
     <span class="scp-tape__tok" data-kind="jump"><b>8</b>|*</span>
     <span class="scp-tape__tok"><b>9</b>na</span>
   </div>
@@ -384,21 +383,21 @@ commandes exactes à entrer.
 ├ yow
 ├ on
 └ onqc</div></li>
-    <li>Crée <code>ca</code>.<div class="scp-tree">*
+    <li>Crée <code>can</code>.<div class="scp-tree">*
 ├ yow
 ├ on
 ├ onqc
-└ <mark>ca</mark></div></li>
+└ <mark>can</mark></div></li>
     <li><code>|*</code> ramène au sommet.<div class="scp-tree"><mark>*</mark>
 ├ yow
 ├ on
 ├ onqc
-└ ca</div></li>
+└ can</div></li>
     <li>Crée <code>na</code>. Terminé.<div class="scp-tree">*
 ├ yow
 ├ on
 ├ onqc
-├ ca
+├ can
 └ <mark>na</mark></div></li>
   </ol>
   <figcaption>Le résultat est une liste à plat : tous les codes sont côte à côte sous <code>*</code>. Le nom surligné indique la position du curseur.</figcaption>
@@ -421,9 +420,9 @@ encore les réglages de votre appareil compagnon.** La phase 2 n’est pas
 ouverte.
 
 <ol class="scp-timeline">
-  <li data-phase="Phase 1"><h3>Préparer</h3><p>Sauvegardez la configuration, puis ajoutez et vérifiez les portées nommées. Conservez les anciennes portées, la retransmission du joker et la portée par défaut. Testez les messages locaux sans portée. Vers la fin, coordonnez les portées locales des robots et de MeshMapper avec les opérateurs.</p></li>
+  <li data-phase="Phase 1"><h3>Préparer</h3><p>Sauvegardez la configuration, puis ajoutez et vérifiez les portées nommées. Conservez les anciennes portées, la retransmission des messages sans portée (<code>*</code>) et la portée par défaut. Testez les messages locaux sans portée. Vers la fin, coordonnez les portées locales des robots et de MeshMapper avec les opérateurs.</p></li>
   <li data-phase="Phase 2"><h3>Coordonner l’activation</h3><p>Janvier 2027 au plus tôt, après une annonce locale et les vérifications nécessaires. Coordonnez le blocage en bordure, les portées d’annonces des répéteurs et les changements des compagnons. Les répéteurs de ville autorisent <code>*</code>; ceux de bordure le bloquent. Les compagnons utilisent <code>onqc</code> par défaut et pour <code>Public</code>, et leur région locale pour les canaux de test.</p></li>
-  <li data-phase="Phase 3"><h3>Seulement au besoin</h3><p>Si les messages sans portée sont encore trop bruyants dans une ville, les répéteurs peuvent aussi lancer <code>set flood.max.unscoped 3</code>. Les messages avec portée atteignent encore 16 sauts.</p></li>
+  <li data-phase="Phase 3"><h3>Seulement au besoin</h3><p>Si les messages sans portée sont encore trop bruyants dans une ville, les répéteurs peuvent aussi lancer <code>set flood.max.unscoped 3</code>. Les diffusions avec portée conservent la limite de 16 sauts; la livraison n’est pas garantie.</p></li>
 </ol>
 
 ## Phase 1 : Configuration du répéteur
@@ -431,7 +430,7 @@ ouverte.
 La phase 1 a trois objectifs :
 
 1. **Mettre la nouvelle configuration de région sur chaque répéteur**, pour
-   que chacun porte sa ville, sa province, `onqc`, `ca` et `na`.
+   que chacun porte sa ville, sa province, `onqc`, `can` et `na`.
 2. **Préserver le fonctionnement du réseau pendant la préparation.** Ne
    supprimez pas les anciennes portées et ne bloquez pas encore les messages
    sans portée. Convenez de la transition et des tests avec les opérateurs voisins.
@@ -446,7 +445,7 @@ Entrez ces commandes dans la ligne de commande du répéteur **une à la fois** 
 dans l’application MeshCore, ouvrez le répéteur, connectez-vous comme
 administrateur et utilisez la zone de commande de **Repeater Admin**, ou
 utilisez la console USB. Chaque commande a son propre bouton de copie.
-Attendez `OK` avant d’envoyer la suivante.
+Attendez chaque réponse et vérifiez-la avant d’envoyer la commande suivante.
 
 <div class="scp-shots" markdown>
 
@@ -546,7 +545,7 @@ Vérifiez ensuite la réponse :
 
 - **Seulement `*^ F` :** le répéteur n’a pas d’anciennes régions. Rien à
   effacer, passez à l’[étape 3](#etape-3-reglages-standard-de-meshcore-canada).
-- **D’autres noms aussi**, comme `ca`, `on-alg` ou `ott` : retirez-les comme
+- **D’autres noms aussi**, comme `can`, `on-alg` ou `ott` : retirez-les comme
   indiqué ci-dessous.
 
 </div>
@@ -577,7 +576,7 @@ Si un `region remove` répond par une erreur :
 - **`Err - not found` :** ce nom est déjà retiré. Ce n’est pas grave,
   continuez.
 
-Retirer `on` et `ca` ne pose pas de problème non plus. L’étape 4 les remet.
+Retirer `on` et `can` ne pose pas de problème non plus. L’étape 4 les remet.
 Quand vous avez terminé, `region` devrait afficher seulement `*^ F`.
 
 <div class="scp-shots" markdown>
@@ -608,14 +607,15 @@ Quand vous avez terminé, `region` devrait afficher seulement `*^ F`.
 <dl class="scp-explain">
   <dt>path.hash.mode 2</dt><dd>Utilise des identifiants de répéteur de 3 octets dans les chemins, pour que moins de répéteurs partagent un identifiant. Exige le micrologiciel 1.14 ou plus récent.</dd>
   <dt>advert.interval 240</dt><dd>Annonce ce répéteur à ses voisins directs toutes les 4 heures.</dd>
-  <dt>flood.advert.interval 47</dt><dd>Annonce ce répéteur dans tout le réseau toutes les 47 heures.</dd>
+  <dt>flood.advert.interval 47</dt><dd>Envoie une annonce par diffusion toutes les 47 heures. Sa propagation dépend des portées, des limites de sauts et des liaisons radio.</dd>
   <dt>flood.max 16</dt><dd>Aucune diffusion ne fait plus de 16 sauts, avec ou sans portée.</dd>
 </dl>
 
 </details>
 
 Ces réglages s’enregistrent d’eux-mêmes. Pas besoin de `region save`. Si une
-commande répond `Err - ??`, votre micrologiciel n’a pas ce réglage; passez-la.
+commande répond `Err - ??`, vérifiez la version du micrologiciel et les réglages
+pris en charge avant de continuer. Ne présumez pas que le réglage a été appliqué.
 
 <div class="scp-shots" markdown>
 
@@ -636,12 +636,12 @@ transition locale. Lancez une ligne à la fois et arrêtez sur `Err`.
 
 <div class="scp-card">
 <p class="scp-variant__label" data-scp-summary>Ottawa et environs · 1.16 ou plus récent · Répéteur de ville</p>
-<ol class="scp-cmds" data-scp-output="region"><li class="scp-cmd"><code>region def yow|* on|* onqc|* ca|* na</code><button type="button" class="scp-copy" title="Copier" aria-label="Copier: region def yow|* on|* onqc|* ca|* na"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li><li class="scp-cmd"><code>region save</code><button type="button" class="scp-copy" title="Copier" aria-label="Copier: region save"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li></ol>
+<ol class="scp-cmds" data-scp-output="region"><li class="scp-cmd"><code>region def yow|* on|* onqc|* can|* na</code><button type="button" class="scp-copy" title="Copier" aria-label="Copier: region def yow|* on|* onqc|* can|* na"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li><li class="scp-cmd"><code>region save</code><button type="button" class="scp-copy" title="Copier" aria-label="Copier: region save"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li></ol>
 <p class="scp-note scp-note--info" data-scp-note="fw-116" hidden><code>region def</code> répond avec la liste terminée, donc vous voyez tout de suite que ça a fonctionné.</p>
 <p class="scp-note scp-note--info" data-scp-note="fw-115" hidden>Chaque <code>region put</code> répond <code>OK - (flood allowed)</code>, et <code>region default</code> répond <code>default scope is now …</code>.</p>
 <p class="scp-note scp-note--info" data-scp-note="fw-put-allow" hidden>Avec ce micrologiciel, une nouvelle région commence avec la diffusion <strong>désactivée</strong>, donc chacune a aussi besoin de <code>region allowf</code>. Il n’y a pas de <code>region default</code>, donc les annonces du répéteur restent sans portée. Une mise à jour du micrologiciel vaut la peine.</p>
 <p class="scp-note" data-scp-note="edge" hidden><strong>Répéteur de bordure :</strong> rejette les messages sans portée, pour qu’ils n’inondent pas la ville voisine. Utilisez-le pour tout répéteur qui communique régulièrement avec des répéteurs de deux zones MeshMapper, comme Rigaud, qui relie <code>yow</code> et <code>yul</code>. Sinon, les messages sans portée passent par lui. Les gens tout près sans portée ne sont pas relayés par lui; évitez-le là où c’est le seul répéteur. Voir <a href="#qui-recoit-quoi">Qui reçoit quoi</a>.</p>
-<p class="scp-note" data-scp-note="extra" hidden><strong>Ville voisine :</strong> cela aide seulement les gens près de ce répéteur à participer aux canaux de cette ville. Tous les autres joignent l’autre ville par <code>onqc</code>. Rigaud, par exemple, porte <code>yul</code> en plus de <code>yow</code>.</p>
+<p class="scp-note" data-scp-note="extra" hidden><strong>Ville voisine :</strong> ajouter son code permet à ce répéteur de relayer aussi cette étiquette. Rigaud, par exemple, porte <code>yul</code> en plus de <code>yow</code>. Le trafic <code>onqc</code> exige toujours des trajets fonctionnels par des répéteurs qui autorisent <code>onqc</code>.</p>
 <p class="scp-note" data-scp-nojs>Ces commandes sont pour un répéteur de ville du secteur d’Ottawa avec le micrologiciel 1.16 ou plus récent. Activez JavaScript pour les adapter à votre répéteur.</p>
 </div>
 
@@ -649,9 +649,9 @@ transition locale. Lancez une ligne à la fois et arrêtez sur `Err`.
 <summary>Que font ces commandes?</summary>
 
 <dl class="scp-explain">
-  <dt>region def / region put</dt><dd>Porter votre ville, votre province, <code>onqc</code>, <code>ca</code> et <code>na</code>.</dd>
-  <dt>region allowf * / region denyf *</dt><dd>Les répéteurs de ville relaient les messages <strong>sans portée</strong> (déjà permis par défaut, réglé pour que vous le voyiez). Les répéteurs de bordure les rejettent.</dd>
-  <dt>region default &lt;ville&gt;</dt><dd>Les annonces de ce répéteur utilisent la portée de votre ville, pour rester locales. Absent avant 1.15.</dd>
+  <dt>region def / region put</dt><dd>Porter votre ville, votre province, <code>onqc</code>, <code>can</code> et <code>na</code>.</dd>
+  <dt>region allowf * / region denyf *</dt><dd>Après l’activation coordonnée, les répéteurs de ville autorisent la retransmission des messages <strong>sans portée</strong>; ceux de bordure la bloquent. La préparation conserve le réglage actuel.</dd>
+  <dt>region default &lt;ville&gt;</dt><dd>Étiquette les annonces diffusées du répéteur avec la portée locale. Absent avant 1.15; inchangé pendant la préparation.</dd>
   <dt>region save</dt><dd>Conserve les réglages de région après un redémarrage.</dd>
 </dl>
 
@@ -682,7 +682,7 @@ consignes de préparation. Utilisez les commandes générées pour votre région
 <ol class="scp-cmds"><li class="scp-cmd"><code>region</code><button type="button" class="scp-copy" title="Copier" aria-label="Copier: region"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li></ol>
 </div>
 
-Vérifiez que votre région locale, votre province, `onqc`, `ca` et `na` portent
+Vérifiez que votre région locale, votre province, `onqc`, `can` et `na` portent
 chacun `F`, ainsi que tout voisin choisi. Pendant la préparation, conservez le
 réglage de `*` et la portée par défaut. **Après l’activation**, `*` ne doit pas
 porter `F` sur un répéteur de bordure. Voici un exemple à Ottawa après activation :
@@ -692,7 +692,7 @@ porter `F` sur un répéteur de bordure. Voici un exemple à Ottawa après activ
  yow F
  on F
  onqc F
- ca F
+ can F
  na F
 ```
 
@@ -803,10 +803,10 @@ Ouvrez le canal, touchez **⋮** en haut à droite, choisissez
 
 | Canal | Portée | Pourquoi |
 | --- | --- | --- |
-| `Public` | `onqc` | Tout le monde en Ontario et au Québec peut se parler |
-| Canaux de test, comme `#testing` | Votre ville, par exemple `yow` | Les tests restent locaux |
-| Canaux de robots, comme `#bots` | Votre ville, par exemple `yow` | Les réponses des robots restent locales |
-| Vos propres canaux | Votre ville, `on`/`qc` ou `onqc` | Choisissez jusqu’où ils doivent aller |
+| `Public` | `onqc` | Discussions ON/QC là où des trajets radio fonctionnels autorisent cette portée |
+| Canaux de test, comme `#testing` | Votre ville, par exemple `yow` | Relayer les tests par les répéteurs qui autorisent cette étiquette |
+| Canaux de robots, comme `#bots` | Votre ville, par exemple `yow` | Utiliser l’étiquette de la région locale pour les réponses |
+| Vos propres canaux | Votre ville, `on`/`qc` ou `onqc` | Choisissez quels répéteurs peuvent relayer les messages |
 
 Si vous faites fonctionner un robot, il devrait déjà être réglé sur votre
 ville depuis la [phase 1](#robots-et-meshmapper).
@@ -883,34 +883,34 @@ défaut **de votre contact**.
 
 <figure class="scp-figure">
   <div class="scp-route">
-    <div class="scp-route__head">Portée par défaut <span class="scp-tag" data-level="city">yow</span><span class="scp-route__verdict" data-result="drop">N’arrive jamais</span></div>
+    <div class="scp-route__head">Portée par défaut <span class="scp-tag" data-level="city">yow</span><span class="scp-route__verdict" data-result="drop">Retransmission bloquée ici</span></div>
     <ol class="scp-track">
       <li><span class="scp-stop" data-kind="phone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg></span><strong>Vous, Ottawa</strong><small>envoie yow</small></li>
-      <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Répéteur d’Ottawa</strong><small>yow on onqc ca na</small></li>
-      <li data-link="drop"><span class="scp-stop" data-kind="repeater" data-state="dim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Répéteur de Montréal</strong><small>yul qc onqc ca na</small></li>
-      <li data-link="none"><span class="scp-stop" data-kind="repeater" data-state="dim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Répéteur de Québec</strong><small>yqb qc onqc ca na</small></li>
+      <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Répéteur d’Ottawa</strong><small>yow on onqc can na</small></li>
+      <li data-link="drop"><span class="scp-stop" data-kind="repeater" data-state="dim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Répéteur de Montréal</strong><small>yul qc onqc can na</small></li>
+      <li data-link="none"><span class="scp-stop" data-kind="repeater" data-state="dim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Répéteur de Québec</strong><small>yqb qc onqc can na</small></li>
       <li data-link="none"><span class="scp-stop" data-kind="phone" data-state="dim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg></span><strong>Ami, Québec</strong><small>défaut yqb</small></li>
     </ol>
     <p class="scp-route__note">Le répéteur de Montréal ne porte pas <code>yow</code>, donc le message s’arrête là. Même s’il passait, la réponse de votre ami utiliserait <code>yqb</code> et s’arrêterait au retour.</p>
   </div>
   <div class="scp-route">
-    <div class="scp-route__head">Portée par défaut <span class="scp-tag" data-level="mesh">onqc</span><span class="scp-route__verdict" data-result="ok">Livré</span></div>
+    <div class="scp-route__head">Portée par défaut <span class="scp-tag" data-level="mesh">onqc</span><span class="scp-route__verdict" data-result="ok">Retransmission permise</span></div>
     <ol class="scp-track" data-animate>
       <li><span class="scp-stop" data-kind="phone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg></span><strong>Vous, Ottawa</strong><small>envoie onqc</small></li>
-      <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Répéteur d’Ottawa</strong><small>yow on onqc ca na</small></li>
-      <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Répéteur de Montréal</strong><small>yul qc onqc ca na</small></li>
-      <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Répéteur de Québec</strong><small>yqb qc onqc ca na</small></li>
+      <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Répéteur d’Ottawa</strong><small>yow on onqc can na</small></li>
+      <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Répéteur de Montréal</strong><small>yul qc onqc can na</small></li>
+      <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Répéteur de Québec</strong><small>yqb qc onqc can na</small></li>
       <li data-link="ok"><span class="scp-stop" data-kind="phone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg></span><strong>Ami, Québec</strong><small>défaut onqc</small></li>
     </ol>
-    <p class="scp-route__note">Tous les répéteurs portent <code>onqc</code>, dans les deux sens. Une fois le chemin trouvé, les MP suivants passent directement et les portées ne comptent plus.</p>
+    <p class="scp-route__note">Tous les répéteurs illustrés autorisent <code>onqc</code> dans les deux sens. Si la découverte réussit, les MP suivants utilisent le trajet enregistré plutôt que la diffusion avec portée.</p>
   </div>
-  <figcaption>Les connexions à un répéteur ou à un serveur de salon fonctionnent de la même façon quand aucun chemin n’est connu.</figcaption>
+  <figcaption>Ces exemples montrent des règles de retransmission compatibles, pas une livraison garantie. Les connexions à un répéteur ou à un serveur de salon exigent aussi une découverte si aucun trajet n’est connu.</figcaption>
 </figure>
 
 <div class="mc-callout" data-kind="warning" markdown>
 **Le piège :** un canal sans portée propre utilise aussi votre portée par
-défaut, `onqc`, donc il joint tout l’Ontario et le Québec. C’est ce qu’on veut
-pour `Public`, mais pas pour les canaux de test et les robots. C’est pourquoi
+défaut, `onqc`, et peut donc être relayé sur les trajets qui autorisent cette étiquette.
+C’est prévu pour le trafic partagé de `Public`, pas les tests locaux ou les robots. C’est pourquoi
 l’étape 2 de la configuration de l’appareil compagnon les règle sur votre
 ville.
 </div>
@@ -922,72 +922,72 @@ ville.
 
 Si les messages sans portée sont encore trop bruyants dans une ville après la
 phase 2, les répéteurs peuvent aussi lancer `set flood.max.unscoped 3`, puis
-`region save`. Les messages sans portée s’arrêtent alors après 3 sauts. Les
-messages avec portée atteignent encore 16 sauts. Faites-le seulement une fois
-que c’est annoncé pour votre ville.
+`region save`. Les messages sans portée ont alors une limite de 3 sauts; les
+diffusions avec portée conservent la limite de 16 sauts. Aucune de ces limites
+ne garantit la livraison. Attendez une annonce pour votre région locale.
 
 ## Qui reçoit quoi
 
 <details class="scp-more" markdown>
 <summary>Afficher les exemples</summary>
 
-Quand les répéteurs de bordure rejettent les messages sans portée, un nouvel
-utilisateur qui n’a pas encore réglé de portée joint quand même tout le monde
-dans sa ville. Ses messages ne passent simplement pas dans la ville voisine.
-Voici le lien Ottawa–Montréal par Rigaud, un répéteur de bordure qui porte
-aussi le code de Montréal, `yul`.
+Ces exemples simplifiés montrent la retransmission **après l’activation coordonnée**.
+Ils supposent des liaisons fonctionnelles et les réglages indiqués, pas une
+couverture complète ni une livraison garantie. Le trajet illustré relie Ottawa
+à Montréal par Rigaud, un répéteur de bordure qui porte aussi `yul`.
 
 <figure class="scp-figure">
   <div class="scp-route">
-    <div class="scp-route__head">Nouvel utilisateur à Ottawa, sans portée <span class="scp-tag" data-level="any">aucune</span><span class="scp-route__verdict" data-result="ok">Tout le secteur d’Ottawa</span></div>
+    <div class="scp-route__head">Nouvel utilisateur à Ottawa, sans portée <span class="scp-tag" data-level="any">aucune</span><span class="scp-route__verdict" data-result="ok">Relais d’Ottawa illustrés</span></div>
     <ol class="scp-track">
       <li><span class="scp-stop" data-kind="phone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg></span><strong>Nouvel utilisateur, Ottawa</strong><small>sans portée</small></li>
       <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Répéteur d’Ottawa</strong><small>permet *</small></li>
       <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Liaison de Rigaud</strong><small>rejette *</small></li>
       <li data-link="drop"><span class="scp-stop" data-kind="repeater" data-state="dim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Répéteur de Montréal</strong><small>permet *</small></li>
-      <li data-link="none"><span class="scp-stop" data-kind="phone" data-state="dim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg></span><strong>Utilisateur de Montréal</strong><small>ne le voit jamais</small></li>
+      <li data-link="none"><span class="scp-stop" data-kind="phone" data-state="dim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg></span><strong>Utilisateur de Montréal</strong><small>pas joint par ce trajet</small></li>
     </ol>
-    <p class="scp-route__note">Chaque répéteur de la zone d’Ottawa le relaie, donc le nouvel utilisateur joint tout le secteur d’Ottawa. Rigaud l’entend mais ne le relaie pas, donc Montréal n’est jamais inondé.</p>
+    <p class="scp-route__note">Le répéteur d’Ottawa illustré autorise les diffusions sans portée. Rigaud reçoit le message, mais ne le relaie pas vers la ville suivante. Les autres trajets et la réception radio directe ne sont pas illustrés.</p>
   </div>
   <div class="scp-route">
-    <div class="scp-route__head">Robot d’Ottawa ou MeshMapper, avec portée <span class="scp-tag" data-level="city">yow</span><span class="scp-route__verdict" data-result="ok">Zone d’Ottawa seulement</span></div>
+    <div class="scp-route__head">Robot d’Ottawa ou MeshMapper, avec portée <span class="scp-tag" data-level="city">yow</span><span class="scp-route__verdict" data-result="ok">Relais autorisant yow</span></div>
     <ol class="scp-track">
       <li><span class="scp-stop" data-kind="phone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg></span><strong>Robot, Ottawa</strong><small>envoie yow</small></li>
-      <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Répéteur d’Ottawa</strong><small>yow on onqc ca na</small></li>
-      <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Liaison de Rigaud</strong><small>yow yul qc onqc ca na</small></li>
-      <li data-link="drop"><span class="scp-stop" data-kind="repeater" data-state="dim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Répéteur de Montréal</strong><small>yul qc onqc ca na</small></li>
-      <li data-link="none"><span class="scp-stop" data-kind="phone" data-state="dim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg></span><strong>Utilisateur de Montréal</strong><small>ne le voit jamais</small></li>
+      <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Répéteur d’Ottawa</strong><small>yow on onqc can na</small></li>
+      <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Liaison de Rigaud</strong><small>yow yul qc onqc can na</small></li>
+      <li data-link="drop"><span class="scp-stop" data-kind="repeater" data-state="dim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Répéteur de Montréal</strong><small>yul qc onqc can na</small></li>
+      <li data-link="none"><span class="scp-stop" data-kind="phone" data-state="dim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg></span><strong>Utilisateur de Montréal</strong><small>pas joint par ce trajet</small></li>
     </ol>
-    <p class="scp-route__note">Rigaud porte <code>yow</code>, donc il relaie le message. Les répéteurs de Montréal ne portent pas <code>yow</code>, donc le message s’arrête à la limite de la zone.</p>
+    <p class="scp-route__note">Rigaud autorise <code>yow</code> et relaie le message. Le répéteur de Montréal illustré n’autorise pas <code>yow</code> et ne le relaie pas. C’est une règle de retransmission, pas une frontière géographique.</p>
   </div>
   <div class="scp-route">
-    <div class="scp-route__head">MP avec la portée par défaut <span class="scp-tag" data-level="mesh">onqc</span><span class="scp-route__verdict" data-result="ok">Tout le réseau</span></div>
+    <div class="scp-route__head">Découverte de trajet par MP diffusé <span class="scp-tag" data-level="mesh">onqc</span><span class="scp-route__verdict" data-result="ok">Retransmission partagée</span></div>
     <ol class="scp-track" data-animate>
       <li><span class="scp-stop" data-kind="phone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg></span><strong>Vous, Ottawa</strong><small>envoie onqc</small></li>
-      <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Répéteur d’Ottawa</strong><small>yow on onqc ca na</small></li>
-      <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Liaison de Rigaud</strong><small>yow yul qc onqc ca na</small></li>
-      <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Répéteur de Montréal</strong><small>yul qc onqc ca na</small></li>
+      <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Répéteur d’Ottawa</strong><small>yow on onqc can na</small></li>
+      <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Liaison de Rigaud</strong><small>yow yul qc onqc can na</small></li>
+      <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Répéteur de Montréal</strong><small>yul qc onqc can na</small></li>
       <li data-link="ok"><span class="scp-stop" data-kind="phone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg></span><strong>Ami, Montréal</strong><small>défaut onqc</small></li>
     </ol>
-    <p class="scp-route__note">Tous les répéteurs portent <code>onqc</code>, y compris le répéteur de bordure, donc les MP traversent encore tout le réseau.</p>
+    <p class="scp-route__note">Tous les répéteurs illustrés autorisent <code>onqc</code>; un MP sans trajet enregistré peut donc être relayé sur ce parcours. Les MP suivants peuvent utiliser le trajet découvert.</p>
   </div>
-  <figcaption>La même chose se produit à chaque bordure entre deux villes.</figcaption>
+  <figcaption>Trajets illustratifs seulement. Les routes, les réglages et la couverture radio varient.</figcaption>
 </figure>
 
 D’autres exemples sur le même lien :
 
-| Message | Répéteurs d’Ottawa<br>`* yow on onqc ca na` | Liaison de Rigaud<br>`yow yul qc onqc ca na` | Répéteurs de Montréal<br>`* yul qc onqc ca na` | Qui le reçoit |
+| Message | Répéteurs d’Ottawa<br>`* yow on onqc can na` | Liaison de Rigaud<br>`yow yul qc onqc can na` | Répéteurs de Montréal<br>`* yul qc onqc can na` | Retransmission dans cet exemple |
 | --- | --- | --- | --- | --- |
-| Nouvel utilisateur à Ottawa, sans portée | ✅ Relaie | ❌ Rejette | Jamais atteint | Tout le secteur d’Ottawa |
-| Nouvel utilisateur à Montréal, sans portée | Jamais atteint | ❌ Rejette | ✅ Relaie | Tout le secteur de Montréal |
-| Canal ou robot d’Ottawa, `yow` | ✅ Relaie | ✅ Relaie | ❌ Rejette | Zone d’Ottawa seulement |
-| Canal ou robot de Montréal, `yul` | ❌ Rejette | ✅ Relaie | ✅ Relaie | Zone de Montréal seulement |
-| Canal de tout le Québec, `qc` | ❌ Rejette | ✅ Relaie | ✅ Relaie | Côté québécois, y compris Gatineau |
-| MP avec la portée par défaut, `onqc` | ✅ Relaie | ✅ Relaie | ✅ Relaie | Tout le réseau ON/QC |
+| Nouvel utilisateur à Ottawa, sans portée | ✅ Relaie | ❌ Rejette | Pas joint par ce trajet | Relais d’Ottawa illustrés |
+| Nouvel utilisateur à Montréal, sans portée | Pas joint par ce trajet | ❌ Rejette | ✅ Relaie | Relais de Montréal illustrés |
+| Canal ou robot d’Ottawa, `yow` | ✅ Relaie | ✅ Relaie | ❌ Rejette | Relais autorisant yow |
+| Canal ou robot de Montréal, `yul` | ❌ Rejette | ✅ Relaie | ✅ Relaie | Relais autorisant yul |
+| Canal de tout le Québec, `qc` | ❌ Rejette | ✅ Relaie | ✅ Relaie | Relais autorisant `qc` |
+| Découverte de trajet par MP diffusé, `onqc` | ✅ Relaie | ✅ Relaie | ✅ Relaie | Relais autorisant `onqc` |
 
-C’est pourquoi les robots et MeshMapper devraient avoir la portée de leur ville :
-ils restent contenus quoi qu’il arrive, et les nouveaux utilisateurs qui n’ont
-pas encore réglé de portée fonctionnent quand même localement.
+Les robots et MeshMapper utilisent l’étiquette de leur région locale pour limiter
+quels répéteurs relaient leurs diffusions. Cela ne garantit pas le confinement
+géographique. Les utilisateurs sans portée ont besoin de liaisons fonctionnelles
+par des répéteurs qui autorisent `*`.
 
 </details>
 
@@ -1012,8 +1012,8 @@ portées des appareils compagnons à l’avance.
 - **Les messages avec portée ont environ 10 caractères de moins.**
   L’application réduit la longueur maximale sur les canaux avec portée (de
   137 à 127 lors de nos essais).
-- **Les annonces des répéteurs restent dans leur ville.** Les utilisateurs de
-  Montréal ne verront pas les répéteurs d’Ottawa par les annonces diffusées.
+- **Après l’activation, les annonces diffusées utilisent l’étiquette locale.**
+  Leur propagation dépend des liaisons radio et des répéteurs qui l’autorisent.
 - **16 sauts doivent suffire.** `flood.max` s’applique aussi à `onqc`. Si le
   plus long chemin réel dans le réseau dépasse 16 sauts, les messages qui
   traversent le réseau s’arrêteront en chemin.
@@ -1027,7 +1027,7 @@ portées des appareils compagnons à l’avance.
 - Utilisez le [guide de migration](../config/standard.md) et le [configurateur](../config/index.md) pour le nettoyage et les commandes adaptées au micrologiciel.
 - Dans le configurateur, cochez **Utiliser les réglages proposés pour ON/QC** pour inclure les identifiants, annonces et limites de sauts de la phase 1. Ils restent facultatifs dans l’outil; les commandes de portée seules ne constituent pas la configuration complète de la phase 1.
 - Coordonnez et testez le déploiement ON/QC avec les opérateurs locaux avant de modifier les répéteurs installés.
-- Le site propose maintenant les zones IATA partout au Canada. Cela ne déploie pas `onqc` à l’échelle nationale : ce scope et les réglages pilotes restent propres à l’Ontario et au Québec. Les autres provinces coordonnent leur propre migration.
+- Le site propose maintenant les zones IATA partout au Canada. Cela ne déploie pas `onqc` à l’échelle nationale : cette portée et les réglages pilotes restent propres à l’Ontario et au Québec. Les autres provinces coordonnent leur propre migration.
 - Les régions et extensions proposées par MeshCore Canada sont des propositions distinctes, pas des ajouts adoptés pour ce déploiement. Confirmez-les localement; les limites publiées par MeshMapper restent intactes.
 
 Des idées? Partagez-les sur le

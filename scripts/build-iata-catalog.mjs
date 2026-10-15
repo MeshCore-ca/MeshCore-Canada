@@ -63,12 +63,12 @@ const profiles = Object.fromEntries(canonicalFeatures.map(feature => {
 }));
 assert.deepEqual([...tags].sort(), Object.keys(policy.zoneProvinces).sort(), "Review province metadata for every IATA region");
 const hierarchy = {
-  ca: { label: "Canada", labelFr: "Canada", parent: null, kind: "country" },
+  can: { label: "Canada", labelFr: "Canada", parent: null, kind: "country" },
   na: { label: "North America", labelFr: "Amérique du Nord", parent: null, kind: "continent" },
 };
 const status = Object.fromEntries(policy.reservedScopes.map(tag => [tag, { state: "reserved", source: policy.proposal }]));
 for (const [tag, province] of Object.entries(policy.provinces)) {
-  hierarchy[tag] = { ...province, parent: "ca", kind: "province" };
+  hierarchy[tag] = { ...province, parent: "can", kind: "province" };
   status[tag] = { state: "scope", source: policy.proposal };
 }
 for (const [tag] of Object.entries(policy.meshScopes)) {
@@ -101,8 +101,8 @@ for (const starter of starters.regions.filter(region => region.area === "provinc
   }
 }
 const externalRegionPaths = { ...structuredClone(legacy.externalRegionPaths), ...policy.optionalNetworks };
-// The historical California suggestion used west/ca. Do not emit a second,
-// incompatible meaning/parent for Canada's ca scope. Keep the archived source intact.
+// Keep the retired California suggestion out of current choices. Restoring it
+// requires a separate local-policy review; the archived source remains intact.
 delete externalRegionPaths.california;
 const catalog = {
   schema: "meshcore-canada-iata-scopes/v1",
@@ -114,7 +114,7 @@ const catalog = {
     boundarySha256: createHash("sha256").update(readFileSync(new URL("docs/assets/regions/iata-boundaries.geojson", root))).digest("hex"),
     meshmapperBoundarySha256: createHash("sha256").update(readFileSync(new URL("docs/assets/regions/meshmapper-iata-boundaries.geojson", root))).digest("hex"),
     jurisdictionSha256: createHash("sha256").update(readFileSync(new URL("docs/assets/regions/scope-jurisdictions.geojson", root))).digest("hex") },
-  meta: { name: "MeshCore Canada IATA scopes", rootTag: "ca", defaultFirmware: "1.16", map: legacy.meta.map },
+  meta: { name: "MeshCore Canada IATA scopes", rootTag: "can", defaultFirmware: "1.16", map: legacy.meta.map },
   hierarchy, status, seeds, aliases, legacyAliases, profiles,
   metroGroups: Object.entries(policy.provinces).map(([province, entry]) => ({ label: entry.label, tags: seeds.filter(seed => seed.provinces.includes(province)).map(seed => seed.tag) })),
   externalRegionPaths,

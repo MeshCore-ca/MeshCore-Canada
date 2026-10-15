@@ -9,7 +9,7 @@ for (const locale of ["", "fr/"]) {
     const commands = page.locator('[data-scp-output="region"] code');
     await expect(toggle).toBeVisible();
     await expect(toggle).toBeChecked();
-    await expect(commands).toHaveText(["region def ykf|* yyz|* on|* onqc|* ca|* na|* onny", "region save"]);
+    await expect(commands).toHaveText(["region def ykf|* yyz|* on|* onqc|* can|* na|* onny", "region save"]);
     await expect(page.locator('[data-scp-share]')).toHaveAttribute("href", /onny=1/);
     await expect(page.locator('[data-scp-tags]')).toContainText(locale ? "Facultative" : "Optional");
     await page.locator('[data-scp-activation]').selectOption("activate");
@@ -23,13 +23,13 @@ for (const locale of ["", "fr/"]) {
     await page.locator('[data-scp-type]').selectOption("city");
     await expect(toggle).toBeVisible();
     await toggle.check();
-    await expect(commands.first()).toHaveText("region def ykf|* on|* onqc|* ca|* na|* onny");
+    await expect(commands.first()).toHaveText("region def ykf|* on|* onqc|* can|* na|* onny");
     expect(errors).toEqual([]);
   });
 
   test(`${locale || "en/"} configurator exposes the same opt-in scope`, async ({ page }) => {
     await page.goto(siteRoute(`/${locale}config/?tag=ykf&province=on&type=large&regions=yyz&external=ontario-new-york&step=4&instructions=technical`));
-    await expect(page.locator('[data-role="result"]')).toContainText("region def ykf|* yyz|* on|* onqc|* ca|* na|* onny");
+    await expect(page.locator('[data-role="result"]')).toContainText("region def ykf|* yyz|* on|* onqc|* can|* na|* onny");
     await expect(page.locator('[data-role="result"]')).not.toContainText("region denyf *");
   });
 
@@ -43,7 +43,7 @@ for (const locale of ["", "fr/"]) {
 
   test(`${locale || "en/"} city repeaters can carry onny without becoming edge repeaters`, async ({ page }) => {
     await page.goto(siteRoute(`/${locale}config/?tag=ykf&province=on&external=ontario-new-york&step=4&instructions=technical`));
-    await expect(page.locator('[data-role="result"]')).toContainText("region def ykf|* on|* onqc|* ca|* na|* onny");
+    await expect(page.locator('[data-role="result"]')).toContainText("region def ykf|* on|* onqc|* can|* na|* onny");
     await expect(page.locator('[data-role="result"]')).not.toContainText("region denyf *");
   });
 }

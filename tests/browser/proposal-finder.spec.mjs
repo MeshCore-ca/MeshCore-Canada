@@ -37,7 +37,7 @@ for (const locale of ["", "fr/"]) {
     await search(page, "YTR");
     await expect(page.locator('[data-scp-area]')).toHaveValue("ytr:on");
     await expect(page.locator('[data-scp-region-name]')).toHaveText("Quinte West (YTR) · Ontario");
-    await expect(page.locator('[data-scp-tags] .scp-tag')).toHaveText(["ytr", "on", "onqc", "ca", "na"]);
+    await expect(page.locator('[data-scp-tags] .scp-tag')).toHaveText(["ytr", "on", "onqc", "can", "na"]);
     await proposalOperator(page);
     for (const version of ["110", "114", "115", "116"]) {
       await page.locator('[data-scp-firmware]').selectOption(version);

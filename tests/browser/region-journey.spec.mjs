@@ -18,7 +18,7 @@ for (const locale of ["", "fr/"]) {
     await page.locator('[data-scp-role]').selectOption("repeater");
     await expect(page.locator('[data-scp-type]')).toHaveValue("unknown");
     const commands=page.locator('[data-scp-output="region"]');
-    await expect(commands.locator("code")).toHaveText(["region def ytr|* on|* onqc|* ca|* na","region save"]);
+    await expect(commands.locator("code")).toHaveText(["region def ytr|* on|* onqc|* can|* na","region save"]);
     await expect(page.locator('[data-scp-readiness]')).toContainText(locale ? "Non confirmé" : "Not locally confirmed");
     const demo=page.locator('[data-scp-simulator]'); await demo.locator("summary").click();
     await page.locator('[data-scp-message]').selectOption("*");
@@ -70,7 +70,7 @@ for (const locale of ["", "fr/"]) {
     await proposalOperator(page,{type:"edge"});
     const box=page.locator('[data-scp-verification]');
     await box.locator("summary").click();
-    const list="*^\n ytr F\n on F\n onqc F\n ca F\n na F";
+    const list="*^\n ytr F\n on F\n onqc F\n can F\n na F";
     await box.locator('[data-verify-list]').fill(list);
     await box.locator('[data-verify-check]').click();
     await expect(box.locator('[data-verify-status]')).toContainText(locale ? "liste correspond" : "region list matches");
@@ -86,7 +86,7 @@ for (const locale of ["", "fr/"]) {
     await proposalOperator(page,{type:"edge"});
     const box=page.locator('[data-scp-verification]'); await box.locator("summary").click();
     const requests=[];page.on("request",r=>requests.push(r.url()+" "+(r.postData()||"")));
-    const list="*^\n ytr F\n on F\n onqc F\n ca F\n na F";
+    const list="*^\n ytr F\n on F\n onqc F\n can F\n na F";
     await box.locator('[data-verify-list]').fill(list.replace("*^","*^ F")+"\n local-private F");
     await box.locator('[data-verify-check]').click();
     await expect(box.locator('[data-verify-details]')).toContainText("local-private");
@@ -103,7 +103,7 @@ for (const locale of ["", "fr/"]) {
     await proposalOperator(page,{activate:false,type:"edge"});
     const box=page.locator('[data-scp-verification]'); await box.locator("summary").click();
     await expect(box.locator('[data-verify-default]')).toHaveCount(0);
-    await box.locator('[data-verify-list]').fill("*^\n ytr F\n on F\n onqc F\n ca F\n na F\n old-scope F");
+    await box.locator('[data-verify-list]').fill("*^\n ytr F\n on F\n onqc F\n can F\n na F\n old-scope F");
     await box.locator('[data-verify-check]').click();
     await expect(box.locator('[data-verify-status]')).toContainText(locale ? "sauvegarde" : "backup");
   });
@@ -111,7 +111,7 @@ for (const locale of ["", "fr/"]) {
   test(`${locale || "en/"} configurator separates preparation, activation and regional readiness`, async ({ page }) => {
     await page.goto(siteRoute(`/${locale}config/?tag=ytr&province=on&type=large&step=4&instructions=technical`));
     const result=page.locator('[data-role="result"]');
-    await expect(result).toContainText("region def ytr|* on|* onqc|* ca|* na");
+    await expect(result).toContainText("region def ytr|* on|* onqc|* can|* na");
     await expect(result.locator('[data-cmd="region denyf *"]')).toHaveCount(0);
     await expect(result.locator('[data-cmd="region default ytr"]')).toHaveCount(0);
     await expect(result.locator('[data-region-readiness]')).toContainText(locale ? "Non confirmé" : "Not locally confirmed");

@@ -34,14 +34,14 @@ sont des noms distincts sur le réseau.
 | Ville | `yow` | La zone de MeshMapper |
 | Province ou territoire | `on` ou `qc` | Le lieu d’installation du répéteur |
 | Réseau partagé | `onqc` | Ontario et Québec seulement |
-| Canada | `ca` | Prévu pour plus tard; pas encore la portée par défaut d’un compagnon |
+| Canada | `can` | Prévu pour plus tard; pas encore la portée par défaut d’un compagnon |
 | Amérique du Nord | `na` | Réservé pour plus tard; pas une route transfrontalière active |
 
 Ces noms sont indépendants. Un répéteur d’Ottawa porte `yow`, `on`, `onqc`,
-`ca` et `na`. Un répéteur de Gatineau porte `yow`, `qc`, `onqc`, `ca` et `na`.
+`can` et `na`. Un répéteur de Gatineau porte `yow`, `qc`, `onqc`, `can` et `na`.
 La zone de ville reste la même des deux côtés de la rivière.
 
-Gardez `ca` et `na` dans la liste du répéteur, mais ne les utilisez pas encore
+Gardez `can` et `na` dans la liste du répéteur, mais ne les utilisez pas encore
 pour les compagnons ou les canaux. Ces noms réservés ne créent pas de lien radio
 vers un autre pays et ne permettent pas aux messages sans portée de traverser
 un répéteur de bordure.
@@ -49,10 +49,10 @@ un répéteur de bordure.
 Le site utilise les codes IATA partout au Canada. Les réglages du réseau
 partagé viennent de la [proposition ON/QC](../proposals/onqc-scopes.md); leur
 publication ne signifie pas que tous les opérateurs les ont adoptés.
-Ailleurs, l’outil propose ville, province, `ca` et `na`, sans inventer une autre
+Ailleurs, l’outil propose ville, province, `can` et `na`, sans inventer une autre
 portée de réseau partagé. Convenez des portées plus larges avec les opérateurs locaux.
 
-Les portées filtrent la retransmission par inondation. Ce ne sont ni du
+Les portées filtrent la retransmission par diffusion. Ce ne sont ni du
 chiffrement, ni un contrôle d’accès, ni des limites de couverture ou des
 barrières GPS. Elles ne limitent pas les messages directs dont le chemin est connu.
 
@@ -71,14 +71,14 @@ grandes régions initiales ci-dessous. Ils ne modifient pas les zones de MeshMap
 ## Régions initiales {#starter-regions}
 
 Ces attributions de MeshCore Canada couvrent des endroits sans zone publiée dans
-MeshMapper. Elles utilisent de vrais codes IATA et les mêmes scopes indépendants,
+MeshMapper. Elles utilisent de vrais codes IATA et les mêmes portées indépendantes,
 mais **ne sont ni des zones publiées dans MeshMapper ni des garanties de couverture**.
 La carte les identifie par des limites dorées en pointillé.
 
 Ces attributions sont des propositions distinctes, pas une extension approuvée
 du déploiement ON/QC. Confirmez leur utilisation localement.
 
-| Secteur | Scope | Référence du code |
+| Secteur | Portée | Référence du code |
 | --- | --- | --- |
 | Île-du-Prince-Édouard | `yyg` | [Charlottetown](https://flyyyg.com/) |
 | Terre-Neuve | `yyt` | [Saint-Jean](https://stjohnsairport.com/) |
@@ -118,8 +118,8 @@ qui contient votre point. Les 13 provinces et territoires restent cartographiés
 Les limites proposées doivent être revues localement; elles ne représentent pas
 la couverture radio mesurée.
 
-Par exemple, l’Île-du-Prince-Édouard utilise `yyg`, `pe`, `ca` et `na`; le Yukon
-utilise `yxy`, `yt`, `ca` et `na`. Ces régions n’utilisent pas `onqc`.
+Par exemple, l’Île-du-Prince-Édouard utilise `yyg`, `pe`, `can` et `na`; le Yukon
+utilise `yxy`, `yt`, `can` et `na`. Ces régions n’utilisent pas `onqc`.
 Le [configurateur](index.md) fournit les commandes.
 
 Ces grandes régions sont un point de départ, pas la preuve d’un lien radio entre
@@ -130,7 +130,7 @@ Les limites publiées par MeshMapper ont toujours priorité.
 Les contours proviennent de la géographie provinciale et territoriale de
 Statistique Canada déjà utilisée par le site. Le Labrador correspond aux divisions
 de recensement 10 et 11; Terre-Neuve couvre le reste de la province. Aucun cercle
-autour d’un aéroport ni ancien nom de scope hiérarchique n’est utilisé.
+autour d’un aéroport ni ancien nom de portée hiérarchique n’est utilisé.
 
 ## Configuration du répéteur
 
@@ -166,10 +166,10 @@ ville/bordure ci-dessous concernent l’activation, pas la préparation.
 À la dernière étape du configurateur, ouvrez **Vérifier une liste de régions
 existante**. Collez la réponse complète de `region` et, avec la version 1.15 ou
 plus récente, celle de `region default` si vous le souhaitez. La comparaison
-indique les scopes conservés, ajoutés, modifiés et supprimés. Les données restent
+indique les portées conservées, ajoutés, modifiés et supprimés. Les données restent
 dans votre navigateur. Vous devez examiner les suppressions avant de copier les
 commandes. Préférez USB et gardez une copie : une réponse à distance peut être
-tronquée. Le symbole `^` marque la région d’origine, pas le scope par défaut.
+tronquée. Le symbole `^` marque la région d’origine, pas la portée par défaut.
 
 Utilisez de préférence le micrologiciel **1.16 ou plus récent**. Le configurateur
 prend aussi en charge **1.15** et un mode limité pour **1.14**. Coordonnez le
@@ -223,7 +223,7 @@ comptent toujours comme une seule région.
 Exemple pour Ottawa :
 
 ```text
-region def yow|* on|* onqc|* ca|* na
+region def yow|* on|* onqc|* can|* na
 region allowf *
 region default yow
 region
@@ -236,7 +236,7 @@ region
 `region default yow` garde les annonces du répéteur dans sa zone de ville.
 
 Pour Gatineau, remplacez `on` par `qc`. Pour Montréal, utilisez `yul` et `qc`.
-À Calgary, utilisez `region def yyc|* ab|* ca|* na` et `region default yyc`.
+À Calgary, utilisez `region def yyc|* ab|* can|* na` et `region default yyc`.
 
 ### Répéteur de bordure {#repeteur-de-liaison}
 
@@ -247,7 +247,7 @@ retransmettre leurs messages avec portée. À Rigaud, du côté québécois,
 pour relier Ottawa–Gatineau et Montréal :
 
 ```text
-region def yow|* yul|* qc|* onqc|* ca|* na
+region def yow|* yul|* qc|* onqc|* can|* na
 region denyf *
 region default yow
 region
@@ -281,7 +281,7 @@ set flood.max 16
 ```
 
 Ces valeurs donnent des identifiants de 3 octets, des annonces locales toutes
-les quatre heures, des annonces par inondation toutes les 47 heures et une
+les quatre heures, des annonces par diffusion toutes les 47 heures et une
 limite de 16 sauts. Vérifiez que cette limite suffit au plus long trajet voulu.
 `set flood.max.unscoped 3` appartient à la **phase 3**, seulement au besoin,
 après la phase 2 et une annonce locale. L’outil ne l’ajoute pas par défaut.
@@ -311,7 +311,7 @@ une fois les répéteurs locaux prêts. Les compagnons personnels attendent la p
 
 **Quand la phase 2 sera annoncée**, avec l’application MeshCore **1.43 ou plus
 récente**, ouvrez **Settings → Network Settings → Default Region Scope** et
-choisissez `onqc`. Le premier message direct envoyé par inondation et sa réponse de
+choisissez `onqc`. Le premier message direct envoyé par diffusion et sa réponse de
 découverte de chemin peuvent ainsi traverser le réseau partagé.
 
 | Trafic ON/QC | Portée |
@@ -321,7 +321,7 @@ découverte de chemin peuvent ainsi traverser le réseau partagé.
 | Autres canaux | Ville, province ou `onqc`, selon l’entente locale |
 
 Définissez chaque canal : sans portée propre, il utilise celle du compagnon.
-N’utilisez pas encore `ca` ou `na` par défaut. Hors ON/QC, convenez d’une portée
+N’utilisez pas encore `can` ou `na` par défaut. Hors ON/QC, convenez d’une portée
 partagée avec les opérateurs; le site ne suppose pas qu’un trajet pancanadien existe.
 
 ## Limites du micrologiciel

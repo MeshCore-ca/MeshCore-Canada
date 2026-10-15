@@ -24,7 +24,7 @@ Utilisez le code indiqué par la [carte des régions IATA](../config/map.md) à
 l’emplacement de votre observateur. La carte distingue les zones MeshMapper des
 régions initiales de MeshCore Canada; la distance jusqu’à un aéroport ne détermine pas le code.
 
-Les observateurs utilisent des majuscules, comme `YOW`; les scopes radio
+Les observateurs utilisent des majuscules, comme `YOW`; les portées radio (scopes)
 utilisent des minuscules, comme `yow`. Gardez le même code d’observateur dans
 chaque entrée du courtier. Consultez l’opérateur avant de modifier un observateur existant.
 
@@ -73,7 +73,8 @@ Si le code de votre communauté n’y figure pas :
 3. demandez à MeshCore Canada d’ajouter ce lieu à la liste.
 
 N’utilisez pas `CAN` pour un observateur au Canada : c’est le code d’un
-aéroport de Guangzhou. Le scope radio réservé `can` est un réglage distinct.
+aéroport de Guangzhou. La portée radio réservée `can` est un réglage distinct,
+pas un code d’emplacement d’observateur.
 N’utilisez pas de valeurs temporaires comme `XXX` ou `HOME`.
 
 Retournez à [Choisir une méthode d’observation](intro.md).

@@ -384,7 +384,7 @@ test("French analyzer terminology and map controls use natural location wording"
 
   assert.match(page, /code d’emplacement/);
   assert.match(page, /carte des régions IATA/);
-  assert.match(page, /les scopes radio/);
+  assert.match(page, /les portées radio \(scopes\)/);
   assert.doesNotMatch(page, /code pertinent le plus près|nom convivial du lieu/);
   assert.match(config, /Location codes: Codes d'emplacement/);
   assert.doesNotMatch(config, /Location codes: Codes de localisation/);

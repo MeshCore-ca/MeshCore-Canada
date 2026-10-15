@@ -21,7 +21,7 @@ page_scripts:
   - assets/regions/modules/configurator-support.js?v=20260926-1
   - assets/regions/modules/iata-scopes.js?v=20261013-1
   - assets/regions/modules/scope-migration.js?v=20260926-2
-  - assets/regions/regions.js?v=20261013-1
+  - assets/regions/regions.js?v=20261015-1
 hide:
   - navigation
   - toc
@@ -29,7 +29,7 @@ hide:
 # Configurer les portées d’un répéteur
 
 Choisissez les régions IATA desservies par ce répéteur. La préparation conserve
-la retransmission du joker et la portée par défaut. Lors d’une transition
+la retransmission des messages sans portée (`*`) et la portée par défaut. Lors d’une transition
 coordonnée localement, les répéteurs de ville autorisent les messages sans
 portée et ceux de bordure les bloquent. Examinez la configuration actuelle
 avant d’appliquer des commandes.

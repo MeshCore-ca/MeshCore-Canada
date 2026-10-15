@@ -23,14 +23,14 @@
     "Coordinated activation": "Activation coordonnée",
     "Stage": "Étape",
     "1. At the coordinated cutover: back up and review removal of obsolete regions, preferably over USB.": "1. Lors de la transition coordonnée : sauvegardez et examinez la suppression des régions obsolètes, de préférence par USB.",
-    "1. Preparation: back up first; keep old scopes, wildcard forwarding (*) and the default scope unchanged.": "1. Préparation : sauvegardez d’abord; conservez les anciennes portées, la retransmission du joker (*) et la portée par défaut.",
+    "1. Preparation: back up first; keep old scopes, wildcard forwarding (*) and the default scope unchanged.": "1. Préparation : sauvegardez d’abord; conservez les anciennes portées, la retransmission des messages sans portée (*) et la portée par défaut.",
     "Not sure yet": "Pas encore certain",
     "Preparation only until regular cross-region links are confirmed.": "Préparation seulement tant que les liens interrégionaux réguliers ne sont pas confirmés.",
     "Does this repeater regularly link another IATA region?": "Ce répéteur communique-t-il régulièrement avec une autre région IATA?",
     "Check neighbours in MeshMapper": "Vérifier les voisins dans MeshMapper",
     "If this is the only local repeater, agree on support for unscoped users before blocking them.": "Si c’est le seul répéteur local, convenez du service aux utilisateurs sans portée avant de les bloquer.",
     "I checked the local cutover announcement and coordinated activation with neighbouring operators.": "J’ai vérifié l’annonce de transition locale et coordonné l’activation avec les opérateurs voisins.",
-    "Preparation keeps existing scopes, wildcard forwarding (*) and the default scope. Review the current list before adding names.": "La préparation conserve les anciennes portées, la retransmission du joker (*) et la portée par défaut. Examinez la liste actuelle avant d’ajouter des noms.",
+    "Preparation keeps existing scopes, wildcard forwarding (*) and the default scope. Review the current list before adding names.": "La préparation conserve les anciennes portées, la retransmission des messages sans portée (*) et la portée par défaut. Examinez la liste actuelle avant d’ajouter des noms.",
     "Confirm the repeater type and local cutover in step 3 before generating activation commands.": "Confirmez le type de répéteur et la transition locale à l’étape 3 avant de générer les commandes d’activation.",
     "At the coordinated cutover only": "Seulement lors de la transition coordonnée",
     "Choose the place you mean:": "Choisissez le lieu recherché :",
@@ -104,8 +104,8 @@
     "Published zones": "Zones publiées",
     "Fetched": "Récupéré le",
     "Flat scopes": "Portées indépendantes",
-    "City, province, mesh scope where defined, can, and na. Each scope is independent.": "Ville, province, réseau partagé s’il est défini, ca et na. Chaque portée est indépendante.",
-    "onqc is for Ontario and Québec. ca and na are reserved for future use, not companion defaults or active cross-border routes.": "onqc couvre l’Ontario et le Québec. ca et na sont réservés pour plus tard, pas comme portées par défaut d’un compagnon ni comme routes transfrontalières actives.",
+    "City, province, mesh scope where defined, can, and na. Each scope is independent.": "Ville, province, réseau partagé s’il est défini, can et na. Chaque portée est indépendante.",
+    "onqc is for Ontario and Québec. can and na are reserved for future use, not companion defaults or active cross-border routes.": "onqc couvre l’Ontario et le Québec. can et na sont réservés pour plus tard, pas comme portées par défaut d’un compagnon ni comme routes transfrontalières actives.",
     "Confirm Ontario–New York (onny, opt-in) tags with neighbouring operators before applying them.": "Confirmez la portée facultative onny avec les opérateurs du trajet Ontario–New York avant de l’appliquer.",
     "Map limits": "Limites de la carte",
     "Only published MeshMapper boundaries are shown. Gaps are not filled with guessed circles or census regions.": "Seules les limites publiées par MeshMapper sont affichées. Les espaces vides ne sont pas comblés par des cercles estimés ou des régions de recensement.",
@@ -1018,7 +1018,7 @@
   }
 
   function ancestryFor(data, tag, province) {
-    if (data.hierarchy[tag] && data.hierarchy[tag].kind === "city" && data.policy.provinces[province]) return ["ca", province, tag];
+    if (data.hierarchy[tag] && data.hierarchy[tag].kind === "city" && data.policy.provinces[province]) return ["can", province, tag];
     var chain = [];
     var seen = {};
     var cur = tag;
@@ -1627,7 +1627,7 @@
       target.innerHTML = (data.externalRegionPathList || []).filter(function (record) { return record.sharedScope; }).map(function (record) {
         return '<label class="mcc-neighbour-path"><input type="checkbox" data-shared-scope value="' + esc(record.id) + '"' +
           ((state.selectedExternalPaths || []).indexOf(record.id) !== -1 ? " checked" : "") + '><span><strong>' + esc(record.label) +
-          '</strong><small>' + (frenchRuntime ? 'Coordonnez avec les opérateurs du trajet. Ne change pas le rôle de bordure ni le joker *.' : 'Coordinate with operators along the path. Does not change edge mode or wildcard forwarding.') + '</small></span></label>';
+          '</strong><small>' + (frenchRuntime ? 'Coordonnez avec les opérateurs du trajet. Ne change pas le rôle de bordure ni la retransmission des messages sans portée (*).' : 'Coordinate with operators along the path. Does not change edge mode or forwarding of messages without a scope (*).') + '</small></span></label>';
       }).join("");
       target.querySelectorAll("input[data-shared-scope]").forEach(function (input) {
         input.addEventListener("change", function () {
@@ -2313,7 +2313,7 @@
       selectedExternalPaths: [],
       canGenerate: false,
       resolution: null,
-      browseTag: data.meta.rootTag || "ca",
+      browseTag: data.meta.rootTag || "can",
       finishPath: "guided",
       wizardStep: 1,
       maxStep: 1
@@ -2445,7 +2445,7 @@
     }
 
     function renderConfigRegionBrowser(tag) {
-      if (!data.hierarchy[tag]) tag = data.meta.rootTag || "ca";
+      if (!data.hierarchy[tag]) tag = data.meta.rootTag || "can";
       state.browseTag = tag;
       var selectedTag = state.resolution && state.resolution.primary
         ? state.resolution.primary.seed.tag
@@ -2960,7 +2960,7 @@
       canGenerate: false,
       resolution: null,
       detailTag: null,
-      browseTag: data.meta.rootTag || "ca"
+      browseTag: data.meta.rootTag || "can"
     };
     var els = {
       input: el.querySelector("[data-role='map-input']"),
@@ -3018,7 +3018,7 @@
           '<div><dt>Fetched</dt><dd>' + esc(data.source.fetchedAt) + '</dd></div></dl>' +
           '<p><a href="https://meshmapper.net/" target="_blank" rel="noopener noreferrer">Open MeshMapper</a></p></section>' +
           '<section class="mcc-card"><h3>Flat scopes</h3><p>City, province, mesh scope where defined, can, and na. Each scope is independent.</p>' +
-          '<p>onqc is for Ontario and Québec. ca and na are reserved for future use, not companion defaults or active cross-border routes.</p></section>' +
+          '<p>onqc is for Ontario and Québec. can and na are reserved for future use, not companion defaults or active cross-border routes.</p></section>' +
           '<section class="mcc-card"><h3>Map limits</h3><p>Published MeshMapper zones are unchanged. Labelled planning regions fill the remaining gaps across Canada.</p>' +
           '<p>Planning regions follow provincial borders and nearby hubs. Newfoundland and Labrador are separate. Published MeshMapper zones take priority.</p></section>' +
           '</div>' +
@@ -3040,7 +3040,7 @@
     }
 
     function renderRegionBrowser(tag, fitSelection) {
-      if (!data.hierarchy[tag]) tag = data.meta.rootTag || "ca";
+      if (!data.hierarchy[tag]) tag = data.meta.rootTag || "can";
       state.browseTag = tag;
       var path = ancestryFor(data, tag, state.jurisdictionTag);
       els.breadcrumbs.innerHTML = path.map(function (item, index) {
@@ -3058,7 +3058,7 @@
       }).join("") : '<p class="mcc-help">' + (data.policy.provinces[tag] ? 'No MeshMapper zones are published here yet.' : 'Select this city zone to see its scope options.') + '</p>';
       if (!map || !browseLayer) return;
       browseLayer.clearLayers();
-      if (tag !== (data.meta.rootTag || "ca") && data.partitionByTag) {
+      if (tag !== (data.meta.rootTag || "can") && data.partitionByTag) {
         browseLayer.addData(featuresForNode(data, tag));
         browseLayer.bringToFront();
         if (selectedLayer) selectedLayer.bringToFront();

@@ -62,7 +62,7 @@ Si Canada n’apparaît pas, suivez les [consignes pour l’ancien préréglage]
 Redémarrez l’appareil après avoir modifié les paramètres radio, puis envoyez
 une annonce.
 
-## Choisir un scope
+## Choisir une portée (scope) {#choisir-un-scope}
 
 !!! warning "ON/QC : attendez la phase 2"
     Pour un compagnon personnel, laissez **Default Region Scope** vide et les
@@ -78,7 +78,7 @@ Public, et votre code de ville, comme `yow`, pour les canaux de test. Réservez
 
 Les responsables de robots et de MeshMapper suivent les [consignes de fin de phase 1](../proposals/onqc-scopes.md#robots-et-meshmapper), une fois les répéteurs locaux prêts. Consultez l’[ordre de déploiement](../proposals/onqc-scopes.md#ordre-de-deploiement) avant de changer les portées.
 
-Ailleurs, utilisez le scope convenu avec votre communauté. Le [guide des scopes](../config/standard.md) présente les versions d’application requises et des exemples. Les scopes ne changent pas les réglages radio.
+Ailleurs, utilisez la portée convenue avec votre communauté. Le [guide des portées](../config/standard.md) présente les versions d’application requises et des exemples. Les portées ne changent pas les réglages radio.
 
 ## Tester l’appareil
 

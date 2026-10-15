@@ -64,6 +64,6 @@ If your community's code is missing:
 2. type the three-letter code into a method that accepts free text; and
 3. ask MeshCore Canada to add the friendly place name.
 
-Do not use `CAN` for an observer in Canada; it is an airport code for Guangzhou. The reserved on-air scope `can` is a separate setting. Do not use placeholders such as `XXX` or `HOME`.
+Do not use `CAN` for an observer in Canada; it is an airport code for Guangzhou. The reserved on-air scope `can` is a separate setting, not an observer location code. Do not use placeholders such as `XXX` or `HOME`.
 
 Return to [Choose an observer method](intro.md).

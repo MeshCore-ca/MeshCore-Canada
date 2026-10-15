@@ -8,7 +8,7 @@
       "qc"
     ]
   },
-  "reservedScopes": ["ca", "na"],
+  "reservedScopes": ["can", "na"],
   "optionalNetworks": {
     "ontario-new-york": {
       "label": "Ontario–New York (onny, opt-in)",
