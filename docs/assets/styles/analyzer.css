@@ -216,6 +216,10 @@
   width: 100%;
 }
 
+.mc-generated-reference .mc-location-table-wrap:first-child {
+  margin-top: 0;
+}
+
 @media screen and (max-width: 59.9844em) {
   .mc-analyzer-flow {
     grid-template-columns: 1fr 1fr;

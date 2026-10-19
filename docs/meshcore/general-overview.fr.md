@@ -14,7 +14,7 @@ difficulty: beginner
 estimated_time: 5-10 minutes
 destructive: false
 page_styles:
-  - assets/styles/devices-builds.css?v=20260728-1
+  - assets/styles/devices-builds.css?v=20261019-1
 ---
 # Qu’est-ce que MeshCore?
 

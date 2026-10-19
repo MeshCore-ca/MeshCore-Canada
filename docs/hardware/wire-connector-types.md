@@ -14,7 +14,7 @@ difficulty: intermediate
 estimated_time: 3-5 minutes
 destructive: false
 page_styles:
-  - assets/styles/devices-builds.css?v=20260728-1
+  - assets/styles/devices-builds.css?v=20261019-1
 ---
 
 # Wire connector types

@@ -17,7 +17,7 @@ destructive: false
 requires:
   - manufacturer-documentation
 page_styles:
-  - assets/styles/devices-builds.css?v=20260909-1
+  - assets/styles/devices-builds.css?v=20261019-1
 ---
 
 # Configurer une Station G3

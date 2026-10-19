@@ -13,7 +13,7 @@ difficulty: advanced
 estimated_time: 35 minutes
 destructive: true
 page_styles:
-  - assets/styles/analyzer.css?v=20260722-2
+  - assets/styles/analyzer.css?v=20261019-1
 page_scripts:
   - assets/javascripts/radio-profiles.js?v=20260904-1
   - assets/javascripts/analyzer-command-builder.js?v=20260904-1

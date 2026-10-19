@@ -83,30 +83,88 @@ a {
   font-size: 1.25rem;
 }
 
-.md-typeset table:not([class]) {
+/* Content tables share one look. bootstrap.js adds .mc-table--responsive to
+   tables in .mc-table-wrap, which drops them out of Material's :not([class]). */
+.md-typeset .md-typeset__scrollwrap {
+  margin: var(--mc-space-4) 0 var(--mc-space-6);
+}
+
+.md-typeset .md-typeset__scrollwrap:first-child {
+  margin-top: 0;
+}
+
+.md-typeset .md-typeset__scrollwrap:last-child {
+  margin-bottom: 0;
+}
+
+.md-typeset .md-typeset__table {
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+
+.md-typeset :is(table:not([class]), table.mc-table--responsive) {
+  display: table;
+  width: 100%;
+  max-width: 100%;
   border: 1px solid var(--mc-color-border);
+  border-collapse: separate;
+  border-spacing: 0;
   border-radius: var(--mc-radius-sm);
   background: var(--mc-color-surface);
   box-shadow: none;
+  font-size: 1rem;
+  line-height: 1.5;
 }
 
-.md-typeset table:not([class]) th {
+.md-typeset :is(table:not([class]), table.mc-table--responsive) :is(th, td) {
+  min-width: 0;
+  padding: var(--mc-space-3);
+  border: 0;
+  border-bottom: 1px solid var(--mc-color-border);
+  text-align: left;
+  vertical-align: top;
+}
+
+.md-typeset :is(table:not([class]), table.mc-table--responsive) th {
   background: var(--mc-color-surface-raised);
   color: var(--mc-color-text);
+  font-weight: 700;
+}
+
+.md-typeset :is(table:not([class]), table.mc-table--responsive) thead th:first-child {
+  border-top-left-radius: var(--mc-radius-sm);
+}
+
+.md-typeset :is(table:not([class]), table.mc-table--responsive) thead th:last-child {
+  border-top-right-radius: var(--mc-radius-sm);
+}
+
+.md-typeset :is(table:not([class]), table.mc-table--responsive) tbody tr:last-child > * {
+  border-bottom: 0;
+}
+
+.md-typeset :is(table:not([class]), table.mc-table--responsive) :is(code, a) {
+  overflow-wrap: anywhere;
+}
+
+.md-typeset :is(table:not([class]), table.mc-table--responsive) tbody tr:hover {
+  background-color: var(--md-typeset-table-color--light);
+  box-shadow: none;
+}
+
+/* Five or more columns: tighten so more of the table fits. */
+.md-typeset table:not([class]):has(thead th:nth-child(5)) {
+  font-size: 0.875rem;
+}
+
+.md-typeset table:not([class]):has(thead th:nth-child(5)) :is(th, td) {
+  padding: var(--mc-space-2);
+  hyphens: auto;
 }
 
 .mc-baseline-table .md-typeset__table {
   width: 100%;
-}
-
-.mc-baseline-table table:not([class]) {
-  display: table;
-  width: 100%;
-  font-size: 0.8rem;
-}
-
-.mc-baseline-table table:not([class]) :is(th, td) {
-  white-space: normal;
 }
 
 .mc-baseline-table table:not([class]) :is(th, td):first-child {
@@ -116,6 +174,17 @@ a {
 .mc-baseline-table table:not([class]) code {
   overflow-wrap: anywhere;
   white-space: normal;
+}
+
+/* Phones: plain tables scroll, so keep them compact. Wrapped tables become cards. */
+@media screen and (max-width: 44.9844em) {
+  .md-typeset table:not([class]) {
+    font-size: 0.875rem;
+  }
+
+  .md-typeset table:not([class]) :is(th, td) {
+    padding: var(--mc-space-2) var(--mc-space-3);
+  }
 }
 
 .md-typeset hr {

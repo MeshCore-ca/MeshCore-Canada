@@ -18,7 +18,7 @@ requires:
   - property-permission
   - site-specific-safety-review
 page_styles:
-  - assets/styles/devices-builds.css?v=20260728-1
+  - assets/styles/devices-builds.css?v=20261019-1
 ---
 
 # Planifier le montage d’un répéteur
