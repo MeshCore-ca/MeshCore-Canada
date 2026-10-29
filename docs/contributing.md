@@ -26,8 +26,8 @@ experience.
 
 -   **Share an idea**
 
-    Report something missing, confusing, or difficult. No GitHub account is
-    needed.
+    Report something missing, confusing, or difficult. Prepare your idea and
+    choose an available way to send it.
 
     [:octicons-arrow-right-24: Share an idea](submit-idea.md)
 

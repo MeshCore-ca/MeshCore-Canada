@@ -40,9 +40,9 @@
     "status": "meshcore/{IATA}/{PUBLIC_KEY}/status"
   },
   "verification": {
-    "observers": "https://live.meshcore.ca/#/observers",
-    "packets": "https://live.meshcore.ca/#/packets",
-    "map": "https://live.meshcore.ca/#/map"
+    "observers": "https://live.meshcore.ca/?tab=Observers",
+    "packets": "https://live.meshcore.ca/",
+    "map": "https://live.meshcore.ca/?tab=Map"
   },
   "location_codes": "location-codes.json"
 }

@@ -8,10 +8,15 @@ task: verify-first-success
 scope: canada-baseline
 status: verified
 owner: docs-ux
-last_reviewed: 2026-07-22
-review_by: 2026-10-19
+last_reviewed: 2026-10-29
+review_by: 2026-12-31
 tested_with:
-  content_baseline: f608cfe
+  content_baseline: 7daceca
+  review_method: bilingual content and navigation checks, not physical-device testing
+evidence:
+  - https://github.com/meshcore-dev/MeshCore/blob/main/docs/faq.md
+  - https://github.com/meshcore-dev/MeshCore/issues/3302#issuecomment-5598886579
+  - Content and linked setup paths reviewed on 2026-10-29; radio and installation checks remain operator tasks.
 difficulty: beginner
 estimated_time: 5-10 minutes
 destructive: false
@@ -69,13 +74,13 @@ Keep it off hard-to-reach spots until the bench check passes.
 
 1. Create nearby mesh activity with a known-good device.
 2. Confirm the observer radio is using matching settings.
-3. Open [CoreScope Observers](https://live.meshcore.ca/#/observers).
+3. Open the [live observer list](https://live.meshcore.ca/?tab=Observers).
 4. Find your observer and check for recent activity.
 5. Use [Check your observer](../analyzer/verify.md) for the full health
    checklist.
 
 !!! success "The observer is working"
-    Your observer appears in CoreScope and shows recent activity after
+    Your observer appears in the live viewer and shows recent activity after
     a nearby transmission.
 
 An online broker connection alone is not the final check.

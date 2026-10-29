@@ -165,9 +165,9 @@ The service stays active, connects to the primary server, and counts new packets
 ## Verify in CoreScope
 
 1. Confirm the service remains active.
-2. Find the observer in [CoreScope Observers](https://live.meshcore.ca/#/observers).
+2. Find the observer in [Live observer list](https://live.meshcore.ca/?tab=Observers).
 3. Wait for normal nearby activity.
-4. Confirm a recent packet in [CoreScope Packets](https://live.meshcore.ca/#/packets).
+4. Confirm a recent packet in [Live packets](https://live.meshcore.ca/).
 
 Finish with [Check your observer](../verify.md). A running service or broker connection is not proof that packets reached CoreScope.
 

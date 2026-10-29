@@ -9,11 +9,12 @@ task: answer-meshcore-question
 scope: canada-baseline
 status: verified
 owner: docs-ux
-last_reviewed: 2026-07-22
-review_by: 2026-10-19
+last_reviewed: 2026-10-29
+review_by: 2026-12-31
 evidence:
-  - Existing MeshCore Canada FAQ
-  - Current configurator and setup guides
+  - https://github.com/meshcore-dev/MeshCore/blob/main/docs/faq.md
+  - https://github.com/meshcore-dev/MeshCore/issues/3302#issuecomment-5598886579
+  - Bilingual answers checked against the IATA configurator and linked setup guides on 2026-10-29; no hardware testing.
 difficulty: beginner
 estimated_time: 2-10 minutes
 destructive: false
@@ -41,14 +42,20 @@ for the Canadian radio settings and **3-byte** paths. See the
 The separate **USA** preset uses the same radio values but leaves the path-hash
 setting unchanged. [Upstream preset update](https://github.com/meshcore-dev/MeshCore/issues/3302#issuecomment-5598886579).
 
-The [repeater configurator](../config/index.md) finds region paths. Its radio and
-advert ID controls remain separate and keep current settings until you choose a change.
+The [repeater configurator](../config/index.md) selects IATA regions and generates
+independent scope commands. Its radio and advert ID controls remain separate and
+keep current settings until you choose a change.
 
 ### What is path hash mode?
 
-It sets the size of the identifiers in this node’s advert paths: 1, 2, or 3 bytes.
-MeshCore Canada recommends 3 bytes to reduce collisions. Firmware 1.14 and newer
-can forward mixed sizes; neighbouring nodes do not all need the same ID size.
+Paths record short repeater identifiers of 1, 2, or 3 bytes. On a repeater,
+`path.hash.mode` controls its own adverts; it does not restrict the path-hash
+sizes it can forward. A companion’s setting controls the path size of its outgoing messages.
+
+MeshCore Canada recommends 3-byte paths. Repeaters on firmware 1.14 or newer can
+forward all three sizes; older repeaters drop packets using 2- or 3-byte paths.
+Follow your community’s settings while older repeaters are being upgraded.
+See the [upstream multibyte FAQ](https://github.com/meshcore-dev/MeshCore/blob/main/docs/faq.md#39-q-what-is-multibyte-support-what-do-1-byte-2-byte-3-byte-adverts-and-messages-mean).
 
 [Read the region standard](../config/standard.md).
 

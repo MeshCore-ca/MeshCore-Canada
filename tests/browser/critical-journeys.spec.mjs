@@ -116,7 +116,8 @@ test("retired French editor links to MeshMapper and retains its language switche
 test("French idea form keeps its dynamic review copy in French", async ({ page }) => {
   await page.goto(siteRoute("/fr/submit-idea/"));
   await expect(page.getByRole("button", { name: "Relire l’idée" })).toBeVisible();
-  await expect(page.getByText(/Aucun compte GitHub n’est nécessaire/i)).toBeVisible();
+  await expect(page.locator(".submission-intro")).toContainText("où un compte est requis");
+  await expect(page.locator(".submission-intro")).not.toContainText("Aucun compte GitHub n’est nécessaire");
   await expect(page.locator("html")).toHaveAttribute("lang", /^fr/);
 });
 
@@ -422,7 +423,8 @@ test("idea form exposes review, verification, and final submission", async ({ pa
   await expect(page.getByRole("button", { name: "Review idea" })).toBeVisible();
   await expect(page.locator("#submission-verification")).toBeHidden();
   await expect(page.locator("#submission-final-actions")).toBeHidden();
-  await expect(page.getByText(/No GitHub account needed/i)).toBeVisible();
+  await expect(page.locator(".submission-intro")).toContainText("which requires an account");
+  await expect(page.locator(".submission-intro")).not.toContainText("No GitHub account needed");
   await expect(page.getByText(/Do not include passwords, keys, addresses, or private coordinates/i)).toBeVisible();
 });
 

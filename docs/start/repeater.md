@@ -8,10 +8,15 @@ task: start-repeater
 scope: canada-baseline
 status: verified
 owner: docs-ux
-last_reviewed: 2026-07-22
-review_by: 2026-10-19
+last_reviewed: 2026-10-29
+review_by: 2026-12-31
 tested_with:
-  content_baseline: f608cfe
+  content_baseline: 7daceca
+  review_method: bilingual content and navigation checks, not physical-device testing
+evidence:
+  - https://github.com/meshcore-dev/MeshCore/blob/main/docs/faq.md
+  - https://github.com/meshcore-dev/MeshCore/issues/3302#issuecomment-5598886579
+  - Content and linked setup paths reviewed on 2026-10-29; radio and installation checks remain operator tasks.
 difficulty: intermediate
 estimated_time: varies by build
 destructive: false
@@ -21,7 +26,7 @@ requires:
 page_styles:
   - assets/styles/repeater-hash-check.css?v=20260820-1
 page_scripts:
-  - assets/javascripts/repeater-hash-check.js?v=20260925-2
+  - assets/javascripts/repeater-hash-check.js?v=20261029-1
 ---
 
 # Start with a repeater
@@ -65,9 +70,12 @@ Use the [repeater configurator](../config/index.md) to select your MeshMapper IA
 zone and independent scopes. Moving from the old region tree? Follow the
 [migration steps](../config/standard.md) before applying the new list.
 
+Start with preparation. Keep working scopes in place and coordinate activation,
+including any edge blocking, with local operators.
+
 <div data-mc-repeater-hash-check></div>
 
-<noscript>JavaScript is required for the live duplicate-ID check. You can also [search the public-key prefix in CoreScope](https://live.meshcore.ca/#/nodes).</noscript>
+<noscript>JavaScript is required for the live duplicate-ID check. You can also [open the live node directory](https://live.meshcore.ca/?tab=Nodes).</noscript>
 
 ## Test it
 

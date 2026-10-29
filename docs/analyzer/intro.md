@@ -88,7 +88,7 @@ For exact broker fields, use the [observer connection reference](broker-referenc
 
 Setup is not finished when a screen says “connected.” You are done when:
 
-1. your observer appears in [CoreScope Observers](https://live.meshcore.ca/#/observers); and
-2. a packet heard by your radio appears in [CoreScope Packets](https://live.meshcore.ca/#/packets).
+1. your observer appears in [Live observer list](https://live.meshcore.ca/?tab=Observers); and
+2. a packet heard by your radio appears in [Live packets](https://live.meshcore.ca/).
 
 Finish with [Check your observer](verify.md). If something fails, go to [Troubleshooting](troubleshooting.md).

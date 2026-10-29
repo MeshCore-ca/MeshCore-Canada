@@ -9,10 +9,10 @@ task: find-meshcore-resource
 scope: canada-baseline
 status: verified
 owner: docs-ux
-last_reviewed: 2026-07-22
-review_by: 2026-10-19
-evidence: External destinations opened successfully on 2026-07-19
-link_checked: 2026-07-19
+last_reviewed: 2026-10-29
+review_by: 2026-12-31
+evidence: Public destinations and viewer navigation checked on 2026-10-29; links are not hardware, service-delivery, or regulatory approval.
+link_checked: 2026-10-29
 difficulty: beginner
 estimated_time: 2-5 minutes
 destructive: false
@@ -22,12 +22,15 @@ destructive: false
 
 Ces liens ouvrent des services à l’extérieur de ce site de documentation.
 
+La visionneuse à `live.meshcore.ca` utilise maintenant Beacon. Certains guides et
+captures d’écran mentionnent encore CoreScope; utilisez les liens actuels ci-dessous.
+
 ## MeshCore Canada
 
 | Service | Utilité | Lien |
 |---|---|---|
 | Forum | Rechercher une discussion ou demander de l’aide. | [Ouvrir le forum (site externe)](https://forum.meshcore.ca/){ target="_blank" rel="noopener" } |
-| CoreScope | Consulter les observateurs, les paquets, les nœuds et les données cartographiques publics. | [Ouvrir CoreScope (site externe)](https://live.meshcore.ca/){ target="_blank" rel="noopener" } |
+| Visionneuse du réseau en direct | Consulter les observateurs, les paquets, les nœuds et les données cartographiques publics. | [Ouvrir la visionneuse (site externe)](https://live.meshcore.ca/){ target="_blank" rel="noopener" } |
 | GitHub | Consulter le code source, les billets et les changements apportés au site. | [Ouvrir le dépôt (site externe)](https://github.com/MeshCore-ca/MeshCore-Canada){ target="_blank" rel="noopener" } |
 
 ## Projet MeshCore officiel
@@ -45,7 +48,7 @@ Ces liens ouvrent des services à l’extérieur de ce site de documentation.
 
 | Organisme | Utilité | Lien |
 |---|---|---|
-| Innovation, Sciences et Développement économique Canada (ISDE) | Consulter l’information canadienne actuelle sur le spectre et le matériel. | [Ouvrir le site d’ISDE (site externe)](https://ised-isde.canada.ca/){ target="_blank" rel="noopener" } |
+| Innovation, Sciences et Développement économique Canada (ISDE) | Consulter l’information canadienne actuelle sur le spectre et le matériel. | [Ouvrir le site d’ISDE (site externe)](https://ised-isde.canada.ca/site/gestion-spectre-telecommunications/fr){ target="_blank" rel="noopener" } |
 | Radio Amateurs du Canada | Consulter de l’information canadienne sur la radio amateur. | [Ouvrir le site de RAC (site externe)](https://www.rac.ca/){ target="_blank" rel="noopener" } |
 
 <div class="mc-callout" data-kind="warning" markdown>

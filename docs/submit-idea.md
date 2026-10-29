@@ -1,16 +1,18 @@
 ---
 title: Share an idea
-description: Share an idea or report a problem without a GitHub account.
+description: Prepare and review a public idea, then choose an available submission method.
 audience:
   - community-member
 task: share-an-idea
 scope: canada-baseline
-status: verified
+status: draft
 owner: maintainers-gateway
-last_reviewed: 2026-07-19
-review_by: 2026-10-19
+last_reviewed: 2026-10-29
+review_by: 2026-11-12
 tested_with:
-  submission_gateway: v1
+  submission_contract: mcc-community-idea/v1
+  review_scope: client validation, preview, copy and GitHub fallback only
+  production_delivery: pending maintainer gateway deployment and signed-out verification
 difficulty: beginner
 estimated_time: 3-5 minutes
 page_styles:
@@ -23,7 +25,7 @@ hide:
 # Share an idea
 
 <div class="submission-intro">
-  <p>Share an idea or report a problem. <strong>No GitHub account needed.</strong></p>
+  <p>Prepare and review your idea here. Anonymous submission depends on service availability. If it is unavailable, copy the text or continue on GitHub, which requires an account.</p>
   <p class="submission-privacy"><strong>Public form.</strong> Do not include passwords, keys, addresses, or private coordinates.</p>
 </div>
 

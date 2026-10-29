@@ -93,9 +93,9 @@ proximité.
 
 ## Vérifier dans CoreScope
 
-1. Ouvrez [CoreScope Observers](https://live.meshcore.ca/#/observers) et trouvez l’observateur RemoteTerm.
+1. Ouvrez [Observateurs en direct](https://live.meshcore.ca/?tab=Observers) et trouvez l’observateur RemoteTerm.
 2. Produisez de l’activité normale à proximité, ou attendez qu’il y en ait.
-3. Ouvrez [CoreScope Packets](https://live.meshcore.ca/#/packets) et confirmez qu’un paquet récent y apparaît.
+3. Ouvrez [Paquets en direct](https://live.meshcore.ca/) et confirmez qu’un paquet récent y apparaît.
 
 Terminez avec [Vérifier votre observateur](verify.md). Une entrée connectée sans
 paquet récent ne confirme pas que tout le parcours fonctionne.

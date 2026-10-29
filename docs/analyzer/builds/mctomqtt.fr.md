@@ -190,9 +190,9 @@ nouveaux paquets lorsque la radio capte du trafic à proximité.
 ## Vérifier dans CoreScope { #check-in-corescope }
 
 1. Confirmez que le service demeure actif.
-2. Trouvez l’observateur dans [CoreScope Observers](https://live.meshcore.ca/#/observers).
+2. Trouvez l’observateur dans [Observateurs en direct](https://live.meshcore.ca/?tab=Observers).
 3. Attendez de l’activité normale à proximité.
-4. Confirmez la présence d’un paquet récent dans [CoreScope Packets](https://live.meshcore.ca/#/packets).
+4. Confirmez la présence d’un paquet récent dans [Paquets en direct](https://live.meshcore.ca/).
 
 Terminez avec [Vérifier votre observateur](../verify.md). Un service en fonction
 ou une connexion au courtier ne confirme pas que les paquets se sont rendus à

@@ -33,11 +33,11 @@ a real radio packet reaches CoreScope.
     <br>It should report an encrypted connection to the primary server without repeating authentication errors.
   </li>
   <li>
-    <strong>Observer view:</strong> open <a href="https://live.meshcore.ca/#/observers">CoreScope Observers</a>.
+    <strong>Observer view:</strong> open <a href="https://live.meshcore.ca/?tab=Observers">Live observer list</a>.
     <br>The observer name and three-letter location code should appear with a recent timestamp.
   </li>
   <li>
-    <strong>Packet view:</strong> create nearby MeshCore activity, then open <a href="https://live.meshcore.ca/#/packets">CoreScope Packets</a>.
+    <strong>Packet view:</strong> create nearby MeshCore activity, then open <a href="https://live.meshcore.ca/">Live packets</a>.
     <br>A recent packet attributed to the observer should appear within a few minutes.
   </li>
 </ol>

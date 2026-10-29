@@ -100,9 +100,9 @@ la radio ne capte aucune activité.
 
 ## Vérifier dans CoreScope
 
-1. Trouvez l’observateur dans [CoreScope Observers](https://live.meshcore.ca/#/observers).
+1. Trouvez l’observateur dans [Observateurs en direct](https://live.meshcore.ca/?tab=Observers).
 2. Attendez de l’activité MeshCore normale à proximité.
-3. Confirmez la présence d’un paquet récent dans [CoreScope Packets](https://live.meshcore.ca/#/packets).
+3. Confirmez la présence d’un paquet récent dans [Paquets en direct](https://live.meshcore.ca/).
 
 Terminez avec [Vérifier votre observateur](../verify.md). Le badge de connexion
 de Home Assistant ne confirme pas que les paquets se sont rendus à CoreScope.

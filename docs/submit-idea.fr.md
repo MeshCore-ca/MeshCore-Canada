@@ -1,16 +1,18 @@
 ---
 title: Partager une idée
-description: Partagez une idée ou signalez un problème sans compte GitHub.
+description: Préparez et relisez une idée publique, puis choisissez une méthode d’envoi disponible.
 audience:
   - community-member
 task: share-an-idea
 scope: canada-baseline
-status: verified
+status: draft
 owner: maintainers-gateway
-last_reviewed: 2026-07-19
-review_by: 2026-10-19
+last_reviewed: 2026-10-29
+review_by: 2026-11-12
 tested_with:
-  submission_gateway: v1
+  submission_contract: mcc-community-idea/v1
+  review_scope: client validation, preview, copy and GitHub fallback only
+  production_delivery: pending maintainer gateway deployment and signed-out verification
 difficulty: beginner
 estimated_time: 3-5 minutes
 page_styles:
@@ -23,7 +25,7 @@ hide:
 # Partager une idée
 
 <div class="submission-intro">
-  <p>Partagez une idée ou signalez un problème. <strong>Aucun compte GitHub n’est nécessaire.</strong></p>
+  <p>Préparez et relisez votre idée ici. L’envoi sans compte dépend de la disponibilité du service. S’il est indisponible, copiez le texte ou continuez sur GitHub, où un compte est requis.</p>
   <p class="submission-privacy"><strong>Ce formulaire est public.</strong> N’incluez aucun mot de passe, aucune clé, aucune adresse ni aucune coordonnée privée.</p>
 </div>
 

@@ -97,8 +97,8 @@ Pour connaître les champs exacts du courtier, consultez les
 L’installation n’est pas terminée dès qu’un écran indique « connected ». Elle
 l’est lorsque :
 
-1. votre observateur apparaît dans [CoreScope Observers](https://live.meshcore.ca/#/observers);
-2. un paquet capté par votre radio apparaît dans [CoreScope Packets](https://live.meshcore.ca/#/packets).
+1. votre observateur apparaît dans [Observateurs en direct](https://live.meshcore.ca/?tab=Observers);
+2. un paquet capté par votre radio apparaît dans [Paquets en direct](https://live.meshcore.ca/).
 
 Terminez avec [Vérifier votre observateur](verify.md). En cas de problème,
 consultez le [dépannage](troubleshooting.md).

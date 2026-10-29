@@ -22,7 +22,7 @@ page_styles:
   - assets/styles/devices-builds.css?v=20261019-1
   - assets/styles/repeater-hash-check.css?v=20260820-1
 page_scripts:
-  - assets/javascripts/repeater-hash-check.js?v=20260925-2
+  - assets/javascripts/repeater-hash-check.js?v=20261029-1
 ---
 # Changer l’identifiant d’un répéteur en mode 1 octet
 
@@ -44,7 +44,7 @@ Ne publiez et ne transmettez jamais une clé privée dans un billet, une capture
 
 <div data-mc-repeater-hash-check></div>
 
-<noscript>JavaScript est requis pour vérifier les identifiants en direct. Vous pouvez aussi [rechercher le préfixe proposé dans CoreScope](https://live.meshcore.ca/#/nodes).</noscript>
+<noscript>JavaScript est requis pour vérifier les identifiants en direct. Vous pouvez aussi [ouvrir le répertoire des nœuds en direct](https://live.meshcore.ca/?tab=Nodes).</noscript>
 
 ## Générer et appliquer la clé
 

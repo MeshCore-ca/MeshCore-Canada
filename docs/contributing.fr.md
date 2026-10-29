@@ -27,7 +27,7 @@ aucune expérience avec Git ou GitHub.
 -   **Partager une idée**
 
     Signalez quelque chose qui manque, porte à confusion ou est difficile à
-    utiliser. Aucun compte GitHub n’est nécessaire.
+    utiliser. Préparez votre idée et choisissez une méthode d’envoi disponible.
 
     [:octicons-arrow-right-24: Partager une idée](submit-idea.md)
 

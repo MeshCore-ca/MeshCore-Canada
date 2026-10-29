@@ -9,11 +9,12 @@ task: answer-meshcore-question
 scope: canada-baseline
 status: verified
 owner: docs-ux
-last_reviewed: 2026-07-22
-review_by: 2026-10-19
+last_reviewed: 2026-10-29
+review_by: 2026-12-31
 evidence:
-  - Existing MeshCore Canada FAQ
-  - Current configurator and setup guides
+  - https://github.com/meshcore-dev/MeshCore/blob/main/docs/faq.md
+  - https://github.com/meshcore-dev/MeshCore/issues/3302#issuecomment-5598886579
+  - Bilingual answers checked against the IATA configurator and linked setup guides on 2026-10-29; no hardware testing.
 difficulty: beginner
 estimated_time: 2-10 minutes
 destructive: false
@@ -41,16 +42,23 @@ Utilisez le profil radio du [répertoire des communautés](../provinces/index.md
 Le préréglage distinct **USA** utilise les mêmes valeurs radio, mais ne modifie pas
 la taille du hachage. [Annonce du changement](https://github.com/meshcore-dev/MeshCore/issues/3302#issuecomment-5598886579).
 
-Le [configurateur de répéteur](../config/index.md) trouve les chemins régionaux.
-Ses réglages radio et de taille d’identifiant d’annonce sont séparés; les valeurs
-actuelles sont conservées tant que vous ne choisissez pas de changement.
+Le [configurateur de répéteur](../config/index.md) sélectionne les régions IATA
+et génère des commandes de portées indépendantes. Ses réglages radio et de taille
+d’identifiant d’annonce restent séparés; les valeurs actuelles sont conservées
+tant que vous ne choisissez pas de changement.
 
 ### Qu’est-ce que le mode de hachage des parcours?
 
-Il détermine la taille des identifiants dans les parcours d’annonce : 1, 2 ou 3 octets.
-MeshCore Canada recommande 3 octets pour réduire les collisions. Les versions 1.14
-et suivantes peuvent relayer des parcours de tailles différentes; les nœuds voisins
-n’ont pas tous besoin d’utiliser la même taille d’identifiant.
+Les parcours contiennent des identifiants courts de répéteur, de 1, 2 ou 3 octets.
+Sur un répéteur, `path.hash.mode` règle la taille utilisée pour ses propres
+annonces, pas celle des parcours qu’il peut relayer. Le réglage d’un compagnon
+détermine la taille des identifiants dans les parcours de ses messages sortants.
+
+MeshCore Canada recommande des parcours de 3 octets. Les répéteurs avec le
+micrologiciel 1.14 ou plus récent relaient les trois tailles; les plus anciens
+rejettent les paquets avec des parcours de 2 ou 3 octets. Suivez les réglages de
+votre communauté pendant la mise à jour des anciens répéteurs.
+Consultez la [FAQ officielle sur les parcours multioctets](https://github.com/meshcore-dev/MeshCore/blob/main/docs/faq.md#39-q-what-is-multibyte-support-what-do-1-byte-2-byte-3-byte-adverts-and-messages-mean).
 
 [Lire la norme des régions](../config/standard.md).
 

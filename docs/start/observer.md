@@ -1,6 +1,6 @@
 ---
 title: Start with an observer
-description: Choose, configure, and verify a MeshCore observer that sends network data to CoreScope.
+description: Choose, configure, and verify a MeshCore observer that sends data to the live network viewer.
 audience:
   - observer-operator
   - service-operator
@@ -8,10 +8,15 @@ task: start-observer
 scope: canada-baseline
 status: verified
 owner: docs-ux
-last_reviewed: 2026-07-22
-review_by: 2026-10-19
+last_reviewed: 2026-10-29
+review_by: 2026-12-31
 tested_with:
-  content_baseline: f608cfe
+  content_baseline: 7daceca
+  review_method: bilingual content and navigation checks, not physical-device testing
+evidence:
+  - https://github.com/meshcore-dev/MeshCore/blob/main/docs/faq.md
+  - https://github.com/meshcore-dev/MeshCore/issues/3302#issuecomment-5598886579
+  - Content and linked setup paths reviewed on 2026-10-29; radio and installation checks remain operator tasks.
 difficulty: intermediate
 estimated_time: varies by method
 destructive: false
@@ -23,7 +28,7 @@ requires:
 # Start with an observer
 
 An observer listens through a MeshCore radio and sends network data to
-CoreScope. Observing does not require repeating; a node can do both if configured
+the live network viewer. Observing does not require repeating; a node can do both if configured
 for it. Observers can run on radio firmware, an always-on computer, or a home-automation host.
 
 Read [what the service collects and who can access
@@ -37,7 +42,8 @@ it](../analyzer/data-collection-access.md) before enabling an observer.
 - Pick a method that matches the radio, operating system, and host you already
   have.
 - Back up configuration before replacing firmware or installing a service.
-- Use a real nearby location code when the chosen method asks for one.
+- Find your location code on the [IATA region map](../config/map.md). Use the same
+  uppercase code in every broker entry; the nearest airport does not determine it.
 
 ## What setup changes
 
@@ -70,7 +76,7 @@ If Canada is not listed, follow the [older-preset instructions](../provinces/ind
 The observer is working when:
 
 1. its radio hears known nearby mesh activity;
-2. it appears in [CoreScope Observers](https://live.meshcore.ca/#/observers);
+2. it appears in the [live observer list](https://live.meshcore.ca/?tab=Observers);
    and
 3. recent activity appears after a nearby transmission.
 
@@ -86,7 +92,7 @@ Use the [observer verification checklist](verify.md#observer).
     <li><label><input id="observer-progress-install" type="checkbox" data-mc-progress> Follow the selected setup guide</label></li>
     <li><label><input id="observer-progress-configure" type="checkbox" data-mc-progress> Apply local radio and service settings</label></li>
     <li><label><input id="observer-progress-verify-local" type="checkbox" data-mc-progress> Check that the radio hears nearby activity</label></li>
-    <li><label><input id="observer-progress-verify-network" type="checkbox" data-mc-progress> Find the observer in CoreScope</label></li>
+    <li><label><input id="observer-progress-verify-network" type="checkbox" data-mc-progress> Find the observer in the live network viewer</label></li>
   </ol>
 </section>
 

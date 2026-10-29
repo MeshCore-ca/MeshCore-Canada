@@ -21,7 +21,7 @@ page_styles:
   - assets/styles/devices-builds.css?v=20261019-1
   - assets/styles/repeater-hash-check.css?v=20260820-1
 page_scripts:
-  - assets/javascripts/repeater-hash-check.js?v=20260925-2
+  - assets/javascripts/repeater-hash-check.js?v=20261029-1
 ---
 # Programmer, configurer et tester un répéteur sur l’établi
 
@@ -155,7 +155,7 @@ ne prouve pas que le réseau maillé est sain. Consultez la
 
 <div data-mc-repeater-hash-check></div>
 
-<noscript>JavaScript est requis pour vérifier les identifiants en direct. Vous pouvez aussi [rechercher le préfixe de la clé publique dans CoreScope](https://live.meshcore.ca/#/nodes).</noscript>
+<noscript>JavaScript est requis pour vérifier les identifiants en direct. Vous pouvez aussi [ouvrir le répertoire des nœuds en direct](https://live.meshcore.ca/?tab=Nodes).</noscript>
 
 ## Vérifier et tester sur l’établi
 

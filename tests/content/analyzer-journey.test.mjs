@@ -105,8 +105,8 @@ test("all observer method guides follow one lifecycle and end in live verificati
     for (const heading of headings) {
       assert.ok(source.includes(heading), `${path} missing ${heading}`);
     }
-    assert.match(source, /https:\/\/live\.meshcore\.ca\/#\/observers/);
-    assert.match(source, /https:\/\/live\.meshcore\.ca\/#\/packets/);
+    assert.match(source, /https:\/\/live\.meshcore\.ca\/\?tab=Observers/);
+    assert.match(source, /\[Live packets\]\(https:\/\/live\.meshcore\.ca\/\)/);
     assert.match(source, /\]\((?:\.\.\/)?verify\.md\)/);
     assert.match(source, /\]\((?:\.\.\/)?troubleshooting\.md/);
     assert.match(source, /not.*proof|not enough|not end-to-end proof|without a recent packet is not complete/i);
@@ -203,6 +203,11 @@ test("canonical observer configuration is redundant, encrypted, and self-consist
   }
   assert.equal(config.network.path_hash_bytes, 3);
   assert.equal(config.location_codes, "location-codes.json");
+  assert.deepEqual(config.verification, {
+    observers: "https://live.meshcore.ca/?tab=Observers",
+    packets: "https://live.meshcore.ca/",
+    map: "https://live.meshcore.ca/?tab=Map",
+  });
 });
 
 test("location-code UI, builder, and host helpers share one validated quick list", () => {

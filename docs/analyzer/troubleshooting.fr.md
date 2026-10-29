@@ -28,7 +28,7 @@ Vérifiez les éléments suivants dans l’ordre :
 1. **Radio :** confirmez qu’elle est alimentée, connectée à la méthode d’observation et réglée selon le réseau maillé local.
 2. **Appareil ou service :** confirmez que le processus de l’observateur fonctionne.
 3. **Courtier :** confirmez que l’observateur indique une connexion à l’adresse principale avec validation TLS.
-4. **Affichage :** attendez quelques minutes, actualisez [CoreScope Observers](https://live.meshcore.ca/#/observers), puis recherchez le nom exact de l’observateur.
+4. **Affichage :** attendez quelques minutes, actualisez [Observateurs en direct](https://live.meshcore.ca/?tab=Observers), puis recherchez le nom exact de l’observateur.
 
 Ces commandes consultent seulement l’état des services :
 
@@ -80,7 +80,7 @@ Une connexion au courtier ne confirme pas la transmission des paquets.
 1. Confirmez que la radio capte l’activité normale du réseau maillé à proximité.
 2. Confirmez que la publication des paquets est activée pour la méthode choisie.
 3. Confirmez que le code d’emplacement et le sujet des paquets concordent.
-4. Consultez [CoreScope Packets](https://live.meshcore.ca/#/packets) après de l’activité à proximité.
+4. Consultez [Paquets en direct](https://live.meshcore.ca/) après de l’activité à proximité.
 
 | Méthode | Paramètre de paquets |
 |---|---|

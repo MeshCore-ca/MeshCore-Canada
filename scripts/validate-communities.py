@@ -849,7 +849,7 @@ def render_index(data: dict[str, Any]) -> str:
             "## Add or update a listing",
             "",
             "Found missing or outdated information?",
-            f"[Send a community update]({metadata['update_route']}). No GitHub account needed.",
+            f"[Send a community update]({metadata['update_route']}). Review and copy your update before sending.",
             "",
         ]
     )
@@ -1055,7 +1055,7 @@ def render_province_page(data: dict[str, Any], page: dict[str, Any]) -> str:
         [
             "## Add or update a listing",
             "",
-            f"[Send a community update]({metadata['update_route']}). No GitHub account needed.",
+            f"[Send a community update]({metadata['update_route']}). Review and copy your update before sending.",
             "",
             "Listings are community-submitted and may be incomplete or out of date.",
             "",
@@ -1460,7 +1460,7 @@ def render_index_fr(data: dict[str, Any], french: dict[str, Any]) -> str:
             "Vous avez trouvé des renseignements manquants ou périmés?",
             (
                 f"[Envoyer une mise à jour de la communauté]({metadata['update_route']}). "
-                "Aucun compte GitHub requis."
+                "Relisez et copiez votre mise à jour avant de l’envoyer."
             ),
             "",
         ]
@@ -1693,7 +1693,7 @@ def render_province_page_fr(
             "",
             (
                 f"[Envoyer une mise à jour de la communauté]({metadata['update_route']}). "
-                "Aucun compte GitHub requis."
+                "Relisez et copiez votre mise à jour avant de l’envoyer."
             ),
             "",
             "Les fiches sont soumises par la communauté et peuvent être incomplètes ou périmées.",

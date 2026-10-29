@@ -220,9 +220,9 @@ The board is configured correctly when:
 
 ## Verify in CoreScope
 
-1. Find the observer in [CoreScope Observers](https://live.meshcore.ca/#/observers).
+1. Find the observer in [Live observer list](https://live.meshcore.ca/?tab=Observers).
 2. Wait for normal nearby radio activity.
-3. Confirm a recent packet in [CoreScope Packets](https://live.meshcore.ca/#/packets).
+3. Confirm a recent packet in [Live packets](https://live.meshcore.ca/).
 
 Finish with [Check your observer](../verify.md). Connected Wi-Fi and MQTT are not proof that packets reached CoreScope.
 

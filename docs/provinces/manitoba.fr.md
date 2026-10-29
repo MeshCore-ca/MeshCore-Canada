@@ -58,6 +58,6 @@ Ce groupe est en formation. Communiquez avec lui pour savoir ce qui fonctionne e
 
 ## Ajouter ou mettre à jour une fiche
 
-[Envoyer une mise à jour de la communauté](../submit-idea.md). Aucun compte GitHub requis.
+[Envoyer une mise à jour de la communauté](../submit-idea.md). Relisez et copiez votre mise à jour avant de l’envoyer.
 
 Les fiches sont soumises par la communauté et peuvent être incomplètes ou périmées.

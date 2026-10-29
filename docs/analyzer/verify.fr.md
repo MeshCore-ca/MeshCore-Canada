@@ -34,11 +34,11 @@ CoreScope.
     <br>Il devrait indiquer une connexion chiffrée à l’adresse principale, sans erreurs d’authentification répétées.
   </li>
   <li>
-    <strong>Vue des observateurs :</strong> ouvrez <a href="https://live.meshcore.ca/#/observers">CoreScope Observers</a>.
+    <strong>Vue des observateurs :</strong> ouvrez <a href="https://live.meshcore.ca/?tab=Observers">Observateurs en direct</a>.
     <br>Le nom de l’observateur et son code d’emplacement à trois lettres devraient apparaître avec une heure récente.
   </li>
   <li>
-    <strong>Vue des paquets :</strong> produisez de l’activité MeshCore à proximité, puis ouvrez <a href="https://live.meshcore.ca/#/packets">CoreScope Packets</a>.
+    <strong>Vue des paquets :</strong> produisez de l’activité MeshCore à proximité, puis ouvrez <a href="https://live.meshcore.ca/">Paquets en direct</a>.
     <br>Un paquet récent attribué à l’observateur devrait apparaître en quelques minutes.
   </li>
 </ol>

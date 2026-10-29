@@ -83,9 +83,9 @@ Both entries stay enabled without repeated TLS or token errors, and RemoteTerm's
 
 ## Verify in CoreScope
 
-1. Open [CoreScope Observers](https://live.meshcore.ca/#/observers) and find the RemoteTerm observer.
+1. Open [Live observer list](https://live.meshcore.ca/?tab=Observers) and find the RemoteTerm observer.
 2. Create or wait for normal nearby activity.
-3. Open [CoreScope Packets](https://live.meshcore.ca/#/packets) and confirm a recent packet appears.
+3. Open [Live packets](https://live.meshcore.ca/) and confirm a recent packet appears.
 
 Finish with [Check your observer](verify.md). A connected entry without a recent packet is not proof that the whole path works.
 

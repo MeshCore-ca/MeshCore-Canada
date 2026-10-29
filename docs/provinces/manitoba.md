@@ -58,6 +58,6 @@ This group is forming. Contact it to learn what is working and where help is nee
 
 ## Add or update a listing
 
-[Send a community update](../submit-idea.md). No GitHub account needed.
+[Send a community update](../submit-idea.md). Review and copy your update before sending.
 
 Listings are community-submitted and may be incomplete or out of date.

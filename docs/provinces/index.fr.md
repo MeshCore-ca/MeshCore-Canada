@@ -546,4 +546,4 @@ ne peuvent pas relayer les parcours multioctets.
 ## Ajouter ou mettre à jour une fiche
 
 Vous avez trouvé des renseignements manquants ou périmés?
-[Envoyer une mise à jour de la communauté](../submit-idea.md). Aucun compte GitHub requis.
+[Envoyer une mise à jour de la communauté](../submit-idea.md). Relisez et copiez votre mise à jour avant de l’envoyer.

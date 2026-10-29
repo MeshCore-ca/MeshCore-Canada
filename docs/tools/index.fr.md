@@ -9,9 +9,9 @@ task: choose-network-tool
 scope: canada-baseline
 status: verified
 owner: docs-ux
-last_reviewed: 2026-07-22
-review_by: 2026-10-22
-evidence: Internal task routes and the external CoreScope destination reviewed on 2026-07-22
+last_reviewed: 2026-10-29
+review_by: 2026-12-31
+evidence: Internal IATA and observer routes plus the live viewer tabs reviewed on 2026-10-29; no deployment or RF coverage approval.
 difficulty: beginner
 estimated_time: 2 minutes
 destructive: false
@@ -27,16 +27,15 @@ Choisissez un outil selon votre tâche.
 
     ---
 
-    Générez les commandes régionales d’un répéteur après avoir choisi son
-    emplacement.
+    Choisissez une région IATA, préparez les portées et examinez les commandes avant de les appliquer.
 
     [:octicons-arrow-right-24: Ouvrir le configurateur de répéteur](../config/index.md)
 
--   :material-map-search:{ .lg .middle } **Trouver votre région MeshCore**
+-   :material-map-search:{ .lg .middle } **Trouver votre région IATA**
 
     ---
 
-    Recherchez un lieu ou utilisez la carte pour voir sa région MeshCore.
+    Trouvez une zone publiée par MeshMapper ou une région proposée clairement indiquée. Ces limites ne sont pas la couverture radio.
 
     [:octicons-arrow-right-24: Trouver ma région](../config/map.md)
 
@@ -45,16 +44,16 @@ Choisissez un outil selon votre tâche.
     ---
 
     Consultez les observateurs, les paquets, les nœuds et les données
-    cartographiques publics dans CoreScope.
+    cartographiques publics dans la visionneuse du réseau en direct.
 
-    [:octicons-arrow-right-24: Ouvrir CoreScope (site externe)](https://live.meshcore.ca/){ target="_blank" rel="noopener" }
+    [:octicons-arrow-right-24: Ouvrir la visionneuse (site externe)](https://live.meshcore.ca/){ target="_blank" rel="noopener" }
 
 -   :material-access-point-network:{ .lg .middle } **Configurer un observateur**
 
     ---
 
     Choisissez une méthode d’observation, puis confirmez que les paquets
-    apparaissent dans CoreScope.
+    apparaissent dans la visionneuse du réseau.
 
     [:octicons-arrow-right-24: Choisir une méthode d’observation](../analyzer/intro.md)
 

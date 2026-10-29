@@ -27,7 +27,7 @@ Check these in order:
 1. **Radio:** confirm it is powered, connected to the observer method, and on the local mesh settings.
 2. **Device or service:** confirm the observer process is running.
 3. **Broker:** confirm that the observer reports a connection to the primary server with TLS verification.
-4. **Viewer:** wait a few minutes, refresh [CoreScope Observers](https://live.meshcore.ca/#/observers), and search the exact observer name.
+4. **Viewer:** wait a few minutes, refresh [Live observer list](https://live.meshcore.ca/?tab=Observers), and search the exact observer name.
 
 These commands only read service status:
 
@@ -76,7 +76,7 @@ A connected broker is not packet proof.
 1. Confirm the radio can hear normal nearby mesh activity.
 2. Confirm packet publishing is enabled for the selected method.
 3. Confirm the location code and packet topic agree.
-4. Check [CoreScope Packets](https://live.meshcore.ca/#/packets) after nearby activity.
+4. Check [Live packets](https://live.meshcore.ca/) after nearby activity.
 
 | Method | Packet setting |
 |---|---|

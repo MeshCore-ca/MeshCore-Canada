@@ -570,4 +570,4 @@ on multi-byte paths; those older versions cannot forward them.
 ## Add or update a listing
 
 Found missing or outdated information?
-[Send a community update](../submit-idea.md). No GitHub account needed.
+[Send a community update](../submit-idea.md). Review and copy your update before sending.
