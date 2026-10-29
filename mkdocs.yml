@@ -43,7 +43,7 @@ theme:
 
 extra_css:
   - assets/styles/tokens.css?v=20260926-1
-  - assets/styles/base.css?v=20260925-2
+  - assets/styles/base.css?v=20261029-1
   - assets/styles/shell.css?v=20260821-1
   - assets/styles/components.css?v=20260926-1
   - assets/styles/network-status.css?v=20260905-1
@@ -131,6 +131,7 @@ plugins:
             Choose hardware: Choisir du matériel
             Companion devices: Appareils compagnons
             Repeater devices: Répéteurs
+            Set up a Station G3: Configurer une Station G3
             Antennas: Antennes
             Solar repeater build: Répéteur solaire
             Build a 300 mW repeater: Monter un répéteur de 300 mW
@@ -240,6 +241,7 @@ nav:
       - Choose hardware: hardware/index.md
       - Companion devices: hardware/recommended-companions.md
       - Repeater devices: hardware/recommended-repeaters.md
+      - Set up a Station G3: hardware/station-g3.md
       - Antennas: hardware/recommended-antenna.md
       - Solar repeater build:
           - Build a 300 mW repeater: hardware/repeater-solar-300mw-diy-build.md

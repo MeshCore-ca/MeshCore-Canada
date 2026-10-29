@@ -18,7 +18,7 @@ requires:
   - confirmed-radio-band
   - confirmed-device-connector
 page_styles:
-  - assets/styles/devices-builds.css?v=20260728-1
+  - assets/styles/devices-builds.css?v=20261019-1
 ---
 
 # Choose an antenna and feed line

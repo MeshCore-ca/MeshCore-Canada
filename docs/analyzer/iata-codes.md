@@ -13,7 +13,7 @@ difficulty: beginner
 estimated_time: 3 minutes
 destructive: false
 page_styles:
-  - assets/styles/analyzer.css?v=20260722-2
+  - assets/styles/analyzer.css?v=20261019-1
 page_scripts:
   - assets/javascripts/analyzer-location-codes.js?v=20260722-2
 ---

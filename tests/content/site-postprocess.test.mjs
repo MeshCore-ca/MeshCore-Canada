@@ -12,8 +12,8 @@ test("broker reference is built from the shared validated configuration", async 
   for (const french of [false, true]) {
     const rows = brokerReferenceRows(config, french);
     assert.equal((rows.match(/<tr>/g) || []).length, 2);
-    assert.match(rows, /mqtt1.meshcore.ca/);
-    assert.match(rows, /mqtt2.meshcore.ca/);
+    assert.match(rows, /mqtt1\.(?:<wbr>)?meshcore\.(?:<wbr>)?ca/);
+    assert.match(rows, /mqtt2\.(?:<wbr>)?meshcore\.(?:<wbr>)?ca/);
     assert.match(rows, french ? /vérifier les certificats/ : /verify certificates/);
   }
   assert.throws(() => brokerReferenceRows({ ...config, brokers: config.brokers.map((broker) => ({ ...broker, tls: false })) }), /Invalid/);

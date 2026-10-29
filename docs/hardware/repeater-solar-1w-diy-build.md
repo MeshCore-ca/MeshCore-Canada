@@ -19,7 +19,7 @@ requires:
   - fabrication-experience
   - manufacturer-documentation
 page_styles:
-  - assets/styles/devices-builds.css?v=20260909-1
+  - assets/styles/devices-builds.css?v=20261019-1
 ---
 
 <span id="experimental-1-w-solar-repeater"></span>

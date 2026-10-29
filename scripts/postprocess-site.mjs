@@ -218,11 +218,14 @@ export function brokerReferenceRows(config, french = false) {
     broker.verify_tls === true && broker.transport === "websockets" && broker.token_audience === broker.host)) {
     throw new Error("Invalid observer broker configuration");
   }
+  // Let hostnames wrap after each dot so the six columns fit narrow layouts.
+  const host = (value) => escape(value).replaceAll(".", ".<wbr>");
   return config.brokers.map((broker) => "<tr>" + [
-    broker.id === "primary" ? (french ? "Principal" : "Primary") : (french ? "Secours" : "Backup"),
-    broker.host, broker.port, "WebSockets", french ? "Requis; vérifier les certificats" : "Required; verify certificates",
-    broker.token_audience,
-  ].map((value) => `<td>${escape(value)}</td>`).join("") + "</tr>").join("\n");
+    escape(broker.id === "primary" ? (french ? "Principal" : "Primary") : (french ? "Secours" : "Backup")),
+    host(broker.host), escape(broker.port), "WebSockets",
+    escape(french ? "Requis; vérifier les certificats" : "Required; verify certificates"),
+    host(broker.token_audience),
+  ].map((value) => `<td>${value}</td>`).join("") + "</tr>").join("\n");
 }
 
 async function hashArtifact(siteRoot) {

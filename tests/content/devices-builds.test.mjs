@@ -15,6 +15,7 @@ const hardwarePages = [
   "docs/hardware/repeater-mounting-options.md",
   "docs/hardware/repeater-solar-1w-diy-build.md",
   "docs/hardware/repeater-solar-300mw-diy-build.md",
+  "docs/hardware/station-g3.md",
 ];
 
 const firmwarePages = [

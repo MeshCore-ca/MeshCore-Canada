@@ -14,7 +14,7 @@ difficulty: advanced
 estimated_time: 8 minutes
 destructive: false
 page_styles:
-  - assets/styles/analyzer.css?v=20260722-2
+  - assets/styles/analyzer.css?v=20261019-1
 ---
 
 # Observer connection reference
