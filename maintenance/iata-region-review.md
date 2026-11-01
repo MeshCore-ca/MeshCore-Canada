@@ -26,6 +26,9 @@ URLs, site assets or browser code. The v1.5.117 read APIs require `X-API-Key`,
 including conditional requests. A regional key can return only part of Canada:
 the importer stops if approved regions disappear. Use `--allow-region-removals`
 only after checking the key's geographic access and confirming actual removals.
+The key must not be limited to certain IPs: GitHub-hosted runners change address
+on every run, and MeshMapper refuses them with `403 ip_not_allowed`. Failed
+requests log MeshMapper's error code.
 
 Parsed responses are kept for 24 hours in the private, ignored
 `.tmp/meshmapper-api-cache.json`, bound to a credential fingerprint and `CA`.

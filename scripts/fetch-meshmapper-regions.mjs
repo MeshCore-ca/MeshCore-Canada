@@ -81,6 +81,14 @@ export function verifyDirectoryCoverage(zones, approved, allowRemovals = false) 
   return missing;
 }
 
+// MeshMapper's error code, e.g. "ip_not_allowed", so logs say why a request was refused.
+async function errorCode(response) {
+  try {
+    const code = (await response.json())?.error;
+    return typeof code === "string" && /^[a-z_]{1,64}$/.test(code) ? " (" + code + ")" : "";
+  } catch { return ""; }
+}
+
 export async function requestJson(url, cache, options = {}) {
   const { apiKey = process.env.MESHMAPPER_API_KEY, fetcher = fetch, now = Date.now, sleep = wait } = options;
   assert.ok(typeof apiKey === "string" && /^[^\s\r\n]{16,512}$/.test(apiKey),
@@ -122,15 +130,16 @@ export async function requestJson(url, cache, options = {}) {
     return previous.data;
   }
   if (!response.ok) {
+    const status = "MeshMapper HTTP " + response.status + await errorCode(response);
     if ([401, 403].includes(response.status)) {
       cache.responses = {}; // Access changed: discard parsed data. Auth failures do not consume the read quota.
       delete cache.retryAt;
-      throw new Error("MeshMapper HTTP " + response.status + ": check the integration key and its geographic/API permissions");
+      throw new Error(status + ": check the integration key, its allowed IPs and its geographic/API permissions");
     }
     const retry = response.headers.get("retry-after");
     const retryTime = retry && /^\d+$/.test(retry) ? now() + Number(retry) * 1000 : Date.parse(retry || "");
     cache.retryAt = Number.isFinite(retryTime) && retryTime > now() ? retryTime : now() + maxAge;
-    throw new Error("MeshMapper HTTP " + response.status + ": " + url +
+    throw new Error(status + ": " + url +
       "; retry deferred until " + new Date(cache.retryAt).toISOString());
   }
   let data;

@@ -138,8 +138,10 @@ test("credential rotation and access failures discard previously authorized data
   assert.notEqual(cache.credential, credential);
   cache.responses[directoryUrl].checkedAt = 1;
   options.fetcher = async () => new Response('{"error":"region_not_allowed"}', { status: 403 });
-  await assert.rejects(requestJson(directoryUrl, cache, options), /HTTP 403/);
+  await assert.rejects(requestJson(directoryUrl, cache, options), /HTTP 403 \(region_not_allowed\)/);
   assert.deepEqual(cache.responses, {});
+  options.fetcher = async () => new Response("<html>Forbidden</html>", { status: 403 });
+  await assert.rejects(requestJson(directoryUrl, cache, options), /HTTP 403: check the integration key/);
 });
 
 test("ambiguous timeouts and broken JSON never cause immediate retries or erase the last copy", async () => {
