@@ -1,6 +1,6 @@
 {
   "schema": "meshcore-canada-iata-scopes/v1",
-  "version": "meshmapper-iata-2026-09-24-starters-2026-09-25",
+  "version": "meshmapper-iata-2026-11-01-starters-2026-11-01",
   "policy": {
     "schema": "meshcore-canada-iata-policy/v1",
     "proposal": "https://meshcore.ca/proposals/onqc-scopes/",
@@ -373,17 +373,19 @@
   "source": {
     "label": "MeshMapper Canadian zones",
     "url": "https://meshmapper.net/",
-    "endpoint": "https://meshmapper.net/?ajax=zones_bbox",
+    "endpoint": "https://meshmapper.net/get_zones.php?country=CA",
+    "boundaryEndpoint": "<region-url>get_geojson.php",
+    "documentation": "https://wiki.meshmapper.net/zones-api/",
     "boundaryAttribution": "MeshMapper zone owners; OpenStreetMap contributors (ODbL) and geoBoundaries (CC BY 4.0) where used by MeshMapper.",
-    "conversion": "Published [latitude, longitude] rings converted to GeoJSON [longitude, latitude]. No clipping, simplification, or radius-based replacement.",
-    "fetchedAt": "2026-09-24T23:49:23.116Z",
-    "starterReviewedAt": "2026-09-25",
-    "publishedCount": 33,
-    "starterCount": 29,
+    "conversion": "API GeoJSON preserved without clipping, simplification, coordinate conversion, or invented boundaries.",
+    "fetchedAt": "2026-11-01T23:30:27.339Z",
+    "starterReviewedAt": "2026-11-01",
+    "publishedCount": 35,
+    "starterCount": 27,
     "boundarySchema": "meshcore-canada-iata-boundaries/v2",
-    "planningExtensionCount": 33,
-    "boundarySha256": "3dc7d4e5c16ad5ca95ce0bf3ae04785691090b61fe8f57764229ddb5cb37a791",
-    "meshmapperBoundarySha256": "78e0d08608b82328033b2ba59b22ce08a82a563725e5d59c5059ca0dc119c2d6",
+    "planningExtensionCount": 35,
+    "boundarySha256": "2eccd43330c31ea7a0bc5edd01b7bd67cb49c2e89c322e1aa1e387b84afb7785",
+    "meshmapperBoundarySha256": "fa91863cb97392614524a7f058b89f18b6a0b71e51d94979baf134e2921dcab2",
     "jurisdictionSha256": "753d7ad13f089cdeee54cb29c9105706226fa75228193c4eda2d4ecc5ed78349"
   },
   "meta": {
@@ -552,6 +554,14 @@
       ],
       "kind": "city"
     },
+    "yhz": {
+      "label": "Halifax",
+      "parent": "ns",
+      "provinces": [
+        "ns"
+      ],
+      "kind": "city"
+    },
     "yka": {
       "label": "Kamloops",
       "parent": "bc",
@@ -662,6 +672,14 @@
       "parent": "bc",
       "provinces": [
         "bc"
+      ],
+      "kind": "city"
+    },
+    "ysj": {
+      "label": "Saint John",
+      "parent": "nb",
+      "provinces": [
+        "nb"
       ],
       "kind": "city"
     },
@@ -1005,24 +1023,6 @@
       ],
       "kind": "city"
     },
-    "ysj": {
-      "label": "Saint John",
-      "labelFr": "Saint John",
-      "parent": "nb",
-      "provinces": [
-        "nb"
-      ],
-      "kind": "city"
-    },
-    "yhz": {
-      "label": "Halifax",
-      "labelFr": "Halifax",
-      "parent": "ns",
-      "provinces": [
-        "ns"
-      ],
-      "kind": "city"
-    },
     "yqi": {
       "label": "Yarmouth",
       "labelFr": "Yarmouth",
@@ -1134,6 +1134,12 @@
       "sourceUrl": "https://ygk.meshmapper.net/",
       "planningExtension": true
     },
+    "yhz": {
+      "state": "published",
+      "source": "MeshMapper",
+      "sourceUrl": "https://yhz.meshmapper.net/",
+      "planningExtension": true
+    },
     "yka": {
       "state": "published",
       "source": "MeshMapper",
@@ -1216,6 +1222,12 @@
       "state": "published",
       "source": "MeshMapper",
       "sourceUrl": "https://yse.meshmapper.net/",
+      "planningExtension": true
+    },
+    "ysj": {
+      "state": "published",
+      "source": "MeshMapper",
+      "sourceUrl": "https://ysj.meshmapper.net/",
       "planningExtension": true
     },
     "ytf": {
@@ -1452,18 +1464,6 @@
       "sourceUrl": "https://yfcfredericton.ca/",
       "planningExtension": false
     },
-    "ysj": {
-      "state": "starter",
-      "source": "MeshCore Canada",
-      "sourceUrl": "https://ysjsaintjohn.ca/",
-      "planningExtension": false
-    },
-    "yhz": {
-      "state": "starter",
-      "source": "MeshCore Canada",
-      "sourceUrl": "https://halifaxstanfield.ca/",
-      "planningExtension": false
-    },
     "yqi": {
       "state": "starter",
       "source": "MeshCore Canada",
@@ -1536,6 +1536,17 @@
         "on"
       ],
       "sourceUrl": "https://ygk.meshmapper.net/",
+      "regionSource": "meshmapper"
+    },
+    {
+      "tag": "yhz",
+      "lat": 44.401498,
+      "lon": -64.302206,
+      "r": 0,
+      "provinces": [
+        "ns"
+      ],
+      "sourceUrl": "https://yhz.meshmapper.net/",
       "regionSource": "meshmapper"
     },
     {
@@ -1618,8 +1629,8 @@
     },
     {
       "tag": "yqb",
-      "lat": 46.894912,
-      "lon": -71.406054,
+      "lat": 46.645425,
+      "lon": -71.575561,
       "r": 0,
       "provinces": [
         "qc"
@@ -1691,6 +1702,17 @@
         "bc"
       ],
       "sourceUrl": "https://yse.meshmapper.net/",
+      "regionSource": "meshmapper"
+    },
+    {
+      "tag": "ysj",
+      "lat": 45.25591,
+      "lon": -66.076612,
+      "r": 0,
+      "provinces": [
+        "nb"
+      ],
+      "sourceUrl": "https://ysj.meshmapper.net/",
       "regionSource": "meshmapper"
     },
     {
@@ -2125,28 +2147,6 @@
       "regionSource": "meshcore-canada"
     },
     {
-      "tag": "ysj",
-      "lat": 45.273,
-      "lon": -66.063,
-      "r": 0,
-      "provinces": [
-        "nb"
-      ],
-      "sourceUrl": "https://ysjsaintjohn.ca/",
-      "regionSource": "meshcore-canada"
-    },
-    {
-      "tag": "yhz",
-      "lat": 44.648,
-      "lon": -63.575,
-      "r": 0,
-      "provinces": [
-        "ns"
-      ],
-      "sourceUrl": "https://halifaxstanfield.ca/",
-      "regionSource": "meshcore-canada"
-    },
-    {
       "tag": "yqi",
       "lat": 43.837,
       "lon": -66.118,
@@ -2182,6 +2182,10 @@
     "ygk": [
       "ygk",
       "Kingston"
+    ],
+    "yhz": [
+      "yhz",
+      "Halifax"
     ],
     "yka": [
       "yka",
@@ -2253,6 +2257,10 @@
     "yse": [
       "yse",
       "Squamish"
+    ],
+    "ysj": [
+      "ysj",
+      "Saint John"
     ],
     "ytf": [
       "ytf",
@@ -2510,18 +2518,6 @@
       "Fredericton",
       "Fredericton",
       "Fredericton"
-    ],
-    "ysj": [
-      "ysj",
-      "Saint John",
-      "Saint John",
-      "Saint John"
-    ],
-    "yhz": [
-      "yhz",
-      "Halifax",
-      "Halifax",
-      "Halifax"
     ],
     "yqi": [
       "yqi",
@@ -2825,6 +2821,33 @@
       },
       "communities": []
     },
+    "yhz": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": [
+        {
+          "id": "lunenburg-county-mesh",
+          "name": "Lunenburg County Mesh",
+          "nameFr": "Lunenburg County Mesh",
+          "route": "/provinces/nova-scotia/#community-lunenburg-county-mesh",
+          "override": false,
+          "settings": {
+            "inherit_national": true,
+            "overrides": {}
+          },
+          "listingReviewed": "2026-08-29"
+        }
+      ]
+    },
     "yka": {
       "maintainer": null,
       "settingsReview": {
@@ -3108,6 +3131,33 @@
         "evidence": null
       },
       "communities": []
+    },
+    "ysj": {
+      "maintainer": null,
+      "settingsReview": {
+        "status": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "rollout": {
+        "phase": "unconfirmed",
+        "checkedAt": null,
+        "evidence": null
+      },
+      "communities": [
+        {
+          "id": "southern-new-brunswick",
+          "name": "Southern New Brunswick",
+          "nameFr": "Southern New Brunswick",
+          "route": "/provinces/new-brunswick/#community-southern-new-brunswick",
+          "override": false,
+          "settings": {
+            "inherit_national": true,
+            "overrides": {}
+          },
+          "listingReviewed": "2026-08-29"
+        }
+      ]
     },
     "ytf": {
       "maintainer": null,
@@ -3935,60 +3985,6 @@
         }
       ]
     },
-    "ysj": {
-      "maintainer": null,
-      "settingsReview": {
-        "status": "unconfirmed",
-        "checkedAt": null,
-        "evidence": null
-      },
-      "rollout": {
-        "phase": "unconfirmed",
-        "checkedAt": null,
-        "evidence": null
-      },
-      "communities": [
-        {
-          "id": "southern-new-brunswick",
-          "name": "Southern New Brunswick",
-          "nameFr": "Southern New Brunswick",
-          "route": "/provinces/new-brunswick/#community-southern-new-brunswick",
-          "override": false,
-          "settings": {
-            "inherit_national": true,
-            "overrides": {}
-          },
-          "listingReviewed": "2026-08-29"
-        }
-      ]
-    },
-    "yhz": {
-      "maintainer": null,
-      "settingsReview": {
-        "status": "unconfirmed",
-        "checkedAt": null,
-        "evidence": null
-      },
-      "rollout": {
-        "phase": "unconfirmed",
-        "checkedAt": null,
-        "evidence": null
-      },
-      "communities": [
-        {
-          "id": "lunenburg-county-mesh",
-          "name": "Lunenburg County Mesh",
-          "nameFr": "Lunenburg County Mesh",
-          "route": "/provinces/nova-scotia/#community-lunenburg-county-mesh",
-          "override": false,
-          "settings": {
-            "inherit_national": true,
-            "overrides": {}
-          },
-          "listingReviewed": "2026-08-29"
-        }
-      ]
-    },
     "yqi": {
       "maintainer": null,
       "settingsReview": {
@@ -4090,17 +4086,17 @@
     {
       "label": "New Brunswick",
       "tags": [
+        "ysj",
         "yyy",
         "yqm",
-        "yfc",
-        "ysj"
+        "yfc"
       ]
     },
     {
       "label": "Nova Scotia",
       "tags": [
-        "yqy",
         "yhz",
+        "yqy",
         "yqi"
       ]
     },

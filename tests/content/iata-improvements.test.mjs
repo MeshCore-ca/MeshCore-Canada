@@ -27,10 +27,15 @@ test("Canada uses can while preparation preserves existing can and earlier-previ
 });
 
 test("remaining city centres have assigned IATA planning regions", () => {
-  for (const [tag, lat, lon] of [["yhz",44.648,-63.575],["yqm",46.088,-64.778],["yfc",45.964,-66.643], ["ysj",45.273,-66.063],
+  for (const [tag, lat, lon] of [["yqm",46.088,-64.778],["yfc",45.964,-66.643],
     ["yqr",50.445,-104.618],["yxe",52.134,-106.67],["ylw",49.888,-119.496],["yxs",53.9171,-122.7497],["ysb",46.492,-80.993]]) {
     assert.deepEqual(plain(scope.matches(boundaries,lat,lon)).map(f => f.properties.tag), [tag]);
     assert.equal(catalog.status[tag].state, "starter");
+  }
+  // MeshMapper now publishes Halifax and Saint John; the former starters with the same codes are retired.
+  for (const [tag, lat, lon] of [["yhz",44.648,-63.575],["ysj",45.273,-66.063]]) {
+    assert.deepEqual(plain(scope.matches(boundaries,lat,lon)).map(f => [f.properties.tag, f.properties.regionSource]), [[tag, "meshmapper"]]);
+    assert.equal(catalog.status[tag].state, "published");
   }
   assert.equal(new Set(catalog.seeds.flatMap(seed => seed.provinces)).size, 13);
 });

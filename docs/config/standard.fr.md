@@ -97,8 +97,8 @@ Dans les autres provinces, ces pôles comblent les espaces restants :
 | Man. | `ybr` Brandon, `yth` Thompson, `yyq` Churchill |
 | Ont. | `ysb` Sudbury, `yam` Sault-Sainte-Marie, `yts` Timmins, `yqk` Kenora |
 | Qc | `yvo` Val-d’Or, `yzv` Sept-Îles, `yvp` Kuujjuaq |
-| N.-B. | `yqm` Moncton, `yfc` Fredericton, `ysj` Saint John |
-| N.-É. | `yhz` Halifax, `yqi` Yarmouth |
+| N.-B. | `yqm` Moncton, `yfc` Fredericton |
+| N.-É. | `yqi` Yarmouth |
 
 Les espaces non attribués sont répartis selon la distance à **tous les centres
 régionaux de la province** : les régions publiées dans MeshMapper et les pôles

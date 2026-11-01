@@ -95,8 +95,8 @@ In the other provinces, these hubs fill the remaining gaps:
 | MB | `ybr` Brandon, `yth` Thompson, `yyq` Churchill |
 | ON | `ysb` Sudbury, `yam` Sault Ste. Marie, `yts` Timmins, `yqk` Kenora |
 | QC | `yvo` Val-d’Or, `yzv` Sept-Îles, `yvp` Kuujjuaq |
-| NB | `yqm` Moncton, `yfc` Fredericton, `ysj` Saint John |
-| NS | `yhz` Halifax, `yqi` Yarmouth |
+| NB | `yqm` Moncton, `yfc` Fredericton |
+| NS | `yqi` Yarmouth |
 
 Unassigned land is divided by distance to **all regional centres in the province**:
 published MeshMapper regions and the starter hubs above. It is not assigned only

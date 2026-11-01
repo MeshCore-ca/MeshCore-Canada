@@ -57,11 +57,13 @@ Geometry problems are reported in the review issue and its candidate-bound
 The publication validators remain strict: never promote a candidate with an
 invalid polygon, an unresolved centre, or a missing usable boundary.
 
-The authenticated 2026-10-13 check returned all 33 approved region codes, but
-YQB had a self-intersecting polygon and YUL had a substantial boundary change.
-The approved map is deliberately retained. See
-`maintenance/meshmapper-api-review-2026-10-13.json` for the candidate digest and
-review findings; a successful fetch is not approval to replace the map.
+The authenticated 2026-10-13 check found a self-intersecting YQB polygon and a
+substantial YUL change, so the map kept its pre-API snapshot (see
+`maintenance/meshmapper-api-review-2026-10-13.json`). On 2026-11-01 YQB was fixed
+in MeshMapper, the YUL change was confirmed, and the first API snapshot replaced
+the old homepage-feed copy. It added MeshMapper's Halifax (YHZ) and Saint John
+(YSJ) zones, which replaced the starter regions with the same codes. A successful
+fetch is still not approval to replace the map.
 
 Gap assignments consider every eligible published regional centre as well as
 starter hubs. Never distribute all leftover land among only newly added hubs.
@@ -102,7 +104,7 @@ It writes nothing, and says what to change, when:
 
 Regions MeshMapper lists without a boundary are kept in the snapshot but left off
 the map, so the weekly review does not report them again. Validators only accept
-API snapshots, apart from the pre-API 2026-09-24 snapshot until it is replaced.
+API snapshots.
 
 After promoting, look at the map, run `node scripts/validate-regions.cjs`,
 `python scripts/verify-iata-geometry.py` and `npm run test:content`, then commit.

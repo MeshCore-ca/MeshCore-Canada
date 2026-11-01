@@ -39,13 +39,9 @@ assert.deepEqual(provinces.features.map(feature => feature.properties.tag).sort(
 assert.equal(data.source.boundarySha256, createHash("sha256").update(read("docs/assets/regions/iata-boundaries.geojson")).digest("hex"));
 assert.equal(data.source.meshmapperBoundarySha256, createHash("sha256").update(read("docs/assets/regions/meshmapper-iata-boundaries.geojson")).digest("hex"));
 assert.equal(provinces.sourceSha256, createHash("sha256").update(read("docs/assets/regions/canada-region-partition-digital.geojson")).digest("hex"));
-// Boundaries must come from the keyed MeshMapper zones API. The only exception is
-// the 2026-09-24 snapshot from the old homepage feed, until an API pull replaces it.
-const legacySnapshotSha256 = "78e0d08608b82328033b2ba59b22ce08a82a563725e5d59c5059ca0dc119c2d6";
-if (data.source.meshmapperBoundarySha256 !== legacySnapshotSha256) {
-  assert.equal(published.schema, "meshcore-canada-meshmapper-zones/v2", "Publish MeshMapper boundaries with scripts/promote-meshmapper-snapshot.mjs");
-  assert.equal(published.source.endpoint, "https://meshmapper.net/get_zones.php?country=CA", "MeshMapper boundaries must come from the zones API, not the map pages");
-}
+// Boundaries must come from the keyed MeshMapper zones API.
+assert.equal(published.schema, "meshcore-canada-meshmapper-zones/v2", "Publish MeshMapper boundaries with scripts/promote-meshmapper-snapshot.mjs");
+assert.equal(published.source.endpoint, "https://meshmapper.net/get_zones.php?country=CA", "MeshMapper boundaries must come from the zones API, not the map pages");
 assert.ok(Number.isFinite(Date.parse(published.fetchedAt)));
 assert.equal(zones.publishedCount, drawn.length);
 assert.equal(zones.starterCount, starters.regions.length);

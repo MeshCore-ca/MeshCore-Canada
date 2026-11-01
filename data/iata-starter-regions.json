@@ -1,6 +1,6 @@
 {
   "schema": "meshcore-canada-iata-starters/v1",
-  "reviewedAt": "2026-09-25",
+  "reviewedAt": "2026-11-01",
   "status": "starter",
   "authority": "MeshCore Canada",
   "note": "These starter hubs complement all published MeshMapper regional centres when assigning gaps within each province. Planning extensions of existing IATA codes are separate features; published polygons never change. Distance uses Canada Lambert projection. Newfoundland and Labrador stay separate. These are proposals for local review, not radio coverage or MeshMapper-approved boundaries.",
@@ -459,38 +459,6 @@
         "Fredericton"
       ],
       "codeSource": "https://yfcfredericton.ca/"
-    },
-    {
-      "tag": "ysj",
-      "province": "nb",
-      "area": "hub",
-      "name": "Saint John",
-      "nameFr": "Saint John",
-      "hub": "Saint John",
-      "center": [
-        -66.063,
-        45.273
-      ],
-      "aliases": [
-        "Saint John"
-      ],
-      "codeSource": "https://ysjsaintjohn.ca/"
-    },
-    {
-      "tag": "yhz",
-      "province": "ns",
-      "area": "hub",
-      "name": "Halifax",
-      "nameFr": "Halifax",
-      "hub": "Halifax",
-      "center": [
-        -63.575,
-        44.648
-      ],
-      "aliases": [
-        "Halifax"
-      ],
-      "codeSource": "https://halifaxstanfield.ca/"
     },
     {
       "tag": "yqi",

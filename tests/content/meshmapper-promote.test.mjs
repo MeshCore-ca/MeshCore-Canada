@@ -15,7 +15,9 @@ function apiCandidate() {
   const candidate = structuredClone(approved);
   candidate.schema = "meshcore-canada-meshmapper-zones/v2";
   candidate.source = { ...candidate.source, endpoint: directoryUrl };
-  for (const feature of candidate.features) Object.assign(feature.properties, { hasBoundary: feature.geometry !== null, group: null });
+  for (const feature of candidate.features) {
+    Object.assign(feature.properties, { hasBoundary: feature.geometry !== null, group: feature.properties.group ?? null });
+  }
   return candidate;
 }
 
@@ -34,7 +36,9 @@ test("an API pull matching the approved boundaries is ready to promote", () => {
 });
 
 test("only files from the zones API can be promoted", () => {
-  assert.match(plan(approved).stops[0], /did not come from the MeshMapper zones API/);
+  const old = apiCandidate();
+  old.schema = "meshcore-canada-meshmapper-zones/v1";
+  assert.match(plan(old).stops[0], /did not come from the MeshMapper zones API/);
   const scraped = apiCandidate();
   scraped.source.endpoint = "https://meshmapper.net/?ajax=zones_bbox";
   assert.match(plan(scraped).stops[0], /did not come from the MeshMapper zones API/);
