@@ -8,10 +8,15 @@ task: start-companion
 scope: canada-baseline
 status: verified
 owner: docs-ux
-last_reviewed: 2026-07-22
-review_by: 2026-10-19
+last_reviewed: 2026-10-29
+review_by: 2026-12-31
 tested_with:
-  content_baseline: f608cfe
+  content_baseline: 7daceca
+  review_method: bilingual content and navigation checks, not physical-device testing
+evidence:
+  - https://github.com/meshcore-dev/MeshCore/blob/main/docs/faq.md
+  - https://github.com/meshcore-dev/MeshCore/issues/3302#issuecomment-5598886579
+  - Content and linked setup paths reviewed on 2026-10-29; radio and installation checks remain operator tasks.
 difficulty: beginner
 estimated_time: 20-30 minutes
 destructive: false
@@ -61,6 +66,24 @@ Si Canada n’apparaît pas, suivez les [consignes pour l’ancien préréglage]
 
 Redémarrez l’appareil après avoir modifié les paramètres radio, puis envoyez
 une annonce.
+
+## Choisir une portée (scope) {#choisir-un-scope}
+
+!!! warning "ON/QC : attendez la phase 2"
+    Pour un compagnon personnel, laissez **Default Region Scope** vide et les
+    canaux **sans portée** pour le moment. La phase 2 n’est pas ouverte. Elle ne
+    peut commencer avant **janvier 2027**, lorsque les répéteurs seront prêts et
+    que le déploiement sera annoncé. Un changement trop tôt peut empêcher vos
+    messages de joindre les autres utilisateurs.
+
+Trouvez votre code de ville sur la [carte des régions IATA](../config/map.md).
+**Quand la phase 2 sera annoncée**, utilisez `onqc` par défaut et pour le canal
+Public, et votre code de ville, comme `yow`, pour les canaux de test. Réservez
+`can` et `na` à un usage futur.
+
+Les responsables de robots et de MeshMapper suivent les [consignes de fin de phase 1](../proposals/onqc-scopes.md#robots-et-meshmapper), une fois les répéteurs locaux prêts. Consultez l’[ordre de déploiement](../proposals/onqc-scopes.md#ordre-de-deploiement) avant de changer les portées.
+
+Ailleurs, utilisez la portée convenue avec votre communauté. Le [guide des portées](../config/standard.md) présente les versions d’application requises et des exemples. Les portées ne changent pas les réglages radio.
 
 ## Tester l’appareil
 

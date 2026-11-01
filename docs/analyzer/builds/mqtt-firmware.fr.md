@@ -241,9 +241,9 @@ La carte est correctement configurée lorsque :
 
 ## Vérifier dans CoreScope { #check-in-corescope }
 
-1. Trouvez l’observateur dans [CoreScope Observers](https://live.meshcore.ca/#/observers).
+1. Trouvez l’observateur dans [Observateurs en direct](https://live.meshcore.ca/?tab=Observers).
 2. Attendez de l’activité radio normale à proximité.
-3. Confirmez la présence d’un paquet récent dans [CoreScope Packets](https://live.meshcore.ca/#/packets).
+3. Confirmez la présence d’un paquet récent dans [Paquets en direct](https://live.meshcore.ca/).
 
 Terminez avec [Vérifier votre observateur](../verify.md). Une connexion Wi-Fi et
 MQTT ne confirme pas que les paquets se sont rendus à CoreScope.

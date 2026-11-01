@@ -83,6 +83,7 @@ test("checks a repeater ID by first-byte Beacon lookup and separates local from 
   await expect(page.locator(".mc-hash-details tbody tr")).toHaveCount(3);
   await expect(page.getByText("This repeater", { exact: true })).toBeVisible();
   await expect(page.getByText("Duplicate in YYZ", { exact: true })).toBeVisible();
+  await expect(page.locator('[data-mc-repeater-hash-check] a[href^="https://live.meshcore.ca"]')).toHaveAttribute("href", "https://live.meshcore.ca/?tab=Nodes");
 
   expect(nodeRequests).toHaveLength(1);
   const request = new URL(nodeRequests[0]);
@@ -98,6 +99,7 @@ test("French repeater pages render and report collisions in French", async ({ pa
   await expect(page.getByRole("heading", { name: "Vérifier si l’identifiant est déjà utilisé" })).toBeVisible();
   await expect(page.getByRole("status").filter({ hasText: "1 autre répéteur utilise 05DE00 dans YYZ" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Comparer les tailles d’identifiant" })).toBeVisible();
+  await expect(page.locator('[data-mc-repeater-hash-check] a[href^="https://live.meshcore.ca"]')).toHaveAttribute("href", "https://live.meshcore.ca/?tab=Nodes");
 });
 
 test("the repeater checker defers Beacon region loading until it is used", async ({ page }) => {
@@ -152,8 +154,8 @@ test("the general region configurator does not show the optional ID checker", as
       beaconRequests.push(url);
     }
   });
-  await page.goto(siteRoute("/config/?place=Ottawa"), { waitUntil: "domcontentloaded" });
-  await expect(page.locator("[data-mcc-regions='config'] [data-role='status']")).toContainText("Region found.");
+  await page.goto(siteRoute("/config/?place=YOW"), { waitUntil: "domcontentloaded" });
+  await expect(page.locator("[data-mcc-regions='config'] [data-role='status']")).toContainText("Zone found. Choose the province");
   await expect(page.locator("[data-mcc-regions='config']")).toBeVisible();
   await expect(page.locator("[data-mc-repeater-hash-check]")).toHaveCount(0);
   expect(beaconRequests).toEqual([]);

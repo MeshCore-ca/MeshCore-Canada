@@ -27,7 +27,7 @@ aucune expérience avec Git ou GitHub.
 -   **Partager une idée**
 
     Signalez quelque chose qui manque, porte à confusion ou est difficile à
-    utiliser. Aucun compte GitHub n’est nécessaire.
+    utiliser. Préparez votre idée et choisissez une méthode d’envoi disponible.
 
     [:octicons-arrow-right-24: Partager une idée](submit-idea.md)
 
@@ -48,9 +48,9 @@ aucune expérience avec Git ou GitHub.
 
 -   **Proposer une modification de région**
 
-    Proposez une nouvelle région ou une modification de ses limites.
+    Demandez à MeshMapper d’ajouter une zone ou de modifier ses limites.
 
-    [:octicons-arrow-right-24: Ouvrir l’éditeur de région](config/editor/index.html)
+    [:octicons-arrow-right-24: Demander une modification de zone](config/editor/index.md)
 
 -   **Contribuer sur GitHub**
 

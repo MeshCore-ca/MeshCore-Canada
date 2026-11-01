@@ -8,10 +8,15 @@ task: start-companion
 scope: canada-baseline
 status: verified
 owner: docs-ux
-last_reviewed: 2026-07-22
-review_by: 2026-10-19
+last_reviewed: 2026-10-29
+review_by: 2026-12-31
 tested_with:
-  content_baseline: f608cfe
+  content_baseline: 7daceca
+  review_method: bilingual content and navigation checks, not physical-device testing
+evidence:
+  - https://github.com/meshcore-dev/MeshCore/blob/main/docs/faq.md
+  - https://github.com/meshcore-dev/MeshCore/issues/3302#issuecomment-5598886579
+  - Content and linked setup paths reviewed on 2026-10-29; radio and installation checks remain operator tasks.
 difficulty: beginner
 estimated_time: 20-30 minutes
 destructive: false
@@ -57,6 +62,22 @@ If Canada is not listed, follow the [older-preset instructions](../provinces/ind
     publishes different settings, use those settings instead.
 
 Reboot after changing the radio settings, then send an advert.
+
+## Choose a scope
+
+!!! warning "ON/QC: wait for Phase 2"
+    For personal companions, leave **Default Region Scope** empty and channels
+    **unscoped** for now. Phase 2 is not open. It can start no earlier than
+    **January 2027**, after the repeaters are ready and the rollout is announced.
+    Switching early can prevent your messages from reaching other users.
+
+Find your city code on the [IATA region map](../config/map.md). **When Phase 2 is
+announced**, use `onqc` for your default scope and Public channel, and your city
+scope, such as `yow`, for test channels. Leave `can` and `na` for future use.
+
+Bot and MeshMapper operators follow the [end-of-Phase-1 instructions](../proposals/onqc-scopes.md#bots-and-meshmapper), once local repeaters are ready. See the [rollout order](../proposals/onqc-scopes.md#rollout-order) before changing scopes.
+
+Elsewhere, use the scope agreed by your local community. See the [scope setup guide](../config/standard.md) for app requirements and examples. Scopes do not change your radio settings.
 
 ## Test it
 

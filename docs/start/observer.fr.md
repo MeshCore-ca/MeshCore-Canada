@@ -1,6 +1,6 @@
 ---
 title: Commencer avec un observateur
-description: Choisissez, configurez et vérifiez un observateur MeshCore qui transmet des données du réseau à CoreScope.
+description: Choisissez, configurez et vérifiez un observateur MeshCore qui transmet des données à la visionneuse du réseau en direct.
 audience:
   - observer-operator
   - service-operator
@@ -8,10 +8,15 @@ task: start-observer
 scope: canada-baseline
 status: verified
 owner: docs-ux
-last_reviewed: 2026-07-22
-review_by: 2026-10-19
+last_reviewed: 2026-10-29
+review_by: 2026-12-31
 tested_with:
-  content_baseline: f608cfe
+  content_baseline: 7daceca
+  review_method: bilingual content and navigation checks, not physical-device testing
+evidence:
+  - https://github.com/meshcore-dev/MeshCore/blob/main/docs/faq.md
+  - https://github.com/meshcore-dev/MeshCore/issues/3302#issuecomment-5598886579
+  - Content and linked setup paths reviewed on 2026-10-29; radio and installation checks remain operator tasks.
 difficulty: intermediate
 estimated_time: varies by method
 destructive: false
@@ -23,7 +28,7 @@ requires:
 # Commencer avec un observateur
 
 Un observateur écoute le réseau au moyen d’une radio MeshCore et transmet les
-données captées à CoreScope. Il n’a pas besoin de relayer le trafic, mais un
+données captées à la visionneuse du réseau en direct. Il n’a pas besoin de relayer le trafic, mais un
 même appareil peut remplir les deux fonctions. Il peut
 fonctionner dans le micrologiciel d’une radio, sur un ordinateur qui reste
 allumé ou sur un système de domotique.
@@ -40,8 +45,8 @@ Avant de l’activer, lisez
   et au système hôte que vous utilisez déjà.
 - Sauvegardez la configuration avant de remplacer un micrologiciel ou
   d’installer un service.
-- Lorsque la méthode le demande, utilisez un vrai code de localisation à
-  proximité.
+- Trouvez votre code sur la [carte des régions IATA](../config/map.md). Utilisez
+  le même code en majuscules pour chaque courtier; l’aéroport le plus proche ne le détermine pas.
 
 ## Ce qui sera modifié
 
@@ -75,7 +80,7 @@ Si Canada n’apparaît pas, suivez les [consignes pour l’ancien préréglage]
 L’observateur fonctionne lorsque :
 
 1. sa radio capte une activité MeshCore connue à proximité;
-2. il apparaît dans [CoreScope Observers](https://live.meshcore.ca/#/observers);
+2. il apparaît dans la [liste des observateurs en direct](https://live.meshcore.ca/?tab=Observers);
 3. une activité récente apparaît après une transmission à proximité.
 
 Utilisez la [liste de vérification de l’observateur](verify.md#observer).
@@ -98,6 +103,6 @@ détaillé. S’il est absent ou silencieux,
     <li><label><input id="observer-progress-install" type="checkbox" data-mc-progress> Suivre le guide de configuration choisi</label></li>
     <li><label><input id="observer-progress-configure" type="checkbox" data-mc-progress> Appliquer les paramètres locaux de la radio et du service</label></li>
     <li><label><input id="observer-progress-verify-local" type="checkbox" data-mc-progress> Vérifier que la radio capte l’activité à proximité</label></li>
-    <li><label><input id="observer-progress-verify-network" type="checkbox" data-mc-progress> Trouver l’observateur dans CoreScope</label></li>
+    <li><label><input id="observer-progress-verify-network" type="checkbox" data-mc-progress> Trouver l’observateur dans la visionneuse du réseau</label></li>
   </ol>
 </section>

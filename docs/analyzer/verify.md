@@ -33,11 +33,11 @@ a real radio packet reaches CoreScope.
     <br>It should report an encrypted connection to the primary server without repeating authentication errors.
   </li>
   <li>
-    <strong>Observer view:</strong> open <a href="https://live.meshcore.ca/#/observers">CoreScope Observers</a>.
+    <strong>Observer view:</strong> open <a href="https://live.meshcore.ca/?tab=Observers">Live observer list</a>.
     <br>The observer name and three-letter location code should appear with a recent timestamp.
   </li>
   <li>
-    <strong>Packet view:</strong> create nearby MeshCore activity, then open <a href="https://live.meshcore.ca/#/packets">CoreScope Packets</a>.
+    <strong>Packet view:</strong> create nearby MeshCore activity, then open <a href="https://live.meshcore.ca/">Live packets</a>.
     <br>A recent packet attributed to the observer should appear within a few minutes.
   </li>
 </ol>
@@ -49,7 +49,7 @@ Do not generate unnecessary traffic on a busy mesh. A normal advert or existing 
 | Check | What you should see |
 |---|---|
 | Name | A clear service name such as `YOW-Repeater-01`, without a home address |
-| Location | The nearest real three-letter airport code, not `CAN`, `XXX`, or `HOME` |
+| Location | The uppercase code from the [IATA region map](../config/map.md), or a community-agreed code where no zone is published |
 | Primary path | Connected to `mqtt1.meshcore.ca` with TLS certificate verification |
 | Backup path | Connected to `mqtt2.meshcore.ca` where the method supports two entries |
 | Packet mode | Packet publishing is enabled, not status-only |

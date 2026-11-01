@@ -71,7 +71,7 @@ mqtt:
   iata_code: YOW
 ```
 
-Remplacez `YOW` par le véritable code le plus près de l’observateur.
+Remplacez `YOW` par votre code de la [carte des régions IATA](../../config/map.md).
 
 Sous `mqtt.brokers`, ajoutez :
 
@@ -130,9 +130,9 @@ paquets change lorsque la radio capte du trafic à proximité.
 
 ## Vérifier dans CoreScope { #check-in-corescope }
 
-1. Trouvez l’observateur dans [CoreScope Observers](https://live.meshcore.ca/#/observers).
+1. Trouvez l’observateur dans [Observateurs en direct](https://live.meshcore.ca/?tab=Observers).
 2. Attendez de l’activité normale à proximité.
-3. Confirmez la présence d’un paquet récent dans [CoreScope Packets](https://live.meshcore.ca/#/packets).
+3. Confirmez la présence d’un paquet récent dans [Paquets en direct](https://live.meshcore.ca/).
 
 Terminez avec [Vérifier votre observateur](../verify.md). Un service systemd en
 bon état ne confirme pas que les paquets se sont rendus à CoreScope.

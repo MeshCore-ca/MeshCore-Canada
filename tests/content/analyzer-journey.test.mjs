@@ -105,8 +105,8 @@ test("all observer method guides follow one lifecycle and end in live verificati
     for (const heading of headings) {
       assert.ok(source.includes(heading), `${path} missing ${heading}`);
     }
-    assert.match(source, /https:\/\/live\.meshcore\.ca\/#\/observers/);
-    assert.match(source, /https:\/\/live\.meshcore\.ca\/#\/packets/);
+    assert.match(source, /https:\/\/live\.meshcore\.ca\/\?tab=Observers/);
+    assert.match(source, /\[Live packets\]\(https:\/\/live\.meshcore\.ca\/\)/);
     assert.match(source, /\]\((?:\.\.\/)?verify\.md\)/);
     assert.match(source, /\]\((?:\.\.\/)?troubleshooting\.md/);
     assert.match(source, /not.*proof|not enough|not end-to-end proof|without a recent packet is not complete/i);
@@ -203,6 +203,11 @@ test("canonical observer configuration is redundant, encrypted, and self-consist
   }
   assert.equal(config.network.path_hash_bytes, 3);
   assert.equal(config.location_codes, "location-codes.json");
+  assert.deepEqual(config.verification, {
+    observers: "https://live.meshcore.ca/?tab=Observers",
+    packets: "https://live.meshcore.ca/",
+    map: "https://live.meshcore.ca/?tab=Map",
+  });
 });
 
 test("location-code UI, builder, and host helpers share one validated quick list", () => {
@@ -383,13 +388,15 @@ test("French analyzer terminology and map controls use natural location wording"
   ];
 
   assert.match(page, /code d’emplacement/);
-  assert.match(page, /code de l’aéroport le plus proche/);
+  assert.match(page, /carte des régions IATA/);
+  assert.match(page, /les portées radio \(scopes\)/);
   assert.doesNotMatch(page, /code pertinent le plus près|nom convivial du lieu/);
   assert.match(config, /Location codes: Codes d'emplacement/);
   assert.doesNotMatch(config, /Location codes: Codes de localisation/);
   assert.match(runtime, /"Zoom in": "Zoom avant"/);
   assert.match(runtime, /"Zoom out": "Zoom arrière"/);
-  assert.match(standard, /aire de diffusion \(AD\)/);
-  assert.match(standard, /subdivision de recensement \(SDR\)/);
-  assert.match(standard, /clés anglaises \x60DA\x60, \x60CSD\x60, \x60CD\x60 et \x60ER\x60/);
+  assert.match(standard, /mêmes\s+limites et identifient leur source/);
+  assert.match(standard, /Régions initiales/);
+  assert.match(standard, /province où le répéteur est installé/);
+  assert.match(standard, /portées en minuscules/);
 });

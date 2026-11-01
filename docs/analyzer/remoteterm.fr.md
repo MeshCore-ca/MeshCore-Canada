@@ -64,7 +64,7 @@ Ouvrez **Settings** → **MQTT & Automation**, ajoutez
 | Token Audience | `mqtt1.meshcore.ca` |
 | Use TLS | Enabled |
 | Verify TLS certificates | Enabled |
-| Region Code | Le véritable code d’emplacement à trois lettres le plus près |
+| Region Code | Le code en majuscules de la [carte des régions IATA](../config/map.md) |
 | Packet Topic Template | `meshcore/{IATA}/{PUBLIC_KEY}/packets` |
 
 Laissez le champ facultatif de courriel du responsable vide, sauf s’il est
@@ -93,9 +93,9 @@ proximité.
 
 ## Vérifier dans CoreScope
 
-1. Ouvrez [CoreScope Observers](https://live.meshcore.ca/#/observers) et trouvez l’observateur RemoteTerm.
+1. Ouvrez [Observateurs en direct](https://live.meshcore.ca/?tab=Observers) et trouvez l’observateur RemoteTerm.
 2. Produisez de l’activité normale à proximité, ou attendez qu’il y en ait.
-3. Ouvrez [CoreScope Packets](https://live.meshcore.ca/#/packets) et confirmez qu’un paquet récent y apparaît.
+3. Ouvrez [Paquets en direct](https://live.meshcore.ca/) et confirmez qu’un paquet récent y apparaît.
 
 Terminez avec [Vérifier votre observateur](verify.md). Une entrée connectée sans
 paquet récent ne confirme pas que tout le parcours fonctionne.

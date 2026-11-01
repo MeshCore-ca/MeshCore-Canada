@@ -17,16 +17,19 @@ destructive: false
 search:
   exclude: true
 page_styles:
-  - assets/styles/scopes-proposal.css?v=20260925-2
+  - assets/styles/scopes-proposal.css?v=20260926-3
 page_scripts:
-  - assets/javascripts/scopes-picker.js?v=20260926-1
+  - assets/regions/modules/iata-scopes.js?v=20261013-1
+  - assets/regions/modules/scope-migration.js?v=20260926-2
+  - assets/javascripts/place-search.js?v=20260925-2
+  - assets/javascripts/scopes-picker.js?v=20261013-1
 ---
 
 # ON/QC region scopes proposal
 
 <div class="scp-hero">
   <p class="mc-eyebrow">Proposal for discussion</p>
-  <p class="mc-lede">Region scopes stop local chatter from flooding the whole network. Today's setup is hard to follow, so this proposal cuts it down to five levels of codes that everyone in Ontario and Québec can remember.</p>
+  <p class="mc-lede">Use MeshMapper’s local-region codes, a province code and <code>onqc</code> to control flood forwarding. Prepare repeaters first, then coordinate activation locally. <code>can</code> and <code>na</code> are reserved for later.</p>
   <ul class="scp-hero__badges">
     <li data-kind="proposal">Not adopted yet</li>
     <li>Ontario + Québec pilot</li>
@@ -47,25 +50,84 @@ Each phase is announced on the
 [MeshCore Canada Discord](https://discord.gg/BESFVMt7yk). The rest of this page explains how it
 all works. You don't need to understand it to follow the steps.
 
+## Find your next step { #your-region }
+
+Search for your city or IATA code, or choose a region below. This includes
+**Quinte / Belleville / Trenton (`ytr`)**, Kingston (`ygk`), Port Hope (`xph`)
+and the other ON/QC regions in the [region map](../config/map.md).
+Proposed areas are labelled; a map outline does not guarantee radio coverage.
+**Find your area → choose your role → review what applies now → verify.**
+
+<div class="scp-picker" data-scp-picker data-copy-label="Copy" data-copied-label="Copied" hidden>
+  <form class="scp-finder" data-scp-search>
+    <label class="scp-picker__field" for="scp-place">City or IATA code</label>
+    <div class="scp-finder__row"><input id="scp-place" data-scp-place type="search" maxlength="120" placeholder="Quinte, Belleville, YTR…" autocomplete="off" required><button class="scp-choice" type="submit">Find settings</button></div>
+    <small class="scp-picker__hint">City searches use the Canadian Geographical Names service. IATA codes and the list below work without it.</small>
+    <p class="scp-finder__status" data-scp-status role="status" aria-live="polite"></p>
+    <div class="scp-finder__choices" data-scp-places></div>
+    <p class="scp-picker__hint"><a href="../../config/map/">Browse the full Canadian region map</a></p>
+  </form>
+  <label class="scp-picker__field"><span>Region · physical province</span><select data-scp-area><option value="">Choose your area</option></select></label>
+  <label class="scp-picker__field"><span>Your role</span><select data-scp-role><option value="">Choose your role</option><option value="companion">Companion user</option><option value="repeater">Repeater operator</option><option value="bot">Bot / MeshMapper operator</option></select></label>
+  <label class="scp-picker__field" data-scp-operator hidden><span>Firmware</span><select data-scp-firmware><option value="116">1.16 or newer</option><option value="115">1.15</option><option value="114">1.14</option><option value="110">1.10 to 1.13</option></select><small class="scp-picker__hint">Not sure? Run <code>ver</code> first.</small></label>
+  <label class="scp-picker__field" data-scp-operator hidden><span>Regular links to another IATA region?</span><select data-scp-type><option value="unknown">Not sure yet</option><option value="city">No — city repeater</option><option value="edge">Yes — edge repeater</option></select><small class="scp-picker__hint">A map boundary alone does not make it an edge repeater. <a href="https://onqc.meshmapper.net/?preset=all&l=rep.nbr.nz.nzb.rb">Check repeater neighbours</a>. If this is the only local repeater, agree on support for unscoped users before blocking them.</small></label>
+  <label class="scp-picker__field" data-scp-operator hidden><span>Stage</span><select data-scp-activation><option value="prepare">Prepare scopes</option><option value="activate">Coordinated activation</option></select></label>
+  <label class="scp-finder__wide scp-picker__hint" data-scp-confirm-field hidden><input type="checkbox" data-scp-activate> I have checked the local cutover announcement and coordinated activation with neighbouring operators. Phase 2 is not automatic.</label>
+  <label class="scp-picker__field" data-scp-extra-field hidden><span>Neighbouring city (optional)</span><select data-scp-extra><option value="">None</option></select></label>
+  <label class="scp-finder__wide scp-picker__hint" data-scp-onny-field hidden><input type="checkbox" data-scp-onny> Add <code>onny</code> for an agreed Ontario–New York link. Keep local scopes; every participating relay must allow <code>onny</code>. This is opt-in, not an activation announcement.</label>
+  <div class="scp-finder__result" data-scp-result hidden>
+    <p><strong data-scp-region-name></strong></p>
+    <p data-scp-role-summary role="status"></p>
+    <dl data-scp-readiness></dl>
+    <p data-scp-region-source></p>
+    <p class="scp-finder__tags" data-scp-tags></p>
+    <p class="scp-picker__hint"><code>can</code> and <code>na</code> are reserved. Companion settings wait for Phase 2.</p>
+    <p class="scp-finder__links"><a class="md-button md-button--primary" data-scp-command-link href="#step-4-region-settings" hidden>Show region commands</a><a data-scp-map href="../../config/map/">Check the map</a><a data-scp-share href="#your-region">Link to these settings</a></p>
+    <p class="scp-picker__hint" data-scp-operator hidden>Save your current settings and <a href="#step-2-clear-any-old-regions">review the existing list</a> before applying commands.</p>
+    <details class="scp-finder__details"><summary>Local contacts and confirmation</summary><div data-scp-profile></div></details>
+    <details class="scp-finder__details" data-scp-simulator hidden><summary>Would this repeater forward it?</summary><label class="scp-picker__field">Message scope<select data-scp-message></select></label><p data-scp-decision role="status"></p><p class="scp-picker__hint">This illustrates flood forwarding for your selected configuration, not a radio path or coverage prediction. Scopes are independent labels; larger labels do not automatically include smaller ones.</p></details>
+  </div>
+</div>
+
+<p data-scp-nojs>The finder needs JavaScript and the region catalogue. The examples below are for Ottawa, not every region. You can also use the <a href="../../config/map/">region map</a>.</p>
+
+## Optional Ontario–New York scope { #cross-border-scopes }
+
+`onny` is an optional shared label for Ontario–New York traffic. It is separate
+from `on`, `onqc`, and local IATA scopes. Add it only when operators along the
+intended path agree to carry it. Keep local channels on their local scopes; use
+`onny` on the agreed shared channel. Match radio settings and the channel key,
+then test both directions. Nothing is automatically re-tagged or geographically guaranteed.
+
+Canada's scope is `can`. If your repeater already has `ca` from an earlier
+preview, preparation keeps that entry so it does not silently remove a working
+path. Coordinate any removal with local operators and inspect the migration
+comparison first. Older screenshots
+may still show the former label; use the generated text commands.
+
 ## The short version
 
-There are five levels of scope. Every repeater carries one code from each: its city, its province, `onqc`, `can` and `na`. When you send a message, the scope decides how far it travels. `can` and `na` are reserved for later, so for now you only pick from the first three.
+Scopes are **independent labels**, not nested areas. A repeater forwards a
+scoped flood only when it carries the matching label with forwarding enabled.
+After activation, use your local-region code, province code or `onqc` as agreed
+locally. `can` and `na` are prepared now but reserved for later. A scope does not
+guarantee distance, coverage or delivery.
 
 <div class="scp-levels-cards">
   <div class="scp-level-card" data-level="city">
-    <h3>City</h3>
+    <h3>Local region</h3>
     <span class="scp-tag" data-level="city">yow</span> <span class="scp-tag" data-level="city">yul</span> <span class="scp-tag" data-level="city">yqb</span>
     <p>Your local area. Same codes as <a href="https://meshmapper.net/">MeshMapper</a>.</p>
   </div>
   <div class="scp-level-card" data-level="prov">
     <h3>Province</h3>
     <span class="scp-tag" data-level="prov">on</span> <span class="scp-tag" data-level="prov">qc</span>
-    <p>Every repeater in that province.</p>
+    <p>Participating repeaters configured for that province.</p>
   </div>
   <div class="scp-level-card" data-level="mesh">
     <h3>Mesh</h3>
     <span class="scp-tag" data-level="mesh">onqc</span>
-    <p>Every repeater in Ontario and Québec.</p>
+    <p>Participating repeaters configured for the ON/QC mesh.</p>
   </div>
   <div class="scp-level-card" data-level="future">
     <h3>Canada</h3>
@@ -82,12 +144,12 @@ There are five levels of scope. Every repeater carries one code from each: its c
 Once every phase is done:
 
 - **Repeaters** carry their city, their province, `onqc`, `can` and `na`.
-- **Bots and MeshMapper** use their city, so they stay local.
-- **Companions** use `onqc` as their default, so direct messages reach anyone.
-- **`Public`** uses `onqc`, so everyone in Ontario and Québec can talk.
-- **Test channels** use your city, so they stay local.
-- **Messages with no scope** still work inside each city. Edge repeaters,
-  the ones that link two cities, drop them, so they don't flood the next city.
+- **Bots and MeshMapper** use their local-region label.
+- **Companions** use `onqc` for flooded direct-message discovery through participating repeaters.
+- **`Public`** uses `onqc` for shared ON/QC chat where working radio paths exist.
+- **Test channels** use your local-region label.
+- **Messages with no scope** can still be forwarded by city repeaters. After
+  coordinated activation, edge repeaters stop forwarding them between IATA regions.
 
 <div class="mc-callout" data-kind="warning" markdown>
 Companions come last, in Phase 2. Setting a scope on your companion before
@@ -101,9 +163,9 @@ people, not more.
   computer.
 - **Repeater:** a fixed radio, often on a roof or tower, that passes messages
   along.
-- **Flood:** how a message spreads when it has no known route: every repeater
-  that hears it passes it on. Channel messages always flood, and so does the
-  first DM to someone.
+- **Flood:** sending a message through multiple repeaters without a fixed path.
+  Each repeater applies its forwarding rules and hop limits. Channel messages
+  use flooding; a DM does too when no usable path is known.
 - **Hop:** one repeater passing a message on.
 - **DM:** a direct message to one contact.
 - **Advert:** a radio announcing itself so others can find it.
@@ -117,8 +179,8 @@ to decide whether to pass the message on.
 
 <div class="mc-callout" markdown>
 A scope is **not** encryption and **not** a GPS fence. Anyone who knows the
-name can use it, and it has nothing to do with where you are. It is only a
-label that says "repeaters that carry this name, please forward this."
+name can use it; the label does not check your GPS position. It asks repeaters
+that allow that label to forward the message.
 </div>
 
 Your app turns the name into a small code and puts it in the message header.
@@ -181,7 +243,7 @@ Four details catch people out:
 </details>
 
 
-## The five levels
+## Scope labels { #the-five-levels }
 
 <figure class="scp-figure">
   <div class="scp-zone" data-level="future">
@@ -189,7 +251,7 @@ Four details catch people out:
   <div class="scp-zone" data-level="future">
   <p class="scp-zone__title"><span class="scp-tag" data-level="future">can</span> Canada <span>Reserved for later. Carried now, not used yet.</span></p>
   <div class="scp-zone" data-level="mesh">
-    <p class="scp-zone__title"><span class="scp-tag" data-level="mesh">onqc</span> Mesh <span>Every repeater in Ontario and Québec</span></p>
+    <p class="scp-zone__title"><span class="scp-tag" data-level="mesh">onqc</span> Mesh <span>Participating ON/QC repeaters</span></p>
     <div class="scp-zone__row">
       <div class="scp-zone" data-level="prov">
         <p class="scp-zone__title"><span class="scp-tag" data-level="prov">on</span> Ontario</p>
@@ -225,18 +287,21 @@ Four details catch people out:
 
 ### What about `can` and `na`?
 
-Every repeater carries `can` now so that a Canada-wide scope works later
-without anyone having to reconfigure their repeater again. Many repeaters set
-up with the current configurator already carry it.
+This proposal adds `can` to participating repeaters in preparation for possible
+Canada-wide use. The configurator includes it in the proposed settings; that
+does not prove it is enabled on any deployed repeater.
 
-**Don't use `can` on your companion or channels yet.** Today it reaches the same
-repeaters as `onqc`. Keep using `onqc`. Once other provinces carry `can` too,
-it becomes the way to reach further, and `onqc` stays as "just the Ontario and
-Québec mesh".
+**Don't use `can` on your companion or channels yet.** It is a reserved label,
+not permission to change your companion early. Future use still needs agreement
+between operators and working radio paths. `onqc` remains the shared Ontario
+and Québec label.
 
-`na` (North America) is the same idea one level up. It is there so the mesh
+`na` (North America) is another independent reserved label. It is there so the mesh
 can link with the US one day, again without anyone reconfiguring their
 repeater. **Don't use `na` yet either.**
+
+This reserves a name, not a cross-border radio path. After coordinated activation,
+edge repeaters block unscoped floods; preparation leaves their current rules unchanged.
 
 ### Why airport codes?
 
@@ -339,9 +404,9 @@ is announced on Discord. **Don't change your companion settings
 yet.** Phase 2 is not open.
 
 <ol class="scp-timeline">
-  <li data-phase="Phase 1"><h3>Repeaters</h3><p>Now. Owners clear old regions and add their codes. City repeaters keep <code>*</code> allowed; edge repeaters drop it. Near the end, bots and MeshMapper are scoped to their city. Nothing breaks inside any city.</p></li>
-  <li data-phase="Phase 2"><h3>Companions</h3><p>January 2027 at the earliest, once the repeaters around them are set up. Users set their default and <code>Public</code> to <code>onqc</code>, and test channels to their city.</p></li>
-  <li data-phase="Phase 3"><h3>Only if needed</h3><p>If messages with no scope are still too noisy inside a city, repeaters can also run <code>set flood.max.unscoped 3</code>. Scoped messages still reach 16 hops.</p></li>
+  <li data-phase="Phase 1"><h3>Prepare</h3><p>Back up the current configuration, add and verify the named scopes. Keep old scopes, forwarding of messages without a scope (<code>*</code>), and the default scope unchanged. Test local unscoped messaging. Near the end, coordinate bot and MeshMapper local-region scopes with operators.</p></li>
+  <li data-phase="Phase 2"><h3>Coordinate activation</h3><p>January 2027 at the earliest, after a local announcement and readiness checks. Coordinate edge blocking, repeater advert scopes and companion changes together. City repeaters allow <code>*</code>; edge repeaters block it. Companions use <code>onqc</code> for the default and <code>Public</code>, and their local region for test channels.</p></li>
+  <li data-phase="Phase 3"><h3>Only if needed</h3><p>If messages with no scope are still too noisy inside a city, repeaters can also run <code>set flood.max.unscoped 3</code>. Scoped floods keep the configured 16-hop limit; delivery is not guaranteed.</p></li>
 </ol>
 
 ## Phase 1: Repeater setup
@@ -350,8 +415,9 @@ Phase 1 has three goals:
 
 1. **Get the new region config on every repeater**, so each one carries its
    city, its province, `onqc`, `can` and `na`.
-2. **Limit unscoped traffic between cities.** Edge repeaters drop messages
-   with no scope, so local chatter stays in its own city.
+2. **Keep the existing network working during preparation.** Do not remove
+   old scopes or start blocking unscoped traffic yet. Agree on the local
+   cutover and tests with neighbouring operators.
 3. **Near the end, scope bots and MeshMapper to their city**, once the
    repeaters around them carry the city code. See
    [Bots and MeshMapper](#bots-and-meshmapper).
@@ -362,7 +428,7 @@ there is nothing for you to do here.
 Type these into the repeater's command line **one command at a time**: in the
 MeshCore app, open the repeater, log in as admin and use the command box in
 **Repeater Admin**, or use the USB console. Each command has its own copy
-button. Wait for `OK` before sending the next one.
+button. Wait for each reply and check it before sending the next command.
 
 <div class="scp-shots" markdown>
 
@@ -404,18 +470,9 @@ after a few seconds, send it again: tap and hold the command and choose
 
 </div>
 
-Then tell us about your repeater. Steps 3 and 4 show the right commands for
-it. Your area is your **MeshMapper zone**: open [MeshMapper](https://meshmapper.net/)
-and find the zone your repeater sits in. These zones follow the MeshMapper
-boundaries that already exist. They are not perfect, but they are how most
-people already see the map today, so there is nothing new to learn.
-
-<div class="scp-picker" data-scp-picker data-copy-label="Copy" data-copied-label="Copied" hidden>
-  <label class="scp-picker__field"><span>Area</span><select data-scp-area><option value="ottawa" data-city="yow" data-province="on">Ottawa and surrounding areas</option><option value="gatineau" data-city="yow" data-province="qc">Gatineau</option><option value="montreal" data-city="yul" data-province="qc">Montréal and surrounding areas</option><option value="quebec" data-city="yqb" data-province="qc">Québec City</option></select></label>
-  <label class="scp-picker__field"><span>Firmware</span><select data-scp-firmware><option value="116">1.16 or newer</option><option value="115">1.15</option><option value="114">1.14</option><option value="110">1.10 to 1.13</option></select></label>
-  <label class="scp-picker__field"><span>Repeater type</span><select data-scp-type><option value="city">City repeater</option><option value="edge">Edge repeater</option></select><small class="scp-picker__hint">Pick edge only if it regularly talks to repeaters in another MeshMapper zone.</small></label>
-  <label class="scp-picker__field" data-scp-extra-field hidden><span>Neighbouring city (optional)</span><select data-scp-extra><option value="">None</option><option value="yow">Ottawa / Gatineau (yow)</option><option value="yul">Montréal (yul)</option><option value="yqb">Québec City (yqb)</option></select></label>
-</div>
+Choose your region, firmware and repeater type in [the finder above](#your-region).
+Steps 3 and 4 update to match. Use the province where the repeater is physically
+located, even when its MeshMapper zone crosses a provincial border.
 
 <div class="mc-callout" markdown>
 **City or edge?** An edge repeater regularly talks to repeaters in **two
@@ -423,6 +480,9 @@ MeshMapper zones**, for example both `yow` and `yul`. Every other repeater is
 a city repeater, including one on the outer edge of its zone: if nothing on
 the other side connects to it, it is a city repeater. If it starts linking to
 another zone regularly, switch it to edge.
+
+Different cities or map outlines with the same IATA code still count as one
+region. Ottawa and Gatineau, for example, both use `yow`.
 </div>
 
 **Not sure? Check the map.** Open [this MeshMapper view](https://onqc.meshmapper.net/?preset=all&lat=45.21108&lon=-75.44812&zoom=9.61&m=dark&l=rep.nbr.nz.nzb.rb&cm=std). It
@@ -434,14 +494,20 @@ are used often and recently, make it an edge repeater. A single link seen a
 few times, or not for weeks, doesn't count.
 
 
-### Step 2: Clear any old regions
+### Step 2: Back up and review { #step-2-clear-any-old-regions }
 
-The new commands don't delete regions that are already on the repeater. To
-avoid conflicts, remove any old ones first. Start by listing what is there:
+Save the complete current list and, on firmware 1.15+, the response to
+`region default`. Use USB if possible. Preparation keeps old scopes; review
+their removal **only at the coordinated cutover**. Start with:
 
 <div class="scp-card">
 <ol class="scp-cmds"><li class="scp-cmd"><code>region</code><button type="button" class="scp-copy" title="Copy" aria-label="Copy: region"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li></ol>
 </div>
+
+<div data-scp-activation-only markdown>
+
+**At activation only:** review these cleanup instructions against your backup.
+Do not delete working legacy scopes during preparation.
 
 <div class="scp-ask" data-scp-ask hidden>
 <p class="scp-ask__q">Does the reply list any names other than <code>*</code>?</p>
@@ -500,6 +566,8 @@ Removing `on` and `can` is fine too. Step 4 adds them back. When you are done,
 
 </div>
 
+</div>
+
 ### Step 3: Standard MeshCore Canada settings
 
 <div class="scp-card">
@@ -515,14 +583,15 @@ Removing `on` and `can` is fine too. Step 4 adds them back. When you are done,
 <dl class="scp-explain">
   <dt>path.hash.mode 2</dt><dd>Uses 3-byte repeater IDs in message paths, so fewer repeaters share an ID. Needs firmware 1.14 or newer.</dd>
   <dt>advert.interval 240</dt><dd>Announces this repeater to direct neighbours every 4 hours.</dd>
-  <dt>flood.advert.interval 47</dt><dd>Announces this repeater across the network every 47 hours.</dd>
+  <dt>flood.advert.interval 47</dt><dd>Sends a flood advert every 47 hours. Its reach depends on scope rules, hop limits and radio links.</dd>
   <dt>flood.max 16</dt><dd>No flood message travels more than 16 hops, scoped or not.</dd>
 </dl>
 
 </details>
 
 These save by themselves. No `region save` is needed for them. If a command
-answers `Err - ??`, your firmware does not have that setting, so skip it.
+answers `Err - ??`, check the firmware version and its supported settings before
+continuing. Do not assume that setting was applied.
 
 <div class="scp-shots" markdown>
 
@@ -535,16 +604,19 @@ answers `Err - ??`, your firmware does not have that setting, so skip it.
 
 ### Step 4: Region settings
 
-These follow your answers in step 1. Run them in order.
+These match your choices in [the finder](#your-region). Preparation adds or
+updates named scopes but does not remove other entries, change `*`, or set a
+default scope. Activation adds the forwarding/default commands after you
+confirm the local cutover. Run one line at a time and stop on `Err`.
 
 <div class="scp-card">
 <p class="scp-variant__label" data-scp-summary>Ottawa and surrounding areas · 1.16 or newer · City repeater</p>
-<ol class="scp-cmds" data-scp-output="region"><li class="scp-cmd"><code>region def yow|* on|* onqc|* can|* na</code><button type="button" class="scp-copy" title="Copy" aria-label="Copy: region def yow|* on|* onqc|* can|* na"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li><li class="scp-cmd"><code>region allowf *</code><button type="button" class="scp-copy" title="Copy" aria-label="Copy: region allowf *"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li><li class="scp-cmd"><code>region default yow</code><button type="button" class="scp-copy" title="Copy" aria-label="Copy: region default yow"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li><li class="scp-cmd"><code>region save</code><button type="button" class="scp-copy" title="Copy" aria-label="Copy: region save"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li></ol>
+<ol class="scp-cmds" data-scp-output="region"><li class="scp-cmd"><code>region def yow|* on|* onqc|* can|* na</code><button type="button" class="scp-copy" title="Copy" aria-label="Copy: region def yow|* on|* onqc|* can|* na"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li><li class="scp-cmd"><code>region save</code><button type="button" class="scp-copy" title="Copy" aria-label="Copy: region save"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li></ol>
 <p class="scp-note scp-note--info" data-scp-note="fw-116" hidden><code>region def</code> answers with the finished list, so you can see straight away that it worked.</p>
 <p class="scp-note scp-note--info" data-scp-note="fw-115" hidden>Each <code>region put</code> answers <code>OK - (flood allowed)</code>, and <code>region default</code> answers <code>default scope is now …</code>.</p>
 <p class="scp-note scp-note--info" data-scp-note="fw-put-allow" hidden>On this firmware a new region starts with forwarding <strong>off</strong>, so each one also needs <code>region allowf</code>. There is no <code>region default</code>, so this repeater's own adverts stay unscoped. Updating the firmware is worth it.</p>
 <p class="scp-note" data-scp-note="edge" hidden><strong>Edge repeater:</strong> drops messages with no scope, so they do not flood the next city. Use it for any repeater that regularly talks to repeaters in two MeshMapper zones, such as Rigaud, which links <code>yow</code> and <code>yul</code>. Otherwise, messages with no scope leak through it. Nearby people without a scope are not relayed by it, so avoid it where it is the only repeater. See <a href="#who-hears-what">Who hears what</a>.</p>
-<p class="scp-note" data-scp-note="extra" hidden><strong>Neighbouring city:</strong> this only helps people near this repeater take part in that city's channels. Everyone else reaches the other city through <code>onqc</code>. Rigaud, for example, carries <code>yul</code> as well as <code>yow</code>.</p>
+<p class="scp-note" data-scp-note="extra" hidden><strong>Neighbouring city:</strong> adding its code lets this repeater forward that label too. Rigaud, for example, carries <code>yul</code> as well as <code>yow</code>. Shared <code>onqc</code> traffic still needs working paths through repeaters that allow <code>onqc</code>.</p>
 <p class="scp-note" data-scp-nojs>These commands are for an Ottawa-area city repeater on firmware 1.16 or newer. Turn on JavaScript to match them to your repeater.</p>
 </div>
 
@@ -553,34 +625,42 @@ These follow your answers in step 1. Run them in order.
 
 <dl class="scp-explain">
   <dt>region def / region put</dt><dd>Carry your city, your province, <code>onqc</code>, <code>can</code> and <code>na</code>.</dd>
-  <dt>region allowf * / region denyf *</dt><dd>City repeaters forward messages with <strong>no scope</strong> (on by default, set so you can see it). Edge repeaters drop them.</dd>
-  <dt>region default &lt;city&gt;</dt><dd>This repeater's own adverts use your city's scope, so they stay local. Not available before 1.15.</dd>
+  <dt>region allowf * / region denyf *</dt><dd>After coordinated activation, city repeaters allow forwarding of messages with <strong>no scope</strong>; edge repeaters block it. Preparation leaves this setting unchanged.</dd>
+  <dt>region default &lt;city&gt;</dt><dd>Tags this repeater's own flood adverts with your local-region scope. Not available before 1.15; unchanged during preparation.</dd>
   <dt>region save</dt><dd>Keeps the region settings after a reboot.</dd>
 </dl>
 
 </details>
 
+The screenshots below show older **activation examples**, not preparation
+instructions. Use the generated commands above for your region and stage.
+
 <div class="scp-shots" markdown>
 
 <figure class="scp-shot" markdown>
-[![Command line showing region def and its reply on firmware 1.16](../assets/images/onqc-scopes/repeater-region-def-116.webp){ loading=lazy width="600" height="1304" }](../assets/images/onqc-scopes/repeater-region-def-116.webp)
-<figcaption markdown="span"><span class="scp-shot__num">1</span> Firmware 1.16 or newer: <code>region def</code> answers with the finished list.</figcaption>
+[![Earlier region def example on firmware 1.16, without the reserved na scope](../assets/images/onqc-scopes/repeater-region-def-116.webp){ loading=lazy width="600" height="1304" }](../assets/images/onqc-scopes/repeater-region-def-116.webp)
+<figcaption markdown="span"><span class="scp-shot__num">1</span> Firmware 1.16+: <code>region def</code> returns the list. This older example omits <code>na</code>; use the commands above.</figcaption>
 </figure>
 
 <figure class="scp-shot" markdown>
-[![Command line showing region put commands on firmware 1.15](../assets/images/onqc-scopes/repeater-07-region-put-115.webp){ loading=lazy width="600" height="1304" }](../assets/images/onqc-scopes/repeater-07-region-put-115.webp)
-<figcaption markdown="span"><span class="scp-shot__num">2</span> Firmware 1.15: each <code>region put</code> answers <code>OK - (flood allowed)</code>.</figcaption>
+[![Earlier region put example on firmware 1.15, without the reserved na scope](../assets/images/onqc-scopes/repeater-07-region-put-115.webp){ loading=lazy width="600" height="1304" }](../assets/images/onqc-scopes/repeater-07-region-put-115.webp)
+<figcaption markdown="span"><span class="scp-shot__num">2</span> Firmware 1.15: each <code>region put</code> answers <code>OK - (flood allowed)</code>. This older example omits <code>na</code>; use the commands above.</figcaption>
 </figure>
 
 </div>
 
 ### Step 5: Check the result
 
+<div data-scp-verification></div>
+
 <div class="scp-card">
 <ol class="scp-cmds"><li class="scp-cmd"><code>region</code><button type="button" class="scp-copy" title="Copy" aria-label="Copy: region"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19 21H8V7h11m0-2H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2m-3-4H4a2 2 0 0 0-2 2v14h2V3h12z"/></svg></button></li></ol>
 </div>
 
-For Ottawa, you should see:
+Check that your local region, province, `onqc`, `can` and `na` each have `F`,
+plus any selected neighbour. During preparation, keep the previous `*` flag
+and default scope. **After activation**, `*` must not have `F` on an edge
+repeater. This example shows an Ottawa city repeater after activation:
 
 ```text
 *^ F
@@ -598,8 +678,8 @@ ignore it.
 <div class="scp-shots" markdown>
 
 <figure class="scp-shot" markdown>
-[![Command line showing the final region list](../assets/images/onqc-scopes/repeater-08-region-result.webp){ loading=lazy width="600" height="1304" }](../assets/images/onqc-scopes/repeater-08-region-result.webp)
-<figcaption markdown="span"><span class="scp-shot__num">1</span> The finished list on an Ottawa repeater.</figcaption>
+[![Earlier Ottawa region list, before the reserved na scope was added](../assets/images/onqc-scopes/repeater-08-region-result.webp){ loading=lazy width="600" height="1304" }](../assets/images/onqc-scopes/repeater-08-region-result.webp)
+<figcaption markdown="span"><span class="scp-shot__num">1</span> Earlier Ottawa example. Your final list should also include <code>na F</code>.</figcaption>
 </figure>
 
 </div>
@@ -640,7 +720,10 @@ has to be finished first. A repeater with no regions set drops every scoped
 message. If you set your default to `onqc` before the repeaters on your routes
 carry it, your channel messages and first DMs will only reach nearby. Until
 Phase 2 is announced, leave **Default Region Scope** empty and your channels
-unscoped. You will still receive everything.
+unscoped. What reaches you still depends on working radio links and the
+repeaters’ forwarding rules. An edge repeater that blocks `*` can prevent
+unscoped cross-region discovery, which is why blocking and companion changes
+must be coordinated at the local cutover.
 </div>
 
 When Phase 2 opens, this is all you need to do: set a default scope, then set
@@ -692,10 +775,10 @@ and pick the scope from this table:
 
 | Channel | Scope | Why |
 | --- | --- | --- |
-| `Public` | `onqc` | Everyone in Ontario and Québec can talk |
-| Test channels, such as `#testing` | Your city, for example `yow` | Tests stay local |
-| Bot channels, such as `#bots` | Your city, for example `yow` | Bot replies stay local |
-| Your own channels | Your city, `on`/`qc`, or `onqc` | Pick how far it should reach |
+| `Public` | `onqc` | Shared ON/QC chat where working, scope-enabled radio paths exist |
+| Test channels, such as `#testing` | Your city, for example `yow` | Forward tests through repeaters allowing that label |
+| Bot channels, such as `#bots` | Your city, for example `yow` | Use the local-region label for bot replies |
+| Your own channels | Your city, `on`/`qc`, or `onqc` | Choose which repeaters may forward the messages |
 
 If you run a bot, it should already be on your city from
 [Phase 1](#bots-and-meshmapper).
@@ -770,7 +853,7 @@ companion the path comes back using **your contact's** default scope.
 
 <figure class="scp-figure">
   <div class="scp-route">
-    <div class="scp-route__head">Companion default <span class="scp-tag" data-level="city">yow</span><span class="scp-route__verdict" data-result="drop">Never arrives</span></div>
+    <div class="scp-route__head">Companion default <span class="scp-tag" data-level="city">yow</span><span class="scp-route__verdict" data-result="drop">Forwarding blocked here</span></div>
     <ol class="scp-track">
       <li><span class="scp-stop" data-kind="phone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg></span><strong>You, Ottawa</strong><small>sends yow</small></li>
       <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Ottawa repeater</strong><small>yow on onqc can na</small></li>
@@ -781,7 +864,7 @@ companion the path comes back using **your contact's** default scope.
     <p class="scp-route__note">The Montréal repeater does not carry <code>yow</code>, so the message stops there. Even if it got through, your friend's reply would use <code>yqb</code> and stop on the way back.</p>
   </div>
   <div class="scp-route">
-    <div class="scp-route__head">Companion default <span class="scp-tag" data-level="mesh">onqc</span><span class="scp-route__verdict" data-result="ok">Delivered</span></div>
+    <div class="scp-route__head">Companion default <span class="scp-tag" data-level="mesh">onqc</span><span class="scp-route__verdict" data-result="ok">Forwarding allowed</span></div>
     <ol class="scp-track" data-animate>
       <li><span class="scp-stop" data-kind="phone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg></span><strong>You, Ottawa</strong><small>sends onqc</small></li>
       <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Ottawa repeater</strong><small>yow on onqc can na</small></li>
@@ -789,15 +872,15 @@ companion the path comes back using **your contact's** default scope.
       <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Québec repeater</strong><small>yqb qc onqc can na</small></li>
       <li data-link="ok"><span class="scp-stop" data-kind="phone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg></span><strong>Friend, Québec City</strong><small>default onqc</small></li>
     </ol>
-    <p class="scp-route__note">Every repeater carries <code>onqc</code>, in both directions. Once the path is found, later DMs go direct and scopes no longer matter.</p>
+    <p class="scp-route__note">All repeaters shown allow <code>onqc</code> in both directions. If discovery succeeds, later DMs use the saved path rather than scoped flooding.</p>
   </div>
-  <figcaption>Logins to a repeater or room server work the same way when no path is known.</figcaption>
+  <figcaption>These examples show matching forwarding rules, not guaranteed delivery. Logins to a repeater or room server also need path discovery when no path is known.</figcaption>
 </figure>
 
 <div class="mc-callout" data-kind="warning" markdown>
 **The catch:** a channel with no scope of its own also uses your default,
-`onqc`, so it reaches all of Ontario and Québec. That is what we want for
-`Public`, but not for test channels and bots. That is why step 2 of the
+`onqc`, so it can be forwarded along paths that allow that label. This is intended
+for shared `Public` traffic, not local tests and bots. That is why step 2 of the
 companion setup sets those to your city.
 </div>
 
@@ -808,44 +891,45 @@ companion setup sets those to your city.
 
 If messages with no scope are still too noisy inside a city after Phase 2,
 repeaters can also run `set flood.max.unscoped 3`, then `region save`.
-Messages with no scope then stop after 3 hops. Scoped messages still reach
-16 hops. Only do this once it is announced for your city.
+Messages with no scope then have a 3-hop limit. Scoped floods keep the configured
+16-hop limit. Neither limit guarantees delivery. Only do this once it is announced
+for your local region.
 
 ## Who hears what
 
 <details class="scp-more" markdown>
 <summary>Show the examples</summary>
 
-With edge repeaters dropping messages with no scope, a new user who hasn't set
-a scope yet still reaches everyone in their own city. Their messages just
-don't cross into the next city. Here is the Ottawa to Montréal link through
+These simplified examples show forwarding **after coordinated activation**.
+They assume working links and the listed repeater settings, not complete coverage
+or guaranteed delivery. The example path connects Ottawa to Montréal through
 Rigaud, an edge repeater that also carries Montréal's code, `yul`.
 
 <figure class="scp-figure">
   <div class="scp-route">
-    <div class="scp-route__head">New user in Ottawa, no scope <span class="scp-tag" data-level="any">none</span><span class="scp-route__verdict" data-result="ok">Whole Ottawa area</span></div>
+    <div class="scp-route__head">New user in Ottawa, no scope <span class="scp-tag" data-level="any">none</span><span class="scp-route__verdict" data-result="ok">Ottawa relays in this example</span></div>
     <ol class="scp-track">
       <li><span class="scp-stop" data-kind="phone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg></span><strong>New user, Ottawa</strong><small>no scope</small></li>
       <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Ottawa repeater</strong><small>allows *</small></li>
       <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Rigaud edge repeater</strong><small>drops *</small></li>
       <li data-link="drop"><span class="scp-stop" data-kind="repeater" data-state="dim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Montréal repeater</strong><small>allows *</small></li>
-      <li data-link="none"><span class="scp-stop" data-kind="phone" data-state="dim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg></span><strong>Montréal user</strong><small>never sees it</small></li>
+      <li data-link="none"><span class="scp-stop" data-kind="phone" data-state="dim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg></span><strong>Montréal user</strong><small>not reached by this path</small></li>
     </ol>
-    <p class="scp-route__note">Every Ottawa-zone repeater passes it on, so the new user reaches the whole Ottawa area. Rigaud hears it but does not pass it on, so Montréal is never flooded.</p>
+    <p class="scp-route__note">The Ottawa repeater shown allows unscoped floods. Rigaud hears the message but does not forward it to the next city. Other routes and direct radio reception are not shown.</p>
   </div>
   <div class="scp-route">
-    <div class="scp-route__head">Ottawa bot or MeshMapper, scoped <span class="scp-tag" data-level="city">yow</span><span class="scp-route__verdict" data-result="ok">Ottawa zone only</span></div>
+    <div class="scp-route__head">Ottawa bot or MeshMapper, scoped <span class="scp-tag" data-level="city">yow</span><span class="scp-route__verdict" data-result="ok">Relays allowing yow</span></div>
     <ol class="scp-track">
       <li><span class="scp-stop" data-kind="phone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg></span><strong>Bot, Ottawa</strong><small>sends yow</small></li>
       <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Ottawa repeater</strong><small>yow on onqc can na</small></li>
       <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Rigaud edge repeater</strong><small>yow yul qc onqc can na</small></li>
       <li data-link="drop"><span class="scp-stop" data-kind="repeater" data-state="dim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Montréal repeater</strong><small>yul qc onqc can na</small></li>
-      <li data-link="none"><span class="scp-stop" data-kind="phone" data-state="dim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg></span><strong>Montréal user</strong><small>never sees it</small></li>
+      <li data-link="none"><span class="scp-stop" data-kind="phone" data-state="dim"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg></span><strong>Montréal user</strong><small>not reached by this path</small></li>
     </ol>
-    <p class="scp-route__note">Rigaud carries <code>yow</code>, so it passes the message on. Montréal repeaters do not carry <code>yow</code>, so it stops at the edge of the zone.</p>
+    <p class="scp-route__note">Rigaud allows <code>yow</code>, so it forwards the message. The Montréal repeater shown does not allow <code>yow</code>, so it does not forward it. This is a forwarding rule, not a geographic boundary.</p>
   </div>
   <div class="scp-route">
-    <div class="scp-route__head">DM with the companion default <span class="scp-tag" data-level="mesh">onqc</span><span class="scp-route__verdict" data-result="ok">Whole mesh</span></div>
+    <div class="scp-route__head">Flooded DM discovery <span class="scp-tag" data-level="mesh">onqc</span><span class="scp-route__verdict" data-result="ok">Shared forwarding</span></div>
     <ol class="scp-track" data-animate>
       <li><span class="scp-stop" data-kind="phone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg></span><strong>You, Ottawa</strong><small>sends onqc</small></li>
       <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Ottawa repeater</strong><small>yow on onqc can na</small></li>
@@ -853,35 +937,48 @@ Rigaud, an edge repeater that also carries Montréal's code, `yul`.
       <li data-link="ok"><span class="scp-stop" data-kind="repeater"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 10v11M8 21h8M9.5 21 12 10l2.5 11"/><circle cx="12" cy="8" r="1.6"/><path d="M8.6 4.6a5 5 0 0 0 0 6.8M15.4 4.6a5 5 0 0 1 0 6.8"/></svg></span><strong>Montréal repeater</strong><small>yul qc onqc can na</small></li>
       <li data-link="ok"><span class="scp-stop" data-kind="phone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18.5h2"/></svg></span><strong>Friend, Montréal</strong><small>default onqc</small></li>
     </ol>
-    <p class="scp-route__note">Every repeater carries <code>onqc</code>, including the edge repeater, so DMs still cross the whole mesh.</p>
+    <p class="scp-route__note">All repeaters shown allow <code>onqc</code>, so a DM without a saved path can be forwarded along this example route. Later DMs can use the discovered path.</p>
   </div>
-  <figcaption>The same thing happens at every edge between two cities.</figcaption>
+  <figcaption>Illustrative paths only. Actual routes, forwarding settings and radio coverage vary.</figcaption>
 </figure>
 
 More examples on the same link:
 
-| Message | Ottawa repeaters<br>`* yow on onqc can na` | Rigaud edge repeater<br>`yow yul qc onqc can na` | Montréal repeaters<br>`* yul qc onqc can na` | Who gets it |
+| Message | Ottawa repeaters<br>`* yow on onqc can na` | Rigaud edge repeater<br>`yow yul qc onqc can na` | Montréal repeaters<br>`* yul qc onqc can na` | Forwarding in this example |
 | --- | --- | --- | --- | --- |
-| New user in Ottawa, no scope | ✅ Forward | ❌ Drop | Never reached | Whole Ottawa area |
-| New user in Montréal, no scope | Never reached | ❌ Drop | ✅ Forward | Whole Montréal area |
-| Ottawa channel or bot, `yow` | ✅ Forward | ✅ Forward | ❌ Drop | Ottawa zone only |
-| Montréal channel or bot, `yul` | ❌ Drop | ✅ Forward | ✅ Forward | Montréal zone only |
-| Québec-wide channel, `qc` | ❌ Drop | ✅ Forward | ✅ Forward | Québec side, including Gatineau |
-| DM with the companion default, `onqc` | ✅ Forward | ✅ Forward | ✅ Forward | Whole ON/QC mesh |
+| New user in Ottawa, no scope | ✅ Forward | ❌ Drop | Not reached on this path | Ottawa relays in this example |
+| New user in Montréal, no scope | Not reached on this path | ❌ Drop | ✅ Forward | Montréal relays in this example |
+| Ottawa channel or bot, `yow` | ✅ Forward | ✅ Forward | ❌ Drop | Relays allowing yow |
+| Montréal channel or bot, `yul` | ❌ Drop | ✅ Forward | ✅ Forward | Relays allowing yul |
+| Québec-wide channel, `qc` | ❌ Drop | ✅ Forward | ✅ Forward | Relays allowing `qc` |
+| Flooded DM discovery, `onqc` | ✅ Forward | ✅ Forward | ✅ Forward | Relays allowing `onqc` |
 
-This is why bots and MeshMapper should be scoped to their city: they stay
-contained no matter what, and new users who haven't set a scope yet still work
-locally.
+Bots and MeshMapper use their local-region label to limit which repeaters
+forward their flooded traffic. This does not guarantee geographic containment.
+Unscoped users still need working links through repeaters that allow `*`.
 
 </details>
 
+
+## How do DMs reach another city without its repeater adverts? { #route-discovery }
+
+You don't need an advert from every repeater along the way. If you have a
+contact but no saved path, the first DM floods through the network. The
+destination returns a path for later DMs to use. You still need the recipient's
+contact and working radio links. See the [MeshCore routing FAQ](https://github.com/meshcore-dev/MeshCore/blob/main/docs/faq.md#54-q-how-does-a-node-discover-a-path-to-its-destination-and-then-use-it-to-send-messages-in-the-future-instead-of-flooding-every-message-it-sends-like-meshtastic).
+
+Once Phase 2 is announced, `onqc` lets discovery pass through configured
+ON/QC repeaters. During migration, **unscoped discovery cannot cross an edge
+repeater that blocks `*`**. A saved path may still work, but a new cross-region
+contact may not. Prepare scopes without changing wildcard forwarding, then
+coordinate activation locally; don't change companion scopes early.
 
 ## Things to know
 
 - **Scoped messages are about 10 characters shorter.** The app lowers the
   message length limit on scoped channels (137 to 127 in our testing).
-- **Repeater adverts stay in their city.** Montréal users will not see Ottawa
-  repeaters through flood adverts.
+- **Repeater flood adverts use the local-region label after activation.**
+  Their reach depends on radio links and which repeaters allow that label.
 - **16 hops has to be enough.** `flood.max` applies to `onqc` too. If the
   longest real path across the mesh is longer than 16 hops, cross-mesh
   messages will stop part way.
@@ -890,11 +987,12 @@ locally.
 
 ## Next steps
 
-- Agree on the list of city codes for Ontario and Québec.
-- Add a "find your town" lookup to meshcore.ca that shows your code.
-- Publish clean-up and setup commands for each city.
-- Add a simple Ontario and Québec mode to the [repeater configurator](../config/index.md).
-- Other provinces keep the current setup until the pilot has proven itself.
+- Check your published MeshMapper code in the [IATA region map](../config/map.md).
+- Use the [migration guide](../config/standard.md) and [repeater configurator](../config/index.md) for clean-up and firmware-specific commands.
+- In the configurator, select **Use the proposed ON/QC standard settings** to include Phase 1’s ID, advert and hop settings. They remain opt-in; scope commands alone are not the full Phase 1 setup.
+- Coordinate and test the ON/QC rollout with local operators before changing deployed repeaters.
+- The website now offers IATA zones across Canada. This is not a nationwide rollout of `onqc`: that scope and the pilot settings remain specific to Ontario and Québec. Other provinces coordinate their own migration.
+- Labelled MeshCore Canada planning regions and extensions are separate proposals, not adopted additions to this rollout. Confirm them locally; published MeshMapper boundaries are unchanged.
 
 Have thoughts? Share them on the
 [MeshCore Canada Discord](https://discord.gg/BESFVMt7yk) or the

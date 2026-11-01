@@ -334,3 +334,29 @@ a[target="_blank"]::after {
     display: none;
   }
 }
+.md-typeset .mc-scope-check {
+  margin: 1rem 0;
+  padding: 1rem;
+  border: 1px solid var(--mc-color-border);
+  border-radius: var(--mc-radius-md);
+  background: var(--mc-color-surface);
+}
+.md-typeset .mc-scope-check summary { cursor: pointer; font-weight: 700; }
+.md-typeset .mc-scope-check label { display: block; margin: 0.8rem 0; }
+.md-typeset .mc-scope-check textarea,
+.md-typeset .mc-scope-check input {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 44px;
+  padding: 0.6rem;
+  border: 1px solid var(--mc-color-border);
+  border-radius: var(--mc-radius-sm);
+  background: var(--mc-color-surface-raised);
+  color: var(--mc-color-text);
+  font-size: 16px;
+}
+.md-typeset .mc-scope-check textarea { font-family: var(--md-code-font-family); }
+.md-typeset .mc-scope-check pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+.md-typeset .mc-scope-check [hidden] { display: none; }
+.md-typeset .mc-scope-check :focus-visible { outline: 3px solid var(--mc-color-focus); outline-offset: 2px; }

@@ -120,7 +120,7 @@ test("external resources are labelled and carry a review date", () => {
   const content = body(markdown);
   const links = [...content.matchAll(/\[([^\]]+)\]\((https:\/\/[^)]+)\)\{([^}]+)\}/g)];
 
-  assert.equal(metadataValue(markdown, "link_checked"), "2026-07-19");
+  assert.equal(metadataValue(markdown, "link_checked"), "2026-10-29");
   assert.ok(links.length >= 10, "reviewed external-link inventory is unexpectedly small");
   for (const [url, label, , attributes] of links) {
     assert.match(label, /\(external\)$/i, url);

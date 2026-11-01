@@ -161,6 +161,6 @@ sauf si une fiche indique des réglages locaux différents.
 
 ## Ajouter ou mettre à jour une fiche
 
-[Envoyer une mise à jour de la communauté](../submit-idea.md). Aucun compte GitHub requis.
+[Envoyer une mise à jour de la communauté](../submit-idea.md). Relisez et copiez votre mise à jour avant de l’envoyer.
 
 Les fiches sont soumises par la communauté et peuvent être incomplètes ou périmées.

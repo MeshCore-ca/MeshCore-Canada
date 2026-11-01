@@ -68,6 +68,8 @@ jobs:
       - name: Validate region authority and proposal automation
         run: |
           node scripts/validate-regions.cjs
+          python scripts/verify-iata-geometry.py
+          node scripts/validate-legacy-region-data.cjs
           python scripts/verify-region-geometry.py
           python scripts/verify-region-geometry.py --partition docs/assets/regions/canada-region-partition-digital.geojson
           python -m unittest discover -s tools/region-proposal-gateway/tests -v
@@ -99,16 +101,22 @@ jobs:
         include:
           - project: chromium
             engine: chromium
+            workers: 4
           - project: chromium-dark
             engine: chromium
+            workers: 4
           - project: mobile-chromium
             engine: chromium
+            workers: 4
           - project: firefox
             engine: firefox
+            workers: 4
           - project: webkit
             engine: webkit
+            workers: 1
           - project: mobile-webkit
             engine: webkit
+            workers: 1
 
     steps:
       - name: Checkout repository
@@ -137,7 +145,8 @@ jobs:
         run: npm run docs:build
 
       - name: Run critical journeys and accessibility checks
-        run: npm run test:browser -- --project=${{ matrix.project }}
+        # WebKit gets a dedicated worker; keep action/test budgets unchanged.
+        run: npm run test:browser -- --project=${{ matrix.project }} --workers=${{ matrix.workers }}
 
   # Branch protection requires a check named "browser"; this job passes only
   # when every browser shard above passed.

@@ -8,10 +8,15 @@ task: start-repeater
 scope: canada-baseline
 status: verified
 owner: docs-ux
-last_reviewed: 2026-07-22
-review_by: 2026-10-19
+last_reviewed: 2026-10-29
+review_by: 2026-12-31
 tested_with:
-  content_baseline: f608cfe
+  content_baseline: 7daceca
+  review_method: bilingual content and navigation checks, not physical-device testing
+evidence:
+  - https://github.com/meshcore-dev/MeshCore/blob/main/docs/faq.md
+  - https://github.com/meshcore-dev/MeshCore/issues/3302#issuecomment-5598886579
+  - Content and linked setup paths reviewed on 2026-10-29; radio and installation checks remain operator tasks.
 difficulty: intermediate
 estimated_time: varies by build
 destructive: false
@@ -21,7 +26,7 @@ requires:
 page_styles:
   - assets/styles/repeater-hash-check.css?v=20260820-1
 page_scripts:
-  - assets/javascripts/repeater-hash-check.js?v=20260904-1
+  - assets/javascripts/repeater-hash-check.js?v=20261029-1
 ---
 
 # Commencer avec un répéteur
@@ -64,12 +69,16 @@ Si Canada n’apparaît pas, suivez les [consignes pour l’ancien préréglage]
     personnes responsables doivent s’entendre sur tout changement qui touche
     le trafic partagé.
 
-Utilisez le [configurateur de répéteur](../config/index.md) pour trouver les
-paramètres régionaux. Relisez les commandes avant de les appliquer.
+Utilisez le [configurateur de répéteur](../config/index.md) pour choisir votre zone
+IATA MeshMapper et ses portées indépendantes. Si vous utilisiez l’ancien arbre de
+régions, suivez les [étapes de migration](../config/standard.md) avant d’appliquer la nouvelle liste.
+
+Commencez par la préparation. Conservez les portées qui fonctionnent et coordonnez
+l’activation, y compris tout blocage en bordure, avec les opérateurs locaux.
 
 <div data-mc-repeater-hash-check></div>
 
-<noscript>JavaScript est requis pour vérifier les identifiants en direct. Vous pouvez aussi [rechercher le préfixe de la clé publique dans CoreScope](https://live.meshcore.ca/#/nodes).</noscript>
+<noscript>JavaScript est requis pour vérifier les identifiants en direct. Vous pouvez aussi [ouvrir le répertoire des nœuds en direct](https://live.meshcore.ca/?tab=Nodes).</noscript>
 
 ## Tester le répéteur
 

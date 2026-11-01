@@ -137,7 +137,8 @@ async function prepareBilingualAssets(siteRoot, docsDirectory) {
   );
 
   const frenchEditor = join(siteRoot, "fr", "config", "editor");
-  if (await mirrorDirectory(
+  const markdownEditor = await pathStat(join(docsDirectory, "config", "editor", "index.md"));
+  if (!markdownEditor?.isFile() && await mirrorDirectory(
     siteRoot,
     join(siteRoot, "config", "editor"),
     frenchEditor,

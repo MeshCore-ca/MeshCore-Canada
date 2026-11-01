@@ -63,7 +63,7 @@ mqtt:
   iata_code: YOW
 ```
 
-Replace `YOW` with the real code nearest the observer.
+Replace `YOW` with your code from the [IATA region map](../../config/map.md).
 
 Under `mqtt.brokers`, add:
 
@@ -119,9 +119,9 @@ The service stays active without YAML, TLS, or token errors, and its packet coun
 
 ## Verify in CoreScope
 
-1. Find the observer in [CoreScope Observers](https://live.meshcore.ca/#/observers).
+1. Find the observer in [Live observer list](https://live.meshcore.ca/?tab=Observers).
 2. Wait for normal nearby activity.
-3. Confirm a recent packet in [CoreScope Packets](https://live.meshcore.ca/#/packets).
+3. Confirm a recent packet in [Live packets](https://live.meshcore.ca/).
 
 Finish with [Check your observer](../verify.md). A healthy systemd service is not proof that packets reached CoreScope.
 

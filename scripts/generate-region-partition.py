@@ -29,7 +29,7 @@ from shapely.strtree import STRtree
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_CATALOG = ROOT / "docs" / "assets" / "regions" / "canada-regions.json"
+DEFAULT_CATALOG = ROOT / "maintenance" / "legacy-regions" / "canada-regions.json"
 DEFAULT_MESHMAPPER = ROOT / "docs" / "assets" / "regions" / "meshmapper-canada-regions.json"
 DEFAULT_OUTPUT = ROOT / "docs" / "assets" / "regions"
 DEFAULT_OVERRIDES = ROOT / "docs" / "assets" / "regions" / "municipal-overrides.json"

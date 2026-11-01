@@ -9,10 +9,10 @@ task: find-meshcore-resource
 scope: canada-baseline
 status: verified
 owner: docs-ux
-last_reviewed: 2026-07-22
-review_by: 2026-10-19
-evidence: External destinations opened successfully on 2026-07-19
-link_checked: 2026-07-19
+last_reviewed: 2026-10-29
+review_by: 2026-12-31
+evidence: Public destinations and viewer navigation checked on 2026-10-29; links are not hardware, service-delivery, or regulatory approval.
+link_checked: 2026-10-29
 difficulty: beginner
 estimated_time: 2-5 minutes
 destructive: false
@@ -22,12 +22,15 @@ destructive: false
 
 These links open services outside this documentation site.
 
+The live viewer at `live.meshcore.ca` now uses Beacon. Older guides and screenshots
+may refer to CoreScope; use the current viewer links below.
+
 ## MeshCore Canada
 
 | Service | Use | Link |
 |---|---|---|
 | Forum | Search discussions or ask for help. | [Open the forum (external)](https://forum.meshcore.ca/){ target="_blank" rel="noopener" } |
-| CoreScope | View public observers, packets, nodes, and map data. | [Open CoreScope (external)](https://live.meshcore.ca/){ target="_blank" rel="noopener" } |
+| Live network viewer | View public observers, packets, nodes, and map data. | [Open the live viewer (external)](https://live.meshcore.ca/){ target="_blank" rel="noopener" } |
 | GitHub | View the source, issues, and site changes. | [Open the repository (external)](https://github.com/MeshCore-ca/MeshCore-Canada){ target="_blank" rel="noopener" } |
 
 ## Official MeshCore
@@ -45,7 +48,7 @@ These links open services outside this documentation site.
 
 | Organization | Use | Link |
 |---|---|---|
-| Innovation, Science and Economic Development Canada (ISED) | Find current Canadian spectrum and equipment information. | [Open ISED (external)](https://ised-isde.canada.ca/){ target="_blank" rel="noopener" } |
+| Innovation, Science and Economic Development Canada (ISED) | Find current Canadian spectrum and equipment information. | [Open ISED (external)](https://ised-isde.canada.ca/site/spectrum-management-telecommunications/en){ target="_blank" rel="noopener" } |
 | Radio Amateurs of Canada | Find Canadian amateur-radio information. | [Open RAC (external)](https://www.rac.ca/){ target="_blank" rel="noopener" } |
 
 <div class="mc-callout" data-kind="warning" markdown>

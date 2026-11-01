@@ -9,9 +9,9 @@ task: choose-network-tool
 scope: canada-baseline
 status: verified
 owner: docs-ux
-last_reviewed: 2026-07-22
-review_by: 2026-10-22
-evidence: Internal task routes and the external CoreScope destination reviewed on 2026-07-22
+last_reviewed: 2026-10-29
+review_by: 2026-12-31
+evidence: Internal IATA and observer routes plus the live viewer tabs reviewed on 2026-10-29; no deployment or RF coverage approval.
 difficulty: beginner
 estimated_time: 2 minutes
 destructive: false
@@ -27,15 +27,15 @@ Choose the tool that matches your task.
 
     ---
 
-    Build region commands for a repeater after choosing its location.
+    Choose an IATA region, prepare forwarding scopes, and review the commands before applying them.
 
     [:octicons-arrow-right-24: Open the repeater configurator](../config/index.md)
 
--   :material-map-search:{ .lg .middle } **Find your MeshCore region**
+-   :material-map-search:{ .lg .middle } **Find your IATA region**
 
     ---
 
-    Search a place or use the map to see its Canadian MeshCore region.
+    Find a published MeshMapper zone or a labelled planning region. These boundaries are not radio coverage.
 
     [:octicons-arrow-right-24: Find my region](../config/map.md)
 
@@ -43,15 +43,15 @@ Choose the tool that matches your task.
 
     ---
 
-    View public observers, packets, nodes, and map data in CoreScope.
+    View public observers, packets, nodes, and maps in the live network viewer.
 
-    [:octicons-arrow-right-24: Open CoreScope (external)](https://live.meshcore.ca/){ target="_blank" rel="noopener" }
+    [:octicons-arrow-right-24: Open the live viewer (external)](https://live.meshcore.ca/){ target="_blank" rel="noopener" }
 
 -   :material-access-point-network:{ .lg .middle } **Set up an observer**
 
     ---
 
-    Choose an observer method, then check that packets appear in CoreScope.
+    Choose an observer method, then check that its packets appear in the live viewer.
 
     [:octicons-arrow-right-24: Choose an observer method](../analyzer/intro.md)
 

@@ -8,10 +8,15 @@ task: verify-first-success
 scope: canada-baseline
 status: verified
 owner: docs-ux
-last_reviewed: 2026-07-22
-review_by: 2026-10-19
+last_reviewed: 2026-10-29
+review_by: 2026-12-31
 tested_with:
-  content_baseline: f608cfe
+  content_baseline: 7daceca
+  review_method: bilingual content and navigation checks, not physical-device testing
+evidence:
+  - https://github.com/meshcore-dev/MeshCore/blob/main/docs/faq.md
+  - https://github.com/meshcore-dev/MeshCore/issues/3302#issuecomment-5598886579
+  - Content and linked setup paths reviewed on 2026-10-29; radio and installation checks remain operator tasks.
 difficulty: beginner
 estimated_time: 5-10 minutes
 destructive: false
@@ -72,12 +77,12 @@ l’établi soit réussi.
 
 1. Créez de l’activité MeshCore à proximité avec un appareil fiable.
 2. Confirmez que la radio de l’observateur utilise les mêmes paramètres.
-3. Ouvrez [CoreScope Observers](https://live.meshcore.ca/#/observers).
+3. Ouvrez la [liste des observateurs en direct](https://live.meshcore.ca/?tab=Observers).
 4. Trouvez votre observateur et vérifiez son activité récente.
 5. Suivez [Vérifier votre observateur](../analyzer/verify.md) pour le test complet.
 
 !!! success "L’observateur fonctionne"
-    Votre observateur apparaît dans CoreScope et affiche une activité récente
+    Votre observateur apparaît dans la visionneuse du réseau et affiche une activité récente
     après une transmission à proximité.
 
 Une connexion au serveur MQTT ne suffit pas à confirmer que tout fonctionne.

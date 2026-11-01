@@ -15,7 +15,7 @@ import geopandas as gpd
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_CATALOG = ROOT / "docs" / "assets" / "regions" / "canada-regions.json"
+DEFAULT_CATALOG = ROOT / "maintenance" / "legacy-regions" / "canada-regions.json"
 DEFAULT_OVERRIDES = ROOT / "docs" / "assets" / "regions" / "municipal-overrides.json"
 OVERRIDES_SCHEMA = "mcc-census-overrides/v2"
 TAG_RE = re.compile(r"^[a-z0-9][a-z0-9-]{0,28}$")

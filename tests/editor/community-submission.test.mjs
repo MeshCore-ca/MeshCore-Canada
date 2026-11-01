@@ -153,7 +153,9 @@ test("page exposes anonymous submission, anti-spam, result, and manual fallback 
   ]) {
     assert.ok(html.includes(`id="${id}"`), `missing ${id}`);
   }
-  assert.match(html, /No GitHub account needed/);
+  assert.match(html, /Anonymous submission depends on service availability/);
+  assert.match(html, /GitHub, which requires an account/);
+  assert.doesNotMatch(html, /No GitHub account needed/);
   assert.match(html, /name="source_page" value="https:\/\/meshcore\.ca\/submit-idea\/"/);
   assert.match(html, /<details class="submission-optional">/);
   assert.match(html, /id="submission-final-actions" class="submission-actions" hidden/);

@@ -17,7 +17,8 @@ page_styles:
   - assets/styles/communities.css?v=20260905-1
 status_notice: false
 page_scripts:
-  - assets/javascripts/communities.js?v=20260905-1
+  - assets/javascripts/place-search.js?v=20260925-2
+  - assets/javascripts/communities.js?v=20260925-2
 ---
 
 <!-- Généré par scripts/validate-communities.py à partir de data/communities.json et data/communities.fr.json. Ne pas modifier à la main. -->
@@ -545,4 +546,4 @@ ne peuvent pas relayer les parcours multioctets.
 ## Ajouter ou mettre à jour une fiche
 
 Vous avez trouvé des renseignements manquants ou périmés?
-[Envoyer une mise à jour de la communauté](../submit-idea.md). Aucun compte GitHub requis.
+[Envoyer une mise à jour de la communauté](../submit-idea.md). Relisez et copiez votre mise à jour avant de l’envoyer.

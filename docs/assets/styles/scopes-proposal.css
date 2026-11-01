@@ -1,34 +1,6 @@
 /* ON/QC region scopes proposal: page-only diagrams and layout. */
 
-:root {
-  --scp-city: #1458b0;
-  --scp-city-bg: #e8f0fb;
-  --scp-prov: #146c43;
-  --scp-prov-bg: #e5f4ec;
-  --scp-mesh: #6b36a8;
-  --scp-mesh-bg: #f1e8fb;
-  --scp-any: #526174;
-  --scp-any-bg: #eef3f8;
-  --scp-ok: var(--mc-color-success);
-  --scp-ok-bg: #e5f4ec;
-  --scp-drop: var(--mc-color-danger);
-  --scp-drop-bg: #fdecea;
-}
-
-[data-md-color-scheme="slate"] {
-  --scp-city: #7db7ff;
-  --scp-city-bg: rgb(125 183 255 / 14%);
-  --scp-prov: #78dfa7;
-  --scp-prov-bg: rgb(120 223 167 / 12%);
-  --scp-mesh: #c9a4ff;
-  --scp-mesh-bg: rgb(201 164 255 / 14%);
-  --scp-any: #b6c0ce;
-  --scp-any-bg: rgb(182 192 206 / 12%);
-  --scp-ok: #78dfa7;
-  --scp-ok-bg: rgb(120 223 167 / 12%);
-  --scp-drop: #ffaaa3;
-  --scp-drop-bg: rgb(255 170 163 / 12%);
-}
+/* Scope colours live in tokens.css so the map and configurator use this palette. */
 
 /* Undo the theme's list indents inside diagrams. */
 [dir] .md-typeset .scp-checks,
@@ -955,6 +927,58 @@
   letter-spacing: normal;
   text-transform: none;
 }
+
+.md-typeset .scp-finder,
+.md-typeset .scp-finder__result {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+
+.md-typeset .scp-finder__row,
+.md-typeset .scp-finder__choices,
+.md-typeset .scp-finder__links,
+.md-typeset .scp-finder__tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--mc-space-2);
+}
+
+.md-typeset .scp-finder__row { margin: var(--mc-space-2) 0; }
+.md-typeset .scp-finder__row input {
+  flex: 2 1 14rem;
+  width: 100%;
+  min-width: 0;
+  height: 2.6rem;
+  padding: 0.5rem var(--mc-space-3);
+  border: 1px solid var(--mc-color-border);
+  border-radius: var(--mc-radius-md);
+  background: var(--mc-color-surface);
+  color: var(--mc-color-text);
+  font: inherit;
+}
+
+.md-typeset .scp-finder__row input:focus-visible {
+  outline: 3px solid var(--mc-color-focus);
+  outline-offset: 2px;
+}
+
+.md-typeset .scp-finder .scp-choice,
+.md-typeset .scp-picker__field select { min-height: 44px; }
+.md-typeset .scp-finder__status:empty,
+.md-typeset .scp-finder__choices:empty { display: none; }
+.md-typeset .scp-finder__result { border-top: 1px solid var(--mc-color-border); }
+.md-typeset .scp-finder__links { gap: var(--mc-space-3); }
+
+.md-typeset .scp-finder__wide,
+.md-typeset .scp-finder__tag-label { grid-column: 1 / -1; flex-basis: 100%; }
+.md-typeset .scp-finder__tag-label { font-size: 0.8rem; }
+.md-typeset .scp-finder__details { margin-top: var(--mc-space-3); }
+.md-typeset .scp-finder__details summary { cursor: pointer; font-weight: 600; min-height: 44px; }
+.md-typeset [data-scp-readiness] > div { display: flex; flex-wrap: wrap; gap: 0.3rem 0.65rem; }
+.md-typeset [data-scp-readiness] dt { font-weight: 600; }
+.md-typeset [data-scp-readiness] dd { margin: 0; }
+.md-typeset .scp-finder__details .mc-region-profile { margin: var(--mc-space-3) 0 0; }
 
 /* ---------- Command cards ---------- */
 

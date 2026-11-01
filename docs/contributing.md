@@ -26,8 +26,8 @@ experience.
 
 -   **Share an idea**
 
-    Report something missing, confusing, or difficult. No GitHub account is
-    needed.
+    Report something missing, confusing, or difficult. Prepare your idea and
+    choose an available way to send it.
 
     [:octicons-arrow-right-24: Share an idea](submit-idea.md)
 
@@ -46,9 +46,9 @@ experience.
 
 -   **Propose a region change**
 
-    Suggest a new region or a boundary change.
+    Ask MeshMapper to add a zone or change its boundary.
 
-    [:octicons-arrow-right-24: Open the region editor](config/editor/index.html)
+    [:octicons-arrow-right-24: Request a zone change](config/editor/index.md)
 
 -   **Contribute on GitHub**
 

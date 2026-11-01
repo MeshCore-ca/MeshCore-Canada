@@ -69,6 +69,6 @@ card lists different local settings.
 
 ## Add or update a listing
 
-[Send a community update](../submit-idea.md). No GitHub account needed.
+[Send a community update](../submit-idea.md). Review and copy your update before sending.
 
 Listings are community-submitted and may be incomplete or out of date.
