@@ -55,6 +55,7 @@ export function reviewText(result, runId = process.env.GITHUB_RUN_ID) {
     `Starter-code collisions: ${list(result.collisions)}\n\n` +
     `Enabled regions without a usable boundary: ${list(result.unmapped)}\n\n` +
     `Geometry requiring review: ${(result.geometryIssues || []).map(item => "`" + item.tag + "` (" + item.kind + ")").join(", ") || "None"}\n\n` +
+    (result.autoReasons?.length ? "Why the nightly check did not publish this automatically:\n\n" + result.autoReasons.map(reason => "- " + reason).join("\n") + "\n\n" : "") +
     "Nothing has been published automatically. To review and publish this candidate:\n\n" +
     "```sh\n" + download + "\nnode scripts/promote-meshmapper-snapshot.mjs --check\nnode scripts/promote-meshmapper-snapshot.mjs\n```\n\n" +
     "The script says what to fix first if a boundary is broken or a new region needs its province. See `maintenance/iata-region-review.md`.\n<!-- meshmapper-review:end -->";
@@ -83,7 +84,9 @@ export async function publish(report, result, { fetcher = fetch, env = process.e
   if (!result.needsReview) {
     if (found) {
       const cleared = "<!-- meshmapper-review:start -->\n## No outstanding MeshMapper changes\n\n" +
-        "The latest candidate matches the approved snapshot and has no geometry findings. Nothing was published automatically." +
+        (result.autoPublished
+          ? "The nightly check found only simple changes and published them automatically."
+          : "The latest candidate matches the approved snapshot and has no geometry findings. Nothing was published automatically.") +
         run + "\n<!-- meshmapper-review:end -->";
       const body = found.body.replace(/<!-- meshmapper-review:start -->[\s\S]*?<!-- meshmapper-review:end -->/, cleared);
       await request(`/issues/${found.number}`, "PATCH", { body, state: "closed", state_reason: "completed" });
@@ -113,6 +116,13 @@ async function main() {
     result.geometryIssues = report.issues;
     result.needsReview ||= report.issues.length > 0;
     result.digest = createHash("sha256").update(result.digest + JSON.stringify(report.issues)).digest("hex");
+  }
+  const autoArgument = process.argv.indexOf("--auto-report");
+  if (autoArgument !== -1) {
+    const auto = await load(process.argv[autoArgument + 1]);
+    assert.ok(["published", "unchanged", "review"].includes(auto.result) && Array.isArray(auto.reasons));
+    if (auto.result === "review") result.autoReasons = auto.reasons;
+    result.autoPublished = auto.result === "published";
   }
   await mkdir(".tmp/meshmapper-review", { recursive: true });
   await writeFile(".tmp/meshmapper-review/changes.json", JSON.stringify(result, null, 2) + "\n");

@@ -143,9 +143,10 @@ automatiquement responsables de région.
 
 La fiche permet de proposer un responsable, de confirmer les réglages avec une
 preuve publique datée ou de proposer une limite. Ces changements passent par une
-PR. Une vérification hebdomadaire regroupe les changements de MeshMapper dans un
-ticket à examiner; rien n’est publié automatiquement. Les réglages confirmés sont
-à revérifier après six mois.
+PR. Les changements de MeshMapper sont vérifiés chaque nuit. Les petits
+ajustements de limites sont publiés automatiquement; les zones ajoutées ou
+retirées et les changements plus importants attendent dans un ticket à examiner.
+Les réglages confirmés sont à revérifier après six mois.
 
 ### Préparer, puis activer localement
 

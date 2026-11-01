@@ -23,3 +23,38 @@ class MeshMapperGeometryTests(unittest.TestCase):
         self.assertEqual(inspect_geometry({"features": [feature]}), [])
         feature["properties"]["center"] = [3, 3]
         self.assertEqual(inspect_geometry({"features": [feature]})[0]["kind"], "center-outside-boundary")
+
+
+compare_maps = runpy.run_path(str(Path(__file__).resolve().parents[2] / "scripts/compare-region-maps.py"))["compare_maps"]
+
+
+class RegionMapComparisonTests(unittest.TestCase):
+    @staticmethod
+    def region(tag, source, east):
+        return {"properties": {"tag": tag, "regionSource": source},
+                "geometry": {"type": "Polygon", "coordinates": [[[0, 0], [east, 0], [east, 1], [0, 1], [0, 0]]]}}
+
+    def test_reports_how_far_each_region_moved(self):
+        before = {"features": [self.region("yow", "meshmapper", 10), self.region("yow", "meshcore-canada", 5), self.region("ykf", "meshmapper", 4)]}
+        after = {"features": [self.region("yow", "meshmapper", 10.05), self.region("yow", "meshcore-canada", 5), self.region("yxu", "meshmapper", 4)]}
+        report = compare_maps(before, after)
+        self.assertEqual([(c["tag"], c["source"], c["percent"]) for c in report["changes"]], [("yow", "meshmapper", 0.5)])
+        self.assertGreater(report["changes"][0]["shiftKm"], 1)
+        self.assertEqual(report["added"], ["yxu (meshmapper)"])
+        self.assertEqual(report["removed"], ["ykf (meshmapper)"])
+
+    def test_a_thin_spike_moves_an_edge_far_but_adds_little_area(self):
+        square = [[-80, 45], [-79, 45], [-79, 46], [-80, 46], [-80, 45]]
+        spiked = [[-80, 45], [-79, 45], [-79, 45.5], [-78.5, 45.5005], [-79, 45.501], [-79, 46], [-80, 46], [-80, 45]]
+        feature = lambda ring: {"properties": {"tag": "yow", "regionSource": "meshmapper"}, "geometry": {"type": "Polygon", "coordinates": [ring]}}
+        change = compare_maps({"features": [feature(square)]}, {"features": [feature(spiked)]})["changes"][0]
+        self.assertLess(change["percent"], 0.1)
+        self.assertGreater(change["shiftKm"], 30)
+
+    def test_tiny_rebuild_slivers_do_not_count_as_reach(self):
+        square = [[-80, 45], [-79, 45], [-79, 46], [-80, 46], [-80, 45]]
+        sliver = [[-76, 45], [-75.999, 45], [-75.999, 45.0001], [-76, 45]]
+        before = {"features": [{"properties": {"tag": "yqa", "regionSource": "meshcore-canada"}, "geometry": {"type": "Polygon", "coordinates": [square]}}]}
+        after = {"features": [{"properties": {"tag": "yqa", "regionSource": "meshcore-canada"}, "geometry": {"type": "MultiPolygon", "coordinates": [[square], [sliver]]}}]}
+        change = compare_maps(before, after)["changes"][0]
+        self.assertEqual(change["shiftKm"], 0)

@@ -79,3 +79,27 @@ test("removed regions, lost boundaries, starter clashes and stale profiles each 
   assert.match(plan(clash).stops[0], new RegExp("^" + starterTags[0] + ": MeshMapper now publishes this MeshCore Canada starter code"));
   assert.match(plan(removed, { profileTags: ["xcm"] }).stops.at(-1), /^xcm: remove its record from data\/iata-region-profiles\.json/);
 });
+
+test("the nightly job publishes only changes under the automatic limit", async () => {
+  const { reviewReasons, simpleChangePercent, simpleShiftKm } = await import("../../scripts/promote-meshmapper-snapshot.mjs");
+  const quiet = { added: [], removed: [], changed: [{ tag: "yow", fields: ["boundary"] }] };
+  const map = changes => ({ added: [], removed: [], changes });
+  assert.equal(simpleChangePercent, 1);
+  assert.equal(simpleShiftKm, 5);
+  assert.deepEqual(reviewReasons(quiet, map([{ tag: "yow", source: "meshmapper", percent: 0.02, shiftKm: 3.2 },
+    { tag: "yow", source: "meshcore-canada", percent: 0.9, shiftKm: 0.001 }])), []);
+  assert.deepEqual(reviewReasons(quiet, map([{ tag: "yul", source: "meshmapper", percent: 42.45, shiftKm: 111.5 }])),
+    ["yul MeshMapper zone changed by 42.5% of its area, above the 1% automatic limit",
+      "yul MeshMapper zone reaches 111.5 km beyond its old outline, above the 5 km automatic limit"]);
+  assert.deepEqual(reviewReasons(quiet, map([{ tag: "yqm", source: "meshcore-canada", percent: 1, shiftKm: 0 }])),
+    ["yqm planning area changed by 1.0% of its area, above the 1% automatic limit"]);
+  // A thin spike adds almost no area but reaches a distant town.
+  assert.deepEqual(reviewReasons(quiet, map([{ tag: "yow", source: "meshmapper", percent: 0.01, shiftKm: 40 }])),
+    ["yow MeshMapper zone reaches 40.0 km beyond its old outline, above the 5 km automatic limit"]);
+  assert.deepEqual(reviewReasons({ ...quiet, changed: [{ tag: "yow", fields: ["centre", "boundary", "group"] }] }, map([])), []);
+  assert.deepEqual(reviewReasons({ ...quiet, changed: [{ tag: "yow", fields: ["name", "boundary"] }] }, map([])),
+    ["yow: name changed; only boundary, centre and group changes publish automatically"]);
+  assert.deepEqual(reviewReasons({ ...quiet, added: ["yhz"] }), ["New zones need their provinces checked: yhz"]);
+  assert.deepEqual(reviewReasons({ ...quiet, removed: ["xcm"] }), ["Zones no longer listed by MeshMapper: xcm"]);
+  assert.deepEqual(reviewReasons(quiet, { added: ["tsa (meshmapper)"], removed: [], changes: [] }), ["Map region appeared or disappeared: tsa (meshmapper)"]);
+});

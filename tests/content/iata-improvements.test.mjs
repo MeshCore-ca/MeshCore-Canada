@@ -118,7 +118,16 @@ test("source review detects renames, geometry changes, removals and starter coll
   assert.doesNotMatch(reviewText(result),/@everyone|<script>/);
   const workflow=read(".github/workflows/meshmapper-review.yml");
   assert.match(workflow,/refs\/heads\/main/); assert.match(workflow,/issues: write/);
-  assert.doesNotMatch(workflow,/contents: write|git push|ssh |deploy|pull_request_target/);
+  // The job's own token stays read-only. Its only push is the gated nightly publish,
+  // made with the admin token so the normal CI runs before the site updates.
+  assert.doesNotMatch(workflow,/contents: write|ssh |deploy|pull_request_target/);
+  assert.equal(workflow.match(/git push|push origin/g).length, 1);
+  const checkStep = workflow.slice(workflow.indexOf("- name: Validate and commit simple changes"), workflow.indexOf("- name: Publish simple changes"));
+  const publishStep = workflow.slice(workflow.indexOf("- name: Publish simple changes"), workflow.indexOf("- name: Prepare, update or close"));
+  for (const step of [checkStep, publishStep]) assert.match(step, /if: steps\.decide\.outputs\.result == 'published'/);
+  assert.match(checkStep, /validate-regions\.cjs/);
+  assert.doesNotMatch(checkStep, /secrets\./, "Checks run without the publishing token");
+  assert.match(publishStep, /push origin HEAD:main/);
 });
 
 test("API snapshot review keeps undrawn and non-three-letter regions visible", () => {
@@ -136,6 +145,9 @@ test("API snapshot review keeps undrawn and non-three-letter regions visible", (
   assert.deepEqual(result.unmapped, [...alreadyUnmapped, "ab12"].sort());
   assert.deepEqual(result.changed[0].fields, ["group"]);
   assert.match(reviewText(result), /without a usable boundary: `ab12`/);
+  assert.doesNotMatch(reviewText(result), /did not publish this automatically/);
+  assert.match(reviewText({ ...result, autoReasons: ["New zones need their provinces checked: ab12"] }),
+    /did not publish this automatically:\n\n- New zones need their provinces checked: ab12/);
   assert.equal(compareSnapshots(next, { ...next, fetchedAt: "2099-01-01" }).needsReview, false);
   const api = structuredClone(snapshot);
   api.schema = "meshcore-canada-meshmapper-zones/v2";
@@ -198,4 +210,18 @@ test("unchanged outstanding review findings neither close nor duplicate the bot 
     },
   });
   assert.deepEqual(calls, ["GET"]);
+});
+
+test("an automatic nightly publish closes the review issue and says so", async () => {
+  const result = { ...compareSnapshots(snapshot, structuredClone(snapshot)), autoPublished: true };
+  const issue = { number: 42, title: "Review MeshMapper region changes", user: { login: "github-actions[bot]" },
+    body: "<!-- meshmapper-review:start -->\nOutdated changes\n<!-- meshmapper-review:end -->" };
+  const env = { GITHUB_REPOSITORY: "example/regions", GITHUB_TOKEN: "fixture-token", GITHUB_RUN_ID: "123" };
+  const calls = [];
+  await publish("No MeshMapper region changes.\n", result, { env, fetcher: async (url, options) => {
+    calls.push({ method: options.method, body: options.body && JSON.parse(options.body) });
+    return new Response(JSON.stringify(calls.length === 1 ? [issue] : {}));
+  } });
+  assert.equal(calls[1].body.state, "closed");
+  assert.match(calls[1].body.body, /published them automatically/);
 });

@@ -1,7 +1,7 @@
 name: Review MeshMapper changes
 on:
   schedule:
-    - cron: '23 14 * * 2'
+    - cron: '23 7 * * *'
   workflow_dispatch:
 permissions:
   contents: read
@@ -14,29 +14,81 @@ jobs:
     # Scheduled review never runs code from an unmerged branch.
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          fetch-depth: 0
+          persist-credentials: false
       - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version: '22'
       - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
         with:
           python-version: '3.13'
+      - name: Install region tools
+        run: python -m pip install -r scripts/requirements-regions.txt
+      # Fail early, every night, if the publishing token stops working.
+      - name: Check the publishing token
+        env:
+          GH_TOKEN: ${{ secrets.MCC_BOUNDARY_PUSH_TOKEN }}
+        run: |
+          set -euo pipefail
+          test -n "$GH_TOKEN" || { echo "MCC_BOUNDARY_PUSH_TOKEN is not configured." >&2; exit 1; }
+          gh api "repos/${{ github.repository }}" --jq '"Publishing token: push=\(.permissions.push) admin=\(.permissions.admin)"'
+          test "$(gh api "repos/${{ github.repository }}" --jq .permissions.push)" = true
       # Authenticated parsed responses must not enter the shared Actions cache.
-      # A weekly cold fetch fits the key budget; local retries retain a private cache.
+      # A nightly cold fetch is about 36 reads, far below the key's daily budget.
       - name: Fetch the official zones API
         env:
           MESHMAPPER_API_KEY: ${{ secrets.MESHMAPPER_API_KEY }}
         run: node scripts/fetch-meshmapper-regions.mjs .tmp/meshmapper-review/candidate.geojson
       - name: Check candidate geometry
+        run: python scripts/check-meshmapper-geometry.py .tmp/meshmapper-review/candidate.geojson .tmp/meshmapper-review/geometry.json
+      # Measure against the map from the last commit a person made to it, not last
+      # night's automatic one, so small changes cannot add up without review.
+      - name: Find the last map a person approved
         run: |
-          python -m pip install shapely==2.0.6
-          python scripts/check-meshmapper-geometry.py .tmp/meshmapper-review/candidate.geojson .tmp/meshmapper-review/geometry.json
-      - name: Prepare or update the review issue
+          set -euo pipefail
+          reviewed="$(git log --format='%H %ae' -- docs/assets/regions/iata-boundaries.geojson |
+            awk '$2 != "41898282+github-actions[bot]@users.noreply.github.com" { print $1; exit }')"
+          echo "Last approved map: $reviewed"
+          git show "$reviewed:docs/assets/regions/iata-boundaries.geojson" > .tmp/meshmapper-review/reviewed-map.geojson
+      # Simple changes (no new or removed zones, valid geometry, only boundaries,
+      # centres or groups changed, and every region within 1% of its area and 5 km of
+      # its old outline since that map) are published. Anything else waits for a person.
+      - name: Decide whether to publish
+        id: decide
+        env:
+          PYTHON: python
+        run: node scripts/promote-meshmapper-snapshot.mjs .tmp/meshmapper-review/candidate.geojson --auto --baseline .tmp/meshmapper-review/reviewed-map.geojson
+      - name: Validate and commit simple changes
+        if: steps.decide.outputs.result == 'published'
+        run: |
+          set -euo pipefail
+          node scripts/validate-regions.cjs
+          python scripts/verify-iata-geometry.py
+          node --test tests/content/iata-*.test.mjs tests/content/meshmapper-*.test.mjs
+          git diff --check
+          git add docs/assets/regions
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -F .tmp/meshmapper-review/commit-message.txt
+      # The token is only available to this push, not to the checks above.
+      - name: Publish simple changes
+        if: steps.decide.outputs.result == 'published'
+        env:
+          MCC_BOUNDARY_PUSH_TOKEN: ${{ secrets.MCC_BOUNDARY_PUSH_TOKEN }}
+        run: |
+          set -euo pipefail
+          push_auth="$(printf 'x-access-token:%s' "$MCC_BOUNDARY_PUSH_TOKEN" | base64 -w0)"
+          echo "::add-mask::$push_auth"
+          # A token push (unlike GITHUB_TOKEN) starts the normal CI, which must pass before meshcore.ca updates.
+          git -c "http.https://github.com/.extraheader=AUTHORIZATION: basic $push_auth" push origin HEAD:main
+      - name: Prepare, update or close the review issue
         env:
           GITHUB_TOKEN: ${{ github.token }}
-        run: node scripts/check-meshmapper-changes.mjs .tmp/meshmapper-review/candidate.geojson --geometry-report .tmp/meshmapper-review/geometry.json --publish-issue
+        run: node scripts/check-meshmapper-changes.mjs .tmp/meshmapper-review/candidate.geojson --geometry-report .tmp/meshmapper-review/geometry.json --auto-report .tmp/meshmapper-review/auto.json --publish-issue
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:

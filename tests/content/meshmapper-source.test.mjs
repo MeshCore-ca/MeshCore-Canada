@@ -167,4 +167,9 @@ test("partial geographic authorization cannot masquerade as national region remo
   const workflow = readFileSync(".github/workflows/meshmapper-review.yml", "utf8");
   assert.match(workflow, /secrets\.MESHMAPPER_API_KEY/);
   assert.doesNotMatch(workflow, /uses: actions\/cache|allow-region-removals|pull_request_target/);
+  // Nightly, publishing only what the promotion script's automatic mode allows.
+  assert.match(workflow, /cron: '23 7 \* \* \*'/);
+  assert.match(workflow, /promote-meshmapper-snapshot\.mjs \S+ --auto --baseline \S+reviewed-map\.geojson/);
+  assert.match(workflow, /fetch-depth: 0/);
+  assert.match(workflow, /if: steps\.decide\.outputs\.result == 'published'/);
 });

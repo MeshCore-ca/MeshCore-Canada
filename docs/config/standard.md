@@ -192,9 +192,9 @@ region maintainers.
 
 Use the region card to volunteer as maintainer, confirm settings with dated public
 evidence, or suggest a boundary refinement. Changes require a reviewed PR.
-MeshMapper changes are checked weekly and collected in a review issue; they are
-never published automatically. Settings confirmations are marked for another
-check after six months.
+MeshMapper changes are checked nightly. Small boundary adjustments are published
+automatically; new or removed zones and larger boundary changes wait in a review
+issue. Settings confirmations are marked for another check after six months.
 
 ### City repeater {#local-repeater}
 

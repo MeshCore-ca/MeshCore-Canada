@@ -24,10 +24,11 @@ The production owner must:
 
 The retired Action has no issue-closure trigger and no write permission.
 Closing an old boundary issue must not change `main`. Do not enable the former
-boundary publisher or create its push token. Owners may retire
-`MCC_BOUNDARY_PUSH_TOKEN` and the boundary-only verification secret after checking
-that no other workflow uses them; keep the App PEM and Turnstile secret used by
-community submissions.
+boundary publisher. Keep `MCC_BOUNDARY_PUSH_TOKEN`: the nightly **Review MeshMapper
+changes** Action now uses it to publish simple MeshMapper updates. Owners may
+retire the boundary-only verification secret after checking that no other
+workflow uses it; keep the App PEM and Turnstile secret used by community
+submissions.
 
 This PR does not deploy the gateway or alter any repeater. The remaining setup
 sections are for an administrator who needs to provision or recover the existing

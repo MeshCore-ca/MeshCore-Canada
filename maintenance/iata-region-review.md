@@ -1,18 +1,36 @@
 # Maintaining IATA regions
 
-The website ships reviewed snapshots. A live upstream change never rewrites the
-map or sends commands to repeaters.
+The website ships snapshots of MeshMapper's zones API. Simple upstream changes
+are published nightly; anything larger waits for a person. Nothing here ever
+sends commands to repeaters.
 
 ## Review a MeshMapper update
 
-The **Review MeshMapper changes** Action runs weekly on `main` and can also be
-started manually there. It uses the [official Zones API](https://wiki.meshmapper.net/zones-api/),
+The **Review MeshMapper changes** Action runs nightly at 07:23 UTC on `main` and
+can also be started manually there. It uses the [official Zones API](https://wiki.meshmapper.net/zones-api/),
 not the homepage or its private map endpoints. It validates drawn geometry and
-compares names, centres, URLs, groups and boundaries. A clean comparison closes
-any matching bot-owned review issue, preserving notes outside its generated
-summary and linking to the resolving check. It creates no issue when nothing
-needs review. A change opens or updates one bot-owned review issue and saves the
-candidate GeoJSON and comparison as a 30-day artifact.
+compares names, centres, URLs, groups and boundaries.
+
+**Simple changes publish themselves.** A change is simple when no zone was added
+or removed, every boundary is valid, only boundaries, centres or groups changed
+(a renamed zone waits for a person), and every region on the combined map,
+including planning areas, changed by less than 1% of its area and reaches no more
+than 5 km beyond its old outline. Reach ignores pieces under 5 hectares (rebuild
+slivers between zones), so a thin spike ending in a town still counts. Both limits
+are measured against the map from the last commit a person made to it, so nightly
+changes cannot add up unseen. Rounding and the routine YOW and YXX edits of
+2026-11-01 reached under 1 km; the redrawn YQB and YUL reached 21 and 111 km. The
+job then rebuilds the map, runs the region validators, geometry check and region
+tests, and commits to `main` with `MCC_BOUNDARY_PUSH_TOKEN` (an admin token, so it
+can bypass the review rule). That push starts the normal CI, which gates the
+deploy. The limits are `simpleChangePercent` and `simpleShiftKm` in
+`scripts/promote-meshmapper-snapshot.mjs`.
+
+**Everything else waits for a person.** The job opens or updates one bot-owned
+review issue that says why it did not publish, and saves the candidate GeoJSON
+and comparison as a 30-day artifact. A clean comparison, including one after an
+automatic publish, closes that issue, preserving notes outside its generated
+summary. The job fails early if the publishing token stops working.
 
 The importer uses `get_zones.php?country=CA`, followed by each returned site's
 `get_geojson.php`. It accepts the API's 2–6-character region codes, preserves
@@ -33,7 +51,7 @@ requests log MeshMapper's error code.
 Parsed responses are kept for 24 hours in the private, ignored
 `.tmp/meshmapper-api-cache.json`, bound to a credential fingerprint and `CA`.
 Credential changes discard the old cache; HTTP 401/403 discard authorized data.
-This cache is not uploaded or placed in the shared Actions cache. The weekly job
+This cache is not uploaded or placed in the shared Actions cache. The nightly job
 fetches a fresh candidate and publishes only that review artifact, never the key.
 
 Requests are spaced by at least 2.2 seconds, below the shared 30-per-minute read
@@ -103,7 +121,7 @@ It writes nothing, and says what to change, when:
   agreeing how its old planning area will be reassigned.
 
 Regions MeshMapper lists without a boundary are kept in the snapshot but left off
-the map, so the weekly review does not report them again. Validators only accept
+the map, so the nightly review does not report them again. Validators only accept
 API snapshots.
 
 After promoting, look at the map, run `node scripts/validate-regions.cjs`,
