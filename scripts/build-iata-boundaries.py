@@ -43,6 +43,11 @@ def polygonal(geometry):
     return geometry
 
 
+def drawn(published):
+    """Zones MeshMapper lists without a boundary stay in the snapshot but off the map."""
+    return [feature for feature in published["features"] if feature["geometry"] is not None]
+
+
 def build_boundaries(published, jurisdictions, policy, labrador, scopes):
     assert policy["schema"] == "meshcore-canada-iata-starters/v1"
     existing = {feature["properties"]["tag"] for feature in published["features"]}
@@ -50,6 +55,7 @@ def build_boundaries(published, jurisdictions, policy, labrador, scopes):
     definitions = policy["regions"]
     assert len({entry["tag"] for entry in definitions}) == len(definitions)
     assert not existing.intersection(entry["tag"] for entry in definitions), "MeshMapper now publishes a starter code: review and replace the starter definition first"
+    published = dict(published, features=drawn(published))
     labrador_area = provinces["nl"].intersection(shape(labrador["geometry"]))
     nl = {"labrador": labrador_area, "newfoundland": provinces["nl"].difference(labrador_area)}
     published_area = unary_union([shape(feature["geometry"]) for feature in published["features"]])
@@ -126,7 +132,7 @@ def main():
     features = build_boundaries(data["meshmapper"], data["jurisdictions"], data["starters"], data["labrador"], data["scopes"])
     output = {
         "type": "FeatureCollection", "schema": "meshcore-canada-iata-boundaries/v2",
-        "featureCount": len(features), "publishedCount": len(data["meshmapper"]["features"]),
+        "featureCount": len(features), "publishedCount": len(drawn(data["meshmapper"])),
         "starterCount": len(data["starters"]["regions"]),
         "planningExtensionCount": sum(feature["properties"].get("planningKind") == "extension" for feature in features),
         "sourceHashes": {name: hashlib.sha256((ROOT / path).read_bytes()).hexdigest() for name, path in INPUTS.items()},

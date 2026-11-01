@@ -11,6 +11,8 @@ const load = path => JSON.parse(read(path));
 const data = load("docs/assets/regions/iata-regions.json");
 const zones = load("docs/assets/regions/iata-boundaries.geojson");
 const published = load("docs/assets/regions/meshmapper-iata-boundaries.geojson");
+// Zones MeshMapper lists without a boundary stay in the snapshot but off the map.
+const drawn = published.features.filter(feature => feature.geometry !== null);
 const starters = load("data/iata-starter-regions.json");
 const provinces = load("docs/assets/regions/scope-jurisdictions.geojson");
 assert.equal(data.schema, "meshcore-canada-iata-scopes/v1");
@@ -37,15 +39,21 @@ assert.deepEqual(provinces.features.map(feature => feature.properties.tag).sort(
 assert.equal(data.source.boundarySha256, createHash("sha256").update(read("docs/assets/regions/iata-boundaries.geojson")).digest("hex"));
 assert.equal(data.source.meshmapperBoundarySha256, createHash("sha256").update(read("docs/assets/regions/meshmapper-iata-boundaries.geojson")).digest("hex"));
 assert.equal(provinces.sourceSha256, createHash("sha256").update(read("docs/assets/regions/canada-region-partition-digital.geojson")).digest("hex"));
-assert.ok(["https://meshmapper.net/?ajax=zones_bbox", "https://meshmapper.net/get_zones.php?country=CA"].includes(published.source.endpoint));
+// Boundaries must come from the keyed MeshMapper zones API. The only exception is
+// the 2026-09-24 snapshot from the old homepage feed, until an API pull replaces it.
+const legacySnapshotSha256 = "78e0d08608b82328033b2ba59b22ce08a82a563725e5d59c5059ca0dc119c2d6";
+if (data.source.meshmapperBoundarySha256 !== legacySnapshotSha256) {
+  assert.equal(published.schema, "meshcore-canada-meshmapper-zones/v2", "Publish MeshMapper boundaries with scripts/promote-meshmapper-snapshot.mjs");
+  assert.equal(published.source.endpoint, "https://meshmapper.net/get_zones.php?country=CA", "MeshMapper boundaries must come from the zones API, not the map pages");
+}
 assert.ok(Number.isFinite(Date.parse(published.fetchedAt)));
-assert.equal(zones.publishedCount, published.features.length);
+assert.equal(zones.publishedCount, drawn.length);
 assert.equal(zones.starterCount, starters.regions.length);
-assert.deepEqual(zones.features.filter(feature => feature.properties.regionSource === "meshmapper").map(feature => feature.properties.tag).sort(), published.features.map(feature => feature.properties.tag).sort());
+assert.deepEqual(zones.features.filter(feature => feature.properties.regionSource === "meshmapper").map(feature => feature.properties.tag).sort(), drawn.map(feature => feature.properties.tag).sort());
 assert.deepEqual(zones.features.filter(feature => feature.properties.planningKind === "starter").map(feature => feature.properties.tag).sort(), starters.regions.map(region => region.tag).sort());
 assert.equal(zones.features.filter(feature => feature.properties.planningKind === "extension").length, zones.planningExtensionCount);
 assert.equal(data.source.planningExtensionCount, zones.planningExtensionCount);
-for (const feature of published.features) {
+for (const feature of drawn) {
   const merged = zones.features.find(item => item.properties.tag === feature.properties.tag);
   assert.deepEqual(merged, { ...feature, properties: { ...feature.properties, regionSource: "meshmapper" } }, "Never alter a published MeshMapper zone");
 }
@@ -62,7 +70,7 @@ for (const feature of zones.features) {
   else {
     assert.equal(feature.properties.regionSource, "meshcore-canada");
     if (feature.properties.planningKind === "extension") {
-      assert.ok(published.features.some(region => region.properties.tag === tag));
+      assert.ok(drawn.some(region => region.properties.tag === tag));
       assert.equal(data.status[tag].planningExtension, true);
     } else {
       assert.equal(feature.properties.planningKind, "starter");

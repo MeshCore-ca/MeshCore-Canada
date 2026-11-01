@@ -47,10 +47,10 @@ The API candidate uses snapshot schema v2; the reviewer also accepts the older
 v1 approved snapshot. `has_boundary: true` may still return `geometry: null`
 when a stored boundary cannot be used. Keep that metadata and flag the region
 for review; do not manufacture a polygon. A region without usable geometry remains
-visible in the review report, but is not a polygon to publish. Do not copy a null geometry into
-the active polygon-only map input or invent a circle for it. Coordinate with the
-region's owner before promoting its boundary. The existing approved map stays
-unchanged until a separate boundary review is completed.
+visible in the review report, but is not a polygon to publish. The map builders
+skip null geometry; never invent a circle for it. Coordinate with the region's
+owner before promoting its boundary. The existing approved map stays unchanged
+until a separate boundary review is completed.
 
 Geometry problems are reported in the review issue and its candidate-bound
 `geometry.json` artifact instead of preventing the issue from being created.
@@ -73,16 +73,40 @@ The geometry check includes named towns between regions, a national half-degree
 sample grid against all eligible centres, and an order-independence check. Full
 coverage and valid polygons alone are not enough to approve a boundary update.
 
-Download the candidate from the linked run. Review it before replacing
-`docs/assets/regions/meshmapper-iata-boundaries.geojson`. Update the province
-assignments in `data/iata-scope-policy.json` for any new code. If MeshMapper now
-publishes a starter code, remove that starter only after agreeing how its old
-planning area will be reassigned. The generator intentionally stops on a collision.
+### Publish a reviewed candidate
 
-Regenerate with `python scripts/build-iata-boundaries.py` and
-`node scripts/build-iata-catalog.mjs`. Run the geometry, content and browser checks,
-and verify the exact candidate on the preview in both languages. Merge through a
-reviewed PR. Never reactivate the retired census-boundary publisher.
+```sh
+gh run download <run id> -n meshmapper-review -D .tmp/meshmapper-review
+node scripts/promote-meshmapper-snapshot.mjs --check
+node scripts/promote-meshmapper-snapshot.mjs
+```
+
+The review issue gives the exact run id. `--check` reports without writing
+anything. Without it, the script replaces
+`docs/assets/regions/meshmapper-iata-boundaries.geojson` and regenerates the
+combined map and catalogue. It needs the region tools
+(`pip install -r scripts/requirements-regions.txt`); set `PYTHON` if `python3`
+is not the interpreter that has them.
+
+It writes nothing, and says what to change, when:
+
+- the file did not come from the zones API;
+- a boundary is invalid, unusable, or does not contain its centre (fix it in
+  MeshMapper and fetch again);
+- a new region needs its provinces in `zoneProvinces` in
+  `data/iata-scope-policy.json` (it suggests the province containing the centre;
+  add any other province the region serves);
+- a region was removed, lost its boundary, or still has a profile record;
+- MeshMapper now publishes a starter code. Remove that starter only after
+  agreeing how its old planning area will be reassigned.
+
+Regions MeshMapper lists without a boundary are kept in the snapshot but left off
+the map, so the weekly review does not report them again. Validators only accept
+API snapshots, apart from the pre-API 2026-09-24 snapshot until it is replaced.
+
+After promoting, look at the map, run `node scripts/validate-regions.cjs`,
+`python scripts/verify-iata-geometry.py` and `npm run test:content`, then commit.
+Never reactivate the retired census-boundary publisher.
 
 ## Region contacts and settings
 

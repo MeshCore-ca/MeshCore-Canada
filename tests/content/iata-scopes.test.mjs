@@ -42,7 +42,7 @@ test("southern Ontario gaps use nearby existing codes, not the new Sudbury hub",
     assert.deepEqual(plain(api.commands(api.profile(catalog, { activation: "activate", home:tag,province:"on"}))), [`region def ${tag}|* on|* onqc|* can|* na`, "region allowf *", `region default ${tag}`]);
   }
   assert.equal(api.matches(combined,46.492,-80.993)[0].properties.tag,"ysb");
-  for (const original of zones.features) {
+  for (const original of zones.features.filter(feature => feature.geometry)) {
     assert.deepEqual(combined.features.find(feature=>feature.properties.tag===original.properties.tag && feature.properties.regionSource==="meshmapper").geometry,original.geometry);
   }
 });
@@ -61,7 +61,7 @@ test("six starter regions cover the missing jurisdictions with honest source lab
     const result = api.profile(catalog, { activation: "activate",  home: tag, province });
     assert.deepEqual(plain(api.commands(result)), [`region def ${tag}|* ${province}|* can|* na`, "region allowf *", `region default ${tag}`]);
   }
-  for (const feature of zones.features) {
+  for (const feature of zones.features.filter(feature => feature.geometry)) {
     assert.deepEqual(combined.features.find(item => item.properties.tag === feature.properties.tag).geometry, feature.geometry);
   }
 });

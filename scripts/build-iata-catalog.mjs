@@ -109,7 +109,7 @@ const catalog = {
   version: `meshmapper-iata-${published.fetchedAt.slice(0, 10)}-starters-${starters.reviewedAt}`,
   policy,
   source: { ...published.source, fetchedAt: published.fetchedAt, starterReviewedAt: starters.reviewedAt,
-    publishedCount: published.features.length, starterCount: starters.regions.length,
+    publishedCount: published.features.filter(feature => feature.geometry !== null).length, starterCount: starters.regions.length,
     boundarySchema: zones.schema, planningExtensionCount: zones.planningExtensionCount,
     boundarySha256: createHash("sha256").update(readFileSync(new URL("docs/assets/regions/iata-boundaries.geojson", root))).digest("hex"),
     meshmapperBoundarySha256: createHash("sha256").update(readFileSync(new URL("docs/assets/regions/meshmapper-iata-boundaries.geojson", root))).digest("hex"),

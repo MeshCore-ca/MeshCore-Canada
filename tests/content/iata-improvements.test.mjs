@@ -127,10 +127,15 @@ test("API snapshot review keeps undrawn and non-three-letter regions visible", (
   next.features[0].properties.group = "ONQC";
   const result = compareSnapshots(snapshot, next);
   assert.deepEqual(result.added, ["ab12"]);
-  assert.deepEqual(result.unmapped, ["ab12"]);
+  const alreadyUnmapped = snapshot.features.filter(feature => feature.geometry === null).map(feature => feature.properties.tag);
+  assert.deepEqual(result.unmapped, [...alreadyUnmapped, "ab12"].sort());
   assert.deepEqual(result.changed[0].fields, ["group"]);
   assert.match(reviewText(result), /without a usable boundary: `ab12`/);
   assert.equal(compareSnapshots(next, { ...next, fetchedAt: "2099-01-01" }).needsReview, false);
+  const api = structuredClone(snapshot);
+  api.schema = "meshcore-canada-meshmapper-zones/v2";
+  for (const feature of api.features) feature.properties.hasBoundary = feature.geometry !== null;
+  assert.equal(compareSnapshots(snapshot, api).needsReview, false, "A first API pull matching the old feed needs no review");
 });
 
 test("source review retains unavailable stored boundaries without inventing a polygon", () => {

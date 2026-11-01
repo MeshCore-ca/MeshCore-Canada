@@ -32,7 +32,9 @@ export function compareSnapshots(before, after, starterTags = []) {
       if (JSON.stringify(previous.geometry) !== JSON.stringify(feature.geometry)) fields.push("boundary");
       if (previous.properties.sourceUrl !== feature.properties.sourceUrl) fields.push("URL");
       if ((previous.properties.group || null) !== (feature.properties.group || null)) fields.push("group");
-      if (previous.properties.hasBoundary !== feature.properties.hasBoundary) fields.push("boundary availability");
+      // Pre-API snapshots have no hasBoundary; every zone in them was drawn.
+      const drawn = item => item.properties.hasBoundary ?? item.geometry !== null;
+      if (drawn(previous) !== drawn(feature)) fields.push("boundary availability");
       if (fields.length) changed.push({ tag, fields });
     }
   }
@@ -45,14 +47,17 @@ export function compareSnapshots(before, after, starterTags = []) {
   return { ...changes, digest, needsReview: added.length + removed.length + changed.length + collisions.length > 0 };
 }
 
-export function reviewText(result) {
+export function reviewText(result, runId = process.env.GITHUB_RUN_ID) {
   const list = values => values.map(tag => "`" + tag + "`").join(", ") || "None";
+  const download = "gh run download " + (/^\d+$/.test(runId || "") ? runId : "<run id>") + " -n meshmapper-review -D .tmp/meshmapper-review";
   return `<!-- meshmapper-review:start -->\n<!-- digest:${result.digest} -->\n## MeshMapper snapshot needs review\n\n` +
     `Added: ${list(result.added)}\n\nRemoved: ${list(result.removed)}\n\nChanged: ${result.changed.map(item => "`" + item.tag + "` (" + item.fields.join(", ") + ")").join(", ") || "None"}\n\n` +
     `Starter-code collisions: ${list(result.collisions)}\n\n` +
     `Enabled regions without a usable boundary: ${list(result.unmapped)}\n\n` +
     `Geometry requiring review: ${(result.geometryIssues || []).map(item => "`" + item.tag + "` (" + item.kind + ")").join(", ") || "None"}\n\n` +
-    "Download the candidate snapshot from this workflow's artifacts. Review its boundaries, province metadata, local contacts, and any starter replacements in a PR. Regenerate the combined map and catalogue, run the region and browser tests, and verify both languages on the preview. Nothing has been published automatically.\n<!-- meshmapper-review:end -->";
+    "Nothing has been published automatically. To review and publish this candidate:\n\n" +
+    "```sh\n" + download + "\nnode scripts/promote-meshmapper-snapshot.mjs --check\nnode scripts/promote-meshmapper-snapshot.mjs\n```\n\n" +
+    "The script says what to fix first if a boundary is broken or a new region needs its province. See `maintenance/iata-region-review.md`.\n<!-- meshmapper-review:end -->";
 }
 
 export async function publish(report, result, { fetcher = fetch, env = process.env } = {}) {

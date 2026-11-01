@@ -17,6 +17,8 @@ def load(path):
 
 zones = load(root / "iata-boundaries.geojson")
 published = load(root / "meshmapper-iata-boundaries.geojson")
+# Zones without a MeshMapper boundary are not drawn on the map.
+drawn = [feature for feature in published["features"] if feature["geometry"] is not None]
 provinces = load(root / "scope-jurisdictions.geojson")
 policy = load(repository / "data/iata-starter-regions.json")
 scopes = load(repository / "data/iata-scope-policy.json")
@@ -34,7 +36,7 @@ for collection in (zones, provinces):
         assert geometry.is_valid and not geometry.is_empty and geometry.area > 0, feature["properties"]
         if collection is zones and feature["properties"].get("planningKind") != "extension":
             assert geometry.covers(Point(*feature["properties"]["center"])), key(feature)
-for feature in published["features"]:
+for feature in drawn:
     retained = next(part for part in zones["features"] if key(part) == (feature["properties"]["tag"], "meshmapper"))
     assert retained["geometry"] == feature["geometry"], "Published MeshMapper coordinates changed"
 province_shapes = {feature["properties"]["tag"]: shape(feature["geometry"]) for feature in provinces["features"]}
@@ -49,7 +51,7 @@ assert {key(feature) for feature in expected} == set(parts)
 for feature in expected:
     assert parts[key(feature)].symmetric_difference(shape(feature["geometry"])).area < 1e-10
 
-published_area = unary_union([shape(feature["geometry"]) for feature in published["features"]])
+published_area = unary_union([shape(feature["geometry"]) for feature in drawn])
 planning = {tag: geometry for (tag, source), geometry in parts.items() if source == "meshcore-canada"}
 assert {entry["province"] for entry in policy["regions"]} == set(province_shapes)
 planning_area = unary_union(list(planning.values()))
@@ -84,7 +86,7 @@ checked = 0
 province_counts = {}
 for province in sorted({entry["province"] for entry in policy["regions"] if entry["area"] == "hub"}):
     centres = [(feature["properties"]["tag"], project(*feature["properties"]["center"]))
-               for feature in published["features"] if province in scopes["zoneProvinces"][feature["properties"]["tag"]]]
+               for feature in drawn if province in scopes["zoneProvinces"][feature["properties"]["tag"]]]
     centres += [(entry["tag"], project(*entry["center"])) for entry in policy["regions"] if entry["province"] == province]
     province_shape = prep(province_shapes[province])
     west, south, east, north = province_shapes[province].bounds
@@ -131,4 +133,9 @@ except AssertionError as error:
 else:
     raise AssertionError("A newly published starter code requires an explicit source transition")
 
-print(f"IATA geometry verified: {len(published['features'])} unchanged published zones, {len(planning)} planning features, all 13 jurisdictions; {checked} independent gap checks: {province_counts}")
+# A zone MeshMapper lists without a boundary leaves the map unchanged.
+undrawn = copy.deepcopy(published)
+undrawn["features"].append({"type": "Feature", "properties": {"tag": "tsu", "center": [-63.9, 46.3], "sourceUrl": "https://tsu.meshmapper.net/", "hasBoundary": False}, "geometry": None})
+assert {key(feature) for feature in builder(undrawn, provinces, policy, labrador, scopes)} == set(parts)
+
+print(f"IATA geometry verified: {len(drawn)} unchanged published zones, {len(planning)} planning features, all 13 jurisdictions; {checked} independent gap checks: {province_counts}")
