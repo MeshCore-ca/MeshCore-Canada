@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Find the three-letter airport code nearest an observer.">
+        <meta name="description" content="Match your observer location code to its IATA region.">
       
       
       
@@ -51,13 +51,13 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/styles/tokens.css?v=20260722-2">
+      <link rel="stylesheet" href="../../assets/styles/tokens.css?v=20260926-1">
     
-      <link rel="stylesheet" href="../../assets/styles/base.css?v=20261019-1">
+      <link rel="stylesheet" href="../../assets/styles/base.css?v=20261029-1">
     
       <link rel="stylesheet" href="../../assets/styles/shell.css?v=20260821-1">
     
-      <link rel="stylesheet" href="../../assets/styles/components.css?v=20260728-1">
+      <link rel="stylesheet" href="../../assets/styles/components.css?v=20260926-1">
     
       <link rel="stylesheet" href="../../assets/styles/network-status.css?v=20260905-1">
     
@@ -73,7 +73,7 @@
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="MeshCore Canada">
     <meta property="og:title" content="Find an observer location code">
-    <meta property="og:description" content="Find the three-letter airport code nearest an observer.">
+    <meta property="og:description" content="Match your observer location code to its IATA region.">
     <meta property="og:url" content="https://meshcore.ca/analyzer/iata-codes/">
     <meta property="og:image" content="https://meshcore.ca/assets/MeshCore-Canada-Logo.png">
     <meta name="twitter:card" content="summary">
@@ -82,7 +82,7 @@
         "@context": "https://schema.org",
         "@type": "WebPage",
         "name": "Find an observer location code",
-        "description": "Find the three-letter airport code nearest an observer.",
+        "description": "Match your observer location code to its IATA region.",
         "url": "https://meshcore.ca/analyzer/iata-codes/",
         "isPartOf": {
           "@type": "WebSite",
@@ -121,6 +121,16 @@
       
     </div>
     <div data-md-component="announce">
+      
+        <aside class="md-banner">
+          <div class="md-banner__inner md-grid md-typeset">
+            
+            
+  
+
+          </div>
+          
+        </aside>
       
     </div>
     
@@ -3426,7 +3436,7 @@
     
   
   
-    <span class="md-status md-status--verified"></span>
+    <span class="md-status md-status--draft"></span>
   
 
   
@@ -3629,8 +3639,9 @@
   
 
   
-<p>An observer uses a real three-letter airport code as a broad location label. It does not define a MeshCore region boundary.</p>
-<p>Use the nearest sensible code for the observer's actual area. Use the same code in every broker entry.</p>
+<p>Use the code shown by the <a href="../../config/map/">IATA region map</a> for your observer's location. The map identifies published MeshMapper zones and MeshCore Canada starter regions; distance to an airport does not determine the code.</p>
+<p>Observer settings use uppercase codes such as <code>YOW</code>; on-air scopes use lowercase names such as <code>yow</code>. Use the same observer code in every broker entry. Coordinate changes to an existing observer with its operator.</p>
+<p>If the map has no assigned region at your location, ask your community which code to use. The quick list below is a reference, not a boundary lookup.</p>
 <div class="mc-location-tool" id="location-code-tool" data-source="../location-codes.json">
   <div class="mc-location-controls">
     <label for="location-code-search">
@@ -3661,13 +3672,13 @@
 
 <h2 id="about-this-list">About this list<a class="headerlink" href="#about-this-list" title="Permanent link">&para;</a></h2>
 <p>The <a href="../location-codes.json">canonical location-code data</a> generates the search tool and the command-builder suggestions. It is a curated Canadian quick list, not a complete official airport-code registry.</p>
-<p>If the nearest real airport code is missing:</p>
+<p>If your community's code is missing:</p>
 <ol>
-<li>verify it against a reliable airport source;</li>
+<li>confirm it with the community and MeshMapper;</li>
 <li>type the three-letter code into a method that accepts free text; and</li>
 <li>ask MeshCore Canada to add the friendly place name.</li>
 </ol>
-<p>Do not use <code>CAN</code> for Canada; it is an airport code for Guangzhou. Do not use placeholders such as <code>XXX</code> or <code>HOME</code>.</p>
+<p>Do not use <code>CAN</code> for an observer in Canada; it is an airport code for Guangzhou. The reserved on-air scope <code>can</code> is a separate setting, not an observer location code. Do not use placeholders such as <code>XXX</code> or <code>HOME</code>.</p>
 <p>Return to <a href="../intro/">Choose an observer method</a>.</p>
 
 
@@ -3784,6 +3795,8 @@
     
   
       <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../assets/javascripts/region-profile.js?v=20260926-1"></script>
       
         <script src="../../assets/javascripts/i18n-runtime.js?v=20260829-1"></script>
       

@@ -51,13 +51,13 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/styles/tokens.css?v=20260722-2">
+      <link rel="stylesheet" href="../../assets/styles/tokens.css?v=20260926-1">
     
-      <link rel="stylesheet" href="../../assets/styles/base.css?v=20261019-1">
+      <link rel="stylesheet" href="../../assets/styles/base.css?v=20261029-1">
     
       <link rel="stylesheet" href="../../assets/styles/shell.css?v=20260821-1">
     
-      <link rel="stylesheet" href="../../assets/styles/components.css?v=20260728-1">
+      <link rel="stylesheet" href="../../assets/styles/components.css?v=20260926-1">
     
       <link rel="stylesheet" href="../../assets/styles/network-status.css?v=20260905-1">
     
@@ -119,6 +119,16 @@
       
     </div>
     <div data-md-component="announce">
+      
+        <aside class="md-banner">
+          <div class="md-banner__inner md-grid md-typeset">
+            
+            
+  
+
+          </div>
+          
+        </aside>
       
     </div>
     
@@ -3594,7 +3604,7 @@
     
   
   
-    <span class="md-status md-status--verified"></span>
+    <span class="md-status md-status--draft"></span>
   
 
   
@@ -3964,12 +3974,17 @@ for the Canadian radio settings and <strong>3-byte</strong> paths. See the
 <a href="../../provinces/#canada-baseline">preset details and older-app guidance</a>.</p>
 <p>The separate <strong>USA</strong> preset uses the same radio values but leaves the path-hash
 setting unchanged. <a href="https://github.com/meshcore-dev/MeshCore/issues/3302#issuecomment-5598886579">Upstream preset update</a>.</p>
-<p>The <a href="../../config/">repeater configurator</a> finds region paths. Its radio and
-advert ID controls remain separate and keep current settings until you choose a change.</p>
+<p>The <a href="../../config/">repeater configurator</a> selects IATA regions and generates
+independent scope commands. Its radio and advert ID controls remain separate and
+keep current settings until you choose a change.</p>
 <h3 id="what-is-path-hash-mode">What is path hash mode?<a class="headerlink" href="#what-is-path-hash-mode" title="Permanent link">&para;</a></h3>
-<p>It sets the size of the identifiers in this node’s advert paths: 1, 2, or 3 bytes.
-MeshCore Canada recommends 3 bytes to reduce collisions. Firmware 1.14 and newer
-can forward mixed sizes; neighbouring nodes do not all need the same ID size.</p>
+<p>Paths record short repeater identifiers of 1, 2, or 3 bytes. On a repeater,
+<code>path.hash.mode</code> controls its own adverts; it does not restrict the path-hash
+sizes it can forward. A companion’s setting controls the path size of its outgoing messages.</p>
+<p>MeshCore Canada recommends 3-byte paths. Repeaters on firmware 1.14 or newer can
+forward all three sizes; older repeaters drop packets using 2- or 3-byte paths.
+Follow your community’s settings while older repeaters are being upgraded.
+See the <a href="https://github.com/meshcore-dev/MeshCore/blob/main/docs/faq.md#39-q-what-is-multibyte-support-what-do-1-byte-2-byte-3-byte-adverts-and-messages-mean">upstream multibyte FAQ</a>.</p>
 <p><a href="../../config/standard/">Read the region standard</a>.</p>
 <h3 id="do-i-need-an-amateur-radio-licence">Do I need an amateur radio licence?<a class="headerlink" href="#do-i-need-an-amateur-radio-licence" title="Permanent link">&para;</a></h3>
 <p>MeshCore Canada cannot decide which authorization applies to your station.
@@ -4137,6 +4152,8 @@ before sharing screenshots or logs.</p>
     
   
       <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../assets/javascripts/region-profile.js?v=20260926-1"></script>
       
         <script src="../../assets/javascripts/i18n-runtime.js?v=20260829-1"></script>
       

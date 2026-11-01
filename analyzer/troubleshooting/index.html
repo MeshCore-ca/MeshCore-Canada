@@ -51,13 +51,13 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/styles/tokens.css?v=20260722-2">
+      <link rel="stylesheet" href="../../assets/styles/tokens.css?v=20260926-1">
     
-      <link rel="stylesheet" href="../../assets/styles/base.css?v=20261019-1">
+      <link rel="stylesheet" href="../../assets/styles/base.css?v=20261029-1">
     
       <link rel="stylesheet" href="../../assets/styles/shell.css?v=20260821-1">
     
-      <link rel="stylesheet" href="../../assets/styles/components.css?v=20260728-1">
+      <link rel="stylesheet" href="../../assets/styles/components.css?v=20260926-1">
     
       <link rel="stylesheet" href="../../assets/styles/network-status.css?v=20260905-1">
     
@@ -121,6 +121,16 @@
       
     </div>
     <div data-md-component="announce">
+      
+        <aside class="md-banner">
+          <div class="md-banner__inner md-grid md-typeset">
+            
+            
+  
+
+          </div>
+          
+        </aside>
       
     </div>
     
@@ -3490,7 +3500,7 @@
     
   
   
-    <span class="md-status md-status--verified"></span>
+    <span class="md-status md-status--draft"></span>
   
 
   
@@ -3748,7 +3758,7 @@
 <li><strong>Radio:</strong> confirm it is powered, connected to the observer method, and on the local mesh settings.</li>
 <li><strong>Device or service:</strong> confirm the observer process is running.</li>
 <li><strong>Broker:</strong> confirm that the observer reports a connection to the primary server with TLS verification.</li>
-<li><strong>Viewer:</strong> wait a few minutes, refresh <a href="https://live.meshcore.ca/#/observers">CoreScope Observers</a>, and search the exact observer name.</li>
+<li><strong>Viewer:</strong> wait a few minutes, refresh <a href="https://live.meshcore.ca/?tab=Observers">Live observer list</a>, and search the exact observer name.</li>
 </ol>
 <p>These commands only read service status:</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">MCtoMQTT</label><label for="__tabbed_1_2">Companion capture</label><label for="__tabbed_1_3">PyMC</label></div>
@@ -3788,7 +3798,7 @@ get path.hash.mode
 <li>Confirm the radio can hear normal nearby mesh activity.</li>
 <li>Confirm packet publishing is enabled for the selected method.</li>
 <li>Confirm the location code and packet topic agree.</li>
-<li>Check <a href="https://live.meshcore.ca/#/packets">CoreScope Packets</a> after nearby activity.</li>
+<li>Check <a href="https://live.meshcore.ca/">Live packets</a> after nearby activity.</li>
 </ol>
 <table>
 <thead>
@@ -3988,6 +3998,8 @@ Steps already tried:
     
   
       <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../assets/javascripts/region-profile.js?v=20260926-1"></script>
       
         <script src="../../assets/javascripts/i18n-runtime.js?v=20260829-1"></script>
       

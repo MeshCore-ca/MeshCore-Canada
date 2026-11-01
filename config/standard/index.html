@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="The public rules, sources, authority, and change process for Canadian MeshCore regions.">
+        <meta name="description" content="Choose MeshMapper IATA zones, configure flat repeater scopes, and migrate safely from the former region hierarchy.">
       
       
       
@@ -27,7 +27,7 @@
     
     
       
-        <title>Region definition and authority - MeshCore Canada</title>
+        <title>IATA regions and message scopes - MeshCore Canada</title>
       
     
     
@@ -47,13 +47,13 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/styles/tokens.css?v=20260722-2">
+      <link rel="stylesheet" href="../../assets/styles/tokens.css?v=20260926-1">
     
-      <link rel="stylesheet" href="../../assets/styles/base.css?v=20261019-1">
+      <link rel="stylesheet" href="../../assets/styles/base.css?v=20261029-1">
     
       <link rel="stylesheet" href="../../assets/styles/shell.css?v=20260821-1">
     
-      <link rel="stylesheet" href="../../assets/styles/components.css?v=20260728-1">
+      <link rel="stylesheet" href="../../assets/styles/components.css?v=20260926-1">
     
       <link rel="stylesheet" href="../../assets/styles/network-status.css?v=20260905-1">
     
@@ -68,8 +68,8 @@
   
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="MeshCore Canada">
-    <meta property="og:title" content="Region definition and authority">
-    <meta property="og:description" content="The public rules, sources, authority, and change process for Canadian MeshCore regions.">
+    <meta property="og:title" content="IATA regions and message scopes">
+    <meta property="og:description" content="Choose MeshMapper IATA zones, configure flat repeater scopes, and migrate safely from the former region hierarchy.">
     <meta property="og:url" content="https://meshcore.ca/config/standard/">
     <meta property="og:image" content="https://meshcore.ca/assets/MeshCore-Canada-Logo.png">
     <meta name="twitter:card" content="summary">
@@ -77,8 +77,8 @@
       {
         "@context": "https://schema.org",
         "@type": "WebPage",
-        "name": "Region definition and authority",
-        "description": "The public rules, sources, authority, and change process for Canadian MeshCore regions.",
+        "name": "IATA regions and message scopes",
+        "description": "Choose MeshMapper IATA zones, configure flat repeater scopes, and migrate safely from the former region hierarchy.",
         "url": "https://meshcore.ca/config/standard/",
         "isPartOf": {
           "@type": "WebSite",
@@ -109,12 +109,22 @@
     <div data-md-component="skip">
       
         
-        <a href="#meshcore-canada-region-definition-and-authority" class="md-skip">
+        <a href="#iata-regions-and-message-scopes" class="md-skip">
           Skip to content
         </a>
       
     </div>
     <div data-md-component="announce">
+      
+        <aside class="md-banner">
+          <div class="md-banner__inner md-grid md-typeset">
+            
+            
+  
+
+          </div>
+          
+        </aside>
       
     </div>
     
@@ -145,7 +155,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Region definition and authority
+              IATA regions and message scopes
             
           </span>
         </div>
@@ -3340,7 +3350,7 @@
     
   
   
-    <span class="md-status md-status--verified"></span>
+    <span class="md-status md-status--draft"></span>
   
 
   
@@ -3420,10 +3430,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#setting-up-a-device" class="md-nav__link">
+  <a href="#the-scope-list" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Setting up a device?
+        The scope list
       
     </span>
   </a>
@@ -3431,10 +3441,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#registry-reference" class="md-nav__link">
+  <a href="#find-your-city-and-province" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Registry reference
+        Find your city and province
       
     </span>
   </a>
@@ -3442,66 +3452,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#the-decision" class="md-nav__link">
+  <a href="#starter-regions" class="md-nav__link">
     <span class="md-ellipsis">
       
-        The decision
+        Starter regions
       
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#canonical-model" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Canonical model
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Canonical model">
+    <nav class="md-nav" aria-label="Starter regions">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#geographic-records" class="md-nav__link">
+  <a href="#planning-extensions" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Geographic records
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#cross-province-repeater-areas" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Cross-province repeater areas
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#large-and-neighbouring-network-paths" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Large and neighbouring network paths
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#selecting-a-larger-region" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Selecting a larger region
+        Planning extensions
       
     </span>
   </a>
@@ -3514,22 +3480,22 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#nationwide-coverage-frame" class="md-nav__link">
+  <a href="#repeater-setup" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Nationwide coverage frame
+        Repeater setup
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="Nationwide coverage frame">
+    <nav class="md-nav" aria-label="Repeater setup">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#prototype-audit" class="md-nav__link">
+  <a href="#existing-devices" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Prototype audit
+        Prepare, then activate locally
       
     </span>
   </a>
@@ -3537,10 +3503,43 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#complete-guardrail-inventory" class="md-nav__link">
+  <a href="#region-contacts-and-review" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Complete guardrail inventory
+        Region contacts and review
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#local-repeater" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        City repeater
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bridge-repeater" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Edge repeater
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#optional-onqc-standard-settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ON/QC Phase 1 settings
       
     </span>
   </a>
@@ -3553,10 +3552,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#authority-and-source-precedence" class="md-nav__link">
+  <a href="#companion-and-channel-setup" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Authority and source precedence
+        Companion and channel setup
       
     </span>
   </a>
@@ -3564,126 +3563,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#deterministic-boundary-generation" class="md-nav__link">
+  <a href="#firmware-limits" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Deterministic boundary generation
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Deterministic boundary generation">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#1-lock-inputs" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        1. Lock inputs
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2-normalize-geometry" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        2. Normalize geometry
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#3-snap-meshmapper-envelopes-to-das" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3. Snap MeshMapper envelopes to DAs
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#4-validate-community-seeds" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        4. Validate community seeds
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#5-set-guardrails" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        5. Set guardrails
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#6-produce-provisional-da-ownership" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        6. Produce provisional DA ownership
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#7-keep-census-communities-coherent" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        7. Keep census communities coherent
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#8-use-radio-activity-only-as-a-privacy-safe-tie-break" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        8. Use radio activity only as a privacy-safe tie-break
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#9-generate-both-boundary-products" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        9. Generate both boundary products
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#splitting-and-merging" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Splitting and merging
+        Firmware limits
       
     </span>
   </a>
@@ -3691,10 +3574,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#names-and-on-air-tags" class="md-nav__link">
+  <a href="#updates-and-older-links" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Names and on-air tags
+        Updates and older links
       
     </span>
   </a>
@@ -3702,104 +3585,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#governance" class="md-nav__link">
+  <a href="#sources" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Governance
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Governance">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#responsibilities" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Responsibilities
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#change-process" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Change process
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#boundary-editor-proposals" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Boundary editor proposals
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#release-checks" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Release checks
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#required-registry-artifacts" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Required registry artifacts
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#release-stages" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Release stages
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#repeater-configuration-rules" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Repeater configuration rules
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#source-record" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Source record
+        Sources
       
     </span>
   </a>
@@ -3841,7 +3630,7 @@
 
 
   
-  <h1 id="meshcore-canada-region-definition-and-authority">MeshCore Canada region definition and authority<a class="headerlink" href="#meshcore-canada-region-definition-and-authority" title="Permanent link">&para;</a></h1>
+  <h1 id="iata-regions-and-message-scopes">IATA regions and message scopes<a class="headerlink" href="#iata-regions-and-message-scopes" title="Permanent link">&para;</a></h1>
   
   
   
@@ -3861,809 +3650,385 @@
   
 
   
-<h2 id="setting-up-a-device">Setting up a device?<a class="headerlink" href="#setting-up-a-device" title="Permanent link">&para;</a></h2>
-<ol>
-<li><a href="../map/">Find your region</a>.</li>
-<li>Confirm the radio settings with your <a href="../../provinces/">community</a>.</li>
-<li>For a repeater, <a href="../">prepare its region paths</a>, check them, then save.</li>
-</ol>
-<p>A region organizes routing; it does not guarantee radio coverage. Ottawa–Gatineau and Lloydminster use several paths for their shared area.</p>
-<p>The rest of this page documents proposed registry rules and maintainer checks. Boundary changes still require community review.</p>
-<h2 id="registry-reference">Registry reference<a class="headerlink" href="#registry-reference" title="Permanent link">&para;</a></h2>
-<p>This standard defines Canada's MeshCore regions. It explains how locations and
-boundaries are assigned, who approves changes, and how source conflicts are
-resolved.</p>
-<table>
-<thead>
-<tr>
-<th>Standard</th>
-<th>Value</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Identifier</td>
-<td>MCC-REG-1</td>
-</tr>
-<tr>
-<td>Version</td>
-<td>1.1 proposed</td>
-</tr>
-<tr>
-<td>Geographic reference</td>
-<td>Statistics Canada 2021 Census geography</td>
-</tr>
-<tr>
-<td>Current semantic input</td>
-<td>Canada MeshCore Region Strategy v1.1.1</td>
-</tr>
-<tr>
-<td>Current community boundary input</td>
-<td>MeshMapper Canada snapshot, 2026-07-12</td>
-</tr>
-<tr>
-<td>Current operational evidence</td>
-<td>Privacy-safe Canadian radio-density snapshot, 2026-07-15 UTC; aggregate Canada–U.S. route snapshot, 2026-07-18</td>
-</tr>
-<tr>
-<td>Adoption</td>
-<td>Community review; publishing this page does not establish network-wide adoption</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition important">
-<p class="admonition-title">What is authoritative today?</p>
-<p>This page and the generated national partition are proposed for review. The candidate assigns every digital DA exactly once and the public map renders only dissolved leaf regions. No raw source polygon or approximate circle is a boundary. The partition becomes operationally authoritative only after community review and every release check in this standard passes.</p>
-</div>
-<h2 id="the-decision">The decision<a class="headerlink" href="#the-decision" title="Permanent link">&para;</a></h2>
-<p>MeshCore Canada maintains <strong>one geographic partition</strong>. Every part of Canada belongs to exactly one geographic leaf in the path <code>can → province or territory → region → optional subregion</code>. Leaf interiors never overlap and their union covers the complete national DA extent.</p>
-<p>The published MeshCore Canada registry is the single source of truth. A boundary is not stored as a hand-drawn polygon. It is stored as ownership of official Statistics Canada geographic cells, then regenerated from those cells. Census Subdivisions keep a municipality or municipal equivalent together by default; Dissemination Areas remain the exact geometry used to publish the shared edge.</p>
-<p>Only leaves own land. Provinces, territories, and larger region records are
-grouping nodes built from their children. Raw MeshMapper polygons, strategy
-circles, and event areas are not published as regions. A shared repeater area
-is configuration metadata, not another map layer.</p>
-<h2 id="canonical-model">Canonical model<a class="headerlink" href="#canonical-model" title="Permanent link">&para;</a></h2>
-<h3 id="geographic-records">Geographic records<a class="headerlink" href="#geographic-records" title="Permanent link">&para;</a></h3>
+<p>Use the <a href="../map/">region map</a> to find your IATA region, then open the
+<a href="../">repeater configurator</a>. Both use the same boundaries and label their sources.</p>
+<p>Write scope names in lowercase: <strong>yow (Ottawa–Gatineau)</strong>, <strong>yul (Montréal)</strong>,
+or <strong>yyz (Toronto)</strong>. Uppercase airport codes can be used to search, but the
+generated on-air names are lowercase. <code>YOW</code>, <code>yow</code>, and the former <code>ott</code> are
+different on-air names.</p>
+<h2 id="the-scope-list">The scope list<a class="headerlink" href="#the-scope-list" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
 <th>Level</th>
+<th>Example</th>
 <th>Purpose</th>
-<th>Rule</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>can</code></td>
-<td>National root</td>
-<td>One record; short tag remains <code>can</code></td>
+<td>City</td>
+<td><code>yow</code></td>
+<td>The MeshMapper city zone</td>
 </tr>
 <tr>
 <td>Province or territory</td>
-<td>Jurisdiction and stewardship</td>
-<td>The 13 official Canadian jurisdictions</td>
+<td><code>on</code> or <code>qc</code></td>
+<td>The province where the repeater is installed</td>
 </tr>
 <tr>
-<td>Region</td>
-<td>Stable operating area</td>
-<td>Exhaustive within its jurisdiction</td>
+<td>Shared mesh</td>
+<td><code>onqc</code></td>
+<td>Ontario and Québec only</td>
 </tr>
 <tr>
-<td>Subregion</td>
-<td>Optional split of a region</td>
-<td>Exhaustive within its parent; never overlaps a sibling</td>
+<td>Canada</td>
+<td><code>can</code></td>
+<td>Carried for future use; not a companion default yet</td>
+</tr>
+<tr>
+<td>North America</td>
+<td><code>na</code></td>
+<td>Reserved for future use; not an active cross-border route</td>
 </tr>
 </tbody>
 </table>
-<p>A region with no children is a geographic leaf. When split, its cells move to
-subregions and the former leaf becomes a grouping node. It has no independent
-fill, resolver ownership, or extra command scope. A location resolves to one
-leaf.</p>
-<p>Every record has separate fields for:</p>
+<p>These are independent names, not an inherited path. An Ottawa repeater carries
+<code>yow</code>, <code>on</code>, <code>onqc</code>, <code>can</code>, and <code>na</code>. A Gatineau repeater carries <code>yow</code>, <code>qc</code>,
+<code>onqc</code>, <code>can</code>, and <code>na</code>. Both use one city zone across the river.</p>
+<p>Keep <code>can</code> and <code>na</code> on the repeater's list, but do not use them as companion or
+channel scopes yet. They reserve names for later; they do not create a radio
+path to another country or let unscoped floods cross an edge repeater.</p>
+<p>The website uses IATA city codes across Canada. The wider-mesh defaults below
+come from the <a href="../../proposals/onqc-scopes/">ON/QC proposal</a>; they are not an
+announcement that every operator has adopted them. Outside ON/QC, the tool
+uses city, province, <code>can</code>, and <code>na</code>, without inventing another shared-mesh scope.
+Agree on wider companion and channel scopes with your local operators.</p>
+<p>Scopes filter flood forwarding. They are not encryption, access control, radio
+coverage, or GPS fences. Known-path direct traffic is not confined by these
+flood filters.</p>
+<h2 id="find-your-city-and-province">Find your city and province<a class="headerlink" href="#find-your-city-and-province" title="Permanent link">&para;</a></h2>
 <ul>
-<li>an immutable registry ID such as <code>ca-ab-r0014</code>;</li>
-<li>one canonical, globally unique on-air tag;</li>
-<li>English and French labels;</li>
-<li>optional locally approved Indigenous and historical labels;</li>
-<li>its parent registry ID;</li>
-<li>its source and review history;</li>
-<li>its release state: <code>proposed</code>, <code>reviewed</code>, <code>active</code>, <code>deprecated</code>, or <code>retired</code>.</li>
+<li>Use the code shown on the map: a published <a href="https://meshmapper.net/">MeshMapper</a> zone or a labelled starter region below.</li>
+<li>For a cross-province zone, use the repeater's physical province. A city name
+  does not override its location.</li>
+<li>If the map shows no zone, ask your community to add or update it in
+  MeshMapper. The nearest airport or a nearby marker is not an assigned zone.</li>
+<li>If published polygons overlap, choose the intended community zone; the tool
+  does not silently choose one.</li>
 </ul>
-<p>Names, tags, and geometry may change through review. The immutable ID does not.</p>
-<h3 id="cross-province-repeater-areas">Cross-province repeater areas<a class="headerlink" href="#cross-province-repeater-areas" title="Permanent link">&para;</a></h3>
-<p>A provincial border separates map ownership, not radio traffic. Every location still has one home leaf, but one repeater may carry several complete leaf paths when its normal coverage crosses a province or territory.</p>
-<p>A <strong>shared repeater area</strong> records an established cross-jurisdiction community. It has a label and member leaves, but no polygon, parent, resolver result, or on-air tag of its own. The configurator emits the complete path for every member instead:</p>
-<ul>
-<li>National Capital Region: <code>can → on → on-alg → ott</code> and <code>can → qc → gatout</code>;</li>
-<li>Lloydminster: <code>can → ab → lloyd-ab</code> and <code>can → sk → lloyd-sk</code>.</li>
-</ul>
-<p>For firmware v1.16+, the National Capital Region becomes:</p>
-<div class="highlight"><pre><span></span><code>region def can on on-alg ott|can qc gatout
-</code></pre></div>
-<p>The <code>ncr</code> search name is not sent over the air. Both sides keep their canonical tags, and every repeater in the shared area receives the same ordered tree.</p>
-<p>This rule applies everywhere in Canada:</p>
-<ol>
-<li>A registered shared area is selected automatically for each member leaf.</li>
-<li>A large-coverage or border repeater outside a registered area may select any verified set of Canadian leaves, including leaves in different provinces or territories.</li>
-<li>Commands contain the union of the selected leaf paths. Shared ancestors appear once, parents appear before children, and each new branch jumps back to an ancestor that already exists.</li>
-<li>The configurator must fail closed if the result exceeds the firmware limits of 32 tags or 172 response bytes. No generated CLI line may exceed 160 characters; if one <code>region def</code> line would be too long, the configurator uses ordered <code>region put</code> lines instead.</li>
-<li>Adding a shared area never moves a census cell, joins polygons, or weakens the non-overlap checks.</li>
-</ol>
-<p>Register an automatic shared area only when operators on every side confirm routine cross-border paths or one continuous community. Other long paths are selected per repeater. This keeps defaults useful without turning every provincial boundary into one oversized radio area.</p>
-<h3 id="large-and-neighbouring-network-paths">Large and neighbouring network paths<a class="headerlink" href="#large-and-neighbouring-network-paths" title="Permanent link">&para;</a></h3>
-<p>A region path is a forwarding choice, not a prediction of RF range. Large coverage does not require a mountain. Elevation, water paths, ordinary rooftop sites, and linked repeaters can all produce long routes.</p>
-<p>Every repeater keeps one Canadian home region. Operators may then add complete Canadian or neighbouring U.S. paths that the repeater should forward. Region matching is exact, so every intended scope needs its complete ancestry. The configurator never adds a neighbouring path automatically and never draws U.S. geometry. Hearing traffic from an area is not enough by itself; add its path only when this repeater is meant to forward traffic scoped to that area.</p>
-<p>Use the smallest useful set and spread work across repeaters:</p>
-<table>
-<thead>
-<tr>
-<th>Repeater role</th>
-<th>Forwarding choice</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Local access</td>
-<td>Home path only</td>
-</tr>
-<tr>
-<td>Regional bridge</td>
-<td>Home path plus the few neighbouring Canadian paths it routinely connects</td>
-</tr>
-<tr>
-<td>Long-haul backbone</td>
-<td>A reviewed set of Canadian and U.S. paths supported by observed routes</td>
-</tr>
-</tbody>
-</table>
-<p>Do not put every available path on every repeater. For example, traffic between Waterloo, Toronto, and Western New York can be divided among bridge repeaters instead of making each repeater carry all three paths. The choice belongs to local operators and must be coordinated with the communities that use those paths.</p>
-<p>A U.S. path is eligible when it is next to Canada or across shared water and appears in resolved route evidence. A farther path requires repeated resolved route evidence. Evidence only makes a path available; it does not make the path a default or prove future performance.</p>
-<p>The 2026-07-18 aggregate route snapshot supports these paths:</p>
+<p>Province outlines identify the repeater's province and define the broad starter
+regions below. They do not split or change published MeshMapper zones.</p>
+<h2 id="starter-regions">Starter regions<a class="headerlink" href="#starter-regions" title="Permanent link">&para;</a></h2>
+<p>These MeshCore Canada assignments fill places without published MeshMapper zones.
+They use real IATA codes and the same flat scope format, but are <strong>not MeshMapper
+listings or coverage claims</strong>. The map marks them with dashed gold boundaries.</p>
+<p>These planning assignments are separate from the ON/QC proposal, not adopted
+parts of that rollout. Confirm their use with local operators.</p>
 <table>
 <thead>
 <tr>
 <th>Area</th>
-<th>Exact path</th>
-<th>Status</th>
-<th>Canadian side</th>
-<th style="text-align: right;">Route patterns / observations</th>
+<th>Scope</th>
+<th>Code reference</th>
 </tr>
 </thead>
 <tbody>
-<tr>
-<td>Western New York</td>
-<td><code>us → us-ny</code></td>
-<td>Documented by WNY operators</td>
-<td>Ontario and Québec</td>
-<td style="text-align: right;">4,508 / 33,820</td>
-</tr>
-<tr>
-<td>Washington</td>
-<td><code>west → pnw → wa</code></td>
-<td>Documented PNW path</td>
-<td>British Columbia</td>
-<td style="text-align: right;">5,384 / 21,596</td>
-</tr>
-<tr>
-<td>Oregon</td>
-<td><code>west → pnw → or</code></td>
-<td>Documented PNW path; farther route</td>
-<td>British Columbia</td>
-<td style="text-align: right;">903 / 1,394</td>
-</tr>
-<tr>
-<td>Pennsylvania</td>
-<td><code>us → us-pa</code></td>
-<td>Provisional; confirm locally</td>
-<td>Ontario</td>
-<td style="text-align: right;">37 / 82</td>
-</tr>
-<tr>
-<td>Ohio</td>
-<td><code>us → us-oh</code></td>
-<td>Provisional; confirm locally</td>
-<td>Ontario</td>
-<td style="text-align: right;">6 / 10</td>
-</tr>
-<tr>
-<td>California</td>
-<td><code>west → ca</code></td>
-<td>Provisional PNW extension; farther route</td>
-<td>British Columbia</td>
-<td style="text-align: right;">7 / 12</td>
-</tr>
-</tbody>
-</table>
-<p>The snapshot counts unique resolved route patterns and their observations from <code>dev.meshcore.ca</code>. It stores no node names, identifiers, or exact coordinates. Counts are routing evidence, not a performance benchmark. Border or farther states may be added later only with the same evidence and neighbouring-operator review.</p>
-<h3 id="selecting-a-larger-region">Selecting a larger region<a class="headerlink" href="#selecting-a-larger-region" title="Permanent link">&para;</a></h3>
-<p>Selecting a province, territory, or larger region reveals its immediate child regions. Selecting a child with further children drills down again. The smallest displayed choices are the active leaves used for location lookup and commands.</p>
-<p>A parent outline is calculated as the union of its children for highlighting and map navigation. It is never stored or rendered as a competing filled region. This keeps the hierarchy useful without assigning the same place twice.</p>
-<p>The initial parent-child tree, labels, and seed locations consolidate the submitted strategy document, forum discussion, Discord feedback, screenshots, and earlier region drafts. Those community sources decide <strong>which</strong> subregions exist and how people identify them. MeshMapper remains the main boundary preference where it has a Canadian region. The generator decides the exact shared edge by assigning whole DAs; it does not invent extra names or stack user-drawn shapes.</p>
-<p>Future feedback enters the same pipeline as a proposed parent change, seed change, name change, or explicit DA reassignment. The before/after DA list is reviewable, so a local preference can improve a boundary without creating a gap or overlap elsewhere.</p>
-<h2 id="nationwide-coverage-frame">Nationwide coverage frame<a class="headerlink" href="#nationwide-coverage-frame" title="Permanent link">&para;</a></h2>
-<p>The topology atom is the <strong>2021 Statistics Canada Dissemination Area (DA)</strong>. The digital product contains all 57,936 DAs and is the complete ownership domain. The cartographic product contains 57,932 DAs because four water-only DAs are omitted; it is used only for the cleaner public shoreline. Both products use the same membership wherever a cartographic DA exists.</p>
-<p>The default ownership cohort is the <strong>2021 Census Subdivision (CSD)</strong>: the Statistics Canada unit used for a municipality or municipal equivalent. All 5,161 CSDs are kept whole unless an approved exception assigns every DA in that CSD. The 293 <strong>Census Divisions (CDs)</strong> provide a higher grouping for regional municipalities, counties, and comparable areas. A reviewed CD decision may keep an established regional community together, but it may not erase another region seed without review.</p>
-<p>The generator uses the 76 official <strong>2021 Economic Regions (ERs)</strong> as broad guardrails. ERs keep an urban seed from absorbing a large, unrelated rural area merely because it is the closest seed. ER names are not automatically used as on-air names.</p>
-<p>The current strategy contributes 192 candidate geographic seeds. The generator creates 193 leaves because the former cross-border Lloydminster seed is split into an Alberta leaf and a Saskatchewan leaf. MeshMapper contributes 29 community source polygons mapped to 27 canonical candidate tags. These are assignment inputs, not competing final layers.</p>
-<table>
-<thead>
-<tr>
-<th>Jurisdiction</th>
-<th style="text-align: right;">ER guardrails</th>
-<th style="text-align: right;">Current candidate leaves</th>
-<th style="text-align: right;">MeshMapper source polygons</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>British Columbia</td>
-<td style="text-align: right;">8</td>
-<td style="text-align: right;">29</td>
-<td style="text-align: right;">9</td>
-</tr>
-<tr>
-<td>Alberta</td>
-<td style="text-align: right;">8</td>
-<td style="text-align: right;">14</td>
-<td style="text-align: right;">4</td>
-</tr>
-<tr>
-<td>Saskatchewan</td>
-<td style="text-align: right;">6</td>
-<td style="text-align: right;">12</td>
-<td style="text-align: right;">1</td>
-</tr>
-<tr>
-<td>Manitoba</td>
-<td style="text-align: right;">8</td>
-<td style="text-align: right;">10</td>
-<td style="text-align: right;">1</td>
-</tr>
-<tr>
-<td>Ontario</td>
-<td style="text-align: right;">11</td>
-<td style="text-align: right;">50</td>
-<td style="text-align: right;">10</td>
-</tr>
-<tr>
-<td>Québec</td>
-<td style="text-align: right;">17</td>
-<td style="text-align: right;">17</td>
-<td style="text-align: right;">4</td>
-</tr>
-<tr>
-<td>New Brunswick</td>
-<td style="text-align: right;">5</td>
-<td style="text-align: right;">15</td>
-<td style="text-align: right;">0</td>
-</tr>
-<tr>
-<td>Nova Scotia</td>
-<td style="text-align: right;">5</td>
-<td style="text-align: right;">18</td>
-<td style="text-align: right;">0</td>
-</tr>
 <tr>
 <td>Prince Edward Island</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">3</td>
-<td style="text-align: right;">0</td>
+<td><code>yyg</code></td>
+<td><a href="https://flyyyg.com/">Charlottetown</a></td>
 </tr>
 <tr>
-<td>Newfoundland and Labrador</td>
-<td style="text-align: right;">4</td>
-<td style="text-align: right;">11</td>
-<td style="text-align: right;">0</td>
+<td>Newfoundland</td>
+<td><code>yyt</code></td>
+<td><a href="https://stjohnsairport.com/">St. John's</a></td>
+</tr>
+<tr>
+<td>Labrador</td>
+<td><code>yyr</code></td>
+<td><a href="https://goosebayairport.com/">Happy Valley–Goose Bay</a></td>
 </tr>
 <tr>
 <td>Yukon</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">6</td>
-<td style="text-align: right;">0</td>
+<td><code>yxy</code></td>
+<td><a href="https://yukonairports.ca/contact-information">Whitehorse</a></td>
 </tr>
 <tr>
 <td>Northwest Territories</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">5</td>
-<td style="text-align: right;">0</td>
+<td><code>yzf</code></td>
+<td><a href="https://tc.canada.ca/en/aviation/operating-airports-aerodromes/list-airports-owned-transport-canada">Yellowknife</a></td>
 </tr>
 <tr>
 <td>Nunavut</td>
-<td style="text-align: right;">1</td>
-<td style="text-align: right;">3</td>
-<td style="text-align: right;">0</td>
-</tr>
-<tr>
-<td><strong>Canada</strong></td>
-<td style="text-align: right;"><strong>76</strong></td>
-<td style="text-align: right;"><strong>193</strong></td>
-<td style="text-align: right;"><strong>29</strong></td>
+<td><code>yfb</code></td>
+<td><a href="https://tc.canada.ca/en/aviation/operating-airports-aerodromes/list-airports-owned-transport-canada">Iqaluit</a></td>
 </tr>
 </tbody>
 </table>
-<p>The candidate leaf catalog remains machine-readable in <a href="../../assets/regions/canada-regions.json"><code>canada-regions.json</code></a>. The table above does not ratify every candidate name or grouping. Fuzzy hub areas—especially in Alberta, Saskatchewan, Manitoba, Newfoundland and Labrador, Yukon, and parts of Québec—remain priorities for local review before activation.</p>
-<h3 id="prototype-audit">Prototype audit<a class="headerlink" href="#prototype-audit" title="Permanent link">&para;</a></h3>
-<p>Prototype testing showed why one generated authority layer is needed:</p>
-<ul>
-<li>the catalog records still require community review before activation;</li>
-<li>192 overlapping seed-radius areas and 29 raw MeshMapper polygons were displayed together, but did not form a partition;</li>
-<li>52 of the 192 seed centres currently resolve to another tag or no tag under the prototype resolver, including three cross-jurisdiction results;</li>
-<li>the 29 MeshMapper polygons contain 29 non-trivial overlap pairs; they must be reconciled before use as one layer;</li>
-<li>the current <code>YXX</code> source polygon is an obvious area outlier and must be refreshed or explicitly approved before it can anchor Abbotsford;</li>
-<li>six normalized aliases have more than one owner, so ambiguous searches require jurisdiction context or an explicit choice.</li>
-</ul>
-<p>These are design findings, not accepted region definitions. The public map uses
-only the generated partition. Source circles and raw source polygons remain
-evidence for the generator and QA report.</p>
-<h3 id="complete-guardrail-inventory">Complete guardrail inventory<a class="headerlink" href="#complete-guardrail-inventory" title="Permanent link">&para;</a></h3>
-<p>Every DA falls inside one of these province-or-territory and ER combinations. Codes are from the 2021 Standard Geographical Classification.</p>
+<p>In the other provinces, these hubs fill the remaining gaps:</p>
 <table>
 <thead>
 <tr>
-<th>Jurisdiction</th>
-<th>Economic regions</th>
+<th>Province</th>
+<th>Planning regions</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Newfoundland and Labrador</td>
-<td><code>1010</code> Avalon Peninsula; <code>1020</code> South Coast–Burin Peninsula; <code>1030</code> West Coast–Northern Peninsula–Labrador; <code>1040</code> Notre Dame–Central Bonavista Bay</td>
+<td>BC</td>
+<td><code>ylw</code> Kelowna, <code>yxs</code> Prince George, <code>yxt</code> Terrace, <code>yxc</code> Cranbrook</td>
 </tr>
 <tr>
-<td>Prince Edward Island</td>
-<td><code>1110</code> Prince Edward Island</td>
+<td>AB</td>
+<td><code>ymm</code> Fort McMurray, <code>yqu</code> Grande Prairie</td>
 </tr>
 <tr>
-<td>Nova Scotia</td>
-<td><code>1210</code> Cape Breton; <code>1220</code> North Shore; <code>1230</code> Annapolis Valley; <code>1240</code> Southern; <code>1250</code> Halifax</td>
+<td>SK</td>
+<td><code>yxe</code> Saskatoon, <code>yqr</code> Regina</td>
 </tr>
 <tr>
-<td>New Brunswick</td>
-<td><code>1310</code> Campbellton–Miramichi; <code>1320</code> Moncton–Richibucto; <code>1330</code> Saint John–St. Stephen; <code>1340</code> Fredericton–Oromocto; <code>1350</code> Edmundston–Woodstock</td>
+<td>MB</td>
+<td><code>ybr</code> Brandon, <code>yth</code> Thompson, <code>yyq</code> Churchill</td>
 </tr>
 <tr>
-<td>Québec</td>
-<td><code>2410</code> Gaspésie–Îles-de-la-Madeleine; <code>2415</code> Bas-Saint-Laurent; <code>2420</code> Capitale-Nationale; <code>2425</code> Chaudière-Appalaches; <code>2430</code> Estrie; <code>2433</code> Centre-du-Québec; <code>2435</code> Montérégie; <code>2440</code> Montréal; <code>2445</code> Laval; <code>2450</code> Lanaudière; <code>2455</code> Laurentides; <code>2460</code> Outaouais; <code>2465</code> Abitibi-Témiscamingue; <code>2470</code> Mauricie; <code>2475</code> Saguenay–Lac-Saint-Jean; <code>2480</code> Côte-Nord; <code>2490</code> Nord-du-Québec</td>
+<td>ON</td>
+<td><code>ysb</code> Sudbury, <code>yam</code> Sault Ste. Marie, <code>yts</code> Timmins, <code>yqk</code> Kenora</td>
 </tr>
 <tr>
-<td>Ontario</td>
-<td><code>3510</code> Ottawa; <code>3515</code> Kingston–Pembroke; <code>3520</code> Muskoka–Kawarthas; <code>3530</code> Toronto; <code>3540</code> Kitchener–Waterloo–Barrie; <code>3550</code> Hamilton–Niagara Peninsula; <code>3560</code> London; <code>3570</code> Windsor–Sarnia; <code>3580</code> Stratford–Bruce Peninsula; <code>3590</code> Northeast; <code>3595</code> Northwest</td>
+<td>QC</td>
+<td><code>yvo</code> Val-d’Or, <code>yzv</code> Sept-Îles, <code>yvp</code> Kuujjuaq</td>
 </tr>
 <tr>
-<td>Manitoba</td>
-<td><code>4610</code> Southeast; <code>4620</code> South Central; <code>4630</code> Southwest; <code>4640</code> North Central; <code>4650</code> Winnipeg; <code>4660</code> Interlake; <code>4670</code> Parklands; <code>4680</code> North</td>
+<td>NB</td>
+<td><code>yqm</code> Moncton, <code>yfc</code> Fredericton, <code>ysj</code> Saint John</td>
 </tr>
 <tr>
-<td>Saskatchewan</td>
-<td><code>4710</code> Regina–Moose Mountain; <code>4720</code> Swift Current–Moose Jaw; <code>4730</code> Saskatoon–Biggar; <code>4740</code> Yorkton–Melville; <code>4750</code> Prince Albert; <code>4760</code> Northern</td>
-</tr>
-<tr>
-<td>Alberta</td>
-<td><code>4810</code> Lethbridge–Medicine Hat; <code>4820</code> Camrose–Drumheller; <code>4830</code> Calgary; <code>4840</code> Banff–Jasper–Rocky Mountain House; <code>4850</code> Red Deer; <code>4860</code> Edmonton; <code>4870</code> Athabasca–Grande Prairie–Peace River; <code>4880</code> Wood Buffalo–Cold Lake</td>
-</tr>
-<tr>
-<td>British Columbia</td>
-<td><code>5910</code> Vancouver Island and Coast; <code>5920</code> Lower Mainland–Southwest; <code>5930</code> Thompson–Okanagan; <code>5940</code> Kootenay; <code>5950</code> Cariboo; <code>5960</code> North Coast; <code>5970</code> Nechako; <code>5980</code> Northeast</td>
-</tr>
-<tr>
-<td>Yukon</td>
-<td><code>6010</code> Yukon</td>
-</tr>
-<tr>
-<td>Northwest Territories</td>
-<td><code>6110</code> Northwest Territories</td>
-</tr>
-<tr>
-<td>Nunavut</td>
-<td><code>6210</code> Nunavut</td>
+<td>NS</td>
+<td><code>yhz</code> Halifax, <code>yqi</code> Yarmouth</td>
 </tr>
 </tbody>
 </table>
-<h2 id="authority-and-source-precedence">Authority and source precedence<a class="headerlink" href="#authority-and-source-precedence" title="Permanent link">&para;</a></h2>
-<p>The <strong>published registry release</strong> is the final operational authority. Its inputs have different jobs:</p>
+<p>Unassigned land is divided by distance to <strong>all regional centres in the province</strong>:
+published MeshMapper regions and the starter hubs above. It is not assigned only
+to new regions. Distance uses Canada Lambert projection.</p>
+<h3 id="planning-extensions">Planning extensions<a class="headerlink" href="#planning-extensions" title="Permanent link">&para;</a></h3>
+<p>A gap next to an existing IATA region can use that code as a <strong>planning extension</strong>.
+For example, the Wingham-area point <code>43.8678, -81.2619</code> is assigned to <code>ykf</code>, not
+Sudbury (<code>ysb</code>). Goderich is assigned to <code>yxu</code>, and Kincardine to <code>ylk</code>.</p>
+<p>Extensions are separate, dashed areas, not changes to MeshMapper's published
+polygons. The result identifies which source contains your point. All 13 provinces
+and territories remain mapped. Planning boundaries need local review and do not
+represent measured radio coverage.</p>
+<p>For example, PEI uses <code>yyg</code>, <code>pe</code>, <code>can</code>, and <code>na</code>; Yukon uses <code>yxy</code>, <code>yt</code>, <code>can</code>, and <code>na</code>.
+They do not use <code>onqc</code>. The <a href="../">configurator</a> generates the commands.</p>
+<p>These are broad starting areas, not a claim that distant communities share an
+RF path. Confirm use with local operators and <a href="../../submit-idea/">suggest a refinement</a>
+as local meshes develop. Published MeshMapper boundaries always take priority.</p>
+<p>The outlines use the existing Statistics Canada province/territory geography.
+Labrador follows census divisions 10 and 11; Newfoundland is the rest of that
+province. No nearest-airport circles or former multi-level scope names are used.</p>
+<h2 id="repeater-setup">Repeater setup<a class="headerlink" href="#repeater-setup" title="Permanent link">&para;</a></h2>
+<p>Use <strong>1.16 or newer</strong> when possible. The configurator also supports <strong>1.15</strong>
+and a limited <strong>1.14</strong> mode. Keep physical recovery access and coordinate with
+nearby operators.</p>
 <table>
 <thead>
 <tr>
-<th style="text-align: right;">Priority</th>
-<th>Source</th>
-<th>Role</th>
+<th>Firmware</th>
+<th>Generated setup</th>
+<th>Advert scope</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align: right;">1</td>
-<td>Approved registry decisions</td>
-<td>Explicit boundary, naming, split, merge, or DA-reassignment decisions</td>
+<td>1.16+</td>
+<td>Flat <code>region def</code></td>
+<td>Home city</td>
 </tr>
 <tr>
-<td style="text-align: right;">2</td>
-<td>MeshMapper Canada</td>
-<td>Main community boundary and identity anchor where it has a Canadian region</td>
+<td>1.15</td>
+<td>Individual <code>region put</code> commands</td>
+<td>Home city</td>
 </tr>
 <tr>
-<td style="text-align: right;">3</td>
-<td>Canada MeshCore Region Strategy v1.1.1</td>
-<td>Candidate tags, parent relationships, and seeds outside MeshMapper coverage</td>
-</tr>
-<tr>
-<td style="text-align: right;">4</td>
-<td>Statistics Canada CD/CSD relationships</td>
-<td>Keep municipalities and established regional groupings coherent</td>
-</tr>
-<tr>
-<td style="text-align: right;">5</td>
-<td>Privacy-safe radio-density snapshot</td>
-<td>Secondary tie-break evidence for close, unreviewed whole-CSD choices</td>
-</tr>
-<tr>
-<td style="text-align: right;">6</td>
-<td>Deterministic generator</td>
-<td>Reconciles every DA into one region without inventing another manual layer</td>
+<td>1.14</td>
+<td><code>region put</code> plus <code>region allowf</code> for each name</td>
+<td>Unscoped; upgrade to scope adverts</td>
 </tr>
 </tbody>
 </table>
-<p>Statistics Canada is the topology authority at every priority. MeshMapper and approved community shapes decide intended coverage; the final edge is snapped to whole DAs so neighbours share the same boundary.</p>
-<p>Other sources have supporting roles:</p>
-<ul>
-<li>SGC Economic Regions prevent unreasonable long-distance growth.</li>
-<li>Census Divisions and Census Subdivisions define the higher grouping and indivisible-by-default ownership cohorts used by the generator.</li>
-<li>Privacy-safe clusters from the MeshCore Canada live and development directories account for every fresh positioned node. Fixed repeater, room, and sensor nodes provide the assignment evidence; companions add advisory density context because they may move. The clusters are supporting evidence, not a replacement for local review.</li>
-<li>Current provincial and territorial datasets validate municipal changes and local terminology.</li>
-<li>The Canadian Geographical Names Database validates place names.</li>
-<li>First Nations reserve, Inuit region, Métis settlement, treaty, and Canada Lands data are reference datasets outside the region layer. They do not become operational boundaries or names without affected-community review.</li>
-</ul>
-<p>An approved local decision may refine a MeshMapper anchor. It must identify the changed DAs, explain the local consensus, pass the same QA, and receive a new registry release. Raw polygons from different providers are never stacked together as a final “best effort” layer.</p>
-<h2 id="deterministic-boundary-generation">Deterministic boundary generation<a class="headerlink" href="#deterministic-boundary-generation" title="Permanent link">&para;</a></h2>
-<p>The generator must produce the same result from the same locked inputs.</p>
-<h3 id="1-lock-inputs">1. Lock inputs<a class="headerlink" href="#1-lock-inputs" title="Permanent link">&para;</a></h3>
-<p>Record the download URL, release date, licence, file size, and SHA-256 hash for:</p>
-<ul>
-<li>the 2021 DA digital and cartographic boundary files;</li>
-<li>the 2021 SGC Economic Region classification;</li>
-<li>the 2021 Census Division and Census Subdivision digital boundary files;</li>
-<li>the MeshMapper Canada snapshot;</li>
-<li>the candidate registry, approved census overrides, privacy-safe radio-density snapshot, and generator configuration.</li>
-</ul>
-<p>Do not mix a newer Census Subdivision file into the 2021 DA suite. Newer municipal files are change advisories until a complete compatible census-geography suite is adopted.</p>
-<h3 id="2-normalize-geometry">2. Normalize geometry<a class="headerlink" href="#2-normalize-geometry" title="Permanent link">&para;</a></h3>
-<p>Validate and repair source geometry, calculate area and distance in Statistics Canada <code>EPSG:3347</code>, and publish web output in WGS 84. Each DA is addressed by its DGUID, not by a row number or a label.</p>
-<p>For MCC-REG-1, the digital DA coverage is the ownership geometry. “Representative point” means GEOS <code>PointOnSurface</code> calculated from that geometry in Statistics Canada's <code>EPSG:3347</code> projection. The complete official DA coverage is preserved as shared atoms; it is not buffered, repaired, or simplified one feature at a time. Only external source polygons are repaired before comparison. <code>sources.lock.json</code> records the exact source files, while <code>generator.yml</code> records the algorithm, toolchain, and precision settings.</p>
-<p>The candidate generator requires each source polygon to have a registry crosswalk, non-empty repaired geometry, a declared jurisdiction, and contact with at least one DA in that jurisdiction. A source marked quarantined is excluded. Centre, radius, and jurisdiction-spill review remain release gates before a candidate can become authoritative.</p>
-<h3 id="3-snap-meshmapper-envelopes-to-das">3. Snap MeshMapper envelopes to DAs<a class="headerlink" href="#3-snap-meshmapper-envelopes-to-das" title="Permanent link">&para;</a></h3>
-<p>A source polygon marks a DA as part of its <strong>macro envelope</strong> when either:</p>
-<ul>
-<li>the DA representative point is covered by the source polygon; or</li>
-<li>at least 50% of the DA land area overlaps the source polygon.</li>
-</ul>
-<p>If envelopes cover the same DA, the winning envelope is selected by:</p>
-<ol>
-<li>an explicit approved override;</li>
-<li>the largest overlap ratio;</li>
-<li>the source-priority value in the registry;</li>
-<li>the lexically smallest immutable registry ID.</li>
-</ol>
-<p>Every conflict is written to the QA report. An envelope chooses which MeshMapper target may compete for a DA; it does not own the DA outright. Raw source shapes are never exported as operational polygons.</p>
-<h3 id="4-validate-community-seeds">4. Validate community seeds<a class="headerlink" href="#4-validate-community-seeds" title="Permanent link">&para;</a></h3>
-<p>Each local region has one reviewed seed point. The DA containing that point is its anchor. A seed on a boundary uses the lexically smallest covering DA DGUID. A seed outside its declared jurisdiction is a release-blocking error.</p>
-<p>Two candidate seeds in the same DA are a release-blocking conflict. The registry must correct the seed; the generator never silently moves it.</p>
-<h3 id="5-set-guardrails">5. Set guardrails<a class="headerlink" href="#5-set-guardrails" title="Permanent link">&para;</a></h3>
-<p>Automatic assignment never crosses a province or territory. Each seed has one home Economic Region. A MeshMapper target may also compete inside every Economic Region touched by its accepted envelope.</p>
-<h3 id="6-produce-provisional-da-ownership">6. Produce provisional DA ownership<a class="headerlink" href="#6-produce-provisional-da-ownership" title="Permanent link">&para;</a></h3>
-<p>First choose the nearest seed whose home Economic Region matches the DA. Inside a winning MeshMapper envelope, compare its mapped target with the community seeds covered by that envelope whose home Economic Region matches the DA. If only the mapped target remains, also include the ordinary same-ER nearest seed. Assign the DA to the closest candidate in <code>EPSG:3347</code>; exact ties resolve by immutable registry ID.</p>
-<p>This is a provisional vote, not final ownership. It keeps MeshMapper as the main boundary preference while allowing submitted local regions to influence a large envelope. The QA report records each envelope's provisional per-region DA counts and blocks a dominant envelope that starves a contained community seed.</p>
-<p>If an Economic Region has no home seed, the generator records a release-blocking fallback and uses the nearest seed inside the same province or territory only to keep the candidate map complete. It never assigns across a jurisdiction border.</p>
-<p>MultiPolygon output is valid for real islands and separated land components; synthetic water bridges are not. A disconnected mainland fragment is flagged for local review.</p>
-<h3 id="7-keep-census-communities-coherent">7. Keep census communities coherent<a class="headerlink" href="#7-keep-census-communities-coherent" title="Permanent link">&para;</a></h3>
-<p>The generator converts provisional DA votes into final whole-CSD ownership in this order:</p>
-<ol>
-<li>an approved CSD decision;</li>
-<li>an approved CD decision that does not conflict with another region seed;</li>
-<li>the region whose seed is inside the CSD;</li>
-<li>the only region seed inside the containing CD;</li>
-<li>the plurality of provisional DA votes;</li>
-<li>for a close unreviewed choice only, qualifying privacy-safe radio-cluster evidence;</li>
-<li>projected seed distance and immutable registry ID for a remaining exact tie.</li>
-</ol>
-<p>A CSD may be divided only by an approved split exception that lists every DGUID in that CSD and its owner. The generator fails if any other CSD has more than one owner. This prevents a nearest-seed edge from slicing an incorporated city merely because one neighbourhood is closer to the next seed.</p>
-<p>The Kitchener-Waterloo fixture is release-blocking: all 189 DAs in Cambridge CSD <code>3530010</code>, including Hespeler, resolve to <code>wat</code>; all 766 DAs in Waterloo CD <code>3530</code> resolve to <code>wat</code>. These counts are tied to the locked 2021 Census geography and must be reviewed when the census vintage changes.</p>
-<h3 id="8-use-radio-activity-only-as-a-privacy-safe-tie-break">8. Use radio activity only as a privacy-safe tie-break<a class="headerlink" href="#8-use-radio-activity-only-as-a-privacy-safe-tie-break" title="Permanent link">&para;</a></h3>
-<p>The locked <code>radio-density.json</code> snapshot combines fresh positioned observations
-from <code>live.meshcore.ca</code> with positioned entries from <code>dev.meshcore.ca</code>, then
-deduplicates matching public keys. Dev does not provide observation times, so
-dev-only entries are advisory and cannot decide a boundary. Fresh live
-repeater, room, and sensor observations provide the counts used for decisions;
-companion locations remain advisory.</p>
-<p>The snapshot is bound to a SHA-256 digest of each DGUID and its provisional
-owner before the radio pass. If candidate labels are stale, validation stops.
-A valid radio tie-break can still change final ownership.</p>
-<p>Clusters span no more than 30 kilometres. Every published geographic count is at least five. Candidate counts are published only inside their own CSD, and the complete CSD candidate breakdown is suppressed if any candidate bucket contains fewer than five nodes. Raw node identifiers, names, and exact coordinates are never persisted.</p>
-<p>Radio evidence may choose between candidates already present in a CSD only when
-the provisional margin is at most 10 percentage points and at least 60% of
-eligible evidence supports one candidate. It cannot create a region, split a
-CSD, cross a province or territory, or override an approved census decision.
-A snapshot is reproducible release evidence, not live automatic authority.
-Changes require a new locked snapshot and normal review.</p>
-<h3 id="9-generate-both-boundary-products">9. Generate both boundary products<a class="headerlink" href="#9-generate-both-boundary-products" title="Permanent link">&para;</a></h3>
-<ul>
-<li>The resolver uses DA <strong>digital</strong> boundaries so coastal water is handled consistently.</li>
-<li>The public map uses DA <strong>cartographic</strong> boundaries for a clean shoreline.</li>
-</ul>
-<p>Both products use the same DA membership. Generated leaf interiors are pairwise disjoint and their union is the complete locked DA extent. Adjacent leaves share one zero-width edge. A point exactly on that edge resolves to the lexically smallest registry ID.</p>
-<h2 id="splitting-and-merging">Splitting and merging<a class="headerlink" href="#splitting-and-merging" title="Permanent link">&para;</a></h2>
-<p>Large regions split by moving whole DAs, not by drawing a new freehand line.</p>
-<p>A split proposal must include:</p>
-<ul>
-<li>the parent region ID;</li>
-<li>the DGUID membership of every proposed child;</li>
-<li>proposed canonical tags and English/French labels;</li>
-<li>the local reason for the split;</li>
-<li>evidence of affected-community review;</li>
-<li>an updated command-budget report.</li>
-</ul>
-<p>All parent cells must belong to exactly one child. After a split, the parent is a non-leaf grouping only. It has no separate resolver ownership, published fill, or additional routing scope.</p>
-<p>Aggregate Dissemination Areas are useful starting groups for a split, but their codes are not permanent identity. They may be divided or combined when local geography calls for it.</p>
-<p>CSDs are the default subregion building blocks. Prefer whole municipalities or municipal equivalents first, then combine adjacent CSDs using their CD, local identity, terrain, and operating evidence. Dividing a CSD is an exception and requires the complete enumerated DA assignment described above.</p>
-<p>A merge preserves every retired ID and tag as an alias or tombstone. A retired tag is never silently reused for another place.</p>
-<h2 id="names-and-on-air-tags">Names and on-air tags<a class="headerlink" href="#names-and-on-air-tags" title="Permanent link">&para;</a></h2>
-<p>The registry follows the forum's preference for short, flat, human-readable tags. Hierarchy is stored in parent fields rather than repeated inside every tag.</p>
-<p>Canonical on-air tags must:</p>
-<ul>
-<li>be globally unique across the connected mesh;</li>
-<li>contain only lowercase <code>a-z</code>, <code>0-9</code>, and <code>-</code>;</li>
-<li>use no more than 29 UTF-8 bytes;</li>
-<li>remain stable once active;</li>
-<li>avoid automatic “largest town wins” naming for broad rural areas;</li>
-<li>be checked against active, deprecated, retired, alias, and non-geographic search-group names.</li>
-</ul>
-<p>IATA and postal codes may be aliases where helpful, but neither system is the national naming authority. New subregions use a locally meaningful flat tag when one is unambiguous. A parent-prefixed tag is a fallback for collision avoidance, not a requirement.</p>
-<p>Generated commands use canonical tags only. Search may accept labels and aliases. The registry stores English and French labels separately; local Indigenous names require review by the affected community and are never inferred.</p>
-<h2 id="governance">Governance<a class="headerlink" href="#governance" title="Permanent link">&para;</a></h2>
-<h3 id="responsibilities">Responsibilities<a class="headerlink" href="#responsibilities" title="Permanent link">&para;</a></h3>
+<p>On 1.15, <code>region put</code> replies <code>OK - (flood allowed)</code>. If an idempotent setup
+command gets no reply, check the connection and resend it; the app offers
+<strong>Send Again</strong>. Stop on an actual error. Earlier firmware should be upgraded
+before using the Canadian 3-byte baseline.</p>
+<h3 id="existing-devices">Prepare, then activate locally<a class="headerlink" href="#existing-devices" title="Permanent link">&para;</a></h3>
+<p>The configurator starts in <strong>Prepare scopes</strong>. It adds or updates named scopes
+without removing old ones or changing <code>*</code> or the default scope. Back up first;
+check the combined list still fits the firmware limits. Existing parents of
+matching names may change to the new flat structure.</p>
+<p>Choose <strong>Coordinated activation</strong> only after checking the local announcement
+and neighbouring operators’ readiness. In ON/QC this is coordinated with
+Phase 2, January 2027 at the earliest—not triggered by the date alone.
+Other provinces set their own timetable. The cleanup and city/edge examples
+below describe activation, not preparation.</p>
+<p>Use USB for the migration if possible, so a scope change cannot interrupt your
+management path. Run <code>region</code> and save a copy of the current tree.
+<code>region def</code> adds or moves entries; it does not remove old ones.</p>
+<p>Remove unwanted names with <code>region remove &lt;name&gt;</code>, working from the most
+indented entries up to their parents. Do not remove <code>*</code>. For the old Ottawa
+path only, the sequence is:</p>
+<div class="highlight"><pre><span></span><code>region remove ott
+region remove on-alg
+region remove on
+region remove can
+region save
+</code></pre></div>
+<p>For a tailored comparison, open <strong>Check an existing region list</strong> in the
+configurator's last step. Paste the complete <code>region</code> reply and, on 1.15+,
+optionally the <code>region default</code> reply. The checker lists retained, added, changed,
+and removed scopes. It keeps the pasted data in your browser and requires you to
+review removals before copying commands. Remote replies may be truncated; use USB
+and keep a backup. The <code>^</code> marker indicates the home region, not the default scope.</p>
+<p>Other trees need their own names and order. Stop on <code>Err - not empty</code>, inspect
+the remaining children, and remove those first. Run <code>region</code> again; only <code>*</code>
+should remain for a full manual replacement. The checker can instead retain
+matching entries and move them out of obsolete parents. Do not factory-reset a node
+just to change its scopes.</p>
+<h3 id="region-contacts-and-review">Region contacts and review<a class="headerlink" href="#region-contacts-and-review" title="Permanent link">&para;</a></h3>
+<p>Each map result shows its boundary source, local community links, maintainer,
+and settings-review status. A published boundary does not prove local adoption
+or confirm radio settings. Directory contacts are not automatically appointed as
+region maintainers.</p>
+<p>Use the region card to volunteer as maintainer, confirm settings with dated public
+evidence, or suggest a boundary refinement. Changes require a reviewed PR.
+MeshMapper changes are checked weekly and collected in a review issue; they are
+never published automatically. Settings confirmations are marked for another
+check after six months.</p>
+<h3 id="local-repeater">City repeater<a class="headerlink" href="#local-repeater" title="Permanent link">&para;</a></h3>
+<p>A repeater serving one IATA region is a city repeater, even on its outer boundary.
+Different cities or map outlines with the same IATA code still count as one region.</p>
+<p>An Ottawa repeater uses:</p>
+<div class="highlight"><pre><span></span><code>region def yow|* on|* onqc|* can|* na
+region allowf *
+region default yow
+region
+region save
+region
+</code></pre></div>
+<p><code>|*</code> returns the definition cursor to the root before the next name.
+<code>region allowf *</code> keeps unscoped traffic working locally. <code>region default yow</code>
+puts this repeater's own flood adverts in its city scope.</p>
+<p>For Gatineau, change <code>on</code> to <code>qc</code>. For Montréal, use <code>yul</code> with <code>qc</code>. Outside
+ON/QC, a Calgary repeater uses <code>region def yyc|* ab|* can|* na</code> and
+<code>region default yyc</code>.</p>
+<h3 id="bridge-repeater">Edge repeater<a class="headerlink" href="#bridge-repeater" title="Permanent link">&para;</a></h3>
+<p>Select edge mode when the repeater regularly talks to repeaters in different
+IATA regions. Being near a boundary alone does not make it an edge repeater.
+Add neighbouring city scopes only if you want to forward their scoped traffic;
+they are optional. For Rigaud, linking
+Ottawa–Gatineau to Montréal from the Québec side:</p>
+<div class="highlight"><pre><span></span><code>region def yow|* yul|* qc|* onqc|* can|* na
+region denyf *
+region default yow
+region
+region save
+region
+</code></pre></div>
+<p>This edge repeater carries both city names but only its own province. It drops
+unscoped floods. Scoped <code>onqc</code> traffic can still cross it; <code>yow</code> traffic stops
+at repeaters that do not carry <code>yow</code>. Any other repeater linking the same
+cities must follow the same unscoped policy, or traffic can go around it.</p>
+<p>Additional U.S. paths remain explicit, separately labelled operator choices.
+Confirm those names with the neighbouring network; this migration does not
+rename U.S. scopes or add U.S. polygons.</p>
+<h3 id="optional-onqc-standard-settings">ON/QC Phase 1 settings<a class="headerlink" href="#optional-onqc-standard-settings" title="Permanent link">&para;</a></h3>
+<p>The configurator offers these as a visible opt-in. It keeps radio frequency
+and advert-ID settings unchanged unless you choose a change. Selecting the
+ON/QC option also selects 3-byte advert IDs. Leave it unchecked to generate
+scope commands without these settings; that is not a complete Phase 1 setup.</p>
+<div class="highlight"><pre><span></span><code>set path.hash.mode 2
+set advert.interval 240
+set flood.advert.interval 47
+set flood.max 16
+</code></pre></div>
+<p>These mean 3-byte IDs, local adverts every four hours, flood adverts every
+47 hours, and at most 16 flood hops. Confirm that 16 hops reaches the longest
+intended route. <code>set flood.max.unscoped 3</code> belongs to <strong>Phase 3</strong>, only if needed
+after Phase 2 and announced locally. It is not a default generated by the tool.</p>
+<p>Settings can take effect or persist as commands are entered. Keep your backup;
+do not rely on rebooting to undo them. Check each reply and stop on errors.
+After saving, run <code>region</code> again and verify every intended scope and <code>F</code> flag.
+After activation, an edge repeater's <code>*</code> must not have <code>F</code>. During preparation,
+keep its previous flag. Use <strong>Verify the result</strong> to compare the saved list,
+then test local messaging and, at cutover, fresh cross-region DMs in both
+directions. A text match is not proof of radio delivery.</p>
+<h2 id="companion-and-channel-setup">Companion and channel setup<a class="headerlink" href="#companion-and-channel-setup" title="Permanent link">&para;</a></h2>
+<div class="admonition warning">
+<p class="admonition-title">ON/QC: wait for Phase 2</p>
+<p>For personal companions, leave <strong>Default Region Scope</strong> empty and channels
+<strong>unscoped</strong> for now. Phase 2 is not open. It can start no earlier than
+<strong>January 2027</strong>, after the repeaters are ready and the rollout is announced.
+Switching early can stop scoped messages at an unconfigured repeater.</p>
+</div>
+<p>Follow the <a href="../../proposals/onqc-scopes/#rollout-order">rollout order</a>. Bots and
+MeshMapper use their city scope at the <strong>end of Phase 1</strong>, once local repeaters
+carry it. Personal companions wait for Phase 2.</p>
+<p><strong>When Phase 2 is announced</strong>, with MeshCore app <strong>1.43 or newer</strong>, open
+<strong>Settings → Network Settings → Default Region Scope</strong> and select <code>onqc</code>.
+This lets an initial
+flooded direct message, and its path-discovery reply, cross the shared mesh.</p>
 <table>
 <thead>
 <tr>
-<th>Role</th>
-<th>Responsibility</th>
+<th>ON/QC traffic</th>
+<th>Scope</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>MeshCore Canada region maintainers</td>
-<td>Registry integrity, collision checks, releases, generator and QA</td>
+<td>Companion default and Public channel</td>
+<td><code>onqc</code></td>
 </tr>
 <tr>
-<td>Provincial or territorial stewards</td>
-<td>Coordinate local proposals and confirm jurisdiction-wide effects</td>
+<td>Personal test channels</td>
+<td>Your city, such as <code>yow</code></td>
 </tr>
 <tr>
-<td>Local operators and communities</td>
-<td>First review of local names, grouping, and practical coverage</td>
-</tr>
-<tr>
-<td>Adjacent region stewards</td>
-<td>Joint review when a proposal moves their shared DA boundary</td>
+<td>Other channels</td>
+<td>City, province, or <code>onqc</code>, by agreement</td>
 </tr>
 </tbody>
 </table>
-<p>The national maintainers enforce the data model; they do not invent local identity. A technically valid change may still wait for local review. A locally popular change may still fail if it creates a gap, overlap, collision, or command-budget violation.</p>
-<h3 id="change-process">Change process<a class="headerlink" href="#change-process" title="Permanent link">&para;</a></h3>
-<ol>
-<li>Submit a proposal from the boundary editor. The proposal service opens a public issue with the affected DGUIDs, names, tags, reason, and proposed author; no contributor account is required.</li>
-<li>Generate a before/after diff and QA report.</li>
-<li>Obtain affected local and jurisdiction review. Cross-boundary proposals require every affected side.</li>
-<li>Allow a public review window recorded in the proposal.</li>
-<li>An allowlisted maintainer approves by closing the <code>boundary-update</code> issue
-   as <strong>Completed</strong>. <strong>Close as not planned</strong> rejects it.</li>
-<li>The repository Action verifies the signed proposal, records the reviewed
-   census decision, regenerates and validates the full national layer, commits
-   it to <code>main</code>, and queues publication.</li>
-<li>Keep the previous release available for rollback and migration.</li>
-</ol>
-<h3 id="boundary-editor-proposals">Boundary editor proposals<a class="headerlink" href="#boundary-editor-proposals" title="Permanent link">&para;</a></h3>
-<p>The boundary editor works on the same census cells as the generator. Its normal action reassigns a whole CSD, with its containing CD shown as review context. It never saves a freehand polygon as operational geometry. A reviewer may use DA-level draft edits to shape an exceptional split, but the approved <code>splitExceptions</code> record must expand that draft to list every DA in the CSD, with no duplicate or missing DGUID.</p>
-<p>The editor is a static page at <code>/config/editor/</code>; no contributor account is
-required. It can move cells to an existing region or propose one new region
-with a unique name, short tag, and changed anchor cell. A new leaf keeps the
-nearest shared parent of its source regions.</p>
-<p>Each proposal records the base membership hash and the owner before and after
-each changed DGUID. On submission:</p>
+<p>Set channel scopes explicitly: an unset channel uses the companion default.
+Do not use <code>can</code> or <code>na</code> as the default yet. Outside ON/QC, agree on a mesh-wide
+default locally; the website does not assume that a Canada-wide route exists.</p>
+<h2 id="firmware-limits">Firmware limits<a class="headerlink" href="#firmware-limits" title="Permanent link">&para;</a></h2>
 <ul>
-<li>the MeshCore Canada service reruns the authority and proposal checks;</li>
-<li>it verifies the anti-spam challenge; and</li>
-<li>a repository-restricted GitHub App opens the public review issue.</li>
+<li>At most <strong>32 named regions</strong>, separate from the wildcard.</li>
+<li>At most <strong>160 bytes per CLI command</strong>.</li>
+<li>A <strong>160-byte region-tree reply buffer</strong>. The tool budgets indentation, flags,
+  a home marker, and the terminating byte so the full result can be checked.</li>
 </ul>
-<p>No GitHub credential or signing secret reaches the browser. The App can read
-and write issues, but it cannot change the map. It signs the canonical proposal
-stored in the issue's machine-readable markers. The issue shows a plain-language
-summary. Maintainers can repeat the check with
-<code>scripts/validate-region-proposal.py</code>, which adds CD/CSD context and requires a
-reason.</p>
-<p>After review, an allowlisted maintainer closes the issue as <strong>Completed</strong>. The
-repository workflow then:</p>
+<p>Select only regions you need to forward. An oversized profile produces no commands.</p>
+<h2 id="updates-and-older-links">Updates and older links<a class="headerlink" href="#updates-and-older-links" title="Permanent link">&para;</a></h2>
+<p>Request changes to published zones in <a href="https://meshmapper.net/">MeshMapper</a>.
+For our starter regions, <a href="../../submit-idea/">send a community proposal</a>.
+MeshCore Canada keeps published zones unchanged and labels its own additions separately.
+Known old links can lead to the corresponding IATA zone, but boundaries may
+have changed. Recheck the place, province, and additional regions. Ambiguous
+or missing old names require a new selection.</p>
+<p>The <a href="../editor/">former editor</a> provides a download of locally saved
+drafts. New census-cell submissions are retired; existing issues and preview
+images are retained as history. Community-listing updates still use the
+<a href="../../submit-idea/">community form</a>.</p>
+<h2 id="sources">Sources<a class="headerlink" href="#sources" title="Permanent link">&para;</a></h2>
 <ul>
-<li>verifies the author, closer, label, App signature, proposal hash, and
-  jurisdiction;</li>
-<li>confirms that every requested cell still has the expected owner;</li>
-<li>records a whole-CSD decision as a cohort override or a partial decision as an
-  explicit split listing every DA in that CSD;</li>
-<li>derives an approved new region's seed from its official anchor cell; and</li>
-<li>regenerates both national partitions and the editor cells from locked
-  sources, runs the release checks, and commits the result to <code>main</code>.</li>
-</ul>
-<p>Community-approved seeds do not take part in the pre-radio candidate pass. The
-reviewed cohort or split owns the approved cells, preserving the locked
-radio-density basis and preventing unreviewed expansion.</p>
-<p>If a requested cell changed during review, the workflow stops. A failed
-publication reopens the issue and leaves <code>main</code> unchanged. Closing an issue as
-<strong>Not planned</strong> changes nothing. Drafts, browser state, and open issues never
-become operational authority.</p>
-<p>The editor geometry in <code>docs/assets/regions/cells/</code> uses
-<code>scripts/build-region-editor-data.py --retain 10%</code>. The 8% default collapses one
-BC dissemination area. The manifest records the retained value with the other
-build inputs.</p>
-<p>Versioning rules:</p>
-<ul>
-<li><strong>Major:</strong> census-geography vintage or incompatible authority/model change.</li>
-<li><strong>Minor:</strong> DA reassignment, split, merge, hierarchy change, tag change, or shared repeater area membership change.</li>
-<li><strong>Patch:</strong> labels, aliases, documentation, or source metadata with no membership change.</li>
-</ul>
-<p>Operational region boundaries are community routing definitions. They are not legal, electoral, cadastral, treaty, title, or sovereignty claims.</p>
-<h2 id="release-checks">Release checks<a class="headerlink" href="#release-checks" title="Permanent link">&para;</a></h2>
-<p>A geographic release fails unless all of these are true:</p>
-<ul>
-<li>all 57,936 DAs appear exactly once in the leaf-membership table;</li>
-<li>all 5,161 CSDs and 293 CDs are identified from the same locked 2021 Census suite;</li>
-<li>every CSD has one leaf owner unless an approved split exception enumerates every one of its DGUIDs;</li>
-<li>every DA's leaf is inside the same province or territory;</li>
-<li>every pair of leaf interiors has zero positive-area overlap, regardless of hierarchy branch;</li>
-<li>the symmetric difference between the leaf union and the locked 57,936-DA digital union is zero at the configured precision;</li>
-<li>every subregion union equals its parent membership;</li>
-<li>only leaves own geometry; no <code>routingOverlays</code>, <code>sharedParents</code>, or profile-added scopes exist;</li>
-<li>every shared repeater area contains canonical leaves from at least two provinces or territories, and no leaf belongs to more than one automatic shared area;</li>
-<li>shared-area names never enter the on-air tree; the complete member paths fit every firmware and serial-line budget;</li>
-<li>every neighbouring path is non-geographic, optional, backed by aggregate route evidence, and uses a documented or explicitly provisional external hierarchy;</li>
-<li>neighbouring paths never own Canadian cells, resolve from a map point, or appear as U.S. boundary geometry;</li>
-<li>every resolver test point returns one and only one leaf;</li>
-<li>every active region is contiguous by shared land edge, or has a documented island/MultiPolygon exception;</li>
-<li>every active tag is globally unique and within the firmware byte limit;</li>
-<li>every old tag resolves to an active record, a deprecated record, or a tombstone;</li>
-<li>every active geographic record has reviewed <code>allowed_er_codes</code>, and no seed or locked-cell conflict remains;</li>
-<li>every MeshMapper anchor has a DA-level deviation report;</li>
-<li>Cambridge CSD <code>3530010</code> has exactly 189 DAs owned by <code>wat</code>, and Waterloo CD <code>3530</code> has exactly 766 DAs owned by <code>wat</code>;</li>
-<li>any radio-density input contains no raw node identifiers, names, or exact coordinates, uses aggregates of at least five nodes, and cannot split a CSD;</li>
-<li>every source polygon passes the area, centre, jurisdiction-compatibility, and review-state checks before it is used as an anchor;</li>
-<li>all generated geometry is valid and reproducible from locked inputs;</li>
-<li>all generated command fixtures fit the 32-region, 172-byte response, and 160-character serial-line limits;</li>
-<li>English and French labels are present for every active geographic record;</li>
-<li>the QA report contains no unreviewed conflicts or fallback regions.</li>
-</ul>
-<h2 id="required-registry-artifacts">Required registry artifacts<a class="headerlink" href="#required-registry-artifacts" title="Permanent link">&para;</a></h2>
-<p>Before the first MCC-REG-1 geographic release is marked active, the repository must publish:</p>
-<table>
-<thead>
-<tr>
-<th>Artifact</th>
-<th>Purpose</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>sources.lock.json</code></td>
-<td>Exact inputs, licences, and hashes</td>
-</tr>
-<tr>
-<td><code>generator.yml</code></td>
-<td>Algorithm version and all constants</td>
-</tr>
-<tr>
-<td><code>canada-regions.json</code></td>
-<td>Geographic records, hierarchy, aliases, and source crosswalks</td>
-</tr>
-<tr>
-<td><code>municipal-overrides.json</code></td>
-<td>Approved CD/CSD ownership, complete CSD splits, and new-region decisions</td>
-</tr>
-<tr>
-<td><code>radio-density.json</code></td>
-<td>Optional locked privacy-safe aggregate evidence; never raw node data</td>
-</tr>
-<tr>
-<td><code>canada-region-membership.csv</code></td>
-<td>One row for every digital DA, with CD/CSD context, provisional vote, and final leaf</td>
-</tr>
-<tr>
-<td><code>aliases.csv</code></td>
-<td>Current, deprecated, historical, and search aliases</td>
-</tr>
-<tr>
-<td><code>canada-region-partition.geojson</code></td>
-<td>Generated cartographic leaf layer</td>
-</tr>
-<tr>
-<td><code>canada-region-partition-digital.geojson</code></td>
-<td>Generated complete resolver layer</td>
-</tr>
-<tr>
-<td><code>canada-region-partition.qa.json</code></td>
-<td>Release evidence, hashes, and source deviations</td>
-</tr>
-<tr>
-<td><code>configuration.yml</code></td>
-<td>Firmware and radio-setting policy kept separate from geography</td>
-</tr>
-</tbody>
-</table>
-<p>Generated GeoJSON is a build output. The catalog, membership table, generator configuration, and source lock are the authority inputs. Non-geographic search groups never own cells, appear in the map layer, or resolve from a point. A shared repeater area's group name never enters a command; only the canonical paths of its member leaves do.</p>
-<h2 id="release-stages">Release stages<a class="headerlink" href="#release-stages" title="Permanent link">&para;</a></h2>
-<table>
-<thead>
-<tr>
-<th>Phase</th>
-<th>Result</th>
-<th>Boundary status</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Generated candidate</td>
-<td>193 exclusive leaves; every digital DA assigned once</td>
-<td>Complete and non-overlapping; still proposed</td>
-</tr>
-<tr>
-<td>Source lock</td>
-<td>Statistics Canada, MeshMapper, strategy, and override inputs frozen</td>
-<td>Reproducible inputs</td>
-</tr>
-<tr>
-<td>Generated draft</td>
-<td>Every DA assigned; automated QA published</td>
-<td>Complete but proposed</td>
-</tr>
-<tr>
-<td>Local review</td>
-<td>Alberta and other fuzzy hub areas corrected; names reviewed in both official languages</td>
-<td>Reviewed</td>
-</tr>
-<tr>
-<td>Active release</td>
-<td>Membership and artifacts pass every release check</td>
-<td>Authoritative</td>
-</tr>
-</tbody>
-</table>
-<p>MeshMapper remains the main community assignment source where it has a region. Circles and raw source polygons are never promoted or rendered as final regions. Ottawa and Outaouais remain adjacent provincial leaves, and Lloydminster remains split into <code>lloyd-ab</code> and <code>lloyd-sk</code>. Their shared repeater configurations join canonical member paths without joining the map geometry.</p>
-<h2 id="repeater-configuration-rules">Repeater configuration rules<a class="headerlink" href="#repeater-configuration-rules" title="Permanent link">&para;</a></h2>
-<p>Generated instructions must follow the <a href="https://docs.meshcore.io/cli_commands/">official MeshCore CLI documentation</a>.
-Examples in strategy documents may be out of date.</p>
-<ul>
-<li>Use <code>region def</code> or <code>region put</code> to define the exact tree required by that repeater.</li>
-<li><code>name|jump</code> creates <code>name</code> under the current cursor and then moves the cursor to <code>jump</code>; <code>jump</code> is not the parent of <code>name</code>.</li>
-<li><code>region def</code> does not clear the current tree and may leave partial changes after an error.</li>
-<li>A cross-province configuration must use one <code>can</code> root with one complete branch per selected leaf. It must not invent a second parent or a shared-area tag.</li>
-<li>A neighbouring U.S. path keeps the hierarchy used by that community. It is a separate root branch and does not become part of <code>can</code>.</li>
-<li>Registered shared repeater areas use the same deterministic member order on every repeater. Other large-coverage selections are ordered by canonical hierarchy, not by click order.</li>
-<li>Select paths per repeater role. Do not add every path everywhere.</li>
-<li>Run bare <code>region</code> to inspect the result.</li>
-<li>Run <code>region save</code> only after the tree and flood permissions are correct.</li>
-</ul>
-<p>The setup tool must generate and test commands from registry parent IDs. It must
-never infer command order by splitting a tag string.</p>
-<p>The map may outline selected Canadian leaves together, but each fill remains
-its original non-overlapping region. Neighbouring U.S. paths appear only in
-commands and labels.</p>
-<p>The boundary editor accepts one province or territory per proposal. Changes to
-shared repeater membership or neighbouring path metadata belong in the catalog
-and require review from every affected side.</p>
-<h2 id="source-record">Source record<a class="headerlink" href="#source-record" title="Permanent link">&para;</a></h2>
-<ul>
-<li><a href="https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54">MeshCore Canada forum discussion</a>, including the complete-coverage and administrative-building-block discussion in <a href="https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54/29">posts 29–36</a>, the local-authority discussion in <a href="https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54/43">posts 43–44</a>, and the discoverability concern in <a href="https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54/50">post 50</a>.</li>
-<li>Canada MeshCore Region Strategy v1.1.1, dated 2026-06-23. Supplied PDF SHA-256: <code>9f32d71d2656cfa3abfda4736c3ddb64d1b6e7c5d4e88a7d55b63424f9353a3b</code>.</li>
-<li><a href="https://meshmapper.net/">MeshMapper</a> Canada snapshot <code>meshmapper-ca-2026-07-12</code>.</li>
-<li><a href="https://www12.statcan.gc.ca/census-recensement/2021/ref/dict/az/definition-eng.cfm?ID=geo021">Statistics Canada 2021 DA definition</a>, <a href="https://www150.statcan.gc.ca/n1/pub/92-160-g/92-160-g2021001-eng.htm">2021 Boundary Files guide</a>, <a href="https://www12.statcan.gc.ca/census-recensement/2021/geo/sip-pis/dguid-idugd/index2021-eng.cfm?year=21">2021 dissemination-geography relationships</a>, and <a href="https://www.statcan.gc.ca/en/subjects/standard/sgc/2021/er-additionalinfo">2021 Economic Region standard</a>.</li>
-<li><a href="https://www.statcan.gc.ca/en/terms-conditions/open-licence">Statistics Canada Open Licence</a>.</li>
-<li>MeshCore Canada privacy-safe positioned-node snapshot from <a href="https://live.meshcore.ca/"><code>live.meshcore.ca</code></a> and <a href="https://dev.meshcore.ca/"><code>dev.meshcore.ca</code></a>, with fixed infrastructure used for decisions and all roles retained only as aggregate context.</li>
-<li>Aggregate resolved-route evidence from <a href="https://dev.meshcore.ca/"><code>dev.meshcore.ca</code></a> on 2026-07-18. Only area totals are retained.</li>
-<li><a href="https://wnymeshcore.org/guides/radio-settings">WNY MeshCore radio settings</a> for <code>us → us-ny</code>, the <a href="https://gessaman.com/meshcore/regions/">Pacific Northwest strategy</a> for <code>west → pnw → wa</code> and <code>west → pnw → or</code>, and the <a href="https://www.regionmesh.com/meshcore-region-configuration/">RegionMesh state-path convention</a> for provisional U.S. state paths.</li>
+<li><a href="../../proposals/onqc-scopes/">ON/QC scope proposal</a></li>
+<li><a href="https://meshmapper.net/">MeshMapper</a> and the snapshot details in the map's <strong>Region data</strong> view</li>
+<li><a href="https://docs.meshcore.io/cli_commands/">MeshCore CLI reference</a></li>
+<li><a href="../../assets/regions/NOTICE.txt">Data and licence notice</a></li>
+<li><a href="https://github.com/MeshCore-ca/MeshCore-Canada/blob/e5281887ffdce3985d8f919fc353fa597a8ac93e/docs/config/standard.md">Previous census-based design, preserved in Git history</a></li>
 </ul>
 
 
@@ -4780,6 +4145,8 @@ and require review from every affected side.</p>
     
   
       <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../assets/javascripts/region-profile.js?v=20260926-1"></script>
       
         <script src="../../assets/javascripts/i18n-runtime.js?v=20260829-1"></script>
       

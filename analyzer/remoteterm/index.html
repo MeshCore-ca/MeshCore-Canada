@@ -51,13 +51,13 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/styles/tokens.css?v=20260722-2">
+      <link rel="stylesheet" href="../../assets/styles/tokens.css?v=20260926-1">
     
-      <link rel="stylesheet" href="../../assets/styles/base.css?v=20261019-1">
+      <link rel="stylesheet" href="../../assets/styles/base.css?v=20261029-1">
     
       <link rel="stylesheet" href="../../assets/styles/shell.css?v=20260821-1">
     
-      <link rel="stylesheet" href="../../assets/styles/components.css?v=20260728-1">
+      <link rel="stylesheet" href="../../assets/styles/components.css?v=20260926-1">
     
       <link rel="stylesheet" href="../../assets/styles/network-status.css?v=20260905-1">
     
@@ -121,6 +121,16 @@
       
     </div>
     <div data-md-component="announce">
+      
+        <aside class="md-banner">
+          <div class="md-banner__inner md-grid md-typeset">
+            
+            
+  
+
+          </div>
+          
+        </aside>
       
     </div>
     
@@ -3503,7 +3513,7 @@
     
   
   
-    <span class="md-status md-status--verified"></span>
+    <span class="md-status md-status--draft"></span>
   
 
   
@@ -3850,7 +3860,7 @@
 </tr>
 <tr>
 <td>Region Code</td>
-<td>Your nearest real three-letter location code</td>
+<td>The uppercase code from the <a href="../../config/map/">IATA region map</a></td>
 </tr>
 <tr>
 <td>Packet Topic Template</td>
@@ -3892,9 +3902,9 @@
 <p>Both entries stay enabled without repeated TLS or token errors, and RemoteTerm's packet count changes when it hears nearby activity.</p>
 <h2 id="verify-in-corescope">Verify in CoreScope<a class="headerlink" href="#verify-in-corescope" title="Permanent link">&para;</a></h2>
 <ol>
-<li>Open <a href="https://live.meshcore.ca/#/observers">CoreScope Observers</a> and find the RemoteTerm observer.</li>
+<li>Open <a href="https://live.meshcore.ca/?tab=Observers">Live observer list</a> and find the RemoteTerm observer.</li>
 <li>Create or wait for normal nearby activity.</li>
-<li>Open <a href="https://live.meshcore.ca/#/packets">CoreScope Packets</a> and confirm a recent packet appears.</li>
+<li>Open <a href="https://live.meshcore.ca/">Live packets</a> and confirm a recent packet appears.</li>
 </ol>
 <p>Finish with <a href="../verify/">Check your observer</a>. A connected entry without a recent packet is not proof that the whole path works.</p>
 <h2 id="recovery">Recovery<a class="headerlink" href="#recovery" title="Permanent link">&para;</a></h2>
@@ -4016,6 +4026,8 @@
     
   
       <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../assets/javascripts/region-profile.js?v=20260926-1"></script>
       
         <script src="../../assets/javascripts/i18n-runtime.js?v=20260829-1"></script>
       

@@ -51,13 +51,13 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/styles/tokens.css?v=20260722-2">
+      <link rel="stylesheet" href="../../../assets/styles/tokens.css?v=20260926-1">
     
-      <link rel="stylesheet" href="../../../assets/styles/base.css?v=20261019-1">
+      <link rel="stylesheet" href="../../../assets/styles/base.css?v=20261029-1">
     
       <link rel="stylesheet" href="../../../assets/styles/shell.css?v=20260821-1">
     
-      <link rel="stylesheet" href="../../../assets/styles/components.css?v=20260728-1">
+      <link rel="stylesheet" href="../../../assets/styles/components.css?v=20260926-1">
     
       <link rel="stylesheet" href="../../../assets/styles/network-status.css?v=20260905-1">
     
@@ -123,6 +123,16 @@
       
     </div>
     <div data-md-component="announce">
+      
+        <aside class="md-banner">
+          <div class="md-banner__inner md-grid md-typeset">
+            
+            
+  
+
+          </div>
+          
+        </aside>
       
     </div>
     
@@ -3569,7 +3579,7 @@
     
   
   
-    <span class="md-status md-status--verified"></span>
+    <span class="md-status md-status--draft"></span>
   
 
   
@@ -3998,10 +4008,7 @@ n’est pas atteint, suivez le plan de récupération avant de configurer l’ap
 <li>Donnez-lui un nom descriptif, comme <code>Callsign_R1</code> ou <code>Downtown_R1</code>.</li>
 <li>Créez un mot de passe administrateur unique et conservez-le de façon sécuritaire.</li>
 <li>Confirmez que la communauté locale n’a pas publié de réglages différents. Sinon, appliquez <strong>Canada</strong> (<code>910.525 MHz / 62.5 kHz / SF7 / CR5</code>).</li>
-<li>Utilisez les valeurs d’annonce actuellement recommandées par MeshCore Canada :</li>
-<li><strong>Advert Interval:</strong> <code>60</code> minutes</li>
-<li><strong>Flood Advert Interval:</strong> <code>24</code> heures</li>
-<li><strong>Flood Max:</strong> <code>64</code></li>
+<li>Utilisez les intervalles d’annonce convenus avec votre réseau local. Le profil proposé pour ON/QC offre <strong>Advert Interval</strong> <code>240</code> minutes, <strong>Flood Advert Interval</strong> <code>47</code> heures et <strong>Flood Max</strong> <code>16</code>. Ces réglages sont facultatifs; ils ne s’appliquent pas automatiquement à tous les réseaux canadiens.</li>
 <li>Utilisez le <a href="../../config/">configurateur de répéteur</a> pour obtenir les commandes de région et le mode de hachage des parcours. Le réglage canadien par défaut utilise 3 octets (<code>set path.hash.mode 2</code>); utilisez les réglages locaux différents lorsque votre communauté en publie.</li>
 <li>Ajoutez les renseignements sur le propriétaire seulement s’ils conviennent à des annonces publiques.</li>
 <li>Enregistrez les réglages et redémarrez l’appareil.</li>
@@ -4023,7 +4030,7 @@ ne prouve pas que le réseau maillé est sain. Consultez la
 <a href="https://docs.meshcore.io/cli_commands/#view-or-change-this-nodes-loop-detection" rel="noopener" target="_blank">référence officielle de la CLI</a>.</p>
 <div data-mc-repeater-hash-check></div>
 
-<noscript>JavaScript est requis pour vérifier les identifiants en direct. Vous pouvez aussi [rechercher le préfixe de la clé publique dans CoreScope](https://live.meshcore.ca/#/nodes).</noscript>
+<noscript>JavaScript est requis pour vérifier les identifiants en direct. Vous pouvez aussi [ouvrir le répertoire des nœuds en direct](https://live.meshcore.ca/?tab=Nodes).</noscript>
 
 <h2 id="verifier-et-tester-sur-letabli">Vérifier et tester sur l’établi<a class="headerlink" href="#verifier-et-tester-sur-letabli" title="Permanent link">&para;</a></h2>
 <ol>
@@ -4171,6 +4178,8 @@ et conservez un accès USB physique.</p>
   
       <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
+        <script src="../../../assets/javascripts/region-profile.js?v=20260926-1"></script>
+      
         <script src="../../../assets/javascripts/i18n-runtime.js?v=20260829-1"></script>
       
         <script src="../../../assets/javascripts/bootstrap.js?v=20260821-1"></script>
@@ -4180,7 +4189,7 @@ et conservez un accès USB physique.</p>
     
   
     
-      <script src="../../../assets/javascripts/repeater-hash-check.js?v=20260904-1" defer></script>
+      <script src="../../../assets/javascripts/repeater-hash-check.js?v=20261029-1" defer></script>
     
     
   

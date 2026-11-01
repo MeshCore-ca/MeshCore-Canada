@@ -51,13 +51,13 @@
       
     
     
-      <link rel="stylesheet" href="../../../../assets/styles/tokens.css?v=20260722-2">
+      <link rel="stylesheet" href="../../../../assets/styles/tokens.css?v=20260926-1">
     
-      <link rel="stylesheet" href="../../../../assets/styles/base.css?v=20261019-1">
+      <link rel="stylesheet" href="../../../../assets/styles/base.css?v=20261029-1">
     
       <link rel="stylesheet" href="../../../../assets/styles/shell.css?v=20260821-1">
     
-      <link rel="stylesheet" href="../../../../assets/styles/components.css?v=20260728-1">
+      <link rel="stylesheet" href="../../../../assets/styles/components.css?v=20260926-1">
     
       <link rel="stylesheet" href="../../../../assets/styles/network-status.css?v=20260905-1">
     
@@ -121,6 +121,16 @@
       
     </div>
     <div data-md-component="announce">
+      
+        <aside class="md-banner">
+          <div class="md-banner__inner md-grid md-typeset">
+            
+            
+  
+
+          </div>
+          
+        </aside>
       
     </div>
     
@@ -3514,7 +3524,7 @@
     
   
   
-    <span class="md-status md-status--verified"></span>
+    <span class="md-status md-status--draft"></span>
   
 
   
@@ -3844,7 +3854,7 @@ et authentifiées par jeton; il ne modifie pas le micrologiciel de la radio.</p>
 <div class="highlight"><pre><span></span><code><span class="nt">mqtt</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">iata_code</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">YOW</span>
 </code></pre></div>
-<p>Remplacez <code>YOW</code> par le véritable code le plus près de l’observateur.</p>
+<p>Remplacez <code>YOW</code> par votre code de la <a href="../../../config/map/">carte des régions IATA</a>.</p>
 <p>Sous <code>mqtt.brokers</code>, ajoutez :</p>
 <div class="highlight"><pre><span></span><code><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MeshCore-CA</span>
 <span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
@@ -3889,9 +3899,9 @@ sudo<span class="w"> </span>systemctl<span class="w"> </span>status<span class="
 paquets change lorsque la radio capte du trafic à proximité.</p>
 <h2 id="check-in-corescope">Vérifier dans CoreScope<a class="headerlink" href="#check-in-corescope" title="Permanent link">&para;</a></h2>
 <ol>
-<li>Trouvez l’observateur dans <a href="https://live.meshcore.ca/#/observers">CoreScope Observers</a>.</li>
+<li>Trouvez l’observateur dans <a href="https://live.meshcore.ca/?tab=Observers">Observateurs en direct</a>.</li>
 <li>Attendez de l’activité normale à proximité.</li>
-<li>Confirmez la présence d’un paquet récent dans <a href="https://live.meshcore.ca/#/packets">CoreScope Packets</a>.</li>
+<li>Confirmez la présence d’un paquet récent dans <a href="https://live.meshcore.ca/">Paquets en direct</a>.</li>
 </ol>
 <p>Terminez avec <a href="../../verify/">Vérifier votre observateur</a>. Un service systemd en
 bon état ne confirme pas que les paquets se sont rendus à CoreScope.</p>
@@ -4022,6 +4032,8 @@ journal.</p>
     
   
       <script src="../../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../../../assets/javascripts/region-profile.js?v=20260926-1"></script>
       
         <script src="../../../../assets/javascripts/i18n-runtime.js?v=20260829-1"></script>
       

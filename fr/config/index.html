@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Choisissez les chemins régionaux canadiens et générez des commandes MeshCore vérifiées pour votre répéteur.">
+        <meta name="description" content="Choisissez les régions IATA, le mode ville ou bordure et les commandes adaptées au micrologiciel.">
       
       
       
@@ -31,7 +31,7 @@
     
     
       
-        <title>Configurer les régions d’un répéteur - MeshCore Canada</title>
+        <title>Configurer les portées d’un répéteur - MeshCore Canada</title>
       
     
     
@@ -51,13 +51,13 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/styles/tokens.css?v=20260722-2">
+      <link rel="stylesheet" href="../../assets/styles/tokens.css?v=20260926-1">
     
-      <link rel="stylesheet" href="../../assets/styles/base.css?v=20261019-1">
+      <link rel="stylesheet" href="../../assets/styles/base.css?v=20261029-1">
     
       <link rel="stylesheet" href="../../assets/styles/shell.css?v=20260821-1">
     
-      <link rel="stylesheet" href="../../assets/styles/components.css?v=20260728-1">
+      <link rel="stylesheet" href="../../assets/styles/components.css?v=20260926-1">
     
       <link rel="stylesheet" href="../../assets/styles/network-status.css?v=20260905-1">
     
@@ -72,8 +72,8 @@
   
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="MeshCore Canada">
-    <meta property="og:title" content="Configurer les régions d’un répéteur">
-    <meta property="og:description" content="Choisissez les chemins régionaux canadiens et générez des commandes MeshCore vérifiées pour votre répéteur.">
+    <meta property="og:title" content="Configurer les portées d’un répéteur">
+    <meta property="og:description" content="Choisissez les régions IATA, le mode ville ou bordure et les commandes adaptées au micrologiciel.">
     <meta property="og:url" content="https://meshcore.ca/fr/config/">
     <meta property="og:image" content="https://meshcore.ca/assets/MeshCore-Canada-Logo.png">
     <meta name="twitter:card" content="summary">
@@ -81,8 +81,8 @@
       {
         "@context": "https://schema.org",
         "@type": "WebPage",
-        "name": "Configurer les r\u00e9gions d\u2019un r\u00e9p\u00e9teur",
-        "description": "Choisissez les chemins r\u00e9gionaux canadiens et g\u00e9n\u00e9rez des commandes MeshCore v\u00e9rifi\u00e9es pour votre r\u00e9p\u00e9teur.",
+        "name": "Configurer les port\u00e9es d\u2019un r\u00e9p\u00e9teur",
+        "description": "Choisissez les r\u00e9gions IATA, le mode ville ou bordure et les commandes adapt\u00e9es au micrologiciel.",
         "url": "https://meshcore.ca/fr/config/",
         "isPartOf": {
           "@type": "WebSite",
@@ -92,7 +92,7 @@
       }
     </script>
     
-      <link rel="stylesheet" href="../../assets/regions/regions.css?v=20260905-1">
+      <link rel="stylesheet" href="../../assets/regions/regions.css?v=20260926-1">
     
   
 
@@ -115,12 +115,22 @@
     <div data-md-component="skip">
       
         
-        <a href="#configurer-les-regions-dun-repeteur" class="md-skip">
+        <a href="#configurer-les-portees-dun-repeteur" class="md-skip">
           Aller au contenu
         </a>
       
     </div>
     <div data-md-component="announce">
+      
+        <aside class="md-banner">
+          <div class="md-banner__inner md-grid md-typeset">
+            
+            
+  
+
+          </div>
+          
+        </aside>
       
     </div>
     
@@ -151,7 +161,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Configurer les régions d’un répéteur
+              Configurer les portées d’un répéteur
             
           </span>
         </div>
@@ -3371,7 +3381,7 @@
     
   
   
-    <span class="md-status md-status--verified"></span>
+    <span class="md-status md-status--draft"></span>
   
 
   
@@ -3523,7 +3533,7 @@
 
 
   
-  <h1 id="configurer-les-regions-dun-repeteur">Configurer les régions d’un répéteur<a class="headerlink" href="#configurer-les-regions-dun-repeteur" title="Permanent link">&para;</a></h1>
+  <h1 id="configurer-les-portees-dun-repeteur">Configurer les portées d’un répéteur<a class="headerlink" href="#configurer-les-portees-dun-repeteur" title="Permanent link">&para;</a></h1>
   
   
   
@@ -3534,8 +3544,11 @@
   
 
   
-<p>Choisissez les chemins que ce répéteur doit relayer. Ajoutez des chemins vers
-d’autres provinces ou les États-Unis seulement si votre réseau local les utilise.</p>
+<p>Choisissez les régions IATA desservies par ce répéteur. La préparation conserve
+la retransmission des messages sans portée (<code>*</code>) et la portée par défaut. Lors d’une transition
+coordonnée localement, les répéteurs de ville autorisent les messages sans
+portée et ceux de bordure les bloquent. Examinez la configuration actuelle
+avant d’appliquer des commandes.</p>
 <div data-mcc-regions="config" data-mcc-root="./"></div>
 
 <noscript>JavaScript est requis. [Consultez la norme sur les régions](standard.md).</noscript>
@@ -3659,6 +3672,8 @@ d’autres provinces ou les États-Unis seulement si votre réseau local les uti
   
       <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
+        <script src="../../assets/javascripts/region-profile.js?v=20260926-1"></script>
+      
         <script src="../../assets/javascripts/i18n-runtime.js?v=20260829-1"></script>
       
         <script src="../../assets/javascripts/bootstrap.js?v=20260821-1"></script>
@@ -3668,11 +3683,17 @@ d’autres provinces ou les États-Unis seulement si votre réseau local les uti
     
   
     
+      <script src="../../assets/javascripts/place-search.js?v=20260925-2" defer></script>
+    
       <script src="../../assets/javascripts/radio-profiles.js?v=20260904-1" defer></script>
     
-      <script src="../../assets/regions/modules/configurator-support.js?v=20260904-1" defer></script>
+      <script src="../../assets/regions/modules/configurator-support.js?v=20260926-1" defer></script>
     
-      <script src="../../assets/regions/regions.js?v=20260909-1" defer></script>
+      <script src="../../assets/regions/modules/iata-scopes.js?v=20261013-1" defer></script>
+    
+      <script src="../../assets/regions/modules/scope-migration.js?v=20260926-2" defer></script>
+    
+      <script src="../../assets/regions/regions.js?v=20261015-1" defer></script>
     
     
   

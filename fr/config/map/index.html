@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Recherchez un lieu ou choisissez une zone sur la carte pour trouver sa région MeshCore.">
+        <meta name="description" content="Trouvez une zone MeshMapper ou une région initiale de MeshCore Canada par lieu, code IATA ou carte.">
       
       
       
@@ -31,7 +31,7 @@
     
     
       
-        <title>Trouver votre région MeshCore au Canada - MeshCore Canada</title>
+        <title>Trouver votre région IATA - MeshCore Canada</title>
       
     
     
@@ -51,13 +51,13 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/styles/tokens.css?v=20260722-2">
+      <link rel="stylesheet" href="../../../assets/styles/tokens.css?v=20260926-1">
     
-      <link rel="stylesheet" href="../../../assets/styles/base.css?v=20261019-1">
+      <link rel="stylesheet" href="../../../assets/styles/base.css?v=20261029-1">
     
       <link rel="stylesheet" href="../../../assets/styles/shell.css?v=20260821-1">
     
-      <link rel="stylesheet" href="../../../assets/styles/components.css?v=20260728-1">
+      <link rel="stylesheet" href="../../../assets/styles/components.css?v=20260926-1">
     
       <link rel="stylesheet" href="../../../assets/styles/network-status.css?v=20260905-1">
     
@@ -72,8 +72,8 @@
   
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="MeshCore Canada">
-    <meta property="og:title" content="Trouver votre région MeshCore au Canada">
-    <meta property="og:description" content="Recherchez un lieu ou choisissez une zone sur la carte pour trouver sa région MeshCore.">
+    <meta property="og:title" content="Trouver votre région IATA">
+    <meta property="og:description" content="Trouvez une zone MeshMapper ou une région initiale de MeshCore Canada par lieu, code IATA ou carte.">
     <meta property="og:url" content="https://meshcore.ca/fr/config/map/">
     <meta property="og:image" content="https://meshcore.ca/assets/MeshCore-Canada-Logo.png">
     <meta name="twitter:card" content="summary">
@@ -81,8 +81,8 @@
       {
         "@context": "https://schema.org",
         "@type": "WebPage",
-        "name": "Trouver votre r\u00e9gion MeshCore au Canada",
-        "description": "Recherchez un lieu ou choisissez une zone sur la carte pour trouver sa r\u00e9gion MeshCore.",
+        "name": "Trouver votre r\u00e9gion IATA",
+        "description": "Trouvez une zone MeshMapper ou une r\u00e9gion initiale de MeshCore Canada par lieu, code IATA ou carte.",
         "url": "https://meshcore.ca/fr/config/map/",
         "isPartOf": {
           "@type": "WebSite",
@@ -92,7 +92,7 @@
       }
     </script>
     
-      <link rel="stylesheet" href="../../../assets/regions/regions.css?v=20260905-1">
+      <link rel="stylesheet" href="../../../assets/regions/regions.css?v=20260926-1">
     
   
 
@@ -115,12 +115,22 @@
     <div data-md-component="skip">
       
         
-        <a href="#trouver-votre-region-meshcore-au-canada" class="md-skip">
+        <a href="#trouver-votre-region-iata" class="md-skip">
           Aller au contenu
         </a>
       
     </div>
     <div data-md-component="announce">
+      
+        <aside class="md-banner">
+          <div class="md-banner__inner md-grid md-typeset">
+            
+            
+  
+
+          </div>
+          
+        </aside>
       
     </div>
     
@@ -151,7 +161,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Trouver votre région MeshCore au Canada
+              Trouver votre région IATA
             
           </span>
         </div>
@@ -3371,7 +3381,7 @@
     
   
   
-    <span class="md-status md-status--verified"></span>
+    <span class="md-status md-status--draft"></span>
   
 
   
@@ -3523,7 +3533,7 @@
 
 
   
-  <h1 id="trouver-votre-region-meshcore-au-canada">Trouver votre région MeshCore au Canada<a class="headerlink" href="#trouver-votre-region-meshcore-au-canada" title="Permanent link">&para;</a></h1>
+  <h1 id="trouver-votre-region-iata">Trouver votre région IATA<a class="headerlink" href="#trouver-votre-region-iata" title="Permanent link">&para;</a></h1>
   
   
   
@@ -3534,7 +3544,9 @@
   
 
   
-<p>Recherchez un lieu ou choisissez une zone sur la carte.</p>
+<p>Recherchez un lieu ou choisissez une région IATA. Les traits pleins indiquent les
+limites publiées par MeshMapper. Les pointillés indiquent les <a href="../standard/#planning-extensions">régions et extensions proposées</a>
+par MeshCore Canada. Ces limites ne représentent pas la couverture radio mesurée.</p>
 <div data-mcc-regions="map" data-mcc-root="../"></div>
 
 <noscript>JavaScript est requis. [Consultez la norme sur les régions](standard.md).</noscript>
@@ -3658,6 +3670,8 @@
   
       <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
+        <script src="../../../assets/javascripts/region-profile.js?v=20260926-1"></script>
+      
         <script src="../../../assets/javascripts/i18n-runtime.js?v=20260829-1"></script>
       
         <script src="../../../assets/javascripts/bootstrap.js?v=20260821-1"></script>
@@ -3667,11 +3681,15 @@
     
   
     
+      <script src="../../../assets/javascripts/place-search.js?v=20260925-2" defer></script>
+    
       <script src="../../../assets/javascripts/radio-profiles.js?v=20260904-1" defer></script>
     
-      <script src="../../../assets/regions/modules/configurator-support.js?v=20260904-1" defer></script>
+      <script src="../../../assets/regions/modules/configurator-support.js?v=20260926-1" defer></script>
     
-      <script src="../../../assets/regions/regions.js?v=20260909-1" defer></script>
+      <script src="../../../assets/regions/modules/iata-scopes.js?v=20261013-1" defer></script>
+    
+      <script src="../../../assets/regions/regions.js?v=20261015-1" defer></script>
     
     
   

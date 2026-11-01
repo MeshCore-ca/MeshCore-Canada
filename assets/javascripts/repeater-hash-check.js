@@ -37,7 +37,7 @@
       longKey: "A MeshCore public key cannot be longer than 64 hexadecimal characters.",
       shortKey: "Enter at least {count} hexadecimal characters for the selected ID size.",
       invalidRegion: "Enter a valid three-letter Beacon region code, such as YOW, YYZ, or YVR.",
-      requestFailed: "Beacon could not complete the check. Try again or search the ID in CoreScope.",
+      requestFailed: "Beacon could not complete the check. Try again or open the live node directory.",
       localConflict: "{prefix} is also used by {count} repeater{s} in {region}",
       networkConflict: "No duplicate in {region}; {prefix} is used by {count} other repeater{s} elsewhere in Beacon",
       clearSeen: "No duplicate found for {prefix}. This repeater is already visible in Beacon.",
@@ -62,7 +62,7 @@
       unknown: "Unknown",
       noName: "Unnamed repeater",
       source: "Data from Beacon",
-      openCoreScope: "Search this ID in CoreScope",
+      openCoreScope: "Open the live node directory",
       partialKey: "A partial public-key prefix is being checked. Paste all 64 characters to identify this repeater separately from other matches."
     },
     fr: {
@@ -89,7 +89,7 @@
       longKey: "Une clé publique MeshCore ne peut pas dépasser 64 caractères hexadécimaux.",
       shortKey: "Saisissez au moins {count} caractères hexadécimaux pour la taille choisie.",
       invalidRegion: "Saisissez un code de région Beacon valide de trois lettres, comme YOW, YYZ ou YVR.",
-      requestFailed: "Beacon n’a pas pu terminer la vérification. Réessayez ou recherchez l’identifiant dans CoreScope.",
+      requestFailed: "Beacon n’a pas pu terminer la vérification. Réessayez ou ouvrez le répertoire des nœuds en direct.",
       localConflict: "{count} autre{s} répéteur{s} utilise{nt} {prefix} dans {region}",
       networkConflict: "Aucun doublon dans {region}; {count} autre{s} répéteur{s} utilise{nt} {prefix} ailleurs dans Beacon",
       clearSeen: "Aucun doublon trouvé pour {prefix}. Ce répéteur est déjà visible dans Beacon.",
@@ -114,7 +114,7 @@
       unknown: "Inconnue",
       noName: "Répéteur sans nom",
       source: "Données fournies par Beacon",
-      openCoreScope: "Rechercher cet identifiant dans CoreScope",
+      openCoreScope: "Ouvrir le répertoire des nœuds en direct",
       partialKey: "Vous vérifiez un préfixe partiel. Collez les 64 caractères pour distinguer ce répéteur des autres résultats."
     }
   };
@@ -408,7 +408,7 @@
       '</div>' + comparisonTable(summaries, selectedBytes, selectedIata, language) +
       detailTable(selected, parsed.full ? parsed.hex : "", selectedIata, language) +
       '<p class="mc-hash-source"><a href="https://dev.meshcore.ca/" target="_blank" rel="noopener noreferrer">' + escapeHtml(message(language, "source")) + '</a> · ' +
-      '<a href="https://live.meshcore.ca/#/nodes?search=' + encodeURIComponent(selected.prefix) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(message(language, "openCoreScope")) + '</a></p>';
+      '<a href="https://live.meshcore.ca/?tab=Nodes" target="_blank" rel="noopener noreferrer">' + escapeHtml(message(language, "openCoreScope")) + '</a></p>';
   }
 
   function renderShell(host, language) {
@@ -461,6 +461,8 @@
     var loadedIatas = null;
     var saved = storedIata();
     if (saved) regionInput.value = saved;
+    var selectedRegion = new URLSearchParams(window.location.search).get("region");
+    if (/^[a-z]{3}$/i.test(selectedRegion || "")) regionInput.value = selectedRegion.toUpperCase();
 
     function loadIatas() {
       if (loadedIatas) return Promise.resolve(loadedIatas);
@@ -516,7 +518,7 @@
         status.textContent = "";
       } catch (error) {
         status.textContent = message(language, "requestFailed");
-        host.querySelector("[data-role='result']").innerHTML = '<p class="mc-hash-source"><a href="https://live.meshcore.ca/#/nodes?search=' + encodeURIComponent(parsed.prefix) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(message(language, "openCoreScope")) + '</a></p>';
+        host.querySelector("[data-role='result']").innerHTML = '<p class="mc-hash-source"><a href="https://live.meshcore.ca/?tab=Nodes" target="_blank" rel="noopener noreferrer">' + escapeHtml(message(language, "openCoreScope")) + '</a></p>';
       } finally {
         clearTimeout(timeout);
         if (host._mcHashAbort === controller) host._mcHashAbort = null;

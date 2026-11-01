@@ -51,13 +51,13 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/styles/tokens.css?v=20260722-2">
+      <link rel="stylesheet" href="../../../assets/styles/tokens.css?v=20260926-1">
     
-      <link rel="stylesheet" href="../../../assets/styles/base.css?v=20261019-1">
+      <link rel="stylesheet" href="../../../assets/styles/base.css?v=20261029-1">
     
       <link rel="stylesheet" href="../../../assets/styles/shell.css?v=20260821-1">
     
-      <link rel="stylesheet" href="../../../assets/styles/components.css?v=20260728-1">
+      <link rel="stylesheet" href="../../../assets/styles/components.css?v=20260926-1">
     
       <link rel="stylesheet" href="../../../assets/styles/network-status.css?v=20260905-1">
     
@@ -119,6 +119,16 @@
       
     </div>
     <div data-md-component="announce">
+      
+        <aside class="md-banner">
+          <div class="md-banner__inner md-grid md-typeset">
+            
+            
+  
+
+          </div>
+          
+        </aside>
       
     </div>
     
@@ -3594,7 +3604,7 @@
     
   
   
-    <span class="md-status md-status--verified"></span>
+    <span class="md-status md-status--draft"></span>
   
 
   
@@ -3964,14 +3974,20 @@ source actuelle.</p>
 <strong>3 octets</strong>. Consultez les <a href="../../provinces/#canada-baseline">détails et les consignes pour les anciennes applications</a>.</p>
 <p>Le préréglage distinct <strong>USA</strong> utilise les mêmes valeurs radio, mais ne modifie pas
 la taille du hachage. <a href="https://github.com/meshcore-dev/MeshCore/issues/3302#issuecomment-5598886579">Annonce du changement</a>.</p>
-<p>Le <a href="../../config/">configurateur de répéteur</a> trouve les chemins régionaux.
-Ses réglages radio et de taille d’identifiant d’annonce sont séparés; les valeurs
-actuelles sont conservées tant que vous ne choisissez pas de changement.</p>
+<p>Le <a href="../../config/">configurateur de répéteur</a> sélectionne les régions IATA
+et génère des commandes de portées indépendantes. Ses réglages radio et de taille
+d’identifiant d’annonce restent séparés; les valeurs actuelles sont conservées
+tant que vous ne choisissez pas de changement.</p>
 <h3 id="quest-ce-que-le-mode-de-hachage-des-parcours">Qu’est-ce que le mode de hachage des parcours?<a class="headerlink" href="#quest-ce-que-le-mode-de-hachage-des-parcours" title="Permanent link">&para;</a></h3>
-<p>Il détermine la taille des identifiants dans les parcours d’annonce : 1, 2 ou 3 octets.
-MeshCore Canada recommande 3 octets pour réduire les collisions. Les versions 1.14
-et suivantes peuvent relayer des parcours de tailles différentes; les nœuds voisins
-n’ont pas tous besoin d’utiliser la même taille d’identifiant.</p>
+<p>Les parcours contiennent des identifiants courts de répéteur, de 1, 2 ou 3 octets.
+Sur un répéteur, <code>path.hash.mode</code> règle la taille utilisée pour ses propres
+annonces, pas celle des parcours qu’il peut relayer. Le réglage d’un compagnon
+détermine la taille des identifiants dans les parcours de ses messages sortants.</p>
+<p>MeshCore Canada recommande des parcours de 3 octets. Les répéteurs avec le
+micrologiciel 1.14 ou plus récent relaient les trois tailles; les plus anciens
+rejettent les paquets avec des parcours de 2 ou 3 octets. Suivez les réglages de
+votre communauté pendant la mise à jour des anciens répéteurs.
+Consultez la <a href="https://github.com/meshcore-dev/MeshCore/blob/main/docs/faq.md#39-q-what-is-multibyte-support-what-do-1-byte-2-byte-3-byte-adverts-and-messages-mean">FAQ officielle sur les parcours multioctets</a>.</p>
 <p><a href="../../config/standard/">Lire la norme des régions</a>.</p>
 <h3 id="dois-je-detenir-un-certificat-doperateur-radioamateur">Dois-je détenir un certificat d’opérateur radioamateur?<a class="headerlink" href="#dois-je-detenir-un-certificat-doperateur-radioamateur" title="Permanent link">&para;</a></h3>
 <p>MeshCore Canada ne peut pas déterminer quelle autorisation s’applique à votre
@@ -4147,6 +4163,8 @@ des captures d’écran ou des journaux.</p>
     
   
       <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../../assets/javascripts/region-profile.js?v=20260926-1"></script>
       
         <script src="../../../assets/javascripts/i18n-runtime.js?v=20260829-1"></script>
       

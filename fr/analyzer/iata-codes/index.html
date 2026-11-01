@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Trouvez le code d’aéroport à trois lettres le plus proche de votre observateur.">
+        <meta name="description" content="Associez le code d’emplacement de votre observateur à sa région IATA.">
       
       
       
@@ -51,13 +51,13 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/styles/tokens.css?v=20260722-2">
+      <link rel="stylesheet" href="../../../assets/styles/tokens.css?v=20260926-1">
     
-      <link rel="stylesheet" href="../../../assets/styles/base.css?v=20261019-1">
+      <link rel="stylesheet" href="../../../assets/styles/base.css?v=20261029-1">
     
       <link rel="stylesheet" href="../../../assets/styles/shell.css?v=20260821-1">
     
-      <link rel="stylesheet" href="../../../assets/styles/components.css?v=20260728-1">
+      <link rel="stylesheet" href="../../../assets/styles/components.css?v=20260926-1">
     
       <link rel="stylesheet" href="../../../assets/styles/network-status.css?v=20260905-1">
     
@@ -73,7 +73,7 @@
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="MeshCore Canada">
     <meta property="og:title" content="Trouver le code d’emplacement d’un observateur">
-    <meta property="og:description" content="Trouvez le code d’aéroport à trois lettres le plus proche de votre observateur.">
+    <meta property="og:description" content="Associez le code d’emplacement de votre observateur à sa région IATA.">
     <meta property="og:url" content="https://meshcore.ca/fr/analyzer/iata-codes/">
     <meta property="og:image" content="https://meshcore.ca/assets/MeshCore-Canada-Logo.png">
     <meta name="twitter:card" content="summary">
@@ -82,7 +82,7 @@
         "@context": "https://schema.org",
         "@type": "WebPage",
         "name": "Trouver le code d\u2019emplacement d\u2019un observateur",
-        "description": "Trouvez le code d\u2019a\u00e9roport \u00e0 trois lettres le plus proche de votre observateur.",
+        "description": "Associez le code d\u2019emplacement de votre observateur \u00e0 sa r\u00e9gion IATA.",
         "url": "https://meshcore.ca/fr/analyzer/iata-codes/",
         "isPartOf": {
           "@type": "WebSite",
@@ -121,6 +121,16 @@
       
     </div>
     <div data-md-component="announce">
+      
+        <aside class="md-banner">
+          <div class="md-banner__inner md-grid md-typeset">
+            
+            
+  
+
+          </div>
+          
+        </aside>
       
     </div>
     
@@ -3426,7 +3436,7 @@
     
   
   
-    <span class="md-status md-status--verified"></span>
+    <span class="md-status md-status--draft"></span>
   
 
   
@@ -3629,10 +3639,14 @@
   
 
   
-<p>Un observateur indique sa zone générale avec le code à trois lettres d’un
-aéroport réel. Ce code ne définit pas les limites d’une région MeshCore.</p>
-<p>Choisissez le code de l’aéroport le plus proche de l’observateur. Utilisez le
-même code dans chaque entrée du courtier.</p>
+<p>Utilisez le code indiqué par la <a href="../../config/map/">carte des régions IATA</a> à
+l’emplacement de votre observateur. La carte distingue les zones MeshMapper des
+régions initiales de MeshCore Canada; la distance jusqu’à un aéroport ne détermine pas le code.</p>
+<p>Les observateurs utilisent des majuscules, comme <code>YOW</code>; les portées radio (scopes)
+utilisent des minuscules, comme <code>yow</code>. Gardez le même code d’observateur dans
+chaque entrée du courtier. Consultez l’opérateur avant de modifier un observateur existant.</p>
+<p>Si la carte n’attribue aucune région à cet endroit, demandez à votre communauté quel
+code utiliser. La liste ci-dessous sert de référence, pas de carte des limites.</p>
 <div class="mc-location-tool" id="location-code-tool" data-source="../location-codes.json">
   <div class="mc-location-controls">
     <label for="location-code-search">
@@ -3666,15 +3680,16 @@ même code dans chaque entrée du courtier.</p>
 alimentent l’outil de recherche et les suggestions du générateur de commandes.
 Il s’agit d’une courte liste canadienne organisée pour ce site, et non d’un
 registre officiel complet des codes d’aéroport.</p>
-<p>Si le code de l’aéroport le plus proche n’y figure pas :</p>
+<p>Si le code de votre communauté n’y figure pas :</p>
 <ol>
-<li>confirmez-le auprès d’une source aéroportuaire fiable;</li>
+<li>confirmez-le auprès de la communauté et de MeshMapper;</li>
 <li>entrez le code à trois lettres dans une méthode qui accepte du texte libre;</li>
 <li>demandez à MeshCore Canada d’ajouter ce lieu à la liste.</li>
 </ol>
-<p>N’utilisez pas <code>CAN</code> pour représenter le Canada : il s’agit du code d’un
-aéroport de Guangzhou. N’utilisez pas non plus de valeurs temporaires comme
-<code>XXX</code> ou <code>HOME</code>.</p>
+<p>N’utilisez pas <code>CAN</code> pour un observateur au Canada : c’est le code d’un
+aéroport de Guangzhou. La portée radio réservée <code>can</code> est un réglage distinct,
+pas un code d’emplacement d’observateur.
+N’utilisez pas de valeurs temporaires comme <code>XXX</code> ou <code>HOME</code>.</p>
 <p>Retournez à <a href="../intro/">Choisir une méthode d’observation</a>.</p>
 
 
@@ -3791,6 +3806,8 @@ aéroport de Guangzhou. N’utilisez pas non plus de valeurs temporaires comme
     
   
       <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../../assets/javascripts/region-profile.js?v=20260926-1"></script>
       
         <script src="../../../assets/javascripts/i18n-runtime.js?v=20260829-1"></script>
       

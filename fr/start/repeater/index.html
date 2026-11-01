@@ -51,13 +51,13 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/styles/tokens.css?v=20260722-2">
+      <link rel="stylesheet" href="../../../assets/styles/tokens.css?v=20260926-1">
     
-      <link rel="stylesheet" href="../../../assets/styles/base.css?v=20261019-1">
+      <link rel="stylesheet" href="../../../assets/styles/base.css?v=20261029-1">
     
       <link rel="stylesheet" href="../../../assets/styles/shell.css?v=20260821-1">
     
-      <link rel="stylesheet" href="../../../assets/styles/components.css?v=20260728-1">
+      <link rel="stylesheet" href="../../../assets/styles/components.css?v=20260926-1">
     
       <link rel="stylesheet" href="../../../assets/styles/network-status.css?v=20260905-1">
     
@@ -121,6 +121,16 @@
       
     </div>
     <div data-md-component="announce">
+      
+        <aside class="md-banner">
+          <div class="md-banner__inner md-grid md-typeset">
+            
+            
+  
+
+          </div>
+          
+        </aside>
       
     </div>
     
@@ -3476,7 +3486,7 @@
     
   
   
-    <span class="md-status md-status--verified"></span>
+    <span class="md-status md-status--draft"></span>
   
 
   
@@ -3736,11 +3746,14 @@ répéteurs à proximité doivent utiliser les mêmes paramètres locaux. Les
 personnes responsables doivent s’entendre sur tout changement qui touche
 le trafic partagé.</p>
 </div>
-<p>Utilisez le <a href="../../config/">configurateur de répéteur</a> pour trouver les
-paramètres régionaux. Relisez les commandes avant de les appliquer.</p>
+<p>Utilisez le <a href="../../config/">configurateur de répéteur</a> pour choisir votre zone
+IATA MeshMapper et ses portées indépendantes. Si vous utilisiez l’ancien arbre de
+régions, suivez les <a href="../../config/standard/">étapes de migration</a> avant d’appliquer la nouvelle liste.</p>
+<p>Commencez par la préparation. Conservez les portées qui fonctionnent et coordonnez
+l’activation, y compris tout blocage en bordure, avec les opérateurs locaux.</p>
 <div data-mc-repeater-hash-check></div>
 
-<noscript>JavaScript est requis pour vérifier les identifiants en direct. Vous pouvez aussi [rechercher le préfixe de la clé publique dans CoreScope](https://live.meshcore.ca/#/nodes).</noscript>
+<noscript>JavaScript est requis pour vérifier les identifiants en direct. Vous pouvez aussi [ouvrir le répertoire des nœuds en direct](https://live.meshcore.ca/?tab=Nodes).</noscript>
 
 <h2 id="tester-le-repeteur">Tester le répéteur<a class="headerlink" href="#tester-le-repeteur" title="Permanent link">&para;</a></h2>
 <p>Le répéteur est prêt à être installé lorsque :</p>
@@ -3889,6 +3902,8 @@ l’installation finale. Si une vérification échoue,
   
       <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
+        <script src="../../../assets/javascripts/region-profile.js?v=20260926-1"></script>
+      
         <script src="../../../assets/javascripts/i18n-runtime.js?v=20260829-1"></script>
       
         <script src="../../../assets/javascripts/bootstrap.js?v=20260821-1"></script>
@@ -3898,7 +3913,7 @@ l’installation finale. Si une vérification échoue,
     
   
     
-      <script src="../../../assets/javascripts/repeater-hash-check.js?v=20260904-1" defer></script>
+      <script src="../../../assets/javascripts/repeater-hash-check.js?v=20261029-1" defer></script>
     
     
   

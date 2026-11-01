@@ -51,13 +51,13 @@
       
     
     
-      <link rel="stylesheet" href="../../../../assets/styles/tokens.css?v=20260722-2">
+      <link rel="stylesheet" href="../../../../assets/styles/tokens.css?v=20260926-1">
     
-      <link rel="stylesheet" href="../../../../assets/styles/base.css?v=20261019-1">
+      <link rel="stylesheet" href="../../../../assets/styles/base.css?v=20261029-1">
     
       <link rel="stylesheet" href="../../../../assets/styles/shell.css?v=20260821-1">
     
-      <link rel="stylesheet" href="../../../../assets/styles/components.css?v=20260728-1">
+      <link rel="stylesheet" href="../../../../assets/styles/components.css?v=20260926-1">
     
       <link rel="stylesheet" href="../../../../assets/styles/network-status.css?v=20260905-1">
     
@@ -121,6 +121,16 @@
       
     </div>
     <div data-md-component="announce">
+      
+        <aside class="md-banner">
+          <div class="md-banner__inner md-grid md-typeset">
+            
+            
+  
+
+          </div>
+          
+        </aside>
       
     </div>
     
@@ -3586,7 +3596,7 @@
     
   
   
-    <span class="md-status md-status--verified"></span>
+    <span class="md-status md-status--draft"></span>
   
 
   
@@ -4026,8 +4036,7 @@ less<span class="w"> </span><span class="s2">"</span><span class="nv">$workdir</
 terminaison, le comportement de sauvegarde et le comportement de redémarrage.
 Conservez le fichier pour le reste de la configuration.</p>
 <h3 id="2-ecrire-sans-redemarrer">2. Écrire sans redémarrer<a class="headerlink" href="#2-ecrire-sans-redemarrer" title="Permanent link">&para;</a></h3>
-<p>Remplacez <code>YOW</code> par le véritable code d’emplacement le plus près de
-l’observateur :</p>
+<p>Remplacez <code>YOW</code> par votre code de la <a href="../../../config/map/">carte des régions IATA</a> :</p>
 <div class="highlight"><pre><span></span><code>bash<span class="w"> </span><span class="s2">"</span><span class="nv">$workdir</span><span class="s2">/add-meshcore-ca-broker.sh"</span><span class="w"> </span>--device<span class="w"> </span>serial-host<span class="w"> </span>--iata<span class="w"> </span>YOW<span class="w"> </span>--no-restart
 </code></pre></div>
 <p>L’outil valide la forme du code, rejette <code>XXX</code>, affiche un avertissement pour
@@ -4100,9 +4109,9 @@ nouveaux paquets lorsque la radio capte du trafic à proximité.</p>
 <h2 id="check-in-corescope">Vérifier dans CoreScope<a class="headerlink" href="#check-in-corescope" title="Permanent link">&para;</a></h2>
 <ol>
 <li>Confirmez que le service demeure actif.</li>
-<li>Trouvez l’observateur dans <a href="https://live.meshcore.ca/#/observers">CoreScope Observers</a>.</li>
+<li>Trouvez l’observateur dans <a href="https://live.meshcore.ca/?tab=Observers">Observateurs en direct</a>.</li>
 <li>Attendez de l’activité normale à proximité.</li>
-<li>Confirmez la présence d’un paquet récent dans <a href="https://live.meshcore.ca/#/packets">CoreScope Packets</a>.</li>
+<li>Confirmez la présence d’un paquet récent dans <a href="https://live.meshcore.ca/">Paquets en direct</a>.</li>
 </ol>
 <p>Terminez avec <a href="../../verify/">Vérifier votre observateur</a>. Un service en fonction
 ou une connexion au courtier ne confirme pas que les paquets se sont rendus à
@@ -4241,6 +4250,8 @@ externe. Utilisez la procédure de désinstallation vérifiée du projet d’ori
     
   
       <script src="../../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../../../assets/javascripts/region-profile.js?v=20260926-1"></script>
       
         <script src="../../../../assets/javascripts/i18n-runtime.js?v=20260829-1"></script>
       

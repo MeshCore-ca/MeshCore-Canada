@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Choose Canadian region paths and produce verified MeshCore repeater commands.">
+        <meta name="description" content="Choose IATA regions, city or edge repeater mode, and firmware-specific commands.">
       
       
       
@@ -31,7 +31,7 @@
     
     
       
-        <title>Set up repeater regions - MeshCore Canada</title>
+        <title>Set up repeater scopes - MeshCore Canada</title>
       
     
     
@@ -51,13 +51,13 @@
       
     
     
-      <link rel="stylesheet" href="../assets/styles/tokens.css?v=20260722-2">
+      <link rel="stylesheet" href="../assets/styles/tokens.css?v=20260926-1">
     
-      <link rel="stylesheet" href="../assets/styles/base.css?v=20261019-1">
+      <link rel="stylesheet" href="../assets/styles/base.css?v=20261029-1">
     
       <link rel="stylesheet" href="../assets/styles/shell.css?v=20260821-1">
     
-      <link rel="stylesheet" href="../assets/styles/components.css?v=20260728-1">
+      <link rel="stylesheet" href="../assets/styles/components.css?v=20260926-1">
     
       <link rel="stylesheet" href="../assets/styles/network-status.css?v=20260905-1">
     
@@ -72,8 +72,8 @@
   
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="MeshCore Canada">
-    <meta property="og:title" content="Set up repeater regions">
-    <meta property="og:description" content="Choose Canadian region paths and produce verified MeshCore repeater commands.">
+    <meta property="og:title" content="Set up repeater scopes">
+    <meta property="og:description" content="Choose IATA regions, city or edge repeater mode, and firmware-specific commands.">
     <meta property="og:url" content="https://meshcore.ca/config/">
     <meta property="og:image" content="https://meshcore.ca/assets/MeshCore-Canada-Logo.png">
     <meta name="twitter:card" content="summary">
@@ -81,8 +81,8 @@
       {
         "@context": "https://schema.org",
         "@type": "WebPage",
-        "name": "Set up repeater regions",
-        "description": "Choose Canadian region paths and produce verified MeshCore repeater commands.",
+        "name": "Set up repeater scopes",
+        "description": "Choose IATA regions, city or edge repeater mode, and firmware-specific commands.",
         "url": "https://meshcore.ca/config/",
         "isPartOf": {
           "@type": "WebSite",
@@ -92,7 +92,7 @@
       }
     </script>
     
-      <link rel="stylesheet" href="../assets/regions/regions.css?v=20260905-1">
+      <link rel="stylesheet" href="../assets/regions/regions.css?v=20260926-1">
     
   
 
@@ -115,12 +115,22 @@
     <div data-md-component="skip">
       
         
-        <a href="#set-up-repeater-regions" class="md-skip">
+        <a href="#set-up-repeater-scopes" class="md-skip">
           Skip to content
         </a>
       
     </div>
     <div data-md-component="announce">
+      
+        <aside class="md-banner">
+          <div class="md-banner__inner md-grid md-typeset">
+            
+            
+  
+
+          </div>
+          
+        </aside>
       
     </div>
     
@@ -151,7 +161,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Set up repeater regions
+              Set up repeater scopes
             
           </span>
         </div>
@@ -3371,7 +3381,7 @@
     
   
   
-    <span class="md-status md-status--verified"></span>
+    <span class="md-status md-status--draft"></span>
   
 
   
@@ -3523,7 +3533,7 @@
 
 
   
-  <h1 id="set-up-repeater-regions">Set up repeater regions<a class="headerlink" href="#set-up-repeater-regions" title="Permanent link">&para;</a></h1>
+  <h1 id="set-up-repeater-scopes">Set up repeater scopes<a class="headerlink" href="#set-up-repeater-scopes" title="Permanent link">&para;</a></h1>
   
   
   
@@ -3534,8 +3544,10 @@
   
 
   
-<p>Choose this repeater’s forwarding paths. Add cross-province or U.S. paths only
-if your local network uses them.</p>
+<p>Choose the IATA regions this repeater serves. Start with preparation, which
+keeps forwarding of messages without a scope (<code>*</code>) and the default scope unchanged. At a coordinated
+local cutover, city repeaters allow unscoped messages and edge repeaters block
+them. Review the current configuration before applying any commands.</p>
 <div data-mcc-regions="config" data-mcc-root="./"></div>
 
 <noscript>JavaScript is required. [Read the region standard](standard.md).</noscript>
@@ -3659,6 +3671,8 @@ if your local network uses them.</p>
   
       <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
       
+        <script src="../assets/javascripts/region-profile.js?v=20260926-1"></script>
+      
         <script src="../assets/javascripts/i18n-runtime.js?v=20260829-1"></script>
       
         <script src="../assets/javascripts/bootstrap.js?v=20260821-1"></script>
@@ -3668,11 +3682,17 @@ if your local network uses them.</p>
     
   
     
+      <script src="../assets/javascripts/place-search.js?v=20260925-2" defer></script>
+    
       <script src="../assets/javascripts/radio-profiles.js?v=20260904-1" defer></script>
     
-      <script src="../assets/regions/modules/configurator-support.js?v=20260904-1" defer></script>
+      <script src="../assets/regions/modules/configurator-support.js?v=20260926-1" defer></script>
     
-      <script src="../assets/regions/regions.js?v=20260909-1" defer></script>
+      <script src="../assets/regions/modules/iata-scopes.js?v=20261013-1" defer></script>
+    
+      <script src="../assets/regions/modules/scope-migration.js?v=20260926-2" defer></script>
+    
+      <script src="../assets/regions/regions.js?v=20261015-1" defer></script>
     
     
   

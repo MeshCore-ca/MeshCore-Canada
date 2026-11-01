@@ -51,13 +51,13 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/styles/tokens.css?v=20260722-2">
+      <link rel="stylesheet" href="../../assets/styles/tokens.css?v=20260926-1">
     
-      <link rel="stylesheet" href="../../assets/styles/base.css?v=20261019-1">
+      <link rel="stylesheet" href="../../assets/styles/base.css?v=20261029-1">
     
       <link rel="stylesheet" href="../../assets/styles/shell.css?v=20260821-1">
     
-      <link rel="stylesheet" href="../../assets/styles/components.css?v=20260728-1">
+      <link rel="stylesheet" href="../../assets/styles/components.css?v=20260926-1">
     
       <link rel="stylesheet" href="../../assets/styles/network-status.css?v=20260905-1">
     
@@ -123,6 +123,16 @@
       
     </div>
     <div data-md-component="announce">
+      
+        <aside class="md-banner">
+          <div class="md-banner__inner md-grid md-typeset">
+            
+            
+  
+
+          </div>
+          
+        </aside>
       
     </div>
     
@@ -3569,7 +3579,7 @@
     
   
   
-    <span class="md-status md-status--verified"></span>
+    <span class="md-status md-status--draft"></span>
   
 
   
@@ -3975,10 +3985,7 @@ hardware. Do not use a filename copied from an older guide or screenshot.</p>
 <li>Set a descriptive name, such as <code>Callsign_R1</code> or <code>Downtown_R1</code>.</li>
 <li>Set a unique admin password and store it securely.</li>
 <li>Confirm the local community has not documented an override. Otherwise apply <strong>Canada</strong> (<code>910.525 MHz / 62.5 kHz / SF7 / CR5</code>).</li>
-<li>Set the current MeshCore Canada default advert values:</li>
-<li><strong>Advert Interval:</strong> <code>60</code> minutes</li>
-<li><strong>Flood Advert Interval:</strong> <code>24</code> hours</li>
-<li><strong>Flood Max:</strong> <code>64</code></li>
+<li>Use the advert intervals agreed by your local network. The proposed ON/QC scope profile offers <strong>Advert Interval</strong> <code>240</code> minutes, <strong>Flood Advert Interval</strong> <code>47</code> hours, and <strong>Flood Max</strong> <code>16</code>. These are optional settings, not automatic changes for every Canadian network.</li>
 <li>Use the <a href="../../config/">Repeater Configurator</a> to get the region commands and path-hash mode. The Canada default is 3-byte (<code>set path.hash.mode 2</code>); use different local settings when your community lists them.</li>
 <li>Add owner information only if it is suitable for public adverts.</li>
 <li>Save the settings and reboot.</li>
@@ -3998,7 +4005,7 @@ a packet storm; it does not repair a faulty repeater or prove the mesh is
 healthy. See the <a href="https://docs.meshcore.io/cli_commands/#view-or-change-this-nodes-loop-detection" rel="noopener" target="_blank">official CLI reference</a>.</p>
 <div data-mc-repeater-hash-check></div>
 
-<noscript>JavaScript is required for the live duplicate-ID check. You can also [search the public-key prefix in CoreScope](https://live.meshcore.ca/#/nodes).</noscript>
+<noscript>JavaScript is required for the live duplicate-ID check. You can also [open the live node directory](https://live.meshcore.ca/?tab=Nodes).</noscript>
 
 <h2 id="verify-and-bench-test">Verify and bench-test<a class="headerlink" href="#verify-and-bench-test" title="Permanent link">&para;</a></h2>
 <ol>
@@ -4136,6 +4143,8 @@ healthy. See the <a href="https://docs.meshcore.io/cli_commands/#view-or-change-
   
       <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
+        <script src="../../assets/javascripts/region-profile.js?v=20260926-1"></script>
+      
         <script src="../../assets/javascripts/i18n-runtime.js?v=20260829-1"></script>
       
         <script src="../../assets/javascripts/bootstrap.js?v=20260821-1"></script>
@@ -4145,7 +4154,7 @@ healthy. See the <a href="https://docs.meshcore.io/cli_commands/#view-or-change-
     
   
     
-      <script src="../../assets/javascripts/repeater-hash-check.js?v=20260904-1" defer></script>
+      <script src="../../assets/javascripts/repeater-hash-check.js?v=20261029-1" defer></script>
     
     
   

@@ -51,13 +51,13 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/styles/tokens.css?v=20260722-2">
+      <link rel="stylesheet" href="../../../assets/styles/tokens.css?v=20260926-1">
     
-      <link rel="stylesheet" href="../../../assets/styles/base.css?v=20261019-1">
+      <link rel="stylesheet" href="../../../assets/styles/base.css?v=20261029-1">
     
       <link rel="stylesheet" href="../../../assets/styles/shell.css?v=20260821-1">
     
-      <link rel="stylesheet" href="../../../assets/styles/components.css?v=20260728-1">
+      <link rel="stylesheet" href="../../../assets/styles/components.css?v=20260926-1">
     
       <link rel="stylesheet" href="../../../assets/styles/network-status.css?v=20260905-1">
     
@@ -121,6 +121,16 @@
       
     </div>
     <div data-md-component="announce">
+      
+        <aside class="md-banner">
+          <div class="md-banner__inner md-grid md-typeset">
+            
+            
+  
+
+          </div>
+          
+        </aside>
       
     </div>
     
@@ -3514,7 +3524,7 @@
     
   
   
-    <span class="md-status md-status--verified"></span>
+    <span class="md-status md-status--draft"></span>
   
 
   
@@ -3836,7 +3846,7 @@ sudo<span class="w"> </span>cp<span class="w"> </span>--no-clobber<span class="w
 <div class="highlight"><pre><span></span><code><span class="nt">mqtt</span><span class="p">:</span>
 <span class="w">  </span><span class="nt">iata_code</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">YOW</span>
 </code></pre></div>
-<p>Replace <code>YOW</code> with the real code nearest the observer.</p>
+<p>Replace <code>YOW</code> with your code from the <a href="../../../config/map/">IATA region map</a>.</p>
 <p>Under <code>mqtt.brokers</code>, add:</p>
 <div class="highlight"><pre><span></span><code><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MeshCore-CA</span>
 <span class="w">  </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
@@ -3878,9 +3888,9 @@ sudo<span class="w"> </span>systemctl<span class="w"> </span>status<span class="
 <p>The service stays active without YAML, TLS, or token errors, and its packet count changes when the radio hears nearby traffic.</p>
 <h2 id="verify-in-corescope">Verify in CoreScope<a class="headerlink" href="#verify-in-corescope" title="Permanent link">&para;</a></h2>
 <ol>
-<li>Find the observer in <a href="https://live.meshcore.ca/#/observers">CoreScope Observers</a>.</li>
+<li>Find the observer in <a href="https://live.meshcore.ca/?tab=Observers">Live observer list</a>.</li>
 <li>Wait for normal nearby activity.</li>
-<li>Confirm a recent packet in <a href="https://live.meshcore.ca/#/packets">CoreScope Packets</a>.</li>
+<li>Confirm a recent packet in <a href="https://live.meshcore.ca/">Live packets</a>.</li>
 </ol>
 <p>Finish with <a href="../../verify/">Check your observer</a>. A healthy systemd service is not proof that packets reached CoreScope.</p>
 <h2 id="recovery">Recovery<a class="headerlink" href="#recovery" title="Permanent link">&para;</a></h2>
@@ -4007,6 +4017,8 @@ sudo<span class="w"> </span>systemctl<span class="w"> </span>status<span class="
     
   
       <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../../assets/javascripts/region-profile.js?v=20260926-1"></script>
       
         <script src="../../../assets/javascripts/i18n-runtime.js?v=20260829-1"></script>
       

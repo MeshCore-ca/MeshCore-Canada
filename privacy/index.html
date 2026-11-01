@@ -49,13 +49,13 @@
       
     
     
-      <link rel="stylesheet" href="../assets/styles/tokens.css?v=20260722-2">
+      <link rel="stylesheet" href="../assets/styles/tokens.css?v=20260926-1">
     
-      <link rel="stylesheet" href="../assets/styles/base.css?v=20261019-1">
+      <link rel="stylesheet" href="../assets/styles/base.css?v=20261029-1">
     
       <link rel="stylesheet" href="../assets/styles/shell.css?v=20260821-1">
     
-      <link rel="stylesheet" href="../assets/styles/components.css?v=20260728-1">
+      <link rel="stylesheet" href="../assets/styles/components.css?v=20260926-1">
     
       <link rel="stylesheet" href="../assets/styles/network-status.css?v=20260905-1">
     
@@ -117,6 +117,16 @@
       
     </div>
     <div data-md-component="announce">
+      
+        <aside class="md-banner">
+          <div class="md-banner__inner md-grid md-typeset">
+            
+            
+  
+
+          </div>
+          
+        </aside>
       
     </div>
     
@@ -3349,7 +3359,7 @@
     
   
   
-    <span class="md-status md-status--verified"></span>
+    <span class="md-status md-status--draft"></span>
   
 
   
@@ -3738,7 +3748,7 @@
 <tr>
 <td>Search for a place in the region tools</td>
 <td>The place, airport code, or postal code you enter</td>
-<td>Checked locally first, then sent to OpenStreetMap or geocoder.ca if needed</td>
+<td>IATA codes are checked locally. Place names go to Natural Resources Canada’s Geolocator API; postal codes use OpenStreetMap or geocoder.ca</td>
 </tr>
 <tr>
 <td>Open the interactive region map</td>
@@ -3761,7 +3771,7 @@
 <td>The named external service</td>
 </tr>
 <tr>
-<td>Submit an idea or region proposal</td>
+<td>Submit a community idea</td>
 <td>The text and proposal details shown at review, plus anti-spam verification</td>
 <td>MeshCore Canada’s submission service, Cloudflare Turnstile, and a public GitHub issue</td>
 </tr>
@@ -3776,9 +3786,11 @@ period has not yet been published.</p>
 <h2 id="saved-on-your-device">Saved on your device<a class="headerlink" href="#saved-on-your-device" title="Permanent link">&para;</a></h2>
 <p>Switching language or moving between the region map and configurator carries your
 selection in the destination URL. This can include entered coordinates, a location
-label, region paths, and radio-profile choices. These URLs may appear in browser
+label, city and province scopes, and radio-profile choices. These URLs may appear in browser
 history and server access logs. Do not share a link containing a private location.
 Downloaded setup summaries omit exact coordinates and credentials.</p>
+<p>The retired region editor can download drafts saved in this browser. Downloading
+does not upload or delete them; old drafts are not approved MeshMapper boundaries.</p>
 <p>Setup checklists, idea drafts, and the last Beacon region code selected in the
 repeater-ID checker are saved in your browser only when you use those features.
 Repeater public keys, passwords, private keys, anti-spam tokens, and location
@@ -3910,6 +3922,8 @@ operators and privacy policies.</p>
     
   
       <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../assets/javascripts/region-profile.js?v=20260926-1"></script>
       
         <script src="../assets/javascripts/i18n-runtime.js?v=20260829-1"></script>
       

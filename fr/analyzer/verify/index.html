@@ -51,13 +51,13 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/styles/tokens.css?v=20260722-2">
+      <link rel="stylesheet" href="../../../assets/styles/tokens.css?v=20260926-1">
     
-      <link rel="stylesheet" href="../../../assets/styles/base.css?v=20261019-1">
+      <link rel="stylesheet" href="../../../assets/styles/base.css?v=20261029-1">
     
       <link rel="stylesheet" href="../../../assets/styles/shell.css?v=20260821-1">
     
-      <link rel="stylesheet" href="../../../assets/styles/components.css?v=20260728-1">
+      <link rel="stylesheet" href="../../../assets/styles/components.css?v=20260926-1">
     
       <link rel="stylesheet" href="../../../assets/styles/network-status.css?v=20260905-1">
     
@@ -121,6 +121,16 @@
       
     </div>
     <div data-md-component="announce">
+      
+        <aside class="md-banner">
+          <div class="md-banner__inner md-grid md-typeset">
+            
+            
+  
+
+          </div>
+          
+        </aside>
       
     </div>
     
@@ -3457,7 +3467,7 @@
     
   
   
-    <span class="md-status md-status--verified"></span>
+    <span class="md-status md-status--draft"></span>
   
 
   
@@ -3689,11 +3699,11 @@ CoreScope.</p>
     <br>Il devrait indiquer une connexion chiffrée à l’adresse principale, sans erreurs d’authentification répétées.
   </li>
   <li>
-    <strong>Vue des observateurs :</strong> ouvrez <a href="https://live.meshcore.ca/#/observers">CoreScope Observers</a>.
+    <strong>Vue des observateurs :</strong> ouvrez <a href="https://live.meshcore.ca/?tab=Observers">Observateurs en direct</a>.
     <br>Le nom de l’observateur et son code d’emplacement à trois lettres devraient apparaître avec une heure récente.
   </li>
   <li>
-    <strong>Vue des paquets :</strong> produisez de l’activité MeshCore à proximité, puis ouvrez <a href="https://live.meshcore.ca/#/packets">CoreScope Packets</a>.
+    <strong>Vue des paquets :</strong> produisez de l’activité MeshCore à proximité, puis ouvrez <a href="https://live.meshcore.ca/">Paquets en direct</a>.
     <br>Un paquet récent attribué à l’observateur devrait apparaître en quelques minutes.
   </li>
 </ol>
@@ -3715,7 +3725,7 @@ normale ou l’activité déjà présente à proximité suffit.</p>
 </tr>
 <tr>
 <td>Emplacement</td>
-<td>Le véritable code d’aéroport à trois lettres le plus près, et non <code>CAN</code>, <code>XXX</code> ou <code>HOME</code></td>
+<td>Le code en majuscules de la <a href="../../config/map/">carte des régions IATA</a>, ou un code convenu avec la communauté si aucune zone n’est publiée</td>
 </tr>
 <tr>
 <td>Parcours principal</td>
@@ -3903,6 +3913,8 @@ consultez le <a href="../troubleshooting/">dépannage</a>.</p>
     
   
       <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../../assets/javascripts/region-profile.js?v=20260926-1"></script>
       
         <script src="../../../assets/javascripts/i18n-runtime.js?v=20260829-1"></script>
       

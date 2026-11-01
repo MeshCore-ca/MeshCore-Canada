@@ -51,13 +51,13 @@
       
     
     
-      <link rel="stylesheet" href="../../../../assets/styles/tokens.css?v=20260722-2">
+      <link rel="stylesheet" href="../../../../assets/styles/tokens.css?v=20260926-1">
     
-      <link rel="stylesheet" href="../../../../assets/styles/base.css?v=20261019-1">
+      <link rel="stylesheet" href="../../../../assets/styles/base.css?v=20261029-1">
     
       <link rel="stylesheet" href="../../../../assets/styles/shell.css?v=20260821-1">
     
-      <link rel="stylesheet" href="../../../../assets/styles/components.css?v=20260728-1">
+      <link rel="stylesheet" href="../../../../assets/styles/components.css?v=20260926-1">
     
       <link rel="stylesheet" href="../../../../assets/styles/network-status.css?v=20260905-1">
     
@@ -121,6 +121,16 @@
       
     </div>
     <div data-md-component="announce">
+      
+        <aside class="md-banner">
+          <div class="md-banner__inner md-grid md-typeset">
+            
+            
+  
+
+          </div>
+          
+        </aside>
       
     </div>
     
@@ -3514,7 +3524,7 @@
     
   
   
-    <span class="md-status md-status--verified"></span>
+    <span class="md-status md-status--draft"></span>
   
 
   
@@ -3903,8 +3913,8 @@ choisissez pas un code voisin pour contourner le problème.</p>
 </tr>
 </tbody>
 </table>
-<p>Réglez le champ d’emplacement de l’intégration au véritable code à trois
-lettres le plus près de l’observateur.</p>
+<p>Réglez le champ d’emplacement de l’intégration sur le code en majuscules de la
+<a href="../../../config/map/">carte des régions IATA</a>.</p>
 <p>Ajoutez l’entrée de secours avec les mêmes paramètres, en ne modifiant que :</p>
 <table>
 <thead>
@@ -3933,9 +3943,9 @@ mais qu’aucun paquet n’apparaît, le mode de paquets est peut-être désacti
 la radio ne capte aucune activité.</p>
 <h2 id="verifier-dans-corescope">Vérifier dans CoreScope<a class="headerlink" href="#verifier-dans-corescope" title="Permanent link">&para;</a></h2>
 <ol>
-<li>Trouvez l’observateur dans <a href="https://live.meshcore.ca/#/observers">CoreScope Observers</a>.</li>
+<li>Trouvez l’observateur dans <a href="https://live.meshcore.ca/?tab=Observers">Observateurs en direct</a>.</li>
 <li>Attendez de l’activité MeshCore normale à proximité.</li>
-<li>Confirmez la présence d’un paquet récent dans <a href="https://live.meshcore.ca/#/packets">CoreScope Packets</a>.</li>
+<li>Confirmez la présence d’un paquet récent dans <a href="https://live.meshcore.ca/">Paquets en direct</a>.</li>
 </ol>
 <p>Terminez avec <a href="../../verify/">Vérifier votre observateur</a>. Le badge de connexion
 de Home Assistant ne confirme pas que les paquets se sont rendus à CoreScope.</p>
@@ -4063,6 +4073,8 @@ erreur caviardée. Examinez toute archive de diagnostics avant de la partager.</
     
   
       <script src="../../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../../../assets/javascripts/region-profile.js?v=20260926-1"></script>
       
         <script src="../../../../assets/javascripts/i18n-runtime.js?v=20260829-1"></script>
       

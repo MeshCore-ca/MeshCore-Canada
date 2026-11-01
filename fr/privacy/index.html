@@ -49,13 +49,13 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/styles/tokens.css?v=20260722-2">
+      <link rel="stylesheet" href="../../assets/styles/tokens.css?v=20260926-1">
     
-      <link rel="stylesheet" href="../../assets/styles/base.css?v=20261019-1">
+      <link rel="stylesheet" href="../../assets/styles/base.css?v=20261029-1">
     
       <link rel="stylesheet" href="../../assets/styles/shell.css?v=20260821-1">
     
-      <link rel="stylesheet" href="../../assets/styles/components.css?v=20260728-1">
+      <link rel="stylesheet" href="../../assets/styles/components.css?v=20260926-1">
     
       <link rel="stylesheet" href="../../assets/styles/network-status.css?v=20260905-1">
     
@@ -117,6 +117,16 @@
       
     </div>
     <div data-md-component="announce">
+      
+        <aside class="md-banner">
+          <div class="md-banner__inner md-grid md-typeset">
+            
+            
+  
+
+          </div>
+          
+        </aside>
       
     </div>
     
@@ -3349,7 +3359,7 @@
     
   
   
-    <span class="md-status md-status--verified"></span>
+    <span class="md-status md-status--draft"></span>
   
 
   
@@ -3738,7 +3748,7 @@
 <tr>
 <td>Rechercher un lieu dans les outils de région</td>
 <td>Le lieu, le code d’aéroport ou le code postal saisi</td>
-<td>Vérification locale d’abord, puis OpenStreetMap ou geocoder.ca au besoin</td>
+<td>Codes IATA vérifiés localement. Noms de lieux transmis à l’API Géolocalisateur de Ressources naturelles Canada; codes postaux transmis à OpenStreetMap ou geocoder.ca</td>
 </tr>
 <tr>
 <td>Ouvrir la carte interactive des régions</td>
@@ -3761,7 +3771,7 @@
 <td>Le service externe indiqué</td>
 </tr>
 <tr>
-<td>Soumettre une idée ou une proposition de région</td>
+<td>Soumettre une idée communautaire</td>
 <td>Le texte et les détails affichés lors de la révision, ainsi que la vérification antipourriel</td>
 <td>Le service de soumission de MeshCore Canada, Cloudflare Turnstile et un billet GitHub public</td>
 </tr>
@@ -3777,7 +3787,7 @@ limitation du débit. Aucune période de conservation n’a encore été publié
 <h2 id="donnees-enregistrees-sur-votre-appareil">Données enregistrées sur votre appareil<a class="headerlink" href="#donnees-enregistrees-sur-votre-appareil" title="Permanent link">&para;</a></h2>
 <p>Changer de langue ou passer entre la carte et le configurateur conserve votre
 sélection dans l’URL de destination. Elle peut contenir les coordonnées saisies,
-un lieu, des chemins régionaux et un profil radio. Ces URL peuvent apparaître dans
+un lieu, des scopes de ville et de province et un profil radio. Ces URL peuvent apparaître dans
 l’historique du navigateur et les journaux du serveur. Ne partagez pas un lien qui
 contient un emplacement privé. Les résumés téléchargés omettent les coordonnées
 exactes et les identifiants de connexion.</p>
@@ -3791,6 +3801,9 @@ La ville recherchée dans le répertoire apparaît dans l’URL pour partager ou
 <p>Vous pouvez effacer les données enregistrées par ce site dans les paramètres de
 votre navigateur. Le formulaire d’idée offre aussi l’action
 <strong>Effacer le brouillon enregistré</strong>.</p>
+<p>L’ancien éditeur de régions peut télécharger les brouillons conservés dans ce
+navigateur. Le téléchargement ne les envoie ni ne les supprime; ces brouillons
+ne sont pas des limites approuvées dans MeshMapper.</p>
 <h2 id="services-externes">Services externes<a class="headerlink" href="#services-externes" title="Permanent link">&para;</a></h2>
 <p>CoreScope, les services MQTT, les outils de reprogrammation et les sites
 communautaires ont leurs propres responsables et politiques de confidentialité.</p>
@@ -3914,6 +3927,8 @@ GitHub ou <a href="https://github.com/MeshCore-ca/MeshCore-Canada/issues">ouvrez
     
   
       <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../assets/javascripts/region-profile.js?v=20260926-1"></script>
       
         <script src="../../assets/javascripts/i18n-runtime.js?v=20260829-1"></script>
       

@@ -51,13 +51,13 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/styles/tokens.css?v=20260722-2">
+      <link rel="stylesheet" href="../../../assets/styles/tokens.css?v=20260926-1">
     
-      <link rel="stylesheet" href="../../../assets/styles/base.css?v=20261019-1">
+      <link rel="stylesheet" href="../../../assets/styles/base.css?v=20261029-1">
     
       <link rel="stylesheet" href="../../../assets/styles/shell.css?v=20260821-1">
     
-      <link rel="stylesheet" href="../../../assets/styles/components.css?v=20260728-1">
+      <link rel="stylesheet" href="../../../assets/styles/components.css?v=20260926-1">
     
       <link rel="stylesheet" href="../../../assets/styles/network-status.css?v=20260905-1">
     
@@ -121,6 +121,16 @@
       
     </div>
     <div data-md-component="announce">
+      
+        <aside class="md-banner">
+          <div class="md-banner__inner md-grid md-typeset">
+            
+            
+  
+
+          </div>
+          
+        </aside>
       
     </div>
     
@@ -3586,7 +3596,7 @@
     
   
   
-    <span class="md-status md-status--verified"></span>
+    <span class="md-status md-status--draft"></span>
   
 
   
@@ -4017,7 +4027,7 @@ less<span class="w"> </span><span class="s2">"</span><span class="nv">$workdir</
 </code></pre></div>
 <p>Check the source URL, changed paths, server addresses, backup behaviour, and restart behaviour. Keep the file for the rest of this setup.</p>
 <h3 id="2-write-without-restarting">2. Write without restarting<a class="headerlink" href="#2-write-without-restarting" title="Permanent link">&para;</a></h3>
-<p>Replace <code>YOW</code> with the real location code nearest the observer:</p>
+<p>Replace <code>YOW</code> with your code from the <a href="../../../config/map/">IATA region map</a>:</p>
 <div class="highlight"><pre><span></span><code>bash<span class="w"> </span><span class="s2">"</span><span class="nv">$workdir</span><span class="s2">/add-meshcore-ca-broker.sh"</span><span class="w"> </span>--device<span class="w"> </span>serial-host<span class="w"> </span>--iata<span class="w"> </span>YOW<span class="w"> </span>--no-restart
 </code></pre></div>
 <p>The helper validates the code shape, rejects <code>XXX</code>, warns on codes outside its quick list, and prints the changed and backup paths.</p>
@@ -4074,9 +4084,9 @@ sudo<span class="w"> </span>systemctl<span class="w"> </span>status<span class="
 <h2 id="verify-in-corescope">Verify in CoreScope<a class="headerlink" href="#verify-in-corescope" title="Permanent link">&para;</a></h2>
 <ol>
 <li>Confirm the service remains active.</li>
-<li>Find the observer in <a href="https://live.meshcore.ca/#/observers">CoreScope Observers</a>.</li>
+<li>Find the observer in <a href="https://live.meshcore.ca/?tab=Observers">Live observer list</a>.</li>
 <li>Wait for normal nearby activity.</li>
-<li>Confirm a recent packet in <a href="https://live.meshcore.ca/#/packets">CoreScope Packets</a>.</li>
+<li>Confirm a recent packet in <a href="https://live.meshcore.ca/">Live packets</a>.</li>
 </ol>
 <p>Finish with <a href="../../verify/">Check your observer</a>. A running service or broker connection is not proof that packets reached CoreScope.</p>
 <h2 id="recovery">Recovery<a class="headerlink" href="#recovery" title="Permanent link">&para;</a></h2>
@@ -4208,6 +4218,8 @@ sudo<span class="w"> </span>systemctl<span class="w"> </span>restart<span class=
     
   
       <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../../assets/javascripts/region-profile.js?v=20260926-1"></script>
       
         <script src="../../../assets/javascripts/i18n-runtime.js?v=20260829-1"></script>
       

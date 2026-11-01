@@ -51,13 +51,13 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/styles/tokens.css?v=20260722-2">
+      <link rel="stylesheet" href="../../assets/styles/tokens.css?v=20260926-1">
     
-      <link rel="stylesheet" href="../../assets/styles/base.css?v=20261019-1">
+      <link rel="stylesheet" href="../../assets/styles/base.css?v=20261029-1">
     
       <link rel="stylesheet" href="../../assets/styles/shell.css?v=20260821-1">
     
-      <link rel="stylesheet" href="../../assets/styles/components.css?v=20260728-1">
+      <link rel="stylesheet" href="../../assets/styles/components.css?v=20260926-1">
     
       <link rel="stylesheet" href="../../assets/styles/network-status.css?v=20260905-1">
     
@@ -121,6 +121,16 @@
       
     </div>
     <div data-md-component="announce">
+      
+        <aside class="md-banner">
+          <div class="md-banner__inner md-grid md-typeset">
+            
+            
+  
+
+          </div>
+          
+        </aside>
       
     </div>
     
@@ -2318,6 +2328,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#choose-your-scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Choose your scope
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#verify-before-regular-use" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3528,7 +3549,7 @@
     
   
   
-    <span class="md-status md-status--verified"></span>
+    <span class="md-status md-status--draft"></span>
   
 
   
@@ -3678,6 +3699,17 @@
     <span class="md-ellipsis">
       
         Configure the companion
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#choose-your-scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Choose your scope
       
     </span>
   </a>
@@ -3886,6 +3918,17 @@ then use this guide to back it up, flash it, and join your local mesh. Check the
 </ol>
 <p>If Canada is not listed in your app or flasher, follow the <a href="../../provinces/#canada-baseline">older-preset instructions</a>.</p>
 <p>The optional <strong>Message Settings → Auto Reset Path</strong> preference affects how the app manages changing paths. Leave it at its default unless your local testing process calls for a different setting.</p>
+<h2 id="choose-your-scope">Choose your scope<a class="headerlink" href="#choose-your-scope" title="Permanent link">&para;</a></h2>
+<div class="admonition warning">
+<p class="admonition-title">ON/QC: wait for Phase 2</p>
+<p>For personal companions, leave <strong>Default Region Scope</strong> empty and channels
+<strong>unscoped</strong> for now. Phase 2 is not open. It can start no earlier than
+<strong>January 2027</strong>, after the repeaters are ready and the rollout is announced.</p>
+</div>
+<p>Flashing does not mean you should change scopes. You can still <a href="../../config/map/">find your IATA region</a>. Read the <a href="../../start/companion/#choose-a-scope">companion scope guide</a> and <a href="../../proposals/onqc-scopes/#rollout-order">rollout order</a> before changing settings.
+<strong>When Phase 2 is announced</strong>, use <code>onqc</code> for the default and Public channel,
+and your city scope for tests. Bots follow the separate <a href="../../proposals/onqc-scopes/#bots-and-meshmapper">end-of-Phase-1 guidance</a>.
+Elsewhere, follow your community’s settings; <code>can</code> and <code>na</code> remain reserved for future use.</p>
 <h2 id="verify-before-regular-use">Verify before regular use<a class="headerlink" href="#verify-before-regular-use" title="Permanent link">&para;</a></h2>
 <ol>
 <li>Confirm the app reconnects and shows the expected device name and radio settings.</li>
@@ -4015,6 +4058,8 @@ then use this guide to back it up, flash it, and join your local mesh. Check the
     
   
       <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../assets/javascripts/region-profile.js?v=20260926-1"></script>
       
         <script src="../../assets/javascripts/i18n-runtime.js?v=20260829-1"></script>
       

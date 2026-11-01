@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Choisissez, configurez et vérifiez un observateur MeshCore qui transmet des données du réseau à CoreScope.">
+        <meta name="description" content="Choisissez, configurez et vérifiez un observateur MeshCore qui transmet des données à la visionneuse du réseau en direct.">
       
       
       
@@ -51,13 +51,13 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/styles/tokens.css?v=20260722-2">
+      <link rel="stylesheet" href="../../../assets/styles/tokens.css?v=20260926-1">
     
-      <link rel="stylesheet" href="../../../assets/styles/base.css?v=20261019-1">
+      <link rel="stylesheet" href="../../../assets/styles/base.css?v=20261029-1">
     
       <link rel="stylesheet" href="../../../assets/styles/shell.css?v=20260821-1">
     
-      <link rel="stylesheet" href="../../../assets/styles/components.css?v=20260728-1">
+      <link rel="stylesheet" href="../../../assets/styles/components.css?v=20260926-1">
     
       <link rel="stylesheet" href="../../../assets/styles/network-status.css?v=20260905-1">
     
@@ -73,7 +73,7 @@
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="MeshCore Canada">
     <meta property="og:title" content="Commencer avec un observateur">
-    <meta property="og:description" content="Choisissez, configurez et vérifiez un observateur MeshCore qui transmet des données du réseau à CoreScope.">
+    <meta property="og:description" content="Choisissez, configurez et vérifiez un observateur MeshCore qui transmet des données à la visionneuse du réseau en direct.">
     <meta property="og:url" content="https://meshcore.ca/fr/start/observer/">
     <meta property="og:image" content="https://meshcore.ca/assets/MeshCore-Canada-Logo.png">
     <meta name="twitter:card" content="summary">
@@ -82,7 +82,7 @@
         "@context": "https://schema.org",
         "@type": "WebPage",
         "name": "Commencer avec un observateur",
-        "description": "Choisissez, configurez et v\u00e9rifiez un observateur MeshCore qui transmet des donn\u00e9es du r\u00e9seau \u00e0 CoreScope.",
+        "description": "Choisissez, configurez et v\u00e9rifiez un observateur MeshCore qui transmet des donn\u00e9es \u00e0 la visionneuse du r\u00e9seau en direct.",
         "url": "https://meshcore.ca/fr/start/observer/",
         "isPartOf": {
           "@type": "WebSite",
@@ -119,6 +119,16 @@
       
     </div>
     <div data-md-component="announce">
+      
+        <aside class="md-banner">
+          <div class="md-banner__inner md-grid md-typeset">
+            
+            
+  
+
+          </div>
+          
+        </aside>
       
     </div>
     
@@ -3474,7 +3484,7 @@
     
   
   
-    <span class="md-status md-status--verified"></span>
+    <span class="md-status md-status--draft"></span>
   
 
   
@@ -3706,7 +3716,7 @@
 
   
 <p>Un observateur écoute le réseau au moyen d’une radio MeshCore et transmet les
-données captées à CoreScope. Il n’a pas besoin de relayer le trafic, mais un
+données captées à la visionneuse du réseau en direct. Il n’a pas besoin de relayer le trafic, mais un
 même appareil peut remplir les deux fonctions. Il peut
 fonctionner dans le micrologiciel d’une radio, sur un ordinateur qui reste
 allumé ou sur un système de domotique.</p>
@@ -3720,8 +3730,8 @@ allumé ou sur un système de domotique.</p>
   et au système hôte que vous utilisez déjà.</li>
 <li>Sauvegardez la configuration avant de remplacer un micrologiciel ou
   d’installer un service.</li>
-<li>Lorsque la méthode le demande, utilisez un vrai code de localisation à
-  proximité.</li>
+<li>Trouvez votre code sur la <a href="../../config/map/">carte des régions IATA</a>. Utilisez
+  le même code en majuscules pour chaque courtier; l’aéroport le plus proche ne le détermine pas.</li>
 </ul>
 <h2 id="ce-qui-sera-modifie">Ce qui sera modifié<a class="headerlink" href="#ce-qui-sera-modifie" title="Permanent link">&para;</a></h2>
 <p>Selon la méthode choisie, la configuration peut remplacer le micrologiciel de
@@ -3746,7 +3756,7 @@ radio diffèrent de ceux des appareils à proximité.</p>
 <p>L’observateur fonctionne lorsque :</p>
 <ol>
 <li>sa radio capte une activité MeshCore connue à proximité;</li>
-<li>il apparaît dans <a href="https://live.meshcore.ca/#/observers">CoreScope Observers</a>;</li>
+<li>il apparaît dans la <a href="https://live.meshcore.ca/?tab=Observers">liste des observateurs en direct</a>;</li>
 <li>une activité récente apparaît après une transmission à proximité.</li>
 </ol>
 <p>Utilisez la <a href="../verify/#observer">liste de vérification de l’observateur</a>.</p>
@@ -3766,7 +3776,7 @@ détaillé. S’il est absent ou silencieux,
     <li><label><input id="observer-progress-install" type="checkbox" data-mc-progress> Suivre le guide de configuration choisi</label></li>
     <li><label><input id="observer-progress-configure" type="checkbox" data-mc-progress> Appliquer les paramètres locaux de la radio et du service</label></li>
     <li><label><input id="observer-progress-verify-local" type="checkbox" data-mc-progress> Vérifier que la radio capte l’activité à proximité</label></li>
-    <li><label><input id="observer-progress-verify-network" type="checkbox" data-mc-progress> Trouver l’observateur dans CoreScope</label></li>
+    <li><label><input id="observer-progress-verify-network" type="checkbox" data-mc-progress> Trouver l’observateur dans la visionneuse du réseau</label></li>
   </ol>
 </section>
 
@@ -3884,6 +3894,8 @@ détaillé. S’il est absent ou silencieux,
     
   
       <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../../assets/javascripts/region-profile.js?v=20260926-1"></script>
       
         <script src="../../../assets/javascripts/i18n-runtime.js?v=20260829-1"></script>
       

@@ -51,13 +51,13 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/styles/tokens.css?v=20260722-2">
+      <link rel="stylesheet" href="../../assets/styles/tokens.css?v=20260926-1">
     
-      <link rel="stylesheet" href="../../assets/styles/base.css?v=20261019-1">
+      <link rel="stylesheet" href="../../assets/styles/base.css?v=20261029-1">
     
       <link rel="stylesheet" href="../../assets/styles/shell.css?v=20260821-1">
     
-      <link rel="stylesheet" href="../../assets/styles/components.css?v=20260728-1">
+      <link rel="stylesheet" href="../../assets/styles/components.css?v=20260926-1">
     
       <link rel="stylesheet" href="../../assets/styles/network-status.css?v=20260905-1">
     
@@ -119,6 +119,16 @@
       
     </div>
     <div data-md-component="announce">
+      
+        <aside class="md-banner">
+          <div class="md-banner__inner md-grid md-typeset">
+            
+            
+  
+
+          </div>
+          
+        </aside>
       
     </div>
     
@@ -790,6 +800,17 @@
     <span class="md-ellipsis">
       
         Use the right radio settings
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#choose-a-scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Choose a scope
       
     </span>
   </a>
@@ -3474,7 +3495,7 @@
     
   
   
-    <span class="md-status md-status--verified"></span>
+    <span class="md-status md-status--draft"></span>
   
 
   
@@ -3591,6 +3612,17 @@
     <span class="md-ellipsis">
       
         Use the right radio settings
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#choose-a-scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Choose a scope
       
     </span>
   </a>
@@ -3730,6 +3762,19 @@ community lists different settings.</p>
 publishes different settings, use those settings instead.</p>
 </div>
 <p>Reboot after changing the radio settings, then send an advert.</p>
+<h2 id="choose-a-scope">Choose a scope<a class="headerlink" href="#choose-a-scope" title="Permanent link">&para;</a></h2>
+<div class="admonition warning">
+<p class="admonition-title">ON/QC: wait for Phase 2</p>
+<p>For personal companions, leave <strong>Default Region Scope</strong> empty and channels
+<strong>unscoped</strong> for now. Phase 2 is not open. It can start no earlier than
+<strong>January 2027</strong>, after the repeaters are ready and the rollout is announced.
+Switching early can prevent your messages from reaching other users.</p>
+</div>
+<p>Find your city code on the <a href="../../config/map/">IATA region map</a>. <strong>When Phase 2 is
+announced</strong>, use <code>onqc</code> for your default scope and Public channel, and your city
+scope, such as <code>yow</code>, for test channels. Leave <code>can</code> and <code>na</code> for future use.</p>
+<p>Bot and MeshMapper operators follow the <a href="../../proposals/onqc-scopes/#bots-and-meshmapper">end-of-Phase-1 instructions</a>, once local repeaters are ready. See the <a href="../../proposals/onqc-scopes/#rollout-order">rollout order</a> before changing scopes.</p>
+<p>Elsewhere, use the scope agreed by your local community. See the <a href="../../config/standard/">scope setup guide</a> for app requirements and examples. Scopes do not change your radio settings.</p>
 <h2 id="test-it">Test it<a class="headerlink" href="#test-it" title="Permanent link">&para;</a></h2>
 <p>The companion is ready when:</p>
 <ol>
@@ -3870,6 +3915,8 @@ with a nearby user. If nobody can see the advert, <a href="../get-help/">get hel
     
   
       <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../assets/javascripts/region-profile.js?v=20260926-1"></script>
       
         <script src="../../assets/javascripts/i18n-runtime.js?v=20260829-1"></script>
       

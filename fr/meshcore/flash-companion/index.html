@@ -51,13 +51,13 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/styles/tokens.css?v=20260722-2">
+      <link rel="stylesheet" href="../../../assets/styles/tokens.css?v=20260926-1">
     
-      <link rel="stylesheet" href="../../../assets/styles/base.css?v=20261019-1">
+      <link rel="stylesheet" href="../../../assets/styles/base.css?v=20261029-1">
     
       <link rel="stylesheet" href="../../../assets/styles/shell.css?v=20260821-1">
     
-      <link rel="stylesheet" href="../../../assets/styles/components.css?v=20260728-1">
+      <link rel="stylesheet" href="../../../assets/styles/components.css?v=20260926-1">
     
       <link rel="stylesheet" href="../../../assets/styles/network-status.css?v=20260905-1">
     
@@ -121,6 +121,16 @@
       
     </div>
     <div data-md-component="announce">
+      
+        <aside class="md-banner">
+          <div class="md-banner__inner md-grid md-typeset">
+            
+            
+  
+
+          </div>
+          
+        </aside>
       
     </div>
     
@@ -2318,6 +2328,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#choisir-votre-scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Choisir votre scope
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#verifier-avant-lutilisation-courante" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3528,7 +3549,7 @@
     
   
   
-    <span class="md-status md-status--verified"></span>
+    <span class="md-status md-status--draft"></span>
   
 
   
@@ -3678,6 +3699,17 @@
     <span class="md-ellipsis">
       
         Configurer le compagnon
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#choisir-votre-scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Choisir votre scope
       
     </span>
   </a>
@@ -3902,6 +3934,21 @@ réglage.</p>
 <p>Le réglage facultatif <strong>Message Settings → Auto Reset Path</strong> détermine comment
 l’application gère les changements de parcours. Conservez sa valeur par défaut,
 sauf si votre méthode d’essai locale exige un autre réglage.</p>
+<h2 id="choisir-votre-scope">Choisir votre scope<a class="headerlink" href="#choisir-votre-scope" title="Permanent link">&para;</a></h2>
+<div class="admonition warning">
+<p class="admonition-title">ON/QC : attendez la phase 2</p>
+<p>Pour un compagnon personnel, laissez <strong>Default Region Scope</strong> vide et les
+canaux <strong>sans portée</strong> pour le moment. La phase 2 n’est pas ouverte. Elle ne
+peut commencer avant <strong>janvier 2027</strong>, lorsque les répéteurs seront prêts et
+que le déploiement sera annoncé.</p>
+</div>
+<p>Installer le micrologiciel ne signifie pas qu’il faut changer les portées.
+Vous pouvez toujours <a href="../../config/map/">trouver votre région IATA</a>.
+Consultez le <a href="../../start/companion/#choisir-un-scope">guide des portées du compagnon</a>
+et l’<a href="../../proposals/onqc-scopes/#ordre-de-deploiement">ordre de déploiement</a>.
+<strong>Quand la phase 2 sera annoncée</strong>, utilisez <code>onqc</code> par défaut et pour le canal
+Public, et votre code de ville pour les tests. Les robots suivent les <a href="../../proposals/onqc-scopes/#robots-et-meshmapper">consignes de fin de phase 1</a>.
+Ailleurs, suivez les réglages de votre communauté; <code>can</code> et <code>na</code> restent réservés à un usage futur.</p>
 <h2 id="verifier-avant-lutilisation-courante">Vérifier avant l’utilisation courante<a class="headerlink" href="#verifier-avant-lutilisation-courante" title="Permanent link">&para;</a></h2>
 <ol>
 <li>Confirmez que l’application se reconnecte et affiche le nom de l’appareil et les réglages radio attendus.</li>
@@ -4034,6 +4081,8 @@ récupération USB propre à la carte dans le dossier de l’appareil.</p>
     
   
       <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../../assets/javascripts/region-profile.js?v=20260926-1"></script>
       
         <script src="../../../assets/javascripts/i18n-runtime.js?v=20260829-1"></script>
       

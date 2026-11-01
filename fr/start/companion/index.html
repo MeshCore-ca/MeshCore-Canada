@@ -51,13 +51,13 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/styles/tokens.css?v=20260722-2">
+      <link rel="stylesheet" href="../../../assets/styles/tokens.css?v=20260926-1">
     
-      <link rel="stylesheet" href="../../../assets/styles/base.css?v=20261019-1">
+      <link rel="stylesheet" href="../../../assets/styles/base.css?v=20261029-1">
     
       <link rel="stylesheet" href="../../../assets/styles/shell.css?v=20260821-1">
     
-      <link rel="stylesheet" href="../../../assets/styles/components.css?v=20260728-1">
+      <link rel="stylesheet" href="../../../assets/styles/components.css?v=20260926-1">
     
       <link rel="stylesheet" href="../../../assets/styles/network-status.css?v=20260905-1">
     
@@ -119,6 +119,16 @@
       
     </div>
     <div data-md-component="announce">
+      
+        <aside class="md-banner">
+          <div class="md-banner__inner md-grid md-typeset">
+            
+            
+  
+
+          </div>
+          
+        </aside>
       
     </div>
     
@@ -790,6 +800,17 @@
     <span class="md-ellipsis">
       
         Choisir les bons paramètres radio
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#choisir-un-scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Choisir une portée (scope)
       
     </span>
   </a>
@@ -3474,7 +3495,7 @@
     
   
   
-    <span class="md-status md-status--verified"></span>
+    <span class="md-status md-status--draft"></span>
   
 
   
@@ -3591,6 +3612,17 @@
     <span class="md-ellipsis">
       
         Choisir les bons paramètres radio
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#choisir-un-scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Choisir une portée (scope)
       
     </span>
   </a>
@@ -3734,6 +3766,21 @@ communauté publie d’autres paramètres, utilisez-les.</p>
 </div>
 <p>Redémarrez l’appareil après avoir modifié les paramètres radio, puis envoyez
 une annonce.</p>
+<h2 id="choisir-un-scope">Choisir une portée (scope)<a class="headerlink" href="#choisir-un-scope" title="Permanent link">&para;</a></h2>
+<div class="admonition warning">
+<p class="admonition-title">ON/QC : attendez la phase 2</p>
+<p>Pour un compagnon personnel, laissez <strong>Default Region Scope</strong> vide et les
+canaux <strong>sans portée</strong> pour le moment. La phase 2 n’est pas ouverte. Elle ne
+peut commencer avant <strong>janvier 2027</strong>, lorsque les répéteurs seront prêts et
+que le déploiement sera annoncé. Un changement trop tôt peut empêcher vos
+messages de joindre les autres utilisateurs.</p>
+</div>
+<p>Trouvez votre code de ville sur la <a href="../../config/map/">carte des régions IATA</a>.
+<strong>Quand la phase 2 sera annoncée</strong>, utilisez <code>onqc</code> par défaut et pour le canal
+Public, et votre code de ville, comme <code>yow</code>, pour les canaux de test. Réservez
+<code>can</code> et <code>na</code> à un usage futur.</p>
+<p>Les responsables de robots et de MeshMapper suivent les <a href="../../proposals/onqc-scopes/#robots-et-meshmapper">consignes de fin de phase 1</a>, une fois les répéteurs locaux prêts. Consultez l’<a href="../../proposals/onqc-scopes/#ordre-de-deploiement">ordre de déploiement</a> avant de changer les portées.</p>
+<p>Ailleurs, utilisez la portée convenue avec votre communauté. Le <a href="../../config/standard/">guide des portées</a> présente les versions d’application requises et des exemples. Les portées ne changent pas les réglages radio.</p>
 <h2 id="tester-lappareil">Tester l’appareil<a class="headerlink" href="#tester-lappareil" title="Permanent link">&para;</a></h2>
 <p>Le compagnon est prêt lorsque :</p>
 <ol>
@@ -3875,6 +3922,8 @@ l’annonce, <a href="../get-help/">obtenez de l’aide</a>.</p>
     
   
       <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../../assets/javascripts/region-profile.js?v=20260926-1"></script>
       
         <script src="../../../assets/javascripts/i18n-runtime.js?v=20260829-1"></script>
       

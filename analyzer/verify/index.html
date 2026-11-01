@@ -51,13 +51,13 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/styles/tokens.css?v=20260722-2">
+      <link rel="stylesheet" href="../../assets/styles/tokens.css?v=20260926-1">
     
-      <link rel="stylesheet" href="../../assets/styles/base.css?v=20261019-1">
+      <link rel="stylesheet" href="../../assets/styles/base.css?v=20261029-1">
     
       <link rel="stylesheet" href="../../assets/styles/shell.css?v=20260821-1">
     
-      <link rel="stylesheet" href="../../assets/styles/components.css?v=20260728-1">
+      <link rel="stylesheet" href="../../assets/styles/components.css?v=20260926-1">
     
       <link rel="stylesheet" href="../../assets/styles/network-status.css?v=20260905-1">
     
@@ -121,6 +121,16 @@
       
     </div>
     <div data-md-component="announce">
+      
+        <aside class="md-banner">
+          <div class="md-banner__inner md-grid md-typeset">
+            
+            
+  
+
+          </div>
+          
+        </aside>
       
     </div>
     
@@ -3457,7 +3467,7 @@
     
   
   
-    <span class="md-status md-status--verified"></span>
+    <span class="md-status md-status--draft"></span>
   
 
   
@@ -3688,11 +3698,11 @@ a real radio packet reaches CoreScope.</p>
     <br>It should report an encrypted connection to the primary server without repeating authentication errors.
   </li>
   <li>
-    <strong>Observer view:</strong> open <a href="https://live.meshcore.ca/#/observers">CoreScope Observers</a>.
+    <strong>Observer view:</strong> open <a href="https://live.meshcore.ca/?tab=Observers">Live observer list</a>.
     <br>The observer name and three-letter location code should appear with a recent timestamp.
   </li>
   <li>
-    <strong>Packet view:</strong> create nearby MeshCore activity, then open <a href="https://live.meshcore.ca/#/packets">CoreScope Packets</a>.
+    <strong>Packet view:</strong> create nearby MeshCore activity, then open <a href="https://live.meshcore.ca/">Live packets</a>.
     <br>A recent packet attributed to the observer should appear within a few minutes.
   </li>
 </ol>
@@ -3713,7 +3723,7 @@ a real radio packet reaches CoreScope.</p>
 </tr>
 <tr>
 <td>Location</td>
-<td>The nearest real three-letter airport code, not <code>CAN</code>, <code>XXX</code>, or <code>HOME</code></td>
+<td>The uppercase code from the <a href="../../config/map/">IATA region map</a>, or a community-agreed code where no zone is published</td>
 </tr>
 <tr>
 <td>Primary path</td>
@@ -3898,6 +3908,8 @@ Packet visible: yes / no
     
   
       <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../assets/javascripts/region-profile.js?v=20260926-1"></script>
       
         <script src="../../assets/javascripts/i18n-runtime.js?v=20260829-1"></script>
       

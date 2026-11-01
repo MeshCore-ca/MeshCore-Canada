@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Choose, configure, and verify a MeshCore observer that sends network data to CoreScope.">
+        <meta name="description" content="Choose, configure, and verify a MeshCore observer that sends data to the live network viewer.">
       
       
       
@@ -51,13 +51,13 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/styles/tokens.css?v=20260722-2">
+      <link rel="stylesheet" href="../../assets/styles/tokens.css?v=20260926-1">
     
-      <link rel="stylesheet" href="../../assets/styles/base.css?v=20261019-1">
+      <link rel="stylesheet" href="../../assets/styles/base.css?v=20261029-1">
     
       <link rel="stylesheet" href="../../assets/styles/shell.css?v=20260821-1">
     
-      <link rel="stylesheet" href="../../assets/styles/components.css?v=20260728-1">
+      <link rel="stylesheet" href="../../assets/styles/components.css?v=20260926-1">
     
       <link rel="stylesheet" href="../../assets/styles/network-status.css?v=20260905-1">
     
@@ -73,7 +73,7 @@
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="MeshCore Canada">
     <meta property="og:title" content="Start with an observer">
-    <meta property="og:description" content="Choose, configure, and verify a MeshCore observer that sends network data to CoreScope.">
+    <meta property="og:description" content="Choose, configure, and verify a MeshCore observer that sends data to the live network viewer.">
     <meta property="og:url" content="https://meshcore.ca/start/observer/">
     <meta property="og:image" content="https://meshcore.ca/assets/MeshCore-Canada-Logo.png">
     <meta name="twitter:card" content="summary">
@@ -82,7 +82,7 @@
         "@context": "https://schema.org",
         "@type": "WebPage",
         "name": "Start with an observer",
-        "description": "Choose, configure, and verify a MeshCore observer that sends network data to CoreScope.",
+        "description": "Choose, configure, and verify a MeshCore observer that sends data to the live network viewer.",
         "url": "https://meshcore.ca/start/observer/",
         "isPartOf": {
           "@type": "WebSite",
@@ -119,6 +119,16 @@
       
     </div>
     <div data-md-component="announce">
+      
+        <aside class="md-banner">
+          <div class="md-banner__inner md-grid md-typeset">
+            
+            
+  
+
+          </div>
+          
+        </aside>
       
     </div>
     
@@ -3474,7 +3484,7 @@
     
   
   
-    <span class="md-status md-status--verified"></span>
+    <span class="md-status md-status--draft"></span>
   
 
   
@@ -3706,7 +3716,7 @@
 
   
 <p>An observer listens through a MeshCore radio and sends network data to
-CoreScope. Observing does not require repeating; a node can do both if configured
+the live network viewer. Observing does not require repeating; a node can do both if configured
 for it. Observers can run on radio firmware, an always-on computer, or a home-automation host.</p>
 <p>Read <a href="../../analyzer/data-collection-access/">what the service collects and who can access
 it</a> before enabling an observer.</p>
@@ -3717,7 +3727,8 @@ it</a> before enabling an observer.</p>
 <li>Pick a method that matches the radio, operating system, and host you already
   have.</li>
 <li>Back up configuration before replacing firmware or installing a service.</li>
-<li>Use a real nearby location code when the chosen method asks for one.</li>
+<li>Find your location code on the <a href="../../config/map/">IATA region map</a>. Use the same
+  uppercase code in every broker entry; the nearest airport does not determine it.</li>
 </ul>
 <h2 id="what-setup-changes">What setup changes<a class="headerlink" href="#what-setup-changes" title="Permanent link">&para;</a></h2>
 <p>Depending on the method, setup may replace radio firmware, install a host
@@ -3741,7 +3752,7 @@ settings do not match nearby devices.</p>
 <p>The observer is working when:</p>
 <ol>
 <li>its radio hears known nearby mesh activity;</li>
-<li>it appears in <a href="https://live.meshcore.ca/#/observers">CoreScope Observers</a>;
+<li>it appears in the <a href="https://live.meshcore.ca/?tab=Observers">live observer list</a>;
    and</li>
 <li>recent activity appears after a nearby transmission.</li>
 </ol>
@@ -3756,7 +3767,7 @@ settings do not match nearby devices.</p>
     <li><label><input id="observer-progress-install" type="checkbox" data-mc-progress> Follow the selected setup guide</label></li>
     <li><label><input id="observer-progress-configure" type="checkbox" data-mc-progress> Apply local radio and service settings</label></li>
     <li><label><input id="observer-progress-verify-local" type="checkbox" data-mc-progress> Check that the radio hears nearby activity</label></li>
-    <li><label><input id="observer-progress-verify-network" type="checkbox" data-mc-progress> Find the observer in CoreScope</label></li>
+    <li><label><input id="observer-progress-verify-network" type="checkbox" data-mc-progress> Find the observer in the live network viewer</label></li>
   </ol>
 </section>
 
@@ -3879,6 +3890,8 @@ view. If it is missing or quiet, <a href="../get-help/">get help</a>.</p>
     
   
       <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../assets/javascripts/region-profile.js?v=20260926-1"></script>
       
         <script src="../../assets/javascripts/i18n-runtime.js?v=20260829-1"></script>
       
