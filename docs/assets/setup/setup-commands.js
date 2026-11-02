@@ -179,16 +179,23 @@
 
   function scopes(s, data, lang) {
     var out = [];
+    var old = null;
     // A board that was already running may carry old regions: show them, then clear them (Ruling 3).
     if (s.running) {
+      old = readReply(s.answers.regionReply);
       out.push(item("region-show", "region", say("why.region-show", lang)));
-      regionRemovals(s.answers.regionReply).names.forEach(function (name) {
+      old.names.forEach(function (name) {
         out.push(item("remove-" + name, "region remove " + name, say("why.remove", lang, { name: name })));
       });
     }
     var result = scopeProfile(s, data);
     var lines = lib("MeshCoreIataScopes").commands(result, s.answers.firmware);
     lines.forEach(function (line) { out.push(scopeItem(line, lines, result, data, lang)); });
+    // As in MeshCoreScopeMigration.plan: an old home region (^) that is removed gets replaced.
+    // Every old name except * is removed here, so any home other than * needs this.
+    if (old && old.home && old.home !== "*") {
+      out.push(item("home", "region home " + result.home, say("why.home", lang, { tag: result.home })));
+    }
     out.push(item("save", "region save", say("why.save", lang)));
     return out;
   }
@@ -253,7 +260,8 @@
       { id: "name", command: "get name", expect: say("check.name", lang, { name: s.answers.name }) }
     ];
     if (s.scoped) {
-      // `region` shows every name the rollup set; never promise a ^ home marker (the generator sets none).
+      // `region` shows every name the rollup set. Never promise a ^ home marker: the generator
+      // sets none, and `region home` is only added when an old home region was removed.
       var tags = scopeProfile(s, data).tags;
       out.push({ id: "region", command: "region", expect: say(s.edge ? "check.region.edge" : "check.region.city", lang, { tags: list(tags, lang) }) });
     }
@@ -265,16 +273,21 @@
   // One line of a `region` reply: indent (one space per level), name, ^ for home, F when it forwards.
   var REPLY_LINE = /^( *)(\*|[A-Za-z0-9][A-Za-z0-9_-]{0,30})(\^)?( F)?$/;
 
-  // Which old regions to remove, deepest first, from a pasted `region` reply.
+  // The only unindented words a console shows inside a reply: the echoed command and OK.
+  var ECHO = /^(?:region|ok)$/i;
+
+  // Reads a pasted `region` reply: the old regions to remove, deepest first, and the
+  // home region (the name marked ^, or null).
   // Tolerates CRLF, tabs, trailing spaces, non-breaking spaces, the console's "  -> "
   // prefix, an echoed `region` line and `OK`. `*` is never removed. Anything that
   // can't be read as one complete list (no `*` line, two lists, lost indents) is
   // readable: false, and nothing is removed.
-  function regionRemovals(reply) {
-    var unreadable = { names: [], readable: false };
+  function readReply(reply) {
+    var unreadable = { names: [], readable: false, home: null };
     if (typeof reply !== "string") return unreadable;
     var kept = [];
     var lostIndents = false;
+    var rooted = false;
     reply.replace(/\r\n?/g, "\n").split("\n").forEach(function (raw) {
       var line = raw.replace(/ /g, " ").replace(/^[ \t]*->[ \t]*/, "");
       var indent = /^[ \t]*/.exec(line)[0];
@@ -282,11 +295,14 @@
       var match = REPLY_LINE.exec(line);
       if (!match) return;                                // blank lines, prompts, Err replies
       if (!match[1] && match[2] !== "*") {
-        // An unindented word is an echoed command or a reply such as OK. One marked
-        // like a region (F or ^) is a region whose indent was lost.
-        if (match[3] || match[4]) lostIndents = true;
+        // Before the list, an unindented word is console output, such as an echoed
+        // command. Inside it, only the echoed `region` or `OK` is ignored: any other
+        // name, or one marked like a region (F or ^), is a region whose indent was
+        // lost, and guessing would leave old regions on the board.
+        if (match[3] || match[4] || (rooted && !ECHO.test(match[2]))) lostIndents = true;
         return;
       }
+      if (!match[1]) rooted = true;
       kept.push(line);
     });
     if (lostIndents || !kept.length) return unreadable;
@@ -301,7 +317,13 @@
       .filter(function (node) { return node.name !== "*"; })
       .sort(function (a, b) { return b.depth - a.depth || a.index - b.index; })
       .map(function (node) { return node.name; });
-    return { names: names, readable: true };
+    return { names: names, readable: true, home: parsed.home };
+  }
+
+  // Which old regions to remove, deepest first, and whether the reply could be read.
+  function regionRemovals(reply) {
+    var read = readReply(reply);
+    return { names: read.names, readable: read.readable };
   }
 
   globalThis.MeshCoreSetupCommands = {

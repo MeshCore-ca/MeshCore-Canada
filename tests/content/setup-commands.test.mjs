@@ -250,6 +250,34 @@ test("pasted region replies: console prefixes, odd spacing, and never *", () => 
     assert.deepEqual(cmds.regionRemovals(reply), { names: [], readable: false }, JSON.stringify(reply));
   }
   assert.deepEqual(cmds.regionRemovals("x".repeat(5000)), { names: [], readable: false });
+  // Indents lost: an unindented name inside the list, with or without F, would leave old regions behind.
+  for (const reply of ["*^ F\ncan\non", "*^\ncan\non", "*^ F\ncan F", "*^ F\n can F\non"]) {
+    assert.deepEqual(cmds.regionRemovals(reply), { names: [], readable: false }, JSON.stringify(reply));
+  }
+  // Only an echoed `region` or `OK`, in any case, is ignored inside the list; other console output before it is too.
+  assert.deepEqual(cmds.regionRemovals("ver\nregion\n*^ F\n ott F\nok\nRegion\nOK"), { names: ["ott"], readable: true });
+});
+
+test("an old home region that gets removed is replaced, as the migration planner does", () => {
+  const running = { ...belleville, status: "running", reflash: false };
+  const out = flat(cmds.rollup({ ...running, regionReply: "*\n ott^ F\n on F" }, data, "en"));
+  assert.deepEqual(out.slice(out.indexOf("region remove ott")), ["region remove ott", "region remove on", "region def ytr|* on|* onqc|* can|* na",
+    "region allowf *", "region default ytr", "region home ytr", "region save", "reboot"]);
+  // The site's migration planner adds the same line for the same reply.
+  const migration = globalThis.MeshCoreScopeMigration;
+  const desired = globalThis.MeshCoreIataScopes.profile(data.catalog, { activation: "activate", home: "ytr", province: "on", bridge: false });
+  assert.ok(migration.plan(migration.parse("*\n ott^ F\n on F"), desired, "1.16").commands.includes("region home ytr"));
+  for (const lang of ["en", "fr"]) {
+    const home = items(cmds.rollup({ ...running, regionReply: "*\n ott^ F" }, data, lang)).find((i) => i.id === "home");
+    assert.equal(home.command, "region home ytr");
+    assert.equal(home.why, text.t("why.home", lang, { tag: "ytr" }));
+  }
+  // Home on *, no home marker, an unreadable reply or nothing pasted: no region home line.
+  for (const reply of ["*^ F\n ott F", "* F\n ott F", "*^ F\nott^ F", undefined]) {
+    assert.ok(!flat(cmds.rollup({ ...running, regionReply: reply }, data, "en")).some((c) => c.startsWith("region home")), String(reply));
+  }
+  // The checks still don't promise a ^ marker.
+  assert.doesNotMatch(cmds.checks({ ...running, regionReply: "*\n ott^ F" }, data, "en").find((c) => c.id === "region").expect, /\^/);
 });
 
 test("text lookups fail loudly and fill in placeholders", () => {
