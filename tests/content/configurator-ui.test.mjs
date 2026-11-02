@@ -39,6 +39,27 @@ test("the setup tool page loads the scope generator before its commands, and not
   }
 });
 
+test("the region map script no longer carries the old configurator, and the map page still loads it", () => {
+  for (const name of ["initConfig", "toolUi", "buildCommands", "renderResult", "refreshTool"]) {
+    assert.doesNotMatch(regionsSource, new RegExp("\\b" + name + "\\b"), name);
+  }
+  assert.doesNotMatch(regionsSource, /mode === "config"/, "initRegions must not dispatch the old config mode");
+  assert.doesNotMatch(regionsSource, /mcc-wizard/);
+  assert.doesNotMatch(read("docs/assets/regions/regions.css"), /mcc-wizard|data-mcc-regions="config"/);
+  // The dashboard names the explainer the way the site nav does.
+  assert.match(regionsSource, /regionPageHref\("guide"\)\) \+ '">' \+ icon\("book-open-check"\) \+ '<span><strong>How repeaters work<\/strong>/);
+  assert.match(regionsSource, /"How repeaters work": "Comprendre les répéteurs"/);
+  assert.doesNotMatch(regionsSource, /<strong>Guide<\/strong>/);
+  for (const mode of ["map", "dashboard", "table"]) {
+    assert.match(regionsSource, new RegExp('mode === "' + mode + '"'), mode);
+  }
+  for (const page of ["docs/config/map.md", "docs/config/map.fr.md"]) {
+    const markdown = read(page);
+    assert.match(markdown, /assets\/regions\/regions\.js\?v=/, page);
+    assert.match(markdown, /<div data-mcc-regions="map"/, page);
+  }
+});
+
 test("manual coordinates fail closed", () => {
   const support = loadSupport();
   assert.deepEqual(
@@ -71,13 +92,14 @@ test("commissioning records omit sensitive and exact location fields", () => {
 test("place searches run on submission and visible maps load without consent", () => {
   assert.doesNotMatch(regionsSource, /allowExternal/);
   assert.doesNotMatch(regionsSource, /online-search-consent|map-online-search-consent/);
-  assert.match(regionsSource, /setTimeout\(locate, 0\)/);
+  assert.match(regionsSource, /els\.locate\.addEventListener\("click", locate\)/);
   assert.match(regionsSource, /geocode\(data, query, thisController && thisController\.signal\)/);
   assert.doesNotMatch(regionsSource, /tile-consent|Allow OpenStreetMap tiles before loading/);
   assert.match(regionsSource, /window\.setTimeout\(loadInteractiveMap, 0\)/);
   assert.match(regionsSource, /mapObserver\.observe\(els\.mapStage\)/);
   assert.match(regionsSource, /tile\.openstreetmap\.org/);
-  assert.match(regionsSource, /Browse regions without search or a map/);
+  assert.match(regionsSource, /Browse by province or territory/);
+  assert.match(regionsSource, /Browse all regions/);
 });
 
 test("region icons are inline SVGs matching the vendored source", () => {

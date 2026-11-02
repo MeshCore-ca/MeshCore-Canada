@@ -73,10 +73,10 @@ test("the scripts no longer tell companions to wait for a later phase", () => {
   assert.match(profile, /onqc/);
 });
 
-test("standards opt-in stays in the configurator and starter regions stay apart from MeshMapper zones", () => {
+test("standard settings come from the setup tool, not the map, and starter regions stay apart from MeshMapper zones", () => {
   const script = readFileSync("docs/assets/regions/regions.js", "utf8");
-  assert.match(script, /standardDefaults: false/);
-  assert.match(script, /data-onqc-settings-summary/);
+  assert.doesNotMatch(script, /standardCommands|data-onqc-settings-summary|ON\/QC Phase 1/);
+  assert.match(readFileSync("docs/assets/setup/setup-commands.js", "utf8"), /\.standardCommands\(s\.answers\.firmware\)/);
   for (const french of [false, true]) {
     const source = readFileSync(`docs/config/guide${french ? ".fr" : ""}.md`, "utf8").replace(/\s+/g, " ");
     assert.match(source, french ? /ce ne sont pas des zones MeshMapper/ : /not MeshMapper zones, and they don't claim radio coverage/);
