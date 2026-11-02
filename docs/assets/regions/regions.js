@@ -1192,9 +1192,15 @@
       name: String(params.get("name") || (tag && labelFor(data, tag)) || "").slice(0, 160) };
   }
 
+  // The setup tool at /config/ reads only the region and its province from a map link
+  // (MeshCoreSetupFlow.fromQuery). The map's own fields, such as its default firmware,
+  // would answer the tool's questions for the person, so they stay on the map.
   function configHrefForState(state) {
-    var mapHref = new URL(mapHrefForState(state));
-    return regionPageHref("config") + mapHref.search;
+    var params = new URLSearchParams();
+    var tag = state.forcedTag || (state.resolution && state.resolution.primary && state.resolution.primary.seed.tag);
+    if (tag) params.set("tag", tag);
+    if (state.jurisdictionTag) params.set("province", state.jurisdictionTag);
+    return regionPageHref("config") + (params.toString() ? "?" + params.toString() : "");
   }
   function haversineKm(aLat, aLon, bLat, bLon) {
     var rad = function (d) { return d * Math.PI / 180; };

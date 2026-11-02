@@ -1,40 +1,36 @@
 ---
-title: Set up repeater scopes
-description: Choose IATA regions, city or edge repeater mode, and firmware-specific commands.
+title: Set up a repeater
+description: A guided setup for a repeater or a repeater observer, one question at a time, ending with every command to paste and what each one does.
 audience:
   - repeater-operator
-task: configure-repeater-regions
+task: set-up-repeater
 scope: canada-baseline
 status: verified
 owner: region-maintainers
-last_reviewed: 2026-09-25
-review_by: 2027-03-24
-tested_with:
-  region_catalog: meshcore-canada-iata-scopes-v1
-difficulty: intermediate
-estimated_time: 5-10 minutes
+last_reviewed: 2026-11-02
+review_by: 2027-05-02
+evidence: tests/browser/setup-tool.spec.mjs
+difficulty: beginner
+estimated_time: 20-40 minutes
 page_styles:
-  - assets/regions/regions.css?v=20260926-1
+  - assets/setup/setup.css?v=20261102-1
 page_scripts:
-  - assets/javascripts/place-search.js?v=20260925-2
-  - assets/javascripts/radio-profiles.js?v=20260904-1
-  - assets/regions/modules/configurator-support.js?v=20260926-1
   - assets/regions/modules/iata-scopes.js?v=20261013-1
   - assets/regions/modules/scope-migration.js?v=20260926-2
-  - assets/regions/regions.js?v=20261102-2
+  - assets/javascripts/place-search.js?v=20260925-2
+  - assets/setup/setup-text.js?v=20261102-1
+  - assets/setup/setup-flow.js?v=20261102-1
+  - assets/setup/setup-place.js?v=20261102-1
+  - assets/setup/setup-commands.js?v=20261102-1
+  - assets/setup/setup-ui.js?v=20261102-1
 hide:
   - navigation
   - toc
 ---
-# Set up repeater scopes
+# Set up a repeater
 
-Choose the IATA regions this repeater serves. Start with preparation, which
-keeps forwarding of messages without a scope (`*`) and the default scope unchanged. At a coordinated
-local cutover, city repeaters allow unscoped messages and edge repeaters block
-them. Review the current configuration before applying any commands.
+Answer a few questions, one at a time, and get every command to paste into your repeater, with what each one does.
 
-<div data-mcc-regions="config" data-mcc-root="./"></div>
+<div data-setup-tool></div>
 
-<noscript>JavaScript is required. [How repeaters work](guide.md) explains scopes and regions.</noscript>
-
-<small>[How repeaters work](guide.md) · [Data sources](../assets/regions/NOTICE.txt) · [Share feedback](https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54/46)</small>
+<noscript>The setup tool needs JavaScript. [How repeaters work](guide.md) explains every step and command it would show.</noscript>

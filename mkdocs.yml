@@ -146,7 +146,7 @@ plugins:
             Update a repeater over the air: Mettre un répéteur à jour à distance
             Network Tools: Outils réseau
             Choose a network tool: Choisir un outil réseau
-            Configure a repeater: Configurer un répéteur
+            Set up a repeater: Configurer un répéteur
             Find your region: Trouver votre région
             How repeaters work: Comprendre les répéteurs
             Set up an observer: Configurer un observateur
@@ -258,7 +258,7 @@ nav:
           - Update a repeater over the air: meshcore/update-repeater-ota.md
   - Network Tools:
       - Choose a network tool: tools/index.md
-      - Configure a repeater: config/index.md
+      - Set up a repeater: config/index.md
       - Find your region: config/map.md
       - How repeaters work: config/guide.md
       - Set up an observer: analyzer/intro.md

@@ -18,7 +18,8 @@
     "tool.title": "Set up a repeater",
     "tool.lede": "Answer a few questions. At the end you get every command to paste, one at a time, with what each one does.",
     "tool.loading": "Loading the region list…",
-    "tool.load-failed": "The region list didn't load. Check your internet connection, then reload the page.",
+    "tool.load-failed": "The region list didn't load. Check your internet connection, then try again.",
+    "tool.retry": "Try again",
 
     // Navigation
     "nav.back": "Back",
@@ -31,6 +32,7 @@
     "nav.share-done": "Link copied",
     "help.toggle": "What does this mean?",
     "help.more": "More in the guide",
+    "link.new-tab": "(opens in a new tab)",
     "list.and": "and",
 
     // Step labels, for the progress line
@@ -77,9 +79,9 @@
     "board.no-wifi.detail": "No Wi-Fi: can't observe",
     "board.observer-nrf52": "A repeater observer needs Wi-Fi, so nRF52 boards can't be used.",
     "board.as-repeater": "Set it up as a plain repeater instead",
-    "board.nrf52-next": "nRF52 board: the next step updates its bootloader first. It only takes a couple of minutes.",
+    "board.nrf52-next": "nRF52 board: before it's flashed, you'll update its bootloader. It only takes a couple of minutes.",
     "board.other": "No problem: when you flash it, pick your board in the flasher's list. If the flasher doesn't list it, MeshCore doesn't support it yet.",
-    "board.other-observer": "Check that the observer flasher lists your board before you go on. If it doesn't, set it up as a plain repeater instead.",
+    "board.other-observer": "Check that the observer flasher (observer.gessaman.com) lists your board before you go on: it has some boards that aren't listed here. If it doesn't list yours, set it up as a plain repeater instead.",
     "board.your-board": "your board",
 
     // New, or already running?
@@ -149,6 +151,7 @@
     "version.v1.16": "1.16 or newer",
     "version.unreadable": "That doesn't look like a version number. Paste the whole reply, or pick the version:",
     "version.pick": "Or pick it:",
+    "version.phone.step4": "Type `ver` and send it. Copy the reply and paste it below.",
     "version.too-old": "This firmware is too old: region settings need version 1.14 or newer. Update it first, then come back.",
     "version.update": "Update the firmware",
 
@@ -170,12 +173,15 @@
     "town.no-match": "No place found with that name. Check the spelling, or type its region code instead.",
     "town.search-failed": "The town search isn't answering right now. Type the region code instead. The {link} shows every code.",
     "town.search-failed.link": "region map",
-    "town.code-label": "Region code",
-    "town.code-placeholder": "For example ytr",
-    "town.code-unknown": "That isn't a region code on the map. Check the {link}.",
+    "town.code-label": "Region code or name",
+    "town.code-placeholder": "For example ytr or Quinte",
+    "town.code-use": "Use it",
+    "town.code-unknown": "No region on the map has that code or name. Check the {link}.",
     "town.code-unknown.link": "region map",
     "town.province": "Which province or territory will it be in?",
     "town.province.hint": "Pick the one where the repeater physically is.",
+    "town.map-link": "Find your region on the map",
+    "town.link-invalid": "The region in your link isn't on the region map anymore. Search for the town instead.",
 
     // Radio settings (only when the region's groups use more than one)
     "radio.question": "Which radio settings does your local group use?",
@@ -225,6 +231,10 @@
     "commands.phone.step2": "Enter the admin password and tap Log In.",
     "commands.phone.step3": "Check for You are logged in as an Admin, then tap Command Line at the bottom.",
     "commands.phone.tip": "Every command should get a reply, usually `OK`. If nothing comes back after a few seconds, tap and hold the command and choose Send Again. Sending a command twice is safe.",
+    "phone.img.contacts": "Contacts list filtered to find a repeater",
+    "phone.img.login": "Repeater Login screen with a password field",
+    "phone.img.admin": "Repeater Admin screen with Command Line at the bottom",
+    "phone.img.ver": "Command Line with the ver command sent",
     "commands.type-yourself": "type this yourself",
     "commands.copy": "Copy",
     "commands.copied": "Copied",
@@ -319,7 +329,8 @@
     "tool.title": "Configurer un répéteur",
     "tool.lede": "Répondez à quelques questions. À la fin, vous obtenez toutes les commandes à coller, une à la fois, avec ce que fait chacune.",
     "tool.loading": "Chargement de la liste des régions…",
-    "tool.load-failed": "La liste des régions n’a pas pu être chargée. Vérifiez votre connexion Internet, puis rechargez la page.",
+    "tool.load-failed": "La liste des régions n’a pas pu être chargée. Vérifiez votre connexion Internet, puis réessayez.",
+    "tool.retry": "Réessayer",
 
     // Navigation
     "nav.back": "Retour",
@@ -332,6 +343,7 @@
     "nav.share-done": "Lien copié",
     "help.toggle": "Qu’est-ce que ça veut dire?",
     "help.more": "En savoir plus dans le guide",
+    "link.new-tab": "(s’ouvre dans un nouvel onglet)",
     "list.and": "et",
 
     // Step labels, for the progress line
@@ -378,9 +390,9 @@
     "board.no-wifi.detail": "Pas de Wi-Fi : ne peut pas observer",
     "board.observer-nrf52": "Un répéteur observateur a besoin du Wi-Fi, donc les cartes nRF52 ne conviennent pas.",
     "board.as-repeater": "La configurer plutôt comme simple répéteur",
-    "board.nrf52-next": "Carte nRF52 : l’étape suivante met d’abord à jour son chargeur d’amorçage. Ça ne prend que quelques minutes.",
+    "board.nrf52-next": "Carte nRF52 : avant de la programmer, vous mettrez à jour son chargeur d’amorçage. Ça ne prend que quelques minutes.",
     "board.other": "Pas de problème : au moment de la programmer, choisissez votre carte dans la liste de l’outil de programmation. Si elle n’y est pas, MeshCore ne la prend pas encore en charge.",
-    "board.other-observer": "Vérifiez que votre carte figure dans l’outil de programmation des observateurs avant de continuer. Sinon, configurez-la plutôt comme simple répéteur.",
+    "board.other-observer": "Vérifiez que votre carte figure dans l’outil de programmation des observateurs (observer.gessaman.com) avant de continuer : il propose des cartes qui ne sont pas dans cette liste. Si la vôtre n’y est pas, configurez-la plutôt comme simple répéteur.",
     "board.your-board": "votre carte",
 
     // New, or already running?
@@ -450,6 +462,7 @@
     "version.v1.16": "1.16 ou plus récent",
     "version.unreadable": "Ça ne ressemble pas à un numéro de version. Collez toute la réponse, ou choisissez la version :",
     "version.pick": "Ou choisissez-la :",
+    "version.phone.step4": "Tapez `ver` et envoyez-le. Copiez la réponse et collez-la ci-dessous.",
     "version.too-old": "Ce micrologiciel est trop ancien : les réglages de région exigent la version 1.14 ou plus récente. Mettez-le d’abord à jour, puis revenez.",
     "version.update": "Mettre le micrologiciel à jour",
 
@@ -471,12 +484,15 @@
     "town.no-match": "Aucun endroit trouvé sous ce nom. Vérifiez l’orthographe, ou tapez plutôt son code de région.",
     "town.search-failed": "La recherche de villes ne répond pas pour l’instant. Tapez plutôt le code de région. La {link} montre tous les codes.",
     "town.search-failed.link": "carte des régions",
-    "town.code-label": "Code de région",
-    "town.code-placeholder": "Par exemple ytr",
-    "town.code-unknown": "Ce code de région n’est pas sur la carte. Consultez la {link}.",
+    "town.code-label": "Code ou nom de la région",
+    "town.code-placeholder": "Par exemple ytr ou Quinte",
+    "town.code-use": "Utiliser",
+    "town.code-unknown": "Aucune région de la carte n’a ce code ou ce nom. Consultez la {link}.",
     "town.code-unknown.link": "carte des régions",
     "town.province": "Dans quelle province ou quel territoire sera-t-il?",
     "town.province.hint": "Choisissez selon l’endroit où le répéteur se trouve réellement.",
+    "town.map-link": "Trouver votre région sur la carte",
+    "town.link-invalid": "La région de votre lien n’est plus sur la carte des régions. Cherchez plutôt la ville.",
 
     // Radio settings (only when the region's groups use more than one)
     "radio.question": "Quels réglages radio votre groupe local utilise-t-il?",
@@ -526,6 +542,10 @@
     "commands.phone.step2": "Entrez le mot de passe administrateur et touchez Log In.",
     "commands.phone.step3": "Vérifiez que You are logged in as an Admin s’affiche, puis touchez Command Line en bas.",
     "commands.phone.tip": "Chaque commande devrait recevoir une réponse, habituellement `OK`. Si rien ne revient après quelques secondes, touchez longuement la commande et choisissez Send Again. Envoyer une commande deux fois ne cause pas de problème.",
+    "phone.img.contacts": "Liste des contacts filtrée pour trouver un répéteur",
+    "phone.img.login": "Écran Repeater Login avec un champ de mot de passe",
+    "phone.img.admin": "Écran Repeater Admin avec Command Line en bas",
+    "phone.img.ver": "Command Line avec la commande ver envoyée",
     "commands.type-yourself": "à taper vous-même",
     "commands.copy": "Copier",
     "commands.copied": "Copié",

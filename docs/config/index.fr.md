@@ -1,41 +1,36 @@
 ---
-title: Configurer les portées d’un répéteur
-description: Choisissez les régions IATA, le mode ville ou bordure et les commandes adaptées au micrologiciel.
+title: Configurer un répéteur
+description: Une configuration guidée pour un répéteur ou un répéteur observateur, une question à la fois, avec chaque commande à coller et ce qu’elle fait.
 audience:
   - repeater-operator
-task: configure-repeater-regions
+task: set-up-repeater
 scope: canada-baseline
 status: verified
 owner: region-maintainers
-last_reviewed: 2026-09-25
-review_by: 2027-03-24
-tested_with:
-  region_catalog: meshcore-canada-iata-scopes-v1
-difficulty: intermediate
-estimated_time: 5-10 minutes
+last_reviewed: 2026-11-02
+review_by: 2027-05-02
+evidence: tests/browser/setup-tool.spec.mjs
+difficulty: beginner
+estimated_time: 20-40 minutes
 page_styles:
-  - assets/regions/regions.css?v=20260926-1
+  - assets/setup/setup.css?v=20261102-1
 page_scripts:
-  - assets/javascripts/place-search.js?v=20260925-2
-  - assets/javascripts/radio-profiles.js?v=20260904-1
-  - assets/regions/modules/configurator-support.js?v=20260926-1
   - assets/regions/modules/iata-scopes.js?v=20261013-1
   - assets/regions/modules/scope-migration.js?v=20260926-2
-  - assets/regions/regions.js?v=20261102-2
+  - assets/javascripts/place-search.js?v=20260925-2
+  - assets/setup/setup-text.js?v=20261102-1
+  - assets/setup/setup-flow.js?v=20261102-1
+  - assets/setup/setup-place.js?v=20261102-1
+  - assets/setup/setup-commands.js?v=20261102-1
+  - assets/setup/setup-ui.js?v=20261102-1
 hide:
   - navigation
   - toc
 ---
-# Configurer les portées d’un répéteur
+# Configurer un répéteur
 
-Choisissez les régions IATA desservies par ce répéteur. La préparation conserve
-la retransmission des messages sans portée (`*`) et la portée par défaut. Lors d’une transition
-coordonnée localement, les répéteurs de ville autorisent les messages sans
-portée et ceux de bordure les bloquent. Examinez la configuration actuelle
-avant d’appliquer des commandes.
+Répondez à quelques questions, une à la fois, et obtenez toutes les commandes à coller dans votre répéteur, avec ce que fait chacune.
 
-<div data-mcc-regions="config" data-mcc-root="./"></div>
+<div data-setup-tool></div>
 
-<noscript>JavaScript est requis. [Comprendre les répéteurs](guide.md) explique les portées et les régions.</noscript>
-
-<small>[Comprendre les répéteurs](guide.md) · [Sources de données](../assets/regions/NOTICE.txt) · [Partager vos commentaires](https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54/46)</small>
+<noscript>L’outil de configuration a besoin de JavaScript. [Comprendre les répéteurs](guide.md) explique chaque étape et chaque commande qu’il afficherait.</noscript>
