@@ -1,0 +1,273 @@
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { readFile } from "node:fs/promises";
+import vm from "node:vm";
+import { before, test } from "node:test";
+import "../../docs/assets/regions/modules/iata-scopes.js";
+
+// Classic browser scripts: run them in this realm so they set their globals.
+for (const file of ["docs/assets/regions/modules/scope-migration.js", "docs/assets/setup/setup-flow.js",
+  "docs/assets/setup/setup-place.js", "docs/assets/setup/setup-text.js", "docs/assets/setup/setup-commands.js"]) {
+  vm.runInThisContext(readFileSync(file, "utf8"), { filename: file });
+}
+const cmds = globalThis.MeshCoreSetupCommands;
+const text = globalThis.MeshCoreSetupText;
+
+// Maps the site's /assets/... URLs to docs/assets/... on disk; the ?v= cache key is ignored.
+async function fileFetcher(url) {
+  const address = new URL(String(url));
+  try {
+    const body = await readFile("docs" + address.pathname, "utf8");
+    return { ok: true, json: async () => JSON.parse(body) };
+  } catch {
+    return { ok: false, json: async () => { throw new Error("not found"); } };
+  }
+}
+
+let data;
+before(async () => {
+  data = await globalThis.MeshCoreSetupPlace.loadData(new URL("https://meshcore.test/assets/setup/setup-commands.js"), fileFetcher);
+});
+
+const flat = groups => groups.flatMap(g => g.items.map(i => i.command));
+const belleville = { type: "repeater", board: "rak4631", status: "new", firmware: "1.16", place: { name: "Belleville", lat: 44.16281, lon: -77.38324 },
+  tag: "ytr", province: "on", radio: "canada", role: "city", name: "Belleville_R1", shareLocation: true };
+test("a new Belleville city repeater gets the full rollup", () => {
+  assert.deepEqual(flat(cmds.rollup(belleville, data, "en")), ["set radio 910.525,62.5,7,5","set name Belleville_R1","set lat 44.1628","set lon -77.3832",
+    "password <your new admin password>","set path.hash.mode 2","set advert.interval 240","set flood.advert.interval 47","set flood.max 16",
+    "region def ytr|* on|* onqc|* can|* na","region allowf *","region default ytr","region save","reboot"]);
+});
+test("edge, cross-border and onny follow the generator", () => {
+  const edge = flat(cmds.rollup({ ...belleville, role: "edge", neighbours: ["ygk"], external: ["western-new-york"] }, data, "en"));
+  assert.ok(edge.includes("region def ytr|* ygk|* on|* onqc|* can|* na|* us us-ny") && edge.includes("region denyf *"));
+  assert.ok(flat(cmds.rollup({ ...belleville, external: ["ontario-new-york"] }, data, "en")).includes("region def ytr|* on|* onqc|* can|* na|* onny"));
+});
+test("the phone route leaves out the radio and clears old regions deepest first", () => {
+  const out = flat(cmds.rollup({ ...belleville, status: "running", reflash: false, firmware: "1.15", regionReply: "*^ F\n can F\n  on F\n   ott F" }, data, "en"));
+  assert.ok(!out.some(c => c.startsWith("set radio")));
+  assert.deepEqual(out.slice(out.indexOf("region"), out.indexOf("region save") + 1), ["region","region remove ott","region remove on","region remove can",
+    "region put ytr","region put on","region put onqc","region put can","region put na","region allowf *","region default ytr","region save"]);
+});
+test("a listen-only repeater observer gets observer lines and no scopes", () => {
+  const out = flat(cmds.rollup({ ...belleville, type: "observer", repeat: "listen", board: "heltec-v3", role: undefined, name: "Belleville_Obs1" }, data, "en"));
+  assert.ok(!out.some(c => c.startsWith("region")));
+  for (const c of ["set mqtt.iata YTR","set mqtt1.preset meshcore-ca-1","set mqtt2.preset meshcore-ca-2","set mqtt.raw off","set mqtt.tx advert","set repeat off","set wifi.pwd <your Wi-Fi password>"]) assert.ok(out.includes(c), c);
+});
+test("BC Mesh radio settings when chosen", () => {
+  assert.equal(flat(cmds.rollup({ ...belleville, tag: "yvr", province: "bc", radio: "bc-mesh" }, data, "en"))[0], "set radio 910.425,62.5,7,5");
+});
+test("the final checks match the device and role", () => {
+  const ids = (a) => cmds.checks(a, data, "en").map(c => c.command);
+  assert.deepEqual(ids(belleville), ["ver", "get name", "region", "advert"]);
+  assert.ok(ids({ ...belleville, type: "observer", repeat: "both", board: "heltec-v3" }).includes("get mqtt.status"));
+  assert.ok(!ids({ ...belleville, type: "observer", repeat: "listen", board: "heltec-v3", role: undefined }).includes("region"));
+  assert.match(cmds.checks({ ...belleville, role: "edge", neighbours: ["ygk"] }, data, "en").find(c => c.command === "region").expect, /without F|no F/);
+});
+test("region replies are read safely", () => {
+  assert.deepEqual(cmds.regionRemovals("region\r\n*^ F \r\n\tcan F\r\n  on F\r\nOK\r\n"), { names: ["on","can"], readable: true });
+  assert.deepEqual(cmds.regionRemovals("*^ F"), { names: [], readable: true });
+  assert.deepEqual(cmds.regionRemovals("nonsense here"), { names: [], readable: false });
+});
+test("every item explains itself in both languages; only manual items hold placeholders", () => {
+  for (const lang of ["en","fr"]) for (const item of cmds.rollup({ ...belleville, type: "observer", repeat: "both", board: "heltec-v3" }, data, lang).flatMap(g => g.items)) {
+    assert.ok(item.why.length > 10, item.id);
+    assert.equal(/</.test(item.command), item.manual, item.id);
+  }
+  for (const key of text.keys()) assert.ok(text.t(key, "fr").length && text.t(key, "en").length, key);
+});
+
+// Beyond the brief: the controller's decisions and the review focus.
+
+const items = (groups) => groups.flatMap((g) => g.items);
+const observer = { ...belleville, type: "observer", repeat: "both", board: "heltec-v3", name: "Belleville_Obs1" };
+
+test("groups come in a fixed order and leave out what doesn't apply", () => {
+  assert.deepEqual(cmds.rollup(belleville, data, "en").map((g) => g.id), ["basics", "canada", "scopes", "finish"]);
+  assert.deepEqual(cmds.rollup(observer, data, "en").map((g) => g.id), ["basics", "canada", "scopes", "observer", "finish"]);
+  assert.deepEqual(cmds.rollup({ ...observer, repeat: "listen", role: undefined }, data, "en").map((g) => g.id), ["basics", "canada", "observer", "finish"]);
+});
+
+test("the observer lines follow the MQTT page's order, typed Wi-Fi lines last", () => {
+  const group = cmds.rollup(observer, data, "en").find((g) => g.id === "observer");
+  assert.deepEqual(group.items.map((i) => i.command), ["set mqtt.iata YTR", "set wifi.powersave none", "set mqtt1.preset meshcore-ca-1",
+    "set mqtt2.preset meshcore-ca-2", "set mqtt.status on", "set mqtt.packets on", "set mqtt.raw off", "set mqtt.rx on", "set mqtt.tx advert",
+    "set bridge.enabled on", "set repeat on", "advert", "set wifi.ssid <your Wi-Fi name>", "set wifi.pwd <your Wi-Fi password>"]);
+  assert.deepEqual(group.items.filter((i) => i.manual).map((i) => i.id), ["ssid", "wifi-pwd"]);
+  // The MQTT page's warning: these replace slots 1 and 2.
+  assert.match(group.items.find((i) => i.id === "mqtt1").why, /slot 1/);
+  assert.match(group.items.find((i) => i.id === "mqtt2").why, /slot 2/);
+  assert.match(text.t("note.mqtt-slots", "en"), /slots 1 and 2/);
+});
+
+test("answers that don't apply are ignored, not trusted (hand-edited share links)", () => {
+  // A listen-only repeater observer carrying role, neighbours and cross-border networks.
+  const listen = flat(cmds.rollup({ ...observer, repeat: "listen", role: "edge", neighbours: ["ygk"], external: ["western-new-york"] }, data, "en"));
+  assert.ok(!listen.some((c) => c.startsWith("region")));
+  assert.ok(listen.includes("set repeat off"));
+  // A city repeater carrying neighbours and an edge-only network: neither applies, the shared onny does.
+  const city = flat(cmds.rollup({ ...belleville, neighbours: ["ygk"], external: ["western-new-york", "ontario-new-york"] }, data, "en"));
+  assert.ok(city.includes("region def ytr|* on|* onqc|* can|* na|* onny"));
+  assert.ok(city.includes("region allowf *"));
+  // A cross-border network offered in another province is dropped; unknown neighbours are dropped.
+  assert.ok(flat(cmds.rollup({ ...belleville, role: "edge", neighbours: ["nope", "ygk"], external: ["washington"] }, data, "en"))
+    .includes("region def ytr|* ygk|* on|* onqc|* can|* na"));
+  // A radio choice the region doesn't offer falls back to the Canada settings.
+  assert.equal(flat(cmds.rollup({ ...belleville, radio: "bc-mesh" }, data, "en"))[0], "set radio 910.525,62.5,7,5");
+  // Old regions are only cleared on a board that was already running.
+  assert.ok(!flat(cmds.rollup({ ...belleville, regionReply: "*^ F\n ott F" }, data, "en")).includes("region"));
+});
+
+test("a running repeater that is reflashed keeps the radio line and still clears old regions (Ruling 3)", () => {
+  const reflashed = { ...belleville, status: "running", reflash: true, regionReply: "*^ F\n ott F\n on F" };
+  const out = flat(cmds.rollup(reflashed, data, "en"));
+  assert.equal(out[0], "set radio 910.525,62.5,7,5");
+  assert.deepEqual(out.slice(out.indexOf("region"), out.indexOf("region def ytr|* on|* onqc|* can|* na")),
+    ["region", "region remove ott", "region remove on"]);
+  // Running, nothing pasted yet: the show line is there, no removals.
+  const waiting = flat(cmds.rollup({ ...reflashed, regionReply: undefined }, data, "en"));
+  assert.ok(waiting.includes("region") && !waiting.some((c) => c.startsWith("region remove")));
+  // A running repeater observer on the observer firmware takes the phone route: no radio, old regions cleared.
+  const phoneObserver = flat(cmds.rollup({ ...observer, status: "running", observerFirmware: "yes", regionReply: "*^ F\n ott F" }, data, "en"));
+  assert.ok(!phoneObserver.some((c) => c.startsWith("set radio")));
+  assert.ok(phoneObserver.includes("region remove ott"));
+});
+
+test("the phone route explains why the radio line is missing", () => {
+  assert.match(text.t("note.radio-phone", "en"), /USB/);
+  assert.match(text.t("note.radio-phone", "fr"), /USB/);
+});
+
+test("every command line gets its own id, and the explanations use why. keys", () => {
+  for (const answers of [observer, { ...belleville, role: "edge", neighbours: ["ygk"], external: ["western-new-york"], status: "running", reflash: false,
+    firmware: "1.14", regionReply: "*^ F\n can F\n  on F" }]) {
+    const ids = items(cmds.rollup(answers, data, "en")).map((i) => i.id);
+    assert.equal(new Set(ids).size, ids.length, ids.join(","));
+  }
+  const whyKeys = text.keys().filter((key) => key.startsWith("why."));
+  for (const key of ["why.radio", "why.name", "why.lat", "why.lon", "why.password", "why.hash", "why.advert", "why.flood-advert", "why.flood-max",
+    "why.region-show", "why.remove", "why.def", "why.allow", "why.deny", "why.default", "why.save", "why.ssid", "why.wifi-pwd", "why.reboot"]) {
+    assert.ok(whyKeys.includes(key), key);
+  }
+  // Every explanation in a rollup is one of those strings, filled in.
+  const templates = whyKeys.map((key) => new RegExp("^" + text.t(key, "en").replace(/[.*+?^$()|[\]\\]/g, "\\$&").replace(/\{[\w-]+\}/g, ".+") + "$"));
+  for (const item of items(cmds.rollup({ ...observer, role: "edge", neighbours: ["ygk"], status: "running", reflash: true, regionReply: "*^ F\n ott F" }, data, "en"))) {
+    assert.ok(templates.some((pattern) => pattern.test(item.why)), item.id + ": " + item.why);
+  }
+});
+
+test("explanations name the regions and the town in plain words", () => {
+  const why = (answers, id, lang = "en") => items(cmds.rollup(answers, data, lang)).find((i) => i.id === id).why;
+  assert.equal(why(belleville, "def"), "Pass on messages labelled for Quinte West (ytr), Ontario (on), Ontario + Québec (onqc), Canada (can) and North America (na).");
+  assert.equal(why(belleville, "allow"), "Also pass on messages with no label, as a city repeater does.");
+  assert.equal(why({ ...belleville, role: "edge", neighbours: ["ygk"] }, "deny"),
+    "Don't pass on messages with no label, so they stay in their own region. That's what makes it an edge repeater.");
+  assert.equal(why(belleville, "default"), "Label this repeater's own announcements with ytr.");
+  assert.match(why(belleville, "lat"), /centre of Belleville/);
+  assert.match(why({ ...belleville, role: "edge", neighbours: ["ygk"], external: ["western-new-york"] }, "def"), /Kingston \(ygk\).*United States \(us\) and New York \(us-ny\)\.$/);
+  assert.equal(why({ ...belleville, status: "running", reflash: false, regionReply: "*^ F\n ott F" }, "remove-ott"), "Remove the old region ott.");
+  assert.equal(why({ ...belleville, tag: "yvr", province: "bc", radio: "bc-mesh" }, "radio"),
+    "Use the BC Mesh radio settings: 910.425 MHz, 62.5 kHz, spreading factor 7, coding rate 5. Every device nearby has to match.");
+});
+
+test("the Canada radio explanation matches the published profile", () => {
+  const canada = JSON.parse(readFileSync("docs/assets/radio-profiles.json", "utf8")).find((p) => p.id === "canada").radio;
+  const values = { mhz: canada.frequency_mhz, khz: canada.bandwidth_khz, sf: canada.spreading_factor, cr: canada.coding_rate };
+  assert.ok(text.t("why.radio", "en").includes(text.t("radio.settings", "en", values)));
+  const comma = (n) => String(n).replace(".", ",");
+  assert.ok(text.t("why.radio", "fr").includes(text.t("radio.settings", "fr", { mhz: comma(values.mhz), khz: comma(values.khz), sf: values.sf, cr: values.cr })));
+});
+
+test("French output is French, placeholders included", () => {
+  const fr = items(cmds.rollup({ ...observer, role: "edge", neighbours: ["ygk"], external: ["western-new-york"] }, data, "fr"));
+  const why = (id) => fr.find((i) => i.id === id).why;
+  assert.match(why("def"), /^Relaie les messages .*Amérique du Nord \(na\), États-Unis \(us\) et New York \(us-ny\)\.$/);
+  assert.match(why("deny"), /répéteur de bordure/);
+  assert.match(why("radio"), /910,525 MHz, 62,5 kHz/);
+  assert.match(why("lat"), /Belleville/);
+  assert.equal(fr.find((i) => i.id === "password").command, "password <votre nouveau mot de passe administrateur>");
+  assert.equal(fr.find((i) => i.id === "ssid").command, "set wifi.ssid <nom de votre Wi-Fi>");
+  assert.equal(fr.find((i) => i.id === "wifi-pwd").command, "set wifi.pwd <mot de passe de votre Wi-Fi>");
+  // Commands themselves never change with the language.
+  const en = items(cmds.rollup({ ...observer, role: "edge", neighbours: ["ygk"], external: ["western-new-york"] }, data, "en"));
+  assert.deepEqual(fr.filter((i) => !i.manual).map((i) => i.command), en.filter((i) => !i.manual).map((i) => i.command));
+  for (const check of cmds.checks(observer, data, "fr")) assert.ok(check.expect.length > 10, check.id);
+  assert.notEqual(cmds.checks(observer, data, "fr")[0].expect, cmds.checks(observer, data, "en")[0].expect);
+});
+
+test("firmware 1.14 gets one line per region, each explained", () => {
+  const out = items(cmds.rollup({ ...belleville, firmware: "1.14" }, data, "en"));
+  const scopes = out.filter((i) => i.command.startsWith("region"));
+  assert.deepEqual(scopes.map((i) => i.command), ["region put ytr", "region allowf ytr", "region put on", "region allowf on", "region put onqc",
+    "region allowf onqc", "region put can", "region allowf can", "region put na", "region allowf na", "region allowf *", "region save"]);
+  assert.match(scopes[0].why, /Quinte West \(ytr\)/);
+  assert.match(scopes[1].why, /^Pass on messages labelled for Quinte West \(ytr\)\.$/);
+});
+
+test("an admin password is only optional on a board that already has one", () => {
+  const why = (answers) => items(cmds.rollup(answers, data, "en")).find((i) => i.id === "password").why;
+  assert.equal(why(belleville), "Set the admin password you'll use to manage it from the app. Keep it in your password manager.");
+  assert.match(why({ ...belleville, status: "running", reflash: false }), /skip this line/);
+});
+
+test("no location lines unless the person asked to show it on maps", () => {
+  assert.ok(!flat(cmds.rollup({ ...belleville, shareLocation: false }, data, "en")).some((c) => /^set (lat|lon) /.test(c)));
+  assert.ok(!flat(cmds.rollup({ ...belleville, place: undefined }, data, "en")).some((c) => /^set (lat|lon) /.test(c)));
+});
+
+test("checks say what to expect for this repeater", () => {
+  const find = (answers, command, lang = "en") => cmds.checks(answers, data, lang).find((c) => c.command === command);
+  assert.match(find(belleville, "get name").expect, /Belleville_R1/);
+  const city = find(belleville, "region").expect;
+  assert.match(city, /ytr, on, onqc, can and na/);
+  assert.doesNotMatch(city, /without F|no F/);
+  assert.doesNotMatch(city, /\^/);
+  assert.match(find({ ...belleville, role: "edge", neighbours: ["ygk"] }, "region").expect, /ytr, ygk, on, onqc, can and na/);
+  assert.notEqual(find(belleville, "ver").expect, find({ ...belleville, status: "running", reflash: false }, "ver").expect);
+  assert.deepEqual(cmds.checks(observer, data, "en").map((c) => c.id), ["ver", "name", "region", "mqtt", "advert"]);
+});
+
+test("cross-border notes are translated, and only where the generator warns", () => {
+  assert.deepEqual(cmds.notes(belleville, data, "en"), []);
+  assert.deepEqual(cmds.notes({ ...belleville, role: "edge", neighbours: ["ygk"], external: ["western-new-york"] }, data, "en"), []);
+  const onny = cmds.notes({ ...belleville, external: ["ontario-new-york"] }, data, "fr");
+  assert.equal(onny.length, 1);
+  assert.match(onny[0], /Ontario–New York/);
+  assert.equal(cmds.notes({ ...belleville, role: "edge", external: ["pennsylvania", "ohio"] }, data, "en").length, 2);
+  assert.equal(cmds.notes({ ...belleville, tag: "ytr", province: "qc" }, data, "en").length, 1);
+  // Nothing is cross-border for a listen-only repeater observer.
+  assert.deepEqual(cmds.notes({ ...observer, repeat: "listen", external: ["ontario-new-york"] }, data, "en"), []);
+});
+
+test("pasted region replies: console prefixes, odd spacing, and never *", () => {
+  // The flasher console echoes the command and starts the reply with "  -> ".
+  assert.deepEqual(cmds.regionRemovals("region\n  -> *^ F\n can F\n  on F\n   ott F\n on-alg F\n"), { names: ["ott", "on", "can", "on-alg"], readable: true });
+  // Copied from a web page: non-breaking spaces and a CR-only line ending.
+  assert.deepEqual(cmds.regionRemovals("*^ F\r yow F\r  old F"), { names: ["old", "yow"], readable: true });
+  // An edge repeater's * has no F; a home marker can sit on another region.
+  assert.deepEqual(cmds.regionRemovals("*\n ott^ F\n can"), { names: ["ott", "can"], readable: true });
+  // Two replies pasted together, a jump in indentation, a repeated name or no reply at all can't be read safely.
+  for (const reply of ["*^ F\n ott F\n*^ F\n ott F", "*^ F\n   ott F", "*^ F\n ott F\n ott F", "", "   ", "OK", "Err - unknown region", undefined, null, 42]) {
+    assert.deepEqual(cmds.regionRemovals(reply), { names: [], readable: false }, JSON.stringify(reply));
+  }
+  assert.deepEqual(cmds.regionRemovals("x".repeat(5000)), { names: [], readable: false });
+});
+
+test("text lookups fail loudly and fill in placeholders", () => {
+  assert.throws(() => text.t("no.such.key", "en"), /no\.such\.key/);
+  assert.equal(text.t("nav.progress", "en", { n: 3, total: 11, label: "Board" }), "Step 3 of 11 · Board");
+  assert.equal(text.t("nav.progress", "fr", { n: 3, total: 11, label: "Carte" }), "Étape 3 sur 11 · Carte");
+  // A placeholder without a value stays as written, so a page can show the template.
+  assert.equal(text.t("why.remove", "en"), "Remove the old region {name}.");
+  assert.deepEqual(Object.keys(text.text.en).sort(), Object.keys(text.text.fr).sort());
+  for (const lang of ["en", "fr"]) {
+    for (const key of text.keys()) {
+      const value = text.t(key, lang);
+      assert.equal(value, value.trim(), key);
+      assert.doesNotMatch(value, /<[a-z/]/i, key + " holds HTML");
+      // Multi-line examples (a pasted region reply) keep their indentation.
+      if (!value.includes("\n")) assert.doesNotMatch(value, /  /, key + " has a double space");
+    }
+  }
+  // French uses typographic apostrophes, like the rest of the site.
+  for (const key of text.keys()) assert.doesNotMatch(text.t(key, "fr"), /'/, key);
+});

@@ -1,0 +1,658 @@
+// Every word the guided repeater setup tool shows, in English and French.
+//
+// How the strings are written:
+// - Plain text only, never HTML. Text between backticks is code: show it in a
+//   <code> element, set with textContent.
+// - {name} placeholders are filled from `vars`. A placeholder with no value stays
+//   as written, so the explainer page can show the template.
+// - {link} marks where a link goes. Its text is the key with ".link" added
+//   (`bootloader.step1` -> `bootloader.step1.link`); the page supplies the address.
+// - `why.*` keys are the command explanations. The explainer page repeats each
+//   one, so keep them standalone sentences.
+// - t() throws on an unknown key or language, so a typo fails loudly in tests.
+(function () {
+  "use strict";
+
+  var en = {
+    // Page
+    "tool.title": "Set up a repeater",
+    "tool.lede": "Answer a few questions. At the end you get every command to paste, one at a time, with what each one does.",
+    "tool.loading": "Loading the region list…",
+    "tool.load-failed": "The region list didn't load. Check your internet connection, then reload the page.",
+
+    // Navigation
+    "nav.back": "Back",
+    "nav.next": "Next",
+    "nav.to-check": "I've pasted them all",
+    "nav.finish": "Finished",
+    "nav.start-over": "Start over",
+    "nav.progress": "Step {n} of {total} · {label}",
+    "nav.share": "Copy a link to these answers",
+    "nav.share-done": "Link copied",
+    "help.toggle": "What does this mean?",
+    "help.more": "More in the guide",
+    "list.and": "and",
+
+    // Step labels, for the progress line
+    "step.type": "What it is",
+    "step.repeat": "Repeat or listen",
+    "step.board": "Board",
+    "step.status": "New or running",
+    "step.reflash": "Update",
+    "step.observerFirmware": "Observer firmware",
+    "step.bootloader": "Bootloader",
+    "step.flash": "Flash",
+    "step.version": "Firmware version",
+    "step.town": "Location",
+    "step.radio": "Radio settings",
+    "step.role": "City or edge",
+    "step.neighbours": "Neighbours",
+    "step.name": "Name",
+    "step.commands": "Commands",
+    "step.check": "Check it",
+
+    // What are you setting up?
+    "type.question": "What are you setting up?",
+    "type.help": "A repeater passes messages on so they reach further. A repeater observer is a repeater that also reports what it hears to live.meshcore.ca, so everyone can see how the mesh is doing. It needs Wi-Fi to do that.",
+    "type.repeater": "Repeater",
+    "type.repeater.detail": "Passes messages on so they reach further. Works on any supported board.",
+    "type.observer": "Repeater observer",
+    "type.observer.detail": "A repeater that also reports what it hears to live.meshcore.ca. Needs Wi-Fi, so ESP32 boards only.",
+
+    // Should it also repeat?
+    "repeat.question": "Should it also pass messages on?",
+    "repeat.help": "Either way it reports what it hears. Listen only is handy indoors or next to another repeater, where repeating would only add noise. You can switch later with `set repeat on` or `set repeat off`.",
+    "repeat.both": "Repeat and observe",
+    "repeat.both.detail": "A full repeater that also reports what it hears. Most people pick this.",
+    "repeat.listen": "Listen only",
+    "repeat.listen.detail": "Reports what it hears to live.meshcore.ca but never passes anything on.",
+
+    // Which board?
+    "board.question": "Which board is it?",
+    "board.hint": "It's printed on the board or on its box.",
+    "board.group.nrf52": "nRF52: low power, good for solar",
+    "board.group.esp32": "ESP32: has Wi-Fi",
+    "board.nrf52.detail": "nRF52 · low power",
+    "board.esp32.detail": "ESP32 · has Wi-Fi",
+    "board.no-wifi.detail": "No Wi-Fi: can't observe",
+    "board.observer-nrf52": "A repeater observer needs Wi-Fi, so nRF52 boards can't be used.",
+    "board.as-repeater": "Set it up as a plain repeater instead",
+    "board.nrf52-next": "nRF52 board: the next step updates its bootloader first. It only takes a couple of minutes.",
+    "board.other": "No problem: when you flash it, pick your board in the flasher's list. If the flasher doesn't list it, MeshCore doesn't support it yet.",
+    "board.other-observer": "Check that the observer flasher lists your board before you go on. If it doesn't, set it up as a plain repeater instead.",
+    "board.your-board": "your board",
+
+    // New, or already running?
+    "status.question": "Is this a new board, or already running as a repeater?",
+    "status.new": "New, or fine to wipe",
+    "status.new.detail": "Nothing on it needs keeping.",
+    "status.running": "Already running",
+    "status.running.detail": "Keep its identity and replace its old settings.",
+    "status.backup": "Back it up first. Export its private key and write down its name and admin password. Never erase it in the flasher: that deletes its identity, and it can't be recreated. Its old regions get cleared in the command list later.",
+
+    // Update its firmware too? (a running repeater)
+    "reflash.question": "Update its firmware too?",
+    "reflash.help": "Updating gets the latest fixes. It needs the board on a USB cable. If you don't update, you can do everything from your phone, in the MeshCore app.",
+    "reflash.yes": "Yes, update it",
+    "reflash.yes.detail": "Flash the latest firmware over USB, then paste the commands into the flasher.",
+    "reflash.no": "No, keep its firmware",
+    "reflash.no.detail": "Send the commands from your phone, in the MeshCore app.",
+
+    // Already on the observer firmware? (a running repeater observer)
+    "observerFirmware.question": "Is it already running the observer firmware?",
+    "observerFirmware.help": "The observer firmware comes from the observer flasher (observer.gessaman.com), under MQTT Observer Firmware. A board flashed with the regular MeshCore flasher isn't running it.",
+    "observerFirmware.yes": "Yes",
+    "observerFirmware.yes.detail": "Send the commands from your phone, in the MeshCore app.",
+    "observerFirmware.no": "No, or not sure",
+    "observerFirmware.no.detail": "Flash the observer firmware first, over USB.",
+    "observerFirmware.switch": "Switching to the observer firmware can wipe its identity. Back up its private key first, and be ready to put it back after flashing.",
+
+    // Update the bootloader (nRF52)
+    "bootloader.question": "First, update the bootloader",
+    "bootloader.help": "The bootloader is the small program that installs firmware. The OTAFIX version lets you update the repeater over Bluetooth later and recovers more safely if an update fails.",
+    "bootloader.step1": "Download the `update-…uf2` file whose name matches {board} from the {link}.",
+    "bootloader.step1.link": "OTAFIX releases",
+    "bootloader.step2": "Plug the board in by USB and double-press its reset button. A drive appears on your computer.",
+    "bootloader.step3": "Copy the file onto that drive. It disconnects by itself when it's done.",
+    "bootloader.step4": "Double-press reset again and open `INFO.TXT` on the drive: it should name your board and the new bootloader version.",
+    "bootloader.confirm": "Done: `INFO.TXT` shows the new bootloader",
+    "bootloader.mismatch": "If `INFO.TXT` names a different board, stop: download the file for your exact board and try again.",
+
+    // Flash the firmware
+    "flash.question.repeater": "Flash the repeater firmware",
+    "flash.question.observer": "Flash the observer firmware",
+    "flash.repeater.step1": "Open the {link} in Chrome or Edge. Other browsers can't talk to USB.",
+    "flash.repeater.step1.link": "MeshCore flasher",
+    "flash.repeater.step2": "Choose {board}, role Repeater, and the newest version.",
+    "flash.observer.step1": "Open the {link} in Chrome or Edge. Other browsers can't talk to USB.",
+    "flash.observer.step1.link": "observer flasher",
+    "flash.observer.step2": "Under MQTT Observer Firmware, choose {board} and role Repeater.",
+    "flash.erase.esp32-new": "Tick Erase device, since it's a new board.",
+    "flash.erase.esp32-running": "Leave Erase device unticked.",
+    "flash.erase.nrf52-new": "Skip Erase Flash unless your board's instructions ask for it.",
+    "flash.erase.nrf52-running": "Don't click Erase Flash.",
+    "flash.step3": "{erase} Then click Flash and wait until it says it's done.",
+    "flash.step4": "Keep that tab open: its Console is where the commands go.",
+    "flash.confirm": "Flashed, and the board reconnected",
+    "flash.failed": "If flashing fails, don't erase it again. Unplug it, plug it back in, and flash the same board and role again.",
+
+    // Firmware version
+    "version.question": "Which firmware version is it running?",
+    "version.help": "Older versions need different region commands, so the command list depends on it.",
+    "version.how.console": "In the flasher, open Console and connect to the board when the browser asks. Type `ver`, press Enter, and paste the reply here.",
+    "version.how.phone": "In the MeshCore app, open the repeater, log in as admin and tap Command Line. Send `ver` and paste the reply here.",
+    "version.label": "Reply to `ver`",
+    "version.placeholder": "For example v1.16.0",
+    "version.found": "Firmware {version}. The commands will match it.",
+    "version.v1.14": "1.14",
+    "version.v1.15": "1.15",
+    "version.v1.16": "1.16 or newer",
+    "version.unreadable": "That doesn't look like a version number. Paste the whole reply, or pick the version:",
+    "version.pick": "Or pick it:",
+    "version.too-old": "This firmware is too old: region settings need version 1.14 or newer. Update it first, then come back.",
+    "version.update": "Update the firmware",
+
+    // Where will it be installed?
+    "town.question": "Where will it be installed?",
+    "town.help": "This picks its region: the area it serves, named after the nearest airport code (Belleville is in `ytr`, Quinte West). Its region decides which messages it passes on.",
+    "town.hint": "Type the town or city where it will be. Near a provincial border, pick the side it's really on.",
+    "town.label": "Town or city",
+    "town.placeholder": "Start typing a town",
+    "town.search": "Search",
+    "town.searching": "Searching…",
+    "town.region": "{name} region",
+    "town.region-detail": "{town} · {province}",
+    "town.places": "Several places have that name. Which one?",
+    "town.regions": "This place sits where regions meet. Which one is it in?",
+    "town.none": "No region on the map covers this place yet. Type its region code below if you know it; the {link} shows them all.",
+    "town.none.link": "region map",
+    "town.mismatch": "The search and the region map disagree about this place's province ({searched} or {found}). Check you picked the right place, or choose a region below.",
+    "town.no-match": "No place found with that name. Check the spelling, or type its region code instead.",
+    "town.search-failed": "The town search isn't answering right now. Type the region code instead. The {link} shows every code.",
+    "town.search-failed.link": "region map",
+    "town.code-label": "Region code",
+    "town.code-placeholder": "For example ytr",
+    "town.code-unknown": "That isn't a region code on the map. Check the {link}.",
+    "town.code-unknown.link": "region map",
+    "town.province": "Which province or territory will it be in?",
+    "town.province.hint": "Pick the one where the repeater physically is.",
+
+    // Radio settings (only when the region's groups use more than one)
+    "radio.question": "Which radio settings does your local group use?",
+    "radio.hint": "Every device nearby has to use the same settings, or they can't hear each other.",
+    "radio.canada": "Canada settings",
+    "radio.canada.detail": "The usual settings across Canada.",
+    "radio.community": "{profile} settings",
+    "radio.used-by": "Used by {list}.",
+    "radio.not-in-group": "Not part of any of these groups? Use the Canada settings.",
+    "radio.settings": "{mhz} MHz, {khz} kHz, spreading factor {sf}, coding rate {cr}",
+
+    // City or edge?
+    "role.question": "Is it a city or an edge repeater?",
+    "role.help": "Edge repeaters regularly hear repeaters in another region, for example one between Belleville and Kingston. City is every other repeater, even on the outskirts. Edge repeaters stop messages with no label from spilling into the next region.",
+    "role.meshmapper": "Check your repeater's neighbours on MeshMapper",
+    "role.city": "City repeater",
+    "role.city.detail": "Serves {region}. Most repeaters are this.",
+    "role.edge": "Edge repeater",
+    "role.edge.detail": "Links {region} with a neighbouring region.",
+    "role.shared.question": "Optional: does it link with a network across the border?",
+    "role.shared.hint": "Only tick this if the operators along the way have agreed to carry that label. Not sure? Leave it off.",
+
+    // Neighbouring regions (edge)
+    "neighbours.question": "Which neighbouring regions does it regularly hear?",
+    "neighbours.hint": "It will also carry messages labelled for these.",
+    "neighbours.none": "None of these",
+    "neighbours.empty": "The map shows no neighbouring regions for {region}.",
+    "neighbours.meshmapper": "See which repeaters it hears on MeshMapper",
+    "crossborder.title": "Networks across the border (optional)",
+    "crossborder.hint": "Only tick one if this repeater links with that network and its operators have agreed. Not sure? Leave them off.",
+
+    // Name it
+    "name.question": "Give it a name",
+    "name.hint": "Other people see this. Letters, numbers, `_` and `-`, no spaces.",
+    "name.label": "Name",
+    "name.invalid": "Use only letters, numbers, `_` or `-`, with no spaces or accents, up to {max} characters.",
+    "name.location": "Show it on maps at the centre of {town} (not the exact spot)",
+
+    // Paste the commands
+    "commands.question.console": "Paste these into the Console, one at a time",
+    "commands.question.phone": "Send these from the app, one at a time",
+    "commands.where.console": "In the {flasher} tab, open Console and connect to the board when the browser asks. Paste a line, press Enter and wait for `OK` before the next one. If one answers `Err`, stop and check it.",
+    "commands.flasher.repeater": "MeshCore flasher",
+    "commands.flasher.observer": "observer flasher",
+    "commands.where.phone": "In the MeshCore app, log in to the repeater as admin and open its Command Line:",
+    "commands.phone.step1": "In Contacts, find your repeater (search by name) and tap it.",
+    "commands.phone.step2": "Enter the admin password and tap Log In.",
+    "commands.phone.step3": "Check for You are logged in as an Admin, then tap Command Line at the bottom.",
+    "commands.phone.tip": "Every command should get a reply, usually `OK`. If nothing comes back after a few seconds, tap and hold the command and choose Send Again. Sending a command twice is safe.",
+    "commands.type-yourself": "type this yourself",
+    "commands.copy": "Copy",
+    "commands.copied": "Copied",
+    "commands.copy-label": "Copy {command}",
+    "commands.copy-failed": "Couldn't copy. Select the command and copy it yourself.",
+    "commands.done": "Done",
+    "commands.done-ticked": "Done ✓",
+    "commands.progress": "{done} of {total} done",
+    "group.basics": "Basics",
+    "group.canada": "MeshCore Canada settings",
+    "group.scopes": "Scopes",
+    "group.scopes.help": "A scope is a label on a message saying how far it should travel. This repeater's region list is the labels it agrees to pass on.",
+    "group.scopes.link": "Scopes and regions explained",
+    "group.observer": "Observer",
+    "group.finish": "Finish",
+    "region.paste-label": "Paste the reply to `region` here",
+    "region.paste-placeholder": "For example:\n*^ F\n can F\n  on F\n   ott F",
+    "region.clean": "No old regions to clear. Go on to the next line.",
+    "region.unreadable": "That reply can't be read. Paste only what `region` answered, from the line starting with `*` to the end, with its indents, and nothing else.",
+    "region.errors": "If `region remove` answers `Err - not empty`, another name is still indented under it: remove that one first, then try again. `Err - not found` means it's already gone, which is fine.",
+    "note.radio-phone": "The radio settings aren't in this list: changing them from your phone would cut off the connection you're using. If the repeater isn't on the Canada settings (or your local group's), change them over USB with the flasher.",
+    "note.mqtt-slots": "The two server lines replace MQTT slots 1 and 2. If this board already reports to another network in those slots, use the observer flasher's Configure via USB to put MeshCore Canada in free slots (3 to 6) instead.",
+    "note.province": "Check the province: {region} is usually in a different one. Use the province where the repeater really is.",
+    "note.network": "Confirm these labels with the operators across the border before you use them: {network}.",
+
+    // What you type yourself, shown between < and >
+    "ph.password": "your new admin password",
+    "ph.ssid": "your Wi-Fi name",
+    "ph.wifi-pwd": "your Wi-Fi password",
+
+    // What each command does
+    "why.radio": "Use the Canada radio settings: 910.525 MHz, 62.5 kHz, spreading factor 7, coding rate 5. Every device nearby has to match.",
+    "why.radio-community": "Use the {profile} radio settings: {settings}. Every device nearby has to match.",
+    "why.name": "The name other people see.",
+    "why.lat": "Show it on maps at the centre of {town} (not the exact spot). This line sets the latitude.",
+    "why.lon": "This line sets the longitude, so maps show it at the centre of {town}.",
+    "why.password": "Set the admin password you'll use to manage it from the app. Keep it in your password manager.",
+    "why.password-keep": "Change the admin password, or skip this line to keep the current one. Keep it in your password manager.",
+    "why.hash": "Use 3-byte repeater IDs in message paths, so fewer repeaters share an ID.",
+    "why.advert": "Announce itself to repeaters in direct range every 4 hours.",
+    "why.flood-advert": "Announce itself across the wider mesh every 47 hours.",
+    "why.flood-max": "Never pass a message on after 16 hops.",
+    "why.region-show": "Show the regions it has now. Paste the reply below to clear the old ones.",
+    "why.remove": "Remove the old region {name}.",
+    "why.def": "Pass on messages labelled for {list}.",
+    "why.put": "Pass on messages labelled for {name}.",
+    "why.put-add": "Add {name} to its list of regions. The next line lets those messages through.",
+    "why.allowf": "Pass on messages labelled for {name}.",
+    "why.allow": "Also pass on messages with no label, as a city repeater does.",
+    "why.deny": "Don't pass on messages with no label, so they stay in their own region. That's what makes it an edge repeater.",
+    "why.default": "Label this repeater's own announcements with {tag}.",
+    "why.save": "Save the region settings.",
+    "why.iata": "Tell live.meshcore.ca which region it reports from.",
+    "why.powersave": "Keep Wi-Fi awake so reports aren't delayed.",
+    "why.mqtt1": "Report to the main MeshCore Canada server. This replaces whatever is in MQTT slot 1.",
+    "why.mqtt2": "Report to the backup MeshCore Canada server too. This replaces whatever is in MQTT slot 2.",
+    "why.mqtt-status": "Send a short status report when it connects and every few minutes, so live.meshcore.ca shows it as online.",
+    "why.mqtt-packets": "Turn on packet reports, the main thing an observer sends: the radio messages it hears.",
+    "why.mqtt-raw": "Don't also send a raw copy of each packet. The servers don't need it.",
+    "why.mqtt-rx": "Include the packets it receives over the radio.",
+    "why.mqtt-tx": "Of the packets it sends itself, report only its own announcements.",
+    "why.bridge": "Turn on sending over Wi-Fi. This is the main switch for all the reports above.",
+    "why.repeat-on": "Also pass messages on, as a full repeater.",
+    "why.repeat-off": "Listen only: never pass messages on.",
+    "why.advert-now": "Announce itself now, so nearby devices see it straight away.",
+    "why.ssid": "Your 2.4 GHz Wi-Fi network. Type its name exactly, without quotes.",
+    "why.wifi-pwd": "Your Wi-Fi password. Never paste this anywhere shared.",
+    "why.reboot": "Restart so every setting takes effect.",
+
+    // Check it worked
+    "check.question": "Check it worked",
+    "check.hint.console": "After it restarts, reconnect the Console and run these. Nothing here changes settings.",
+    "check.hint.phone": "After it restarts, log in again in the app and send these from Command Line. Nothing here changes settings.",
+    "check.ver": "Shows the firmware version. It should be the one you just flashed.",
+    "check.ver.phone": "Shows the firmware version. It should be the same as before.",
+    "check.name": "Should answer {name}.",
+    "check.region.city": "Should list only {tags}, each followed by F, which means it passes those messages on. The * line at the top should also have F, as on every city repeater.",
+    "check.region.edge": "Should list only {tags}, each followed by F, which means it passes those messages on. The * line at the top should have no F: that's what makes it an edge repeater.",
+    "check.mqtt": "Should show slots 1 and 2 connected. If not, check the Wi-Fi name and password.",
+    "check.advert": "Sends an announcement. A phone running MeshCore nearby should see it appear.",
+    "check.live": "Within a few minutes it should appear in the {link}.",
+    "check.live.link": "live observer list",
+    "check.next": "All good? Keep it on the bench for a day before putting it up high. Next: {link}.",
+    "check.next.link": "mounting options",
+    "check.recovery": "If it doesn't restart or reconnect, don't erase it again. Unplug it, plug it back in with a good data cable, and flash the same board and role again over USB.",
+    "check.recovery.phone": "If it doesn't answer after restarting, give it a minute and log in again. Still nothing? Connect it by USB and check it in the flasher's Console."
+  };
+
+  var fr = {
+    // Page
+    "tool.title": "Configurer un répéteur",
+    "tool.lede": "Répondez à quelques questions. À la fin, vous obtenez toutes les commandes à coller, une à la fois, avec ce que fait chacune.",
+    "tool.loading": "Chargement de la liste des régions…",
+    "tool.load-failed": "La liste des régions n’a pas pu être chargée. Vérifiez votre connexion Internet, puis rechargez la page.",
+
+    // Navigation
+    "nav.back": "Retour",
+    "nav.next": "Suivant",
+    "nav.to-check": "Je les ai toutes collées",
+    "nav.finish": "Terminé",
+    "nav.start-over": "Recommencer",
+    "nav.progress": "Étape {n} sur {total} · {label}",
+    "nav.share": "Copier un lien vers ces réponses",
+    "nav.share-done": "Lien copié",
+    "help.toggle": "Qu’est-ce que ça veut dire?",
+    "help.more": "En savoir plus dans le guide",
+    "list.and": "et",
+
+    // Step labels, for the progress line
+    "step.type": "Type d’appareil",
+    "step.repeat": "Relayer ou écouter",
+    "step.board": "Carte",
+    "step.status": "Neuve ou en service",
+    "step.reflash": "Mise à jour",
+    "step.observerFirmware": "Micrologiciel d’observateur",
+    "step.bootloader": "Chargeur d’amorçage",
+    "step.flash": "Programmation",
+    "step.version": "Version du micrologiciel",
+    "step.town": "Emplacement",
+    "step.radio": "Réglages radio",
+    "step.role": "Ville ou bordure",
+    "step.neighbours": "Régions voisines",
+    "step.name": "Nom",
+    "step.commands": "Commandes",
+    "step.check": "Vérification",
+
+    // What are you setting up?
+    "type.question": "Que configurez-vous?",
+    "type.help": "Un répéteur relaie les messages pour qu’ils aillent plus loin. Un répéteur observateur est un répéteur qui rapporte aussi ce qu’il entend à live.meshcore.ca, pour que tout le monde puisse voir l’état du réseau. Il lui faut le Wi-Fi pour ça.",
+    "type.repeater": "Répéteur",
+    "type.repeater.detail": "Relaie les messages pour qu’ils aillent plus loin. Fonctionne sur toutes les cartes prises en charge.",
+    "type.observer": "Répéteur observateur",
+    "type.observer.detail": "Un répéteur qui rapporte aussi ce qu’il entend à live.meshcore.ca. Il lui faut le Wi-Fi, donc une carte ESP32.",
+
+    // Should it also repeat?
+    "repeat.question": "Doit-il aussi relayer les messages?",
+    "repeat.help": "Dans les deux cas, il rapporte ce qu’il entend. L’écoute seule est utile à l’intérieur ou près d’un autre répéteur, là où relayer ne ferait qu’ajouter du bruit. Vous pourrez changer plus tard avec `set repeat on` ou `set repeat off`.",
+    "repeat.both": "Relayer et observer",
+    "repeat.both.detail": "Un répéteur complet qui rapporte aussi ce qu’il entend. C’est le choix de la plupart des gens.",
+    "repeat.listen": "Écouter seulement",
+    "repeat.listen.detail": "Rapporte ce qu’il entend à live.meshcore.ca, mais ne relaie jamais rien.",
+
+    // Which board?
+    "board.question": "Quelle est votre carte?",
+    "board.hint": "Son nom est imprimé sur la carte ou sur sa boîte.",
+    "board.group.nrf52": "nRF52 : faible consommation, idéal pour l’énergie solaire",
+    "board.group.esp32": "ESP32 : avec Wi-Fi",
+    "board.nrf52.detail": "nRF52 · faible consommation",
+    "board.esp32.detail": "ESP32 · avec Wi-Fi",
+    "board.no-wifi.detail": "Pas de Wi-Fi : ne peut pas observer",
+    "board.observer-nrf52": "Un répéteur observateur a besoin du Wi-Fi, donc les cartes nRF52 ne conviennent pas.",
+    "board.as-repeater": "La configurer plutôt comme simple répéteur",
+    "board.nrf52-next": "Carte nRF52 : l’étape suivante met d’abord à jour son chargeur d’amorçage. Ça ne prend que quelques minutes.",
+    "board.other": "Pas de problème : au moment de la programmer, choisissez votre carte dans la liste de l’outil de programmation. Si elle n’y est pas, MeshCore ne la prend pas encore en charge.",
+    "board.other-observer": "Vérifiez que votre carte figure dans l’outil de programmation des observateurs avant de continuer. Sinon, configurez-la plutôt comme simple répéteur.",
+    "board.your-board": "votre carte",
+
+    // New, or already running?
+    "status.question": "Est-ce une carte neuve, ou déjà en service comme répéteur?",
+    "status.new": "Neuve, ou peut être effacée",
+    "status.new.detail": "Il n’y a rien à garder dessus.",
+    "status.running": "Déjà en service",
+    "status.running.detail": "Garder son identité et remplacer ses anciens réglages.",
+    "status.backup": "Sauvegardez-la d’abord. Exportez sa clé privée et notez son nom et son mot de passe administrateur. Ne l’effacez jamais dans l’outil de programmation : ça supprime son identité, qui ne peut pas être recréée. Ses anciennes régions seront retirées plus loin, dans la liste des commandes.",
+
+    // Update its firmware too? (a running repeater)
+    "reflash.question": "Mettre aussi son micrologiciel à jour?",
+    "reflash.help": "La mise à jour apporte les dernières corrections. Il faut brancher la carte par câble USB. Sans mise à jour, vous pouvez tout faire depuis votre téléphone, dans l’application MeshCore.",
+    "reflash.yes": "Oui, le mettre à jour",
+    "reflash.yes.detail": "Programmer le dernier micrologiciel par USB, puis coller les commandes dans l’outil de programmation.",
+    "reflash.no": "Non, garder son micrologiciel",
+    "reflash.no.detail": "Envoyer les commandes depuis votre téléphone, dans l’application MeshCore.",
+
+    // Already on the observer firmware? (a running repeater observer)
+    "observerFirmware.question": "A-t-il déjà le micrologiciel d’observateur?",
+    "observerFirmware.help": "Le micrologiciel d’observateur vient de l’outil de programmation des observateurs (observer.gessaman.com), sous MQTT Observer Firmware. Une carte programmée avec l’outil MeshCore habituel ne l’a pas.",
+    "observerFirmware.yes": "Oui",
+    "observerFirmware.yes.detail": "Envoyer les commandes depuis votre téléphone, dans l’application MeshCore.",
+    "observerFirmware.no": "Non, ou je ne sais pas",
+    "observerFirmware.no.detail": "Programmer d’abord le micrologiciel d’observateur, par USB.",
+    "observerFirmware.switch": "Passer au micrologiciel d’observateur peut effacer son identité. Sauvegardez d’abord sa clé privée et prévoyez de la remettre après la programmation.",
+
+    // Update the bootloader (nRF52)
+    "bootloader.question": "D’abord, mettez à jour le chargeur d’amorçage",
+    "bootloader.help": "Le chargeur d’amorçage est le petit programme qui installe le micrologiciel. La version OTAFIX permet de mettre le répéteur à jour par Bluetooth plus tard, et la carte se récupère plus facilement si une mise à jour échoue.",
+    "bootloader.step1": "Téléchargez, depuis les {link}, le fichier `update-…uf2` dont le nom correspond à {board}.",
+    "bootloader.step1.link": "versions OTAFIX",
+    "bootloader.step2": "Branchez la carte par USB et appuyez deux fois sur son bouton de réinitialisation. Un lecteur apparaît sur votre ordinateur.",
+    "bootloader.step3": "Copiez le fichier sur ce lecteur. Il se déconnecte de lui-même quand c’est terminé.",
+    "bootloader.step4": "Appuyez de nouveau deux fois sur le bouton et ouvrez `INFO.TXT` sur le lecteur : il doit indiquer votre carte et la nouvelle version du chargeur d’amorçage.",
+    "bootloader.confirm": "Fait : `INFO.TXT` indique le nouveau chargeur d’amorçage",
+    "bootloader.mismatch": "Si `INFO.TXT` indique une autre carte, arrêtez-vous : téléchargez le fichier de votre carte exacte et recommencez.",
+
+    // Flash the firmware
+    "flash.question.repeater": "Programmez le micrologiciel du répéteur",
+    "flash.question.observer": "Programmez le micrologiciel d’observateur",
+    "flash.repeater.step1": "Ouvrez l’{link} dans Chrome ou Edge. Les autres navigateurs ne peuvent pas communiquer par USB.",
+    "flash.repeater.step1.link": "outil de programmation MeshCore",
+    "flash.repeater.step2": "Choisissez {board}, le rôle Repeater et la version la plus récente.",
+    "flash.observer.step1": "Ouvrez l’{link} dans Chrome ou Edge. Les autres navigateurs ne peuvent pas communiquer par USB.",
+    "flash.observer.step1.link": "outil de programmation des observateurs",
+    "flash.observer.step2": "Sous MQTT Observer Firmware, choisissez {board} et le rôle Repeater.",
+    "flash.erase.esp32-new": "Cochez Erase device, puisque c’est une carte neuve.",
+    "flash.erase.esp32-running": "Laissez Erase device décoché.",
+    "flash.erase.nrf52-new": "N’utilisez Erase Flash que si les instructions de votre carte le demandent.",
+    "flash.erase.nrf52-running": "Ne cliquez pas sur Erase Flash.",
+    "flash.step3": "{erase} Cliquez ensuite sur Flash et attendez qu’il indique que c’est terminé.",
+    "flash.step4": "Gardez cet onglet ouvert : c’est dans sa Console que vont les commandes.",
+    "flash.confirm": "La carte est programmée et s’est reconnectée",
+    "flash.failed": "Si la programmation échoue, ne l’effacez pas de nouveau. Débranchez-la, rebranchez-la, puis programmez de nouveau la même carte avec le même rôle.",
+
+    // Firmware version
+    "version.question": "Quelle version du micrologiciel a-t-il?",
+    "version.help": "Les versions plus anciennes ont besoin d’autres commandes de région, donc la liste des commandes en dépend.",
+    "version.how.console": "Dans l’outil de programmation, ouvrez Console et connectez-vous à la carte quand le navigateur le demande. Tapez `ver`, appuyez sur Entrée et collez la réponse ici.",
+    "version.how.phone": "Dans l’application MeshCore, ouvrez le répéteur, connectez-vous comme administrateur et touchez Command Line. Envoyez `ver` et collez la réponse ici.",
+    "version.label": "Réponse à `ver`",
+    "version.placeholder": "Par exemple v1.16.0",
+    "version.found": "Micrologiciel {version}. Les commandes y seront adaptées.",
+    "version.v1.14": "1.14",
+    "version.v1.15": "1.15",
+    "version.v1.16": "1.16 ou plus récent",
+    "version.unreadable": "Ça ne ressemble pas à un numéro de version. Collez toute la réponse, ou choisissez la version :",
+    "version.pick": "Ou choisissez-la :",
+    "version.too-old": "Ce micrologiciel est trop ancien : les réglages de région exigent la version 1.14 ou plus récente. Mettez-le d’abord à jour, puis revenez.",
+    "version.update": "Mettre le micrologiciel à jour",
+
+    // Where will it be installed?
+    "town.question": "Où sera-t-il installé?",
+    "town.help": "Ce choix détermine sa région : le secteur qu’il dessert, nommé d’après le code d’aéroport le plus proche (Belleville est dans `ytr`, Quinte West). Sa région décide quels messages il relaie.",
+    "town.hint": "Tapez la ville ou le village où il sera. Près d’une frontière provinciale, choisissez le côté où il se trouve vraiment.",
+    "town.label": "Ville ou village",
+    "town.placeholder": "Commencez à taper une ville",
+    "town.search": "Chercher",
+    "town.searching": "Recherche…",
+    "town.region": "Région {name}",
+    "town.region-detail": "{town} · {province}",
+    "town.places": "Plusieurs endroits portent ce nom. Lequel?",
+    "town.regions": "Cet endroit se trouve à la jonction de plusieurs régions. Dans laquelle est-il?",
+    "town.none": "Aucune région de la carte ne couvre encore cet endroit. Tapez son code de région ci-dessous si vous le connaissez; la {link} les montre tous.",
+    "town.none.link": "carte des régions",
+    "town.mismatch": "La recherche et la carte des régions ne s’entendent pas sur la province de cet endroit ({searched} ou {found}). Vérifiez l’endroit choisi, ou choisissez une région ci-dessous.",
+    "town.no-match": "Aucun endroit trouvé sous ce nom. Vérifiez l’orthographe, ou tapez plutôt son code de région.",
+    "town.search-failed": "La recherche de villes ne répond pas pour l’instant. Tapez plutôt le code de région. La {link} montre tous les codes.",
+    "town.search-failed.link": "carte des régions",
+    "town.code-label": "Code de région",
+    "town.code-placeholder": "Par exemple ytr",
+    "town.code-unknown": "Ce code de région n’est pas sur la carte. Consultez la {link}.",
+    "town.code-unknown.link": "carte des régions",
+    "town.province": "Dans quelle province ou quel territoire sera-t-il?",
+    "town.province.hint": "Choisissez selon l’endroit où le répéteur se trouve réellement.",
+
+    // Radio settings (only when the region's groups use more than one)
+    "radio.question": "Quels réglages radio votre groupe local utilise-t-il?",
+    "radio.hint": "Tous les appareils des environs doivent utiliser les mêmes réglages, sinon ils ne s’entendent pas.",
+    "radio.canada": "Réglages canadiens",
+    "radio.canada.detail": "Les réglages habituels partout au Canada.",
+    "radio.community": "Réglages de {profile}",
+    "radio.used-by": "Utilisés par {list}.",
+    "radio.not-in-group": "Vous ne faites partie d’aucun de ces groupes? Utilisez les réglages canadiens.",
+    "radio.settings": "{mhz} MHz, {khz} kHz, facteur d’étalement {sf}, taux de codage {cr}",
+
+    // City or edge?
+    "role.question": "Est-ce un répéteur de ville ou de bordure?",
+    "role.help": "Un répéteur de bordure entend régulièrement des répéteurs d’une autre région, par exemple entre Belleville et Kingston. Tous les autres sont des répéteurs de ville, même en périphérie. Les répéteurs de bordure empêchent les messages sans étiquette de déborder dans la région voisine.",
+    "role.meshmapper": "Vérifiez les voisins de votre répéteur sur MeshMapper",
+    "role.city": "Répéteur de ville",
+    "role.city.detail": "Dessert {region}. C’est le cas de la plupart des répéteurs.",
+    "role.edge": "Répéteur de bordure",
+    "role.edge.detail": "Relie {region} à une région voisine.",
+    "role.shared.question": "Facultatif : est-il relié à un réseau de l’autre côté de la frontière?",
+    "role.shared.hint": "Cochez seulement si les opérateurs du trajet ont convenu de relayer cette étiquette. Dans le doute, laissez décoché.",
+
+    // Neighbouring regions (edge)
+    "neighbours.question": "Quelles régions voisines entend-il régulièrement?",
+    "neighbours.hint": "Il relaiera aussi les messages étiquetés pour celles-ci.",
+    "neighbours.none": "Aucune de celles-ci",
+    "neighbours.empty": "La carte n’indique aucune région voisine pour {region}.",
+    "neighbours.meshmapper": "Voyez quels répéteurs il entend sur MeshMapper",
+    "crossborder.title": "Réseaux de l’autre côté de la frontière (facultatif)",
+    "crossborder.hint": "Cochez-en un seulement si ce répéteur est relié à ce réseau et que ses opérateurs sont d’accord. Dans le doute, laissez-les décochés.",
+
+    // Name it
+    "name.question": "Donnez-lui un nom",
+    "name.hint": "Les autres le voient. Lettres, chiffres, `_` et `-`, sans espaces.",
+    "name.label": "Nom",
+    "name.invalid": "Utilisez seulement des lettres, des chiffres, `_` ou `-`, sans espaces ni accents, jusqu’à {max} caractères.",
+    "name.location": "L’afficher sur les cartes au centre de la localité ({town}), pas à l’endroit exact",
+
+    // Paste the commands
+    "commands.question.console": "Collez-les dans la Console, une à la fois",
+    "commands.question.phone": "Envoyez-les depuis l’application, une à la fois",
+    "commands.where.console": "Dans l’onglet de l’{flasher}, ouvrez Console et connectez-vous à la carte quand le navigateur le demande. Collez une ligne, appuyez sur Entrée et attendez `OK` avant la suivante. Si une ligne répond `Err`, arrêtez et vérifiez-la.",
+    "commands.flasher.repeater": "outil de programmation MeshCore",
+    "commands.flasher.observer": "outil de programmation des observateurs",
+    "commands.where.phone": "Dans l’application MeshCore, connectez-vous au répéteur comme administrateur et ouvrez sa ligne de commande :",
+    "commands.phone.step1": "Dans Contacts, trouvez votre répéteur (cherchez par nom) et touchez-le.",
+    "commands.phone.step2": "Entrez le mot de passe administrateur et touchez Log In.",
+    "commands.phone.step3": "Vérifiez que You are logged in as an Admin s’affiche, puis touchez Command Line en bas.",
+    "commands.phone.tip": "Chaque commande devrait recevoir une réponse, habituellement `OK`. Si rien ne revient après quelques secondes, touchez longuement la commande et choisissez Send Again. Envoyer une commande deux fois ne cause pas de problème.",
+    "commands.type-yourself": "à taper vous-même",
+    "commands.copy": "Copier",
+    "commands.copied": "Copié",
+    "commands.copy-label": "Copier {command}",
+    "commands.copy-failed": "Impossible de copier. Sélectionnez la commande et copiez-la vous-même.",
+    "commands.done": "Fait",
+    "commands.done-ticked": "Fait ✓",
+    "commands.progress": "Fait : {done} sur {total}",
+    "group.basics": "Réglages de base",
+    "group.canada": "Réglages de MeshCore Canada",
+    "group.scopes": "Portées",
+    "group.scopes.help": "Une portée est une étiquette sur un message qui indique jusqu’où il doit aller. La liste des régions de ce répéteur, ce sont les étiquettes qu’il accepte de relayer.",
+    "group.scopes.link": "Les portées et les régions expliquées",
+    "group.observer": "Observateur",
+    "group.finish": "Pour terminer",
+    "region.paste-label": "Collez ici la réponse à `region`",
+    "region.paste-placeholder": "Par exemple :\n*^ F\n can F\n  on F\n   ott F",
+    "region.clean": "Aucune ancienne région à retirer. Passez à la ligne suivante.",
+    "region.unreadable": "Impossible de lire cette réponse. Collez seulement ce que `region` a répondu, de la ligne qui commence par `*` jusqu’à la fin, avec ses retraits, et rien d’autre.",
+    "region.errors": "Si `region remove` répond `Err - not empty`, un autre nom est encore en retrait sous celui-ci : retirez-le d’abord, puis réessayez. `Err - not found` veut dire qu’il est déjà retiré; ce n’est pas grave.",
+    "note.radio-phone": "Les réglages radio ne sont pas dans cette liste : les changer depuis votre téléphone couperait la connexion que vous utilisez. Si le répéteur n’utilise pas les réglages canadiens (ou ceux de votre groupe local), changez-les par USB avec l’outil de programmation.",
+    "note.mqtt-slots": "Les deux lignes de serveur remplacent les emplacements MQTT 1 et 2. Si cette carte envoie déjà ses rapports à un autre réseau dans ces emplacements, utilisez plutôt Configure via USB dans l’outil de programmation des observateurs pour mettre MeshCore Canada dans des emplacements libres (3 à 6).",
+    "note.province": "Vérifiez la province : la région {region} se trouve habituellement dans une autre. Indiquez la province où le répéteur se trouve réellement.",
+    "note.network": "Confirmez ces étiquettes avec les opérateurs de l’autre côté de la frontière avant de les utiliser : {network}.",
+
+    // What you type yourself, shown between < and >
+    "ph.password": "votre nouveau mot de passe administrateur",
+    "ph.ssid": "nom de votre Wi-Fi",
+    "ph.wifi-pwd": "mot de passe de votre Wi-Fi",
+
+    // What each command does
+    "why.radio": "Utilise les réglages radio canadiens : 910,525 MHz, 62,5 kHz, facteur d’étalement 7, taux de codage 5. Tous les appareils des environs doivent avoir les mêmes.",
+    "why.radio-community": "Utilise les réglages radio de {profile} : {settings}. Tous les appareils des environs doivent avoir les mêmes.",
+    "why.name": "Le nom que les autres voient.",
+    "why.lat": "Place le répéteur sur les cartes au centre de la localité ({town}), pas à l’endroit exact. Cette ligne règle la latitude.",
+    "why.lon": "Cette ligne règle la longitude, pour que les cartes le placent au centre de la localité ({town}).",
+    "why.password": "Règle le mot de passe administrateur qui vous servira à le gérer depuis l’application. Gardez-le dans votre gestionnaire de mots de passe.",
+    "why.password-keep": "Change le mot de passe administrateur. Sautez cette ligne pour conserver l’actuel. Gardez-le dans votre gestionnaire de mots de passe.",
+    "why.hash": "Utilise des identifiants de répéteur de 3 octets dans les chemins des messages, pour que moins de répéteurs partagent le même identifiant.",
+    "why.advert": "S’annonce toutes les 4 heures aux répéteurs qui l’entendent directement.",
+    "why.flood-advert": "S’annonce dans l’ensemble du réseau maillé toutes les 47 heures.",
+    "why.flood-max": "Ne relaie jamais un message après 16 sauts.",
+    "why.region-show": "Affiche les régions qu’il a maintenant. Collez la réponse ci-dessous pour retirer les anciennes.",
+    "why.remove": "Retire l’ancienne région {name}.",
+    "why.def": "Relaie les messages qui portent une de ces étiquettes : {list}.",
+    "why.put": "Relaie les messages qui portent l’étiquette {name}.",
+    "why.put-add": "Ajoute {name} à sa liste de régions. La ligne suivante laisse passer ces messages.",
+    "why.allowf": "Relaie les messages qui portent l’étiquette {name}.",
+    "why.allow": "Relaie aussi les messages sans étiquette, comme le fait un répéteur de ville.",
+    "why.deny": "Ne relaie pas les messages sans étiquette, pour qu’ils restent dans leur région. C’est ce qui en fait un répéteur de bordure.",
+    "why.default": "Étiquette avec {tag} les annonces de ce répéteur.",
+    "why.save": "Enregistre les réglages de région.",
+    "why.iata": "Indique à live.meshcore.ca de quelle région viennent ses rapports.",
+    "why.powersave": "Garde le Wi-Fi éveillé pour que les rapports ne soient pas retardés.",
+    "why.mqtt1": "Envoie ses rapports au serveur principal de MeshCore Canada. Remplace ce qui se trouve dans l’emplacement MQTT 1.",
+    "why.mqtt2": "Envoie aussi ses rapports au serveur de secours de MeshCore Canada. Remplace ce qui se trouve dans l’emplacement MQTT 2.",
+    "why.mqtt-status": "Envoie un court rapport d’état à la connexion, puis toutes les quelques minutes, pour que live.meshcore.ca l’affiche en ligne.",
+    "why.mqtt-packets": "Active les rapports de paquets, l’essentiel de ce qu’envoie un observateur : les messages radio qu’il entend.",
+    "why.mqtt-raw": "N’envoie pas en plus une copie brute de chaque paquet. Les serveurs n’en ont pas besoin.",
+    "why.mqtt-rx": "Inclut les paquets qu’il reçoit par radio.",
+    "why.mqtt-tx": "Parmi les paquets qu’il envoie lui-même, ne rapporte que ses propres annonces.",
+    "why.bridge": "Active l’envoi par Wi-Fi. C’est l’interrupteur principal de tous les rapports ci-dessus.",
+    "why.repeat-on": "Relaie aussi les messages, comme un répéteur complet.",
+    "why.repeat-off": "Écoute seulement : ne relaie jamais de messages.",
+    "why.advert-now": "S’annonce tout de suite, pour que les appareils à proximité le voient sans attendre.",
+    "why.ssid": "Votre réseau Wi-Fi 2,4 GHz. Tapez son nom exactement, sans guillemets.",
+    "why.wifi-pwd": "Le mot de passe de votre Wi-Fi. Ne le collez jamais dans un endroit partagé.",
+    "why.reboot": "Redémarre pour que tous les réglages prennent effet.",
+
+    // Check it worked
+    "check.question": "Vérifiez que tout fonctionne",
+    "check.hint.console": "Après le redémarrage, reconnectez la Console et lancez ces commandes. Aucune ne change de réglage.",
+    "check.hint.phone": "Après le redémarrage, reconnectez-vous dans l’application et envoyez ces commandes depuis Command Line. Aucune ne change de réglage.",
+    "check.ver": "Affiche la version du micrologiciel. Ce doit être celle que vous venez de programmer.",
+    "check.ver.phone": "Affiche la version du micrologiciel. Elle doit être la même qu’avant.",
+    "check.name": "Doit répondre {name}.",
+    "check.region.city": "Doit afficher seulement {tags}, chacun suivi de F, ce qui veut dire qu’il relaie ces messages. La ligne * en haut doit aussi avoir F, comme sur tout répéteur de ville.",
+    "check.region.edge": "Doit afficher seulement {tags}, chacun suivi de F, ce qui veut dire qu’il relaie ces messages. La ligne * en haut ne doit pas avoir de F : c’est ce qui en fait un répéteur de bordure.",
+    "check.mqtt": "Doit indiquer que les emplacements 1 et 2 sont connectés. Sinon, vérifiez le nom et le mot de passe du Wi-Fi.",
+    "check.advert": "Envoie une annonce. Un téléphone avec MeshCore à proximité devrait la voir apparaître.",
+    "check.live": "D’ici quelques minutes, il devrait apparaître dans la {link}.",
+    "check.live.link": "liste des observateurs en direct",
+    "check.next": "Tout va bien? Gardez-le sur l’établi une journée avant de l’installer en hauteur. Ensuite : {link}.",
+    "check.next.link": "options de montage",
+    "check.recovery": "S’il ne redémarre pas ou ne se reconnecte pas, ne l’effacez pas de nouveau. Débranchez-le, rebranchez-le avec un bon câble de données, puis programmez de nouveau la même carte avec le même rôle, par USB.",
+    "check.recovery.phone": "S’il ne répond pas après le redémarrage, attendez une minute et reconnectez-vous. Toujours rien? Branchez-le par USB et vérifiez-le dans la Console de l’outil de programmation."
+  };
+
+  // French names for cross-border labels the catalogue only names in English.
+  // Canadian regions take their French name from the catalogue (labelFr).
+  var tagLabelsFr = {
+    us: "États-Unis",
+    "us-ny": "New York",
+    "us-pa": "Pennsylvanie",
+    "us-oh": "Ohio",
+    west: "Réseau de l’Ouest",
+    pnw: "Nord-Ouest Pacifique",
+    wa: "Washington",
+    or: "Oregon"
+  };
+
+  var TABLES = { en: Object.freeze(en), fr: Object.freeze(fr) };
+  var PLACEHOLDER = /\{([A-Za-z][\w-]*)\}/g;
+
+  function has(object, key) {
+    return Object.prototype.hasOwnProperty.call(object, key);
+  }
+
+  function t(key, lang, vars) {
+    if (!has(TABLES, lang)) throw new Error("Unknown setup language: " + lang);
+    var table = TABLES[lang];
+    if (!has(table, key)) throw new Error("Missing setup text: " + key + " (" + lang + ")");
+    return table[key].replace(PLACEHOLDER, function (whole, name) {
+      return vars && has(vars, name) && vars[name] != null ? String(vars[name]) : whole;
+    });
+  }
+
+  // Every key in either language, sorted. A key missing from one language makes t() throw.
+  function keys() {
+    var seen = {};
+    Object.keys(en).concat(Object.keys(fr)).forEach(function (key) { seen[key] = true; });
+    return Object.keys(seen).sort();
+  }
+
+  globalThis.MeshCoreSetupText = {
+    t: t,
+    keys: keys,
+    text: TABLES,
+    tagLabelsFr: Object.freeze(tagLabelsFr)
+  };
+}());
