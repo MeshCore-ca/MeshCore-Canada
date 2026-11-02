@@ -991,6 +991,10 @@
       box.appendChild(codeForm());
     } else if (a.tag && a.province) {
       box.appendChild(regionCard());
+      // A starter region or a planning extension isn't a MeshMapper zone: say so, as the map does.
+      var kind = Place.planning(a.tag, a.place, state.data);
+      var href = kind === "starter" ? LINKS.guide + "#starter-regions" : LINKS.guide + "#planning-extensions";
+      if (kind) box.appendChild(note("info", para(rich("town." + kind, null, href)), { "data-setup-planning": kind }));
     }
   }
 
@@ -1237,7 +1241,9 @@
       refreshScopes();
     });
     replyStatus(status);
-    return el("div", { class: "setup-reply" }, [el("label", { for: "setup-reply" }, rich("region.paste-label")), area, status]);
+    // From the app the reply comes back over the radio, which can cut a long one short.
+    var cut = Flow.route(state.answers) === "phone" ? para(rich("region.phone-cut"), { class: "setup-hint", "data-setup-reply-cut": "" }) : null;
+    return el("div", { class: "setup-reply" }, [el("label", { for: "setup-reply" }, rich("region.paste-label")), area, cut, status]);
   }
 
   function replyStatus(status) {

@@ -448,6 +448,10 @@ L’outil retire d’abord les noms les plus en retrait et ne retire jamais `*`.
 sous celui-ci : retirez-le d’abord, puis réessayez. `Err - not found` veut dire
 qu’il est déjà retiré; ce n’est pas grave.
 
+Depuis l’application, une longue réponse peut être tronquée. Si la liste semble
+coupée, ou si le répéteur a beaucoup de régions, lancez plutôt `region` par USB,
+dans la Console de l’outil de programmation.
+
 ### Micrologiciels plus anciens { #older-firmware }
 
 À partir de la version 1.16, le micrologiciel construit toute la liste avec une

@@ -416,6 +416,10 @@ The tool removes the most indented names first and never removes `*`. If
 it: remove that one first, then try again. `Err - not found` means it's already
 gone, which is fine.
 
+From the app, a long reply can be cut short. If the list looks cut off, or the
+repeater has many regions, run `region` over USB instead, in the flasher's
+Console.
+
 ### Older firmware {#older-firmware}
 
 Firmware 1.16 and newer builds the whole list with one `region def` line. Older

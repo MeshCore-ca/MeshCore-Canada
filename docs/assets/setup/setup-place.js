@@ -124,6 +124,23 @@
     return { status: suggested.length ? "province-mismatch" : "none", options: suggested };
   }
 
+  // Whether a region, at this spot, is one of MeshCore Canada's own planning areas
+  // rather than a MeshMapper zone, told apart the same way as on the region map:
+  //   "starter"    a starter region: MeshMapper has no zone there yet
+  //   "extension"  the spot is outside the region's MeshMapper zone, in the gap
+  //                MeshCore Canada gives to that region (a planning extension)
+  //   null         a MeshMapper zone, or no spot to check (a region code typed by hand)
+  function planning(tag, place, data) {
+    var status = data.catalog.status && has(data.catalog.status, tag) ? data.catalog.status[tag] : null;
+    if (status && status.state === "starter") return "starter";
+    if (!place || typeof place.lat !== "number" || typeof place.lon !== "number" || !isFinite(place.lat) || !isFinite(place.lon)) return null;
+    var scopes = globalThis.MeshCoreIataScopes;
+    if (!scopes) throw new Error("The region script must be loaded first");
+    var here = scopes.matches(data.boundaries, place.lat, place.lon).filter(function (feature) { return feature.properties.tag === tag; });
+    if (!here.length || here.some(function (feature) { return feature.properties.regionSource === "meshmapper"; })) return null;
+    return here.some(function (feature) { return feature.properties.planningKind === "extension"; }) ? "extension" : null;
+  }
+
   // A region code typed by hand: one option for each province the region spans.
   function fromCode(code, data) {
     var catalog = data.catalog;
@@ -236,6 +253,7 @@
   globalThis.MeshCoreSetupPlace = {
     loadData: loadData,
     resolve: resolve,
+    planning: planning,
     fromCode: fromCode,
     fromAlias: fromAlias,
     neighbours: neighbours,

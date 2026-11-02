@@ -20,7 +20,7 @@ page_scripts:
   - assets/javascripts/place-search.js?v=20260925-2
   - assets/setup/setup-text.js?v=20261102-5
   - assets/setup/setup-flow.js?v=20261102-5
-  - assets/setup/setup-place.js?v=20261102-1
+  - assets/setup/setup-place.js?v=20261102-5
   - assets/setup/setup-commands.js?v=20261102-3
   - assets/setup/setup-ui.js?v=20261102-5
 hide:

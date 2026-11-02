@@ -264,6 +264,19 @@ test("cross-border networks all exist in the catalogue, and callers cannot chang
   assert.deepEqual(place.crossBorder("on").shared, ["ontario-new-york"]);
 });
 
+test("planning tells starter regions and planning extensions apart from MeshMapper zones, as the map does", () => {
+  // A starter region is MeshCore Canada's own, wherever the spot is.
+  assert.equal(place.planning("yyg", null, data), "starter");
+  assert.equal(place.planning("yyg", where(46.2382, -63.1311), data), "starter");
+  // Wingham is outside Waterloo's MeshMapper zone, in the gap MeshCore Canada gives to ykf.
+  assert.equal(place.planning("ykf", where(43.8678, -81.2619), data), "extension");
+  // Inside a MeshMapper zone, or with no spot to check (a region code typed by hand), there is nothing to say.
+  assert.equal(place.planning("ykf", where(43.4643, -80.5204), data), null);
+  assert.equal(place.planning("ytr", where(44.16281, -77.38324), data), null);
+  assert.equal(place.planning("ykf", null, data), null);
+  assert.equal(place.planning("ykf", { name: "Wingham" }, data), null);
+});
+
 test("the script loads without the place search and region scripts; only resolve needs them", async () => {
   const sandbox = { URL };
   vm.createContext(sandbox);

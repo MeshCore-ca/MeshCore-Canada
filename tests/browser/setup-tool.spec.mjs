@@ -207,6 +207,8 @@ test("running repeater via phone", async ({ page }) => {
   expect((await commandLines(page)).some((line) => line.startsWith("set radio"))).toBe(false);
   // The `region` line comes first, with the paste box right after it.
   await expect(page.locator('[data-setup-command="region-show"] code')).toHaveText("region");
+  // A reply sent over the radio can be cut short, so the box says what to do then.
+  await expect(page.locator(".setup-reply [data-setup-reply-cut]")).toHaveText(plain("region.phone-cut", "en"));
   await page.locator("[data-setup-reply]").fill("*^ F\n can F\n  on F\n   ott F");
   await expect.poll(async () => scopeLines(await codes(page).allTextContents())).toEqual([
     "region", "region remove ott", "region remove on", "region remove can",
@@ -227,6 +229,16 @@ test("running repeater via phone", async ({ page }) => {
   await expect(page.locator("[data-setup-check] .setup-command__code")).toHaveText(["ver", "get name", "region", "clock sync", "advert"]);
   await expect(page.locator('[data-setup-check="clock"]')).toContainText(plain("check.clock.phone", "en"));
   await expect(page.locator('[data-setup-check="name"]')).toContainText(T("check.name", "en", { name: "Quinte-Hill" }));
+});
+
+test("a running repeater updated over USB still clears its old regions, without the app's cut-off warning", async ({ page }) => {
+  await page.goto(siteRoute(`/config/?type=repeater&board=heltec-v3&status=running&reflash=1&role=city&name=Test_R1&${BELLEVILLE}`));
+  await confirmStep(page, "flash");
+  await version(page, "v1.16.0");
+  await nextUntil(page, "commands");
+  await expect(page.locator("[data-setup-reply]")).toBeVisible();
+  // Over USB the whole reply comes through.
+  await expect(page.locator("[data-setup-reply-cut]")).toHaveCount(0);
 });
 
 test("edge repeater offers neighbouring regions and Ontario cross-border options", async ({ page }) => {
@@ -352,6 +364,28 @@ test("ambiguous and unknown towns", async ({ page }) => {
   await expect(page.locator("[data-setup-region]")).toContainText("Québec");
   expect(queries.length).toBe(before);
 });
+
+for (const lang of LANGS) {
+  test(`${lang} a starter region or a planning extension says to check with local operators`, async ({ page }) => {
+    const root = `${ROUTES[lang]}?type=repeater&board=heltec-v3&status=running&reflash=0`;
+    const note = page.locator("[data-setup-planning]");
+    // Charlottetown is in a starter region.
+    await openLink(page, `${root}&tag=yyg&province=pe&town=Charlottetown&lat=46.2382&lon=-63.1311`, { to: "town" });
+    await expect(page.locator("[data-setup-region]")).toContainText("yyg");
+    await expect(note).toHaveAttribute("data-setup-planning", "starter");
+    await expect(note).toHaveText(linked("town.starter", lang));
+    await expect(note.locator("a")).toHaveAttribute("href", /config\/guide\/#starter-regions$/);
+    // The Wingham-area point is just outside Waterloo's MeshMapper zone.
+    await openLink(page, `${root}&tag=ykf&province=on&town=Wingham&lat=43.8678&lon=-81.2619`, { to: "town" });
+    await expect(note).toHaveAttribute("data-setup-planning", "extension");
+    await expect(note).toHaveText(linked("town.extension", lang));
+    await expect(note.locator("a")).toHaveAttribute("href", /config\/guide\/#planning-extensions$/);
+    // A MeshMapper zone needs no note.
+    await openLink(page, `${root}&${BELLEVILLE}`, { to: "town" });
+    await expect(page.locator("[data-setup-region]")).toContainText("ytr");
+    await expect(note).toHaveCount(0);
+  });
+}
 
 test("town search offline offers a region code and the map", async ({ page }) => {
   await page.route("https://geolocator.api.geo.ca/**", (route) => route.abort());

@@ -138,7 +138,7 @@ test("every command explanation in the tool appears on the page, word for word",
 test("the page answers the tool's questions in the tool's own words", () => {
   for (const [lang, path] of Object.entries(pages)) {
     const page = flat(read(path));
-    for (const key of ["type.help", "repeat.help", "role.help", "crossborder.hint", "region.errors"]) {
+    for (const key of ["type.help", "repeat.help", "role.help", "crossborder.hint", "region.errors", "region.phone-cut"]) {
       for (const sentence of sentences(text.t(key, lang))) {
         assert.ok(page.includes(sentence), `${path} is missing ${key}: ${sentence}`);
       }
