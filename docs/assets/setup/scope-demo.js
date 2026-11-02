@@ -41,7 +41,7 @@
     "reason.can": "`can` is on every repeater's list, so all of these pass on a message labelled `can`, though nobody uses it yet.",
     "reason.*": "A message with no label counts as `*`. City repeaters pass those on, so all of these do; edge repeaters don't.",
     "note": "Each town has a city repeater set up with the tool. This shows what each repeater's list allows, not radio coverage.",
-    "failed": "The example didn't load. The tables above show the same idea."
+    "failed": "The example didn't load. The table and list above show the same idea."
   };
 
   var fr = {
@@ -60,7 +60,7 @@
     "reason.can": "`can` est dans la liste de chaque répéteur : tous ceux-ci relaient donc un message étiqueté `can`, même si personne ne l’utilise encore.",
     "reason.*": "Un message sans étiquette compte comme `*`. Les répéteurs de ville le relaient, donc tous ceux-ci le font; les répéteurs de bordure, non.",
     "note": "Chaque ville a un répéteur de ville configuré avec l’outil. On voit ce que permet la liste de chaque répéteur, pas la couverture radio.",
-    "failed": "L’exemple ne s’est pas chargé. Les tableaux ci-dessus montrent la même chose."
+    "failed": "L’exemple ne s’est pas chargé. Le tableau et la liste ci-dessus montrent la même chose."
   };
 
   function has(object, key) {

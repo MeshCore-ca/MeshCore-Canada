@@ -200,13 +200,16 @@ between:
 
 Does each repeater pass the message on?
 
-| Message | Belleville | Edge repeater | Kingston | How far it goes |
-| --- | --- | --- | --- | --- |
-| No label, sent in Belleville | Yes | No | Not reached | Stays around Belleville |
-| `ytr`, a Belleville channel | Yes | Yes | No | Stops at Kingston's repeaters |
-| `ygk`, a Kingston channel | No | Yes | Yes | Stays around Kingston |
-| `on`, an Ontario channel | Yes | Yes | Yes | Across Ontario |
-| `onqc`, a companion's default | Yes | Yes | Yes | Across Ontario and Québec |
+- **No label, sent in Belleville:** Belleville passes it on. The edge repeater
+  doesn't, so Kingston isn't reached. It stays around Belleville.
+- **`ytr`, a Belleville channel:** Belleville and the edge repeater pass it on.
+  Kingston's repeaters don't, so it stops there.
+- **`ygk`, a Kingston channel:** the edge repeater and Kingston pass it on.
+  Belleville doesn't, so it stays around Kingston.
+- **`on`, an Ontario channel:** all three pass it on, so it goes across
+  Ontario.
+- **`onqc`, a companion's default:** all three pass it on, so it goes across
+  Ontario and Québec.
 
 This shows which repeaters pass a message on, not radio coverage. Anyone in
 range of a repeater still hears what it sends, and real meshes have more paths
@@ -219,7 +222,7 @@ you could put on it.
 
 <div data-scope-demo></div>
 
-<noscript><p>The example needs JavaScript to run. The tables above show the same idea.</p></noscript>
+<noscript><p>The example needs JavaScript to run. The table and list above show the same idea.</p></noscript>
 
 ### Why airport codes?
 

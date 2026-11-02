@@ -146,11 +146,8 @@ for (const lang of ["en", "fr"]) {
             targets: violation.nodes.map((node) => node.target)
           }));
       };
-      // The whole page as it loads, like the site-wide check in accessibility.spec.mjs. The one rule left out is
-      // scrollable-region-focusable: on a phone the five-column "Who passes on what" table is 19px wider than
-      // the screen, and the theme's scroll wrapper around it can't be reached by keyboard. That table is not the
-      // example, and the example itself is checked below with every rule on.
-      const wholePage = await blocking(new AxeBuilder({ page }).disableRules(["scrollable-region-focusable"]));
+      // The whole page as it loads, with every rule on, like the site-wide check in accessibility.spec.mjs.
+      const wholePage = await blocking(new AxeBuilder({ page }));
       expect(wholePage, JSON.stringify(wholePage, null, 2)).toEqual([]);
       // Then the example itself after each kind of answer. Choosing a label scrolls the page, which
       // makes the theme's header title fade in; that fade is not part of the example.
@@ -178,6 +175,19 @@ for (const lang of ["en", "fr"]) {
       });
       expect(overflow.page).toBeLessThanOrEqual(0);
       expect(overflow.wide).toEqual([]);
+    });
+
+    test("no table on the page needs sideways scrolling on a phone, even without hyphenation", async ({ page }) => {
+      await page.setViewportSize({ width: 390, height: 844 });
+      await openDemo(page, lang);
+      // Browsers only hyphenate with a dictionary installed, so check the worst case: whole words only.
+      await page.addStyleTag({ content: "*, *::before, *::after { hyphens: manual !important; }" });
+      const wide = await page.evaluate(() =>
+        Array.from(document.querySelectorAll(".md-typeset__scrollwrap"))
+          .filter((wrap) => wrap.scrollWidth > wrap.clientWidth)
+          .map((wrap) => wrap.querySelector("th").textContent.trim())
+      );
+      expect(wide, "tables wider than the screen").toEqual([]);
     });
 
     test("says it could not load, in plain words, when the catalogue is missing", async ({ page }) => {

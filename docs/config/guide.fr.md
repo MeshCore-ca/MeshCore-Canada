@@ -218,15 +218,19 @@ bordure entre les deux :
 
 Chaque répéteur relaie-t-il le message?
 
-| Message | Belleville | Répéteur de bordure | Kingston | Jusqu’où il va |
-| --- | --- | --- | --- | --- |
-| Sans étiquette, envoyé à Belleville | Oui | Non | Pas atteint | Reste autour de Belleville |
-| `ytr`, un canal de Belleville | Oui | Oui | Non | S’arrête aux répéteurs de Kingston |
-| `ygk`, un canal de Kingston | Non | Oui | Oui | Reste autour de Kingston |
-| `on`, un canal de l’Ontario | Oui | Oui | Oui | Partout en Ontario |
-| `onqc`, la portée par défaut d’un compagnon | Oui | Oui | Oui | Partout en Ontario et au Québec |
+- **Sans étiquette, envoyé à Belleville :** Belleville le relaie. Le répéteur de
+  bordure ne le relaie pas, donc Kingston n’est pas atteint. Il reste autour de
+  Belleville.
+- **`ytr`, un canal de Belleville :** Belleville et le répéteur de bordure le
+  relaient. Les répéteurs de Kingston ne le relaient pas, donc il s’arrête là.
+- **`ygk`, un canal de Kingston :** le répéteur de bordure et Kingston le
+  relaient. Belleville ne le relaie pas, donc il reste autour de Kingston.
+- **`on`, un canal de l’Ontario :** les trois le relaient, donc il va partout en
+  Ontario.
+- **`onqc`, la portée par défaut d’un compagnon :** les trois le relaient, donc
+  il va partout en Ontario et au Québec.
 
-Ce tableau montre quels répéteurs relaient un message, pas la couverture radio.
+Cette liste montre quels répéteurs relaient un message, pas la couverture radio.
 Quiconque est à portée d’un répéteur entend quand même ce qu’il transmet, et un
 vrai réseau a plus de trajets que celui-ci.
 
@@ -237,7 +241,7 @@ l’étiquette qu’on y met.
 
 <div data-scope-demo></div>
 
-<noscript><p>L’exemple a besoin de JavaScript pour fonctionner. Les tableaux ci-dessus montrent la même chose.</p></noscript>
+<noscript><p>L’exemple a besoin de JavaScript pour fonctionner. Le tableau et la liste ci-dessus montrent la même chose.</p></noscript>
 
 ### Pourquoi des codes d’aéroport?
 
