@@ -391,9 +391,11 @@ flash it, back it up:
 3. Never erase it in the flasher.
 
 If flashing wipes it anyway, for example when you switch to the observer
-firmware, put the key back with `set prv.key <saved key>`, then `reboot`: in the
-flasher's Console right after flashing, or in the app's Command Line once you
-can log in. Both commands are in the
+firmware, put the key back. Right after flashing, while it's still plugged in,
+send `set prv.key <saved key>` in the flasher's Console, then `reboot`. Put the
+key you saved in place of `<saved key>`. You can also do it later from the app's
+Command Line if you can log in as admin; if you can't, plug it in by USB and use
+the flasher's Console. Both commands are in the
 [MeshCore command reference](https://docs.meshcore.io/cli_commands/#view-or-change-this-nodes-identity-private-key).
 
 Never share the private key: anyone who has it can pose as your repeater.

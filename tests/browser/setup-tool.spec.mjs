@@ -173,7 +173,6 @@ test("running repeater via phone", async ({ page }) => {
   await choose(page, "running");
   // The back-up warning says how: the private key comes off with `get prv.key`, from the app's Command Line or over USB.
   await expect(step(page).locator(".setup-note--warn")).toHaveText(linked("status.backup", "en"));
-  await expect(step(page).locator(".setup-note--warn")).toContainText(/MeshCore app.*Command Line.*USB.*Console/);
   await expect(step(page).locator(".setup-note--warn a")).toHaveAttribute("href", "https://flasher.meshcore.io/");
   await next(page);
   await answer(page, "reflash", "no");

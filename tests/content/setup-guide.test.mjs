@@ -100,10 +100,13 @@ test("the back-up advice says how to save the private key (app or USB) and put i
   // The key comes off and goes back two ways: the app's Command Line after an admin login, or USB (the flasher's Console).
   const app = { en: /MeshCore app[^.]*log in[^.]*Command Line[^.]*`get prv\.key`/, fr: /application MeshCore[^.]*connectez-vous[^.]*Command Line[^.]*`get prv\.key`/ };
   const keep = { en: /password manager and never paste it anywhere shared/, fr: /gestionnaire de mots de passe et ne la collez jamais dans un endroit partagé/ };
+  // The restore advice starts here; the tool and the guide carry it word for word.
+  const restoreStart = { en: "Right after flashing", fr: "Juste après la programmation" };
   const putBack = {
-    en: /`set prv\.key <saved key>`, then `reboot`: .*Console.* Command Line/,
-    fr: /`set prv\.key <clé sauvegardée>`,\s+puis `reboot` : .*Console.* Command Line/s,
+    en: /^Right after flashing, while it's still plugged in, send `set prv\.key <saved key>` in the flasher's Console, then `reboot`\. Put the key you saved in place of `<saved key>`\. You can also do it later from the app's Command Line if you can log in as admin; if you can't, plug it in by USB and use the flasher's Console\./,
+    fr: /^Juste après la programmation, tant qu’il est encore branché, envoyez `set prv\.key <clé sauvegardée>` dans la Console de l’outil de programmation, puis `reboot`\. Remplacez `<clé sauvegardée>` par la clé que vous avez sauvegardée\. Vous pouvez aussi le faire plus tard dans la Command Line de l’application si vous pouvez vous connecter comme administrateur ; sinon, branchez-le par USB et utilisez la Console de l’outil de programmation\./,
   };
+  const restoreOf = (string, lang) => string.slice(string.indexOf(restoreStart[lang]));
   for (const lang of ["en", "fr"]) {
     for (const key of ["status.backup", "observerFirmware.switch"]) {
       const string = text.t(key, lang);
@@ -113,8 +116,8 @@ test("the back-up advice says how to save the private key (app or USB) and put i
       assert.match(string, keep[lang], `${lang} ${key}: where to keep it, and not where to paste it`);
     }
     const restore = text.t("observerFirmware.switch", lang);
-    assert.match(restore, putBack[lang], `${lang} observerFirmware.switch says how to put it back, from either place`);
-    assert.doesNotMatch(restore, /followed by|suivi de/, `${lang}: shows the command with its placeholder`);
+    assert.ok(restore.includes(restoreStart[lang]), `${lang} observerFirmware.switch says how to put the key back`);
+    assert.match(restoreOf(restore, lang), putBack[lang], `${lang} observerFirmware.switch: the key goes back from the Console, or later from the app`);
   }
   for (const [lang, path] of Object.entries(pages)) {
     const source = read(path);
@@ -122,10 +125,14 @@ test("the back-up advice says how to save the private key (app or USB) and put i
     const section = source.slice(source.search(/\{ ?#back-up ?\}/), source.search(/\{ ?#old-regions ?\}/)).replace(/\s+/g, " ");
     assert.ok(section.length > 200, `${path} needs a back-up section before the old regions`);
     assert.match(section, /`get prv\.key`/, path);
-    assert.match(section, /Command Line/, `${path}: the app's Command Line`);
-    assert.match(section, /USB/, `${path}: USB`);
-    assert.match(section, keep[lang], `${path}: same keep-it-safe advice as the tool`);
-    assert.match(section, putBack[lang], `${path}: same restore advice as the tool`);
+    // Step 2 itself carries both ways, so the restore paragraph can't stand in for it.
+    const step2 = section.slice(section.indexOf("2. "), section.indexOf("3. "));
+    assert.match(step2, app[lang], `${path}: step 2 saves the key from the app`);
+    assert.match(step2, /USB/, `${path}: step 2 saves the key over USB`);
+    assert.match(step2, /Console/, `${path}: step 2 names the flasher's Console`);
+    assert.match(step2, keep[lang], `${path}: same keep-it-safe advice as the tool`);
+    const restore = restoreOf(text.t("observerFirmware.switch", lang), lang);
+    assert.ok(section.includes(restore), `${path}: the restore advice is the tool's, word for word`);
     assert.match(section, /docs\.meshcore\.io\/cli_commands\/#view-or-change-this-nodes-identity-private-key/, path);
   }
 });

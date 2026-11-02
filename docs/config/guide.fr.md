@@ -421,10 +421,13 @@ perdue. Avant de le programmer, sauvegardez-le :
 3. Ne l’effacez jamais dans l’outil de programmation.
 
 Si la programmation l’efface quand même, par exemple quand vous passez au
-micrologiciel d’observateur, remettez la clé avec `set prv.key <clé sauvegardée>`,
-puis `reboot` : dans la Console de l’outil de programmation juste après, ou dans
-Command Line de l’application une fois que vous pouvez vous connecter. Les deux
-commandes figurent dans la
+micrologiciel d’observateur, remettez la clé. Juste après la programmation, tant
+qu’il est encore branché, envoyez `set prv.key <clé sauvegardée>` dans la
+Console de l’outil de programmation, puis `reboot`. Remplacez
+`<clé sauvegardée>` par la clé que vous avez sauvegardée. Vous pouvez aussi le
+faire plus tard dans la Command Line de l’application si vous pouvez vous
+connecter comme administrateur ; sinon, branchez-le par USB et utilisez la
+Console de l’outil de programmation. Les deux commandes figurent dans la
 [référence des commandes MeshCore (en anglais)](https://docs.meshcore.io/cli_commands/#view-or-change-this-nodes-identity-private-key).
 
 Ne partagez jamais la clé privée : quiconque l’a peut se faire passer pour votre

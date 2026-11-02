@@ -345,6 +345,8 @@ test("text lookups fail loudly and fill in placeholders", () => {
       const value = text.t(key, lang);
       assert.equal(value, value.trim(), key);
       // `<saved key>` inside a code span is a command placeholder, shown as text; HTML anywhere else is a mistake.
+      // An unpaired backtick would let a "<" hide in a code span that never closes, so the backticks must pair up.
+      assert.equal((value.match(/`/g) || []).length % 2, 0, key + " has an unpaired backtick");
       assert.doesNotMatch(value.replace(/`[^`]*`/g, ""), /<[a-z/]/i, key + " holds HTML");
       // Multi-line examples (a pasted region reply) keep their indentation.
       if (!value.includes("\n")) assert.doesNotMatch(value, /  /, key + " has a double space");

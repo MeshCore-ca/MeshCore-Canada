@@ -37,7 +37,7 @@ Changer la clé privée change l’identité du nœud. Cette opération peut rom
 
 1. Confirmez auprès de la personne responsable de la région que le répéteur doit rester en mode 1 octet et qu’un nouvel identifiant est nécessaire.
 2. Connectez-vous au répéteur et notez sa clé publique actuelle avec `get public.key`.
-3. À l’aide d’une connexion série fiable, ou de la Command Line de l’application MeshCore après vous être connecté au répéteur comme administrateur, sauvegardez la clé privée actuelle avec `get prv.key`, puis conservez-la comme secret dans un endroit sécurisé.
+3. À l’aide d’une connexion série fiable, ou dans la Command Line de l’application MeshCore après vous être connecté au répéteur comme administrateur, sauvegardez la clé privée actuelle avec `get prv.key`, puis conservez-la comme secret dans un endroit sécurisé.
 4. Confirmez que l’identifiant proposé de 2 à 6 caractères n’est pas déjà utilisé dans le registre de coordination de la région.
 
 Ne publiez et ne transmettez jamais une clé privée dans un billet, une capture d’écran, une discussion publique ou un journal. La clé privée précédente que vous avez sauvegardée est votre seul moyen de revenir en arrière.
@@ -68,7 +68,7 @@ Si la vérification échoue, restaurez l’ancienne clé privée sauvegardée av
 
 ## Récupération
 
-Si l’accès administrateur, le préfixe de la clé publique, les annonces, la configuration de la région ou l’acheminement sont incorrects, gardez le répéteur sur l’établi. Restaurez l’ancienne clé privée sauvegardée au moyen de la connexion série fiable, ou de la Command Line de l’application MeshCore si vous pouvez encore vous connecter au répéteur comme administrateur, redémarrez l’appareil, puis confirmez que tout son état précédent est rétabli avant de le remettre en service.
+Si l’accès administrateur, le préfixe de la clé publique, les annonces, la configuration de la région ou l’acheminement sont incorrects, gardez le répéteur sur l’établi. Restaurez l’ancienne clé privée sauvegardée au moyen de la connexion série fiable, ou dans la Command Line de l’application MeshCore si vous pouvez encore vous connecter au répéteur comme administrateur, redémarrez l’appareil, puis confirmez que tout son état précédent est rétabli avant de le remettre en service.
 
 ## Consigner le changement
 

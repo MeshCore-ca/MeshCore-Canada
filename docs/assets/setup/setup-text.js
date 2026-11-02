@@ -110,7 +110,7 @@
     "observerFirmware.yes.detail": "Send the commands from your phone, in the MeshCore app.",
     "observerFirmware.no": "No, or not sure",
     "observerFirmware.no.detail": "Flash the observer firmware first, over USB.",
-    "observerFirmware.switch": "Switching to the observer firmware can wipe its identity. Save its private key first: in the MeshCore app, log in to the repeater as admin, tap Command Line and send `get prv.key`. Over USB, send the same command in the flasher's Console. Keep the reply in your password manager and never paste it anywhere shared. After flashing, put the key back with `set prv.key <saved key>`, then `reboot`: in the flasher's Console right after flashing, or in the app's Command Line once you can log in.",
+    "observerFirmware.switch": "Switching to the observer firmware can wipe its identity. Save its private key first: in the MeshCore app, log in to the repeater as admin, tap Command Line and send `get prv.key`. Over USB, send the same command in the flasher's Console. Keep the reply in your password manager and never paste it anywhere shared. If its identity does get wiped, put the key back. Right after flashing, while it's still plugged in, send `set prv.key <saved key>` in the flasher's Console, then `reboot`. Put the key you saved in place of `<saved key>`. You can also do it later from the app's Command Line if you can log in as admin; if you can't, plug it in by USB and use the flasher's Console.",
 
     // Update the bootloader (nRF52)
     "bootloader.question": "First, update the bootloader",
@@ -434,7 +434,7 @@
     "observerFirmware.yes.detail": "Envoyer les commandes depuis votre téléphone, dans l’application MeshCore.",
     "observerFirmware.no": "Non, ou je ne sais pas",
     "observerFirmware.no.detail": "Programmer d’abord le micrologiciel d’observateur, par USB.",
-    "observerFirmware.switch": "Passer au micrologiciel d’observateur peut effacer son identité. Sauvegardez d’abord sa clé privée : dans l’application MeshCore, connectez-vous au répéteur comme administrateur, touchez Command Line et envoyez `get prv.key`. Par USB, envoyez la même commande dans la Console de l’outil de programmation. Gardez la réponse dans votre gestionnaire de mots de passe et ne la collez jamais dans un endroit partagé. Après la programmation, remettez la clé avec `set prv.key <clé sauvegardée>`, puis `reboot` : dans la Console de l’outil de programmation juste après, ou dans Command Line de l’application une fois que vous pouvez vous connecter.",
+    "observerFirmware.switch": "Passer au micrologiciel d’observateur peut effacer son identité. Sauvegardez d’abord sa clé privée : dans l’application MeshCore, connectez-vous au répéteur comme administrateur, touchez Command Line et envoyez `get prv.key`. Par USB, envoyez la même commande dans la Console de l’outil de programmation. Gardez la réponse dans votre gestionnaire de mots de passe et ne la collez jamais dans un endroit partagé. Si l’identité est effacée, remettez la clé. Juste après la programmation, tant qu’il est encore branché, envoyez `set prv.key <clé sauvegardée>` dans la Console de l’outil de programmation, puis `reboot`. Remplacez `<clé sauvegardée>` par la clé que vous avez sauvegardée. Vous pouvez aussi le faire plus tard dans la Command Line de l’application si vous pouvez vous connecter comme administrateur ; sinon, branchez-le par USB et utilisez la Console de l’outil de programmation.",
 
     // Update the bootloader (nRF52)
     "bootloader.question": "D’abord, mettez à jour le chargeur d’amorçage",
