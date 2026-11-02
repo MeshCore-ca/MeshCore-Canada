@@ -15,6 +15,11 @@ evidence: tests/content/setup-guide.test.mjs
 difficulty: beginner
 estimated_time: 10 minutes
 destructive: false
+page_styles:
+  - assets/setup/scope-demo.css?v=20261102-1
+page_scripts:
+  - assets/regions/modules/iata-scopes.js?v=20261013-1
+  - assets/setup/scope-demo.js?v=20261102-1
 ---
 
 # Comprendre les répéteurs
@@ -45,7 +50,7 @@ Avant de relayer un message, un répéteur vérifie deux choses :
   répéteur ne le relaie.
 
 Tous les appareils des environs doivent utiliser les mêmes réglages radio, sinon
-ils ne s’entendent pas. La plupart du Canada utilise les réglages radio
+ils ne s’entendent pas. La majeure partie du Canada utilise les réglages radio
 canadiens; certains groupes locaux ont les leurs.
 
 Pour en configurer un, utilisez l’[outil de configuration](index.md). Pour le
@@ -119,7 +124,9 @@ répéteur, et la [carte des régions](map.md) les montre toutes.
   d’Ottawa a `yow` et `on`, un répéteur de Gatineau `yow` et `qc`.
 - **Les villes d’une même région partagent son code.** Ottawa et Gatineau sont
   toutes deux dans `yow`.
-- **Aucune zone MeshMapper pour votre secteur?** La carte montre plutôt une
+- **Aucune zone pour votre secteur?** [MeshMapper](https://meshmapper.net/),
+  la carte communautaire qui dessine le secteur de chaque région, ne couvre pas
+  tout. La carte des régions montre alors plutôt une
   [région initiale](#starter-regions) de MeshCore Canada.
 - **Écrivez les codes en minuscules.** Vous pouvez chercher `YTR`, mais sur les
   ondes, `ytr` et `YTR` sont deux étiquettes différentes.
@@ -148,7 +155,7 @@ message d’atteindre une autre province ou un autre pays.
 
 **Chaque étiquette est indépendante.** Les étiquettes vont de la plus petite à
 la plus grande, mais elles ne s’emboîtent pas : avoir `on` ne veut pas dire
-avoir `ytr`. Chaque étiquette doit être dans la liste à part entière. C’est
+avoir `ytr`. Chaque étiquette doit être dans la liste séparément. C’est
 pourquoi l’outil de configuration met sur chaque répéteur toutes celles qui
 s’appliquent.
 
@@ -180,7 +187,7 @@ La liste d’un répéteur de ville de Belleville contient `*`, `ytr`, `on`, `on
 Le répéteur entend quand même tous les messages : sa liste décide seulement
 lesquels il relaie. Votre appareil compagnon reçoit tout ce qui l’atteint.
 
-Quelques détails piègent souvent :
+Quelques pièges fréquents :
 
 - **L’orthographe doit être exacte.** `ytr`, `YTR` et `quinte` sont trois
   étiquettes différentes.
@@ -223,6 +230,15 @@ Ce tableau montre quels répéteurs relaient un message, pas la couverture radio
 Quiconque est à portée d’un répéteur entend quand même ce qu’il transmet, et un
 vrai réseau a plus de trajets que celui-ci.
 
+### Essayez : quelles villes une étiquette atteint-elle? { #scope-demo }
+
+Cet exemple montre quels répéteurs de ville relaient un message, selon
+l’étiquette qu’on y met.
+
+<div data-scope-demo></div>
+
+<noscript><p>L’exemple a besoin de JavaScript pour fonctionner. Les tableaux ci-dessus montrent la même chose.</p></noscript>
+
 ### Pourquoi des codes d’aéroport?
 
 - **MeshMapper les utilise déjà**, par exemple `ytr.meshmapper.net`.
@@ -230,7 +246,7 @@ vrai réseau a plus de trajets que celui-ci.
   [code d’emplacement que chaque observateur transmet](../analyzer/iata-codes.md).
   D’autres noms seulement pour les régions ne feraient qu’ajouter de la
   confusion.
-- **Il n’y a ni accent ni majuscule à se tromper.** `montréal`, `Montreal` et
+- **Aucun accent ni majuscule où se tromper.** `montréal`, `Montreal` et
   `montreal` seraient trois étiquettes différentes.
 - **Ils sont faciles à diviser plus tard.** Si une ville veut un jour son propre
   secteur, elle peut prendre son propre code d’aéroport et garder sa province
@@ -430,7 +446,7 @@ La version 1.14 n’a pas de `region default` : les annonces du répéteur reste
 donc sans étiquette. La mise à jour en vaut la peine. Avant la version 1.14, les
 réglages de région ne fonctionnent pas : mettez d’abord le micrologiciel à jour.
 
-### Observateur
+### Répéteur observateur
 
 Ces lignes concernent seulement un répéteur observateur.
 
@@ -711,6 +727,6 @@ Statistique Canada. Le Labrador correspond aux divisions de recensement 10 et
 
 ## Sources
 
-- [MeshMapper](https://meshmapper.net/) et l’onglet **Données des régions** de la carte
+- [MeshMapper](https://meshmapper.net/) et l’onglet **Données régionales** de la carte
 - [Référence des commandes MeshCore (en anglais)](https://docs.meshcore.io/cli_commands/)
 - [Sources et licences](../assets/regions/NOTICE.txt)

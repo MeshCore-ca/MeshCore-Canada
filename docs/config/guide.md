@@ -15,6 +15,11 @@ evidence: tests/content/setup-guide.test.mjs
 difficulty: beginner
 estimated_time: 10 minutes
 destructive: false
+page_styles:
+  - assets/setup/scope-demo.css?v=20261102-1
+page_scripts:
+  - assets/regions/modules/iata-scopes.js?v=20261013-1
+  - assets/setup/scope-demo.js?v=20261102-1
 ---
 
 # How repeaters work
@@ -114,8 +119,10 @@ and the [region map](map.md) shows them all.
   repeater `yow` and `qc`.
 - **Towns in the same region share its code.** Ottawa and Gatineau are both
   `yow`.
-- **No MeshMapper zone for your area?** The map shows a MeshCore Canada
-  [starter region](#starter-regions) instead.
+- **No zone for your area?** [MeshMapper](https://meshmapper.net/), the
+  community map that draws each region's area, doesn't cover everywhere. The
+  region map then shows a MeshCore Canada [starter region](#starter-regions)
+  instead.
 - **Write codes in lowercase.** You can search for `YTR`, but on the air `ytr`
   and `YTR` are two different labels.
 
@@ -204,6 +211,15 @@ Does each repeater pass the message on?
 This shows which repeaters pass a message on, not radio coverage. Anyone in
 range of a repeater still hears what it sends, and real meshes have more paths
 than this.
+
+### Try it: which towns does a label reach? {#scope-demo}
+
+This example shows which towns' city repeaters pass on a message, for each label
+you could put on it.
+
+<div data-scope-demo></div>
+
+<noscript><p>The example needs JavaScript to run. The tables above show the same idea.</p></noscript>
 
 ### Why airport codes?
 
@@ -400,7 +416,7 @@ Firmware 1.14 has no `region default`, so the repeater's own announcements carry
 no label. Updating is worth it. Below 1.14, region settings don't work: update
 the firmware first.
 
-### Observer
+### Repeater observer
 
 These lines are only for a repeater observer.
 

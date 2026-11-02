@@ -152,3 +152,29 @@ test("no page or script still links to the region standard", () => {
     assert.doesNotMatch(source, /[Rr]egion standard|[Nn]orme (sur les|des) régions/, path);
   }
 });
+
+test("the observer settings heading uses the tool's device name, never just Observer", () => {
+  for (const [lang, path] of Object.entries(pages)) {
+    const heading = text.t("group.observer", lang);
+    assert.equal(heading, text.t("type.observer", lang), "the tool's group and its device choice use one name");
+    assert.match(read(path), new RegExp(`^### ${heading}$`, "m"), `${path} needs the ${heading} heading`);
+    assert.doesNotMatch(read(path), /^### (Observer|Observateur)$/m, path);
+  }
+});
+
+test("MeshMapper is explained where the page first mentions it", () => {
+  const explained = { en: /community map/, fr: /carte communautaire/ };
+  for (const [lang, path] of Object.entries(pages)) {
+    const body = flat(read(path));
+    const first = body.indexOf("MeshMapper");
+    assert.ok(first >= 0, path);
+    assert.match(body.slice(first, first + 160), explained[lang], `${path}: explain MeshMapper at its first use`);
+  }
+});
+
+test("the French page avoids the phrasings the review flagged", () => {
+  const source = read(pages.fr);
+  for (const bad of ["Il n’y a ni accent ni majuscule", "La plupart du Canada", "à part entière", "Quelques détails piègent", "Données des régions"]) {
+    assert.ok(!flat(source).includes(bad), `guide.fr.md should not say: ${bad}`);
+  }
+});
