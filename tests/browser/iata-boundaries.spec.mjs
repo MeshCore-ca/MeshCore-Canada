@@ -1,6 +1,6 @@
 import { expect, test } from "./site-fixtures.mjs";
 import { siteRoute } from "./site-route.mjs";
-import { codes, expectStep, phoneLink } from "./setup-helpers.mjs";
+import { expectStep, phoneLink, commandLines } from "./setup-helpers.mjs";
 
 for (const locale of ["", "fr/"]) {
   const lang = locale ? "fr" : "en";
@@ -36,7 +36,7 @@ for (const locale of ["", "fr/"]) {
       // The same region in the setup tool.
       await page.goto(siteRoute(phoneLink(tag, "on", { lang })));
       await expectStep(page, "commands");
-      expect(await codes(page).allTextContents()).toContain(`region def ${tag}|* on|* onqc|* can|* na`);
+      expect(await commandLines(page)).toContain(`region def ${tag}|* on|* onqc|* can|* na`);
       expect(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth+1)).toBeTruthy();
     });
   }

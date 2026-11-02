@@ -1,7 +1,7 @@
 import { expect, test } from "./site-fixtures.mjs";
 import { siteRoute } from "./site-route.mjs";
 import { readFile } from "node:fs/promises";
-import { PHONE_ROUTE, codes, expectStep, mockGeocoder, next, nextButton, nextUntil, answer, phoneLink, searchTown, startPhoneRoute, step, toolRoot, T } from "./setup-helpers.mjs";
+import { PHONE_ROUTE, codes, expectStep, mockGeocoder, next, nextButton, nextUntil, answer, phoneLink, searchTown, startPhoneRoute, step, toolRoot, T, commandLines } from "./setup-helpers.mjs";
 
 for (const locale of ["", "fr/"]) {
   const lang = locale ? "fr" : "en";
@@ -25,7 +25,7 @@ for (const locale of ["", "fr/"]) {
       // The same region in the tool: the flat list for a province outside ON/QC, and no radio line on the phone route.
       await page.goto(siteRoute(phoneLink(tag, province, { lang })));
       await expectStep(page, "commands");
-      const lines = await codes(page).allTextContents();
+      const lines = await commandLines(page);
       expect(lines).toContain(`region def ${tag}|* ${province}|* can|* na`);
       expect(lines.join("\n")).not.toContain("onqc");
       expect(lines.some((line) => line.startsWith("set radio"))).toBe(false);
@@ -35,7 +35,7 @@ for (const locale of ["", "fr/"]) {
     for (const firmware of ["1.14", "1.15"]) {
       await page.goto(siteRoute(phoneLink("yow", "on", { lang, firmware })));
       await expectStep(page, "commands");
-      const lines = await codes(page).allTextContents();
+      const lines = await commandLines(page);
       expect(lines).toContain("region put yow");
       expect(lines).toContain("region allowf *");
       expect(lines.filter((line) => line.startsWith("region def "))).toEqual([]);
@@ -72,7 +72,7 @@ for (const locale of ["", "fr/"]) {
     page.on("pageerror", error => errors.push(error.message));
     await page.goto(siteRoute(phoneLink("yow", "qc", { lang, role: "edge", extra: "neighbours=yul" })));
     await expectStep(page, "commands");
-    const lines = await codes(page).allTextContents();
+    const lines = await commandLines(page);
     expect(lines).toContain("region def yow|* yul|* qc|* onqc|* can|* na");
     expect(lines).toContain("region denyf *");
     expect(lines).toContain("region default yow");
@@ -91,7 +91,7 @@ for (const locale of ["", "fr/"]) {
     await next(page);
     await answer(page, "role", "city");
     await nextUntil(page, "commands");
-    const lines = await codes(page).allTextContents();
+    const lines = await commandLines(page);
     expect(lines).toContain("region def yow|* qc|* onqc|* can|* na");
     expect(lines).toContain("region allowf *");
     expect(lines.join("\n")).not.toMatch(/\bott\b/);
@@ -109,7 +109,7 @@ for (const locale of ["", "fr/"]) {
     await page.locator("[data-setup-name]").fill("Test_R1");
     await next(page);
     await expectStep(page, "commands");
-    const lines = await codes(page).allTextContents();
+    const lines = await commandLines(page);
     for (const command of ["set path.hash.mode 2", "set advert.interval 240", "set flood.advert.interval 47", "set flood.max 16"]) {
       expect(lines).toContain(command);
     }

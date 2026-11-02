@@ -2,7 +2,7 @@ import { expect, test } from "./site-fixtures.mjs";
 import AxeBuilder from "@axe-core/playwright";
 import { siteRoute } from "./site-route.mjs";
 import { submissionSha256 } from "../../docs/config/editor/issue.js";
-import { answer, choose, codes, confirmStep, expectStep, next, nextButton, nextUntil, phoneLink, startPhoneRoute, step, toolRoot } from "./setup-helpers.mjs";
+import { answer, choose, codes, confirmStep, expectStep, next, nextButton, nextUntil, phoneLink, startPhoneRoute, step, toolRoot, commandLines } from "./setup-helpers.mjs";
 
 for (const locale of ["", "fr/"]) {
   const lang = locale ? "fr" : "en";
@@ -10,7 +10,7 @@ for (const locale of ["", "fr/"]) {
     // A running repeater keeps its radio: the phone route has no radio line, and the old mvrd code moves to yvr.
     await page.goto(siteRoute(phoneLink("mvrd", "bc", { lang })));
     await expectStep(page, "commands");
-    const phone = await codes(page).allTextContents();
+    const phone = await commandLines(page);
     expect(phone).toContain("region def yvr|* bc|* can|* na");
     expect(phone.some((line) => line.startsWith("set radio"))).toBe(false);
 
@@ -22,7 +22,7 @@ for (const locale of ["", "fr/"]) {
     await expect(nextButton(page)).toBeDisabled();
     await choose(page, "bc-mesh");
     await nextUntil(page, "commands");
-    let lines = await codes(page).allTextContents();
+    let lines = await commandLines(page);
     expect(lines).toContain("set radio 910.425,62.5,7,5");
     expect(lines).toContain("set path.hash.mode 2");
     expect(lines).toContain("region def yvr|* bc|* can|* na");
@@ -33,7 +33,7 @@ for (const locale of ["", "fr/"]) {
     }
     await choose(page, "canada");
     await nextUntil(page, "commands");
-    lines = await codes(page).allTextContents();
+    lines = await commandLines(page);
     expect(lines).toContain("set radio 910.525,62.5,7,5");
     expect(lines).not.toContain("set radio 910.425,62.5,7,5");
   });
@@ -54,7 +54,7 @@ for (const locale of ["", "fr/"]) {
     await page.locator("[data-setup-name]").fill("Ottawa_R1");
     await next(page);
     await expectStep(page, "commands");
-    const lines = await codes(page).allTextContents();
+    const lines = await commandLines(page);
     expect(lines).toContain("region put yow");
     expect(lines).not.toContain("region put qc");
     expect(lines.some((line) => line.startsWith("set radio"))).toBe(false);

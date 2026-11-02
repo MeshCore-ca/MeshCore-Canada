@@ -44,6 +44,13 @@ export const step = (page) => page.locator("[data-setup-step]");
 export const nextButton = (page) => page.locator("[data-setup-next]");
 export const progress = (page) => page.locator("[data-setup-progress]");
 export const codes = (page) => page.locator("[data-setup-command] code");
+// The command lines on the commands screen. A link that holds every answer renders that screen at
+// once, with a loading panel while the region data arrives, so wait for the first line before reading:
+// allTextContents() on its own does not wait and can return nothing.
+export async function commandLines(page) {
+  await expect(codes(page).first()).toBeVisible();
+  return codes(page).allTextContents();
+}
 
 export async function expectStep(page, id) {
   await expect(page.locator(`[data-setup-step="${id}"]`)).toBeVisible();

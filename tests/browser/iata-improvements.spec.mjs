@@ -1,7 +1,7 @@
 import { test, expect } from "./site-fixtures.mjs";
 import { siteRoute } from "./site-route.mjs";
 import { readFileSync } from "node:fs";
-import { PHONE_ROUTE, T, choose, codes, expectStep, nextButton, nextUntil, phoneLink, plain, step, toolRoot } from "./setup-helpers.mjs";
+import { PHONE_ROUTE, T, choose, codes, expectStep, nextButton, nextUntil, phoneLink, plain, step, toolRoot, commandLines } from "./setup-helpers.mjs";
 import "../../docs/assets/regions/modules/iata-scopes.js";
 const catalog = JSON.parse(readFileSync("docs/assets/regions/iata-regions.json", "utf8"));
 
@@ -17,7 +17,7 @@ for (const locale of ["", "fr/"]) {
     await expect(page.locator("[data-setup-help-text]")).toContainText(T("role.help", lang).split(/(?<=[.!?])\s/)[0]);
     await choose(page, "city");
     await nextUntil(page, "commands");
-    const lines = await codes(page).allTextContents();
+    const lines = await commandLines(page);
     expect(lines).toContain(`region def ${tag}|* on|* onqc|* can|* na`);
     expect(lines).toContain("region allowf *");
     expect(lines).not.toContain("region denyf *");

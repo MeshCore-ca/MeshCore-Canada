@@ -3,7 +3,7 @@ import { expect, test } from "./site-fixtures.mjs";
 import { siteRoute } from "./site-route.mjs";
 import {
   T, plain, firstSentence, linked, mockGeocoder, step, nextButton, progress, codes, expectStep, next, choose, answer,
-  confirmStep, version, searchTown, town, scopeLines
+  confirmStep, version, searchTown, town, scopeLines, commandLines
 } from "./setup-helpers.mjs";
 
 // The guided setup tool at /config/. Shared helpers (the text table, the geocoder mock, the step
@@ -147,7 +147,7 @@ test("running repeater via phone", async ({ page }) => {
   await expect(step(page)).toContainText(T("commands.question.phone", "en"));
   await expect(page.locator("[data-setup-step] [data-setup-phone-steps] img")).not.toHaveCount(0);
   await expect(page.locator('[data-setup-note="radio-phone"]')).toContainText(firstSentence(T("note.radio-phone", "en")));
-  expect((await codes(page).allTextContents()).some((line) => line.startsWith("set radio"))).toBe(false);
+  expect((await commandLines(page)).some((line) => line.startsWith("set radio"))).toBe(false);
   // The `region` line comes first, with the paste box right after it.
   await expect(page.locator('[data-setup-command="region-show"] code')).toHaveText("region");
   await page.locator("[data-setup-reply]").fill("*^ F\n can F\n  on F\n   ott F");
@@ -199,7 +199,7 @@ test("edge repeater offers neighbouring regions and Ontario cross-border options
   await expectStep(page, "name");
   await next(page);
   await expectStep(page, "commands");
-  const lines = await codes(page).allTextContents();
+  const lines = await commandLines(page);
   expect(lines).toContain("region def ytr|* ygk|* on|* onqc|* can|* na|* onny|* us us-ny");
   expect(lines).toContain("region denyf *");
   await expect(page.locator("[data-setup-notes]")).toContainText(T("note.network", "en", { network: "Ontario–New York (onny, opt-in)" }));
@@ -214,7 +214,7 @@ test("edge repeater offers neighbouring regions and Ontario cross-border options
   await expectStep(page, "name");
   await next(page);
   await expectStep(page, "commands");
-  const city = await codes(page).allTextContents();
+  const city = await commandLines(page);
   expect(city).toContain("region def ytr|* on|* onqc|* can|* na|* onny");
   expect(city).toContain("region allowf *");
 });
@@ -396,7 +396,7 @@ test("changing the town clears neighbours and the suggested name", async ({ page
   await expect(page.locator("[data-setup-name]")).toHaveValue("Kingston_R1");
   await next(page);
   await expectStep(page, "commands");
-  const lines = await codes(page).allTextContents();
+  const lines = await commandLines(page);
   expect(lines).toContain("set name Kingston_R1");
   expect(lines).toContain("region def ygk|* on|* onqc|* can|* na");
   expect(lines).toContain("region default ygk");
@@ -456,7 +456,7 @@ test("share link restores answers and holds no secrets", async ({ page, context 
   await other.goto(shared.href);
   // Every answer is there, so the link opens on the commands, minus the pasted reply.
   await expectStep(other, "commands");
-  const lines = await codes(other).allTextContents();
+  const lines = await commandLines(other);
   expect(lines).toContain("set name Belleville_R1");
   expect(lines).toContain("set lat 44.1628");
   expect(lines).toContain("region");
@@ -598,6 +598,21 @@ test("region data that fails to load says so, and can be tried again", async ({ 
   await expect(page.locator("[data-setup-region]")).toContainText("ytr");
 });
 
+test("a link that opens on the commands waits for slow region data before the lines are read", async ({ page }) => {
+  // A complete link draws the commands screen at once, with a loading panel until the region data arrives.
+  let delayed = 0;
+  await page.route("**/iata-boundaries.geojson*", async (route) => {
+    delayed += 1;
+    await new Promise((resolve) => setTimeout(resolve, 300));
+    await route.continue();
+  });
+  await page.goto(siteRoute(`/config/?type=repeater&board=heltec-v3&status=running&reflash=0&firmware=1.16&role=city&name=Belleville_R1&${BELLEVILLE}`));
+  await expectStep(page, "commands");
+  const lines = await commandLines(page);
+  expect(delayed).toBeGreaterThan(0);
+  expect(lines).toContain("region def ytr|* on|* onqc|* can|* na");
+});
+
 test("language switch keeps the answers", async ({ page }) => {
   await page.goto(siteRoute("/config/"));
   await answer(page, "type", "observer");
@@ -624,7 +639,7 @@ test("language switch on the commands screen after flashing keeps the place and 
     await next(page);
   }
   await expectStep(page, "commands");
-  const english = await codes(page).allTextContents();
+  const english = await commandLines(page);
   await page.locator('[data-setup-command="name"] [data-done]').click();
   // The flashed and bootloader ticks never go in the address, even while switching.
   expect(page.url()).not.toMatch(/flashed|bootloader|step=/);
@@ -632,7 +647,7 @@ test("language switch on the commands screen after flashing keeps the place and 
   await page.locator('.md-select__link[hreflang="fr"]').click();
   await expect(page.locator("html")).toHaveAttribute("lang", "fr");
   await expectStep(page, "commands");
-  const french = await codes(page).allTextContents();
+  const french = await commandLines(page);
   const notPassword = (line) => !line.startsWith("password ");
   expect(french.filter(notPassword)).toEqual(english.filter(notPassword));
   expect(french).toContain(`password <${T("ph.password", "fr")}>`);

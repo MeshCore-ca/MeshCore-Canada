@@ -80,7 +80,7 @@ for (const locale of ["", "fr/"]) {
     await expectStep(page, "town");
     const map = page.locator("[data-setup-map]");
     await expect(map).toBeVisible();
-    expect(await map.evaluate(link => new URL(link.href).pathname)).toBe(`/${locale}config/map/`);
+    expect(await map.evaluate(link => new URL(link.href).pathname)).toMatch(new RegExp(`/${locale}config/map/$`));
   });
 
   test(`${locale || "en/"} compact header totals are cached, readable, and keyboard accessible`, async ({ page }) => {

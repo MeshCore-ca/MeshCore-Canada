@@ -1,6 +1,6 @@
 import { expect, test } from "./site-fixtures.mjs";
 import { siteRoute } from "./site-route.mjs";
-import { codes, expectStep, phoneLink } from "./setup-helpers.mjs";
+import { expectStep, phoneLink, commandLines } from "./setup-helpers.mjs";
 
 // Source lines wrap, so let any run of whitespace stand for the single spaces.
 const sentence = text => new RegExp(text.trim().split(/\s+/).map(word => word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("\\s+"));
@@ -43,7 +43,7 @@ for (const locale of ["", "fr/"]) {
   test(`${locale || "en/"} the ON/QC label is not added for other provinces`, async ({ page }) => {
     await page.goto(siteRoute(phoneLink("yyc", "ab", { lang: locale ? "fr" : "en" })));
     await expectStep(page, "commands");
-    const lines = await codes(page).allTextContents();
+    const lines = await commandLines(page);
     expect(lines).toContain("region def yyc|* ab|* can|* na");
     expect(lines.join("\n")).not.toContain("onqc");
   });
