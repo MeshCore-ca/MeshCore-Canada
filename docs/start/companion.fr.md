@@ -112,7 +112,7 @@ Trouvez votre code de ville sur la [carte des régions IATA](../config/map.md). 
 
 Les responsables de robots et de MeshMapper suivent les [consignes pour les robots et MeshMapper](../proposals/onqc-scopes.md#robots-et-meshmapper).
 
-Le [guide des portées](../config/standard.md) présente les versions d’application requises et des exemples. Les portées ne changent pas les réglages radio.
+[Comprendre les répéteurs](../config/guide.md#companions) explique les portées, avec des exemples. Les portées ne changent pas les réglages radio.
 
 ## Tester l’appareil
 

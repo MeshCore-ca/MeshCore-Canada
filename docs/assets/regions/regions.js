@@ -387,7 +387,7 @@
     "Unable to load the source lock": "Impossible de charger le verrouillage des sources",
     "Release": "Publication",
     "Status": "État",
-    "Standard": "Norme",
+    "Guide": "Guide",
     "Connectivity": "Connectivité",
     "Online": "En ligne",
     "Offline; showing cached static data when available": "Hors ligne; affichage des données statiques en cache lorsqu’elles sont disponibles",
@@ -402,7 +402,7 @@
     "Unavailable": "Indisponible",
     "Download QA JSON": "Télécharger le JSON de contrôle",
     "Download catalog": "Télécharger le catalogue",
-    "Open standard and change process": "Ouvrir la norme et le processus de modification",
+    "How repeaters work": "Comprendre les répéteurs",
     "Try again": "Réessayer",
     "Loading release evidence…": "Chargement des preuves de publication…",
     "Select this region to see its full path.": "Sélectionnez cette région pour voir son chemin complet.",
@@ -1127,7 +1127,7 @@
     if (!host && window.location.pathname.indexOf(".html") !== -1) {
       return (page === "config" ? "config" : page) + ".html";
     }
-    var routes = { dashboard: "", config: "", setup: "", map: "map/", standard: "standard/" };
+    var routes = { dashboard: "", config: "", setup: "", map: "map/", guide: "guide/" };
     var root = host ? host.getAttribute("data-mcc-root") : "./";
     return new URL(routes[page] || "", new URL(root, document.baseURI)).href;
   }
@@ -1748,7 +1748,7 @@
     var extension = resolution.planningKind === "extension";
     return '<div class="mcc-note mcc-note-warning"><strong>' + (extension ? 'MeshCore Canada planning extension' : 'MeshCore Canada starter region') + '</strong><p>' +
       (extension ? 'This point is outside the published MeshMapper boundary. MeshCore Canada assigns the gap to this nearby IATA region for planning; confirm its use locally.' : 'This broad starter region is assigned by MeshCore Canada, not yet published by MeshMapper. Confirm its use with local operators; it does not promise radio coverage.') +
-      '</p><a href="' + esc(regionPageHref("standard") + (extension ? '#planning-extensions' : '#starter-regions')) + '">' + (extension ? 'Planning extension details' : 'Starter region details') + '</a></div>';
+      '</p><a href="' + esc(regionPageHref("guide") + (extension ? '#planning-extensions' : '#starter-regions')) + '">' + (extension ? 'Planning extension details' : 'Starter region details') + '</a></div>';
   }
 
   function activationKey(state) {
@@ -1910,7 +1910,7 @@
       '<div class="mcc-result-console">' +
       planningNotice(state.resolution) +
       (firmware === "1.14" ? '<div class="mcc-note mcc-note-warning">On firmware 1.14, this repeater\'s adverts stay unscoped. Upgrade to 1.15 or newer to scope its adverts by city.</div>' : '') +
-      '<div class="mcc-note mcc-note-warning"><strong>' + (rec.activation === "prepare" ? 'Prepare scopes' : 'At the coordinated cutover only') + '</strong><p>' + (rec.activation === "prepare" ? 'Preparation keeps existing scopes, wildcard forwarding (*) and the default scope. Review the current list before adding names.' : 'Back up the current region list. Remove old entries before applying this profile; use USB if possible.') + '</p><a href="' + esc(regionPageHref("standard") + '#existing-devices') + '">Migration instructions</a></div>' +
+      '<div class="mcc-note mcc-note-warning"><strong>' + (rec.activation === "prepare" ? 'Prepare scopes' : 'At the coordinated cutover only') + '</strong><p>' + (rec.activation === "prepare" ? 'Preparation keeps existing scopes, wildcard forwarding (*) and the default scope. Review the current list before adding names.' : 'Back up the current region list. Remove old entries before applying this profile; use USB if possible.') + '</p><a href="' + esc(regionPageHref("guide") + '#old-regions') + '">Migration instructions</a></div>' +
       '<div class="mcc-result-head">' +
       '<div>' +
       '<h3 class="mcc-result-title"><code>' + esc(titleTag.toUpperCase()) + "</code> — " + esc(labelFor(data, titleTag)) + "</h3>" +
@@ -1971,7 +1971,7 @@
 
   function sourceUrlFor(data, tag) {
     var st = statusFor(data, tag);
-    if (st.state === "starter") return regionPageHref("standard") + '#starter-regions';
+    if (st.state === "starter") return regionPageHref("guide") + '#starter-regions';
     if (st.sourceUrl) return st.sourceUrl;
     var meshMapperSource = data.meshMapperSources && data.meshMapperSources[tag] && data.meshMapperSources[tag][0];
     if (meshMapperSource && meshMapperSource.sourceUrl) return meshMapperSource.sourceUrl;
@@ -3016,7 +3016,7 @@
           '<a class="mcc-button mcc-button-secondary" href="' + esc(new URL("meshmapper-iata-boundaries.geojson", assetBase).href) + '" download>Download MeshMapper boundaries</a>' +
           '<a class="mcc-button mcc-button-secondary" href="' + esc(new URL("iata-boundaries.geojson", assetBase).href) + '" download>Download IATA boundaries</a>' +
           '<a class="mcc-button mcc-button-secondary" href="' + esc(new URL("iata-regions.json", assetBase).href) + '" download>Download catalog</a>' +
-          '<a class="mcc-button mcc-button-secondary" href="' + esc(regionPageHref("standard")) + '">Open standard and change process</a>' +
+          '<a class="mcc-button mcc-button-secondary" href="' + esc(regionPageHref("guide")) + '">How repeaters work</a>' +
           '</div></section>';
         auditLoaded = true;
     }
@@ -3465,7 +3465,7 @@
           '<td><code>' + esc(row.tag) + "</code> " + esc(row.label) + "</td>" +
           "<td>" + esc(row.provinces.map(function (province) { return labelFor(data, province); }).join(" / ")) + "</td>" +
           '<td><a href="' + esc(row.sourceUrl) + '">' + esc(row.sourceTier === "meshmapper" ? "MeshMapper" : "MeshCore Canada starter region") + '</a>' +
-          (row.planningExtension ? '<br><a href="' + esc(regionPageHref("standard") + '#planning-extensions') + '">Planning extension</a>' : '') + '</td>' +
+          (row.planningExtension ? '<br><a href="' + esc(regionPageHref("guide") + '#planning-extensions') + '">Planning extension</a>' : '') + '</td>' +
           "</tr>";
       }).join("");
     }
@@ -3482,7 +3482,7 @@
       '<div class="mcc-dashboard-actions">' +
       '<a class="mcc-action-button" href="' + esc(regionPageHref("config")) + '">' + icon("list-checks") + '<span><strong>Setup</strong></span></a>' +
       '<a class="mcc-action-button" href="' + esc(regionPageHref("map")) + '">' + icon("map") + '<span><strong>Map</strong></span></a>' +
-      '<a class="mcc-action-button" href="' + esc(regionPageHref("standard")) + '">' + icon("book-open-check") + '<span><strong>Standard</strong></span></a>' +
+      '<a class="mcc-action-button" href="' + esc(regionPageHref("guide")) + '">' + icon("book-open-check") + '<span><strong>Guide</strong></span></a>' +
       '</div>' +
       '</section>' +
       '<section class="mcc-stat-grid" aria-label="Region status summary">' +

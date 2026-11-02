@@ -21,7 +21,7 @@ page_scripts:
   - assets/regions/modules/configurator-support.js?v=20260926-1
   - assets/regions/modules/iata-scopes.js?v=20261013-1
   - assets/regions/modules/scope-migration.js?v=20260926-2
-  - assets/regions/regions.js?v=20261102-1
+  - assets/regions/regions.js?v=20261102-2
 hide:
   - navigation
   - toc
@@ -35,6 +35,6 @@ them. Review the current configuration before applying any commands.
 
 <div data-mcc-regions="config" data-mcc-root="./"></div>
 
-<noscript>JavaScript is required. [Read the region standard](standard.md).</noscript>
+<noscript>JavaScript is required. [How repeaters work](guide.md) explains scopes and regions.</noscript>
 
-<small>[Region standard](standard.md) · [Data sources](../assets/regions/NOTICE.txt) · [Share feedback](https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54/46)</small>
+<small>[How repeaters work](guide.md) · [Data sources](../assets/regions/NOTICE.txt) · [Share feedback](https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54/46)</small>

@@ -10,7 +10,7 @@ for (const locale of ["", "fr/"]) {
   test.describe(`${locale || "en/"} companion scope guidance without JavaScript`, () => {
     test.use({ javaScriptEnabled: false });
     test("all companion entry points tell people to set a default scope now", async ({ page }) => {
-      for (const path of ["start/companion/", "meshcore/flash-companion/", "config/standard/"]) {
+      for (const path of ["start/companion/", "meshcore/flash-companion/", "config/guide/"]) {
         await page.goto(siteRoute(`/${locale}${path}`));
         const note = page.locator(".admonition.note").filter({ hasText: locale ? /portée par défaut/i : /set your default scope/i });
         await expect(note).toBeVisible();

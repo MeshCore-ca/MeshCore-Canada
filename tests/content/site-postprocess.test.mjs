@@ -312,3 +312,51 @@ test("noindex-all injects robots metadata into every HTML page", async () => {
     await rm(root, { recursive: true, force: true });
   }
 });
+
+// The same template mkdocs-redirects writes for each entry in redirect_maps.
+const redirectStub = (url) => `
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Redirecting...</title>
+    <link rel="canonical" href="${url}">
+    <script>var anchor=window.location.hash.substr(1);location.href="${url}"+(anchor?"#"+anchor:"")</script>
+    <meta http-equiv="refresh" content="0; url=${url}">
+</head>
+<body>
+You're being redirected to a <a href="${url}">new destination</a>.
+</body>
+</html>
+`;
+
+test("old French addresses redirect to the French page when it exists", async () => {
+  const root = await mkdtemp(join(tmpdir(), "mcc-site-french-redirects-"));
+  try {
+    for (const dir of ["config/standard", "config/old", "regions", "fr/config/guide", "fr/start"]) {
+      await mkdir(join(root, dir), { recursive: true });
+    }
+    await writeFile(join(root, "index.html"), '<link rel="canonical" href="https://meshcore.ca/">', "utf8");
+    await writeFile(join(root, "config", "standard", "index.html"), redirectStub("../guide/"), "utf8");
+    await writeFile(join(root, "config", "old", "index.html"), redirectStub("../missing/"), "utf8");
+    await writeFile(join(root, "regions", "index.html"), redirectStub("https://example.com/"), "utf8");
+    await writeFile(join(root, "fr", "config", "guide", "index.html"), "<html lang=\"fr\">Guide</html>", "utf8");
+    await writeFile(join(root, "fr", "start", "index.html"), "<html lang=\"fr\">Commencer</html>", "utf8");
+    await writeFile(join(root, "sitemap.xml"), "<urlset><url><loc>https://meshcore.ca/</loc></url></urlset>", "utf8");
+
+    await postprocessSite(root, { revision: "redirect-sha", generatedAt: "2026-11-02T00:00:00.000Z" });
+
+    const twin = await readFile(join(root, "fr", "config", "standard", "index.html"), "utf8");
+    assert.match(twin, /<html lang="fr">/);
+    assert.match(twin, /location\.href="\.\.\/guide\/"/);
+    assert.match(twin, /url=\.\.\/guide\//);
+    assert.doesNotMatch(twin, /You're being redirected/);
+    // No French page to land on, or a link off the site: no French twin.
+    await assert.rejects(readFile(join(root, "fr", "config", "old", "index.html")), { code: "ENOENT" });
+    await assert.rejects(readFile(join(root, "fr", "regions", "index.html")), { code: "ENOENT" });
+    // The English stub is untouched.
+    assert.equal(await readFile(join(root, "config", "standard", "index.html"), "utf8"), redirectStub("../guide/"));
+  } finally {
+    await rm(root, { recursive: true, force: true });
+  }
+});

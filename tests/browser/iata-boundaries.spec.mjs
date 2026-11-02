@@ -26,7 +26,7 @@ for (const locale of ["", "fr/"]) {
       await expect(result.locator('.mcc-deterministic-result')).not.toContainText("ysb");
       await expect(result.locator('.mcc-note-warning')).toContainText(locale ? "Extension proposée" : "planning extension");
       await expect(result.locator('.mc-region-profile')).toContainText(locale ? "Extension proposée par MeshCore Canada" : "MeshCore Canada planning extension");
-      await expect(result.locator('a[href*="standard/#planning-extensions"]')).toHaveCount(1);
+      await expect(result.locator('a[href*="guide/#planning-extensions"]')).toHaveCount(1);
       await result.locator('.mcc-detail-actions a').click();
       await page.locator('[data-wizard-step="3"] [data-next-step]').click();
       const output=page.locator('[data-role="result"]');

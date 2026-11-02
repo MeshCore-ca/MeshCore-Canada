@@ -988,7 +988,7 @@ coordinate activation locally; don't change companion scopes early.
 ## Next steps
 
 - Check your published MeshMapper code in the [IATA region map](../config/map.md).
-- Use the [migration guide](../config/standard.md) and [repeater configurator](../config/index.md) for clean-up and firmware-specific commands.
+- Use [How repeaters work](../config/guide.md) and the [repeater configurator](../config/index.md) for clean-up and firmware-specific commands.
 - In the configurator, select **Use the proposed ON/QC standard settings** to include Phase 1’s ID, advert and hop settings. They remain opt-in; scope commands alone are not the full Phase 1 setup.
 - Coordinate and test the ON/QC rollout with local operators before changing deployed repeaters.
 - The website now offers IATA zones across Canada. This is not a nationwide rollout of `onqc`: that scope and the pilot settings remain specific to Ontario and Québec. Other provinces coordinate their own migration.

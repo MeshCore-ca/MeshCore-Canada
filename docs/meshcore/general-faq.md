@@ -57,7 +57,7 @@ forward all three sizes; older repeaters drop packets using 2- or 3-byte paths.
 Follow your community’s settings while older repeaters are being upgraded.
 See the [upstream multibyte FAQ](https://github.com/meshcore-dev/MeshCore/blob/main/docs/faq.md#39-q-what-is-multibyte-support-what-do-1-byte-2-byte-3-byte-adverts-and-messages-mean).
 
-[Read the region standard](../config/standard.md).
+[How repeaters work](../config/guide.md#settings) explains each repeater setting.
 
 ### Do I need an amateur radio licence?
 
@@ -111,7 +111,8 @@ and maintainability matter more than screen features.
 ### How do I start a mesh where none is listed?
 
 Begin with companions so people can test locally. Add fixed infrastructure only
-after checking placement, power, local coordination, and the region standard.
+after checking placement, power, local coordination, and
+[how scopes and regions work](../config/guide.md#scopes-and-regions).
 
 When the group is ready, [add the community](../contributing.md) so others can
 find its status, contact information, and any reviewed local settings.

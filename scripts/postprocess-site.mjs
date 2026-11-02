@@ -9,7 +9,7 @@ import {
   stat,
   writeFile,
 } from "node:fs/promises";
-import { dirname, isAbsolute, join, relative, resolve, sep } from "node:path";
+import { dirname, isAbsolute, join, posix, relative, resolve, sep } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { gzipSync } from "node:zlib";
 import process from "node:process";
@@ -24,6 +24,9 @@ const canonicalPattern =
   /<link\s+rel=["']canonical["']\s+href=["']([^"']+)["'][^>]*>/i;
 const alternateTagPattern =
   /<link\b(?=[^>]*\brel=["']alternate["'])[^>]*>/gi;
+// The page mkdocs-redirects writes for each redirect_maps entry, and the address it sends people to.
+const redirectStubPattern =
+  /<title>Redirecting\.\.\.<\/title>[\s\S]*?location\.href="([^"]+)"/;
 const languageMenuAnchorPattern =
   /<a\b(?=[^>]*\bclass=["'][^"']*\bmd-select__link\b)(?=[^>]*\bhreflang=["'](?:en|fr)["'])[^>]*>/gi;
 
@@ -177,6 +180,36 @@ async function prepareBilingualAssets(siteRoot, docsDirectory) {
   }
 }
 
+// mkdocs-redirects writes each redirect once, at the English address. Give it a
+// French twin when the page it points to has a French version, so an old French
+// link lands on the French page instead of a 404.
+async function mirrorFrenchRedirects(siteRoot) {
+  const frenchRoot = join(siteRoot, "fr");
+  if (!(await isDirectory(frenchRoot))) return;
+  for (const file of await walk(siteRoot)) {
+    const name = relative(siteRoot, file).split(sep).join("/");
+    if (!name.endsWith("index.html") || name.startsWith("fr/") || name.startsWith("assets/")) continue;
+    const html = await readFile(file, "utf8");
+    const target = html.match(redirectStubPattern)?.[1];
+    if (!target || /^[a-z][a-z0-9+.-]*:|^\/\//i.test(target) || target.startsWith("/")) continue;
+    const targetPath = posix.join(posix.dirname(name), target.split("#")[0]);
+    if (targetPath === ".." || targetPath.startsWith("../")) continue;
+    const frenchTarget = join(frenchRoot, targetPath, "index.html");
+    const frenchStub = join(frenchRoot, name);
+    if (!(await pathStat(frenchTarget))?.isFile() || await pathStat(frenchStub)) continue;
+    assertBuildDestination(siteRoot, frenchStub);
+    await mkdir(dirname(frenchStub), { recursive: true });
+    await writeFile(
+      frenchStub,
+      html
+        .replace('<html lang="en">', '<html lang="fr">')
+        .replace("<title>Redirecting...</title>", "<title>Redirection…</title>")
+        .replace(/You're being redirected to a (<a [^>]*>)new destination<\/a>\./, "Cette page a déménagé : $1voir la nouvelle page</a>."),
+      "utf8",
+    );
+  }
+}
+
 async function walk(directory) {
   const files = [];
   for (const entry of await readdir(directory, { withFileTypes: true })) {
@@ -266,6 +299,7 @@ export async function postprocessSite(siteDirectory, options = {}) {
     siteRoot,
     resolve(options.docsDirectory || join(projectRoot, "docs")),
   );
+  await mirrorFrenchRedirects(siteRoot);
 
   const htmlFiles = (await walk(siteRoot)).filter((file) => file.endsWith(".html"));
   const localePageCounts = htmlFiles.reduce(

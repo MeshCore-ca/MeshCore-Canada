@@ -20,7 +20,7 @@ MeshCore Canada's map and configurator use the same IATA zones as MeshMapper.
 Request new zones or boundary changes there so both tools stay consistent.
 The former census-cell editor is retired.
 
-For the [MeshCore Canada starter regions](../standard.md#starter-regions),
+For the [MeshCore Canada starter regions](../guide.md#starter-regions),
 [send a community proposal](../../submit-idea.md). These additions are labelled
 separately and do not change MeshMapper's published zones.
 
@@ -41,4 +41,4 @@ MeshMapper boundaries.
 To change a community's contacts or description, [send a community update](../../submit-idea.md).
 That form still works independently of region boundaries.
 
-[Read the IATA scope guide](../standard.md).
+[How repeaters work](../guide.md) explains scopes and regions.

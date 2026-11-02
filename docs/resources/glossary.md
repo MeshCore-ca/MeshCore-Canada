@@ -117,5 +117,5 @@ the linked guides explain how to use each setting or device.
 
 - [Compare MeshCore roles](../start/choose-a-goal.md)
 - [Read common questions](../meshcore/general-faq.md)
-- [Open the region standard](../config/standard.md)
+- [How repeaters work](../config/guide.md)
 - [Choose an observer method](../analyzer/intro.md)

@@ -1024,7 +1024,7 @@ portées des appareils compagnons à l’avance.
 ## Prochaines étapes
 
 - Trouvez votre code MeshMapper sur la [carte des régions IATA](../config/map.md).
-- Utilisez le [guide de migration](../config/standard.md) et le [configurateur](../config/index.md) pour le nettoyage et les commandes adaptées au micrologiciel.
+- Utilisez [Comprendre les répéteurs](../config/guide.md) et le [configurateur](../config/index.md) pour le nettoyage et les commandes adaptées au micrologiciel.
 - Dans le configurateur, cochez **Utiliser les réglages proposés pour ON/QC** pour inclure les identifiants, annonces et limites de sauts de la phase 1. Ils restent facultatifs dans l’outil; les commandes de portée seules ne constituent pas la configuration complète de la phase 1.
 - Coordonnez et testez le déploiement ON/QC avec les opérateurs locaux avant de modifier les répéteurs installés.
 - Le site propose maintenant les zones IATA partout au Canada. Cela ne déploie pas `onqc` à l’échelle nationale : cette portée et les réglages pilotes restent propres à l’Ontario et au Québec. Les autres provinces coordonnent leur propre migration.

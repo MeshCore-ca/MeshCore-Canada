@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 
-const companionPages = ["start/companion", "meshcore/flash-companion", "config/standard"];
+const companionPages = ["start/companion", "meshcore/flash-companion", "config/guide"];
 
 // The admonition that starts with `!!! note "..."`: its title line and its indented body.
 function scopeNote(source, path) {
@@ -46,7 +46,7 @@ test("the companion guide shows the default scope steps with its six screenshots
       assert.ok(image, `${french ? "FR" : "EN"} companion guide needs ${shot} with alt text`);
     }
     // The other pages point to those steps instead of repeating them.
-    for (const page of ["meshcore/flash-companion", "config/standard"]) {
+    for (const page of ["meshcore/flash-companion", "config/guide"]) {
       const other = readFileSync(`docs/${page}${french ? ".fr" : ""}.md`, "utf8");
       assert.match(other, french ? /companion\.md#regler-votre-portee-par-defaut/ : /companion\.md#set-your-default-scope/, page);
     }
@@ -55,7 +55,7 @@ test("the companion guide shows the default scope steps with its six screenshots
 
 test("the companion pages keep the how-to for the Default Region Scope setting", () => {
   for (const french of [false, true]) {
-    for (const page of ["start/companion", "config/standard"]) {
+    for (const page of ["start/companion", "config/guide"]) {
       const source = readFileSync(`docs/${page}${french ? ".fr" : ""}.md`, "utf8");
       assert.match(source, /Network Settings/, page);
       assert.match(source, /Default Region Scope/, page);
@@ -73,14 +73,13 @@ test("the scripts no longer tell companions to wait for a later phase", () => {
   assert.match(profile, /onqc/);
 });
 
-test("standards opt-in and planning assignments stay separate from rollout approval", () => {
+test("standards opt-in stays in the configurator and starter regions stay apart from MeshMapper zones", () => {
   const script = readFileSync("docs/assets/regions/regions.js", "utf8");
   assert.match(script, /standardDefaults: false/);
   assert.match(script, /data-onqc-settings-summary/);
   for (const french of [false, true]) {
-    const source = readFileSync(`docs/config/standard${french ? ".fr" : ""}.md`, "utf8");
-    assert.match(source, french ? /pas une extension approuvée/ : /not adopted\s+parts of that rollout/);
-    assert.match(source, french ? /pas une configuration complète de la phase 1/ : /not a complete Phase 1 setup/);
+    const source = readFileSync(`docs/config/guide${french ? ".fr" : ""}.md`, "utf8").replace(/\s+/g, " ");
+    assert.match(source, french ? /ce ne sont pas des zones MeshMapper/ : /not MeshMapper zones, and they don't claim radio coverage/);
   }
 });
 

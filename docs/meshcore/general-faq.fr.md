@@ -60,7 +60,7 @@ rejettent les paquets avec des parcours de 2 ou 3 octets. Suivez les réglages d
 votre communauté pendant la mise à jour des anciens répéteurs.
 Consultez la [FAQ officielle sur les parcours multioctets](https://github.com/meshcore-dev/MeshCore/blob/main/docs/faq.md#39-q-what-is-multibyte-support-what-do-1-byte-2-byte-3-byte-adverts-and-messages-mean).
 
-[Lire la norme des régions](../config/standard.md).
+[Comprendre les répéteurs](../config/guide.md#settings) explique chaque réglage du répéteur.
 
 ### Dois-je détenir un certificat d’opérateur radioamateur?
 
@@ -120,7 +120,8 @@ d’entretien comptent davantage que les fonctions de l’écran.
 
 Commencez avec des compagnons pour permettre aux gens de faire des essais
 locaux. Ajoutez une infrastructure fixe seulement après avoir vérifié
-l’emplacement, l’alimentation, la coordination locale et la norme des régions.
+l’emplacement, l’alimentation, la coordination locale et le
+[fonctionnement des portées et des régions](../config/guide.md#scopes-and-regions).
 
 Lorsque le groupe est prêt, [ajoutez la communauté](../contributing.md) afin que
 d’autres personnes puissent trouver son état, ses coordonnées et tout réglage

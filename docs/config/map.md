@@ -21,7 +21,7 @@ page_scripts:
   - assets/javascripts/radio-profiles.js?v=20260904-1
   - assets/regions/modules/configurator-support.js?v=20260926-1
   - assets/regions/modules/iata-scopes.js?v=20261013-1
-  - assets/regions/regions.js?v=20261102-1
+  - assets/regions/regions.js?v=20261102-2
 hide:
   - toc
 ---
@@ -29,11 +29,11 @@ hide:
 # Find your IATA region
 
 Search for a place or choose an IATA region. Solid outlines are published MeshMapper
-boundaries. Dashed outlines are MeshCore Canada [planning regions and extensions](standard.md#planning-extensions).
+boundaries. Dashed outlines are MeshCore Canada [starter regions and planning extensions](guide.md#starter-regions).
 Neither shows measured radio coverage.
 
 <div data-mcc-regions="map" data-mcc-root="../"></div>
 
-<noscript>JavaScript is required. [Read the region standard](standard.md).</noscript>
+<noscript>JavaScript is required. [How repeaters work](guide.md) explains scopes and regions.</noscript>
 
-<small>[Region standard](standard.md) · [Data sources](../assets/regions/NOTICE.txt)</small>
+<small>[How repeaters work](guide.md) · [Data sources](../assets/regions/NOTICE.txt)</small>

@@ -21,7 +21,7 @@ page_scripts:
   - assets/regions/modules/configurator-support.js?v=20260926-1
   - assets/regions/modules/iata-scopes.js?v=20261013-1
   - assets/regions/modules/scope-migration.js?v=20260926-2
-  - assets/regions/regions.js?v=20261102-1
+  - assets/regions/regions.js?v=20261102-2
 hide:
   - navigation
   - toc
@@ -36,6 +36,6 @@ avant d’appliquer des commandes.
 
 <div data-mcc-regions="config" data-mcc-root="./"></div>
 
-<noscript>JavaScript est requis. [Consultez la norme sur les régions](standard.md).</noscript>
+<noscript>JavaScript est requis. [Comprendre les répéteurs](guide.md) explique les portées et les régions.</noscript>
 
-<small>[Norme sur les régions](standard.md) · [Sources de données](../assets/regions/NOTICE.txt) · [Partager vos commentaires](https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54/46)</small>
+<small>[Comprendre les répéteurs](guide.md) · [Sources de données](../assets/regions/NOTICE.txt) · [Partager vos commentaires](https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54/46)</small>

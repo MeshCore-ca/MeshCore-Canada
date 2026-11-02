@@ -21,7 +21,7 @@ que MeshMapper. Demandez les nouvelles zones et les changements de limites dans
 MeshMapper pour garder les deux outils cohérents. L’ancien éditeur fondé sur les
 secteurs de recensement est retiré.
 
-Pour les [régions initiales de MeshCore Canada](../standard.md#starter-regions),
+Pour les [régions initiales de MeshCore Canada](../guide.md#starter-regions),
 [envoyez une proposition communautaire](../../submit-idea.md). Ces ajouts sont
 identifiés séparément et ne modifient pas les zones publiées par MeshMapper.
 
@@ -43,4 +43,4 @@ Pour modifier les coordonnées ou la description d’une communauté,
 [envoyez une mise à jour](../../submit-idea.md). Ce formulaire reste indépendant
 des limites régionales.
 
-[Consulter le guide des portées IATA](../standard.md).
+[Comprendre les répéteurs](../guide.md) explique les portées et les régions.

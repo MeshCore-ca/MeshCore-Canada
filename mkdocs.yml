@@ -148,6 +148,7 @@ plugins:
             Choose a network tool: Choisir un outil réseau
             Configure a repeater: Configurer un répéteur
             Find your region: Trouver votre région
+            How repeaters work: Comprendre les répéteurs
             Set up an observer: Configurer un observateur
             Check an observer: Vérifier un observateur
             Troubleshoot network data: Dépanner les données du réseau
@@ -186,7 +187,8 @@ plugins:
         regions/index.md: config/index.md
         regions/setup.md: config/index.md
         regions/map.md: config/map.md
-        regions/standard.md: config/standard.md
+        regions/standard.md: config/guide.md
+        config/standard.md: config/guide.md
         resources/getting-started.md: start/index.md
         meshcore/firmware-rak-custom-display.md: meshcore/flash-companion.md
         meshcore/firmware-heltec-v3-wifi.md: meshcore/flash-companion.md
@@ -258,6 +260,7 @@ nav:
       - Choose a network tool: tools/index.md
       - Configure a repeater: config/index.md
       - Find your region: config/map.md
+      - How repeaters work: config/guide.md
       - Set up an observer: analyzer/intro.md
       - Check an observer: analyzer/verify.md
       - Troubleshoot network data: analyzer/troubleshooting.md

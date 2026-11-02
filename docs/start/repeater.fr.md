@@ -70,8 +70,8 @@ Si Canada n’apparaît pas, suivez les [consignes pour l’ancien préréglage]
     le trafic partagé.
 
 Utilisez le [configurateur de répéteur](../config/index.md) pour choisir votre zone
-IATA MeshMapper et ses portées indépendantes. Si vous utilisiez l’ancien arbre de
-régions, suivez les [étapes de migration](../config/standard.md) avant d’appliquer la nouvelle liste.
+IATA MeshMapper et ses portées indépendantes. Le répéteur a encore d’anciennes
+régions? [Comprendre les répéteurs](../config/guide.md#old-regions) explique comment les retirer.
 
 Commencez par la préparation. Conservez les portées qui fonctionnent et coordonnez
 l’activation, y compris tout blocage en bordure, avec les opérateurs locaux.

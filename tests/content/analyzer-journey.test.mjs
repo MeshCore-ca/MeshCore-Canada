@@ -380,9 +380,9 @@ test("French location finder localizes display labels without changing canonical
 });
 
 test("French analyzer terminology and map controls use natural location wording", () => {
-  const [page, standard, runtime, config] = [
+  const [page, guide, runtime, config] = [
     read("docs/analyzer/iata-codes.fr.md"),
-    read("docs/config/standard.fr.md"),
+    read("docs/config/guide.fr.md"),
     read("docs/assets/javascripts/i18n-runtime.js"),
     read("mkdocs.yml"),
   ];
@@ -395,8 +395,8 @@ test("French analyzer terminology and map controls use natural location wording"
   assert.doesNotMatch(config, /Location codes: Codes de localisation/);
   assert.match(runtime, /"Zoom in": "Zoom avant"/);
   assert.match(runtime, /"Zoom out": "Zoom arrière"/);
-  assert.match(standard, /mêmes\s+limites et identifient leur source/);
-  assert.match(standard, /Régions initiales/);
-  assert.match(standard, /province où le répéteur est installé/);
-  assert.match(standard, /portées en minuscules/);
+  assert.match(guide, /\[carte des régions\]\(map\.md\)/);
+  assert.match(guide, /Régions initiales/);
+  assert.match(guide, /choisissez le côté où il se trouve\s+vraiment/);
+  assert.match(guide, /Écrivez les codes en minuscules/);
 });

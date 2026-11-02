@@ -15,7 +15,7 @@ for (const locale of ["", "fr/"]) {
       await expect(detail).toContainText(tag);
       await expect(detail).toContainText(locale ? "Région initiale de MeshCore Canada" : "MeshCore Canada starter region");
       await expect(detail.locator(`a[href="https://${tag}.meshmapper.net/"]`)).toHaveCount(0);
-      await expect(detail.locator('a[href*="standard/#starter-regions"]')).toHaveAttribute("href", new RegExp(`/${locale}config/standard/#starter-regions$`));
+      await expect(detail.locator('a[href*="guide/#starter-regions"]')).toHaveAttribute("href", new RegExp(`/${locale}config/guide/#starter-regions$`));
       await detail.locator('.mcc-detail-actions a').click();
       await page.locator('[data-wizard-step="3"] [data-next-step]').click();
       const output = page.locator('[data-role="result"]');

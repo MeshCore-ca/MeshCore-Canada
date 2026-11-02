@@ -1,0 +1,154 @@
+import assert from "node:assert/strict";
+import { existsSync, readFileSync } from "node:fs";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+import vm from "node:vm";
+import test from "node:test";
+
+const root = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
+const read = (path) => readFileSync(resolve(root, path), "utf8");
+
+vm.runInThisContext(read("docs/assets/setup/setup-text.js"), { filename: "setup-text.js" });
+const text = globalThis.MeshCoreSetupText;
+
+const pages = { en: "docs/config/guide.md", fr: "docs/config/guide.fr.md" };
+
+// The sections the setup tool's "?" help and the region map link to. Both languages keep these ids.
+const anchors = [
+  "what-a-repeater-is",
+  "repeater-observers",
+  "scopes-and-regions",
+  "settings",
+  "city-or-edge",
+  "companions",
+  "starter-regions",
+  "planning-extensions",
+];
+
+// The values the page's "What each setting does" examples use: a Belleville repeater in ytr (Quinte West),
+// with BC Mesh as the example of a local group's own radio settings.
+const examples = {
+  en: {
+    town: "Belleville",
+    tag: "ytr",
+    name: "Quinte West (ytr)",
+    list: "Quinte West (ytr), Ontario (on), Ontario + Québec (onqc), Canada (can) and North America (na)",
+    profile: "BC Mesh",
+    settings: text.t("radio.settings", "en", { mhz: "910.425", khz: "62.5", sf: 7, cr: 5 }),
+  },
+  fr: {
+    town: "Belleville",
+    tag: "ytr",
+    name: "Quinte West (ytr)",
+    list: "Quinte West (ytr), Ontario (on), Ontario + Québec (onqc), Canada (can) et Amérique du Nord (na)",
+    profile: "BC Mesh",
+    settings: text.t("radio.settings", "fr", { mhz: "910,425", khz: "62,5", sf: 7, cr: 5 }),
+  },
+};
+// why.remove names an old region from a pasted `region` reply (the tool's example reply ends in ott).
+const exampleOverrides = { "why.remove": { name: "ott" } };
+
+const coreSentence = {
+  en: "A scope is a label on a message saying how far it should travel. A region list is the labels a repeater agrees to pass on.",
+  fr: "Une portée est une étiquette sur un message qui indique jusqu’où il doit aller. Une liste de régions, ce sont les étiquettes qu’un répéteur accepte de relayer.",
+};
+
+function frontMatter(source) {
+  const match = source.match(/^---\n([\s\S]*?)\n---\n/);
+  assert.ok(match, "page must start with YAML front matter");
+  return match[1];
+}
+
+// Page text with its front matter removed and every run of whitespace made one space, so wrapped lines still match.
+function flat(source) {
+  return source.replace(/^---\n[\s\S]*?\n---\n/, "").replace(/\s+/g, " ");
+}
+
+const sentences = (value) => value.split(/(?<=[.!?])\s+/).filter(Boolean);
+
+test("both explainer pages exist with verified front matter", () => {
+  for (const [lang, path] of Object.entries(pages)) {
+    assert.ok(existsSync(resolve(root, path)), `${path} must exist`);
+    const metadata = frontMatter(read(path));
+    assert.match(metadata, /^status: verified$/m, path);
+    assert.match(metadata, /^evidence: tests\/content\/setup-guide\.test\.mjs$/m, path);
+    assert.match(metadata, lang === "en" ? /^title: How repeaters work$/m : /^title: Comprendre les répéteurs$/m, path);
+    assert.equal((read(path).match(/^# /gm) || []).length, 1, `${path} has one H1`);
+  }
+});
+
+test("every section the tool links to is on both pages, with the same ids", () => {
+  for (const path of Object.values(pages)) {
+    const source = read(path);
+    for (const id of anchors) {
+      assert.match(source, new RegExp(`^#{2,3} .+\\{ ?#${id} ?\\}$`, "m"), `${path} needs #${id}`);
+    }
+  }
+});
+
+test("the pages say what a scope and a region list are in the same words", () => {
+  for (const [lang, path] of Object.entries(pages)) {
+    assert.ok(flat(read(path)).includes(coreSentence[lang]), `${path} needs the core sentence`);
+  }
+});
+
+test("every command explanation in the tool appears on the page, word for word", () => {
+  const keys = text.keys().filter((key) => key.startsWith("why."));
+  assert.ok(keys.length >= 38, `expected the tool's command explanations, found ${keys.length}`);
+  for (const [lang, path] of Object.entries(pages)) {
+    const page = flat(read(path));
+    for (const key of keys) {
+      const expected = text.t(key, lang, { ...examples[lang], ...exampleOverrides[key] });
+      assert.doesNotMatch(expected, /\{[A-Za-z][\w-]*\}/, `${key} has a placeholder with no example value`);
+      assert.ok(page.includes(expected), `${path} is missing ${key}: ${expected}`);
+    }
+  }
+});
+
+test("the page answers the tool's questions in the tool's own words", () => {
+  for (const [lang, path] of Object.entries(pages)) {
+    const page = flat(read(path));
+    for (const key of ["type.help", "repeat.help", "role.help", "crossborder.hint", "region.errors"]) {
+      for (const sentence of sentences(text.t(key, lang))) {
+        assert.ok(page.includes(sentence), `${path} is missing ${key}: ${sentence}`);
+      }
+    }
+  }
+});
+
+test("the pages set scopes now: no phase, preparation or activation wording", () => {
+  for (const path of Object.values(pages)) {
+    const source = read(path);
+    assert.doesNotMatch(source, /phase/i, path);
+    assert.doesNotMatch(source, /pr[ée]par/i, path);
+    assert.doesNotMatch(source, /activat/i, path);
+    assert.doesNotMatch(source, /January 2027|janvier 2027|proposals\/onqc-scopes/, path);
+  }
+});
+
+test("the region standard page is gone and its old addresses lead to the explainer", () => {
+  for (const path of ["docs/config/standard.md", "docs/config/standard.fr.md"]) {
+    assert.equal(existsSync(resolve(root, path)), false, `${path} must be removed`);
+  }
+  const config = read("mkdocs.yml");
+  assert.match(config, /^ {8}config\/standard\.md: config\/guide\.md$/m);
+  assert.match(config, /^ {8}regions\/standard\.md: config\/guide\.md$/m, "the old regions link must not chain through a redirect");
+  assert.doesNotMatch(config, /: config\/standard(\.fr)?\.md$/m, "no redirect may point at the removed page");
+  assert.match(config, /^ {6}- How repeaters work: config\/guide\.md$/m);
+  assert.match(config, /^ {12}How repeaters work: Comprendre les répéteurs$/m);
+});
+
+test("no page or script still links to the region standard", () => {
+  const sources = [
+    "docs/config/index.md", "docs/config/index.fr.md", "docs/config/map.md", "docs/config/map.fr.md",
+    "docs/config/editor/index.md", "docs/config/editor/index.fr.md", "docs/meshcore/general-faq.md",
+    "docs/meshcore/general-faq.fr.md", "docs/resources/glossary.md", "docs/resources/glossary.fr.md",
+    "docs/start/companion.md", "docs/start/companion.fr.md", "docs/start/repeater.md", "docs/start/repeater.fr.md",
+    "docs/proposals/onqc-scopes.md", "docs/proposals/onqc-scopes.fr.md", "docs/assets/regions/regions.js",
+  ];
+  for (const path of sources) {
+    const source = read(path);
+    assert.doesNotMatch(source, /standard\.md|"standard\/"|regionPageHref\("standard"\)/, path);
+    assert.doesNotMatch(source, /[Rr]egion standard|[Nn]orme (sur les|des) régions/, path);
+  }
+});

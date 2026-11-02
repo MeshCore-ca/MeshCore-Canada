@@ -21,7 +21,7 @@ page_scripts:
   - assets/javascripts/radio-profiles.js?v=20260904-1
   - assets/regions/modules/configurator-support.js?v=20260926-1
   - assets/regions/modules/iata-scopes.js?v=20261013-1
-  - assets/regions/regions.js?v=20261102-1
+  - assets/regions/regions.js?v=20261102-2
 hide:
   - toc
 ---
@@ -29,11 +29,11 @@ hide:
 # Trouver votre région IATA
 
 Recherchez un lieu ou choisissez une région IATA. Les traits pleins indiquent les
-limites publiées par MeshMapper. Les pointillés indiquent les [régions et extensions proposées](standard.md#planning-extensions)
+limites publiées par MeshMapper. Les pointillés indiquent les [régions initiales et extensions proposées](guide.md#starter-regions)
 par MeshCore Canada. Ces limites ne représentent pas la couverture radio mesurée.
 
 <div data-mcc-regions="map" data-mcc-root="../"></div>
 
-<noscript>JavaScript est requis. [Consultez la norme sur les régions](standard.md).</noscript>
+<noscript>JavaScript est requis. [Comprendre les répéteurs](guide.md) explique les portées et les régions.</noscript>
 
-<small>[Norme sur les régions](standard.md) · [Sources de données](../assets/regions/NOTICE.txt)</small>
+<small>[Comprendre les répéteurs](guide.md) · [Sources de données](../assets/regions/NOTICE.txt)</small>

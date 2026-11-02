@@ -107,7 +107,7 @@ Find your city code on the [IATA region map](../config/map.md). In Ontario and Q
 
 Bot and MeshMapper operators follow the [bot and MeshMapper instructions](../proposals/onqc-scopes.md#bots-and-meshmapper).
 
-See the [scope setup guide](../config/standard.md) for app requirements and examples. Scopes do not change your radio settings.
+[How repeaters work](../config/guide.md#companions) explains scopes, with examples. Scopes do not change your radio settings.
 
 ## Test it
 
