@@ -180,14 +180,13 @@ test("a changed type or board keeps what still applies", () => {
 test("share links keep only valid, known answers", () => {
   const a = { type: "observer", repeat: "both", board: "heltec-v4", status: "running", observerFirmware: "yes", firmware: "1.15",
     tag: "yvr", province: "bc", radio: "bc-mesh", role: "edge", neighbours: ["yxx", "yyj"], external: ["washington"],
-    name: "Vancouver_Obs1", nameEdited: true, shareLocation: false, reflash: false, bootloader: true, flashed: true,
-    place: { name: "Vancouver", province: "bc", lat: 49.28, lon: -123.12 }, regionReply: "*^ F" };
-  const q = flow.toQuery(a);
-  assert.doesNotMatch(q, /^\?|place|lat|lon|regionReply/);
+    name: "Vancouver_Obs1", nameEdited: true, shareLocation: false, reflash: false,
+    place: { name: "Vancouver", province: "bc", lat: 49.28, lon: -123.12 } };
+  const q = flow.toQuery({ ...a, regionReply: "*^ F" });
+  assert.doesNotMatch(q, /^\?|place=|regionReply/);
   const back = flow.fromQuery(q);
-  const { place, regionReply, ...kept } = a;
-  assert.deepEqual(back, kept);
-  assert.deepEqual(flow.fromQuery("?" + q), kept);
+  assert.deepEqual(back, a);
+  assert.deepEqual(flow.fromQuery("?" + q), a);
   assert.equal(flow.toQuery({}), "");
   assert.deepEqual(flow.fromQuery(""), {});
   assert.deepEqual(flow.fromQuery(flow.toQuery({ role: "edge", neighbours: [] })), { role: "edge", neighbours: [] });
@@ -196,4 +195,53 @@ test("share links keep only valid, known answers", () => {
   assert.deepEqual(hostile, { neighbours: ["ygk", "ytr"], external: ["western-new-york"] });
   assert.equal(Object.getPrototypeOf(hostile), Object.prototype);
   assert.doesNotMatch(flow.toQuery({ name: "has space", tag: "<b>", password: "secret" }), /secret|space|<b>|password/);
+});
+
+test("the chosen town survives a reload: accents kept, coordinates rounded to 4 decimals", () => {
+  const a = { type: "repeater", board: "heltec-v3", status: "new", tag: "yul", province: "qc",
+    place: { name: "Montréal", province: "qc", lat: 45.501689, lon: -73.567256 } };
+  const q = flow.toQuery(a);
+  assert.match(q, /(?:^|&)town=Montr%C3%A9al(?:&|$)/);
+  assert.match(q, /(?:^|&)lat=45\.5017(?:&|$)/);
+  assert.match(q, /(?:^|&)lon=-73\.5673(?:&|$)/);
+  assert.doesNotMatch(q, /(?:^|&)place=/);
+  assert.deepEqual(flow.fromQuery(q), { ...a, place: { name: "Montréal", province: "qc", lat: 45.5017, lon: -73.5673 } });
+  // a name with spaces and punctuation, and a link that arrives with a leading "?"
+  const spaced = flow.fromQuery("?" + flow.toQuery({ tag: "yow", province: "qc", place: { name: "Saint-Jean-sur-Richelieu (QC) & co", province: "qc", lat: 45.3, lon: -73.26 } }));
+  assert.deepEqual(spaced.place, { name: "Saint-Jean-sur-Richelieu (QC) & co", province: "qc", lat: 45.3, lon: -73.26 });
+  // the province comes from the province answer; without one the place has none
+  assert.deepEqual(flow.fromQuery("town=Ottawa&lat=45.4215&lon=-75.6972"), { place: { name: "Ottawa", lat: 45.4215, lon: -75.6972 } });
+});
+
+test("a town that is missing, oversized or outside Canada is dropped whole", () => {
+  const ok = { name: "Belleville", province: "on", lat: 44.1628, lon: -77.3832 };
+  const only = place => flow.fromQuery(flow.toQuery({ tag: "ytr", province: "on", place }));
+  assert.deepEqual(only(ok), { tag: "ytr", province: "on", place: ok });
+  for (const bad of [{ ...ok, lat: 12 }, { ...ok, lat: 90 }, { ...ok, lon: -20 }, { ...ok, lon: -170 }, { ...ok, lat: NaN },
+    { ...ok, lat: "44.1" }, { ...ok, name: "" }, { ...ok, name: "   " }, { ...ok, name: "x".repeat(81) }, { ...ok, name: 7 }]) {
+    assert.equal(flow.toQuery({ place: bad }), "", JSON.stringify(bad));
+  }
+  assert.equal(only({ ...ok, name: "x".repeat(80) }).place.name.length, 80);
+  // the same checks apply to links written by hand
+  const read = query => flow.fromQuery("tag=ytr&province=on&" + query);
+  const kept = { tag: "ytr", province: "on" };
+  assert.deepEqual(read("town=Belleville&lat=12&lon=-77.38"), kept);
+  assert.deepEqual(read("town=Belleville&lat=44.16&lon=-20"), kept);
+  assert.deepEqual(read("town=Belleville&lat=abc&lon=-77.38"), kept);
+  assert.deepEqual(read("town=Belleville&lat=&lon=-77.38"), kept);
+  assert.deepEqual(read("town=Belleville&lat=0x2C&lon=-77.38"), kept);
+  assert.deepEqual(read("town=&lat=44.16&lon=-77.38"), kept);
+  assert.deepEqual(read("town=Belleville&lat=44.16"), kept);
+  assert.deepEqual(read("town=" + "x".repeat(81) + "&lat=44.16&lon=-77.38"), kept);
+  // `place` stays the town-search deep link and is never read as a place
+  assert.deepEqual(flow.fromQuery("place=Belleville"), {});
+  assert.deepEqual(flow.fromQuery("place=Belleville&town=Kingston&lat=44.23&lon=-76.49").place.name, "Kingston");
+});
+
+test("the 'I did this' ticks never go into a share link", () => {
+  assert.equal(flow.toQuery({ bootloader: true, flashed: true }), "");
+  const q = flow.toQuery({ type: "repeater", board: "rak4631", status: "new", bootloader: true, flashed: true });
+  assert.doesNotMatch(q, /bootloader|flashed/);
+  assert.deepEqual(flow.fromQuery(q), { type: "repeater", board: "rak4631", status: "new" });
+  assert.deepEqual(flow.fromQuery("bootloader=1&flashed=1&type=repeater"), { type: "repeater" });
 });

@@ -170,8 +170,10 @@
     return letters.slice(0, MAX_NAME - suffix.length) + suffix;
   }
 
-  // Share links: every non-secret answer except the picked place (the town search
-  // runs again) and pasted device replies. Each field knows how to write and read itself.
+  // Share links: the non-secret answers, plus the picked town (as town, lat and lon).
+  // Never carried: pasted device replies, and the "I flashed it" / "I updated the
+  // bootloader" ticks, which a shared link must not pre-tick for someone else.
+  // Each field knows how to write and read itself.
   function enumField(key, values) {
     return {
       key: key,
@@ -216,8 +218,6 @@
     enumField("status", STATUS),
     flagField("reflash"),
     enumField("observerFirmware", YES_NO),
-    flagField("bootloader"),
-    flagField("flashed"),
     enumField("firmware", VERSIONS),
     codeField("tag", TAG_RE),
     codeField("province", TAG_RE),
@@ -232,6 +232,47 @@
     flagField("shareLocation")
   ];
 
+  // The picked town travels as town, lat and lon (4 decimals, about 10 m) so a reload or a
+  // language switch needs no new search. It is not called "place": `?place=<text>` is the
+  // deep link that starts the town search. The place's province is the `province` answer.
+  var MAX_TOWN = 80;
+  var CANADA = { latMin: 41, latMax: 84, lonMin: -142, lonMax: -52 };
+  var DECIMAL_RE = /^-?\d+(\.\d+)?$/;
+
+  function round4(value) { return Math.round(value * 10000) / 10000; }
+
+  function validTown(name) {
+    return typeof name === "string" && name.trim().length > 0 && name.length <= MAX_TOWN;
+  }
+
+  function inCanada(lat, lon) {
+    return isFinite(lat) && isFinite(lon) &&
+      lat >= CANADA.latMin && lat <= CANADA.latMax && lon >= CANADA.lonMin && lon <= CANADA.lonMax;
+  }
+
+  function placeParts(place) {
+    if (!place || typeof place.lat !== "number" || typeof place.lon !== "number" || !validTown(place.name)) return [];
+    var lat = round4(place.lat);
+    var lon = round4(place.lon);
+    if (!inCanada(lat, lon)) return [];
+    return ["town=" + encodeURIComponent(place.name), "lat=" + lat, "lon=" + lon];
+  }
+
+  function readPlace(params, province) {
+    var name = params.get("town");
+    var lat = params.get("lat");
+    var lon = params.get("lon");
+    if (!validTown(name) || !DECIMAL_RE.test(lat || "") || !DECIMAL_RE.test(lon || "")) return undefined;
+    lat = parseFloat(lat);
+    lon = parseFloat(lon);
+    if (!inCanada(lat, lon)) return undefined;
+    var place = { name: name };
+    if (province !== undefined) place.province = province;
+    place.lat = lat;
+    place.lon = lon;
+    return place;
+  }
+
   function toQuery(answers) {
     var a = answers || {};
     var parts = [];
@@ -240,7 +281,7 @@
       var text = field.write(a[field.key]);
       if (text !== null) parts.push(field.key + "=" + text);
     });
-    return parts.join("&");
+    return parts.concat(placeParts(a.place)).join("&");
   }
 
   function fromQuery(search) {
@@ -251,6 +292,8 @@
       var value = field.read(params.get(field.key));
       if (value !== undefined) answers[field.key] = value;
     });
+    var place = readPlace(params, answers.province);
+    if (place) answers.place = place;
     return answers;
   }
 
