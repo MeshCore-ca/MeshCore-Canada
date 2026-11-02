@@ -90,6 +90,8 @@ for (const locale of ["", "fr/"]) {
     await expect(page.locator("[data-setup-region]")).toContainText("Québec");
     await next(page);
     await answer(page, "role", "city");
+    await expectStep(page, "name");
+    await page.locator("[data-setup-name]").fill("Gatineau_R1");
     await nextUntil(page, "commands");
     const lines = await commandLines(page);
     expect(lines).toContain("region def yow|* qc|* onqc|* can|* na");

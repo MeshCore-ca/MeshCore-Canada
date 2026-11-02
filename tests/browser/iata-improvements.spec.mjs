@@ -15,6 +15,8 @@ for (const locale of ["", "fr/"]) {
     await page.locator("[data-setup-help]").click();
     await expect(page.locator("[data-setup-help-text]")).toContainText(T("role.help", lang).split(/(?<=[.!?])\s/)[0]);
     await choose(page, "city");
+    await nextUntil(page, "name");
+    await page.locator("[data-setup-name]").fill(`${town}_R1`);
     await nextUntil(page, "commands");
     const lines = await commandLines(page);
     expect(lines).toContain(`region def ${tag}|* on|* onqc|* can|* na`);

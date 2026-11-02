@@ -221,6 +221,7 @@
     // Name it
     "name.question": "Give it a name",
     "name.hint": "Other people see this. Letters, numbers, `_` and `-`, no spaces.",
+    "name.hint.running": "Type the name it has now to keep it, or type a new one. Other people see this. Letters, numbers, `_` and `-`, no spaces.",
     "name.label": "Name",
     "name.invalid": "Use only letters, numbers, `_` or `-`, with no spaces or accents, up to {max} characters.",
     "name.location": "Show it on maps at the centre of {town} (not the exact spot)",
@@ -539,6 +540,7 @@
     // Name it
     "name.question": "Donnez-lui un nom",
     "name.hint": "Les autres le voient. Lettres, chiffres, `_` et `-`, sans espaces.",
+    "name.hint.running": "Tapez le nom qu’il a maintenant pour le garder, ou tapez-en un nouveau. Les autres le voient. Lettres, chiffres, `_` et `-`, sans espaces.",
     "name.label": "Nom",
     "name.invalid": "Utilisez seulement des lettres, des chiffres, `_` ou `-`, sans espaces ni accents, jusqu’à {max} caractères.",
     "name.location": "L’afficher sur les cartes au centre de la localité ({town}), pas à l’endroit exact",

@@ -146,9 +146,15 @@ test("running repeater via phone", async ({ page }) => {
   await town(page, "Belleville", "ytr");
   await answer(page, "role", "city");
   await expectStep(page, "name");
+  // A running repeater already has a name: nothing is suggested, so it isn't renamed by accident.
+  await expect(page.locator("[data-setup-name]")).toHaveValue("");
+  await expect(step(page)).toContainText(plain("name.hint.running", "en"));
+  await expect(nextButton(page)).toBeDisabled();
+  await page.locator("[data-setup-name]").fill("Quinte-Hill");
   await next(page);
   await expectStep(page, "commands");
   await expect(step(page)).toContainText(T("commands.question.phone", "en"));
+  expect(await commandLines(page)).toContain("set name Quinte-Hill");
   await expect(page.locator("[data-setup-step] [data-setup-phone-steps] img")).not.toHaveCount(0);
   await expect(page.locator('[data-setup-note="radio-phone"]')).toContainText(firstSentence(T("note.radio-phone", "en")));
   expect((await commandLines(page)).some((line) => line.startsWith("set radio"))).toBe(false);
@@ -173,6 +179,7 @@ test("running repeater via phone", async ({ page }) => {
   // From the app the repeater takes the time from the phone, so the clock check is the sync itself, before the advert.
   await expect(page.locator("[data-setup-check] .setup-command__code")).toHaveText(["ver", "get name", "region", "clock sync", "advert"]);
   await expect(page.locator('[data-setup-check="clock"]')).toContainText(plain("check.clock.phone", "en"));
+  await expect(page.locator('[data-setup-check="name"]')).toContainText(T("check.name", "en", { name: "Quinte-Hill" }));
 });
 
 test("edge repeater offers neighbouring regions and Ontario cross-border options", async ({ page }) => {
@@ -234,6 +241,8 @@ test("French pages name the cross-border networks in French", async ({ page }) =
   await page.locator('[data-setup-neighbour="none"] input').check();
   await page.locator('[data-setup-external="pennsylvania"] input').check();
   await next(page);
+  await expectStep(page, "name");
+  await page.locator("[data-setup-name]").fill("Belleville_R1");
   await next(page);
   await expectStep(page, "commands");
   await expect(page.locator("[data-setup-notes]")).toContainText(T("note.network", "fr", { network: "Pennsylvanie" }));
@@ -444,6 +453,7 @@ test("share link restores answers and holds no secrets", async ({ page, context 
   await town(page, "Belleville", "ytr");
   await answer(page, "role", "city");
   await expectStep(page, "name");
+  await page.locator("[data-setup-name]").fill("Belleville_R1");
   await next(page);
   await expectStep(page, "commands");
   await page.locator("[data-setup-reply]").fill("*^ F\n ott F");
@@ -451,7 +461,7 @@ test("share link restores answers and holds no secrets", async ({ page, context 
   const shared = new URL(page.url());
   expect(Object.fromEntries(shared.searchParams)).toEqual({
     type: "repeater", board: "rak4631", status: "running", reflash: "0", firmware: "1.15",
-    tag: "ytr", province: "on", role: "city", name: "Belleville_R1",
+    tag: "ytr", province: "on", role: "city", name: "Belleville_R1", nameEdited: "1",
     town: "Belleville", lat: "44.1628", lon: "-77.3832"
   });
   expect(shared.search).not.toMatch(/ott|reply|bootloader|flashed|password|pwd|ssid/i);
@@ -803,6 +813,8 @@ test("phone width", async ({ page }, testInfo) => {
   await town(page, "Belleville", "ytr");
   await answer(page, "role", "city");
   await expectStep(page, "name");
+  await page.locator("[data-setup-name]").fill("Belleville_R1");
+  await fitsTheScreen(page, "name (phone)");
   await next(page);
   await expectStep(page, "commands");
   await page.locator("[data-setup-reply]").fill("*^ F\n can F\n  on F\n   ott F");

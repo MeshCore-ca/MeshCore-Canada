@@ -884,7 +884,7 @@
     var input = el("input", { type: "text", id: "setup-name", class: "setup-input", "data-setup-name": "", value: a.name || "",
       maxlength: "31", autocomplete: "off", autocapitalize: "off", spellcheck: "false", "aria-describedby": "setup-name-hint setup-name-message" });
     var message = el("div", { id: "setup-name-message", class: "setup-message", "data-setup-name-message": "", "aria-live": "polite" });
-    body.appendChild(para(rich("name.hint"), { class: "setup-hint", id: "setup-name-hint" }));
+    body.appendChild(para(rich(a.status === "running" ? "name.hint.running" : "name.hint"), { class: "setup-hint", id: "setup-name-hint" }));
     body.appendChild(el("div", { class: "setup-field" }, [el("label", { for: "setup-name", text: t("name.label") }), input]));
     body.appendChild(message);
     function check() {

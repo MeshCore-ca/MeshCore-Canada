@@ -47,6 +47,17 @@ test("names are suggested from the town; a region from the map answers the town 
   assert.equal(flow.isComplete("name", { name: "Belleville_R1" }), true);
 });
 
+test("a running board gets no suggested name: the person types its current name to keep it, or a new one", () => {
+  for (const type of ["repeater", "observer"]) {
+    assert.equal(flow.suggestName({ type, status: "running", place: { name: "Kingston" } }), "", type);
+  }
+  assert.equal(flow.suggestName({ type: "repeater", status: "new", place: { name: "Kingston" } }), "Kingston_R1");
+  // Switching to running drops a name suggested for a new board, but keeps one the person typed.
+  assert.equal(flow.resetDependents({ status: "running", name: "Kingston_R1" }, "status").name, undefined);
+  assert.equal(flow.resetDependents({ status: "running", name: "Hilltop", nameEdited: true }, "status").name, "Hilltop");
+  assert.equal(flow.isComplete("name", { status: "running" }), false);
+});
+
 test("ver replies are read leniently", () => {
   assert.deepEqual(flow.parseVersion("v1.15.0"), { firmware: "1.15", tooOld: false });
   assert.deepEqual(flow.parseVersion("MeshCore v1.16.2 (Build: 12-Oct-2026)"), { firmware: "1.16", tooOld: false });

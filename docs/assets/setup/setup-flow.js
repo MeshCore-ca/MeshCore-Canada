@@ -132,7 +132,7 @@
   var DEPENDENTS = {
     type: ["repeat", "reflash", "observerFirmware", "bootloader", "flashed", "firmware", "regionReply", "name"],
     board: ["bootloader", "flashed", "firmware", "regionReply"],
-    status: ["reflash", "observerFirmware", "bootloader", "flashed", "firmware", "regionReply"],
+    status: ["reflash", "observerFirmware", "bootloader", "flashed", "firmware", "regionReply", "name"],
     reflash: ["bootloader", "flashed", "firmware"],
     observerFirmware: ["flashed", "firmware"],
     place: ["tag", "province", "radio", "neighbours", "external", "name"],
@@ -158,8 +158,11 @@
 
   var ACCENTED = { "œ": "oe", "Œ": "OE", "æ": "ae", "Æ": "AE" };
 
+  // A name for a new board, from its town. A board that is already running has a name
+  // people know it by, so nothing is suggested: the person types it to keep it, or a new one.
   function suggestName(answers) {
     var a = answers || {};
+    if (a.status === "running") return "";
     var town = a.place && typeof a.place.name === "string" ? a.place.name : "";
     var letters = town
       .replace(/[ŒœÆæ]/g, function (ch) { return ACCENTED[ch]; })

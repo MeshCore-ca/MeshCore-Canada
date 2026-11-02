@@ -37,6 +37,11 @@ test("a new Belleville city repeater gets the full rollup", () => {
     "password <your new admin password>","set path.hash.mode 2","set advert.interval 240","set flood.advert.interval 47","set flood.max 16",
     "region def ytr|* on|* onqc|* can|* na","region allowf *","region default ytr","region save","reboot"]);
 });
+test("a running repeater keeps the name the person typed", () => {
+  const running = { ...belleville, status: "running", reflash: false, name: "Hilltop-Kingston", nameEdited: true };
+  assert.ok(flat(cmds.rollup(running, data, "en")).includes("set name Hilltop-Kingston"));
+  assert.equal(cmds.checks(running, data, "en").find((c) => c.id === "name").expect, "Should answer Hilltop-Kingston.");
+});
 test("edge, cross-border and onny follow the generator", () => {
   const edge = flat(cmds.rollup({ ...belleville, role: "edge", neighbours: ["ygk"], external: ["western-new-york"] }, data, "en"));
   assert.ok(edge.includes("region def ytr|* ygk|* on|* onqc|* can|* na|* us us-ny") && edge.includes("region denyf *"));
