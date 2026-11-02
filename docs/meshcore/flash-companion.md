@@ -89,15 +89,16 @@ The optional **Message Settings → Auto Reset Path** preference affects how the
 
 ## Choose your scope
 
-!!! warning "ON/QC: wait for Phase 2"
-    For personal companions, leave **Default Region Scope** empty and channels
-    **unscoped** for now. Phase 2 is not open. It can start no earlier than
-    **January 2027**, after the repeaters are ready and the rollout is announced.
+!!! note "Set your default scope now"
+    Repeaters now use scopes to decide which messages to pass on. A default
+    scope on your companion keeps your messages travelling the right distance.
 
-Flashing does not mean you should change scopes. You can still [find your IATA region](../config/map.md). Read the [companion scope guide](../start/companion.md#choose-a-scope) and [rollout order](../proposals/onqc-scopes.md#rollout-order) before changing settings.
-**When Phase 2 is announced**, use `onqc` for the default and Public channel,
-and your city scope for tests. Bots follow the separate [end-of-Phase-1 guidance](../proposals/onqc-scopes.md#bots-and-meshmapper).
-Elsewhere, follow your community’s settings; `can` and `na` remain reserved for future use.
+    - **Ontario or Québec:** use `onqc`.
+    - **Elsewhere:** use your province's code, such as `ns` or `bc`, unless
+      your community has agreed on something else.
+
+You can set it once the app is connected. The [companion scope guide](../start/companion.md#choose-a-scope) shows the steps in the MeshCore app. You can also [find your IATA region](../config/map.md).
+In Ontario and Québec, use `onqc` for the Public channel too, and your city scope for tests. Bots follow the separate [bot and MeshMapper guidance](../proposals/onqc-scopes.md#bots-and-meshmapper). Leave `can` and `na` for future use.
 
 ## Verify before regular use
 

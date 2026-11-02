@@ -69,21 +69,27 @@ une annonce.
 
 ## Choisir une portée (scope) {#choisir-un-scope}
 
-!!! warning "ON/QC : attendez la phase 2"
-    Pour un compagnon personnel, laissez **Default Region Scope** vide et les
-    canaux **sans portée** pour le moment. La phase 2 n’est pas ouverte. Elle ne
-    peut commencer avant **janvier 2027**, lorsque les répéteurs seront prêts et
-    que le déploiement sera annoncé. Un changement trop tôt peut empêcher vos
-    messages de joindre les autres utilisateurs.
+!!! note "Réglez dès maintenant votre portée par défaut"
+    Les répéteurs utilisent maintenant les portées pour choisir les messages à
+    retransmettre. Une portée par défaut sur votre compagnon fait en sorte que
+    vos messages aillent aussi loin qu’il le faut.
 
-Trouvez votre code de ville sur la [carte des régions IATA](../config/map.md).
-**Quand la phase 2 sera annoncée**, utilisez `onqc` par défaut et pour le canal
-Public, et votre code de ville, comme `yow`, pour les canaux de test. Réservez
-`can` et `na` à un usage futur.
+    - **Ontario ou Québec :** utilisez `onqc`.
+    - **Ailleurs :** utilisez le code de votre province, comme `ns` ou `bc`,
+      sauf si votre communauté a convenu d’autre chose.
 
-Les responsables de robots et de MeshMapper suivent les [consignes de fin de phase 1](../proposals/onqc-scopes.md#robots-et-meshmapper), une fois les répéteurs locaux prêts. Consultez l’[ordre de déploiement](../proposals/onqc-scopes.md#ordre-de-deploiement) avant de changer les portées.
+Pour la régler, connectez votre compagnon à l’application MeshCore (version 1.43 ou plus récente), puis :
 
-Ailleurs, utilisez la portée convenue avec votre communauté. Le [guide des portées](../config/standard.md) présente les versions d’application requises et des exemples. Les portées ne changent pas les réglages radio.
+1. Touchez la **roue des réglages** en haut à droite.
+2. Descendez jusqu’à **Network Settings** et touchez **Default Region Scope**.
+3. Si votre portée n’est pas dans la liste, touchez **Add Region** (ou le **+**), tapez-la en minuscules et touchez le crochet.
+4. Touchez votre portée pour la sélectionner, puis touchez le crochet en haut à droite. **Settings Saved!** apparaît.
+
+Trouvez votre code de ville sur la [carte des régions IATA](../config/map.md). En Ontario et au Québec, utilisez aussi `onqc` pour le canal Public et votre code de ville, comme `yow`, pour les canaux de test : ouvrez le canal, touchez **⋮** et choisissez **Set Region Scope**. Réservez `can` et `na` à un usage futur.
+
+Les responsables de robots et de MeshMapper suivent les [consignes pour les robots et MeshMapper](../proposals/onqc-scopes.md#robots-et-meshmapper).
+
+Le [guide des portées](../config/standard.md) présente les versions d’application requises et des exemples. Les portées ne changent pas les réglages radio.
 
 ## Tester l’appareil
 

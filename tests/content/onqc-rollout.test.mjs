@@ -2,28 +2,47 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 
-test("every personal companion entry point gates ON/QC scopes on the announced Phase 2", () => {
+const companionPages = ["start/companion", "meshcore/flash-companion", "config/standard"];
+
+test("every personal companion entry point tells people to set a default scope now", () => {
   for (const french of [false, true]) {
-    for (const page of ["start/companion", "meshcore/flash-companion", "config/standard"]) {
+    for (const page of companionPages) {
       const path = `docs/${page}${french ? ".fr" : ""}.md`;
       const source = readFileSync(path, "utf8");
-      assert.match(source, french ? /La phase 2 n’est pas ouverte/ : /Phase 2 is not open/, path);
-      assert.match(source, french ? /janvier 2027/ : /January 2027/, path);
-      assert.match(source, french ? /Default Region Scope\*\* vide/ : /Default Region Scope\*\* empty/, path);
-      assert.match(source, french ? /\*\*sans portée\*\*/ : /\*\*unscoped\*\*/, path);
-      assert.match(source, french ? /\*\*Quand la phase 2 sera annoncée\*\*/ : /\*\*When Phase 2 is\s+announced\*\*/, path);
-      assert.match(source, french ? /#ordre-de-deploiement/ : /#rollout-order/, path);
+      assert.doesNotMatch(source, /Phase 2|phase 2|January 2027|janvier 2027|Default Region Scope\*\* (empty|vide)/, path);
+      assert.match(source, french ? /portée par défaut/i : /set (your|a) default (region )?scope/i, path);
+      assert.match(source, french ? /Ontario[\s\S]*Québec[\s\S]*`onqc`/ : /Ontario[\s\S]*Québec[\s\S]*`onqc`/, path);
+      assert.match(source, french ? /code de votre province/ : /your province['’]s code/, path);
     }
   }
 });
 
-test("standards opt-in, Phase 3 and planning assignments stay separate from rollout approval", () => {
+test("the companion pages keep the how-to for the Default Region Scope setting", () => {
+  for (const french of [false, true]) {
+    for (const page of ["start/companion", "config/standard"]) {
+      const source = readFileSync(`docs/${page}${french ? ".fr" : ""}.md`, "utf8");
+      assert.match(source, /Network Settings/, page);
+      assert.match(source, /Default Region Scope/, page);
+    }
+  }
+});
+
+test("the scripts no longer tell companions to wait for a later phase", () => {
+  const profile = readFileSync("docs/assets/javascripts/region-profile.js", "utf8");
+  const regions = readFileSync("docs/assets/regions/regions.js", "utf8");
+  for (const [name, source] of [["region-profile.js", profile], ["regions.js", regions]]) {
+    assert.doesNotMatch(source, /Phase 2|phase 2|January 2027|janvier 2027|repeaters first|les répéteurs d’abord/, name);
+  }
+  assert.match(profile, /Default Region Scope/);
+  assert.match(profile, /onqc/);
+});
+
+test("standards opt-in and planning assignments stay separate from rollout approval", () => {
   const script = readFileSync("docs/assets/regions/regions.js", "utf8");
   assert.match(script, /standardDefaults: false/);
   assert.match(script, /data-onqc-settings-summary/);
   for (const french of [false, true]) {
     const source = readFileSync(`docs/config/standard${french ? ".fr" : ""}.md`, "utf8");
-    assert.match(source, french ? /\*\*phase 3\*\*[\s\S]*après la phase 2 et une annonce locale/ : /\*\*Phase 3\*\*[\s\S]*after Phase 2 and announced locally/);
     assert.match(source, french ? /pas une extension approuvée/ : /not adopted\s+parts of that rollout/);
     assert.match(source, french ? /pas une configuration complète de la phase 1/ : /not a complete Phase 1 setup/);
   }

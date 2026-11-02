@@ -65,19 +65,26 @@ Reboot after changing the radio settings, then send an advert.
 
 ## Choose a scope
 
-!!! warning "ON/QC: wait for Phase 2"
-    For personal companions, leave **Default Region Scope** empty and channels
-    **unscoped** for now. Phase 2 is not open. It can start no earlier than
-    **January 2027**, after the repeaters are ready and the rollout is announced.
-    Switching early can prevent your messages from reaching other users.
+!!! note "Set your default scope now"
+    Repeaters now use scopes to decide which messages to pass on. A default
+    scope on your companion keeps your messages travelling the right distance.
 
-Find your city code on the [IATA region map](../config/map.md). **When Phase 2 is
-announced**, use `onqc` for your default scope and Public channel, and your city
-scope, such as `yow`, for test channels. Leave `can` and `na` for future use.
+    - **Ontario or Québec:** use `onqc`.
+    - **Elsewhere:** use your province's code, such as `ns` or `bc`, unless
+      your community has agreed on something else.
 
-Bot and MeshMapper operators follow the [end-of-Phase-1 instructions](../proposals/onqc-scopes.md#bots-and-meshmapper), once local repeaters are ready. See the [rollout order](../proposals/onqc-scopes.md#rollout-order) before changing scopes.
+To set it, connect your companion to the MeshCore app (version 1.43 or newer), then:
 
-Elsewhere, use the scope agreed by your local community. See the [scope setup guide](../config/standard.md) for app requirements and examples. Scopes do not change your radio settings.
+1. Tap the **settings cog** in the top right.
+2. Scroll to **Network Settings** and tap **Default Region Scope**.
+3. If your scope is not listed, tap **Add Region** (or the **+**), type it in lowercase and tap the checkmark.
+4. Tap your scope to select it, then tap the checkmark in the top right. **Settings Saved!** pops up.
+
+Find your city code on the [IATA region map](../config/map.md). In Ontario and Québec, also use `onqc` for the Public channel and your city scope, such as `yow`, for test channels: open the channel, tap **⋮** and choose **Set Region Scope**. Leave `can` and `na` for future use.
+
+Bot and MeshMapper operators follow the [bot and MeshMapper instructions](../proposals/onqc-scopes.md#bots-and-meshmapper).
+
+See the [scope setup guide](../config/standard.md) for app requirements and examples. Scopes do not change your radio settings.
 
 ## Test it
 

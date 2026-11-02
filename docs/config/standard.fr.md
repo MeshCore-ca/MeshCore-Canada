@@ -157,9 +157,8 @@ micrologiciel. Les parents des noms correspondants peuvent être ramenés à
 la racine pour la nouvelle structure sans hiérarchie.
 
 Choisissez **Activation coordonnée** seulement après avoir vérifié l’annonce
-locale et la préparation des opérateurs voisins. En ON/QC, cette transition
-se coordonne avec la phase 2, janvier 2027 au plus tôt; la date ne suffit pas.
-Les autres provinces fixent leur calendrier. Le nettoyage et les exemples
+locale et la préparation des opérateurs voisins. ON/QC est ouvert dès maintenant;
+les autres provinces fixent leur calendrier. Le nettoyage et les exemples
 ville/bordure ci-dessous concernent l’activation, pas la préparation.
 
 ### Comparer une configuration existante
@@ -284,8 +283,9 @@ set flood.max 16
 Ces valeurs donnent des identifiants de 3 octets, des annonces locales toutes
 les quatre heures, des annonces par diffusion toutes les 47 heures et une
 limite de 16 sauts. Vérifiez que cette limite suffit au plus long trajet voulu.
-`set flood.max.unscoped 3` appartient à la **phase 3**, seulement au besoin,
-après la phase 2 et une annonce locale. L’outil ne l’ajoute pas par défaut.
+`set flood.max.unscoped 3` est une étape ultérieure et facultative : ajoutez-la
+seulement au besoin, une fois les nouvelles portées en service et avec l’accord
+de votre communauté. L’outil ne l’ajoute pas par défaut.
 
 Les commandes peuvent prendre effet ou être enregistrées dès leur saisie.
 Conservez une sauvegarde : un redémarrage ne suffit pas nécessairement à les
@@ -299,21 +299,22 @@ du texte ne prouve pas la livraison radio.
 
 ## Compagnons et canaux
 
-!!! warning "ON/QC : attendez la phase 2"
-    Pour un compagnon personnel, laissez **Default Region Scope** vide et les
-    canaux **sans portée** pour le moment. La phase 2 n’est pas ouverte. Elle ne
-    peut commencer avant **janvier 2027**, lorsque les répéteurs seront prêts et
-    que le déploiement sera annoncé. Un changement trop tôt peut bloquer les
-    messages sur un répéteur qui n’est pas encore configuré.
+!!! note "Réglez dès maintenant votre portée par défaut"
+    Les répéteurs utilisent maintenant les portées pour choisir les messages à
+    retransmettre. Une portée par défaut sur votre compagnon fait en sorte que
+    vos messages aillent aussi loin qu’il le faut.
 
-Suivez l’[ordre de déploiement](../proposals/onqc-scopes.md#ordre-de-deploiement).
-Les robots et MeshMapper utilisent leur portée de ville à la **fin de la phase 1**,
-une fois les répéteurs locaux prêts. Les compagnons personnels attendent la phase 2.
+    - **Ontario ou Québec :** utilisez `onqc`.
+    - **Ailleurs :** utilisez le code de votre province, comme `ns` ou `bc`,
+      sauf si votre communauté a convenu d’autre chose.
 
-**Quand la phase 2 sera annoncée**, avec l’application MeshCore **1.43 ou plus
-récente**, ouvrez **Settings → Network Settings → Default Region Scope** et
-choisissez `onqc`. Le premier message direct envoyé par diffusion et sa réponse de
-découverte de chemin peuvent ainsi traverser le réseau partagé.
+Avec l’application MeshCore **1.43 ou plus récente**, ouvrez
+**Settings → Network Settings → Default Region Scope** et choisissez votre
+portée, en l’ajoutant d’abord si elle n’est pas dans la liste. Le
+[guide du compagnon](../start/companion.md#choisir-un-scope) montre chaque étape.
+Une portée par défaut permet au premier message direct envoyé par diffusion, et à
+sa réponse de découverte de chemin, de traverser le réseau partagé. Les robots et
+MeshMapper utilisent leur portée de ville, une fois les répéteurs locaux prêts.
 
 | Trafic ON/QC | Portée |
 | --- | --- |
@@ -322,8 +323,9 @@ découverte de chemin peuvent ainsi traverser le réseau partagé.
 | Autres canaux | Ville, province ou `onqc`, selon l’entente locale |
 
 Définissez chaque canal : sans portée propre, il utilise celle du compagnon.
-N’utilisez pas encore `can` ou `na` par défaut. Hors ON/QC, convenez d’une portée
-partagée avec les opérateurs; le site ne suppose pas qu’un trajet pancanadien existe.
+N’utilisez pas encore `can` ou `na` par défaut. Hors ON/QC, utilisez le code de
+votre province, sauf si votre communauté a convenu d’une autre portée partagée;
+le site ne suppose pas qu’un trajet pancanadien existe.
 
 ## Limites du micrologiciel
 

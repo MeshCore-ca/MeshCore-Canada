@@ -105,19 +105,17 @@ sauf si votre méthode d’essai locale exige un autre réglage.
 
 ## Choisir votre scope
 
-!!! warning "ON/QC : attendez la phase 2"
-    Pour un compagnon personnel, laissez **Default Region Scope** vide et les
-    canaux **sans portée** pour le moment. La phase 2 n’est pas ouverte. Elle ne
-    peut commencer avant **janvier 2027**, lorsque les répéteurs seront prêts et
-    que le déploiement sera annoncé.
+!!! note "Réglez dès maintenant votre portée par défaut"
+    Les répéteurs utilisent maintenant les portées pour choisir les messages à
+    retransmettre. Une portée par défaut sur votre compagnon fait en sorte que
+    vos messages aillent aussi loin qu’il le faut.
 
-Installer le micrologiciel ne signifie pas qu’il faut changer les portées.
-Vous pouvez toujours [trouver votre région IATA](../config/map.md).
-Consultez le [guide des portées du compagnon](../start/companion.md#choisir-un-scope)
-et l’[ordre de déploiement](../proposals/onqc-scopes.md#ordre-de-deploiement).
-**Quand la phase 2 sera annoncée**, utilisez `onqc` par défaut et pour le canal
-Public, et votre code de ville pour les tests. Les robots suivent les [consignes de fin de phase 1](../proposals/onqc-scopes.md#robots-et-meshmapper).
-Ailleurs, suivez les réglages de votre communauté; `can` et `na` restent réservés à un usage futur.
+    - **Ontario ou Québec :** utilisez `onqc`.
+    - **Ailleurs :** utilisez le code de votre province, comme `ns` ou `bc`,
+      sauf si votre communauté a convenu d’autre chose.
+
+Vous pouvez la régler dès que l’application est connectée. Le [guide des portées du compagnon](../start/companion.md#choisir-un-scope) montre les étapes dans l’application MeshCore. Vous pouvez aussi [trouver votre région IATA](../config/map.md).
+En Ontario et au Québec, utilisez aussi `onqc` pour le canal Public et votre code de ville pour les tests. Les robots suivent les [consignes pour les robots et MeshMapper](../proposals/onqc-scopes.md#robots-et-meshmapper). Réservez `can` et `na` à un usage futur.
 
 ## Vérifier avant l’utilisation courante
 
