@@ -15,11 +15,14 @@ const routes = [
   ["submit-idea", "/submit-idea/"],
   ["fr-home", "/fr/"],
   ["fr-config", "/fr/config/"],
+  ["guide", "/config/guide/"],
+  ["fr-guide", "/fr/config/guide/"],
   ["map-result", "/config/map/?tag=ott"],
   ["editor", "/config/editor/"],
   ["mobile-map-result", "/config/map/?tag=ott", "mobile"],
   ["mobile-fr-map-result", "/fr/config/map/?tag=ott", "mobile"],
-  ["mobile-editor", "/config/editor/", "mobile"]
+  ["mobile-editor", "/config/editor/", "mobile"],
+  ["mobile-config", "/config/", "mobile"]
 ];
 const budgets = {
   performance: 0.8,

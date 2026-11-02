@@ -1409,6 +1409,8 @@
     try {
       start(root);
     } catch (error) {
+      // Say what broke in the console; the page shows the plain message.
+      console.error(error);
       fail(root);
     }
   }

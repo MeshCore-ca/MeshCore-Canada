@@ -38,7 +38,7 @@ C’est une radio MeshCore qui reste allumée au même endroit, idéalement en
 hauteur, sur un toit ou un mât. Personne n’y discute directement. Pour discuter,
 on utilise un **appareil compagnon** : la petite radio jumelée à l’application
 MeshCore sur un téléphone ou un ordinateur. Quand un répéteur entend un message,
-il peut le retransmettre, pour qu’il joigne des gens trop loin pour entendre
+il peut le relayer, pour qu’il joigne des gens trop loin pour entendre
 l’appareil compagnon. Chaque répéteur qui relaie un message compte pour un
 **saut**.
 
@@ -351,10 +351,10 @@ connexion que vous utilisez.
     Lettres, chiffres, `_` et `-`, sans espaces.
 
 `set lat 44.1628`
-:   Place le répéteur sur les cartes au centre de la localité (Belleville), pas à l’endroit exact. Cette ligne règle la latitude.
+:   Place le répéteur sur les cartes près de la localité (Belleville), pas à son endroit exact. Cette ligne règle la latitude.
 
 `set lon -77.3832`
-:   Cette ligne règle la longitude, pour que les cartes le placent au centre de la localité (Belleville).
+:   Cette ligne règle la longitude, pour que les cartes le placent près de la localité (Belleville).
 
     Décochez l’option de carte dans l’outil, et ces deux lignes disparaissent.
 
@@ -362,7 +362,7 @@ connexion que vous utilisez.
 :   Règle le mot de passe administrateur qui vous servira à le gérer depuis l’application. Gardez-le dans votre gestionnaire de mots de passe.
 
 `password <votre nouveau mot de passe administrateur>`, sur un répéteur déjà en service
-:   Change le mot de passe administrateur. Sautez cette ligne pour conserver l’actuel. Gardez-le dans votre gestionnaire de mots de passe.
+:   Change le mot de passe administrateur. Si vous sautez cette ligne, le répéteur conserve l’actuel. Gardez le nouveau dans votre gestionnaire de mots de passe.
 
 ### Réglages de MeshCore Canada
 
@@ -400,7 +400,7 @@ micrologiciel 1.16 ou plus récent :
     Un répéteur de bordure reçoit cette ligne au lieu de `region allowf *`.
 
 `region default ytr`
-:   Étiquette avec ytr les annonces de ce répéteur.
+:   Ajoute l’étiquette ytr aux annonces de ce répéteur.
 
 `region save`
 :   Enregistre les réglages de région.
@@ -466,7 +466,7 @@ ces lignes se répètent donc pour chaque étiquette.
 **Micrologiciel 1.14 :**
 
 `region put ytr`
-:   Ajoute Quinte West (ytr) à sa liste de régions. Il ne relaie pas ces messages avant sa ligne region allowf.
+:   Ajoute Quinte West (ytr) à sa liste de régions. Il ne relaie pas ces messages avant sa ligne `region allowf`.
 
 `region allowf ytr`
 :   Relaie les messages qui portent l’étiquette Quinte West (ytr).
@@ -499,7 +499,7 @@ Ces lignes concernent seulement un répéteur observateur.
     emplacements libres (3 à 6).
 
 `set mqtt.status on`
-:   Envoie un court rapport d’état à la connexion, puis toutes les quelques minutes, pour que live.meshcore.ca l’affiche en ligne.
+:   Envoie un court rapport d’état à la connexion, puis régulièrement, pour que live.meshcore.ca l’affiche en ligne.
 
 `set mqtt.packets on`
 :   Rapporte les paquets (messages radio) qu’il entend. C’est l’essentiel de ce qu’il envoie aux serveurs.

@@ -120,7 +120,7 @@ l’installation finale. Si une vérification échoue,
   <ol>
     <li><label><input id="repeater-progress-hardware" type="checkbox" data-mc-progress> Confirmer que le matériel et l’emplacement conviennent</label></li>
     <li><label><input id="repeater-progress-prepare" type="checkbox" data-mc-progress> Sauvegarder les données et préparer l’appareil</label></li>
-    <li><label><input id="repeater-progress-flash" type="checkbox" data-mc-progress> La programmer avec l’outil de configuration</label></li>
+    <li><label><input id="repeater-progress-flash" type="checkbox" data-mc-progress> Programmer le répéteur avec l’outil de configuration</label></li>
     <li><label><input id="repeater-progress-configure" type="checkbox" data-mc-progress> Appliquer les paramètres locaux et régionaux</label></li>
     <li><label><input id="repeater-progress-verify-local" type="checkbox" data-mc-progress> Vérifier le répéteur sur l’établi</label></li>
     <li><label><input id="repeater-progress-verify-community" type="checkbox" data-mc-progress> Faire un essai avec un compagnon à proximité</label></li>

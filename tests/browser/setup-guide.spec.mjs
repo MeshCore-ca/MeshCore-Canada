@@ -182,8 +182,12 @@ for (const lang of ["en", "fr"]) {
       await openDemo(page, lang);
       // Browsers only hyphenate with a dictionary installed, so check the worst case: whole words only.
       await page.addStyleTag({ content: "*, *::before, *::after { hyphens: manual !important; }" });
+      // The page's tables (starter regions, channel scopes) are there to check, so an empty list proves something.
+      const tables = page.locator("article .md-typeset__scrollwrap");
+      expect(await tables.count(), "the page's tables").toBeGreaterThanOrEqual(3);
+      await expect(tables.first().locator("table")).toBeVisible();
       const wide = await page.evaluate(() =>
-        Array.from(document.querySelectorAll(".md-typeset__scrollwrap"))
+        Array.from(document.querySelectorAll("article .md-typeset__scrollwrap"))
           .filter((wrap) => wrap.scrollWidth > wrap.clientWidth)
           .map((wrap) => wrap.querySelector("th").textContent.trim())
       );

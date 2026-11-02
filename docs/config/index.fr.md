@@ -13,7 +13,7 @@ evidence: tests/browser/setup-tool.spec.mjs
 difficulty: beginner
 estimated_time: 20-40 minutes
 page_styles:
-  - assets/setup/setup.css?v=20261102-2
+  - assets/setup/setup.css?v=20261102-5
 page_scripts:
   - assets/regions/modules/iata-scopes.js?v=20261013-1
   - assets/regions/modules/scope-migration.js?v=20260926-2

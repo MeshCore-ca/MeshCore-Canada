@@ -8,8 +8,8 @@ task: flash-companion
 scope: canada-baseline
 status: draft
 owner: docs-firmware
-last_reviewed: 2026-07-22
-review_by: 2026-10-17
+last_reviewed: 2026-11-02
+review_by: 2026-12-31
 difficulty: beginner
 estimated_time: 20-30 minutes
 destructive: true

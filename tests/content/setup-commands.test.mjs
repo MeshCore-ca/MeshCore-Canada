@@ -167,7 +167,14 @@ test("explanations name the regions and the town in plain words", () => {
   assert.equal(why({ ...belleville, role: "edge", neighbours: ["ygk"] }, "deny"),
     "Don't pass on messages with no label, so they stay in their own region. That's what makes it an edge repeater.");
   assert.equal(why(belleville, "default"), "Label this repeater's own announcements with ytr.");
-  assert.match(why(belleville, "lat"), /centre of Belleville/);
+  // The town search's point can be several km from the town's middle, so the map position is only "near" it.
+  assert.equal(why(belleville, "lat"), "Show it on maps near Belleville (not its exact spot). This line sets the latitude.");
+  assert.equal(why(belleville, "lon"), "This line sets the longitude, so maps show it near Belleville.");
+  assert.equal(why(belleville, "lat", "fr"), "Place le répéteur sur les cartes près de la localité (Belleville), pas à son endroit exact. Cette ligne règle la latitude.");
+  assert.doesNotMatch(text.t("name.location", "en") + text.t("name.location", "fr"), /centre/);
+  assert.equal(why({ ...belleville, firmware: "1.14" }, "put-ytr"),
+    "Add Quinte West (ytr) to its list of regions. It doesn't pass those messages on until its `region allowf` line.");
+  assert.equal(why(belleville, "default", "fr"), "Ajoute l’étiquette ytr aux annonces de ce répéteur.");
   assert.match(why({ ...belleville, role: "edge", neighbours: ["ygk"], external: ["western-new-york"] }, "def"), /Kingston \(ygk\).*United States \(us\) and New York \(us-ny\)\.$/);
   assert.equal(why({ ...belleville, status: "running", reflash: false, regionReply: "*^ F\n ott F" }, "remove-ott"), "Remove the old region ott.");
   assert.equal(why({ ...belleville, tag: "yvr", province: "bc", radio: "bc-mesh" }, "radio"),

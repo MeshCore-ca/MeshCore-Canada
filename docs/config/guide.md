@@ -324,10 +324,10 @@ using.
     Letters, numbers, `_` and `-`, no spaces.
 
 `set lat 44.1628`
-:   Show it on maps at the centre of Belleville (not the exact spot). This line sets the latitude.
+:   Show it on maps near Belleville (not its exact spot). This line sets the latitude.
 
 `set lon -77.3832`
-:   This line sets the longitude, so maps show it at the centre of Belleville.
+:   This line sets the longitude, so maps show it near Belleville.
 
     Untick the map option in the tool and both lines are left out.
 
@@ -433,7 +433,7 @@ versions add one name per line, so these lines repeat for each label.
 **Firmware 1.14:**
 
 `region put ytr`
-:   Add Quinte West (ytr) to its list of regions. It doesn't pass those messages on until its region allowf line.
+:   Add Quinte West (ytr) to its list of regions. It doesn't pass those messages on until its `region allowf` line.
 
 `region allowf ytr`
 :   Pass on messages labelled for Quinte West (ytr).

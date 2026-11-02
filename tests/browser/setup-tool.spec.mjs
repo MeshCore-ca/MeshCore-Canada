@@ -28,6 +28,9 @@ for (const lang of LANGS) {
     await answer(page, "type", "repeater");
     await expectStep(page, "board");
     await expect(nextButton(page)).toBeDisabled();
+    // Chip names show as written: nRF52, not NRF52.
+    await expect(page.locator("#setup-board-nrf52")).toHaveCSS("text-transform", "none");
+    await expect(page.locator("#setup-board-nrf52")).toHaveText(T("board.group.nrf52", lang));
     await choose(page, "rak4631");
     // An nRF52 board adds the bootloader step.
     await expect(progress(page)).toHaveText(T("nav.progress", lang, { n: 2, total: 11, label: T("step.board", lang) }));

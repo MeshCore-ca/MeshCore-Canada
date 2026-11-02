@@ -8,7 +8,7 @@ task: start-companion
 scope: canada-baseline
 status: verified
 owner: docs-ux
-last_reviewed: 2026-10-29
+last_reviewed: 2026-11-02
 review_by: 2026-12-31
 tested_with:
   content_baseline: 7daceca
