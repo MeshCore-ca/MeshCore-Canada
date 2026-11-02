@@ -1,14 +1,13 @@
 import { test, expect } from "./site-fixtures.mjs";
 import { siteRoute } from "./site-route.mjs";
 import { readFileSync } from "node:fs";
-import { PHONE_ROUTE, T, choose, codes, expectStep, nextButton, nextUntil, phoneLink, plain, step, toolRoot, commandLines } from "./setup-helpers.mjs";
+import { PHONE_ROUTE, T, choose, codes, expectStep, nextButton, nextUntil, openLink, phoneLink, plain, step, toolRoot, commandLines } from "./setup-helpers.mjs";
 const catalog = JSON.parse(readFileSync("docs/assets/regions/iata-regions.json", "utf8"));
 
 for (const locale of ["", "fr/"]) {
   const lang = locale ? "fr" : "en";
   for (const [lat, lon, tag, town] of [[43.8678, -81.2619, "ykf", "Wingham"], [45.4765, -75.7013, "yow", "Ottawa"]]) test(`${locale || "en/"} ${tag} boundary location asks for the role, and a city repeater passes unlabelled messages`, async ({ page }) => {
-    await page.goto(siteRoute(`${toolRoot(lang)}?${PHONE_ROUTE}&tag=${tag}&province=on&town=${town}&lat=${lat}&lon=${lon}`));
-    await expectStep(page, "role");
+    await openLink(page, `${toolRoot(lang)}?${PHONE_ROUTE}&tag=${tag}&province=on&town=${town}&lat=${lat}&lon=${lon}`, { to: "role" });
     // Nothing is chosen for the person: neither card starts picked, and Next waits.
     await expect(step(page).locator('[aria-pressed="true"]')).toHaveCount(0);
     await expect(nextButton(page)).toBeDisabled();
@@ -43,8 +42,7 @@ for (const locale of ["", "fr/"]) {
   });
 
   test(`${locale || "en/"} a pasted region list removes old names one by one, stays on the page and clears on edit`, async ({ page }) => {
-    await page.goto(siteRoute(phoneLink("yow", "on", { lang })));
-    await expectStep(page, "commands");
+    await openLink(page, phoneLink("yow", "on", { lang }));
     const requests = [];
     page.on("request", request => requests.push(request.url() + " " + (request.postData() || "")));
     const removals = async () => (await codes(page).allTextContents()).filter(line => line.startsWith("region remove"));

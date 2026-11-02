@@ -3,7 +3,7 @@ import { expect, test } from "./site-fixtures.mjs";
 import { siteRoute } from "./site-route.mjs";
 import {
   T, plain, firstSentence, linked, mockGeocoder, step, nextButton, progress, codes, expectStep, next, choose, answer,
-  confirmStep, version, searchTown, town, scopeLines, commandLines
+  confirmStep, version, searchTown, town, scopeLines, commandLines, openLink, nextUntil
 } from "./setup-helpers.mjs";
 
 // The guided setup tool at /config/. Shared helpers (the text table, the geocoder mock, the step
@@ -183,11 +183,10 @@ test("running repeater via phone", async ({ page }) => {
 });
 
 test("edge repeater offers neighbouring regions and Ontario cross-border options", async ({ page }) => {
-  await page.goto(siteRoute(`/config/?type=repeater&board=heltec-v3&status=new&firmware=1.16&${BELLEVILLE}`));
-  // A shared link never ticks "flashed" for someone else.
+  await page.goto(siteRoute(`/config/?type=repeater&board=heltec-v3&status=new&${BELLEVILLE}`));
+  // A shared link never ticks "flashed" for someone else, and never says which firmware is on the board.
   await confirmStep(page, "flash");
-  await expectStep(page, "version");
-  await next(page);
+  await version(page, "v1.16.0");
   await expectStep(page, "town");
   await expect(page.locator("[data-setup-region]")).toContainText("ytr");
   await next(page);
@@ -234,8 +233,7 @@ test("edge repeater offers neighbouring regions and Ontario cross-border options
 });
 
 test("French pages name the cross-border networks in French", async ({ page }) => {
-  await page.goto(siteRoute(`/fr/config/?type=repeater&board=heltec-v3&status=running&reflash=0&firmware=1.16&role=edge&${BELLEVILLE}`));
-  await expectStep(page, "neighbours");
+  await openLink(page, `/fr/config/?type=repeater&board=heltec-v3&status=running&reflash=0&role=edge&${BELLEVILLE}`, { to: "neighbours" });
   await expect(page.locator('[data-setup-external="pennsylvania"]')).toHaveText("Pennsylvanie");
   await expect(page.locator('[data-setup-external="western-new-york"]')).toHaveText("Ouest de l’État de New York");
   await page.locator('[data-setup-neighbour="none"] input').check();
@@ -250,9 +248,8 @@ test("French pages name the cross-border networks in French", async ({ page }) =
 
 test("ambiguous and unknown towns", async ({ page }) => {
   const queries = await mockGeocoder(page);
-  // A running repeater on the phone route with its version known: the first open question is the town.
-  await page.goto(siteRoute("/config/?type=repeater&board=heltec-v3&status=running&reflash=0&firmware=1.16"));
-  await expectStep(page, "town");
+  // A running repeater on the phone route: once its version is in, the next question is the town.
+  await openLink(page, "/config/?type=repeater&board=heltec-v3&status=running&reflash=0", { to: "town" });
   const choices = page.locator("[data-setup-step] [data-setup-choice]");
 
   // Several places share the name: ask which one, never pick.
@@ -311,8 +308,7 @@ test("ambiguous and unknown towns", async ({ page }) => {
 
 test("town search offline offers a region code and the map", async ({ page }) => {
   await page.route("https://geolocator.api.geo.ca/**", (route) => route.abort());
-  await page.goto(siteRoute("/fr/config/?type=repeater&board=heltec-v3&status=running&reflash=0&firmware=1.16"));
-  await expectStep(page, "town");
+  await openLink(page, "/fr/config/?type=repeater&board=heltec-v3&status=running&reflash=0", { to: "town" });
   await searchTown(page, "Belleville");
   await expect(page.locator("[data-setup-town-message]")).toHaveText(linked("town.search-failed", "fr"));
   await expect(page.locator("[data-setup-step] a[href$='config/map/']")).not.toHaveCount(0);
@@ -324,8 +320,7 @@ test("town search offline offers a region code and the map", async ({ page }) =>
 test("a town search that never answers gives up and offers the code box", async ({ page }) => {
   await page.clock.install();
   await page.route("https://geolocator.api.geo.ca/**", () => { /* never answers */ });
-  await page.goto(siteRoute("/config/?type=repeater&board=heltec-v3&status=running&reflash=0&firmware=1.16"));
-  await expectStep(page, "town");
+  await openLink(page, "/config/?type=repeater&board=heltec-v3&status=running&reflash=0", { to: "town" });
   await expect(page.locator("[data-setup-town-results]")).not.toContainText(T("tool.loading", "en"));
   await searchTown(page, "Belleville");
   await expect(page.locator("[data-setup-town-results]")).toContainText(T("town.searching", "en"));
@@ -342,8 +337,7 @@ test("a town search that never answers gives up and offers the code box", async 
 
 test("a place deep link fills the search and starts it at the town step", async ({ page }) => {
   const queries = await mockGeocoder(page);
-  await page.goto(siteRoute("/config/?place=Guelph%2C%20Ontario&type=repeater&board=heltec-v3&status=running&reflash=0&firmware=1.16"));
-  await expectStep(page, "town");
+  await openLink(page, "/config/?place=Guelph%2C%20Ontario&type=repeater&board=heltec-v3&status=running&reflash=0", { to: "town" });
   await expect(page.locator("[data-setup-town]")).toHaveValue("Guelph, Ontario");
   await expect(page.locator("[data-setup-region]")).toContainText("ykf");
   expect(queries).toEqual(["Guelph"]);
@@ -361,11 +355,12 @@ test("firmware reply", async ({ page }) => {
   await input.fill("MeshCore v1.16.2 (Build: 12-Oct-2026)");
   await expect(message).toHaveText(T("version.found", "en", { version: "1.16.2" }));
   await expect(nextButton(page)).toBeEnabled();
-  await expect.poll(() => new URL(page.url()).searchParams.get("firmware")).toBe("1.16");
+  // The version stays out of the address: whoever opens a shared link is asked for their own `ver` reply.
+  expect(new URL(page.url()).searchParams.has("firmware")).toBe(false);
 
   await input.fill("v1.17.0");
   await expect(message).toHaveText(T("version.found", "en", { version: "1.17.0" }));
-  await expect.poll(() => new URL(page.url()).searchParams.get("firmware")).toBe("1.16");
+  await expect(nextButton(page)).toBeEnabled();
 
   // Unreadable: pick the version instead.
   await input.fill("hello");
@@ -374,7 +369,7 @@ test("firmware reply", async ({ page }) => {
   await expect(page.locator('[data-setup-choice="1.14"]')).toBeVisible();
   await choose(page, "1.15");
   await expect(nextButton(page)).toBeEnabled();
-  await expect.poll(() => new URL(page.url()).searchParams.get("firmware")).toBe("1.15");
+  expect(new URL(page.url()).searchParams.has("firmware")).toBe(false);
 
   // Too old: update first, and the update offers the flash steps.
   await input.fill("v1.13.1");
@@ -392,10 +387,9 @@ test("firmware reply", async ({ page }) => {
 
 test("changing the town clears neighbours and the suggested name", async ({ page }) => {
   await mockGeocoder(page);
-  await page.goto(siteRoute(`/config/?type=repeater&board=heltec-v3&status=new&firmware=1.16&role=edge&neighbours=ygk&name=Belleville_R1&${BELLEVILLE}`));
+  await page.goto(siteRoute(`/config/?type=repeater&board=heltec-v3&status=new&role=edge&neighbours=ygk&name=Belleville_R1&${BELLEVILLE}`));
   await confirmStep(page, "flash");
-  await expectStep(page, "version");
-  await next(page);
+  await version(page, "v1.16.0");
   await town(page, "Kingston", "ygk");
   await expectStep(page, "role");
   await expect(page.locator('[data-setup-choice="edge"]')).toHaveAttribute("aria-pressed", "true");
@@ -459,24 +453,31 @@ test("share link restores answers and holds no secrets", async ({ page, context 
   await page.locator("[data-setup-reply]").fill("*^ F\n ott F");
   await expect(codes(page)).toContainText(["region remove ott"]);
   const shared = new URL(page.url());
+  // Everything but the firmware version, which whoever opens the link is asked for.
   expect(Object.fromEntries(shared.searchParams)).toEqual({
-    type: "repeater", board: "rak4631", status: "running", reflash: "0", firmware: "1.15",
+    type: "repeater", board: "rak4631", status: "running", reflash: "0",
     tag: "ytr", province: "on", role: "city", name: "Belleville_R1", nameEdited: "1",
     town: "Belleville", lat: "44.1628", lon: "-77.3832"
   });
-  expect(shared.search).not.toMatch(/ott|reply|bootloader|flashed|password|pwd|ssid/i);
+  expect(shared.search).not.toMatch(/ott|reply|bootloader|flashed|firmware|password|pwd|ssid/i);
   await page.locator("[data-setup-share]").click();
   await expect(page.locator("[data-setup-share]")).toHaveText(T("nav.share-done", "en"));
   expect(await page.evaluate(() => window.__copied)).toEqual([shared.href]);
 
   const other = await context.newPage();
   await other.goto(shared.href);
-  // Every answer is there, so the link opens on the commands, minus the pasted reply.
-  await expectStep(other, "commands");
+  // The link opens on the version question: every route asks for the `ver` reply.
+  await expectStep(other, "version");
+  await expect(other.locator("[data-setup-version]")).toHaveValue("");
+  await expect(nextButton(other)).toBeDisabled();
+  await version(other, "v1.15.1");
+  // Every other answer is there, minus the pasted reply.
+  await nextUntil(other, "commands");
   const lines = await commandLines(other);
   expect(lines).toContain("set name Belleville_R1");
   expect(lines).toContain("set lat 44.1628");
   expect(lines).toContain("region");
+  expect(lines).toContain("region put ytr");
   expect(lines.some((line) => line.startsWith("region remove"))).toBe(false);
   await expect(other.locator("[data-setup-reply]")).toHaveValue("");
   await other.close();
@@ -485,8 +486,7 @@ test("share link restores answers and holds no secrets", async ({ page, context 
 test("a town name from a link is shown as text, never as markup", async ({ page }) => {
   await page.addInitScript(() => { window.__injected = false; });
   const town = encodeURIComponent('<img src=x onerror="window.__injected=true">');
-  await page.goto(siteRoute(`/config/?type=repeater&board=heltec-v3&status=running&reflash=0&firmware=1.16&tag=ytr&province=on&town=${town}&lat=44.1628&lon=-77.3832`));
-  await expectStep(page, "role");
+  await openLink(page, `/config/?type=repeater&board=heltec-v3&status=running&reflash=0&tag=ytr&province=on&town=${town}&lat=44.1628&lon=-77.3832`, { to: "role" });
   await page.locator("[data-setup-back]").click();
   await expectStep(page, "town");
   await expect(page.locator("[data-setup-region]")).toContainText('<img src=x onerror="window.__injected=true">');
@@ -515,8 +515,7 @@ test("map link opens with the region filled in", async ({ page }) => {
 });
 
 test("start over asks first and sits away from the next button", async ({ page }) => {
-  await page.goto(siteRoute(`/config/?type=repeater&board=heltec-v3&status=running&reflash=0&firmware=1.16&role=city&name=Belleville_R1&${BELLEVILLE}`));
-  await expectStep(page, "commands");
+  await openLink(page, `/config/?type=repeater&board=heltec-v3&status=running&reflash=0&role=city&name=Belleville_R1&${BELLEVILLE}`);
   await next(page);
   await expectStep(page, "check");
   await expect(nextButton(page)).toHaveCount(0);
@@ -537,12 +536,10 @@ test("start over asks first and sits away from the next button", async ({ page }
 
 test("old and unknown region codes in a link", async ({ page }) => {
   // An old code moves to its current region.
-  await page.goto(siteRoute("/config/?type=repeater&board=heltec-v3&status=running&reflash=0&firmware=1.16&tag=ott&province=on"));
-  await expectStep(page, "role");
+  await openLink(page, "/config/?type=repeater&board=heltec-v3&status=running&reflash=0&tag=ott&province=on", { to: "role" });
   await expect.poll(() => new URL(page.url()).searchParams.get("tag")).toBe("yow");
   // A code the map doesn't have is dropped, and the tool goes back to ask for the town.
-  await page.goto(siteRoute("/config/?type=repeater&board=heltec-v3&status=running&reflash=0&firmware=1.16&tag=zzz&province=on&role=city&name=Hilltop"));
-  await expectStep(page, "town");
+  await openLink(page, "/config/?type=repeater&board=heltec-v3&status=running&reflash=0&tag=zzz&province=on&role=city&name=Hilltop", { to: "town" });
   await expect(step(page)).toContainText(T("town.link-invalid", "en"));
   await expect(nextButton(page)).toBeDisabled();
   expect(new URL(page.url()).searchParams.get("tag")).toBe(null);
@@ -603,8 +600,7 @@ test("region data loads only when the town step needs it", async ({ page }) => {
 test("region data that fails to load says so, and can be tried again", async ({ page }) => {
   let down = true;
   await page.route("**/iata-boundaries.geojson*", (route) => (down ? route.fulfill({ status: 503, body: "" }) : route.continue()));
-  await page.goto(siteRoute("/config/?type=repeater&board=heltec-v3&status=running&reflash=0&firmware=1.16"));
-  await expectStep(page, "town");
+  await openLink(page, "/config/?type=repeater&board=heltec-v3&status=running&reflash=0", { to: "town" });
   await expect(page.locator("[data-setup-step] [role='alert']")).toHaveText(T("tool.load-failed", "en"));
   await expect(nextButton(page)).toBeDisabled();
   down = false;
@@ -615,15 +611,18 @@ test("region data that fails to load says so, and can be tried again", async ({ 
   await expect(page.locator("[data-setup-region]")).toContainText("ytr");
 });
 
-test("a link that opens on the commands waits for slow region data before the lines are read", async ({ page }) => {
-  // A complete link draws the commands screen at once, with a loading panel until the region data arrives.
+test("a language switch that reopens on the commands waits for slow region data before the lines are read", async ({ page }) => {
+  await openLink(page, `/config/?type=repeater&board=heltec-v3&status=running&reflash=0&role=city&name=Belleville_R1&${BELLEVILLE}`);
+  // The other language's page draws the commands screen at once, with a loading panel until the region data arrives.
   let delayed = 0;
   await page.route("**/iata-boundaries.geojson*", async (route) => {
     delayed += 1;
     await new Promise((resolve) => setTimeout(resolve, 300));
     await route.continue();
   });
-  await page.goto(siteRoute(`/config/?type=repeater&board=heltec-v3&status=running&reflash=0&firmware=1.16&role=city&name=Belleville_R1&${BELLEVILLE}`));
+  await page.locator(".md-select > button").first().click();
+  await page.locator('.md-select__link[hreflang="fr"]').click();
+  await expect(page.locator("html")).toHaveAttribute("lang", "fr");
   await expectStep(page, "commands");
   const lines = await commandLines(page);
   expect(delayed).toBeGreaterThan(0);
@@ -648,18 +647,19 @@ test("language switch keeps the answers", async ({ page }) => {
 });
 
 test("language switch on the commands screen after flashing keeps the place and the commands", async ({ page }) => {
-  await page.goto(siteRoute(`/config/?type=repeater&board=rak4631&status=new&firmware=1.16&role=city&name=Belleville_R1&${BELLEVILLE}`));
+  await page.goto(siteRoute(`/config/?type=repeater&board=rak4631&status=new&role=city&name=Belleville_R1&${BELLEVILLE}`));
   await confirmStep(page, "bootloader");
   await confirmStep(page, "flash");
-  for (const id of ["version", "town", "role", "name"]) {
+  await version(page, "v1.15.0");
+  for (const id of ["town", "role", "name"]) {
     await expectStep(page, id);
     await next(page);
   }
   await expectStep(page, "commands");
   const english = await commandLines(page);
   await page.locator('[data-setup-command="name"] [data-done]').click();
-  // The flashed and bootloader ticks never go in the address, even while switching.
-  expect(page.url()).not.toMatch(/flashed|bootloader|step=/);
+  // The flashed and bootloader ticks and the firmware version never go in the address, even while switching.
+  expect(page.url()).not.toMatch(/flashed|bootloader|firmware|step=/);
   await page.locator(".md-select > button").first().click();
   await page.locator('.md-select__link[hreflang="fr"]').click();
   await expect(page.locator("html")).toHaveAttribute("lang", "fr");
@@ -667,9 +667,11 @@ test("language switch on the commands screen after flashing keeps the place and 
   const french = await commandLines(page);
   const notPassword = (line) => !line.startsWith("password ");
   expect(french.filter(notPassword)).toEqual(english.filter(notPassword));
+  // The version came across too: firmware 1.15 still gets one `region put` line per label.
+  expect(french).toContain("region put ytr");
   expect(french).toContain(`password <${T("ph.password", "fr")}>`);
   await expect(page.locator('[data-setup-command="name"] [data-done]')).toHaveAttribute("aria-pressed", "true");
-  expect(page.url()).not.toMatch(/flashed|bootloader|step=/);
+  expect(page.url()).not.toMatch(/flashed|bootloader|firmware|step=/);
   // A plain reload is a fresh start of this tab's page: the flash ticks have to be given again.
   await page.reload();
   await expectStep(page, "bootloader");
@@ -689,8 +691,7 @@ test("copy works on plain HTTP", async ({ page }) => {
       return true;
     };
   });
-  await page.goto(siteRoute(`/config/?type=repeater&board=heltec-v3&status=running&reflash=0&firmware=1.16&role=city&name=Belleville_R1&${BELLEVILLE}`));
-  await expectStep(page, "commands");
+  await openLink(page, `/config/?type=repeater&board=heltec-v3&status=running&reflash=0&role=city&name=Belleville_R1&${BELLEVILLE}`);
   const line = page.locator('[data-setup-command="name"]');
   const copy = line.locator("[data-copy]");
   await expect(copy).toContainText(T("commands.copy", "en"));
@@ -852,8 +853,7 @@ for (const lang of LANGS) {
     await expectStep(page, "repeat");
     await expect(page.locator("[data-setup-step] h2")).toBeFocused();
 
-    await page.goto(siteRoute(`${ROUTES[lang]}?type=observer&repeat=both&board=heltec-v3&status=running&observerFirmware=yes&firmware=1.16&role=edge&neighbours=ygk&name=Belleville_Obs1&${BELLEVILLE}`));
-    await expectStep(page, "commands");
+    await openLink(page, `${ROUTES[lang]}?type=observer&repeat=both&board=heltec-v3&status=running&observerFirmware=yes&role=edge&neighbours=ygk&name=Belleville_Obs1&${BELLEVILLE}`);
     // The MQTT slot warning comes right before the repeater observer lines.
     const slots = page.locator('[data-setup-note="mqtt-slots"]');
     await expect(slots).toContainText(firstSentence(T("note.mqtt-slots", lang)));

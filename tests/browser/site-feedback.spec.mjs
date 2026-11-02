@@ -2,7 +2,7 @@ import { expect, test } from "./site-fixtures.mjs";
 import AxeBuilder from "@axe-core/playwright";
 import { readFileSync } from "node:fs";
 import { siteRoute } from "./site-route.mjs";
-import { PHONE_ROUTE, expectStep } from "./setup-helpers.mjs";
+import { PHONE_ROUTE, openLink } from "./setup-helpers.mjs";
 
 const communityCount = JSON.parse(
   readFileSync(new URL("../../data/communities.json", import.meta.url), "utf8"),
@@ -76,8 +76,7 @@ for (const locale of ["", "fr/"]) {
     await page.goto(siteRoute(`/${locale}hardware/`));
     await expect(page.locator(".mc-guide-status")).toHaveCount(0);
     // The setup tool's town step links to the region map.
-    await page.goto(siteRoute(`/${locale}config/?${PHONE_ROUTE}`));
-    await expectStep(page, "town");
+    await openLink(page, `/${locale}config/?${PHONE_ROUTE}`, { to: "town" });
     const map = page.locator("[data-setup-map]");
     await expect(map).toBeVisible();
     expect(await map.evaluate(link => new URL(link.href).pathname)).toMatch(new RegExp(`/${locale}config/map/$`));

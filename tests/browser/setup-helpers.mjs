@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import vm from "node:vm";
 import { expect } from "./site-fixtures.mjs";
+import { siteRoute } from "./site-route.mjs";
 
 // Shared by the specs that drive the guided setup tool at /config/. Every word the tool
 // shows comes from setup-text.js, so the tests read the same table instead of copying sentences.
@@ -102,14 +103,21 @@ export function scopeLines(list) {
   return list.slice(list.indexOf("region"), list.indexOf("region save") + 1);
 }
 
-// A running repeater changed from the phone: no flash steps and no radio line, so a link
-// that holds the rest of the answers opens on the commands.
-export const PHONE_ROUTE = "type=repeater&board=heltec-v3&status=running&reflash=0&firmware=1.16";
+// A running repeater changed from the phone: no flash steps and no radio line.
+export const PHONE_ROUTE = "type=repeater&board=heltec-v3&status=running&reflash=0";
 export const toolRoot = (lang) => (lang === "fr" ? "/fr/config/" : "/config/");
-// A complete phone-route link for a region, so it opens on the commands. `extra` is more answers
-// as a query string, for example "neighbours=yul".
-export function phoneLink(tag, province, { lang = "en", firmware = "1.16", role = "city", extra = "" } = {}) {
-  return `${toolRoot(lang)}?${PHONE_ROUTE.replace("firmware=1.16", `firmware=${firmware}`)}&tag=${tag}&province=${province}&role=${role}&name=Test_R1${extra ? `&${extra}` : ""}`;
+// A phone-route link for a region that holds every answer a link can carry. `extra` is more
+// answers as a query string, for example "neighbours=yul". Open it with openLink.
+export function phoneLink(tag, province, { lang = "en", role = "city", extra = "" } = {}) {
+  return `${toolRoot(lang)}?${PHONE_ROUTE}&tag=${tag}&province=${province}&role=${role}&name=Test_R1${extra ? `&${extra}` : ""}`;
+}
+// A link never carries the firmware version: every route asks for the `ver` reply. So a link
+// opens on the version question at the latest. This opens it, answers with `reply`, and
+// presses Next until `to` (the commands, unless said otherwise).
+export async function openLink(page, path, { reply = "v1.16.0", to = "commands" } = {}) {
+  await page.goto(siteRoute(path));
+  await version(page, reply);
+  await nextUntil(page, to);
 }
 // Types the first answers of the phone route, ending on the town step.
 export async function startPhoneRoute(page, reply = "v1.16.2") {

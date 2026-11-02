@@ -220,8 +220,9 @@
   }
 
   // A language switch loads the other page with the answers in its address. What never
-  // goes in an address (the flashed and bootloader ticks, the pasted reply), the Done
-  // ticks and the current step go in this tab's sessionStorage, for that one load only.
+  // goes in an address (the flashed and bootloader ticks, the firmware version and the
+  // `ver` reply, the pasted `region` reply), the Done ticks and the current step go in
+  // this tab's sessionStorage, for that one load only.
   var HANDOFF_KEY = "meshcore-setup:language-switch";
 
   function saveForLanguageSwitch() {
@@ -230,6 +231,7 @@
       sessionStorage.setItem(HANDOFF_KEY, JSON.stringify({
         query: Flow.toQuery(a), step: state.step, at: Date.now(),
         bootloader: a.bootloader === true, flashed: a.flashed === true,
+        firmware: typeof a.firmware === "string" ? a.firmware : "", version: state.versionText,
         reply: typeof a.regionReply === "string" ? a.regionReply : "",
         ticks: Object.keys(state.ticks).filter(function (key) { return state.ticks[key]; })
       }));
@@ -249,6 +251,8 @@
     if (!saved || typeof saved !== "object" || saved.query !== Flow.toQuery(state.answers) || !(Date.now() - saved.at < 600000)) return null;
     if (saved.bootloader === true) state.answers.bootloader = true;
     if (saved.flashed === true) state.answers.flashed = true;
+    if (Flow.VERSIONS.indexOf(saved.firmware) !== -1) state.answers.firmware = saved.firmware;
+    if (typeof saved.version === "string") state.versionText = saved.version.slice(0, 200);
     if (typeof saved.reply === "string" && saved.reply) state.answers.regionReply = saved.reply.slice(0, 4000);
     (Array.isArray(saved.ticks) ? saved.ticks : []).forEach(function (key) { if (typeof key === "string") state.ticks[key] = true; });
     return typeof saved.step === "string" ? saved.step : null;

@@ -188,13 +188,21 @@ test("a changed type or board keeps what still applies", () => {
   assert.equal(flow.resetDependents({ type: "observer", board: "other-esp32" }, "type").board, "other-esp32");
 });
 
+test("share links leave out the firmware version, so whoever opens one is asked for the ver reply", () => {
+  const q = flow.toQuery({ type: "repeater", board: "heltec-v3", status: "running", reflash: false, firmware: "1.16" });
+  assert.equal(q, "type=repeater&board=heltec-v3&status=running&reflash=0");
+  // Older links that still carry it are read without it.
+  assert.deepEqual(flow.fromQuery("type=repeater&firmware=1.16"), { type: "repeater" });
+  assert.equal(flow.isComplete("version", flow.fromQuery("firmware=1.15")), false);
+});
+
 test("share links keep only valid, known answers", () => {
-  const a = { type: "observer", repeat: "both", board: "heltec-v4", status: "running", observerFirmware: "yes", firmware: "1.15",
+  const a = { type: "observer", repeat: "both", board: "heltec-v4", status: "running", observerFirmware: "yes",
     tag: "yvr", province: "bc", radio: "bc-mesh", role: "edge", neighbours: ["yxx", "yyj"], external: ["washington"],
     name: "Vancouver_Obs1", nameEdited: true, shareLocation: false, reflash: false,
     place: { name: "Vancouver", province: "bc", lat: 49.28, lon: -123.12 } };
-  const q = flow.toQuery({ ...a, regionReply: "*^ F" });
-  assert.doesNotMatch(q, /^\?|place=|regionReply/);
+  const q = flow.toQuery({ ...a, regionReply: "*^ F", firmware: "1.15" });
+  assert.doesNotMatch(q, /^\?|place=|regionReply|firmware/);
   const back = flow.fromQuery(q);
   assert.deepEqual(back, a);
   assert.deepEqual(flow.fromQuery("?" + q), a);

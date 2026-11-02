@@ -174,8 +174,9 @@
   }
 
   // Share links: the non-secret answers, plus the picked town (as town, lat and lon).
-  // Never carried: pasted device replies, and the "I flashed it" / "I updated the
-  // bootloader" ticks, which a shared link must not pre-tick for someone else.
+  // Never carried: pasted device replies; the "I flashed it" / "I updated the
+  // bootloader" ticks, which a shared link must not pre-tick for someone else; and
+  // the firmware version, because every route asks for the board's own `ver` reply.
   // Each field knows how to write and read itself.
   function enumField(key, values) {
     return {
@@ -221,7 +222,6 @@
     enumField("status", STATUS),
     flagField("reflash"),
     enumField("observerFirmware", YES_NO),
-    enumField("firmware", VERSIONS),
     codeField("tag", TAG_RE),
     codeField("province", TAG_RE),
     codeField("radio", ID_RE),
@@ -302,6 +302,7 @@
 
   globalThis.MeshCoreSetupFlow = {
     BOARDS: BOARDS,
+    VERSIONS: VERSIONS,
     stepIds: stepIds,
     isComplete: isComplete,
     route: route,
