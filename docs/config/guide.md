@@ -383,14 +383,17 @@ devices know it by that key, and it can't be recreated if it's lost. Before you
 flash it, back it up:
 
 1. Write down its name and admin password.
-2. Connect it by USB, open the Console in the
-   [MeshCore flasher](https://flasher.meshcore.io/), send `get prv.key` and keep
-   the reply in your password manager. This only works over USB.
+2. To save its private key, in the MeshCore app open the repeater from Contacts,
+   log in as admin, tap Command Line and send `get prv.key`. Or connect it by
+   USB, open the Console in the [MeshCore flasher](https://flasher.meshcore.io/)
+   and send the same command. Keep the reply in your password manager and never
+   paste it anywhere shared.
 3. Never erase it in the flasher.
 
 If flashing wipes it anyway, for example when you switch to the observer
-firmware, put the key back in the Console with `set prv.key` followed by the
-saved key, then `reboot`. Both commands are in the
+firmware, put the key back with `set prv.key <saved key>`, then `reboot`: in the
+flasher's Console right after flashing, or in the app's Command Line once you
+can log in. Both commands are in the
 [MeshCore command reference](https://docs.meshcore.io/cli_commands/#view-or-change-this-nodes-identity-private-key).
 
 Never share the private key: anyone who has it can pose as your repeater.

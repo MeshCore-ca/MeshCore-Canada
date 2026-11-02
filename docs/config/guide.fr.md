@@ -412,15 +412,19 @@ le reconnaissent par cette clé, et elle ne peut pas être recréée si elle est
 perdue. Avant de le programmer, sauvegardez-le :
 
 1. Notez son nom et son mot de passe administrateur.
-2. Branchez-le par USB, ouvrez la Console dans
-   l’[outil de programmation MeshCore](https://flasher.meshcore.io/), envoyez
-   `get prv.key` et gardez la réponse dans votre gestionnaire de mots de passe.
-   Ça ne fonctionne que par USB.
+2. Pour sauvegarder sa clé privée, dans l’application MeshCore, ouvrez le
+   répéteur depuis Contacts, connectez-vous comme administrateur, touchez
+   Command Line et envoyez `get prv.key`. Ou branchez-le par USB, ouvrez la
+   Console dans l’[outil de programmation MeshCore](https://flasher.meshcore.io/)
+   et envoyez la même commande. Gardez la réponse dans votre gestionnaire de
+   mots de passe et ne la collez jamais dans un endroit partagé.
 3. Ne l’effacez jamais dans l’outil de programmation.
 
 Si la programmation l’efface quand même, par exemple quand vous passez au
-micrologiciel d’observateur, remettez la clé dans la Console avec `set prv.key`
-suivi de la clé sauvegardée, puis `reboot`. Les deux commandes figurent dans la
+micrologiciel d’observateur, remettez la clé avec `set prv.key <clé sauvegardée>`,
+puis `reboot` : dans la Console de l’outil de programmation juste après, ou dans
+Command Line de l’application une fois que vous pouvez vous connecter. Les deux
+commandes figurent dans la
 [référence des commandes MeshCore (en anglais)](https://docs.meshcore.io/cli_commands/#view-or-change-this-nodes-identity-private-key).
 
 Ne partagez jamais la clé privée : quiconque l’a peut se faire passer pour votre

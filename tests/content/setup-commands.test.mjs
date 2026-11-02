@@ -344,7 +344,8 @@ test("text lookups fail loudly and fill in placeholders", () => {
     for (const key of text.keys()) {
       const value = text.t(key, lang);
       assert.equal(value, value.trim(), key);
-      assert.doesNotMatch(value, /<[a-z/]/i, key + " holds HTML");
+      // `<saved key>` inside a code span is a command placeholder, shown as text; HTML anywhere else is a mistake.
+      assert.doesNotMatch(value.replace(/`[^`]*`/g, ""), /<[a-z/]/i, key + " holds HTML");
       // Multi-line examples (a pasted region reply) keep their indentation.
       if (!value.includes("\n")) assert.doesNotMatch(value, /  /, key + " has a double space");
     }

@@ -37,7 +37,7 @@ Changing the private key changes the node identity. It can break existing admini
 
 1. Confirm with the local region operator that the repeater must remain in 1-byte mode and that a new ID is required.
 2. Connect to the repeater and record its current public key with `get public.key`.
-3. Over a trusted serial connection, back up the current private key with `get prv.key` and store it as a secret in a secure location.
+3. Over a trusted serial connection, or from the MeshCore app's Command Line after logging in to the repeater as admin, back up the current private key with `get prv.key` and store it as a secret in a secure location.
 4. Confirm the proposed 2–6 character ID is unused in the local region's coordination record.
 
 Never post or transmit either private key through an issue, screenshot, public chat, or log. The saved old private key is the rollback path.

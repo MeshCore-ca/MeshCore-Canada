@@ -96,22 +96,36 @@ test("every guide link in the tool points at a section both pages have", () => {
   for (const id of used) assert.ok(anchors.includes(id), `#${id} belongs in the list of sections the tool links to`);
 });
 
-test("the back-up advice says how to save the private key and put it back, in the tool and on the guide", () => {
+test("the back-up advice says how to save the private key (app or USB) and put it back, in the tool and on the guide", () => {
+  // The key comes off and goes back two ways: the app's Command Line after an admin login, or USB (the flasher's Console).
+  const app = { en: /MeshCore app[^.]*log in[^.]*Command Line[^.]*`get prv\.key`/, fr: /application MeshCore[^.]*connectez-vous[^.]*Command Line[^.]*`get prv\.key`/ };
+  const keep = { en: /password manager and never paste it anywhere shared/, fr: /gestionnaire de mots de passe et ne la collez jamais dans un endroit partagé/ };
+  const putBack = {
+    en: /`set prv\.key <saved key>`, then `reboot`: .*Console.* Command Line/,
+    fr: /`set prv\.key <clé sauvegardée>`,\s+puis `reboot` : .*Console.* Command Line/s,
+  };
   for (const lang of ["en", "fr"]) {
-    const backup = text.t("status.backup", lang);
-    assert.match(backup, /`get prv\.key`/, `${lang} status.backup says how to save the key`);
-    assert.match(backup, lang === "en" ? /USB/ : /USB/, `${lang} status.backup: over USB`);
-    assert.match(backup, lang === "en" ? /password manager/ : /gestionnaire de mots de passe/, `${lang} status.backup: where to keep it`);
+    for (const key of ["status.backup", "observerFirmware.switch"]) {
+      const string = text.t(key, lang);
+      assert.match(string, app[lang], `${lang} ${key}: save the key from the app`);
+      assert.match(string, /USB/, `${lang} ${key}: save the key over USB`);
+      assert.match(string, /Console/, `${lang} ${key}: ...in the flasher's Console`);
+      assert.match(string, keep[lang], `${lang} ${key}: where to keep it, and not where to paste it`);
+    }
     const restore = text.t("observerFirmware.switch", lang);
-    assert.match(restore, /`get prv\.key`/, `${lang} observerFirmware.switch says how to save the key`);
-    assert.match(restore, /`set prv\.key`.*`reboot`/, `${lang} observerFirmware.switch says how to put it back`);
+    assert.match(restore, putBack[lang], `${lang} observerFirmware.switch says how to put it back, from either place`);
+    assert.doesNotMatch(restore, /followed by|suivi de/, `${lang}: shows the command with its placeholder`);
   }
-  for (const path of Object.values(pages)) {
+  for (const [lang, path] of Object.entries(pages)) {
     const source = read(path);
-    const section = source.slice(source.search(/\{ ?#back-up ?\}/), source.search(/\{ ?#old-regions ?\}/));
+    // The page wraps its lines; the tool's strings don't.
+    const section = source.slice(source.search(/\{ ?#back-up ?\}/), source.search(/\{ ?#old-regions ?\}/)).replace(/\s+/g, " ");
     assert.ok(section.length > 200, `${path} needs a back-up section before the old regions`);
     assert.match(section, /`get prv\.key`/, path);
-    assert.match(section, /`set prv\.key/, path);
+    assert.match(section, /Command Line/, `${path}: the app's Command Line`);
+    assert.match(section, /USB/, `${path}: USB`);
+    assert.match(section, keep[lang], `${path}: same keep-it-safe advice as the tool`);
+    assert.match(section, putBack[lang], `${path}: same restore advice as the tool`);
     assert.match(section, /docs\.meshcore\.io\/cli_commands\/#view-or-change-this-nodes-identity-private-key/, path);
   }
 });
