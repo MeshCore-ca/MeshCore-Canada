@@ -68,7 +68,7 @@ Si la vérification échoue, restaurez l’ancienne clé privée sauvegardée av
 
 ## Récupération
 
-Si l’accès administrateur, le préfixe de la clé publique, les annonces, la configuration de la région ou l’acheminement sont incorrects, gardez le répéteur sur l’établi. Restaurez l’ancienne clé privée sauvegardée au moyen de la connexion série fiable, redémarrez l’appareil, puis confirmez que tout son état précédent est rétabli avant de le remettre en service.
+Si l’accès administrateur, le préfixe de la clé publique, les annonces, la configuration de la région ou l’acheminement sont incorrects, gardez le répéteur sur l’établi. Restaurez l’ancienne clé privée sauvegardée au moyen de la connexion série fiable, ou de la Command Line de l’application MeshCore si vous pouvez encore vous connecter au répéteur comme administrateur, redémarrez l’appareil, puis confirmez que tout son état précédent est rétabli avant de le remettre en service.
 
 ## Consigner le changement
 

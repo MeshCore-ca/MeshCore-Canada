@@ -69,7 +69,7 @@ If verification fails, restore the backed-up old private key with `set prv.key <
 
 ## Recovery
 
-If admin access, the public-key prefix, adverts, region configuration, or routing is wrong, keep the repeater on the bench. Restore the backed-up old private key over the trusted serial connection, reboot, and confirm the complete former state before returning it to service.
+If admin access, the public-key prefix, adverts, region configuration, or routing is wrong, keep the repeater on the bench. Restore the backed-up old private key over the trusted serial connection, or from the MeshCore app's Command Line if you can still log in to the repeater as admin, reboot, and confirm the complete former state before returning it to service.
 
 ## Record the change
 
