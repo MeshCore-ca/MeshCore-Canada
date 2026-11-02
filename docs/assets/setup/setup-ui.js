@@ -621,6 +621,7 @@
     repeat: pair("repeat", { key: "repeat.help", anchor: "repeater-observers" }, [["both", "both"], ["listen", "listen"]]),
 
     board: {
+      help: function () { return { key: "board.help", anchor: "repeater-observers" }; },
       body: function (body) {
         var a = state.answers;
         var observer = a.type === "observer";
@@ -652,7 +653,7 @@
       }
     },
 
-    status: pair("status", null, [["new", "new"], ["running", "running"]], function (body) {
+    status: pair("status", { key: "status.help", anchor: "back-up" }, [["new", "new"], ["running", "running"]], function (body) {
       if (state.answers.status === "running") body.appendChild(note("warn", para(rich("status.backup", null, LINKS.flasher))));
     }),
 
@@ -697,6 +698,7 @@
     },
 
     radio: {
+      help: function () { return { key: "radio.help", anchor: "settings" }; },
       body: radioBody
     },
 
@@ -706,10 +708,12 @@
     },
 
     neighbours: {
+      help: function () { return { key: "neighbours.help", anchor: "city-or-edge" }; },
       body: neighboursBody
     },
 
     name: {
+      help: function () { return { key: "name.help", anchor: "settings" }; },
       body: nameBody
     },
 

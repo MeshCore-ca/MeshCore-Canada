@@ -101,6 +101,53 @@ for (const lang of LANGS) {
   });
 }
 
+// Each question's "?" opens a short answer and one link to the matching section of the guide.
+async function expectHelp(page, id, anchor, lang = "en") {
+  await expectStep(page, id);
+  const toggle = page.locator("[data-setup-step] [data-setup-help]");
+  await expect(toggle, `${id} has a ?`).toHaveCount(1);
+  await expect(page.locator("[data-setup-help-text]")).toBeHidden();
+  await toggle.click();
+  await expect(toggle).toHaveAttribute("aria-expanded", "true");
+  const help = page.locator("[data-setup-help-text]");
+  await expect(help).toContainText(plain(`${id}.help`, lang));
+  const guide = help.locator('a[href*="config/guide/"]');
+  await expect(guide, `${id}: one guide link`).toHaveCount(1);
+  await expect(guide).toHaveAttribute("href", new RegExp(`config/guide/#${anchor}$`));
+}
+
+for (const lang of LANGS) {
+  test(`${lang} every question has a ? with a short answer and a link to the guide`, async ({ page }) => {
+    // A new board flashed in Vancouver, at the edge: the route that asks the most questions.
+    await page.goto(siteRoute(`${ROUTES[lang]}?tag=yvr&province=bc`));
+    await expectHelp(page, "type", "what-a-repeater-is", lang);
+    await choose(page, "repeater");
+    await next(page);
+    await expectHelp(page, "board", "repeater-observers", lang);
+    await choose(page, "heltec-v3");
+    await next(page);
+    await expectHelp(page, "status", "back-up", lang);
+    await choose(page, "new");
+    await next(page);
+    await confirmStep(page, "flash");
+    await expectHelp(page, "version", "older-firmware", lang);
+    await page.locator("[data-setup-version]").fill("v1.16.0");
+    await next(page);
+    await expectHelp(page, "town", "scopes-and-regions", lang);
+    await next(page);
+    await expectHelp(page, "radio", "settings", lang);
+    await choose(page, "canada");
+    await next(page);
+    await expectHelp(page, "role", "city-or-edge", lang);
+    await choose(page, "edge");
+    await next(page);
+    await expectHelp(page, "neighbours", "city-or-edge", lang);
+    await page.locator('[data-setup-neighbour="none"] input').check();
+    await next(page);
+    await expectHelp(page, "name", "settings", lang);
+  });
+}
+
 test("a greyed-out nRF52 board from a link is not picked and can't be clicked", async ({ page }) => {
   await page.goto(siteRoute("/config/?type=observer&repeat=both&board=rak4631"));
   await expectStep(page, "board");

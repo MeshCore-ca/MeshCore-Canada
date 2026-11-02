@@ -92,7 +92,7 @@ test("every section the tool links to is on both pages, with the same ids", () =
 test("every guide link in the tool points at a section both pages have", () => {
   const ui = read("docs/assets/setup/setup-ui.js");
   const used = [...ui.matchAll(/anchor: "([a-z-]+)"|LINKS\.guide \+ "#([a-z-]+)"/g)].map((match) => match[1] || match[2]);
-  assert.ok(used.length >= 5, `expected the tool's guide links, found ${used.length}`);
+  assert.ok(used.length >= 12, `expected the tool's guide links, found ${used.length}`);
   for (const id of used) assert.ok(anchors.includes(id), `#${id} belongs in the list of sections the tool links to`);
 });
 

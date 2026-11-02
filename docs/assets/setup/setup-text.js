@@ -75,6 +75,7 @@
     // Which board?
     "board.question": "Which board is it?",
     "board.hint": "It's printed on the board or on its box.",
+    "board.help": "nRF52 boards use little power, so they suit solar. ESP32 boards have Wi-Fi. A repeater observer needs Wi-Fi to send its reports, so it needs an ESP32 board.",
     "board.group.nrf52": "nRF52: low power, good for solar",
     "board.group.esp32": "ESP32: has Wi-Fi",
     "board.nrf52.detail": "nRF52 · low power",
@@ -89,6 +90,7 @@
 
     // New, or already running?
     "status.question": "Is this a new board, or already running as a repeater?",
+    "status.help": "Already running keeps its identity: the private key other devices know it by. Its settings are replaced and its old regions cleared. Pick New if nothing on it needs keeping.",
     "status.new": "New, or fine to wipe",
     "status.new.detail": "Nothing on it needs keeping.",
     "status.running": "Already running",
@@ -191,6 +193,7 @@
     // Radio settings (only when the region's groups use more than one)
     "radio.question": "Which radio settings does your local group use?",
     "radio.hint": "Every device nearby has to use the same settings, or they can't hear each other.",
+    "radio.help": "Most of Canada uses the Canada radio settings. Some local groups, such as BC Mesh, use their own. Pick the ones the repeaters around you use. Not sure? Ask local operators.",
     "radio.canada": "Canada settings",
     "radio.canada.detail": "The usual settings across Canada.",
     "radio.community": "{profile} settings",
@@ -212,6 +215,7 @@
     // Neighbouring regions (edge)
     "neighbours.question": "Which neighbouring regions does it regularly hear?",
     "neighbours.hint": "It will also carry messages labelled for these.",
+    "neighbours.help": "An edge repeater lists the neighbouring regions it regularly hears. It will also carry messages labelled for these. They're optional: without them, it still passes on its province's label and the wider ones.",
     "neighbours.none": "None of these",
     "neighbours.empty": "The map shows no neighbouring regions for {region}.",
     "neighbours.meshmapper": "See which repeaters it hears on MeshMapper",
@@ -221,6 +225,7 @@
     // Name it
     "name.question": "Give it a name",
     "name.hint": "Other people see this. Letters, numbers, `_` and `-`, no spaces.",
+    "name.help": "The name shows in the MeshCore app and on maps, so people can tell repeaters apart. A place and a number, such as Belleville_R1, works well.",
     "name.hint.running": "Type the name it has now to keep it, or type a new one. Other people see this. Letters, numbers, `_` and `-`, no spaces.",
     "name.label": "Name",
     "name.invalid": "Use only letters, numbers, `_` or `-`, with no spaces or accents, up to {max} characters.",
@@ -394,6 +399,7 @@
     // Which board?
     "board.question": "Quelle est votre carte?",
     "board.hint": "Son nom est imprimé sur la carte ou sur sa boîte.",
+    "board.help": "Les cartes nRF52 consomment peu, ce qui convient à l’énergie solaire. Les cartes ESP32 ont le Wi-Fi. Un répéteur observateur a besoin du Wi-Fi pour envoyer ses rapports, donc d’une carte ESP32.",
     "board.group.nrf52": "nRF52 : faible consommation, idéal pour l’énergie solaire",
     "board.group.esp32": "ESP32 : avec Wi-Fi",
     "board.nrf52.detail": "nRF52 · faible consommation",
@@ -408,6 +414,7 @@
 
     // New, or already running?
     "status.question": "Est-ce une carte neuve, ou déjà en service comme répéteur?",
+    "status.help": "Déjà en service garde son identité : la clé privée par laquelle les autres appareils le reconnaissent. Ses réglages sont remplacés et ses anciennes régions retirées. Choisissez Neuve s’il n’y a rien à garder dessus.",
     "status.new": "Neuve, ou peut être effacée",
     "status.new.detail": "Il n’y a rien à garder dessus.",
     "status.running": "Déjà en service",
@@ -510,6 +517,7 @@
     // Radio settings (only when the region's groups use more than one)
     "radio.question": "Quels réglages radio votre groupe local utilise-t-il?",
     "radio.hint": "Tous les appareils des environs doivent utiliser les mêmes réglages, sinon ils ne s’entendent pas.",
+    "radio.help": "Presque tout le Canada utilise les réglages radio canadiens. Certains groupes locaux, comme BC Mesh, ont les leurs. Choisissez ceux des répéteurs autour de vous. Dans le doute, demandez aux opérateurs locaux.",
     "radio.canada": "Réglages canadiens",
     "radio.canada.detail": "Les réglages habituels partout au Canada.",
     "radio.community": "Réglages de {profile}",
@@ -531,6 +539,7 @@
     // Neighbouring regions (edge)
     "neighbours.question": "Quelles régions voisines entend-il régulièrement?",
     "neighbours.hint": "Il relaiera aussi les messages étiquetés pour celles-ci.",
+    "neighbours.help": "Un répéteur de bordure liste les régions voisines qu’il entend régulièrement. Il relaiera aussi les messages étiquetés pour celles-ci. Elles sont facultatives : sans elles, il relaie quand même l’étiquette de sa province et les plus larges.",
     "neighbours.none": "Aucune de celles-ci",
     "neighbours.empty": "La carte n’indique aucune région voisine pour {region}.",
     "neighbours.meshmapper": "Voyez quels répéteurs il entend sur MeshMapper",
@@ -540,6 +549,7 @@
     // Name it
     "name.question": "Donnez-lui un nom",
     "name.hint": "Les autres le voient. Lettres, chiffres, `_` et `-`, sans espaces.",
+    "name.help": "Le nom s’affiche dans l’application MeshCore et sur les cartes, pour qu’on puisse distinguer les répéteurs. Un lieu et un numéro, comme Belleville_R1, conviennent bien.",
     "name.hint.running": "Tapez le nom qu’il a maintenant pour le garder, ou tapez-en un nouveau. Les autres le voient. Lettres, chiffres, `_` et `-`, sans espaces.",
     "name.label": "Nom",
     "name.invalid": "Utilisez seulement des lettres, des chiffres, `_` ou `-`, sans espaces ni accents, jusqu’à {max} caractères.",
