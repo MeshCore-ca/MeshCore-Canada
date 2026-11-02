@@ -276,8 +276,9 @@ directions. A text match is not proof of radio delivery.
 ## Companion and channel setup
 
 !!! note "Set your default scope now"
-    Repeaters now use scopes to decide which messages to pass on. A default
-    scope on your companion keeps your messages travelling the right distance.
+    Repeaters set up with the [meshcore.ca setup tool](index.md) pass messages
+    on by scope. Edge repeaters don't pass on messages that have no scope, so
+    without a default scope your messages may not reach beyond your own area.
 
     - **Ontario or Québec:** use `onqc`.
     - **Elsewhere:** use your province's code, such as `ns` or `bc`, unless
@@ -285,7 +286,7 @@ directions. A text match is not proof of radio delivery.
 
 With MeshCore app **1.43 or newer**, open
 **Settings → Network Settings → Default Region Scope** and select your scope,
-adding it first if it is not listed. The [companion guide](../start/companion.md#choose-a-scope)
+adding it first if it is not listed. The [companion guide](../start/companion.md#set-your-default-scope)
 shows each step. A default scope lets an initial flooded direct message, and its
 path-discovery reply, cross the shared mesh. Bots and MeshMapper use their city
 scope, once local repeaters carry it.

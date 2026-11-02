@@ -106,15 +106,16 @@ sauf si votre méthode d’essai locale exige un autre réglage.
 ## Choisir votre scope
 
 !!! note "Réglez dès maintenant votre portée par défaut"
-    Les répéteurs utilisent maintenant les portées pour choisir les messages à
-    retransmettre. Une portée par défaut sur votre compagnon fait en sorte que
-    vos messages aillent aussi loin qu’il le faut.
+    Les répéteurs configurés avec l’[outil de configuration de meshcore.ca](../config/index.md)
+    retransmettent les messages selon leur portée. Les répéteurs de bordure ne
+    retransmettent pas les messages sans portée : sans portée par défaut, vos
+    messages risquent de ne pas dépasser votre secteur.
 
     - **Ontario ou Québec :** utilisez `onqc`.
     - **Ailleurs :** utilisez le code de votre province, comme `ns` ou `bc`,
       sauf si votre communauté a convenu d’autre chose.
 
-Vous pouvez la régler dès que l’application est connectée. Le [guide des portées du compagnon](../start/companion.md#choisir-un-scope) montre les étapes dans l’application MeshCore. Vous pouvez aussi [trouver votre région IATA](../config/map.md).
+Vous pouvez la régler dès que l’application est connectée. Le [guide des portées du compagnon](../start/companion.md#regler-votre-portee-par-defaut) montre les étapes dans l’application MeshCore. Vous pouvez aussi [trouver votre région IATA](../config/map.md).
 En Ontario et au Québec, utilisez aussi `onqc` pour le canal Public et votre code de ville pour les tests. Les robots suivent les [consignes pour les robots et MeshMapper](../proposals/onqc-scopes.md#robots-et-meshmapper). Réservez `can` et `na` à un usage futur.
 
 ## Vérifier avant l’utilisation courante

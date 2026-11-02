@@ -4,15 +4,51 @@ import test from "node:test";
 
 const companionPages = ["start/companion", "meshcore/flash-companion", "config/standard"];
 
+// The admonition that starts with `!!! note "..."`: its title line and its indented body.
+function scopeNote(source, path) {
+  const lines = source.split("\n");
+  const start = lines.findIndex(line => line.startsWith("!!! note "));
+  assert.notEqual(start, -1, `${path} has no scope note`);
+  let end = start + 1;
+  while (end < lines.length && (lines[end].trim() === "" || lines[end].startsWith("    "))) end += 1;
+  return lines.slice(start, end).join("\n");
+}
+
 test("every personal companion entry point tells people to set a default scope now", () => {
   for (const french of [false, true]) {
     for (const page of companionPages) {
       const path = `docs/${page}${french ? ".fr" : ""}.md`;
       const source = readFileSync(path, "utf8");
       assert.doesNotMatch(source, /Phase 2|phase 2|January 2027|janvier 2027|Default Region Scope\*\* (empty|vide)/, path);
-      assert.match(source, french ? /portée par défaut/i : /set (your|a) default (region )?scope/i, path);
-      assert.match(source, french ? /Ontario[\s\S]*Québec[\s\S]*`onqc`/ : /Ontario[\s\S]*Québec[\s\S]*`onqc`/, path);
-      assert.match(source, french ? /code de votre province/ : /your province['’]s code/, path);
+      const note = scopeNote(source, path);
+      assert.match(note, french ? /^!!! note "Réglez dès maintenant votre portée par défaut"/ : /^!!! note "Set your default scope now"/, path);
+      assert.match(note, french
+        ? /\*\*Ontario ou Québec :\*\* utilisez `onqc`/
+        : /\*\*Ontario or Québec:\*\* use `onqc`/, path);
+      assert.match(note, french
+        ? /\*\*Ailleurs :\*\* utilisez le code de votre province/
+        : /\*\*Elsewhere:\*\* use your province['’]s code/, path);
+      // The "why", the same on every page.
+      assert.match(note.replace(/\s+/g, " "), french
+        ? /Les répéteurs de bordure ne retransmettent pas les messages sans portée : sans portée par défaut, vos messages risquent de ne pas dépasser votre secteur/
+        : /Edge repeaters don['’]t pass on messages that have no scope, so without a default scope your messages may not reach beyond your own area/, path);
+    }
+  }
+});
+
+test("the companion guide shows the default scope steps with its six screenshots", () => {
+  const shots = ["01-connected", "02-settings", "03-select-region", "04-add-region", "05-pick-onqc", "06-saved"];
+  for (const french of [false, true]) {
+    const source = readFileSync(`docs/start/companion${french ? ".fr" : ""}.md`, "utf8");
+    assert.match(source, french ? /\{#regler-votre-portee-par-defaut\}/ : /\{#set-your-default-scope\}/);
+    for (const shot of shots) {
+      const image = source.match(new RegExp(`!\\[([^\\]]{20,})\\]\\(\\.\\./assets/images/onqc-scopes/companion-${shot}\\.webp\\)`));
+      assert.ok(image, `${french ? "FR" : "EN"} companion guide needs ${shot} with alt text`);
+    }
+    // The other pages point to those steps instead of repeating them.
+    for (const page of ["meshcore/flash-companion", "config/standard"]) {
+      const other = readFileSync(`docs/${page}${french ? ".fr" : ""}.md`, "utf8");
+      assert.match(other, french ? /companion\.md#regler-votre-portee-par-defaut/ : /companion\.md#set-your-default-scope/, page);
     }
   }
 });

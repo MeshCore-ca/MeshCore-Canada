@@ -70,20 +70,43 @@ une annonce.
 ## Choisir une portée (scope) {#choisir-un-scope}
 
 !!! note "Réglez dès maintenant votre portée par défaut"
-    Les répéteurs utilisent maintenant les portées pour choisir les messages à
-    retransmettre. Une portée par défaut sur votre compagnon fait en sorte que
-    vos messages aillent aussi loin qu’il le faut.
+    Les répéteurs configurés avec l’[outil de configuration de meshcore.ca](../config/index.md)
+    retransmettent les messages selon leur portée. Les répéteurs de bordure ne
+    retransmettent pas les messages sans portée : sans portée par défaut, vos
+    messages risquent de ne pas dépasser votre secteur.
 
     - **Ontario ou Québec :** utilisez `onqc`.
     - **Ailleurs :** utilisez le code de votre province, comme `ns` ou `bc`,
       sauf si votre communauté a convenu d’autre chose.
 
-Pour la régler, connectez votre compagnon à l’application MeshCore (version 1.43 ou plus récente), puis :
+### La régler dans l’application MeshCore {#regler-votre-portee-par-defaut}
 
-1. Touchez la **roue des réglages** en haut à droite.
+Il vous faut l’application MeshCore, version 1.43 ou plus récente. Les captures
+d’écran utilisent `onqc`; tapez votre propre portée si vous êtes ailleurs.
+
+1. Connectez votre appareil compagnon à l’application MeshCore et touchez la **roue des réglages** en haut à droite.
+
+    [![Liste des contacts de l’application MeshCore avec la roue des réglages en haut à droite](../assets/images/onqc-scopes/companion-01-connected.webp){ loading=lazy width="300" height="652" }](../assets/images/onqc-scopes/companion-01-connected.webp)
+
 2. Descendez jusqu’à **Network Settings** et touchez **Default Region Scope**.
-3. Si votre portée n’est pas dans la liste, touchez **Add Region** (ou le **+**), tapez-la en minuscules et touchez le crochet.
-4. Touchez votre portée pour la sélectionner, puis touchez le crochet en haut à droite. **Settings Saved!** apparaît.
+
+    [![Écran Settings avec Network Settings et Default Region Scope](../assets/images/onqc-scopes/companion-02-settings.webp){ loading=lazy width="300" height="652" }](../assets/images/onqc-scopes/companion-02-settings.webp)
+
+3. Si votre portée n’est pas dans la liste, touchez **Add Region**, ou le **+** en haut à droite.
+
+    [![Écran Select Region sans région et bouton Add Region](../assets/images/onqc-scopes/companion-03-select-region.webp){ loading=lazy width="300" height="652" }](../assets/images/onqc-scopes/companion-03-select-region.webp)
+
+4. Tapez votre portée, tout en minuscules, et touchez le **crochet** en haut à droite.
+
+    [![Écran Add Region avec onqc tapé](../assets/images/onqc-scopes/companion-04-add-region.webp){ loading=lazy width="300" height="652" }](../assets/images/onqc-scopes/companion-04-add-region.webp)
+
+5. Touchez votre portée pour la sélectionner.
+
+    [![Écran Select Region avec onqc dans la liste](../assets/images/onqc-scopes/companion-05-pick-onqc.webp){ loading=lazy width="300" height="652" }](../assets/images/onqc-scopes/companion-05-pick-onqc.webp)
+
+6. Default Region Scope affiche maintenant votre portée. Touchez le **crochet** en haut à droite. Il tourne pendant l’enregistrement, puis **Settings Saved!** apparaît.
+
+    [![Settings avec onqc comme portée par défaut et le message Settings Saved](../assets/images/onqc-scopes/companion-06-saved.webp){ loading=lazy width="300" height="652" }](../assets/images/onqc-scopes/companion-06-saved.webp)
 
 Trouvez votre code de ville sur la [carte des régions IATA](../config/map.md). En Ontario et au Québec, utilisez aussi `onqc` pour le canal Public et votre code de ville, comme `yow`, pour les canaux de test : ouvrez le canal, touchez **⋮** et choisissez **Set Region Scope**. Réservez `can` et `na` à un usage futur.
 

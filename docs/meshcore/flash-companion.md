@@ -90,14 +90,15 @@ The optional **Message Settings → Auto Reset Path** preference affects how the
 ## Choose your scope
 
 !!! note "Set your default scope now"
-    Repeaters now use scopes to decide which messages to pass on. A default
-    scope on your companion keeps your messages travelling the right distance.
+    Repeaters set up with the [meshcore.ca setup tool](../config/index.md) pass messages
+    on by scope. Edge repeaters don't pass on messages that have no scope, so
+    without a default scope your messages may not reach beyond your own area.
 
     - **Ontario or Québec:** use `onqc`.
     - **Elsewhere:** use your province's code, such as `ns` or `bc`, unless
       your community has agreed on something else.
 
-You can set it once the app is connected. The [companion scope guide](../start/companion.md#choose-a-scope) shows the steps in the MeshCore app. You can also [find your IATA region](../config/map.md).
+You can set it once the app is connected. The [companion scope guide](../start/companion.md#set-your-default-scope) shows the steps in the MeshCore app. You can also [find your IATA region](../config/map.md).
 In Ontario and Québec, use `onqc` for the Public channel too, and your city scope for tests. Bots follow the separate [bot and MeshMapper guidance](../proposals/onqc-scopes.md#bots-and-meshmapper). Leave `can` and `na` for future use.
 
 ## Verify before regular use

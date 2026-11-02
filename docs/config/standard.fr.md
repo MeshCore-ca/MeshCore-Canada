@@ -300,9 +300,10 @@ du texte ne prouve pas la livraison radio.
 ## Compagnons et canaux
 
 !!! note "Réglez dès maintenant votre portée par défaut"
-    Les répéteurs utilisent maintenant les portées pour choisir les messages à
-    retransmettre. Une portée par défaut sur votre compagnon fait en sorte que
-    vos messages aillent aussi loin qu’il le faut.
+    Les répéteurs configurés avec l’[outil de configuration de meshcore.ca](index.md)
+    retransmettent les messages selon leur portée. Les répéteurs de bordure ne
+    retransmettent pas les messages sans portée : sans portée par défaut, vos
+    messages risquent de ne pas dépasser votre secteur.
 
     - **Ontario ou Québec :** utilisez `onqc`.
     - **Ailleurs :** utilisez le code de votre province, comme `ns` ou `bc`,
@@ -311,7 +312,7 @@ du texte ne prouve pas la livraison radio.
 Avec l’application MeshCore **1.43 ou plus récente**, ouvrez
 **Settings → Network Settings → Default Region Scope** et choisissez votre
 portée, en l’ajoutant d’abord si elle n’est pas dans la liste. Le
-[guide du compagnon](../start/companion.md#choisir-un-scope) montre chaque étape.
+[guide du compagnon](../start/companion.md#regler-votre-portee-par-defaut) montre chaque étape.
 Une portée par défaut permet au premier message direct envoyé par diffusion, et à
 sa réponse de découverte de chemin, de traverser le réseau partagé. Les robots et
 MeshMapper utilisent leur portée de ville, une fois les répéteurs locaux prêts.

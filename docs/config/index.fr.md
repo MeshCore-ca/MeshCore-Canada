@@ -21,7 +21,7 @@ page_scripts:
   - assets/regions/modules/configurator-support.js?v=20260926-1
   - assets/regions/modules/iata-scopes.js?v=20261013-1
   - assets/regions/modules/scope-migration.js?v=20260926-2
-  - assets/regions/regions.js?v=20261015-1
+  - assets/regions/regions.js?v=20261102-1
 hide:
   - navigation
   - toc

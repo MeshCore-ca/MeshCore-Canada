@@ -66,19 +66,42 @@ Reboot after changing the radio settings, then send an advert.
 ## Choose a scope
 
 !!! note "Set your default scope now"
-    Repeaters now use scopes to decide which messages to pass on. A default
-    scope on your companion keeps your messages travelling the right distance.
+    Repeaters set up with the [meshcore.ca setup tool](../config/index.md) pass messages
+    on by scope. Edge repeaters don't pass on messages that have no scope, so
+    without a default scope your messages may not reach beyond your own area.
 
     - **Ontario or Québec:** use `onqc`.
     - **Elsewhere:** use your province's code, such as `ns` or `bc`, unless
       your community has agreed on something else.
 
-To set it, connect your companion to the MeshCore app (version 1.43 or newer), then:
+### Set it in the MeshCore app {#set-your-default-scope}
 
-1. Tap the **settings cog** in the top right.
-2. Scroll to **Network Settings** and tap **Default Region Scope**.
-3. If your scope is not listed, tap **Add Region** (or the **+**), type it in lowercase and tap the checkmark.
-4. Tap your scope to select it, then tap the checkmark in the top right. **Settings Saved!** pops up.
+You need the MeshCore app, version 1.43 or newer. The screenshots use `onqc`;
+type your own scope if you are elsewhere.
+
+1. Connect your companion to the MeshCore app and tap the **settings cog** in the top right.
+
+    [![MeshCore app contacts list with the settings cog at the top right](../assets/images/onqc-scopes/companion-01-connected.webp){ loading=lazy width="300" height="652" }](../assets/images/onqc-scopes/companion-01-connected.webp)
+
+2. Scroll down to **Network Settings** and tap **Default Region Scope**.
+
+    [![Settings screen with Network Settings and Default Region Scope](../assets/images/onqc-scopes/companion-02-settings.webp){ loading=lazy width="300" height="652" }](../assets/images/onqc-scopes/companion-02-settings.webp)
+
+3. If your scope is not listed, tap **Add Region**, or the **+** at the top right.
+
+    [![Select Region screen with no regions and an Add Region button](../assets/images/onqc-scopes/companion-03-select-region.webp){ loading=lazy width="300" height="652" }](../assets/images/onqc-scopes/companion-03-select-region.webp)
+
+4. Type your scope, all lowercase, and tap the **checkmark** in the top right.
+
+    [![Add Region screen with onqc typed in](../assets/images/onqc-scopes/companion-04-add-region.webp){ loading=lazy width="300" height="652" }](../assets/images/onqc-scopes/companion-04-add-region.webp)
+
+5. Tap your scope to select it.
+
+    [![Select Region screen with onqc listed](../assets/images/onqc-scopes/companion-05-pick-onqc.webp){ loading=lazy width="300" height="652" }](../assets/images/onqc-scopes/companion-05-pick-onqc.webp)
+
+6. Default Region Scope now shows your scope. Tap the **checkmark** in the top right. It spins while saving, then **Settings Saved!** pops up.
+
+    [![Settings showing onqc as the default region scope and a Settings Saved message](../assets/images/onqc-scopes/companion-06-saved.webp){ loading=lazy width="300" height="652" }](../assets/images/onqc-scopes/companion-06-saved.webp)
 
 Find your city code on the [IATA region map](../config/map.md). In Ontario and Québec, also use `onqc` for the Public channel and your city scope, such as `yow`, for test channels: open the channel, tap **⋮** and choose **Set Region Scope**. Leave `can` and `na` for future use.
 
