@@ -113,6 +113,6 @@ récupéré par USB. Utilisez ensuite la
 
 ## Poursuivre la configuration
 
-- [Programmer et tester un répéteur sur l’établi](../meshcore/flash-repeater.md)
+- [Configurer un répéteur](../config/index.md)
 - [Choisir une antenne et une ligne d’alimentation](recommended-antenna.md)
 - [Planifier un montage sécuritaire](repeater-mounting-options.md)

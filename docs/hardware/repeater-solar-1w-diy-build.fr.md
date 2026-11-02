@@ -289,7 +289,7 @@ Les options d’adresse et d’INA219 viennent du guide d’origine : elles sél
 
 ## Dépannage et récupération { #recuperation-et-retour-en-arriere }
 
-Si le répéteur ne démarre pas, débranchez l’alimentation et revérifiez le câblage ainsi que la modification du bouton BOOT. N’utilisez plus une batterie chaude, gonflée, endommagée ou qui fuit. Si une mise à jour du micrologiciel échoue, suivez les [étapes de récupération par USB](../meshcore/flash-repeater.md#plan-de-recuperation) après avoir vérifié l’alimentation et les connexions RF.
+Si le répéteur ne démarre pas, débranchez l’alimentation et revérifiez le câblage ainsi que la modification du bouton BOOT. N’utilisez plus une batterie chaude, gonflée, endommagée ou qui fuit. Si une mise à jour du micrologiciel échoue, reprenez la programmation de la même carte avec le même rôle, par USB, à l’aide de l’[outil de configuration du répéteur](../config/index.md), après avoir vérifié l’alimentation et les connexions RF. Ne l’effacez pas de nouveau.
 
 <span id="entretien"></span>
 

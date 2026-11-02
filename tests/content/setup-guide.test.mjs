@@ -144,7 +144,7 @@ test("no page or script still links to the region standard", () => {
     "docs/config/editor/index.md", "docs/config/editor/index.fr.md", "docs/meshcore/general-faq.md",
     "docs/meshcore/general-faq.fr.md", "docs/resources/glossary.md", "docs/resources/glossary.fr.md",
     "docs/start/companion.md", "docs/start/companion.fr.md", "docs/start/repeater.md", "docs/start/repeater.fr.md",
-    "docs/proposals/onqc-scopes.md", "docs/proposals/onqc-scopes.fr.md", "docs/assets/regions/regions.js",
+    "docs/assets/regions/regions.js",
   ];
   for (const path of sources) {
     const source = read(path);

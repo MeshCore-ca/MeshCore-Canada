@@ -103,6 +103,6 @@ A completed repeater should remain on the bench until it survives a reboot, reta
 
 ## Continue setup
 
-- [Flash and bench-test a repeater](../meshcore/flash-repeater.md)
+- [Set up a repeater](../config/index.md)
 - [Choose an antenna and feed line](recommended-antenna.md)
 - [Plan a safe mount](repeater-mounting-options.md)

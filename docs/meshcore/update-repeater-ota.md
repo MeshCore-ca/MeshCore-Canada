@@ -28,7 +28,7 @@ Confirm the exact board, bootloader, installed version, and firmware file
 before continuing.
 
 !!! danger "Bootloader prerequisite"
-    Proceed only after confirming that the exact board has the OTAFIX bootloader described in [Flashing a Repeater](flash-repeater.md#nrf52-bootloader-decision). A failed OTA update can require physical USB recovery.
+    Proceed only after confirming that the exact board has the OTAFIX bootloader described in the [repeater setup tool](../config/index.md), which walks through the bootloader update for nRF52 boards. A failed OTA update can require physical USB recovery.
 
 !!! warning "Android is the method tested by the community"
     The community has observed failed OTA attempts from iOS and currently recommends Android for this workflow. This is a local risk-control recommendation, not a claim that upstream iOS support does not exist.

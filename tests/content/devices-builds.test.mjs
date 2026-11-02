@@ -20,7 +20,6 @@ const hardwarePages = [
 
 const firmwarePages = [
   "docs/meshcore/flash-companion.md",
-  "docs/meshcore/flash-repeater.md",
   "docs/meshcore/flash-room-server.md",
   "docs/meshcore/general-overview.md",
   "docs/meshcore/generate-repeater-id.md",
@@ -149,7 +148,6 @@ test("hardware landing makes both solar build guides easy to find", () => {
 test("destructive firmware flows expose preflight, backup, verification, and recovery", () => {
   const destructivePages = [
     "docs/meshcore/flash-companion.md",
-    "docs/meshcore/flash-repeater.md",
     "docs/meshcore/flash-room-server.md",
     "docs/meshcore/generate-repeater-id.md",
     "docs/meshcore/update-repeater-ota.md",
@@ -168,7 +166,6 @@ test("destructive firmware flows expose preflight, backup, verification, and rec
 
   for (const path of [
     "docs/meshcore/flash-companion.md",
-    "docs/meshcore/flash-repeater.md",
     "docs/meshcore/flash-room-server.md",
   ]) {
     const source = read(path);

@@ -82,7 +82,7 @@ buying parts or starting work.
 After choosing a supported device, follow the matching setup guide:
 
 - [Flash a companion](../meshcore/flash-companion.md)
-- [Flash and bench-test a repeater](../meshcore/flash-repeater.md)
+- [Set up a repeater](../config/index.md)
 - [Flash a room server](../meshcore/flash-room-server.md)
 
 Found an outdated product or compatibility detail? [Share the correction](../submit-idea.md) and include the manufacturer source and date you checked it.

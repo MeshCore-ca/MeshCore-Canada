@@ -99,7 +99,7 @@ The optional **Message Settings → Auto Reset Path** preference affects how the
       your community has agreed on something else.
 
 You can set it once the app is connected. The [companion scope guide](../start/companion.md#set-your-default-scope) shows the steps in the MeshCore app. You can also [find your IATA region](../config/map.md).
-In Ontario and Québec, use `onqc` for the Public channel too, and your city scope for tests. Bots follow the separate [bot and MeshMapper guidance](../proposals/onqc-scopes.md#bots-and-meshmapper). Leave `can` and `na` for future use.
+In Ontario and Québec, use `onqc` for the Public channel too, and your city scope for tests. Bots follow the separate [bot and MeshMapper guidance](../config/guide.md#bots-and-meshmapper). Leave `can` and `na` for future use.
 
 ## Verify before regular use
 

@@ -118,7 +118,7 @@ Ces changements peuvent être difficiles à annuler sans remplacer des pièces.
     <h3>Étape 3 — Programmer et vérifier l’ajustement à sec</h3>
     <ol>
       <li>Gardez l’appareil ouvert et accessible.</li>
-      <li>Suivez le <a href="../../meshcore/flash-repeater/">guide de programmation sécuritaire d’un répéteur</a> pour la carte exacte.</li>
+      <li>Suivez l’<a href="../../config/">outil de configuration du répéteur</a> pour programmer la carte exacte.</li>
       <li>Fixez la radio sur la plaque arrière et confirmez que les câbles ne sont ni pincés ni pliés brusquement.</li>
     </ol>
     <figure>

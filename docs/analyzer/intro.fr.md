@@ -15,7 +15,7 @@ destructive: false
 page_styles:
   - assets/styles/analyzer.css?v=20261019-1
 page_scripts:
-  - assets/javascripts/analyzer-method-chooser.js?v=20260722-2
+  - assets/javascripts/analyzer-method-chooser.js?v=20261102-1
 ---
 
 # Configurer un observateur de réseau
@@ -66,7 +66,7 @@ Les mêmes choix figurent dans ce tableau :
 | Home Assistant utilise déjà MeshCore | [Home Assistant](builds/meshcore-ha.md) | Home Assistant |
 | PyMC gère déjà un répéteur | [PyMC](builds/pymc.md) | L’hôte PyMC |
 | Un hôte Linux ou macOS est relié par USB | [MCtoMQTT](builds/mctomqtt.md) | L’hôte USB |
-| Une carte LoRa Wi-Fi compatible peut y être consacrée | [Micrologiciel MQTT autonome](builds/mqtt-firmware.md) | Aucun hôte distinct |
+| Une carte LoRa Wi-Fi compatible peut y être consacrée | [Répéteur observateur](../config/index.md?type=observer), configuré avec l’outil guidé | Aucun hôte distinct |
 
 Si aucune méthode ne convient, demandez conseil sur le
 [forum de MeshCore Canada](https://forum.meshcore.ca/) avant d’installer un

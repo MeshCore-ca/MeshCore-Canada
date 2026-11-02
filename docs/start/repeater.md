@@ -35,7 +35,7 @@ A repeater extends coverage by routing traffic for other users. Because it is
 fixed infrastructure, plan its power, antenna, access, and maintenance before
 installation.
 
-[Install and configure a repeater](../meshcore/flash-repeater.md){ .md-button .md-button--primary }
+[Set up a repeater](../config/index.md){ .md-button .md-button--primary }
 
 ## Before you start
 
@@ -44,15 +44,16 @@ installation.
 - Keep physical recovery access while testing.
 - Record the current identity and settings before any erase or update.
 
-## Know what flashing changes
+## Know what setup changes
 
-The guide installs repeater firmware and sets radio, identity, adverts, and
-regional settings. Test on the bench before a difficult installation.
+The setup tool walks you through flashing the repeater firmware, then gives you
+the commands that set its radio, name, adverts, and regions. Test on the bench
+before a difficult installation.
 
+## Set up the repeater
 
-## Flash the repeater
-
-Follow [Flash and configure a repeater](../meshcore/flash-repeater.md).
+Open the [repeater setup tool](../config/index.md). It asks a few questions,
+then gives you every command to paste, one at a time, with what each one does.
 
 ## Use the right radio and region settings
 
@@ -66,12 +67,13 @@ If Canada is not listed, follow the [older-preset instructions](../provinces/ind
     need matching local settings, and operators should agree on changes that
     affect shared traffic.
 
-Use the [repeater configurator](../config/index.md) to select your MeshMapper IATA
-zone and independent scopes. Already running with old regions?
-[How repeaters work](../config/guide.md#old-regions) explains how they're cleared.
+The [setup tool](../config/index.md) picks your MeshMapper IATA region from your
+town and sets its scopes. Already running with old regions? The tool clears them
+first: [How repeaters work](../config/guide.md#old-regions) explains how.
 
-Start with preparation. Keep working scopes in place and coordinate activation,
-including any edge blocking, with local operators.
+A repeater that regularly hears repeaters in another region is an edge repeater.
+Check with nearby operators before you set one up:
+[How repeaters work](../config/guide.md#city-or-edge) explains the difference.
 
 <div data-mc-repeater-hash-check></div>
 
@@ -93,7 +95,7 @@ Use the [repeater verification checklist](verify.md#repeater).
   <ol>
     <li><label><input id="repeater-progress-hardware" type="checkbox" data-mc-progress> Confirm compatible hardware and site</label></li>
     <li><label><input id="repeater-progress-prepare" type="checkbox" data-mc-progress> Back up and prepare</label></li>
-    <li><label><input id="repeater-progress-flash" type="checkbox" data-mc-progress> Follow the flashing guide</label></li>
+    <li><label><input id="repeater-progress-flash" type="checkbox" data-mc-progress> Flash it with the setup tool</label></li>
     <li><label><input id="repeater-progress-configure" type="checkbox" data-mc-progress> Apply local and regional settings</label></li>
     <li><label><input id="repeater-progress-verify-local" type="checkbox" data-mc-progress> Bench-check the repeater</label></li>
     <li><label><input id="repeater-progress-verify-community" type="checkbox" data-mc-progress> Test with a nearby companion</label></li>
@@ -105,7 +107,7 @@ Use the [repeater verification checklist](verify.md#repeater).
 Keep a record of the site, owner, recovery access, settings, and last
 successful check. Recheck it after firmware, antenna, power, or region changes.
 For firmware 1.14 or newer, review the coordinated
-[loop-detection setting](../meshcore/flash-repeater.md#loop-detection) before
+[loop-detection setting](../config/guide.md#loop-detection) before
 changing a community repeater.
 
 Review [antenna](../hardware/recommended-antenna.md) and

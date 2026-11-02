@@ -118,4 +118,4 @@ Record each inspection date, inspector, photographs, hardware/cable condition, e
 
 ## Before installing
 
-Return to the [repeater choice](recommended-repeaters.md) or [flash and bench-test the repeater](../meshcore/flash-repeater.md) before installing it.
+Return to the [repeater choice](recommended-repeaters.md) or [set up the repeater](../config/index.md) and bench-test it before installing it.

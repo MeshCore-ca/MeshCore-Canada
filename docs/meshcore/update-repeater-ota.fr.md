@@ -29,7 +29,7 @@ Confirmez la carte exacte, le chargeur d’amorçage, la version installée et l
 fichier du micrologiciel avant de continuer.
 
 !!! danger "Chargeur d’amorçage requis"
-    Continuez seulement après avoir confirmé que la carte exacte possède le chargeur d’amorçage OTAFIX décrit dans [Programmer un répéteur](flash-repeater.md#nrf52-bootloader-decision). Une mise à jour OTA ratée peut exiger une récupération physique par USB.
+    Continuez seulement après avoir confirmé que la carte exacte possède le chargeur d’amorçage OTAFIX décrit dans l’[outil de configuration du répéteur](../config/index.md), qui guide la mise à jour du chargeur d’amorçage des cartes nRF52. Une mise à jour OTA ratée peut exiger une récupération physique par USB.
 
 !!! warning "Android est la méthode testée par la communauté"
     La communauté a observé des échecs de mise à jour OTA depuis iOS et recommande actuellement Android pour cette procédure. Il s’agit d’une recommandation locale pour réduire les risques, et non d’une affirmation selon laquelle la prise en charge d’iOS n’existe pas en amont.

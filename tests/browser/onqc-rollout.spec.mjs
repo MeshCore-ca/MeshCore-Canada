@@ -15,7 +15,7 @@ for (const locale of ["", "fr/"]) {
         await expect(note).toBeVisible();
         await expect(note).toContainText("onqc");
         await expect(note).toContainText(locale ? /code de votre province/ : /your province['’]s code/);
-        await expect(note).toContainText(locale ? sentence("Les répéteurs de bordure ne retransmettent pas les messages sans portée") : /Edge repeaters don['’]t\s+pass on messages that have no\s+scope/);
+        await expect(note).toContainText(locale ? sentence("Les répéteurs de bordure ne relaient pas les messages sans portée") : /Edge repeaters don['’]t\s+pass on messages that have no\s+scope/);
         await expect(page.locator("article")).not.toContainText(/Phase 2|phase 2|January 2027|janvier 2027/);
         if (path !== "meshcore/flash-companion/") {
           await expect(page.locator("article")).toContainText("Network Settings");

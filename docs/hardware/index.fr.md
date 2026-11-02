@@ -85,7 +85,7 @@ ou de commencer les travaux.
 Après avoir choisi un appareil pris en charge, suivez le guide correspondant :
 
 - [Programmer un compagnon](../meshcore/flash-companion.md)
-- [Programmer et tester un répéteur sur l’établi](../meshcore/flash-repeater.md)
+- [Configurer un répéteur](../config/index.md)
 - [Programmer un serveur de salon](../meshcore/flash-room-server.md)
 
 Vous avez trouvé un produit ou un renseignement de compatibilité périmé?

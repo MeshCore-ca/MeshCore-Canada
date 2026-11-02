@@ -288,7 +288,7 @@ The address and INA219 flags are from the original guide: they select `0x40` and
 
 ## Troubleshooting and recovery { #recovery-and-undo }
 
-If the unit does not start, disconnect power and recheck the wiring and BOOT-button modification. Stop using any battery that is hot, swollen, leaking, or damaged. If a firmware change fails, use the [USB recovery steps](../meshcore/flash-repeater.md#recovery-plan) after checking the power and RF connections.
+If the unit does not start, disconnect power and recheck the wiring and BOOT-button modification. Stop using any battery that is hot, swollen, leaking, or damaged. If a firmware change fails, check the power and RF connections, then flash the same board and role again over USB with the [repeater setup tool](../config/index.md). Don't erase the board again.
 
 <span id="maintenance"></span>
 

@@ -30,7 +30,7 @@ test("every personal companion entry point tells people to set a default scope n
         : /\*\*Elsewhere:\*\* use your province['’]s code/, path);
       // The "why", the same on every page.
       assert.match(note.replace(/\s+/g, " "), french
-        ? /Les répéteurs de bordure ne retransmettent pas les messages sans portée : sans portée par défaut, vos messages risquent de ne pas dépasser votre secteur/
+        ? /Les répéteurs de bordure ne relaient pas les messages sans portée : sans portée par défaut, vos messages risquent de ne pas dépasser votre secteur/
         : /Edge repeaters don['’]t pass on messages that have no scope, so without a default scope your messages may not reach beyond your own area/, path);
     }
   }
@@ -91,9 +91,9 @@ test("current country-scope guidance uses can in both languages without rewritin
       assert.match(source, /`can`/, path);
       assert.doesNotMatch(source, /`ca`/, path);
     }
-    const proposal = readFileSync(`docs/proposals/onqc-scopes${french ? ".fr" : ""}.md`, "utf8");
-    assert.match(proposal, /region remove can/);
-    assert.match(proposal, /`can`/);
+    const guide = readFileSync(`docs/config/guide${french ? ".fr" : ""}.md`, "utf8");
+    assert.match(guide, /`can`/, "the explainer names can");
+    assert.doesNotMatch(guide, /`ca`/, "the explainer never names the old ca");
   }
   const map = readFileSync("docs/assets/regions/regions.js", "utf8");
   assert.match(map, /City, province, mesh scope where defined, can, and na/);
@@ -102,12 +102,12 @@ test("current country-scope guidance uses can in both languages without rewritin
 });
 
 test("scope explanations do not promise universal delivery or geographic containment", () => {
-  const english = readFileSync("docs/proposals/onqc-scopes.md", "utf8");
-  const french = readFileSync("docs/proposals/onqc-scopes.fr.md", "utf8");
+  const english = readFileSync("docs/config/guide.md", "utf8");
+  const french = readFileSync("docs/config/guide.fr.md", "utf8");
   assert.doesNotMatch(english, /Everyone in Ontario and Québec can talk|contained no matter what|still reaches everyone|Every repeater carries `can` now|Edge repeaters still block/);
   assert.doesNotMatch(french, /Tout le monde en Ontario et au Québec peut se parler|contenus quoi qu’il arrive|joint quand même tout le monde|Chaque répéteur porte `can` dès maintenant|bordure bloquent toujours/);
-  assert.match(english, /forwarding rules and hop limits/);
-  assert.match(french, /règles de retransmission et les limites de sauts/);
-  assert.match(english, /After coordinated activation/);
-  assert.match(french, /Après l’activation coordonnée/);
+  assert.match(english, /A label isn't a lock or a fence/);
+  assert.match(french, /Une étiquette n’est ni un cadenas ni une clôture/);
+  assert.match(english, /which repeaters pass a message on, not radio coverage/);
+  assert.match(french, /quels répéteurs relaient un message, pas la couverture radio/);
 });

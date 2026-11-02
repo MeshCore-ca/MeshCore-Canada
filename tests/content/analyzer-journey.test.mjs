@@ -17,7 +17,6 @@ const pages = [
   "docs/analyzer/remoteterm.md",
   "docs/analyzer/builds/mctomqtt.md",
   "docs/analyzer/builds/meshcore-ha.md",
-  "docs/analyzer/builds/mqtt-firmware.md",
   "docs/analyzer/builds/pymc.md",
 ];
 
@@ -25,7 +24,6 @@ const methodPages = [
   "docs/analyzer/remoteterm.md",
   "docs/analyzer/builds/mctomqtt.md",
   "docs/analyzer/builds/meshcore-ha.md",
-  "docs/analyzer/builds/mqtt-firmware.md",
   "docs/analyzer/builds/pymc.md",
 ];
 
@@ -79,12 +77,13 @@ test("intro explains the path before MQTT details and recommends every method", 
   assert.ok(source.indexOf("The shared servers use MQTT") > viewer);
   assert.match(source, /id="observer-method-chooser"/);
   assert.match(source, /assets\/javascripts\/analyzer-method-chooser\.js/);
-  for (const method of ["RemoteTerm", "Home Assistant", "PyMC", "MCtoMQTT", "Standalone MQTT firmware"]) {
+  for (const method of ["RemoteTerm", "Home Assistant", "PyMC", "MCtoMQTT", "Repeater observer"]) {
     assert.match(source, new RegExp(method));
   }
-  for (const path of ["../remoteterm/", "../builds/meshcore-ha/", "../builds/pymc/", "../builds/mctomqtt/", "../builds/mqtt-firmware/"]) {
+  for (const path of ["../remoteterm/", "../builds/meshcore-ha/", "../builds/pymc/", "../builds/mctomqtt/", "../../config/?type=observer"]) {
     assert.ok(chooser.includes(`href: "${path}"`), `chooser must resolve ${path} from /analyzer/intro/`);
   }
+  assert.doesNotMatch(chooser, /mqtt-firmware/, "the standalone firmware method is now the repeater observer in the setup tool");
   assert.match(source, /broker connection.*not.*finish|Setup is not finished.*connected/is);
 });
 
@@ -210,7 +209,7 @@ test("canonical observer configuration is redundant, encrypted, and self-consist
   });
 });
 
-test("location-code UI, builder, and host helpers share one validated quick list", () => {
+test("location-code UI and host helpers share one validated quick list", () => {
   const data = JSON.parse(read("docs/analyzer/location-codes.json"));
   const codes = data.locations.map((location) => location.code);
   assert.equal(new Set(codes).size, codes.length, "location codes must be unique");
@@ -235,26 +234,6 @@ test("location-code UI, builder, and host helpers share one validated quick list
   const locationPage = read("docs/analyzer/iata-codes.md");
   assert.match(locationPage, /data-source="\.\.\/location-codes\.json"/);
   assert.match(locationPage, /analyzer-location-codes\.js/);
-
-  const firmwarePage = read("docs/analyzer/builds/mqtt-firmware.md");
-  assert.match(firmwarePage, /data-location-source="\.\.\/\.\.\/location-codes\.json"/);
-});
-
-test("standalone builder is external, fail-closed, redacted, and non-persistent", () => {
-  const page = read("docs/analyzer/builds/mqtt-firmware.md");
-  const script = read("docs/assets/javascripts/analyzer-command-builder.js");
-
-  assert.doesNotMatch(page, /<style>|<script>/);
-  assert.match(page, /page_scripts:\n(?:  - [^\n]+\n)*  - assets\/javascripts\/analyzer-command-builder\.js/);
-  assert.match(page, /type="password"/);
-  assert.doesNotMatch(page.match(/<input id="observer-ssid"[^>]*>/)?.[0] || "", /\svalue=/);
-  assert.match(script, /safeCliToken/);
-  assert.match(script, /set wifi\.ssid \[hidden\]/);
-  assert.match(script, /set wifi\.pwd \[hidden\]/);
-  assert.match(script, /window\.addEventListener\("pagehide"/);
-  assert.match(script, /navigator\.clipboard\.writeText\(exactCommands\.join/);
-  assert.doesNotMatch(script, /localStorage|sessionStorage|document\.cookie/);
-  assert.doesNotThrow(() => new Function(script));
 });
 
 test("review-first host setup precedes remote execution and includes rollback", () => {

@@ -38,6 +38,10 @@ Avant de l’activer, lisez
 
 [Choisir une méthode d’observation](../analyzer/intro.md){ .md-button .md-button--primary }
 
+Vous voulez un répéteur qui rapporte aussi ce qu’il entend? Configurez-le comme
+[répéteur observateur](../config/index.md?type=observer) : l’outil guidé couvre la
+programmation et chaque commande.
+
 ## Avant de commencer
 
 - Ouvrez l’outil [Choisir une méthode d’observation](../analyzer/intro.md).

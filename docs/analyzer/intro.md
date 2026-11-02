@@ -15,7 +15,7 @@ destructive: false
 page_styles:
   - assets/styles/analyzer.css?v=20261019-1
 page_scripts:
-  - assets/javascripts/analyzer-method-chooser.js?v=20260722-2
+  - assets/javascripts/analyzer-method-chooser.js?v=20261102-1
 ---
 
 # Set up a network observer
@@ -63,7 +63,7 @@ The same choices are listed here:
 | Home Assistant already has MeshCore | [Home Assistant](builds/meshcore-ha.md) | Home Assistant |
 | PyMC already manages a repeater | [PyMC](builds/pymc.md) | The PyMC host |
 | A Linux or macOS host is connected by USB | [MCtoMQTT](builds/mctomqtt.md) | The USB host |
-| A supported Wi-Fi LoRa board can be dedicated | [Standalone MQTT firmware](builds/mqtt-firmware.md) | No separate host |
+| A supported Wi-Fi LoRa board can be dedicated | [Repeater observer](../config/index.md?type=observer), set up in the guided tool | No separate host |
 
 If none fit, ask in the [MeshCore Canada forum](https://forum.meshcore.ca/) before installing anything new.
 

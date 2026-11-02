@@ -3,6 +3,10 @@ import { existsSync, readFileSync, statSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
+import vm from "node:vm";
+
+vm.runInThisContext(readFileSync(resolve(dirname(fileURLToPath(import.meta.url)), "../../docs/assets/setup/setup-text.js"), "utf8"), { filename: "setup-text.js" });
+const setupText = globalThis.MeshCoreSetupText;
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 
@@ -17,7 +21,6 @@ function countH1(markdown) {
 const assignedPages = [
   "docs/hardware/repeater-mounting-options.md",
   "docs/meshcore/flash-companion.md",
-  "docs/meshcore/flash-repeater.md",
   "docs/meshcore/flash-room-server.md",
   "docs/meshcore/update-repeater-ota.md",
   "docs/meshcore/generate-repeater-id.md",
@@ -25,7 +28,6 @@ const assignedPages = [
   "docs/provinces/index.md",
   "docs/provinces/saskatchewan.md",
   "docs/analyzer/builds/mctomqtt.md",
-  "docs/analyzer/builds/mqtt-firmware.md",
 ];
 
 test("every P0 content page has exactly one H1", () => {
@@ -34,12 +36,10 @@ test("every P0 content page has exactly one H1", () => {
   }
 });
 
-test("destructive flash actions are gated by backup warnings", () => {
+test("destructive flash actions on the guide pages are gated by backup warnings", () => {
   const cases = [
     ["docs/meshcore/flash-companion.md", "Click **Erase Flash**"],
-    ["docs/meshcore/flash-repeater.md", "Click **Erase Flash**"],
     ["docs/meshcore/flash-room-server.md", "Click **Erase Flash**"],
-    ["docs/analyzer/builds/mqtt-firmware.md", "enable **Erase device**"],
   ];
 
   for (const [file, destructiveAction] of cases) {
@@ -53,6 +53,39 @@ test("destructive flash actions are gated by backup warnings", () => {
     assert.ok(backupIndex >= 0, `${file}: backup instructions must precede erase`);
     assert.match(text.slice(0, actionIndex), /private key|identity/i, file);
   }
+});
+
+test("the setup tool erases only new boards and warns to back up a running one first", () => {
+  const warn = {
+    en: /Back it up first\. Export its private key.*Never erase it in the flasher: that deletes its identity/,
+    fr: /Sauvegardez-la d’abord\. Exportez sa clé privée.*Ne l’effacez jamais dans l’outil de programmation : ça supprime son identité/,
+  };
+  const eraseNew = {
+    en: { esp32: /^Tick Erase device, since it's a new board\./, nrf52: /^Skip Erase Flash unless your board's instructions ask for it\./ },
+    fr: { esp32: /^Cochez Erase device, puisque c’est une carte neuve\./, nrf52: /^N’utilisez Erase Flash que si les instructions de votre carte le demandent\./ },
+  };
+  const eraseRunning = {
+    en: { esp32: /^Leave Erase device unticked\./, nrf52: /^Don't click Erase Flash\./ },
+    fr: { esp32: /^Laissez Erase device décoché\./, nrf52: /^Ne cliquez pas sur Erase Flash\./ },
+  };
+  const backUpFirstOnSwitch = { en: /Back up its private key first/, fr: /Sauvegardez d’abord sa clé privée/ };
+
+  for (const lang of ["en", "fr"]) {
+    assert.match(setupText.t("status.backup", lang), warn[lang], `${lang}: a running board is backed up before anything else`);
+    assert.match(setupText.t("observerFirmware.switch", lang), backUpFirstOnSwitch[lang], `${lang}: switching firmware warns to back up`);
+    for (const chip of ["esp32", "nrf52"]) {
+      assert.match(setupText.t(`flash.erase.${chip}-new`, lang), eraseNew[lang][chip], `${lang} ${chip}: new boards only`);
+      assert.match(setupText.t(`flash.erase.${chip}-running`, lang), eraseRunning[lang][chip], `${lang} ${chip}: a running board is never erased`);
+    }
+  }
+
+  // The warning shows on the "new or running" screen, which comes before the flash step; the flash step then picks its erase line by that same answer.
+  const ui = read("docs/assets/setup/setup-ui.js");
+  assert.match(ui, /status === "running"\) body\.appendChild\(note\("warn", t\("status\.backup"\)\)\)/);
+  assert.match(ui, /t\("flash\.erase\." \+ [^;]*"-" \+ \(a\.status === "running" \? "running" : "new"\)\)/);
+  const flow = read("docs/assets/setup/setup-flow.js");
+  const askedStatus = flow.indexOf('steps.push("board", "status")');
+  assert.ok(askedStatus >= 0 && askedStatus < flow.indexOf('steps.push("flash")'), "the status question comes before the flash step");
 });
 
 test("unsafe and incomplete legacy pages are removed from the content tree", () => {
@@ -101,160 +134,6 @@ test("Saskatchewan directory and generated listing agree on the national baselin
   assert.match(sk, /<h3>YQRMesh<\/h3>[\s\S]*?<dd>Uses the Canada defaults<\/dd>/);
   assert.doesNotMatch(sk, /1-byte|Local setting differs/);
 });
-test("observer credential fields are empty, masked, revealable, and never persisted", () => {
-  const page = read("docs/analyzer/builds/mqtt-firmware.md");
-  const script = read("docs/assets/javascripts/analyzer-command-builder.js");
-  const ssidInput = page.match(/<input id="observer-ssid"[^>]*>/)?.[0] || "";
-  const passwordInput = page.match(/<input id="observer-password"[^>]*>/)?.[0] || "";
-
-  assert.ok(ssidInput, "SSID input missing");
-  assert.doesNotMatch(ssidInput, /\svalue=/);
-  assert.match(passwordInput, /type="password"/);
-  assert.doesNotMatch(passwordInput, /\svalue=/);
-  assert.match(page, /id="observer-toggle-password"/);
-  assert.match(script, /safeCliToken/);
-  assert.match(script, /set wifi\.ssid \[hidden\]/);
-  assert.match(script, /set wifi\.pwd \[hidden\]/);
-  assert.match(script, /navigator\.clipboard\.writeText\(exactCommands\.join/);
-  assert.match(script, /window\.addEventListener\("pagehide"/);
-  assert.doesNotMatch(page, /YourWiFi(Network|Password)/);
-  assert.doesNotMatch(page, /<script>/, "builder must be route-scoped");
-  assert.doesNotThrow(() => new Function(script));
-});
-
-test("observer builder fails closed and redacts valid WiFi credentials", () => {
-  const script = read("docs/assets/javascripts/analyzer-command-builder.js");
-
-  class FakeElement {
-    constructor(value = "", type = "text") {
-      this.value = value;
-      this.type = type;
-      this.textContent = "";
-      this.disabled = false;
-      this.attributes = new Map();
-      this.listeners = new Map();
-      this.dataset = {};
-      this.options = [];
-      this.selectedIndex = 0;
-      this.children = [];
-    }
-    addEventListener(type, listener) {
-      this.listeners.set(type, listener);
-    }
-    setAttribute(name, value) {
-      this.attributes.set(name, value);
-    }
-    focus() {}
-    appendChild(child) {
-      this.children.push(child);
-      return child;
-    }
-    replaceChildren(...children) {
-      this.children = children;
-    }
-    dispatch(type) {
-      this.listeners.get(type)?.({ type });
-    }
-  }
-
-  const elements = new Map([
-    ["observer-command-builder", new FakeElement()],
-    ["observer-board", new FakeElement("heltec-v3")],
-    ["observer-iata", new FakeElement()],
-    ["observer-role", new FakeElement("Repeater")],
-    ["observer-number", new FakeElement("01")],
-    ["observer-ssid", new FakeElement()],
-    ["observer-password", new FakeElement("", "password")],
-    ["observer-repeat", new FakeElement("on")],
-    ["observer-radio", new FakeElement("keep")],
-    ["observer-hash", new FakeElement("keep")],
-    ["observer-command-output", new FakeElement()],
-    ["observer-copy-status", new FakeElement()],
-    ["observer-command-errors", new FakeElement()],
-    ["observer-command-summary", new FakeElement()],
-    ["observer-copy-commands", new FakeElement()],
-    ["observer-reveal-commands", new FakeElement()],
-    ["observer-toggle-password", new FakeElement()],
-    ["observer-clear-secrets", new FakeElement()],
-    ["observer-iata-list", new FakeElement()],
-    ["observer-location-status", new FakeElement()],
-  ]);
-  elements.get("observer-board").options = [{ text: "Heltec V3" }];
-  elements.get("observer-hash").options = [{ text: "Keep current settings" }];
-  const windowListeners = new Map();
-  const fakeWindow = {
-    TextEncoder,
-    addEventListener(type, listener) {
-      windowListeners.set(type, listener);
-    },
-  };
-  const fakeDocument = {
-    readyState: "complete",
-    getElementById: (id) => elements.get(id) || null,
-    createElement: () => new FakeElement(),
-    createDocumentFragment: () => new FakeElement(),
-  };
-  const fakeNavigator = { clipboard: { writeText: async () => {} } };
-
-  new Function("document", "window", "navigator", "TextEncoder", script)(
-    fakeDocument,
-    fakeWindow,
-    fakeNavigator,
-    TextEncoder,
-  );
-
-  const rootElement = elements.get("observer-command-builder");
-  const output = elements.get("observer-command-output");
-  const errors = elements.get("observer-command-errors");
-  const copyButton = elements.get("observer-copy-commands");
-  const revealButton = elements.get("observer-reveal-commands");
-
-  assert.equal(copyButton.disabled, true);
-  assert.match(output.textContent, /Complete the required fields/);
-
-  elements.get("observer-iata").value = "YOW";
-  elements.get("observer-ssid").value = "SafeNetwork";
-  elements.get("observer-password").value = "SafePassword42!";
-  rootElement.dispatch("input");
-
-  assert.equal(errors.textContent, "");
-  assert.equal(copyButton.disabled, true);
-  assert.match(output.textContent, /set wifi\.ssid \[hidden\]/);
-  assert.match(output.textContent, /set wifi\.pwd \[hidden\]/);
-  assert.doesNotMatch(output.textContent, /SafeNetwork|SafePassword42/);
-
-  revealButton.dispatch("click");
-  assert.equal(copyButton.disabled, false);
-  assert.match(output.textContent, /set wifi\.ssid SafeNetwork/);
-  assert.match(output.textContent, /set wifi\.pwd SafePassword42!/);
-
-  elements.get("observer-password").value = "bad\nreboot";
-  rootElement.dispatch("input");
-  assert.equal(copyButton.disabled, true);
-  assert.match(errors.textContent, /safe CLI character set/);
-  assert.doesNotMatch(output.textContent, /bad|reboot/);
-
-  elements.get("observer-password").value = "short7";
-  rootElement.dispatch("input");
-  assert.equal(copyButton.disabled, true);
-  assert.match(errors.textContent, /8–63 byte Wi-Fi password/);
-
-  elements.get("observer-password").value = "Z".repeat(64);
-  rootElement.dispatch("input");
-  assert.equal(copyButton.disabled, true);
-  assert.match(errors.textContent, /64-digit hexadecimal PSK/);
-
-  elements.get("observer-password").value = "A1".repeat(32);
-  rootElement.dispatch("input");
-  assert.equal(errors.textContent, "");
-  assert.match(output.textContent, /set wifi\.pwd \[hidden\]/);
-
-  windowListeners.get("pagehide")();
-  assert.equal(elements.get("observer-ssid").value, "");
-  assert.equal(elements.get("observer-password").value, "");
-  assert.equal(elements.get("observer-password").type, "password");
-});
-
 test("remote installer guidance explains impact, review, and rollback before one-liners", () => {
   const page = read("docs/analyzer/builds/mctomqtt.md");
   const reviewIndex = page.indexOf("### 1. Download and inspect the helper");

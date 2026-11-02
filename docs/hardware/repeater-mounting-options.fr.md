@@ -152,5 +152,5 @@ prochaine inspection.
 ## Avant l’installation
 
 Revenez au [choix du répéteur](recommended-repeaters.md) ou
-[programmez et testez le répéteur sur l’établi](../meshcore/flash-repeater.md)
+[configurez le répéteur](../config/index.md) et testez-le sur l’établi
 avant de l’installer.

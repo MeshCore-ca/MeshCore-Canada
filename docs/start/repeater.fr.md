@@ -35,7 +35,7 @@ Un répéteur améliore la couverture en relayant le trafic des autres personnes
 Puisqu’il s’agit d’une installation fixe, planifiez l’alimentation, l’antenne,
 l’accès et l’entretien avant de l’installer.
 
-[Installer et configurer un répéteur](../meshcore/flash-repeater.md){ .md-button .md-button--primary }
+[Configurer un répéteur](../config/index.md){ .md-button .md-button--primary }
 
 ## Avant de commencer
 
@@ -47,14 +47,16 @@ l’accès et l’entretien avant de l’installer.
 
 ## Ce qui sera modifié
 
-Le guide installe le micrologiciel du répéteur et configure la radio,
-l’identité, les annonces et la région. Faites les essais sur l’établi avant
-toute installation difficile d’accès.
+L’outil de configuration vous guide pour programmer le micrologiciel du
+répéteur, puis vous donne les commandes qui règlent sa radio, son nom, ses
+annonces et ses régions. Faites les essais sur l’établi avant toute
+installation difficile d’accès.
 
+## Configurer le répéteur
 
-## Installer le micrologiciel du répéteur
-
-Suivez le guide [Reprogrammer et configurer un répéteur](../meshcore/flash-repeater.md).
+Ouvrez l’[outil de configuration du répéteur](../config/index.md). Il pose
+quelques questions, puis vous donne toutes les commandes à coller, une à la
+fois, avec ce que chacune fait.
 
 ## Choisir les bons paramètres radio et régionaux
 
@@ -69,12 +71,15 @@ Si Canada n’apparaît pas, suivez les [consignes pour l’ancien préréglage]
     personnes responsables doivent s’entendre sur tout changement qui touche
     le trafic partagé.
 
-Utilisez le [configurateur de répéteur](../config/index.md) pour choisir votre zone
-IATA MeshMapper et ses portées indépendantes. Le répéteur a encore d’anciennes
-régions? [Comprendre les répéteurs](../config/guide.md#old-regions) explique comment les retirer.
+L’[outil de configuration](../config/index.md) choisit votre zone IATA MeshMapper
+d’après votre ville et règle ses portées. Le répéteur a encore d’anciennes
+régions? L’outil les retire d’abord :
+[Comprendre les répéteurs](../config/guide.md#old-regions) explique comment.
 
-Commencez par la préparation. Conservez les portées qui fonctionnent et coordonnez
-l’activation, y compris tout blocage en bordure, avec les opérateurs locaux.
+Un répéteur qui entend régulièrement des répéteurs d’une autre région est un
+répéteur de bordure. Consultez les personnes responsables à proximité avant d’en
+configurer un : [Comprendre les répéteurs](../config/guide.md#city-or-edge)
+explique la différence.
 
 <div data-mc-repeater-hash-check></div>
 
@@ -96,7 +101,7 @@ Conservez le nom de l’emplacement, la personne responsable, le moyen d’accè
 cas de panne, les paramètres et la date de la dernière vérification réussie.
 Revérifiez l’appareil après tout changement de micrologiciel, d’antenne,
 d’alimentation ou de région. Avec le micrologiciel 1.14 ou plus récent,
-consultez le [paramètre de détection des boucles](../meshcore/flash-repeater.md#loop-detection)
+consultez le [paramètre de détection des boucles](../config/guide.md#loop-detection)
 avant de le modifier sur un répéteur communautaire.
 
 Consultez les conseils sur les [antennes](../hardware/recommended-antenna.md) et
@@ -110,7 +115,7 @@ l’installation finale. Si une vérification échoue,
   <ol>
     <li><label><input id="repeater-progress-hardware" type="checkbox" data-mc-progress> Confirmer que le matériel et l’emplacement conviennent</label></li>
     <li><label><input id="repeater-progress-prepare" type="checkbox" data-mc-progress> Sauvegarder les données et préparer l’appareil</label></li>
-    <li><label><input id="repeater-progress-flash" type="checkbox" data-mc-progress> Suivre le guide d’installation du micrologiciel</label></li>
+    <li><label><input id="repeater-progress-flash" type="checkbox" data-mc-progress> La programmer avec l’outil de configuration</label></li>
     <li><label><input id="repeater-progress-configure" type="checkbox" data-mc-progress> Appliquer les paramètres locaux et régionaux</label></li>
     <li><label><input id="repeater-progress-verify-local" type="checkbox" data-mc-progress> Vérifier le répéteur sur l’établi</label></li>
     <li><label><input id="repeater-progress-verify-community" type="checkbox" data-mc-progress> Faire un essai avec un compagnon à proximité</label></li>

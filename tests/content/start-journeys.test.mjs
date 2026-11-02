@@ -167,9 +167,46 @@ test("retired visitor pages use canonical redirects instead of searchable bridge
     ["meshcore/firmware-rak-custom-display.md", "meshcore/flash-companion.md"],
     ["meshcore/firmware-heltec-v3-wifi.md", "meshcore/flash-companion.md"],
     ["hardware/repeater-solar-batteries.md", "hardware/recommended-repeaters.md"],
+    // The flash guide, the MQTT observer page and the ON/QC proposal now live in the setup tool and its explainer.
+    ["meshcore/flash-repeater.md", "config/index.md"],
+    ["analyzer/builds/mqtt-firmware.md", "config/index.md"],
+    ["proposals/onqc-scopes.md", "config/guide.md"],
   ]) {
     assert.match(config, new RegExp(`${oldPath.replaceAll("/", "\\/")}: ${currentPath.replaceAll("/", "\\/")}`));
     assert.equal(existsSync(resolve(docsRoot, oldPath)), false, `${oldPath} must not remain searchable`);
+  }
+});
+
+test("the retired setup pages and their assets are gone, in both languages", () => {
+  for (const retired of [
+    "meshcore/flash-repeater", "analyzer/builds/mqtt-firmware", "proposals/onqc-scopes",
+  ]) {
+    for (const suffix of [".md", ".fr.md"]) {
+      assert.equal(existsSync(resolve(docsRoot, retired + suffix)), false, `${retired}${suffix} must be removed`);
+    }
+  }
+  for (const asset of [
+    "assets/javascripts/scopes-picker.js", "assets/javascripts/analyzer-command-builder.js", "assets/styles/scopes-proposal.css",
+  ]) {
+    assert.equal(existsSync(resolve(docsRoot, asset)), false, `${asset} was only used by a retired page`);
+  }
+  const config = readFileSync(resolve(repoRoot, "mkdocs.yml"), "utf8");
+  assert.doesNotMatch(config, /^ +- [^\n]*: (?:meshcore\/flash-repeater|analyzer\/builds\/mqtt-firmware)\.md$/m, "retired pages are out of the navigation");
+  assert.doesNotMatch(config, /^ +(?:Flash a repeater|MQTT firmware): /m, "retired pages have no French navigation titles");
+});
+
+test("the repeater and observer start pages lead to the setup tool without phase wording", () => {
+  for (const french of [false, true]) {
+    const suffix = french ? ".fr" : "";
+    const repeater = readDoc(`start/repeater${suffix}.md`);
+    const observer = readDoc(`start/observer${suffix}.md`);
+    assert.match(repeater, /\]\(\.\.\/config\/index\.md\)\{ \.md-button \.md-button--primary \}/, "the repeater page's main button opens the tool");
+    assert.match(repeater, /\]\(\.\.\/config\/guide\.md#old-regions\)/, "old regions are explained in the guide");
+    assert.match(repeater, /\]\(\.\.\/config\/guide\.md#loop-detection\)/, "loop detection is explained in the guide");
+    assert.match(repeater, /data-mc-repeater-hash-check/, "the duplicate-ID check stays on the repeater page");
+    assert.doesNotMatch(repeater, /flash-repeater|Start with preparation|coordinate activation|Commencez par la préparation|coordonnez\s+l’activation/);
+    assert.match(observer, /\]\(\.\.\/config\/index\.md\?type=observer\)/, "the observer page links the repeater observer setup");
+    assert.doesNotMatch(observer, /mqtt-firmware/);
   }
 });
 

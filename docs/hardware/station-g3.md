@@ -38,7 +38,7 @@ The Station G3 is a high-power LoRa base station with an external transmit ampli
 !!! warning "Check your output power"
     The G3 can put out several watts. 30 dBm is 1 W at the antenna port, before cable loss and antenna gain. Antenna gain adds to the radiated power, so check [current ISED rules](../resources/links.md#radio-and-regulatory-references) against your full setup.
 
-- Flash a Station G3 build. For a repeater, choose **UnitEng/BQ Voyage Station G3** in the [MeshCore flasher](../meshcore/flash-repeater.md). For an observer, choose **Station G3 (ESP32)** on the [MQTT observer flasher](../analyzer/builds/mqtt-firmware.md). Use a **(2nd RF slot)** build only if the LoRa card is in the second RF slot, which is not the default.
+- Flash a Station G3 build. Open the [repeater setup tool](../config/index.md) and choose **My board isn't listed** (ESP32) when it asks for the board. When you reach the flasher, choose **UnitEng/BQ Voyage Station G3** for a repeater, or **Station G3 (ESP32)** in the observer flasher for a [repeater observer](../config/index.md?type=observer). Use a **(2nd RF slot)** build only if the LoRa card is in the second RF slot, which is not the default.
 - Have a data USB-C cable for the MCU board so you can use the console.
 
 ## How the power levels work
@@ -138,8 +138,8 @@ You should see `off`, `on`, and `16`.
 
 The G3-specific settings are done. Continue with the setup for this node's role:
 
-- **Repeater:** [Configure the repeater](../meshcore/flash-repeater.md#configure-the-repeater), then [set up its regions](../config/index.md).
-- **Observer:** [Build a standalone MQTT observer](../analyzer/builds/mqtt-firmware.md#set-up) to add Wi-Fi, your location code, and the MQTT presets.
+- **Repeater:** [Set up a repeater](../config/index.md) to configure it and its regions.
+- **Repeater observer:** [Set up a repeater observer](../config/index.md?type=observer) to add Wi-Fi, your location code, and the MQTT presets.
 
 ## Sources
 

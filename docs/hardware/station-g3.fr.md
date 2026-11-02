@@ -38,7 +38,7 @@ La Station G3 est une station de base LoRa haute puissance dotée d’un amplifi
 !!! warning "Vérifiez votre puissance de sortie"
     La G3 peut émettre plusieurs watts. 30 dBm correspond à 1 W au port d’antenne, avant les pertes de câble et le gain d’antenne. Le gain d’antenne s’ajoute à la puissance rayonnée : vérifiez les [règles actuelles d’ISDE](../resources/links.md#radio-and-regulatory-references) pour l’ensemble de votre installation.
 
-- Installez un micrologiciel pour la Station G3. Pour un répéteur, choisissez **UnitEng/BQ Voyage Station G3** dans l’[outil d’installation MeshCore](../meshcore/flash-repeater.md). Pour un observateur, choisissez **Station G3 (ESP32)** dans l’[outil d’installation de l’observateur MQTT](../analyzer/builds/mqtt-firmware.md). N’utilisez une version **(2nd RF slot)** que si la carte LoRa est dans le deuxième emplacement RF, ce qui n’est pas la configuration par défaut.
+- Installez un micrologiciel pour la Station G3. Ouvrez l’[outil de configuration du répéteur](../config/index.md) et choisissez **Ma carte n’est pas dans la liste** (ESP32) quand il demande la carte. Dans l’outil de programmation, choisissez **UnitEng/BQ Voyage Station G3** pour un répéteur, ou **Station G3 (ESP32)** dans l’outil de programmation des observateurs pour un [répéteur observateur](../config/index.md?type=observer). N’utilisez une version **(2nd RF slot)** que si la carte LoRa est dans le deuxième emplacement RF, ce qui n’est pas la configuration par défaut.
 - Ayez un câble de données USB-C pour la carte MCU afin d’utiliser la console.
 
 ## Fonctionnement des niveaux de puissance
@@ -138,8 +138,8 @@ Vous devriez voir `off`, `on` et `16`.
 
 Les réglages propres à la G3 sont terminés. Poursuivez avec la configuration du rôle de ce nœud :
 
-- **Répéteur :** [Configurer le répéteur](../meshcore/flash-repeater.md#configurer-le-repeteur), puis [configurer ses régions](../config/index.md).
-- **Observateur :** [Configurer un observateur MQTT autonome](../analyzer/builds/mqtt-firmware.md#configuration) pour ajouter le Wi-Fi, votre code d’emplacement et les préréglages MQTT.
+- **Répéteur :** [Configurer un répéteur](../config/index.md) pour le configurer, lui et ses régions.
+- **Répéteur observateur :** [Configurer un répéteur observateur](../config/index.md?type=observer) pour ajouter le Wi-Fi, votre code d’emplacement et les préréglages MQTT.
 
 ## Sources
 

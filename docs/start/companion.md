@@ -105,7 +105,7 @@ type your own scope if you are elsewhere.
 
 Find your city code on the [IATA region map](../config/map.md). In Ontario and Québec, also use `onqc` for the Public channel and your city scope, such as `yow`, for test channels: open the channel, tap **⋮** and choose **Set Region Scope**. Leave `can` and `na` for future use.
 
-Bot and MeshMapper operators follow the [bot and MeshMapper instructions](../proposals/onqc-scopes.md#bots-and-meshmapper).
+Bot and MeshMapper operators follow the [bot and MeshMapper instructions](../config/guide.md#bots-and-meshmapper).
 
 [How repeaters work](../config/guide.md#companions) explains scopes, with examples. Scopes do not change your radio settings.
 

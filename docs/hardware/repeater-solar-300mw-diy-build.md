@@ -112,7 +112,7 @@ The procedure drills enclosure openings, installs an external antenna connector 
     <h3>Stage 3 — Flash and dry-fit</h3>
     <ol>
       <li>Keep the unit open and accessible.</li>
-      <li>Follow the <a href="../../meshcore/flash-repeater/">safe repeater flashing guide</a> for the exact board.</li>
+      <li>Follow the <a href="../../config/">repeater setup tool</a> to flash the exact board.</li>
       <li>Mount the radio on the backplate and confirm that cables are not pinched or sharply bent.</li>
     </ol>
     <figure>

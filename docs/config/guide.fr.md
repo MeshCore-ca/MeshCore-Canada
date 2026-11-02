@@ -615,8 +615,8 @@ peut avoir la sienne, et tout le reste utilise votre **portée par défaut**.
 
 !!! note "Réglez dès maintenant votre portée par défaut"
     Les répéteurs configurés avec l’[outil de configuration de meshcore.ca](index.md)
-    retransmettent les messages selon leur portée. Les répéteurs de bordure ne
-    retransmettent pas les messages sans portée : sans portée par défaut, vos
+    relaient les messages selon leur portée. Les répéteurs de bordure ne
+    relaient pas les messages sans portée : sans portée par défaut, vos
     messages risquent de ne pas dépasser votre secteur.
 
     - **Ontario ou Québec :** utilisez `onqc`.

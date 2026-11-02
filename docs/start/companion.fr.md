@@ -71,8 +71,8 @@ une annonce.
 
 !!! note "Réglez dès maintenant votre portée par défaut"
     Les répéteurs configurés avec l’[outil de configuration de meshcore.ca](../config/index.md)
-    retransmettent les messages selon leur portée. Les répéteurs de bordure ne
-    retransmettent pas les messages sans portée : sans portée par défaut, vos
+    relaient les messages selon leur portée. Les répéteurs de bordure ne
+    relaient pas les messages sans portée : sans portée par défaut, vos
     messages risquent de ne pas dépasser votre secteur.
 
     - **Ontario ou Québec :** utilisez `onqc`.
@@ -110,7 +110,7 @@ d’écran utilisent `onqc`; tapez votre propre portée si vous êtes ailleurs.
 
 Trouvez votre code de ville sur la [carte des régions IATA](../config/map.md). En Ontario et au Québec, utilisez aussi `onqc` pour le canal Public et votre code de ville, comme `yow`, pour les canaux de test : ouvrez le canal, touchez **⋮** et choisissez **Set Region Scope**. Réservez `can` et `na` à un usage futur.
 
-Les responsables de robots et de MeshMapper suivent les [consignes pour les robots et MeshMapper](../proposals/onqc-scopes.md#robots-et-meshmapper).
+Les responsables de robots et de MeshMapper suivent les [consignes pour les robots et MeshMapper](../config/guide.md#bots-and-meshmapper).
 
 [Comprendre les répéteurs](../config/guide.md#companions) explique les portées, avec des exemples. Les portées ne changent pas les réglages radio.
 

@@ -36,6 +36,10 @@ it](../analyzer/data-collection-access.md) before enabling an observer.
 
 [Choose an observer setup](../analyzer/intro.md){ .md-button .md-button--primary }
 
+Want a repeater that also reports what it hears? Set it up as a
+[repeater observer](../config/index.md?type=observer): the guided tool covers the
+flashing and every command.
+
 ## Before you start
 
 - Open the [observer method chooser](../analyzer/intro.md).

@@ -141,7 +141,6 @@ plugins:
             Mounting options: Options de montage
             Firmware: Micrologiciel
             Flash a companion: Installer le micrologiciel d'un compagnon
-            Flash a repeater: Installer le micrologiciel d'un répéteur
             Flash a room server: Installer le micrologiciel d'un serveur de salon
             Update a repeater over the air: Mettre un répéteur à jour à distance
             Network Tools: Outils réseau
@@ -154,7 +153,6 @@ plugins:
             Troubleshoot network data: Dépanner les données du réseau
             Observer methods: Méthodes d'observation
             Observer data and privacy: Données d'observation et confidentialité
-            MQTT firmware: Micrologiciel MQTT
             References: Références
             Broker reference: Référence des serveurs MQTT
             Location codes: Codes d'emplacement
@@ -195,6 +193,9 @@ plugins:
         hardware/repeater-solar-batteries.md: hardware/recommended-repeaters.md
         hardware/overview.md: hardware/index.md
         meshcore/general-meshcore-roles.md: start/choose-a-goal.md
+        meshcore/flash-repeater.md: config/index.md
+        analyzer/builds/mqtt-firmware.md: config/index.md
+        proposals/onqc-scopes.md: config/guide.md
 
 markdown_extensions:
   - admonition
@@ -253,7 +254,6 @@ nav:
           - Mounting options: hardware/repeater-mounting-options.md
       - Firmware:
           - Flash a companion: meshcore/flash-companion.md
-          - Flash a repeater: meshcore/flash-repeater.md
           - Flash a room server: meshcore/flash-room-server.md
           - Update a repeater over the air: meshcore/update-repeater-ota.md
   - Network Tools:
@@ -269,7 +269,6 @@ nav:
           - RemoteTerm: analyzer/remoteterm.md
           - MCtoMQTT: analyzer/builds/mctomqtt.md
           - Home Assistant: analyzer/builds/meshcore-ha.md
-          - MQTT firmware: analyzer/builds/mqtt-firmware.md
           - PyMC: analyzer/builds/pymc.md
       - References:
           - Broker reference: analyzer/broker-reference.md
