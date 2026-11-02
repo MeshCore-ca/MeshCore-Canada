@@ -210,4 +210,4 @@ Based on community build notes contributed by MrAlders0n in 2026. The parts and
 instructions still require hardware review.
 
 After the bench test, complete the [mounting plan](repeater-mounting-options.md)
-and set the repeater's region with the [configurator](../config/index.md).
+and set the repeater's region with the [setup tool](../config/index.md).

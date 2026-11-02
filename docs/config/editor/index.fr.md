@@ -16,7 +16,7 @@ page_modules:
 
 # Les régions se modifient maintenant dans MeshMapper
 
-La carte et le configurateur de MeshCore Canada utilisent les mêmes zones IATA
+La carte et l’outil de configuration de MeshCore Canada utilisent les mêmes zones IATA
 que MeshMapper. Demandez les nouvelles zones et les changements de limites dans
 MeshMapper pour garder les deux outils cohérents. L’ancien éditeur fondé sur les
 secteurs de recensement est retiré.

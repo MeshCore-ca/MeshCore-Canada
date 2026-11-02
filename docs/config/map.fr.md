@@ -21,7 +21,7 @@ page_scripts:
   - assets/javascripts/radio-profiles.js?v=20260904-1
   - assets/regions/modules/configurator-support.js?v=20260926-1
   - assets/regions/modules/iata-scopes.js?v=20261013-1
-  - assets/regions/regions.js?v=20261102-4
+  - assets/regions/regions.js?v=20261102-5
 hide:
   - toc
 ---

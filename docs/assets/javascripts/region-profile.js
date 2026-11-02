@@ -11,13 +11,6 @@
     if (request) url.searchParams.set("request", request);
     return esc(url.href);
   }
-  function readiness(profile) {
-    var rollout = profile.rollout || { phase: "unconfirmed", checkedAt: null, evidence: null };
-    var labels = { unconfirmed: t("Not locally confirmed", "Non confirmé localement"), preparing: t("Preparation reported", "Préparation signalée"),
-      "cutover-announced": t("Local cutover announced", "Transition locale annoncée"), active: t("Activation reported", "Activation signalée") };
-    return '<div data-region-readiness><dt>' + t("Local rollout", "Déploiement local") + '</dt><dd>' + (labels[rollout.phase] || labels.unconfirmed) +
-      (rollout.checkedAt ? ' · <a href="' + esc(rollout.evidence) + '">' + esc(rollout.checkedAt) + '</a>' : '') + '</dd></div>';
-  }
   function render(data, tag, province, base, resolution) {
     var profile = data.profiles && data.profiles[tag];
     if (!profile) return "";
@@ -34,8 +27,11 @@
     return '<section class="mc-region-profile" aria-label="' + t("Region profile", "Fiche régionale") + '"><h3>' + t("Your region", "Votre région") + ': <code>' + esc(tag.toUpperCase()) + '</code></h3>' +
       '<dl><div><dt>' + t("Boundary source", "Source des limites") + '</dt><dd>' + sourceLabel + ' · ' + esc(planning ? data.source.starterReviewedAt : data.source.fetchedAt.slice(0,10)) + '</dd></div>' +
       '<div><dt>' + t("Local settings", "Réglages locaux") + '</dt><dd>' + settings + (review.checkedAt ? ' · <a href="' + esc(review.evidence) + '">' + esc(review.checkedAt) + '</a>' : '') + '</dd></div>' +
-      readiness(profile) + '<div><dt>' + t("Maintainer", "Responsable") + '</dt><dd>' + owner + '</dd></div></dl>' +
-      '<p>' + (!province ? t("Choose the physical province to see the applicable rollout guidance.", "Choisissez la province du répéteur pour voir les consignes de déploiement applicables.") : province === 'on' || province === 'qc' ? t("ON/QC scopes are open now. Set your companion’s Default Region Scope to ", "Les portées ON/QC sont ouvertes dès maintenant. Réglez la portée par défaut (Default Region Scope) de votre compagnon sur ") + '<code>onqc</code>.' : t("This region is outside the ON/QC pilot. Set your companion’s Default Region Scope to ", "Cette région est hors du projet pilote ON/QC. Réglez la portée par défaut (Default Region Scope) de votre compagnon sur ") + '<code>' + esc(province) + '</code>' + t(", unless your community has agreed on something else.", ", sauf si votre communauté a convenu d’autre chose.")) + '</p>' +
+      '<div><dt>' + t("Maintainer", "Responsable") + '</dt><dd>' + owner + '</dd></div></dl>' +
+      // Scopes are set now: companions in Ontario and Québec use onqc, elsewhere the province's code.
+      '<p>' + (!province ? t("Choose the province where the repeater is to see which default scope companions should use.", "Choisissez la province où se trouve le répéteur pour voir quelle portée par défaut les compagnons doivent utiliser.") :
+        province === 'on' || province === 'qc' ? t("Set your companion’s Default Region Scope to ", "Réglez dès maintenant la portée par défaut (Default Region Scope) de votre compagnon sur ") + '<code>onqc</code>' + t(" now.", ".") :
+        t("Set your companion’s Default Region Scope to ", "Réglez dès maintenant la portée par défaut (Default Region Scope) de votre compagnon sur ") + '<code>' + esc(province) + '</code>' + t(" now, unless your community has agreed on something else.", ", sauf si votre communauté a convenu d’autre chose.")) + '</p>' +
       '<p>' + t("A published boundary does not confirm local radio settings or adoption. Directory contacts below are not appointed region maintainers.", "Une limite publiée ne confirme ni les réglages radio ni l’adoption locale. Les contacts ci-dessous ne sont pas des responsables régionaux désignés.") + '</p>' +
       (contacts ? '<ul>' + contacts + '</ul>' : '<p>' + t("No community contact is listed for this region yet.", "Aucun contact communautaire n’est encore indiqué pour cette région.") + '</p>') +
       '<p><a href="' + href(base, "provinces/", tag, province) + '">' + t("Community listings", "Communautés") + '</a> · ' +
@@ -64,11 +60,11 @@
       var base = new URL(prefix, assetRoot);
       var province = data.policy.zoneProvinces[tag].includes(params.get("province")) ? params.get("province") : "";
       var banner = document.createElement("aside"); banner.dataset.regionContext = ""; banner.className = "mc-region-profile";
-      banner.innerHTML = '<strong>' + t("Selected region", "Région choisie") + ': ' + esc(tag.toUpperCase()) + '</strong> · <a href="' + href(base, "config/map/", tag, province) + '">' + t("View region", "Voir la région") + '</a> · <a href="' + href(base, "config/", tag, province) + '">' + t("Repeater commands", "Commandes du répéteur") + '</a>';
+      banner.innerHTML = '<strong>' + t("Selected region", "Région choisie") + ': ' + esc(tag.toUpperCase()) + '</strong> · <a href="' + href(base, "config/map/", tag, province) + '">' + t("View region", "Voir la région") + '</a> · <a href="' + href(base, "config/", tag, province) + '">' + t("Set up a repeater", "Configurer un répéteur") + '</a>';
       heading.after(banner);
     }).catch(function () { /* The page remains usable without context data. */ });
   }
-  globalThis.MeshCoreRegionProfile = { render: render, readiness: readiness, load: load };
+  globalThis.MeshCoreRegionProfile = { render: render, load: load };
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init, { once: true }); else init();
   if (window.document$) window.document$.subscribe(init);
 })();

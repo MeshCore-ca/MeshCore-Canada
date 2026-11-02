@@ -15,7 +15,7 @@ destructive: false
 page_styles:
   - assets/styles/analyzer.css?v=20261019-1
 page_scripts:
-  - assets/javascripts/analyzer-method-chooser.js?v=20261102-1
+  - assets/javascripts/analyzer-method-chooser.js?v=20261102-5
 ---
 
 # Set up a network observer

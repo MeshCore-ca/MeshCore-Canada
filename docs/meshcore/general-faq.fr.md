@@ -9,7 +9,7 @@ task: answer-meshcore-question
 scope: canada-baseline
 status: verified
 owner: docs-ux
-last_reviewed: 2026-10-29
+last_reviewed: 2026-11-02
 review_by: 2026-12-31
 evidence:
   - https://github.com/meshcore-dev/MeshCore/blob/main/docs/faq.md
@@ -42,10 +42,11 @@ Utilisez le profil radio du [répertoire des communautés](../provinces/index.md
 Le préréglage distinct **USA** utilise les mêmes valeurs radio, mais ne modifie pas
 la taille du hachage. [Annonce du changement](https://github.com/meshcore-dev/MeshCore/issues/3302#issuecomment-5598886579).
 
-Le [configurateur de répéteur](../config/index.md) sélectionne les régions IATA
-et génère des commandes de portées indépendantes. Ses réglages radio et de taille
-d’identifiant d’annonce restent séparés; les valeurs actuelles sont conservées
-tant que vous ne choisissez pas de changement.
+L’[outil de configuration](../config/index.md) trouve la région de votre
+répéteur d’après sa localité et vous donne chaque commande à coller. Il règle
+toujours des parcours de 3 octets. Si vous programmez le répéteur, il règle
+aussi les réglages radio canadiens, ou ceux de votre groupe local. Si vous
+envoyez les commandes depuis votre téléphone, il ne change pas les réglages radio.
 
 ### Qu’est-ce que le mode de hachage des parcours?
 

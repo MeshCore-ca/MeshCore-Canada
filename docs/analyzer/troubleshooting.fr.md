@@ -84,7 +84,7 @@ Une connexion au courtier ne confirme pas la transmission des paquets.
 
 | Méthode | Paramètre de paquets |
 |---|---|
-| Micrologiciel MQTT | `get mqtt.packets` indique `on`, `get bridge.enabled` indique `on` et `get mqtt.rx` indique `on` |
+| Répéteur observateur | `get mqtt.packets` indique `on`, `get bridge.enabled` indique `on` et `get mqtt.rx` indique `on` |
 | MCtoMQTT / capture du compagnon | Le sujet des paquets se termine par `/packets`, et non seulement par `/status` |
 | PyMC | Le champ `format` du courtier est `letsmesh` |
 | Home Assistant | **Payload Mode** est réglé à `packet`, ou l’ancien réglage **Packets (Lets Mesh)** est activé |

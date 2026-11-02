@@ -44,7 +44,7 @@ period has not yet been published.
 
 ## Saved on your device
 
-Switching language or moving between the region map and configurator carries your
+Switching language or moving between the region map and setup tool carries your
 selection in the destination URL. This can include entered coordinates, a location
 label, city and province scopes, and radio-profile choices. These URLs may appear in browser
 history and server access logs. Do not share a link containing a private location.

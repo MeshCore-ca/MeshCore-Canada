@@ -16,7 +16,7 @@ page_modules:
 
 # Region changes now use MeshMapper
 
-MeshCore Canada's map and configurator use the same IATA zones as MeshMapper.
+MeshCore Canada's map and setup tool use the same IATA zones as MeshMapper.
 Request new zones or boundary changes there so both tools stay consistent.
 The former census-cell editor is retired.
 

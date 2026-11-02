@@ -47,7 +47,7 @@
     "The IATA scope catalog is unavailable or out of date.": "Le catalogue des portées IATA est indisponible ou périmé.",
     "These are published MeshMapper zones, not radio coverage or scope-enforcement boundaries.": "Ce sont les zones publiées par MeshMapper, pas des limites de couverture radio ou d’application des portées.",
     "Open this zone in MeshMapper": "Ouvrir cette zone dans MeshMapper",
-    "Choose the repeater province in the configurator": "Choisissez la province du répéteur dans le configurateur",
+    "Choose the repeater province in the setup tool": "Choisissez la province du répéteur dans l’outil de configuration",
     "MeshMapper snapshot": "Instantané MeshMapper",
     "Published zones": "Zones publiées",
     "Fetched": "Récupéré le",
@@ -144,7 +144,7 @@
     "Repeater paths": "Chemins du répéteur",
     "Region details": "Détails de la région",
     "Find a community": "Trouver une communauté",
-    "Configure this region": "Configurer cette région",
+    "Set up a repeater here": "Configurer un répéteur ici",
     "Copy link": "Copier le lien",
     "This location is outside Canada.": "Cet emplacement se trouve à l’extérieur du Canada.",
     "Loading Canadian boundaries and map tools…": "Chargement des limites canadiennes et des outils cartographiques…",
@@ -1467,11 +1467,11 @@
           : '<p>These are published MeshMapper zones, not radio coverage or scope-enforcement boundaries.</p><p><a href="' + esc(seedForTag(data, tag).sourceUrl) + '" target="_blank" rel="noopener noreferrer">Open this zone in MeshMapper</a></p>') +
         (window.MeshCoreRegionProfile ? window.MeshCoreRegionProfile.render(data, tag, state.jurisdictionTag, new URL("../", regionPageHref("config")), state.resolution) : '') +
         '<p><a href="' + esc(communityUrl.href) + '">Find a community</a></p>' +
-        '<details><summary>Region details</summary><dl class="mcc-review-list"><div><dt>Province or territory</dt><dd>' + esc(state.jurisdictionTag ? labelFor(data, state.jurisdictionTag) : "Choose the repeater province in the configurator") + '</dd></div>' +
+        '<details><summary>Region details</summary><dl class="mcc-review-list"><div><dt>Province or territory</dt><dd>' + esc(state.jurisdictionTag ? labelFor(data, state.jurisdictionTag) : "Choose the repeater province in the setup tool") + '</dd></div>' +
         '<div><dt>Status</dt><dd>' + esc(state.resolution.planningKind === "extension" ? "Planning extension" : statusLabel(statusFor(data, tag).state || "draft")) + '</dd></div>' +
         '<div><dt>Aliases</dt><dd>' + esc(aliases.length ? aliases.join(", ") : "None recorded") + '</dd></div>' +
         '<div><dt>Repeater paths</dt><dd>' + esc(rec ? rec.paths.length : 1) + '</dd></div></dl></details>' +
-        '<div class="mcc-detail-actions"><a class="mcc-button" href="' + esc(configHrefForState(state)) + '">Configure this region</a>' +
+        '<div class="mcc-detail-actions"><a class="mcc-button" href="' + esc(configHrefForState(state)) + '">Set up a repeater here</a>' +
         '<button type="button" class="mcc-button mcc-button-secondary" data-action="copy-region-link">' + icon("link") + 'Copy link</button></div>';
       var copyLink = els.textResult.querySelector("[data-action='copy-region-link']");
       if (copyLink) copyLink.addEventListener("click", function () {

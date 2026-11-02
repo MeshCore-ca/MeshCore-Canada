@@ -93,7 +93,7 @@ substitute for current manufacturer documentation and qualified review.
   <li>The antenna is attached before the radio can transmit.</li>
   <li>Property permission, structural review, weather loads, cable routing, and electrical hazards are addressed.</li>
   <li>The repeater can be recovered by USB after installation.</li>
-  <li>The local region and settings are confirmed in the repeater configurator.</li>
+  <li>The local region and settings are confirmed in the setup tool.</li>
   <li>A bench test and maintenance plan are ready before installation.</li>
 </ul>
 

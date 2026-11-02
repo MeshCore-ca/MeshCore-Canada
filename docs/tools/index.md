@@ -9,7 +9,7 @@ task: choose-network-tool
 scope: canada-baseline
 status: verified
 owner: docs-ux
-last_reviewed: 2026-10-29
+last_reviewed: 2026-11-02
 review_by: 2026-12-31
 evidence: Internal IATA and observer routes plus the live viewer tabs reviewed on 2026-10-29; no deployment or RF coverage approval.
 difficulty: beginner
@@ -23,13 +23,21 @@ Choose the tool that matches your task.
 
 <div class="grid cards" markdown>
 
--   :material-tune-variant:{ .lg .middle } **Configure a repeater**
+-   :material-tune-variant:{ .lg .middle } **Set up a repeater**
 
     ---
 
-    Choose an IATA region, prepare forwarding scopes, and review the commands before applying them.
+    Answer a few questions, one at a time, and get every command to paste, with what each one does.
 
-    [:octicons-arrow-right-24: Open the repeater configurator](../config/index.md)
+    [:octicons-arrow-right-24: Set up a repeater](../config/index.md)
+
+-   :material-book-open-variant:{ .lg .middle } **How repeaters work**
+
+    ---
+
+    What repeaters do, how scopes and regions decide where messages go, and what each setup command means.
+
+    [:octicons-arrow-right-24: Read how repeaters work](../config/guide.md)
 
 -   :material-map-search:{ .lg .middle } **Find your IATA region**
 

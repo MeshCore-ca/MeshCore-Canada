@@ -86,7 +86,7 @@ par une clé privée.
 
 | Méthode | Paramètre de paquets requis |
 |---|---|
-| Micrologiciel MQTT | `mqtt.packets on`, `bridge.enabled on`, et `mqtt.rx on` |
+| Répéteur observateur | `mqtt.packets on`, `bridge.enabled on`, et `mqtt.rx on` |
 | MCtoMQTT / capture d’un compagnon | Configurez le sujet `/packets` |
 | PyMC | `format: letsmesh` |
 | Home Assistant | **Payload Mode** = `packet` |

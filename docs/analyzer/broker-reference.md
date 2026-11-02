@@ -82,7 +82,7 @@ meshcore/{IATA}/{PUBLIC_KEY}/status
 
 | Method | Required packet setting |
 |---|---|
-| MQTT firmware | `mqtt.packets on`, `bridge.enabled on`, and `mqtt.rx on` |
+| Repeater observer | `mqtt.packets on`, `bridge.enabled on`, and `mqtt.rx on` |
 | MCtoMQTT / companion capture | Configure the `/packets` topic |
 | PyMC | `format: letsmesh` |
 | Home Assistant | **Payload Mode** = `packet` |

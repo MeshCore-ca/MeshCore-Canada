@@ -233,4 +233,4 @@ et les instructions doivent encore faire l’objet d’un examen du matériel.
 
 Après l’essai sur l’établi, terminez le
 [plan de montage](repeater-mounting-options.md) et réglez la région du répéteur
-au moyen du [configurateur](../config/index.md).
+au moyen de l’[outil de configuration](../config/index.md).

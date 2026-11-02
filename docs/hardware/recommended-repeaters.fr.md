@@ -99,7 +99,7 @@ du fabricant et d’un examen par une personne qualifiée.
   <li>L’antenne est branchée avant que la radio puisse transmettre.</li>
   <li>L’autorisation du propriétaire, l’examen de la structure, les charges dues aux intempéries, le passage des câbles et les risques électriques sont pris en compte.</li>
   <li>Le répéteur peut être récupéré par USB après son installation.</li>
-  <li>La région et les réglages locaux sont confirmés dans le configurateur de répéteur.</li>
+  <li>La région et les réglages locaux sont confirmés dans l’outil de configuration.</li>
   <li>Un essai sur l’établi et un plan d’entretien sont prêts avant l’installation.</li>
 </ul>
 

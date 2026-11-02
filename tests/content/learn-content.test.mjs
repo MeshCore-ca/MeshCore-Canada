@@ -75,7 +75,7 @@ test("FAQ is deep-linkable and refers changing settings to canonical sources", (
     assert.match(markdown, new RegExp(`^## ${heading}$`, "m"), heading);
   }
   assert.ok((markdown.match(/^### /gm) || []).length >= 9, "FAQ questions need headings");
-  assert.match(markdown, /\[repeater configurator\]\(\.\.\/config\/index\.md\)/);
+  assert.match(markdown, /\[setup tool\]\(\.\.\/config\/index\.md\)/);
   assert.match(markdown, /\[community directory\]\(\.\.\/provinces\/index\.md\)/);
   assert.doesNotMatch(markdown, /910\.525|set radio|set path\.hash\.mode/);
 });

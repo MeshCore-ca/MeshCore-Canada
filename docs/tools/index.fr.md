@@ -9,7 +9,7 @@ task: choose-network-tool
 scope: canada-baseline
 status: verified
 owner: docs-ux
-last_reviewed: 2026-10-29
+last_reviewed: 2026-11-02
 review_by: 2026-12-31
 evidence: Internal IATA and observer routes plus the live viewer tabs reviewed on 2026-10-29; no deployment or RF coverage approval.
 difficulty: beginner
@@ -27,9 +27,17 @@ Choisissez un outil selon votre tâche.
 
     ---
 
-    Choisissez une région IATA, préparez les portées et examinez les commandes avant de les appliquer.
+    Répondez à quelques questions, une à la fois, et obtenez toutes les commandes à coller, avec ce que fait chacune.
 
-    [:octicons-arrow-right-24: Ouvrir le configurateur de répéteur](../config/index.md)
+    [:octicons-arrow-right-24: Configurer un répéteur](../config/index.md)
+
+-   :material-book-open-variant:{ .lg .middle } **Comprendre les répéteurs**
+
+    ---
+
+    Ce que font les répéteurs, comment les portées et les régions guident les messages, et ce que fait chaque commande.
+
+    [:octicons-arrow-right-24: Lire comment fonctionnent les répéteurs](../config/guide.md)
 
 -   :material-map-search:{ .lg .middle } **Trouver votre région IATA**
 

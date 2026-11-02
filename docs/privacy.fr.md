@@ -45,7 +45,7 @@ limitation du débit. Aucune période de conservation n’a encore été publié
 
 ## Données enregistrées sur votre appareil
 
-Changer de langue ou passer entre la carte et le configurateur conserve votre
+Changer de langue ou passer entre la carte et l’outil de configuration conserve votre
 sélection dans l’URL de destination. Elle peut contenir les coordonnées saisies,
 un lieu, des scopes de ville et de province et un profil radio. Ces URL peuvent apparaître dans
 l’historique du navigateur et les journaux du serveur. Ne partagez pas un lien qui

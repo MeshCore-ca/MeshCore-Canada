@@ -9,7 +9,7 @@ task: answer-meshcore-question
 scope: canada-baseline
 status: verified
 owner: docs-ux
-last_reviewed: 2026-10-29
+last_reviewed: 2026-11-02
 review_by: 2026-12-31
 evidence:
   - https://github.com/meshcore-dev/MeshCore/blob/main/docs/faq.md
@@ -42,9 +42,10 @@ for the Canadian radio settings and **3-byte** paths. See the
 The separate **USA** preset uses the same radio values but leaves the path-hash
 setting unchanged. [Upstream preset update](https://github.com/meshcore-dev/MeshCore/issues/3302#issuecomment-5598886579).
 
-The [repeater configurator](../config/index.md) selects IATA regions and generates
-independent scope commands. Its radio and advert ID controls remain separate and
-keep current settings until you choose a change.
+The [setup tool](../config/index.md) finds your repeater's region from its town
+and gives you every command to paste. It always sets 3-byte paths. When you flash
+the repeater, it also sets the Canada radio settings, or your local group's. When
+you send the commands from your phone, it leaves the radio settings as they are.
 
 ### What is path hash mode?
 

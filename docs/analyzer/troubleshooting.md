@@ -80,7 +80,7 @@ A connected broker is not packet proof.
 
 | Method | Packet setting |
 |---|---|
-| MQTT firmware | `get mqtt.packets` is `on`, `get bridge.enabled` is `on`, and `get mqtt.rx` is `on` |
+| Repeater observer | `get mqtt.packets` is `on`, `get bridge.enabled` is `on`, and `get mqtt.rx` is `on` |
 | MCtoMQTT / companion capture | Packet topic ends in `/packets`, not only `/status` |
 | PyMC | Broker `format` is `letsmesh` |
 | Home Assistant | **Payload Mode** is `packet`, or older **Packets (Lets Mesh)** is enabled |
