@@ -115,17 +115,21 @@ test("keeps preview and bounded manual GitHub fallbacks", () => {
 });
 
 test("MkDocs keeps tool scripts route scoped", async () => {
-  const [config, submitPage, configPage] = await Promise.all([
+  const [config, submitPage, configPage, mapPage] = await Promise.all([
     readFile(new URL("../../mkdocs.yml", import.meta.url), "utf8"),
     readFile(new URL("../../docs/submit-idea.md", import.meta.url), "utf8"),
-    readFile(new URL("../../docs/config/index.md", import.meta.url), "utf8")
+    readFile(new URL("../../docs/config/index.md", import.meta.url), "utf8"),
+    readFile(new URL("../../docs/config/map.md", import.meta.url), "utf8")
   ]);
   assert.equal((config.match(/^extra_javascript:/gm) || []).length, 1);
   assert.match(config, /^\s+- assets\/javascripts\/bootstrap\.js(?:\?v=\d{8}-\d+)?$/m);
   assert.doesNotMatch(config, /^\s+- assets\/regions\/regions\.js(?:\?v=\d{8}-\d+)?$/m);
   assert.doesNotMatch(config, /^\s+- javascripts\/submission-form\.js(?:\?v=\d{8}-\d+)?$/m);
   assert.match(submitPage, /^\s+- javascripts\/submission-form\.js(?:\?v=\d{8}-\d+)?$/m);
-  assert.match(configPage, /^\s+- assets\/regions\/regions\.js(?:\?v=\d{8}-\d+)?$/m);
+  // The region application belongs to the map page; the setup tool page has its own script.
+  assert.match(mapPage, /^\s+- assets\/regions\/regions\.js(?:\?v=\d{8}-\d+)?$/m);
+  assert.doesNotMatch(configPage, /^\s+- assets\/regions\/regions\.js(?:\?v=\d{8}-\d+)?$/m);
+  assert.match(configPage, /^\s+- assets\/setup\/setup-ui\.js(?:\?v=\d{8}-\d+)?$/m);
 });
 
 test("page exposes anonymous submission, anti-spam, result, and manual fallback controls", async () => {

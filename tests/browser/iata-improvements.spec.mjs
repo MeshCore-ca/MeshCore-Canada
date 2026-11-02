@@ -1,34 +1,26 @@
 import { test, expect } from "./site-fixtures.mjs";
 import { siteRoute } from "./site-route.mjs";
-import { activateConfig } from "./activation-helpers.mjs";
 import { readFileSync } from "node:fs";
+import { PHONE_ROUTE, T, choose, codes, expectStep, nextButton, nextUntil, phoneLink, plain, step, toolRoot } from "./setup-helpers.mjs";
 import "../../docs/assets/regions/modules/iata-scopes.js";
 const catalog = JSON.parse(readFileSync("docs/assets/regions/iata-regions.json", "utf8"));
 
 for (const locale of ["", "fr/"]) {
-  for (const [lat, lon, tag] of [[43.8678, -81.2619, "ykf"], [45.4765, -75.7013, "yow"]]) test(`${locale || "en/"} ${tag} boundary location stays city mode unless explicitly changed`, async ({ page }) => {
-      await page.goto(siteRoute(`/${locale}config/?lat=${lat}&lon=${lon}&step=3&instructions=technical`));
-      const step = page.locator('[data-wizard-step="3"]');
-      await expect(step).toBeVisible();
-      await expect(step.getByRole("radio", { name: locale ? "Répéteur de ville" : "City repeater" })).toBeChecked();
-      await expect(step.locator('[data-role="repeater-type-help"]')).toContainText(locale ? "limite extérieure" : "outer boundary");
-      await expect(step).toContainText(locale ? "même code IATA" : "same IATA code");
-      await activateConfig(page);
-      await step.locator('[data-next-step]').click();
-      const result = page.locator('[data-role="result"]');
-      await expect(result).toContainText(`region def ${tag}|*`);
-      await expect(result).toContainText("region allowf *");
-      await expect(result).not.toContainText("region denyf *");
-  });
-  test(`${locale || "en/"} edge bookmarks retain their role and require coordinated activation`, async ({ page }) => {
-    // Preserve existing edge-mode bookmarks; an extra city scope is optional.
-    await page.goto(siteRoute(`/${locale}config/?tag=yow&province=on&type=large&step=3&instructions=technical`));
-    const step = page.locator('[data-wizard-step="3"]');
-    await expect(step.getByRole("radio", { name: locale ? "Répéteur de bordure" : "Edge repeater" })).toBeChecked();
-    await activateConfig(page);
-    await step.locator('[data-next-step]').click();
-    await expect(page.locator('[data-role="result"]')).toContainText("region def yow|* on|* onqc|* can|* na");
-    await expect(page.locator('[data-role="result"]')).toContainText("region denyf *");
+  const lang = locale ? "fr" : "en";
+  for (const [lat, lon, tag, town] of [[43.8678, -81.2619, "ykf", "Wingham"], [45.4765, -75.7013, "yow", "Ottawa"]]) test(`${locale || "en/"} ${tag} boundary location asks for the role, and a city repeater passes unlabelled messages`, async ({ page }) => {
+    await page.goto(siteRoute(`${toolRoot(lang)}?${PHONE_ROUTE}&tag=${tag}&province=on&town=${town}&lat=${lat}&lon=${lon}`));
+    await expectStep(page, "role");
+    // Nothing is chosen for the person: neither card starts picked, and Next waits.
+    await expect(step(page).locator('[aria-pressed="true"]')).toHaveCount(0);
+    await expect(nextButton(page)).toBeDisabled();
+    await page.locator("[data-setup-help]").click();
+    await expect(page.locator("[data-setup-help-text]")).toContainText(T("role.help", lang).split(/(?<=[.!?])\s/)[0]);
+    await choose(page, "city");
+    await nextUntil(page, "commands");
+    const lines = await codes(page).allTextContents();
+    expect(lines).toContain(`region def ${tag}|* on|* onqc|* can|* na`);
+    expect(lines).toContain("region allowf *");
+    expect(lines).not.toContain("region denyf *");
   });
 
   test(`${locale || "en/"} ambiguous city search asks for the province and respects the choice`, async ({ page }) => {
@@ -49,25 +41,20 @@ for (const locale of ["", "fr/"]) {
     await expect(result.locator('.mcc-detail-actions a')).toHaveAttribute("href",/province=qc/);
   });
 
-  test(`${locale || "en/"} migration requires removal review, stays local and clears on edit`, async ({ page }) => {
-    await page.goto(siteRoute(`/${locale}config/?tag=yow&province=on&step=4&instructions=technical`));
-    await activateConfig(page);
-    const panel=page.locator('[data-scope-migration]');
-    await panel.locator("summary").click();
-    const requests=[]; page.on("request", request=>requests.push(request.url()+" "+(request.postData()||"")));
-    await panel.locator('[data-migration-input]').fill("* F\n legacy-private F\n  yow^ F\n obsolete F");
-    await panel.locator('[data-migration-default]').fill("default scope is yow");
-    await panel.locator('[data-migration-check]').click();
-    await expect(panel.locator('[data-migration-report]')).toContainText("legacy-private, obsolete");
-    await expect(panel.locator('[data-migration-commands]')).toBeHidden();
-    await panel.locator('[data-migration-review] input').check();
-    await expect(panel.locator('[data-migration-commands]')).toHaveValue(/region put yow\nregion remove legacy-private\nregion remove obsolete/);
-    expect(requests.some(request=>request.includes("legacy-private"))).toBeFalsy();
-    await panel.locator('[data-migration-input]').fill("* F\n ...");
-    await expect(panel.locator('[data-migration-copy]')).toBeHidden();
-    await panel.locator('[data-migration-check]').click();
-    await expect(panel.locator('[data-migration-status]')).not.toBeEmpty();
-    await expect(panel.locator('[data-migration-review]')).toBeHidden();
+  test(`${locale || "en/"} a pasted region list removes old names one by one, stays on the page and clears on edit`, async ({ page }) => {
+    await page.goto(siteRoute(phoneLink("yow", "on", { lang })));
+    await expectStep(page, "commands");
+    const requests = [];
+    page.on("request", request => requests.push(request.url() + " " + (request.postData() || "")));
+    const removals = async () => (await codes(page).allTextContents()).filter(line => line.startsWith("region remove"));
+    await page.locator("[data-setup-reply]").fill("* F\n legacy-private F\n  yow^ F\n obsolete F");
+    // Deepest first; nothing is kept back for the new list to rely on.
+    await expect.poll(removals).toEqual(["region remove yow", "region remove legacy-private", "region remove obsolete"]);
+    expect(requests.some(request => request.includes("legacy-private"))).toBeFalsy();
+    expect(page.url()).not.toContain("legacy-private");
+    await page.locator("[data-setup-reply]").fill("bad reply");
+    await expect.poll(removals).toEqual([]);
+    await expect(page.locator("[data-setup-reply-status]")).toHaveText(plain("region.unreadable", lang));
   });
 
   test(`${locale || "en/"} region profile carries contact, role and contribution context`, async ({ page }) => {

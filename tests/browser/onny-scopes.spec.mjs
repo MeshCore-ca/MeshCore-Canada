@@ -1,7 +1,9 @@
 import { expect, test } from "./site-fixtures.mjs";
 import { siteRoute } from "./site-route.mjs";
+import { codes, expectStep, phoneLink } from "./setup-helpers.mjs";
 
 for (const locale of ["", "fr/"]) {
+  const lang = locale ? "fr" : "en";
   test(`${locale || "en/"} guide shares optional onny and resets activation approval`, async ({ page }) => {
     const errors = []; page.on("pageerror", error => errors.push(error.message));
     await page.goto(siteRoute(`/${locale}proposals/onqc-scopes/?tag=ykf&province=on&role=repeater&type=edge&neighbour=yyz&onny=1`));
@@ -27,23 +29,29 @@ for (const locale of ["", "fr/"]) {
     expect(errors).toEqual([]);
   });
 
-  test(`${locale || "en/"} configurator exposes the same opt-in scope`, async ({ page }) => {
-    await page.goto(siteRoute(`/${locale}config/?tag=ykf&province=on&type=large&regions=yyz&external=ontario-new-york&step=4&instructions=technical`));
-    await expect(page.locator('[data-role="result"]')).toContainText("region def ykf|* yyz|* on|* onqc|* can|* na|* onny");
-    await expect(page.locator('[data-role="result"]')).not.toContainText("region denyf *");
+  test(`${locale || "en/"} setup tool exposes the same opt-in scope`, async ({ page }) => {
+    await page.goto(siteRoute(phoneLink("ykf", "on", { lang, role: "edge", extra: "neighbours=yyz&external=ontario-new-york" })));
+    await expectStep(page, "commands");
+    const lines = await codes(page).allTextContents();
+    expect(lines).toContain("region def ykf|* yyz|* on|* onqc|* can|* na|* onny");
+    // An edge repeater still blocks unlabelled messages; the shared label doesn't change that.
+    expect(lines).toContain("region denyf *");
   });
 
-  test(`${locale || "en/"} retired conflicting external selection requires review`, async ({ page }) => {
-    await page.goto(siteRoute(`/${locale}config/?tag=ykf&province=on&type=large&external=california&step=4`));
-    await expect(page.locator('[data-wizard-step="3"]')).toBeVisible();
-    await expect(page.locator('[data-action="confirm-scope-migration"]')).toBeVisible();
-    await expect(page.locator('[data-wizard-step="3"] [data-next-step]')).toBeDisabled();
-    await expect(page.locator('[data-wizard-step="3"]')).toContainText("external:california");
+  test(`${locale || "en/"} a retired cross-border network in a link is dropped, not applied`, async ({ page }) => {
+    await page.goto(siteRoute(phoneLink("ykf", "on", { lang, role: "edge", extra: "neighbours=yyz&external=california" })));
+    await expectStep(page, "commands");
+    const lines = await codes(page).allTextContents();
+    expect(lines).toContain("region def ykf|* yyz|* on|* onqc|* can|* na");
+    expect(lines.join("\n")).not.toMatch(/california|us-ca|\bus\b|onny/);
   });
 
   test(`${locale || "en/"} city repeaters can carry onny without becoming edge repeaters`, async ({ page }) => {
-    await page.goto(siteRoute(`/${locale}config/?tag=ykf&province=on&external=ontario-new-york&step=4&instructions=technical`));
-    await expect(page.locator('[data-role="result"]')).toContainText("region def ykf|* on|* onqc|* can|* na|* onny");
-    await expect(page.locator('[data-role="result"]')).not.toContainText("region denyf *");
+    await page.goto(siteRoute(phoneLink("ykf", "on", { lang, extra: "external=ontario-new-york" })));
+    await expectStep(page, "commands");
+    const lines = await codes(page).allTextContents();
+    expect(lines).toContain("region def ykf|* on|* onqc|* can|* na|* onny");
+    expect(lines).toContain("region allowf *");
+    expect(lines).not.toContain("region denyf *");
   });
 }

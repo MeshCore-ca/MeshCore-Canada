@@ -2,6 +2,7 @@ import { expect, test } from "./site-fixtures.mjs";
 import AxeBuilder from "@axe-core/playwright";
 import { readFileSync } from "node:fs";
 import { siteRoute } from "./site-route.mjs";
+import { PHONE_ROUTE, expectStep } from "./setup-helpers.mjs";
 
 const communityCount = JSON.parse(
   readFileSync(new URL("../../data/communities.json", import.meta.url), "utf8"),
@@ -64,7 +65,7 @@ for (const locale of ["", "fr/"]) {
     await expect(page.locator("[data-community-card]:visible")).toContainText("YQLMesh");
   });
 
-  test(`${locale || "en/"} homepage motif and first-step browsing links remain accessible`, async ({ page }) => {
+  test(`${locale || "en/"} homepage motif and the setup tool's map link remain accessible`, async ({ page }) => {
     await mockNetwork(page);
     await page.goto(siteRoute(`/${locale}`));
     const hero = page.locator(".mc-home-hero");
@@ -74,14 +75,12 @@ for (const locale of ["", "fr/"]) {
     await expect(page.locator(".mc-preset-note")).toContainText(locale ? "3 octets" : "3-byte");
     await page.goto(siteRoute(`/${locale}hardware/`));
     await expect(page.locator(".mc-guide-status")).toHaveCount(0);
-    await page.goto(siteRoute(`/${locale}config/`));
-    const step = page.locator('[data-wizard-step="1"]');
-    const map = step.locator('[data-action="view-map"]');
-    const editor = step.locator('a[href*="/config/editor/"]');
+    // The setup tool's town step links to the region map.
+    await page.goto(siteRoute(`/${locale}config/?${PHONE_ROUTE}`));
+    await expectStep(page, "town");
+    const map = page.locator("[data-setup-map]");
     await expect(map).toBeVisible();
-    await expect(editor).toBeVisible();
-    await expect(map).toHaveAttribute("href", new RegExp(`/${locale}config/map/$`));
-    await expect(editor).toHaveAttribute("href", new RegExp(`/${locale}config/editor/$`));
+    expect(await map.evaluate(link => new URL(link.href).pathname)).toBe(`/${locale}config/map/`);
   });
 
   test(`${locale || "en/"} compact header totals are cached, readable, and keyboard accessible`, async ({ page }) => {

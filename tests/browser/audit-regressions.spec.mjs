@@ -2,46 +2,62 @@ import { expect, test } from "./site-fixtures.mjs";
 import AxeBuilder from "@axe-core/playwright";
 import { siteRoute } from "./site-route.mjs";
 import { submissionSha256 } from "../../docs/config/editor/issue.js";
+import { answer, choose, codes, confirmStep, expectStep, next, nextButton, nextUntil, phoneLink, startPhoneRoute, step, toolRoot } from "./setup-helpers.mjs";
 
 for (const locale of ["", "fr/"]) {
-  test(`${locale || "en/"} region setup preserves radio until explicitly selected`, async ({ page }) => {
-    await page.goto(siteRoute(`/${locale}config/?tag=mvrd&step=4`));
-    const result = page.locator('[data-role="result"]');
-    await expect(result).toContainText("region def yvr|* bc|* can|* na");
-    await expect(result).not.toContainText("set radio");
-    await expect(result).not.toContainText("set path.hash.mode");
-    await page.locator('[data-go-step="3"]').click();
-    await page.locator("#mcc-radio-profile").selectOption("bc-mesh");
-    await page.locator("#mcc-hash-mode").selectOption("2");
-    await expect(page.locator('[data-action="view-map"]').first()).toHaveAttribute("href", /radio=bc-mesh&hash=2/);
-    await page.locator('[data-wizard-step="3"] [data-next-step]').click();
-    await expect(result).toContainText("set radio 910.425,62.5,7,5");
-    await expect(result).toContainText("set path.hash.mode 2");
-    await expect(page.locator('[data-role="review-summary"]')).toContainText("910.425");
-    await page.locator('[data-go-step="3"]').click();
-    await page.locator("#mcc-radio-profile").selectOption("canada");
-    await page.locator('[data-wizard-step="3"] [data-next-step]').click();
-    await expect(result).toContainText("set radio 910.525,62.5,7,5");
+  const lang = locale ? "fr" : "en";
+  test(`${locale || "en/"} region setup preserves radio on the phone route and asks a BC repeater to choose when flashing`, async ({ page }) => {
+    // A running repeater keeps its radio: the phone route has no radio line, and the old mvrd code moves to yvr.
+    await page.goto(siteRoute(phoneLink("mvrd", "bc", { lang })));
+    await expectStep(page, "commands");
+    const phone = await codes(page).allTextContents();
+    expect(phone).toContain("region def yvr|* bc|* can|* na");
+    expect(phone.some((line) => line.startsWith("set radio"))).toBe(false);
+
+    // Flashing writes the radio, and BC has two groups' settings, so nothing is picked for the person.
+    await page.goto(siteRoute(`${toolRoot(lang)}?type=repeater&board=heltec-v3&status=new&firmware=1.16&tag=mvrd&province=bc&role=city&name=Test_R1`));
+    await confirmStep(page, "flash");
+    await nextUntil(page, "radio");
+    await expect(step(page).locator('[aria-pressed="true"]')).toHaveCount(0);
+    await expect(nextButton(page)).toBeDisabled();
+    await choose(page, "bc-mesh");
+    await nextUntil(page, "commands");
+    let lines = await codes(page).allTextContents();
+    expect(lines).toContain("set radio 910.425,62.5,7,5");
+    expect(lines).toContain("set path.hash.mode 2");
+    expect(lines).toContain("region def yvr|* bc|* can|* na");
+    // Changing the answer changes the line.
+    for (const id of ["name", "role", "radio"]) {
+      await page.locator("[data-setup-back]").click();
+      await expectStep(page, id);
+    }
+    await choose(page, "canada");
+    await nextUntil(page, "commands");
+    lines = await codes(page).allTextContents();
+    expect(lines).toContain("set radio 910.525,62.5,7,5");
+    expect(lines).not.toContain("set radio 910.425,62.5,7,5");
   });
 
   test(`${locale || "en/"} map handoff migrates legacy city aliases without adding a second province`, async ({ page }) => {
     await page.goto(siteRoute(`/${locale}config/map/?tag=ott&province=on&type=large&regions=mtl&firmware=1.15`));
     const link = page.locator('[data-role="map-text-result"] .mcc-detail-actions a');
     await expect(link).toBeVisible();
+    // Only the current region goes across: no legacy code, no extra regions, no firmware or role.
+    expect(Object.fromEntries(new URL(await link.getAttribute("href")).searchParams)).toEqual({ tag: "yow", province: "on" });
     await link.click();
-    await expect(page.locator('[data-role="selected-region"]')).toContainText("Ottawa");
-    await page.locator('[data-wizard-step="3"] [data-next-step]').click();
-    const result = page.locator('[data-role="result"]');
-    await expect(result).toContainText("region put yow");
-    await expect(result).not.toContainText("region put qc");
-    await expect(result).toContainText("region put yul");
-    await expect(result).not.toContainText("set radio");
-  });
-
-  test(`${locale || "en/"} invalid saved location offers recovery instead of commands`, async ({ page }) => {
-    await page.goto(siteRoute(`/${locale}config/?tag=unknown&lat=999&lon=0`));
-    await expect(page.locator('[data-role="status"]')).toHaveText(/invalid|invalide/);
-    await expect(page.locator('[data-go-step="4"]')).toBeDisabled();
+    await startPhoneRoute(page, "v1.15.1");
+    await expect(page.locator("[data-setup-region]")).toContainText("yow");
+    await expect(page.locator("[data-setup-region]")).toContainText("Ottawa");
+    await next(page);
+    await answer(page, "role", "city");
+    await expectStep(page, "name");
+    await page.locator("[data-setup-name]").fill("Ottawa_R1");
+    await next(page);
+    await expectStep(page, "commands");
+    const lines = await codes(page).allTextContents();
+    expect(lines).toContain("region put yow");
+    expect(lines).not.toContain("region put qc");
+    expect(lines.some((line) => line.startsWith("set radio"))).toBe(false);
   });
 
   test(`${locale || "en/"} map loads when visible and its keyboard shortcut stays out of the way`, async ({ page }, testInfo) => {
@@ -117,15 +133,16 @@ for (const locale of ["", "fr/"]) {
   });
 }
 
-test("language switch keeps selected region, firmware, radio, and review step", async ({ page }) => {
-  await page.goto(siteRoute("/config/?tag=mvrd&step=4&firmware=1.15&radio=bc-mesh&hash=2"));
-  await expect(page.locator('[data-role="result"]')).toContainText("set radio 910.425");
+test("language switch keeps selected region, firmware, radio, and commands step", async ({ page }) => {
+  await page.goto(siteRoute("/config/?type=repeater&board=heltec-v3&status=new&firmware=1.15&radio=bc-mesh&tag=yvr&province=bc&role=city&name=Test_R1"));
+  await confirmStep(page, "flash");
+  await nextUntil(page, "commands");
+  await expect(codes(page)).toContainText(["set radio 910.425,62.5,7,5", "region put yvr"]);
   await page.locator(".md-select > button").click();
   await page.locator('.md-select__link[hreflang="fr"]').click();
-  await expect(page.locator('[data-role="result"]')).toContainText("set radio 910.425");
-  await expect(page.locator('[data-role="result"]')).toContainText("region put yvr");
-  await expect(page.locator('[data-wizard-step="4"]')).toBeVisible();
   await expect(page.locator("html")).toHaveAttribute("lang", "fr");
+  await expectStep(page, "commands");
+  await expect(codes(page)).toContainText(["set radio 910.425,62.5,7,5", "region put yvr"]);
 });
 
 test("map tiles appear while a slow boundary overlay is still loading", async ({ page }) => {

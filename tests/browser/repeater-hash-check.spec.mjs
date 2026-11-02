@@ -146,7 +146,7 @@ test("the repeater checker mounts without a disruptive layout shift", async ({ p
   expect(await page.evaluate(() => window.__mcLayoutShift)).toBeLessThan(0.1);
 });
 
-test("the general region configurator does not show the optional ID checker", async ({ page }) => {
+test("the setup tool does not show the optional ID checker", async ({ page }) => {
   const beaconRequests = [];
   page.on("request", (request) => {
     const url = request.url();
@@ -155,8 +155,8 @@ test("the general region configurator does not show the optional ID checker", as
     }
   });
   await page.goto(siteRoute("/config/?place=YOW"), { waitUntil: "domcontentloaded" });
-  await expect(page.locator("[data-mcc-regions='config'] [data-role='status']")).toContainText("Zone found. Choose the province");
-  await expect(page.locator("[data-mcc-regions='config']")).toBeVisible();
+  await expect(page.locator("[data-setup-step='type']")).toBeVisible();
+  await expect(page.locator("[data-setup-tool]")).toBeVisible();
   await expect(page.locator("[data-mc-repeater-hash-check]")).toHaveCount(0);
   expect(beaconRequests).toEqual([]);
 });

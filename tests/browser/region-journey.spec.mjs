@@ -1,7 +1,7 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "./site-fixtures.mjs";
 import { siteRoute } from "./site-route.mjs";
-import { proposalOperator, activateConfig } from "./activation-helpers.mjs";
+import { proposalOperator } from "./activation-helpers.mjs";
 
 for (const locale of ["", "fr/"]) {
   test(`${locale || "en/"} role guidance prepares first and explains independent forwarding`, async ({ page }) => {
@@ -108,35 +108,7 @@ for (const locale of ["", "fr/"]) {
     await expect(box.locator('[data-verify-status]')).toContainText(locale ? "sauvegarde" : "backup");
   });
 
-  test(`${locale || "en/"} configurator separates preparation, activation and regional readiness`, async ({ page }) => {
-    await page.goto(siteRoute(`/${locale}config/?tag=ytr&province=on&type=large&step=4&instructions=technical`));
-    const result=page.locator('[data-role="result"]');
-    await expect(result).toContainText("region def ytr|* on|* onqc|* can|* na");
-    await expect(result.locator('[data-cmd="region denyf *"]')).toHaveCount(0);
-    await expect(result.locator('[data-cmd="region default ytr"]')).toHaveCount(0);
-    await expect(result.locator('[data-region-readiness]')).toContainText(locale ? "Non confirmé" : "Not locally confirmed");
-    await activateConfig(page);
-    await expect(result).toContainText("region denyf *");
-    await expect(result).toContainText("region default ytr");
-    await page.locator('[data-go-step="3"]').click();
-    await page.locator('[data-action="add-served-region"]').selectOption("yul");
-    await page.locator('[data-go-step="4"]').click();
-    await expect(result.locator('[data-cmd]')).toHaveCount(0);
-    await activateConfig(page);
-    await result.locator('[data-scope-verification] summary').click();
-    await expect(result.locator('[data-verify-list]')).toBeVisible();
-  });
-
-  test(`${locale || "en/"} unknown forwarding roles cannot activate and other provinces keep local policy`, async ({ page }) => {
-    await page.goto(siteRoute(`/${locale}config/?tag=ytr&province=on&type=large&step=4&instructions=technical`));
-    const result=page.locator('[data-role="result"]');
-    await activateConfig(page);
-    await page.locator('[data-go-step="3"]').click();
-    await page.locator('input[name="mcc-type"][value="unknown"]').check();
-    await page.locator('[data-action="confirm-activation"]').check();
-    await page.locator('[data-go-step="4"]').click();
-    await expect(result.locator('[data-cmd]')).toHaveCount(0);
-    await expect(result).toContainText(locale ? "Confirmez" : "Confirm");
+  test(`${locale || "en/"} other provinces keep local policy outside the ON/QC pilot`, async ({ page }) => {
     await page.goto(siteRoute(`/${locale}config/map/?tag=yyc&province=ab`));
     await expect(page.locator('[data-role="map-text-result"]')).toContainText(locale ? "hors du projet pilote" : "outside the ON/QC pilot");
   });

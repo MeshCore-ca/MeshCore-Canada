@@ -14,13 +14,28 @@ function loadSupport() {
   return context.MeshCoreRegionConfiguratorSupport;
 }
 
-test("config and map load the pure support helper before the region application", () => {
-  for (const page of ["docs/config/index.md", "docs/config/map.md"]) {
-    const markdown = read(page);
+// indexOf is -1 for a missing script, which would sort before everything: require both to be present.
+function loadsBefore(markdown, first, second) {
+  const a = markdown.indexOf(first);
+  const b = markdown.indexOf(second);
+  return a !== -1 && b !== -1 && a < b;
+}
+
+test("the map loads the pure support helper before the region application", () => {
+  for (const page of ["docs/config/map.md", "docs/config/map.fr.md"]) {
     assert.ok(
-      markdown.indexOf("assets/regions/modules/configurator-support.js") <
-        markdown.indexOf("assets/regions/regions.js"),
+      loadsBefore(read(page), "assets/regions/modules/configurator-support.js", "assets/regions/regions.js"),
+      page,
     );
+  }
+});
+
+test("the setup tool page loads the scope generator before its commands, and not the region application", () => {
+  for (const page of ["docs/config/index.md", "docs/config/index.fr.md"]) {
+    const markdown = read(page);
+    assert.ok(loadsBefore(markdown, "assets/regions/modules/iata-scopes.js", "assets/setup/setup-commands.js"), page);
+    assert.ok(loadsBefore(markdown, "assets/setup/setup-commands.js", "assets/setup/setup-ui.js"), page);
+    assert.ok(!markdown.includes("assets/regions/regions.js"), page);
   }
 });
 

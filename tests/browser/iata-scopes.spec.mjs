@@ -1,9 +1,10 @@
 import { expect, test } from "./site-fixtures.mjs";
 import { siteRoute } from "./site-route.mjs";
-import { activateConfig } from "./activation-helpers.mjs";
 import { readFile } from "node:fs/promises";
+import { PHONE_ROUTE, codes, expectStep, mockGeocoder, next, nextButton, nextUntil, answer, phoneLink, searchTown, startPhoneRoute, step, toolRoot, T } from "./setup-helpers.mjs";
 
 for (const locale of ["", "fr/"]) {
+  const lang = locale ? "fr" : "en";
   for (const [tag, province, lat, lon] of [
     ["yyg", "pe", 46.2382, -63.1311], ["yyt", "nl", 47.5605, -52.7128],
     ["yyr", "nl", 53.303, -60.326], ["yxy", "yt", 60.7212, -135.0568],
@@ -16,43 +17,38 @@ for (const locale of ["", "fr/"]) {
       await expect(detail).toContainText(locale ? "Région initiale de MeshCore Canada" : "MeshCore Canada starter region");
       await expect(detail.locator(`a[href="https://${tag}.meshmapper.net/"]`)).toHaveCount(0);
       await expect(detail.locator('a[href*="guide/#starter-regions"]')).toHaveAttribute("href", new RegExp(`/${locale}config/guide/#starter-regions$`));
-      await detail.locator('.mcc-detail-actions a').click();
-      await page.locator('[data-wizard-step="3"] [data-next-step]').click();
-      const output = page.locator('[data-role="result"]');
-      await expect(output).toContainText(`region def ${tag}|* ${province}|* can|* na`);
-      await expect(output).toContainText(locale ? "pas encore publiée dans MeshMapper" : "not yet published by MeshMapper");
-      await expect(output).not.toContainText("onqc");
-      await expect(output).not.toContainText("set radio");
+      // The map hands only the region to the setup tool, which opens on its first question.
+      const configure = detail.locator('.mcc-detail-actions a');
+      expect(Object.fromEntries(new URL(await configure.getAttribute("href")).searchParams)).toEqual({ tag, province });
+      await configure.click();
+      await expectStep(page, "type");
+      // The same region in the tool: the flat list for a province outside ON/QC, and no radio line on the phone route.
+      await page.goto(siteRoute(phoneLink(tag, province, { lang })));
+      await expectStep(page, "commands");
+      const lines = await codes(page).allTextContents();
+      expect(lines).toContain(`region def ${tag}|* ${province}|* can|* na`);
+      expect(lines.join("\n")).not.toContain("onqc");
+      expect(lines.some((line) => line.startsWith("set radio"))).toBe(false);
     });
   }
   test(`${locale || "en/"} older firmware gets explicit permissions and no unsupported advert command`, async ({ page }) => {
     for (const firmware of ["1.14", "1.15"]) {
-      await page.goto(siteRoute(`/${locale}config/?tag=yow&province=on&step=4&firmware=${firmware}&instructions=technical`));
-      await activateConfig(page);
-      const result = page.locator('[data-role="result"]');
-      await expect(result).toContainText("region put yow");
-      await expect(result).toContainText("region allowf *");
-      await expect(result.locator('[data-cmd^="region def "]')).toHaveCount(0);
+      await page.goto(siteRoute(phoneLink("yow", "on", { lang, firmware })));
+      await expectStep(page, "commands");
+      const lines = await codes(page).allTextContents();
+      expect(lines).toContain("region put yow");
+      expect(lines).toContain("region allowf *");
+      expect(lines.filter((line) => line.startsWith("region def "))).toEqual([]);
       if (firmware === "1.14") {
-        await expect(result).toContainText("region allowf yow");
-        await expect(result).not.toContainText("region default");
-        await expect(result).toContainText(locale ? "restent sans scope" : "stay unscoped");
-      } else await expect(result).toContainText("region default yow");
+        expect(lines).toContain("region allowf yow");
+        expect(lines.filter((line) => line.startsWith("region default"))).toEqual([]);
+      } else expect(lines).toContain("region default yow");
     }
-    await page.goto(siteRoute(`/${locale}config/?tag=yow&province=on&step=4&firmware=1.13`));
-    await expect(page.locator('[data-role="result"]')).toContainText(locale ? "prise en charge" : "supported firmware");
-    await expect(page.locator('[data-action="copy-commands"]')).toHaveCount(0);
-  });
-
-  test(`${locale || "en/"} ambiguous legacy city choices require review`, async ({ page }) => {
-    await page.goto(siteRoute(`/${locale}config/?tag=ott&province=on&type=large&regions=capnat&step=4`));
-    await expect(page.locator('[data-wizard-step="3"]')).toBeVisible();
-    await expect(page.locator('[data-action="confirm-scope-migration"]')).toBeVisible();
-    await expect(page.locator('[data-wizard-step="3"] [data-next-step]')).toBeDisabled();
-    await page.locator('[data-action="confirm-scope-migration"]').check();
-    await page.locator('[data-wizard-step="3"] [data-next-step]').click();
-    await expect(page.locator('[data-role="result"]')).toContainText("region def yow|* on|* onqc|* can|* na");
-    await expect(page.locator('[data-role="result"]')).not.toContainText("capnat");
+    // Firmware below 1.14 gets no commands: the link opens on the version question and Next stays off.
+    await page.goto(siteRoute(phoneLink("yow", "on", { lang, firmware: "1.13" })));
+    await expectStep(page, "version");
+    await expect(nextButton(page)).toBeDisabled();
+    await expect(codes(page)).toHaveCount(0);
   });
 
   test(`${locale || "en/"} historical drafts can be downloaded without uploading or deleting them`, async ({ page }) => {
@@ -74,43 +70,53 @@ for (const locale of ["", "fr/"]) {
   test(`${locale || "en/"} IATA bridge setup matches the ON/QC proposal`, async ({ page }) => {
     const errors = [];
     page.on("pageerror", error => errors.push(error.message));
-    await page.goto(siteRoute(`/${locale}config/?tag=yow&province=qc&type=large&regions=yul&step=4&instructions=technical`));
-    await activateConfig(page);
-    const result = page.locator('[data-role="result"]');
-    await expect(result).toContainText("region def yow|* yul|* qc|* onqc|* can|* na");
-    await expect(result).toContainText("region denyf *");
-    await expect(result).toContainText("region default yow");
-    await expect(result).not.toContainText("region def can on");
-    await expect(result).not.toContainText("set radio");
+    await page.goto(siteRoute(phoneLink("yow", "qc", { lang, role: "edge", extra: "neighbours=yul" })));
+    await expectStep(page, "commands");
+    const lines = await codes(page).allTextContents();
+    expect(lines).toContain("region def yow|* yul|* qc|* onqc|* can|* na");
+    expect(lines).toContain("region denyf *");
+    expect(lines).toContain("region default yow");
+    expect(lines.join("\n")).not.toContain("region def can on");
+    expect(lines.some((line) => line.startsWith("set radio"))).toBe(false);
     expect(errors).toEqual([]);
   });
 
-  test(`${locale || "en/"} Gatineau coordinates select yow with qc, not a separate legacy region`, async ({ page }) => {
-    await page.goto(siteRoute(`/${locale}config/?lat=45.4765&lon=-75.7013&province=on&step=4&instructions=technical`));
-    await activateConfig(page);
-    await expect(page.locator('[data-role="result"]')).toContainText("region def yow|* qc|* onqc|* can|* na");
-    await expect(page.locator('[data-role="result"]')).toContainText("region allowf *");
-    await expect(page.locator("#mcc-home-province")).toHaveValue("qc");
+  test(`${locale || "en/"} Gatineau selects yow with qc, not a separate legacy region`, async ({ page }) => {
+    await mockGeocoder(page);
+    await page.goto(siteRoute(`${toolRoot(lang)}?${PHONE_ROUTE}`));
+    await expectStep(page, "town");
+    await searchTown(page, "Gatineau");
+    await expect(page.locator("[data-setup-region]")).toContainText("yow");
+    await expect(page.locator("[data-setup-region]")).toContainText("Québec");
+    await next(page);
+    await answer(page, "role", "city");
+    await nextUntil(page, "commands");
+    const lines = await codes(page).allTextContents();
+    expect(lines).toContain("region def yow|* qc|* onqc|* can|* na");
+    expect(lines).toContain("region allowf *");
+    expect(lines.join("\n")).not.toMatch(/\bott\b/);
   });
 
   test(`${locale || "en/"} a shared IATA zone needs a province before commands are offered`, async ({ page }) => {
-    await page.goto(siteRoute(`/${locale}config/?tag=yow&step=4`));
-    await expect(page.locator('[data-wizard-step="2"]')).toBeVisible();
-    await expect(page.locator("#mcc-home-province")).toHaveValue("");
-    await expect(page.locator('[data-wizard-step="2"] [data-next-step]')).toBeDisabled();
-    await expect(page.locator("#mcc-home-province")).toBeEnabled();
-    await page.locator("#mcc-home-province").selectOption("on");
-    await expect(page.locator('[data-wizard-step="2"] [data-next-step]')).toBeEnabled();
-    await page.locator('[data-wizard-step="2"] [data-next-step]').click();
-    await page.locator('[data-action="standard-defaults"]').check();
-    await expect(page.locator("#mcc-hash-mode")).toHaveValue("2");
-    await page.locator('[data-wizard-step="3"] [data-next-step]').click();
+    await page.goto(siteRoute(`${toolRoot(lang)}?${PHONE_ROUTE}&tag=yow&role=city&name=Test_R1`));
+    await expectStep(page, "town");
+    await expect(step(page)).toContainText(T("town.province", lang));
+    await expect(nextButton(page)).toBeDisabled();
+    await page.locator('[data-setup-choice="yow:on"]').click();
+    await expect(nextButton(page)).toBeEnabled();
+    // Picking the province sets the region again, which clears the name; no town was searched to suggest one.
+    await nextUntil(page, "name");
+    await page.locator("[data-setup-name]").fill("Test_R1");
+    await next(page);
+    await expectStep(page, "commands");
+    const lines = await codes(page).allTextContents();
     for (const command of ["set path.hash.mode 2", "set advert.interval 240", "set flood.advert.interval 47", "set flood.max 16"]) {
-      await expect(page.locator('[data-role="result"]')).toContainText(command);
+      expect(lines).toContain(command);
     }
+    expect(lines).toContain("region def yow|* on|* onqc|* can|* na");
   });
 
-  test(`${locale || "en/"} the map and configurator use the same MeshMapper zone`, async ({ page }) => {
+  test(`${locale || "en/"} the map and setup tool use the same MeshMapper zone`, async ({ page }) => {
     const requests = [];
     page.on("request", request => requests.push(request.url()));
     await page.goto(siteRoute(`/${locale}config/map/?lat=45.4765&lon=-75.7013`));
@@ -120,7 +126,9 @@ for (const locale of ["", "fr/"]) {
     const configure = detail.locator('.mcc-detail-actions a[href*="province=qc"]');
     await expect(configure).toHaveCount(1);
     await configure.click();
-    await expect(page.locator("#mcc-home-province")).toHaveValue("qc");
+    await startPhoneRoute(page);
+    await expect(page.locator("[data-setup-region]")).toContainText("yow");
+    await expect(page.locator("[data-setup-region]")).toContainText("Québec");
     expect(requests.some(url => url.includes("iata-boundaries.geojson"))).toBeTruthy();
     expect(requests.some(url => url.includes("canada-region-partition"))).toBeFalsy();
   });

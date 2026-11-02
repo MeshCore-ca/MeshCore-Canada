@@ -1,7 +1,9 @@
 import { expect, test } from "./site-fixtures.mjs";
 import { siteRoute } from "./site-route.mjs";
+import { codes, expectStep, phoneLink } from "./setup-helpers.mjs";
 
 for (const locale of ["", "fr/"]) {
+  const lang = locale ? "fr" : "en";
   test(`${locale || "en/"} map polygons use their published name for hover and selection`, async ({ page }) => {
     await page.goto(siteRoute(`/${locale}config/map/?lat=42.406519&lon=-82.188273`));
     const stage = page.locator('.mcc-map-stage');
@@ -27,23 +29,22 @@ for (const locale of ["", "fr/"]) {
       await expect(result.locator('.mcc-note-warning')).toContainText(locale ? "Extension proposée" : "planning extension");
       await expect(result.locator('.mc-region-profile')).toContainText(locale ? "Extension proposée par MeshCore Canada" : "MeshCore Canada planning extension");
       await expect(result.locator('a[href*="guide/#planning-extensions"]')).toHaveCount(1);
-      await result.locator('.mcc-detail-actions a').click();
-      await page.locator('[data-wizard-step="3"] [data-next-step]').click();
-      const output=page.locator('[data-role="result"]');
-      await expect(output).toContainText(`region def ${tag}|* on|* onqc|* can|* na`);
-      await expect(output.locator('.mc-region-profile')).toContainText(locale ? "Extension proposée" : "planning extension");
+      const configure=result.locator('.mcc-detail-actions a');
+      expect(Object.fromEntries(new URL(await configure.getAttribute("href")).searchParams)).toEqual({ tag, province: "on" });
+      await configure.click();
+      await expectStep(page, "type");
+      // The same region in the setup tool.
+      await page.goto(siteRoute(phoneLink(tag, "on", { lang })));
+      await expectStep(page, "commands");
+      expect(await codes(page).allTextContents()).toContain(`region def ${tag}|* on|* onqc|* can|* na`);
       expect(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth+1)).toBeTruthy();
     });
   }
-  test(`${locale || "en/"} published Waterloo stays published and a saved bad YSB link needs correction`, async ({page}) => {
+  test(`${locale || "en/"} published Waterloo stays published`, async ({page}) => {
     await page.goto(siteRoute(`/${locale}config/map/?lat=43.4643&lon=-80.5204`));
     const result=page.locator('[data-role="map-text-result"]');
     await expect(result.locator('.mcc-deterministic-result')).toContainText("ykf");
     await expect(result.locator('.mcc-note-warning')).toHaveCount(0);
     await expect(result.locator('.mc-region-profile')).toContainText("MeshMapper");
-    await page.goto(siteRoute(`/${locale}config/?tag=ysb&lat=43.8678&lon=-81.2619&step=4`));
-    await expect(page.locator('[data-role="status"]')).toContainText(locale ? "ne correspond pas" : "differs");
-    await expect(page.locator('[data-go-step="4"]')).toBeDisabled();
-    await expect(page.locator('[data-cmd^="region def"]')).toHaveCount(0);
   });
 }
