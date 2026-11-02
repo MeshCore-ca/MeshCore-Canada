@@ -62,7 +62,9 @@ for (const lang of LANGS) {
     await expect(nextButton(page)).toHaveText(T("nav.to-check", lang));
     await next(page);
     await expectStep(page, "check");
-    await expect(page.locator("[data-setup-check] code")).toHaveText(["ver", "get name", "region", "advert"]);
+    // The commands themselves, not the `clock sync` the clock check mentions in its explanation.
+    await expect(page.locator("[data-setup-check] .setup-command__code")).toHaveText(["ver", "get name", "region", "clock", "advert"]);
+    await expect(page.locator('[data-setup-check="clock"]')).toContainText(plain("check.clock", lang));
     await expect(step(page)).toContainText(T("check.name", lang, { name: "Belleville_R1" }));
   });
 
@@ -166,6 +168,9 @@ test("running repeater via phone", async ({ page }) => {
   await next(page);
   await expectStep(page, "check");
   await expect(step(page)).toContainText(T("check.hint.phone", "en"));
+  // From the app the repeater takes the time from the phone, so the clock check is the sync itself, before the advert.
+  await expect(page.locator("[data-setup-check] .setup-command__code")).toHaveText(["ver", "get name", "region", "clock sync", "advert"]);
+  await expect(page.locator('[data-setup-check="clock"]')).toContainText(plain("check.clock.phone", "en"));
 });
 
 test("edge repeater offers neighbouring regions and Ontario cross-border options", async ({ page }) => {

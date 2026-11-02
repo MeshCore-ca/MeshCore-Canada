@@ -58,7 +58,7 @@ test("BC Mesh radio settings when chosen", () => {
 });
 test("the final checks match the device and role", () => {
   const ids = (a) => cmds.checks(a, data, "en").map(c => c.command);
-  assert.deepEqual(ids(belleville), ["ver", "get name", "region", "advert"]);
+  assert.deepEqual(ids(belleville), ["ver", "get name", "region", "clock", "advert"]);
   assert.ok(ids({ ...belleville, type: "observer", repeat: "both", board: "heltec-v3" }).includes("get mqtt.status"));
   assert.ok(!ids({ ...belleville, type: "observer", repeat: "listen", board: "heltec-v3", role: undefined }).includes("region"));
   assert.match(cmds.checks({ ...belleville, role: "edge", neighbours: ["ygk"] }, data, "en").find(c => c.command === "region").expect, /without F|no F/);
@@ -223,7 +223,29 @@ test("checks say what to expect for this repeater", () => {
   assert.doesNotMatch(city, /\^/);
   assert.match(find({ ...belleville, role: "edge", neighbours: ["ygk"] }, "region").expect, /ytr, ygk, on, onqc, can and na/);
   assert.notEqual(find(belleville, "ver").expect, find({ ...belleville, status: "running", reflash: false }, "ver").expect);
-  assert.deepEqual(cmds.checks(observer, data, "en").map((c) => c.id), ["ver", "name", "region", "mqtt", "advert"]);
+  assert.deepEqual(cmds.checks(observer, data, "en").map((c) => c.id), ["ver", "name", "region", "mqtt", "clock", "advert"]);
+});
+
+test("the checks remind people to resync the clock after a restart, before the advert, in both languages", () => {
+  const running = { ...belleville, status: "running", reflash: false };
+  // Over USB the Console has no phone to take the time from: it shows the clock and says where to sync it.
+  // From the app the repeater takes the time from the phone, so there the check is the sync itself.
+  const cases = [
+    [belleville, "clock", { en: /Shows its clock, in UTC\. Check it after every restart.*`clock sync`.*Command Line/, fr: /Affiche son horloge, en UTC\. Vérifiez-la après chaque redémarrage.*`clock sync`.*Command Line/ }],
+    [running, "clock sync", { en: /Sets its clock from your phone\. Do this after every restart/, fr: /Règle son horloge d’après votre téléphone\. Faites-le après chaque redémarrage/ }],
+  ];
+  for (const [answers, command, expected] of cases) {
+    for (const lang of ["en", "fr"]) {
+      const list = cmds.checks(answers, data, lang);
+      const clock = list.find((c) => c.id === "clock");
+      assert.equal(clock.command, command, `${lang} ${command}`);
+      assert.match(clock.expect, expected[lang], `${lang} ${command}`);
+      assert.match(clock.expect, lang === "en"
+        ? /routing can continue without a correct clock, but stale advert timing can prevent companions from accepting a new advert/
+        : /l’acheminement peut continuer même si l’horloge est inexacte, mais une heure d’annonce périmée peut empêcher les compagnons d’accepter une nouvelle annonce/);
+      assert.ok(list.findIndex((c) => c.id === "clock") < list.findIndex((c) => c.id === "advert"), `${lang}: the clock comes before the advert`);
+    }
+  }
 });
 
 test("cross-border notes are translated, and only where the generator warns", () => {

@@ -87,6 +87,10 @@ The repeater is ready to install when:
 2. it sends an advert; and
 3. a nearby known-good companion receives that advert.
 
+After every reboot, resync the repeater clock before you send the advert. Routing
+can continue without a correct clock, but stale advert timing can prevent
+companions from accepting a new advert.
+
 Use the [repeater verification checklist](verify.md#repeater).
 
 <section class="mc-start-progress" data-mc-progress-page="repeater" aria-labelledby="repeater-progress-title">

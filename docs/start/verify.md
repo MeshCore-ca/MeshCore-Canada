@@ -48,9 +48,12 @@ If the advert is missing, compare radio and path settings before reflashing.
 
 1. Keep the repeater accessible on the bench.
 2. Reboot it and confirm the intended settings remain.
-3. Send an advert from the repeater.
-4. Confirm a nearby known-good companion receives it.
-5. Repeat the check after any antenna, power, or installation change.
+3. Resync the repeater clock after every reboot. Routing can continue without a
+   correct clock, but stale advert timing can prevent companions from accepting
+   a new advert.
+4. Send an advert from the repeater.
+5. Confirm a nearby known-good companion receives it.
+6. Repeat the check after any antenna, power, or installation change.
 
 !!! success "The repeater is ready"
     The repeater retains its settings and a nearby known-good companion

@@ -195,6 +195,20 @@ test("the retired setup pages and their assets are gone, in both languages", () 
   assert.doesNotMatch(config, /^ +(?:Flash a repeater|MQTT firmware): /m, "retired pages have no French navigation titles");
 });
 
+test("the repeater bench test says to resync the clock after every reboot, and why", () => {
+  const flat = (source) => source.replace(/\s+/g, " ");
+  for (const [page, advice] of [
+    ["start/repeater.md", /After every reboot, resync the repeater clock before you send the advert\. Routing can continue without a correct clock, but stale advert timing can prevent companions from accepting a new advert\./],
+    ["start/verify.md", /Resync the repeater clock after every reboot\. Routing can continue without a correct clock, but stale advert timing can prevent companions from accepting a new advert\./],
+    ["start/repeater.fr.md", /Après chaque redémarrage, synchronisez de nouveau l’horloge du répéteur avant d’envoyer l’annonce\. L’acheminement peut continuer même si l’horloge est inexacte, mais une heure d’annonce périmée peut empêcher les compagnons d’accepter une nouvelle annonce\./],
+    ["start/verify.fr.md", /Synchronisez de nouveau l’horloge du répéteur après chaque redémarrage\. L’acheminement peut continuer même si l’horloge est inexacte, mais une heure d’annonce périmée peut empêcher les compagnons d’accepter une nouvelle annonce\./],
+  ]) {
+    const source = readDoc(page);
+    const section = page.startsWith("start/verify") ? source.slice(source.search(/^## (Repeater|Répéteur)/m)) : source;
+    assert.match(flat(section), advice, page);
+  }
+});
+
 test("the repeater and observer start pages lead to the setup tool without phase wording", () => {
   for (const french of [false, true]) {
     const suffix = french ? ".fr" : "";

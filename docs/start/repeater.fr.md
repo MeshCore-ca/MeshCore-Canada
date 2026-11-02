@@ -93,6 +93,11 @@ Le répéteur est prêt à être installé lorsque :
 2. il envoie une annonce;
 3. un appareil compagnon fiable à proximité reçoit cette annonce.
 
+Après chaque redémarrage, synchronisez de nouveau l’horloge du répéteur avant
+d’envoyer l’annonce. L’acheminement peut continuer même si l’horloge est
+inexacte, mais une heure d’annonce périmée peut empêcher les compagnons
+d’accepter une nouvelle annonce.
+
 Utilisez la [liste de vérification du répéteur](verify.md#repeater).
 
 ## Et ensuite?

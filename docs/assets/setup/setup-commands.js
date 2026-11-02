@@ -268,6 +268,11 @@
       out.push({ id: "region", command: "region", expect: say(s.edge ? "check.region.edge" : "check.region.city", lang, { tags: list(tags, lang) }) });
     }
     if (s.observer) out.push({ id: "mqtt", command: "get mqtt.status", expect: say("check.mqtt", lang) });
+    // After every restart the clock needs setting again, or companions can refuse the new advert. Over USB the
+    // Console has no phone to take the time from, so there it only shows the clock and says where to sync it.
+    out.push(s.route === "phone"
+      ? { id: "clock", command: "clock sync", expect: say("check.clock.phone", lang) }
+      : { id: "clock", command: "clock", expect: say("check.clock", lang) });
     out.push({ id: "advert", command: "advert", expect: say("check.advert", lang) });
     return out;
   }

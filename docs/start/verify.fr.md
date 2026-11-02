@@ -49,9 +49,13 @@ de réinstaller le micrologiciel.
 
 1. Gardez le répéteur accessible sur l’établi.
 2. Redémarrez-le et confirmez que les paramètres prévus sont toujours présents.
-3. Envoyez une annonce à partir du répéteur.
-4. Confirmez qu’un appareil compagnon fiable à proximité la reçoit.
-5. Recommencez la vérification après tout changement d’antenne, d’alimentation
+3. Synchronisez de nouveau l’horloge du répéteur après chaque redémarrage.
+   L’acheminement peut continuer même si l’horloge est inexacte, mais une heure
+   d’annonce périmée peut empêcher les compagnons d’accepter une nouvelle
+   annonce.
+4. Envoyez une annonce à partir du répéteur.
+5. Confirmez qu’un appareil compagnon fiable à proximité la reçoit.
+6. Recommencez la vérification après tout changement d’antenne, d’alimentation
    ou d’installation.
 
 !!! success "Le répéteur est prêt"
