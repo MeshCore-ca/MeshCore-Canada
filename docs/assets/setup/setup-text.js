@@ -93,7 +93,8 @@
     "status.new.detail": "Nothing on it needs keeping.",
     "status.running": "Already running",
     "status.running.detail": "Keep its identity and replace its old settings.",
-    "status.backup": "Back it up first. Export its private key and write down its name and admin password. Never erase it in the flasher: that deletes its identity, and it can't be recreated. Its old regions get cleared in the command list later.",
+    "status.backup": "Back it up first. Write down its name and admin password. To save its private key, connect it by USB, open the Console in the {link}, send `get prv.key` and keep the reply in your password manager. Never erase it in the flasher: that deletes its identity, and it can't be recreated. Its old regions get cleared in the command list later.",
+    "status.backup.link": "MeshCore flasher",
 
     // Update its firmware too? (a running repeater)
     "reflash.question": "Update its firmware too?",
@@ -110,7 +111,7 @@
     "observerFirmware.yes.detail": "Send the commands from your phone, in the MeshCore app.",
     "observerFirmware.no": "No, or not sure",
     "observerFirmware.no.detail": "Flash the observer firmware first, over USB.",
-    "observerFirmware.switch": "Switching to the observer firmware can wipe its identity. Back up its private key first, and be ready to put it back after flashing.",
+    "observerFirmware.switch": "Switching to the observer firmware can wipe its identity. Save its private key first: over USB, send `get prv.key` in the flasher's Console and keep the reply. After flashing, put it back with `set prv.key` followed by the saved key, then `reboot`.",
 
     // Update the bootloader (nRF52)
     "bootloader.question": "First, update the bootloader",
@@ -311,16 +312,16 @@
 
     // Check it worked
     "check.question": "Check it worked",
-    "check.hint.console": "After it restarts, reconnect the Console and run these. Nothing here changes settings.",
-    "check.hint.phone": "After it restarts, log in again in the app and send these from Command Line. Nothing here changes settings.",
+    "check.hint.console": "After it restarts, reconnect the Console and run these. They change nothing, except the clock if it needs setting.",
+    "check.hint.phone": "After it restarts, log in again in the app and send these from Command Line. They change nothing, except `clock sync`, which sets its clock.",
     "check.ver": "Shows the firmware version. It should be the one you just flashed.",
     "check.ver.phone": "Shows the firmware version. It should be the same as before.",
     "check.name": "Should answer {name}.",
     "check.region.city": "Should list only {tags}, each followed by F, which means it passes those messages on. The * line at the top should also have F, as on every city repeater.",
     "check.region.edge": "Should list only {tags}, each followed by F, which means it passes those messages on. The * line at the top should have no F: that's what makes it an edge repeater.",
     "check.mqtt": "Should show slots 1 and 2, its first two server connections, as connected. If not, check the Wi-Fi name and password.",
-    "check.clock": "Shows its clock, in UTC. Check it after every restart: routing can continue without a correct clock, but stale advert timing can prevent companions from accepting a new advert. If it's wrong, log in to the repeater from the MeshCore app and send `clock sync` from Command Line.",
-    "check.clock.phone": "Sets its clock from your phone. Do this after every restart: routing can continue without a correct clock, but stale advert timing can prevent companions from accepting a new advert.",
+    "check.clock": "Shows its clock, in UTC. After a restart its clock is often wrong, and phones may ignore its announcements until it's set. If it's wrong, set it from your phone: in the MeshCore app, open Contacts, tap the repeater, log in as admin, then tap Command Line and send `clock sync`.",
+    "check.clock.phone": "Sets its clock from your phone. After a restart its clock is often wrong, and phones may ignore its announcements until it's set.",
     "check.advert": "Sends an announcement. A phone running MeshCore nearby should see it appear.",
     "check.live": "Within a few minutes it should appear in the {link}.",
     "check.live.link": "live observer list",
@@ -410,7 +411,8 @@
     "status.new.detail": "Il n’y a rien à garder dessus.",
     "status.running": "Déjà en service",
     "status.running.detail": "Garder son identité et remplacer ses anciens réglages.",
-    "status.backup": "Sauvegardez-la d’abord. Exportez sa clé privée et notez son nom et son mot de passe administrateur. Ne l’effacez jamais dans l’outil de programmation : ça supprime son identité, qui ne peut pas être recréée. Ses anciennes régions seront retirées plus loin, dans la liste des commandes.",
+    "status.backup": "Sauvegardez-la d’abord. Notez son nom et son mot de passe administrateur. Pour sauvegarder sa clé privée, branchez-la par USB, ouvrez la Console dans l’{link}, envoyez `get prv.key` et gardez la réponse dans votre gestionnaire de mots de passe. Ne l’effacez jamais dans l’outil de programmation : ça supprime son identité, qui ne peut pas être recréée. Ses anciennes régions seront retirées plus loin, dans la liste des commandes.",
+    "status.backup.link": "outil de programmation MeshCore",
 
     // Update its firmware too? (a running repeater)
     "reflash.question": "Mettre aussi son micrologiciel à jour?",
@@ -427,7 +429,7 @@
     "observerFirmware.yes.detail": "Envoyer les commandes depuis votre téléphone, dans l’application MeshCore.",
     "observerFirmware.no": "Non, ou je ne sais pas",
     "observerFirmware.no.detail": "Programmer d’abord le micrologiciel d’observateur, par USB.",
-    "observerFirmware.switch": "Passer au micrologiciel d’observateur peut effacer son identité. Sauvegardez d’abord sa clé privée et prévoyez de la remettre après la programmation.",
+    "observerFirmware.switch": "Passer au micrologiciel d’observateur peut effacer son identité. Sauvegardez d’abord sa clé privée : par USB, envoyez `get prv.key` dans la Console de l’outil de programmation et gardez la réponse. Après la programmation, remettez-la avec `set prv.key` suivi de la clé sauvegardée, puis `reboot`.",
 
     // Update the bootloader (nRF52)
     "bootloader.question": "D’abord, mettez à jour le chargeur d’amorçage",
@@ -628,16 +630,16 @@
 
     // Check it worked
     "check.question": "Vérifiez que tout fonctionne",
-    "check.hint.console": "Après le redémarrage, reconnectez la Console et lancez ces commandes. Aucune ne change de réglage.",
-    "check.hint.phone": "Après le redémarrage, reconnectez-vous dans l’application et envoyez ces commandes depuis Command Line. Aucune ne change de réglage.",
+    "check.hint.console": "Après le redémarrage, reconnectez la Console et lancez ces commandes. Elles ne changent rien, sauf l’horloge si elle doit être réglée.",
+    "check.hint.phone": "Après le redémarrage, reconnectez-vous dans l’application et envoyez ces commandes depuis Command Line. Elles ne changent rien, sauf `clock sync`, qui règle son horloge.",
     "check.ver": "Affiche la version du micrologiciel. Ce doit être celle que vous venez de programmer.",
     "check.ver.phone": "Affiche la version du micrologiciel. Elle doit être la même qu’avant.",
     "check.name": "Doit répondre {name}.",
     "check.region.city": "Doit afficher seulement {tags}, chacun suivi de F, ce qui veut dire qu’il relaie ces messages. La ligne * en haut doit aussi avoir F, comme sur tout répéteur de ville.",
     "check.region.edge": "Doit afficher seulement {tags}, chacun suivi de F, ce qui veut dire qu’il relaie ces messages. La ligne * en haut ne doit pas avoir de F : c’est ce qui en fait un répéteur de bordure.",
     "check.mqtt": "Doit indiquer que les emplacements 1 et 2, ses deux premières connexions de serveur, sont connectés. Sinon, vérifiez le nom et le mot de passe du Wi-Fi.",
-    "check.clock": "Affiche son horloge, en UTC. Vérifiez-la après chaque redémarrage : l’acheminement peut continuer même si l’horloge est inexacte, mais une heure d’annonce périmée peut empêcher les compagnons d’accepter une nouvelle annonce. Si elle est inexacte, connectez-vous au répéteur depuis l’application MeshCore et envoyez `clock sync` depuis Command Line.",
-    "check.clock.phone": "Règle son horloge d’après votre téléphone. Faites-le après chaque redémarrage : l’acheminement peut continuer même si l’horloge est inexacte, mais une heure d’annonce périmée peut empêcher les compagnons d’accepter une nouvelle annonce.",
+    "check.clock": "Affiche son horloge, en UTC. Après un redémarrage, son horloge est souvent fausse, et les téléphones peuvent ignorer ses annonces tant qu’elle n’est pas réglée. Si elle est fausse, réglez-la depuis votre téléphone : dans l’application MeshCore, ouvrez Contacts, touchez le répéteur, connectez-vous comme administrateur, puis touchez Command Line et envoyez `clock sync`.",
+    "check.clock.phone": "Règle son horloge d’après votre téléphone. Après un redémarrage, son horloge est souvent fausse, et les téléphones peuvent ignorer ses annonces tant qu’elle n’est pas réglée.",
     "check.advert": "Envoie une annonce. Un téléphone avec MeshCore à proximité devrait la voir apparaître.",
     "check.live": "D’ici quelques minutes, il devrait apparaître dans la {link}.",
     "check.live.link": "liste des observateurs en direct",

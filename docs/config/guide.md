@@ -376,6 +376,25 @@ The scope lines for a Belleville city repeater on firmware 1.16 or newer:
 `region save`
 :   Save the region settings.
 
+### Back up a running repeater {#back-up}
+
+A repeater that's already running has an identity: its private key. Other
+devices know it by that key, and it can't be recreated if it's lost. Before you
+flash it, back it up:
+
+1. Write down its name and admin password.
+2. Connect it by USB, open the Console in the
+   [MeshCore flasher](https://flasher.meshcore.io/), send `get prv.key` and keep
+   the reply in your password manager. This only works over USB.
+3. Never erase it in the flasher.
+
+If flashing wipes it anyway, for example when you switch to the observer
+firmware, put the key back in the Console with `set prv.key` followed by the
+saved key, then `reboot`. Both commands are in the
+[MeshCore command reference](https://docs.meshcore.io/cli_commands/#view-or-change-this-nodes-identity-private-key).
+
+Never share the private key: anyone who has it can pose as your repeater.
+
 ### Clearing old regions {#old-regions}
 
 A repeater that's already running may still have regions from an older setup.
@@ -480,7 +499,9 @@ These lines are only for a repeater observer.
 :   Restart so every setting takes effect.
 
 After it restarts, the tool lists a few checks, such as `ver` and `region`. They
-only show its settings; they don't change anything.
+only show its settings. The one exception is `clock sync`, which sets its clock:
+after a restart its clock is often wrong, and phones may ignore its
+announcements until it's set.
 
 ### Loop detection {#loop-detection}
 

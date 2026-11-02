@@ -226,13 +226,22 @@ test("checks say what to expect for this repeater", () => {
   assert.deepEqual(cmds.checks(observer, data, "en").map((c) => c.id), ["ver", "name", "region", "mqtt", "clock", "advert"]);
 });
 
-test("the checks remind people to resync the clock after a restart, before the advert, in both languages", () => {
+// The one plain sentence about the clock, used by the tool and by the start pages (start-journeys.test.mjs).
+const CLOCK = {
+  en: "After a restart its clock is often wrong, and phones may ignore its announcements until it's set.",
+  fr: "Après un redémarrage, son horloge est souvent fausse, et les téléphones peuvent ignorer ses annonces tant qu’elle n’est pas réglée."
+};
+
+test("the checks remind people to set the clock after a restart, before the advert, in plain words", () => {
   const running = { ...belleville, status: "running", reflash: false };
-  // Over USB the Console has no phone to take the time from: it shows the clock and says where to sync it.
+  // Over USB the Console has no phone to take the time from: it shows the clock and says how to set it from the app.
   // From the app the repeater takes the time from the phone, so there the check is the sync itself.
   const cases = [
-    [belleville, "clock", { en: /Shows its clock, in UTC\. Check it after every restart.*`clock sync`.*Command Line/, fr: /Affiche son horloge, en UTC\. Vérifiez-la après chaque redémarrage.*`clock sync`.*Command Line/ }],
-    [running, "clock sync", { en: /Sets its clock from your phone\. Do this after every restart/, fr: /Règle son horloge d’après votre téléphone\. Faites-le après chaque redémarrage/ }],
+    [belleville, "clock", {
+      en: /^Shows its clock, in UTC\. .* If it's wrong, set it from your phone: in the MeshCore app, open Contacts, tap the repeater, log in as admin, then tap Command Line and send `clock sync`\.$/,
+      fr: /^Affiche son horloge, en UTC\. .* Si elle est fausse, réglez-la depuis votre téléphone : dans l’application MeshCore, ouvrez Contacts, touchez le répéteur, connectez-vous comme administrateur, puis touchez Command Line et envoyez `clock sync`\.$/
+    }],
+    [running, "clock sync", { en: /^Sets its clock from your phone\. /, fr: /^Règle son horloge d’après votre téléphone\. / }],
   ];
   for (const [answers, command, expected] of cases) {
     for (const lang of ["en", "fr"]) {
@@ -240,11 +249,21 @@ test("the checks remind people to resync the clock after a restart, before the a
       const clock = list.find((c) => c.id === "clock");
       assert.equal(clock.command, command, `${lang} ${command}`);
       assert.match(clock.expect, expected[lang], `${lang} ${command}`);
-      assert.match(clock.expect, lang === "en"
-        ? /routing can continue without a correct clock, but stale advert timing can prevent companions from accepting a new advert/
-        : /l’acheminement peut continuer même si l’horloge est inexacte, mais une heure d’annonce périmée peut empêcher les compagnons d’accepter une nouvelle annonce/);
+      assert.ok(clock.expect.includes(CLOCK[lang]), `${lang} ${command}: the plain clock sentence`);
+      assert.doesNotMatch(clock.expect, /stale|advert timing|routing|acheminement|périmée/, `${lang} ${command}: no jargon`);
       assert.ok(list.findIndex((c) => c.id === "clock") < list.findIndex((c) => c.id === "advert"), `${lang}: the clock comes before the advert`);
     }
+  }
+});
+
+test("the checks' introduction says only the clock can change", () => {
+  for (const lang of ["en", "fr"]) {
+    for (const key of ["check.hint.console", "check.hint.phone"]) {
+      const hint = text.t(key, lang);
+      assert.doesNotMatch(hint, /Nothing here changes|Aucune ne change/, `${lang} ${key}`);
+      assert.match(hint, lang === "en" ? /change nothing, except/ : /ne changent rien, sauf/, `${lang} ${key}`);
+    }
+    assert.match(text.t("check.hint.phone", lang), /`clock sync`/);
   }
 });
 

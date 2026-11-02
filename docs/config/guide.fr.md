@@ -405,6 +405,27 @@ micrologiciel 1.16 ou plus récent :
 `region save`
 :   Enregistre les réglages de région.
 
+### Sauvegarder un répéteur en service { #back-up }
+
+Un répéteur déjà en service a une identité : sa clé privée. Les autres appareils
+le reconnaissent par cette clé, et elle ne peut pas être recréée si elle est
+perdue. Avant de le programmer, sauvegardez-le :
+
+1. Notez son nom et son mot de passe administrateur.
+2. Branchez-le par USB, ouvrez la Console dans
+   l’[outil de programmation MeshCore](https://flasher.meshcore.io/), envoyez
+   `get prv.key` et gardez la réponse dans votre gestionnaire de mots de passe.
+   Ça ne fonctionne que par USB.
+3. Ne l’effacez jamais dans l’outil de programmation.
+
+Si la programmation l’efface quand même, par exemple quand vous passez au
+micrologiciel d’observateur, remettez la clé dans la Console avec `set prv.key`
+suivi de la clé sauvegardée, puis `reboot`. Les deux commandes figurent dans la
+[référence des commandes MeshCore (en anglais)](https://docs.meshcore.io/cli_commands/#view-or-change-this-nodes-identity-private-key).
+
+Ne partagez jamais la clé privée : quiconque l’a peut se faire passer pour votre
+répéteur.
+
 ### Retirer les anciennes régions { #old-regions }
 
 Un répéteur déjà en service peut encore avoir des régions d’une ancienne
@@ -512,7 +533,10 @@ Ces lignes concernent seulement un répéteur observateur.
 :   Redémarre pour que tous les réglages prennent effet.
 
 Après le redémarrage, l’outil propose quelques vérifications, comme `ver` et
-`region`. Elles affichent seulement ses réglages, sans rien changer.
+`region`. Elles affichent seulement ses réglages. La seule exception est
+`clock sync`, qui règle son horloge : après un redémarrage, son horloge est
+souvent fausse, et les téléphones peuvent ignorer ses annonces tant qu’elle
+n’est pas réglée.
 
 ### Détection des boucles { #loop-detection }
 

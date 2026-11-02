@@ -8,7 +8,7 @@ task: start-repeater
 scope: canada-baseline
 status: verified
 owner: docs-ux
-last_reviewed: 2026-10-29
+last_reviewed: 2026-11-02
 review_by: 2026-12-31
 tested_with:
   content_baseline: 7daceca
@@ -93,10 +93,10 @@ Le répéteur est prêt à être installé lorsque :
 2. il envoie une annonce;
 3. un appareil compagnon fiable à proximité reçoit cette annonce.
 
-Après chaque redémarrage, synchronisez de nouveau l’horloge du répéteur avant
-d’envoyer l’annonce. L’acheminement peut continuer même si l’horloge est
-inexacte, mais une heure d’annonce périmée peut empêcher les compagnons
-d’accepter une nouvelle annonce.
+Chaque fois que le répéteur redémarre, réglez de nouveau son horloge avec
+`clock sync` depuis l’application MeshCore avant d’envoyer l’annonce. Après un
+redémarrage, son horloge est souvent fausse, et les téléphones peuvent ignorer
+ses annonces tant qu’elle n’est pas réglée.
 
 Utilisez la [liste de vérification du répéteur](verify.md#repeater).
 

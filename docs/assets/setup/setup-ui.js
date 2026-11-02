@@ -649,13 +649,13 @@
     },
 
     status: pair("status", null, [["new", "new"], ["running", "running"]], function (body) {
-      if (state.answers.status === "running") body.appendChild(note("warn", t("status.backup")));
+      if (state.answers.status === "running") body.appendChild(note("warn", para(rich("status.backup", null, LINKS.flasher))));
     }),
 
     reflash: pair("reflash", { key: "reflash.help" }, [["yes", true], ["no", false]]),
 
     observerFirmware: pair("observerFirmware", { key: "observerFirmware.help", anchor: "repeater-observers" }, [["yes", "yes"], ["no", "no"]], function (body) {
-      if (state.answers.observerFirmware === "no") body.appendChild(note("warn", t("observerFirmware.switch")));
+      if (state.answers.observerFirmware === "no") body.appendChild(note("warn", para(rich("observerFirmware.switch"))));
     }),
 
     bootloader: {
@@ -1267,7 +1267,7 @@
     if (!state.data) return loading(body);
     var a = state.answers;
     var phone = Flow.route(a) === "phone";
-    body.appendChild(para(t(phone ? "check.hint.phone" : "check.hint.console"), { class: "setup-hint" }));
+    body.appendChild(para(rich(phone ? "check.hint.phone" : "check.hint.console"), { class: "setup-hint" }));
     body.appendChild(el("ol", { class: "setup-commands" }, Commands.checks(a, state.data, lang).map(function (item) {
       var code = el("code", { class: "setup-command__code", text: item.command });
       return el("li", { class: "setup-command", "data-setup-check": item.id }, [code, el("p", { class: "setup-command__expect" }, codeText(item.expect)),

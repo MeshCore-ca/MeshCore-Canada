@@ -8,7 +8,7 @@ task: verify-first-success
 scope: canada-baseline
 status: verified
 owner: docs-ux
-last_reviewed: 2026-10-29
+last_reviewed: 2026-11-02
 review_by: 2026-12-31
 tested_with:
   content_baseline: 7daceca
@@ -48,9 +48,9 @@ If the advert is missing, compare radio and path settings before reflashing.
 
 1. Keep the repeater accessible on the bench.
 2. Reboot it and confirm the intended settings remain.
-3. Resync the repeater clock after every reboot. Routing can continue without a
-   correct clock, but stale advert timing can prevent companions from accepting
-   a new advert.
+3. Each time it reboots, set its clock again with `clock sync` from the MeshCore
+   app. After a restart its clock is often wrong, and phones may ignore its
+   announcements until it's set.
 4. Send an advert from the repeater.
 5. Confirm a nearby known-good companion receives it.
 6. Repeat the check after any antenna, power, or installation change.

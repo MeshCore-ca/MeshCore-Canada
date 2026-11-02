@@ -57,8 +57,8 @@ test("destructive flash actions on the guide pages are gated by backup warnings"
 
 test("the setup tool erases only new boards and warns to back up a running one first", () => {
   const warn = {
-    en: /Back it up first\. Export its private key.*Never erase it in the flasher: that deletes its identity/,
-    fr: /Sauvegardez-la d’abord\. Exportez sa clé privée.*Ne l’effacez jamais dans l’outil de programmation : ça supprime son identité/,
+    en: /Back it up first\. .*save its private key.*`get prv\.key`.*Never erase it in the flasher: that deletes its identity/,
+    fr: /Sauvegardez-la d’abord\. .*sauvegarder sa clé privée.*`get prv\.key`.*Ne l’effacez jamais dans l’outil de programmation : ça supprime son identité/,
   };
   const eraseNew = {
     en: { esp32: /^Tick Erase device, since it's a new board\./, nrf52: /^Skip Erase Flash unless your board's instructions ask for it\./ },
@@ -68,7 +68,7 @@ test("the setup tool erases only new boards and warns to back up a running one f
     en: { esp32: /^Leave Erase device unticked\./, nrf52: /^Don't click Erase Flash\./ },
     fr: { esp32: /^Laissez Erase device décoché\./, nrf52: /^Ne cliquez pas sur Erase Flash\./ },
   };
-  const backUpFirstOnSwitch = { en: /Back up its private key first/, fr: /Sauvegardez d’abord sa clé privée/ };
+  const backUpFirstOnSwitch = { en: /Save its private key first/, fr: /Sauvegardez d’abord sa clé privée/ };
 
   for (const lang of ["en", "fr"]) {
     assert.match(setupText.t("status.backup", lang), warn[lang], `${lang}: a running board is backed up before anything else`);
@@ -81,7 +81,7 @@ test("the setup tool erases only new boards and warns to back up a running one f
 
   // The warning shows on the "new or running" screen, which comes before the flash step; the flash step then picks its erase line by that same answer.
   const ui = read("docs/assets/setup/setup-ui.js");
-  assert.match(ui, /status === "running"\) body\.appendChild\(note\("warn", t\("status\.backup"\)\)\)/);
+  assert.match(ui, /status === "running"\) body\.appendChild\(note\("warn", para\(rich\("status\.backup", null, LINKS\.flasher\)\)\)\)/);
   assert.match(ui, /t\("flash\.erase\." \+ [^;]*"-" \+ \(a\.status === "running" \? "running" : "new"\)\)/);
   const flow = read("docs/assets/setup/setup-flow.js");
   const askedStatus = flow.indexOf('steps.push("board", "status")');

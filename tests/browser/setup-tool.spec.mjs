@@ -121,7 +121,9 @@ test("running repeater via phone", async ({ page }) => {
   await answer(page, "board", "rak4631");
   await expectStep(page, "status");
   await choose(page, "running");
-  await expect(step(page)).toContainText(firstSentence(T("status.backup", "en")));
+  // The back-up warning says how: the private key comes off over USB with `get prv.key`.
+  await expect(step(page).locator(".setup-note--warn")).toHaveText(linked("status.backup", "en"));
+  await expect(step(page).locator(".setup-note--warn a")).toHaveAttribute("href", "https://flasher.meshcore.io/");
   await next(page);
   await answer(page, "reflash", "no");
   await expectStep(page, "version");
@@ -167,7 +169,7 @@ test("running repeater via phone", async ({ page }) => {
   await expect(page.locator("[data-setup-reply-status]")).toHaveText(T("region.clean", "en"));
   await next(page);
   await expectStep(page, "check");
-  await expect(step(page)).toContainText(T("check.hint.phone", "en"));
+  await expect(step(page)).toContainText(plain("check.hint.phone", "en"));
   // From the app the repeater takes the time from the phone, so the clock check is the sync itself, before the advert.
   await expect(page.locator("[data-setup-check] .setup-command__code")).toHaveText(["ver", "get name", "region", "clock sync", "advert"]);
   await expect(page.locator('[data-setup-check="clock"]')).toContainText(plain("check.clock.phone", "en"));

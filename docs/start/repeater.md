@@ -8,7 +8,7 @@ task: start-repeater
 scope: canada-baseline
 status: verified
 owner: docs-ux
-last_reviewed: 2026-10-29
+last_reviewed: 2026-11-02
 review_by: 2026-12-31
 tested_with:
   content_baseline: 7daceca
@@ -87,9 +87,9 @@ The repeater is ready to install when:
 2. it sends an advert; and
 3. a nearby known-good companion receives that advert.
 
-After every reboot, resync the repeater clock before you send the advert. Routing
-can continue without a correct clock, but stale advert timing can prevent
-companions from accepting a new advert.
+Each time the repeater reboots, set its clock again with `clock sync` from the
+MeshCore app before you send the advert. After a restart its clock is often
+wrong, and phones may ignore its announcements until it's set.
 
 Use the [repeater verification checklist](verify.md#repeater).
 

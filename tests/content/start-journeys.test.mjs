@@ -195,17 +195,23 @@ test("the retired setup pages and their assets are gone, in both languages", () 
   assert.doesNotMatch(config, /^ +(?:Flash a repeater|MQTT firmware): /m, "retired pages have no French navigation titles");
 });
 
-test("the repeater bench test says to resync the clock after every reboot, and why", () => {
+test("the repeater bench test says to set the clock after every reboot, and why, in the tool's words", () => {
   const flat = (source) => source.replace(/\s+/g, " ");
-  for (const [page, advice] of [
-    ["start/repeater.md", /After every reboot, resync the repeater clock before you send the advert\. Routing can continue without a correct clock, but stale advert timing can prevent companions from accepting a new advert\./],
-    ["start/verify.md", /Resync the repeater clock after every reboot\. Routing can continue without a correct clock, but stale advert timing can prevent companions from accepting a new advert\./],
-    ["start/repeater.fr.md", /Après chaque redémarrage, synchronisez de nouveau l’horloge du répéteur avant d’envoyer l’annonce\. L’acheminement peut continuer même si l’horloge est inexacte, mais une heure d’annonce périmée peut empêcher les compagnons d’accepter une nouvelle annonce\./],
-    ["start/verify.fr.md", /Synchronisez de nouveau l’horloge du répéteur après chaque redémarrage\. L’acheminement peut continuer même si l’horloge est inexacte, mais une heure d’annonce périmée peut empêcher les compagnons d’accepter une nouvelle annonce\./],
+  // The same plain sentence as the setup tool's clock check (setup-commands.test.mjs).
+  const why = {
+    en: "After a restart its clock is often wrong, and phones may ignore its announcements until it's set.",
+    fr: "Après un redémarrage, son horloge est souvent fausse, et les téléphones peuvent ignorer ses annonces tant qu’elle n’est pas réglée."
+  };
+  for (const [page, advice, lang] of [
+    ["start/repeater.md", "Each time the repeater reboots, set its clock again with `clock sync` from the MeshCore app before you send the advert.", "en"],
+    ["start/verify.md", "Each time it reboots, set its clock again with `clock sync` from the MeshCore app.", "en"],
+    ["start/repeater.fr.md", "Chaque fois que le répéteur redémarre, réglez de nouveau son horloge avec `clock sync` depuis l’application MeshCore avant d’envoyer l’annonce.", "fr"],
+    ["start/verify.fr.md", "Chaque fois qu’il redémarre, réglez de nouveau son horloge avec `clock sync` depuis l’application MeshCore.", "fr"],
   ]) {
     const source = readDoc(page);
-    const section = page.startsWith("start/verify") ? source.slice(source.search(/^## (Repeater|Répéteur)/m)) : source;
-    assert.match(flat(section), advice, page);
+    const section = flat(page.startsWith("start/verify") ? source.slice(source.search(/^## (Repeater|Répéteur)/m)) : source);
+    assert.ok(section.includes(`${advice} ${why[lang]}`), page);
+    assert.doesNotMatch(section, /stale advert|advert timing|heure d’annonce périmée/, `${page}: no jargon`);
   }
 });
 

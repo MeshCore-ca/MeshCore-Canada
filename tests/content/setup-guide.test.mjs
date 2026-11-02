@@ -23,6 +23,9 @@ const anchors = [
   "companions",
   "starter-regions",
   "planning-extensions",
+  "back-up",
+  "old-regions",
+  "older-firmware",
 ];
 
 // The values the page's "What each setting does" examples use: a Belleville repeater in ytr (Quinte West),
@@ -83,6 +86,33 @@ test("every section the tool links to is on both pages, with the same ids", () =
     for (const id of anchors) {
       assert.match(source, new RegExp(`^#{2,3} .+\\{ ?#${id} ?\\}$`, "m"), `${path} needs #${id}`);
     }
+  }
+});
+
+test("every guide link in the tool points at a section both pages have", () => {
+  const ui = read("docs/assets/setup/setup-ui.js");
+  const used = [...ui.matchAll(/anchor: "([a-z-]+)"|LINKS\.guide \+ "#([a-z-]+)"/g)].map((match) => match[1] || match[2]);
+  assert.ok(used.length >= 5, `expected the tool's guide links, found ${used.length}`);
+  for (const id of used) assert.ok(anchors.includes(id), `#${id} belongs in the list of sections the tool links to`);
+});
+
+test("the back-up advice says how to save the private key and put it back, in the tool and on the guide", () => {
+  for (const lang of ["en", "fr"]) {
+    const backup = text.t("status.backup", lang);
+    assert.match(backup, /`get prv\.key`/, `${lang} status.backup says how to save the key`);
+    assert.match(backup, lang === "en" ? /USB/ : /USB/, `${lang} status.backup: over USB`);
+    assert.match(backup, lang === "en" ? /password manager/ : /gestionnaire de mots de passe/, `${lang} status.backup: where to keep it`);
+    const restore = text.t("observerFirmware.switch", lang);
+    assert.match(restore, /`get prv\.key`/, `${lang} observerFirmware.switch says how to save the key`);
+    assert.match(restore, /`set prv\.key`.*`reboot`/, `${lang} observerFirmware.switch says how to put it back`);
+  }
+  for (const path of Object.values(pages)) {
+    const source = read(path);
+    const section = source.slice(source.search(/\{ ?#back-up ?\}/), source.search(/\{ ?#old-regions ?\}/));
+    assert.ok(section.length > 200, `${path} needs a back-up section before the old regions`);
+    assert.match(section, /`get prv\.key`/, path);
+    assert.match(section, /`set prv\.key/, path);
+    assert.match(section, /docs\.meshcore\.io\/cli_commands\/#view-or-change-this-nodes-identity-private-key/, path);
   }
 });
 
