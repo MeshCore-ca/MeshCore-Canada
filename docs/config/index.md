@@ -13,16 +13,16 @@ evidence: tests/browser/setup-tool.spec.mjs
 difficulty: beginner
 estimated_time: 20-40 minutes
 page_styles:
-  - assets/setup/setup.css?v=20261102-1
+  - assets/setup/setup.css?v=20261102-2
 page_scripts:
   - assets/regions/modules/iata-scopes.js?v=20261013-1
   - assets/regions/modules/scope-migration.js?v=20260926-2
   - assets/javascripts/place-search.js?v=20260925-2
-  - assets/setup/setup-text.js?v=20261102-1
+  - assets/setup/setup-text.js?v=20261102-2
   - assets/setup/setup-flow.js?v=20261102-1
   - assets/setup/setup-place.js?v=20261102-1
-  - assets/setup/setup-commands.js?v=20261102-1
-  - assets/setup/setup-ui.js?v=20261102-1
+  - assets/setup/setup-commands.js?v=20261102-2
+  - assets/setup/setup-ui.js?v=20261102-2
 hide:
   - navigation
   - toc
@@ -31,6 +31,8 @@ hide:
 
 Answer a few questions, one at a time, and get every command to paste into your repeater, with what each one does.
 
-<div data-setup-tool></div>
+<div data-setup-tool><p class="setup-fallback">The setup tool didn't load. Reload the page.</p></div>
 
 <noscript>The setup tool needs JavaScript. [How repeaters work](guide.md) explains every step and command it would show.</noscript>
+
+<small>[How repeaters work](guide.md) · [Data sources](../assets/regions/NOTICE.txt) · [Share feedback](https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54/46)</small>

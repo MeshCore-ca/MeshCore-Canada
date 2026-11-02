@@ -28,7 +28,9 @@ const PLACES = {
   "Saint John": [row("Saint John", "New Brunswick", 45.27271, -66.06766)],
   "St. John's": [row("St. John's", "Newfoundland and Labrador", 47.56494, -52.70931)],
   // The search says Québec; the region map puts this spot in Ontario.
-  "Ottawa": [row("Ottawa", "Québec", 45.4215, -75.6972)]
+  "Ottawa": [row("Ottawa", "Québec", 45.4215, -75.6972)],
+  // A spot no region covers (Seattle's coordinates, given a Canadian province so the search keeps it).
+  "Faraway": [row("Faraway", "British Columbia", 47.6062, -122.3321)]
 };
 
 async function mockGeocoder(page, places = PLACES) {
@@ -152,8 +154,8 @@ for (const lang of LANGS) {
       await expect(page.locator(`[data-setup-choice="${id}"]`)).toBeDisabled();
     }
     // The reason is on the card and read out with the board's name.
-  await expect(page.locator('[data-setup-card="rak4631"]')).toContainText(T("board.no-wifi.detail", lang));
-  await expect(page.locator('[data-setup-choice="rak4631"]')).toHaveAccessibleDescription(T("board.no-wifi.detail", lang));
+    await expect(page.locator('[data-setup-card="rak4631"]')).toContainText(T("board.no-wifi.detail", lang));
+    await expect(page.locator('[data-setup-choice="rak4631"]')).toHaveAccessibleDescription(T("board.no-wifi.detail", lang));
     await expect(step(page)).toContainText(T("board.observer-nrf52", lang));
     await expect(page.locator('[data-setup-choice="heltec-v3"]')).toBeEnabled();
     // A board the list doesn't name can still be a repeater observer, if the observer flasher has it.
@@ -175,6 +177,19 @@ for (const lang of LANGS) {
     await expect(page.locator('[data-setup-choice="repeater"]')).toHaveAttribute("aria-pressed", "true");
   });
 }
+
+test("a greyed-out nRF52 board from a link is not picked and can't be clicked", async ({ page }) => {
+  await page.goto(siteRoute("/config/?type=observer&repeat=both&board=rak4631"));
+  await expectStep(page, "board");
+  const rak = page.locator('[data-setup-choice="rak4631"]');
+  await expect(rak).toHaveAttribute("aria-pressed", "false");
+  await expect(page.locator('[data-setup-card="rak4631"]')).not.toHaveClass(/is-picked/);
+  await page.locator('[data-setup-card="rak4631"]').click();
+  await expect(rak).toHaveAttribute("aria-pressed", "false");
+  await expect(nextButton(page)).toBeDisabled();
+  await choose(page, "heltec-v3");
+  await expect(nextButton(page)).toBeEnabled();
+});
 
 test("running repeater via phone", async ({ page }) => {
   await mockGeocoder(page);
@@ -283,6 +298,19 @@ test("edge repeater offers neighbouring regions and Ontario cross-border options
   expect(city).toContain("region allowf *");
 });
 
+test("French pages name the cross-border networks in French", async ({ page }) => {
+  await page.goto(siteRoute(`/fr/config/?type=repeater&board=heltec-v3&status=running&reflash=0&firmware=1.16&role=edge&${BELLEVILLE}`));
+  await expectStep(page, "neighbours");
+  await expect(page.locator('[data-setup-external="pennsylvania"]')).toHaveText("Pennsylvanie");
+  await expect(page.locator('[data-setup-external="western-new-york"]')).toHaveText("Ouest de l’État de New York");
+  await page.locator('[data-setup-neighbour="none"] input').check();
+  await page.locator('[data-setup-external="pennsylvania"] input').check();
+  await next(page);
+  await next(page);
+  await expectStep(page, "commands");
+  await expect(page.locator("[data-setup-notes]")).toContainText(T("note.network", "fr", { network: "Pennsylvanie" }));
+});
+
 test("ambiguous and unknown towns", async ({ page }) => {
   const queries = await mockGeocoder(page);
   // A running repeater on the phone route with its version known: the first open question is the town.
@@ -295,6 +323,8 @@ test("ambiguous and unknown towns", async ({ page }) => {
   await expect(step(page)).toContainText(T("town.places", "en"));
   await expect(choices).toHaveCount(3);
   await expect(choices).toContainText(["Saint-Jean-sur-Richelieu", "Saint John", "St. John's"]);
+  // Each place says which region it is in, so two with the same name can be told apart.
+  await expect(page.locator("[data-setup-step] [data-setup-card]")).toContainText(["Québec · Montreal (yul)", "New Brunswick · Saint John (ysj)", "Newfoundland and Labrador · Newfoundland (yyt)"]);
   await expect(page.locator("[data-setup-region]")).toHaveCount(0);
   await expect(nextButton(page)).toBeDisabled();
   await choices.filter({ hasText: "Saint John" }).click();
@@ -306,6 +336,8 @@ test("ambiguous and unknown towns", async ({ page }) => {
   await expect(page.locator("[data-setup-town-message]")).toHaveText(T("town.no-match", "en"));
   await expect(nextButton(page)).toBeDisabled();
   await expect(page.locator("[data-setup-map]")).toHaveAttribute("href", /config\/map\/$/);
+  // The map is for looking up the code to bring back here, not for starting over there.
+  await expect(page.locator(".setup-map-link")).toHaveText(linked("town.map-hint", "en"));
   await page.locator("[data-setup-code]").fill("nope");
   await page.locator("[data-setup-code]").press("Enter");
   await expect(page.locator("[data-setup-code-message]")).toHaveText(linked("town.code-unknown", "en"));
@@ -313,6 +345,12 @@ test("ambiguous and unknown towns", async ({ page }) => {
   await page.locator("[data-setup-code]").press("Enter");
   await expect(page.locator("[data-setup-region]")).toContainText("ytr");
   await expect(nextButton(page)).toBeEnabled();
+
+  // A place no region covers: say so and offer the code or name box.
+  await searchTown(page, "Faraway");
+  await expect(page.locator("[data-setup-town-message]")).toHaveText(linked("town.none", "en"));
+  await expect(page.locator("[data-setup-code]")).toBeVisible();
+  await expect(nextButton(page)).toBeDisabled();
 
   // The search and the region map disagree about the province: explain and let the person choose.
   await searchTown(page, "Ottawa");
@@ -341,6 +379,25 @@ test("town search offline offers a region code and the map", async ({ page }) =>
   await searchTown(page, "Belleville");
   await expect(page.locator("[data-setup-town-message]")).toHaveText(linked("town.search-failed", "fr"));
   await expect(page.locator("[data-setup-step] a[href$='config/map/']")).not.toHaveCount(0);
+  await page.locator("[data-setup-code]").fill("ytr");
+  await page.locator("[data-setup-code]").press("Enter");
+  await expect(page.locator("[data-setup-region]")).toContainText("ytr");
+});
+
+test("a town search that never answers gives up and offers the code box", async ({ page }) => {
+  await page.clock.install();
+  await page.route("https://geolocator.api.geo.ca/**", () => { /* never answers */ });
+  await page.goto(siteRoute("/config/?type=repeater&board=heltec-v3&status=running&reflash=0&firmware=1.16"));
+  await expectStep(page, "town");
+  await expect(page.locator("[data-setup-town-results]")).not.toContainText(T("tool.loading", "en"));
+  await searchTown(page, "Belleville");
+  await expect(page.locator("[data-setup-town-results]")).toContainText(T("town.searching", "en"));
+  // Ten seconds pass on the page's clock with no answer.
+  await expect.poll(async () => {
+    await page.clock.runFor(1_000);
+    return page.locator("[data-setup-town-message]").count();
+  }, { timeout: 20_000 }).toBe(1);
+  await expect(page.locator("[data-setup-town-message]")).toHaveText(linked("town.search-failed", "en"));
   await page.locator("[data-setup-code]").fill("ytr");
   await page.locator("[data-setup-code]").press("Enter");
   await expect(page.locator("[data-setup-region]")).toContainText("ytr");
@@ -519,6 +576,27 @@ test("map link opens with the region filled in", async ({ page }) => {
   await expectStep(page, "role");
 });
 
+test("start over asks first and sits away from the next button", async ({ page }) => {
+  await page.goto(siteRoute(`/config/?type=repeater&board=heltec-v3&status=running&reflash=0&firmware=1.16&role=city&name=Belleville_R1&${BELLEVILLE}`));
+  await expectStep(page, "commands");
+  await next(page);
+  await expectStep(page, "check");
+  await expect(nextButton(page)).toHaveCount(0);
+  const answers = page.url();
+  await page.locator("[data-setup-restart]").click();
+  await expect(step(page)).toContainText(T("restart.confirm", "en"));
+  await expect(page.locator("[data-setup-restart-no]")).toBeFocused();
+  await page.locator("[data-setup-restart-no]").click();
+  await expect(page.locator("[data-setup-restart]")).toBeFocused();
+  await expectStep(page, "check");
+  expect(page.url()).toBe(answers);
+  await page.locator("[data-setup-restart]").click();
+  await page.locator("[data-setup-restart-yes]").click();
+  await expectStep(page, "type");
+  await expect(page.locator("[data-setup-step] [aria-pressed='true']")).toHaveCount(0);
+  expect(new URL(page.url()).search).toBe("");
+});
+
 test("old and unknown region codes in a link", async ({ page }) => {
   // An old code moves to its current region.
   await page.goto(siteRoute("/config/?type=repeater&board=heltec-v3&status=running&reflash=0&firmware=1.16&tag=ott&province=on"));
@@ -541,6 +619,30 @@ test("the region map hands off to the tool", async ({ page }) => {
   await link.click();
   await expectStep(page, "type");
   await expect.poll(() => new URL(page.url()).searchParams.get("tag")).toBe("ytr");
+});
+
+test("the page credits its region data", async ({ page }) => {
+  for (const [route, words] of [["/config/", "Data sources"], ["/fr/config/", "Sources de données"]]) {
+    await page.goto(siteRoute(route));
+    await expect(page.getByRole("link", { name: words })).toHaveAttribute("href", /assets\/regions\/NOTICE\.txt$/);
+  }
+});
+
+test("a script that fails to load leaves a plain message, not an empty box", async ({ page }) => {
+  // One of the setup scripts missing: the tool says so at once.
+  await page.route("**/assets/setup/setup-commands.js*", (route) => route.abort());
+  await page.goto(siteRoute("/fr/config/"));
+  const tool = page.locator("[data-setup-tool]");
+  await expect(tool.getByRole("alert")).toHaveText("L’outil de configuration n’a pas pu se charger. Rechargez la page.");
+  expect((await tool.boundingBox()).height).toBeLessThan(120);
+
+  // The tool's own script missing: the page's sentence shows once the wait is over.
+  await page.unroute("**/assets/setup/setup-commands.js*");
+  await page.route("**/assets/setup/setup-ui.js*", (route) => route.abort());
+  await page.goto(siteRoute("/config/"));
+  await expect(tool.locator(".setup-fallback")).toBeVisible({ timeout: 16_000 });
+  await expect(tool).toHaveText("The setup tool didn't load. Reload the page.");
+  await expect.poll(async () => (await tool.boundingBox()).height).toBeLessThan(120);
 });
 
 test("region data loads only when the town step needs it", async ({ page }) => {
@@ -584,12 +686,40 @@ test("language switch keeps the answers", async ({ page }) => {
   await page.locator(".md-select > button").first().click();
   await page.locator('.md-select__link[hreflang="fr"]').click();
   await expect(page.locator("html")).toHaveAttribute("lang", "fr");
-  // The first open question in French, with the earlier answers kept.
-  await expectStep(page, "status");
-  await expect(progress(page)).toContainText(T("step.status", "fr"));
-  await page.locator("[data-setup-back]").click();
+  // The same screen in French, with the answers kept.
   await expectStep(page, "board");
+  await expect(progress(page)).toContainText(T("step.board", "fr"));
   await expect(page.locator('[data-setup-choice="heltec-v4"]')).toHaveAttribute("aria-pressed", "true");
+  await next(page);
+  await expectStep(page, "status");
+});
+
+test("language switch on the commands screen after flashing keeps the place and the commands", async ({ page }) => {
+  await page.goto(siteRoute(`/config/?type=repeater&board=rak4631&status=new&firmware=1.16&role=city&name=Belleville_R1&${BELLEVILLE}`));
+  await confirmStep(page, "bootloader");
+  await confirmStep(page, "flash");
+  for (const id of ["version", "town", "role", "name"]) {
+    await expectStep(page, id);
+    await next(page);
+  }
+  await expectStep(page, "commands");
+  const english = await codes(page).allTextContents();
+  await page.locator('[data-setup-command="name"] [data-done]').click();
+  // The flashed and bootloader ticks never go in the address, even while switching.
+  expect(page.url()).not.toMatch(/flashed|bootloader|step=/);
+  await page.locator(".md-select > button").first().click();
+  await page.locator('.md-select__link[hreflang="fr"]').click();
+  await expect(page.locator("html")).toHaveAttribute("lang", "fr");
+  await expectStep(page, "commands");
+  const french = await codes(page).allTextContents();
+  const notPassword = (line) => !line.startsWith("password ");
+  expect(french.filter(notPassword)).toEqual(english.filter(notPassword));
+  expect(french).toContain(`password <${T("ph.password", "fr")}>`);
+  await expect(page.locator('[data-setup-command="name"] [data-done]')).toHaveAttribute("aria-pressed", "true");
+  expect(page.url()).not.toMatch(/flashed|bootloader|step=/);
+  // A plain reload is a fresh start of this tab's page: the flash ticks have to be given again.
+  await page.reload();
+  await expectStep(page, "bootloader");
 });
 
 test("copy works on plain HTTP", async ({ page }) => {
@@ -769,6 +899,10 @@ for (const lang of LANGS) {
 
     await page.goto(siteRoute(`${ROUTES[lang]}?type=observer&repeat=both&board=heltec-v3&status=running&observerFirmware=yes&firmware=1.16&role=edge&neighbours=ygk&name=Belleville_Obs1&${BELLEVILLE}`));
     await expectStep(page, "commands");
+    // The MQTT slot warning comes right before the repeater observer lines.
+    const slots = page.locator('[data-setup-note="mqtt-slots"]');
+    await expect(slots).toContainText(firstSentence(T("note.mqtt-slots", lang)));
+    expect(await slots.evaluate((note) => note.nextElementSibling.querySelector("[data-setup-command]").dataset.setupCommand)).toBe("iata");
     await page.locator("[data-setup-reply]").fill("*^ F\n ott F");
     await page.locator('[data-setup-command="name"] [data-done]').click();
     await page.locator("[data-setup-help]").first().click();

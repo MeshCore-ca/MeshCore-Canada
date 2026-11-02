@@ -246,8 +246,10 @@
     if (data.catalog.hierarchy[result.home].provinces.indexOf(result.province) === -1) {
       out.push(say("note.province", lang, { region: tagName(result.home, data, lang) }));
     }
+    var french = lib("MeshCoreSetupText").networkLabelsFr || {};
     result.externalPaths.forEach(function (record) {
-      if (record.status !== "documented") out.push(say("note.network", lang, { network: (lang === "fr" && record.labelFr) || record.label }));
+      var name = (lang === "fr" && (record.labelFr || (has(french, record.id) && french[record.id]))) || record.label;
+      if (record.status !== "documented") out.push(say("note.network", lang, { network: name }));
     });
     return out;
   }

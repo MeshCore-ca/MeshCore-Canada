@@ -149,6 +149,9 @@
     };
   }
 
+  // How long a town search may take before the tool offers the region code box instead.
+  var SEARCH_TIMEOUT = 10000;
+
   // Steps whose screen shows region data, so it is drawn again when the data arrives.
   var DATA_STEPS = ["town", "radio", "role", "neighbours", "commands", "check"];
   // Answers whose change also clears the version that was typed.
@@ -208,9 +211,47 @@
       history.replaceState(history.state, "", location.pathname + (query ? "?" + query : "") + location.hash);
     } catch (error) { /* a sandboxed page can refuse; the tool still works */ }
     document.querySelectorAll(".md-select__link[hreflang]").forEach(function (anchor) {
-      if (!anchor.dataset.setupBase) anchor.dataset.setupBase = anchor.href.split(/[?#]/)[0];
+      if (!anchor.dataset.setupBase) {
+        anchor.dataset.setupBase = anchor.href.split(/[?#]/)[0];
+        anchor.addEventListener("click", saveForLanguageSwitch);
+      }
       anchor.href = anchor.dataset.setupBase + (query ? "?" + query : "");
     });
+  }
+
+  // A language switch loads the other page with the answers in its address. What never
+  // goes in an address (the flashed and bootloader ticks, the pasted reply), the Done
+  // ticks and the current step go in this tab's sessionStorage, for that one load only.
+  var HANDOFF_KEY = "meshcore-setup:language-switch";
+
+  function saveForLanguageSwitch() {
+    var a = state.answers;
+    try {
+      sessionStorage.setItem(HANDOFF_KEY, JSON.stringify({
+        query: Flow.toQuery(a), step: state.step, at: Date.now(),
+        bootloader: a.bootloader === true, flashed: a.flashed === true,
+        reply: typeof a.regionReply === "string" ? a.regionReply : "",
+        ticks: Object.keys(state.ticks).filter(function (key) { return state.ticks[key]; })
+      }));
+    } catch (error) { /* storage blocked: the answers in the address still carry over */ }
+  }
+
+  // Takes back what the other language's page saved, if it is for these same answers.
+  // Returns the step it was on, or null.
+  function takeLanguageSwitch() {
+    var saved;
+    try {
+      saved = JSON.parse(sessionStorage.getItem(HANDOFF_KEY) || "null");
+      sessionStorage.removeItem(HANDOFF_KEY);
+    } catch (error) {
+      return null;
+    }
+    if (!saved || typeof saved !== "object" || saved.query !== Flow.toQuery(state.answers) || !(Date.now() - saved.at < 600000)) return null;
+    if (saved.bootloader === true) state.answers.bootloader = true;
+    if (saved.flashed === true) state.answers.flashed = true;
+    if (typeof saved.reply === "string" && saved.reply) state.answers.regionReply = saved.reply.slice(0, 4000);
+    (Array.isArray(saved.ticks) ? saved.ticks : []).forEach(function (key) { if (typeof key === "string") state.ticks[key] = true; });
+    return typeof saved.step === "string" ? saved.step : null;
   }
 
   // ------------------------------------------------------------------ region data
@@ -330,7 +371,8 @@
   function networkName(id) {
     var paths = state.data && state.data.catalog.externalRegionPaths;
     var entry = paths && has(paths, id) ? paths[id] : null;
-    return entry ? (isFrench && entry.labelFr) || entry.label : id;
+    var french = isFrench && (entry && entry.labelFr || (has(Text.networkLabelsFr, id) && Text.networkLabelsFr[id]));
+    return french || (entry ? entry.label : id);
   }
 
   function sayList(values) {
@@ -415,10 +457,9 @@
     var index = ids.indexOf(id);
     var back = el("button", { type: "button", class: "setup-button setup-button--secondary", "data-setup-back": "", disabled: index <= 0,
       on: { click: function () { move(-1); } } }, t("nav.back"));
-    var forward = id === "check"
-      ? el("button", { type: "button", class: "setup-button setup-button--secondary", "data-setup-restart": "", on: { click: restart } }, t("nav.start-over"))
-      : el("button", { type: "button", class: "setup-button", "data-setup-next": "", disabled: !canContinue(id),
-        on: { click: function () { move(1); } } }, t(id === "commands" ? "nav.to-check" : "nav.next"));
+    // The last screen has no Next; Start over is a small link further up, and asks first.
+    var forward = id === "check" ? null : el("button", { type: "button", class: "setup-button", "data-setup-next": "", disabled: !canContinue(id),
+      on: { click: function () { move(1); } } }, t(id === "commands" ? "nav.to-check" : "nav.next"));
     return el("div", { class: "setup-actions" }, [back, forward]);
   }
 
@@ -594,7 +635,7 @@
           body.appendChild(choiceGroup(Flow.BOARDS.filter(function (item) { return item.chip === chip; }).map(function (item) {
             var blocked = observer && chip === "nrf52";
             var detail = blocked ? t("board.no-wifi.detail") : t("board." + chip + ".detail");
-            return choice(item.id, boardName(item), detail, { disabled: blocked, pressed: a.board === item.id, pick: function () {
+            return choice(item.id, boardName(item), detail, { disabled: blocked, pressed: a.board === item.id && !blocked, pick: function () {
               if (choose("board", item.id)) renderStep({ focus: '[data-setup-choice="' + item.id + '"]' });
             } });
           }), labelId));
@@ -879,7 +920,9 @@
     ]);
     body.appendChild(para(t("town.hint"), { class: "setup-hint" }));
     body.appendChild(form);
-    body.appendChild(para(link(t("town.map-link"), LINKS.map, { "data-setup-map": "" }), { class: "setup-map-link" }));
+    var hint = para(rich("town.map-hint", null, LINKS.map), { class: "setup-hint setup-map-link" });
+    hint.querySelector("a").setAttribute("data-setup-map", "");
+    body.appendChild(hint);
     var results = el("div", { class: "setup-town-results", "data-setup-town-results": "" });
     body.appendChild(results);
     renderTownResults(results);
@@ -920,7 +963,7 @@
     if (town.status === "places") {
       box.appendChild(townMessage(t("town.places")));
       box.appendChild(choiceGroup(town.places.map(function (place, index) {
-        return choice("place:" + index, place.name, place.province, { pick: function () { pickPlace(place); } });
+        return choice("place:" + index, place.name, placeDetail(place), { pick: function () { pickPlace(place); } });
       })));
     } else if (town.status === "regions" || town.status === "province" || town.status === "mismatch") {
       if (town.status === "mismatch") box.appendChild(townMessage(t("town.mismatch", town.mismatch)));
@@ -941,6 +984,17 @@
     } else if (a.tag && a.province) {
       box.appendChild(regionCard());
     }
+  }
+
+  // "Québec · Montreal (yul)": the province, and the region(s) the map puts the place in,
+  // so two places with the same name can be told apart.
+  function placeDetail(place) {
+    var regions = [];
+    Place.resolve(place, state.data).options.forEach(function (option) {
+      var name = regionName(option.tag) + " (" + option.tag + ")";
+      if (regions.indexOf(name) === -1) regions.push(name);
+    });
+    return regions.length ? place.province + " · " + sayList(regions) : place.province;
   }
 
   function regionCard() {
@@ -1001,13 +1055,20 @@
       // A region code needs no search.
       var code = Place.fromCode(query, data);
       if (code.length) return offerRegions(code);
-      return Search.lookup(query, lang, function (url) { return window.fetch(url); }).then(function (places) {
+      // A search that hangs is stopped, so the person gets the code box instead of waiting forever.
+      var controller = typeof AbortController === "function" ? new AbortController() : null;
+      var timer = controller && window.setTimeout(function () { controller.abort(); }, SEARCH_TIMEOUT);
+      return Search.lookup(query, lang, function (url) {
+        return window.fetch(url, controller ? { signal: controller.signal } : undefined);
+      }).then(function (places) {
+        window.clearTimeout(timer);
         if (token !== town.token) return;
         if (!places.length) return showTown("no-match");
         if (places.length === 1) return pickPlace(places[0]);
         town.places = places;
         showTown("places");
       }, function () {
+        window.clearTimeout(timer);
         if (token === town.token) showTown("failed");
       });
     }, function () {
@@ -1215,6 +1276,29 @@
     if (a.type === "observer") body.appendChild(note("ok", rich("check.live", null, LINKS.live)));
     body.appendChild(note("ok", rich("check.next", null, LINKS.mounting)));
     body.appendChild(para(t(phone ? "check.recovery.phone" : "check.recovery"), { class: "setup-hint" }));
+    body.appendChild(restartBox());
+  }
+
+  // "Start over", then a plain question before anything is cleared.
+  function restartBox() {
+    var box = el("div", { class: "setup-restart" });
+    function offer(focus) {
+      box.textContent = "";
+      var button = el("button", { type: "button", class: "setup-link-button", "data-setup-restart": "", on: { click: ask } }, t("nav.start-over"));
+      box.appendChild(button);
+      if (focus) button.focus();
+    }
+    function ask() {
+      box.textContent = "";
+      var keep = el("button", { type: "button", class: "setup-button setup-button--secondary setup-button--small", "data-setup-restart-no": "",
+        on: { click: function () { offer(true); } } }, t("restart.no"));
+      var yes = el("button", { type: "button", class: "setup-button setup-button--small", "data-setup-restart-yes": "", on: { click: restart } }, t("restart.yes"));
+      box.appendChild(note("warn", [para(t("restart.confirm"), { id: "setup-restart-question" }),
+        el("div", { class: "setup-restart__buttons", role: "group", "aria-labelledby": "setup-restart-question" }, [keep, yes])]));
+      keep.focus();
+    }
+    offer(false);
+    return box;
   }
 
   // ------------------------------------------------------------------ copy helper
@@ -1285,6 +1369,21 @@
 
   // ------------------------------------------------------------------ mount
 
+  // Shown when a setup script didn't load. setup-text.js may be the missing one, so
+  // these words live here. The pages carry the same sentence for when this file is missing.
+  var FAILED = {
+    en: "The setup tool didn't load. Reload the page.",
+    fr: "L’outil de configuration n’a pas pu se charger. Rechargez la page."
+  };
+
+  function fail(root) {
+    state.root = null;
+    root.removeAttribute("data-setup-ready");
+    root.setAttribute("data-setup-failed", "");
+    root.textContent = "";
+    root.appendChild(el("p", { class: "setup-fallback", role: "alert", text: FAILED[lang] }));
+  }
+
   function mount(root) {
     Flow = globalThis.MeshCoreSetupFlow;
     Place = globalThis.MeshCoreSetupPlace;
@@ -1292,7 +1391,15 @@
     Search = globalThis.MeshCorePlaceSearch;
     Text = globalThis.MeshCoreSetupText;
     if (!root || root.dataset.setupReady === "1" || state.root) return;
-    if (!Flow || !Place || !Commands || !Search || !Text) throw new Error("The setup scripts must load before setup-ui.js");
+    if (!Flow || !Place || !Commands || !Search || !Text || !globalThis.MeshCoreIataScopes || !globalThis.MeshCoreScopeMigration) return fail(root);
+    try {
+      start(root);
+    } catch (error) {
+      fail(root);
+    }
+  }
+
+  function start(root) {
     root.dataset.setupReady = "1";
     // Every word here is already in the page's language.
     root.setAttribute("data-i18n-ignore", "");
@@ -1306,8 +1413,13 @@
       state.town.deepLink = place;
       state.town.query = place;
     }
+    var resumed = takeLanguageSwitch();
     buildFrame(root);
-    state.step = firstOpen(stepList());
+    var ids = stepList();
+    var open = firstOpen(ids);
+    // After a language switch, the step the person was on, if every step before it is still answered.
+    var reachable = Flow.isComplete(open, state.answers) ? ids.length - 1 : ids.indexOf(open);
+    state.step = resumed && ids.indexOf(resumed) !== -1 && ids.indexOf(resumed) <= reachable ? resumed : open;
     arrive(state.step);
     renderStep({});
     // A link that already names a town or region needs the region data now.

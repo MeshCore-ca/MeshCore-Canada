@@ -1,10 +1,41 @@
 /* The guided setup tool at /config/: one question per screen (layout A).
    Colours, spacing and type come from the site's tokens, so light and dark both work. */
 
-/* Keep room for the first question while the script loads, without leaving a gap for readers with no JavaScript. */
+/* Keep room for the first question while the scripts load, without leaving a gap for
+   readers with no JavaScript. If the tool still hasn't started after 12 seconds, the
+   room goes and the page's "didn't load" sentence shows instead. */
 @media (scripting: enabled) {
-  [data-setup-tool]:empty {
+  [data-setup-tool]:not([data-setup-ready]):not([data-setup-failed]) {
     min-height: 24rem;
+    animation: setup-give-up 0s 12s forwards;
+  }
+
+  .md-typeset .setup-fallback {
+    visibility: hidden;
+    animation: setup-reveal 0s 12s forwards;
+  }
+
+  .md-typeset [data-setup-failed] .setup-fallback {
+    visibility: visible;
+    animation: none;
+  }
+}
+
+@media (scripting: none) {
+  .md-typeset .setup-fallback {
+    display: none;
+  }
+}
+
+@keyframes setup-give-up {
+  to {
+    min-height: 0;
+  }
+}
+
+@keyframes setup-reveal {
+  to {
+    visibility: visible;
   }
 }
 
@@ -614,6 +645,18 @@
 
 .setup-reply {
   margin: 0.75rem 0 0;
+}
+
+/* Start over, and the question it asks first */
+.md-typeset .setup-tool .setup-restart {
+  margin-top: 1.25rem;
+}
+
+.setup-restart__buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
 }
 
 /* The off-screen box the copy fallback uses */

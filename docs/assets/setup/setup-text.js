@@ -27,6 +27,9 @@
     "nav.to-check": "I've pasted them all",
     "nav.finish": "Finished",
     "nav.start-over": "Start over",
+    "restart.confirm": "Start over? This clears every answer and Done tick on this page.",
+    "restart.yes": "Yes, start over",
+    "restart.no": "Keep my answers",
     "nav.progress": "Step {n} of {total} · {label}",
     "nav.share": "Copy a link to these answers",
     "nav.share-done": "Link copied",
@@ -180,7 +183,8 @@
     "town.code-unknown.link": "region map",
     "town.province": "Which province or territory will it be in?",
     "town.province.hint": "Pick the one where the repeater physically is.",
-    "town.map-link": "Find your region on the map",
+    "town.map-hint": "Can't find it? Look up your region's code on the {link}, then come back here and type it in the box above.",
+    "town.map-hint.link": "region map",
     "town.link-invalid": "The region in your link isn't on the region map anymore. Search for the town instead.",
 
     // Radio settings (only when the region's groups use more than one)
@@ -338,6 +342,9 @@
     "nav.to-check": "Je les ai toutes collées",
     "nav.finish": "Terminé",
     "nav.start-over": "Recommencer",
+    "restart.confirm": "Recommencer? Toutes les réponses et les coches « Fait » de cette page seront effacées.",
+    "restart.yes": "Oui, recommencer",
+    "restart.no": "Garder mes réponses",
     "nav.progress": "Étape {n} sur {total} · {label}",
     "nav.share": "Copier un lien vers ces réponses",
     "nav.share-done": "Lien copié",
@@ -491,7 +498,8 @@
     "town.code-unknown.link": "carte des régions",
     "town.province": "Dans quelle province ou quel territoire sera-t-il?",
     "town.province.hint": "Choisissez selon l’endroit où le répéteur se trouve réellement.",
-    "town.map-link": "Trouver votre région sur la carte",
+    "town.map-hint": "Introuvable? Cherchez le code de votre région sur la {link}, puis revenez ici et tapez-le dans la case ci-dessus.",
+    "town.map-hint.link": "carte des régions",
     "town.link-invalid": "La région de votre lien n’est plus sur la carte des régions. Cherchez plutôt la ville.",
 
     // Radio settings (only when the region's groups use more than one)
@@ -648,6 +656,15 @@
     or: "Oregon"
   };
 
+  // French names for the cross-border networks; the catalogue names most of them in English only.
+  var networkLabelsFr = {
+    "western-new-york": "Ouest de l’État de New York",
+    washington: "État de Washington",
+    oregon: "Oregon",
+    pennsylvania: "Pennsylvanie",
+    ohio: "Ohio"
+  };
+
   var TABLES = { en: Object.freeze(en), fr: Object.freeze(fr) };
   var PLACEHOLDER = /\{([A-Za-z][\w-]*)\}/g;
 
@@ -675,6 +692,7 @@
     t: t,
     keys: keys,
     text: TABLES,
-    tagLabelsFr: Object.freeze(tagLabelsFr)
+    tagLabelsFr: Object.freeze(tagLabelsFr),
+    networkLabelsFr: Object.freeze(networkLabelsFr)
   };
 }());
