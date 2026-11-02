@@ -58,3 +58,17 @@ class RegionMapComparisonTests(unittest.TestCase):
         after = {"features": [{"properties": {"tag": "yqa", "regionSource": "meshcore-canada"}, "geometry": {"type": "MultiPolygon", "coordinates": [[square], [sliver]]}}]}
         change = compare_maps(before, after)["changes"][0]
         self.assertEqual(change["shiftKm"], 0)
+
+    def test_zones_are_measured_in_full_and_new_holes_are_flagged(self):
+        square = [[-80, 45], [-79, 45], [-79, 46], [-80, 46], [-80, 45]]
+        zone = lambda *rings: {"features": [{"properties": {"tag": "yul", "regionSource": "meshmapper"},
+                                             "geometry": {"type": "Polygon", "coordinates": list(rings)}}]}
+        # A spike thinner than the sliver filter, ending 39 km away, still counts for a zone.
+        hair = [[-80, 45], [-79, 45], [-79, 45.5], [-78.5, 45.50001], [-79, 45.50002], [-79, 46], [-80, 46], [-80, 45]]
+        change = compare_maps(zone(square), zone(hair))["changes"][0]
+        self.assertGreater(change["shiftKm"], 30)
+        self.assertFalse(change["shapeChanged"])
+        hole = [[-79.5, 45.5], [-79.499, 45.5], [-79.499, 45.501], [-79.5, 45.5]]
+        change = compare_maps(zone(square), zone(square, hole))["changes"][0]
+        self.assertLess(change["percent"], 0.01)
+        self.assertTrue(change["shapeChanged"])

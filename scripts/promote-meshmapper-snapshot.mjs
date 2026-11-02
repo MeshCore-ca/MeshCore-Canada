@@ -75,6 +75,7 @@ export function reviewReasons(result, map) {
     if (change.percent >= simpleChangePercent) {
       reasons.push(`${change.tag} ${kind} changed by ${change.percent.toFixed(1)}% of its area, above the ${simpleChangePercent}% automatic limit`);
     }
+    if (change.shapeChanged) reasons.push(`${change.tag} ${kind} gained or lost a hole or a separate piece`);
     if (change.shiftKm >= simpleShiftKm) {
       reasons.push(`${change.tag} ${kind} reaches ${change.shiftKm.toFixed(1)} km beyond its old outline, above the ${simpleShiftKm} km automatic limit`);
     }

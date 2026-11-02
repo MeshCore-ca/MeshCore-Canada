@@ -99,6 +99,8 @@ test("the nightly job publishes only changes under the automatic limit", async (
   assert.deepEqual(reviewReasons({ ...quiet, changed: [{ tag: "yow", fields: ["centre", "boundary", "group"] }] }, map([])), []);
   assert.deepEqual(reviewReasons({ ...quiet, changed: [{ tag: "yow", fields: ["name", "boundary"] }] }, map([])),
     ["yow: name changed; only boundary, centre and group changes publish automatically"]);
+  assert.deepEqual(reviewReasons(quiet, map([{ tag: "yul", source: "meshmapper", percent: 0.001, shiftKm: 0, shapeChanged: true }])),
+    ["yul MeshMapper zone gained or lost a hole or a separate piece"]);
   assert.deepEqual(reviewReasons({ ...quiet, added: ["yhz"] }), ["New zones need their provinces checked: yhz"]);
   assert.deepEqual(reviewReasons({ ...quiet, removed: ["xcm"] }), ["Zones no longer listed by MeshMapper: xcm"]);
   assert.deepEqual(reviewReasons(quiet, { added: ["tsa (meshmapper)"], removed: [], changes: [] }), ["Map region appeared or disappeared: tsa (meshmapper)"]);

@@ -15,8 +15,10 @@ compares names, centres, URLs, groups and boundaries.
 or removed, every boundary is valid, only boundaries, centres or groups changed
 (a renamed zone waits for a person), and every region on the combined map,
 including planning areas, changed by less than 1% of its area and reaches no more
-than 5 km beyond its old outline. Reach ignores pieces under 5 hectares (rebuild
-slivers between zones), so a thin spike ending in a town still counts. Both limits
+than 5 km beyond its old outline. MeshMapper zones are measured in full, and a
+zone that gains or loses a hole or a separate piece always waits for a person.
+For planning areas only, reach ignores pieces under 5 hectares, which are slivers
+left between zones when the map is rebuilt. Both limits
 are measured against the map from the last commit a person made to it, so nightly
 changes cannot add up unseen. Rounding and the routine YOW and YXX edits of
 2026-11-01 reached under 1 km; the redrawn YQB and YUL reached 21 and 111 km. The

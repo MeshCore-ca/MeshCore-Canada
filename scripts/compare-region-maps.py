@@ -11,22 +11,28 @@ from shapely.ops import transform
 
 # Statistics Canada Lambert, in metres, so distances are real kilometres.
 to_metres = Transformer.from_crs(4326, 3347, always_xy=True).transform
-# Pieces smaller than 5 hectares cannot hold a town. Ignoring them keeps rebuild
-# slivers between zones from counting as a far-reaching change.
+# Rebuilding planning areas leaves slivers between zones; pieces under 5 hectares
+# there are ignored. MeshMapper zones come straight from their owners and are
+# always measured in full.
 SLIVER_M2 = 50_000
 
 
-def reach_km(before, after):
+def reach_km(before, after, ignore_slivers=False):
     """How far any added or removed piece of a region reaches beyond its old outline."""
     def farthest(pieces, other):
         worst = 0.0
         for piece in getattr(pieces, "geoms", [pieces]):
-            if piece.is_empty or piece.area < SLIVER_M2:
+            if piece.is_empty or (ignore_slivers and piece.area < SLIVER_M2):
                 continue
             worst = max(worst, float(shapely.distance(shapely.points(shapely.get_coordinates(piece)), other).max()))
         return worst
     old, new = transform(to_metres, before), transform(to_metres, after)
     return max(farthest(new.difference(old), old), farthest(old.difference(new), new)) / 1000
+
+
+def pieces_and_holes(geometry):
+    parts = getattr(geometry, "geoms", [geometry])
+    return len(parts), sum(len(part.interiors) for part in parts)
 
 
 def compare_maps(before, after):
@@ -39,8 +45,12 @@ def compare_maps(before, after):
         moved = old[key].symmetric_difference(new[key]).area
         if moved > 0:
             # Area alone misses a thin spike reaching a distant town; its reach does not.
+            zone = key[1] == "meshmapper"
             changes.append({"tag": key[0], "source": key[1], "percent": round(moved / area * 100, 6),
-                            "shiftKm": round(reach_km(old[key], new[key]), 3)})
+                            "shiftKm": round(reach_km(old[key], new[key], ignore_slivers=not zone), 3),
+                            # A new hole or separate piece can move a town out of or into a zone
+                            # while adding almost no area or reach.
+                            "shapeChanged": zone and pieces_and_holes(old[key]) != pieces_and_holes(new[key])})
     return {
         "added": sorted("%s (%s)" % key for key in new.keys() - old.keys()),
         "removed": sorted("%s (%s)" % key for key in old.keys() - new.keys()),
