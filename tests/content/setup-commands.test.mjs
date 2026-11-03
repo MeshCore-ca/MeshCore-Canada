@@ -382,6 +382,7 @@ test("the firmware question is four choices, with the same version labels in bot
     assert.deepEqual(["1.16", "1.15", "1.14"].map((value) => text.t(`version.${value}`, lang)), ["1.16.0+", "1.15.x", "1.14.x"], lang);
     for (const value of ["1.16", "1.15", "1.14", "older"]) assert.ok(text.t(`version.${value}.detail`, lang).length > 20, `${lang} ${value}`);
     assert.match(text.t("version.hint", lang), /`ver`.*v1\.15\.0/, lang);
+    assert.match(text.t("version.hint", lang), /Contacts[\s\S]*Command Line[\s\S]*`ver`/, lang + ": the hint says how to reach Command Line");
   }
   assert.equal(text.t("version.older", "en"), "Older than 1.14");
   assert.equal(text.t("version.older", "fr"), "Plus ancienne que 1.14");

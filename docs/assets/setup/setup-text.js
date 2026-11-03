@@ -131,7 +131,7 @@
     "flash.repeater.step2": "Choose your board (its name is printed on the board or its box), role Repeater, and the newest version.",
     "flash.observer.step1": "Open the {link} in Chrome or Edge. Other browsers can't talk to USB.",
     "flash.observer.step1.link": "observer flasher",
-    "flash.observer.step2": "Under MQTT Observer Firmware, choose your board (its name is printed on the board or its box) and role Repeater.",
+    "flash.observer.step2": "Under MQTT Observer Firmware, choose your board (its name is printed on the board or its box), role Repeater, and the newest version.",
     "flash.erase.esp32-new": "Tick Erase device, since it's a new board.",
     "flash.erase.esp32-running": "Leave Erase device unticked.",
     "flash.erase.nrf52-new": "Click Erase Flash, since it's a new board.",
@@ -156,7 +156,7 @@
     "version.1.14.detail": "Adds one region per line, and has no region default, so its own announcements carry no label.",
     "version.older": "Older than 1.14",
     "version.older.detail": "Region settings don't work: update the firmware first.",
-    "version.hint": "Not sure? In the app's Command Line, send `ver`. The reply starts with the version, like v1.15.0.",
+    "version.hint": "Not sure? In the MeshCore app, tap your repeater in Contacts, log in with the admin password, tap Command Line and send `ver`. The reply starts with the version, like v1.15.0.",
     "version.update": "Update its firmware now",
 
     // Where will it be installed?
@@ -467,7 +467,7 @@
     "flash.repeater.step2": "Choisissez votre carte (son nom est imprimé sur la carte ou sur sa boîte), le rôle Repeater et la version la plus récente.",
     "flash.observer.step1": "Ouvrez l’{link} dans Chrome ou Edge. Les autres navigateurs ne peuvent pas communiquer par USB.",
     "flash.observer.step1.link": "outil de programmation des observateurs",
-    "flash.observer.step2": "Sous MQTT Observer Firmware, choisissez votre carte (son nom est imprimé sur la carte ou sur sa boîte) et le rôle Repeater.",
+    "flash.observer.step2": "Sous MQTT Observer Firmware, choisissez votre carte (son nom est imprimé sur la carte ou sur sa boîte), le rôle Repeater et la version la plus récente.",
     "flash.erase.esp32-new": "Cochez Erase device, puisque c’est une carte neuve.",
     "flash.erase.esp32-running": "Laissez Erase device décoché.",
     "flash.erase.nrf52-new": "Cliquez sur Erase Flash, puisque c’est une carte neuve.",
@@ -492,7 +492,7 @@
     "version.1.14.detail": "Ajoute une région par ligne et n’a pas de région par défaut : ses propres annonces restent donc sans étiquette.",
     "version.older": "Plus ancienne que 1.14",
     "version.older.detail": "Les réglages de région ne fonctionnent pas : mettez d’abord le micrologiciel à jour.",
-    "version.hint": "Pas sûr? Dans la Command Line de l’application, envoyez `ver`. La réponse commence par la version, par exemple v1.15.0.",
+    "version.hint": "Pas sûr? Dans l’application MeshCore, touchez votre répéteur dans Contacts, connectez-vous avec le mot de passe administrateur, touchez Command Line et envoyez `ver`. La réponse commence par la version, par exemple v1.15.0.",
     "version.update": "Mettre à jour son micrologiciel maintenant",
 
     // Where will it be installed?

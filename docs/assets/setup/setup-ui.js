@@ -726,6 +726,8 @@
           state.olderFirmware = value === "older";
           setAnswers(next);
           renderStep({ focus: '[data-setup-choice="' + value + '"]' });
+          // The update button appears below the choices; say so for screen readers.
+          if (value === "older") announce(t("version.older.detail") + " " + t("version.update"));
         }
       });
     })));

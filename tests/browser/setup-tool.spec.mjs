@@ -810,6 +810,8 @@ test("Older than 1.14 blocks Next and offers the update, which removes the quest
     await expect(page.locator('[data-setup-card="older"]')).toContainText(T("version.older.detail", "en"));
     await expect(step(page).locator(".setup-note")).toHaveCount(0);
     await expect(page.locator("[data-setup-update]")).toHaveText("Update its firmware now");
+    // Screen readers hear that the update button appeared.
+    await expect(page.locator("[data-setup-live]")).toHaveText(`${T("version.older.detail", "en")} ${T("version.update", "en")}`);
     await expect(nextButton(page)).toBeDisabled();
     expect(new URL(page.url()).searchParams.has("firmware")).toBe(false);
     // Picking a supported version takes the note away; picking Older again brings it back.

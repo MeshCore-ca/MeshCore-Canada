@@ -223,7 +223,7 @@ test("the board step asks what kind of board it is, with examples and a way to c
       assert.doesNotMatch(text.t(key, lang), /\{board\}/, `${lang} ${key} needs no board name`);
     }
     assert.match(text.t("flash.repeater.step2", lang), lang === "en" ? /^Choose your board \(its name is printed on the board or its box\), role Repeater, and the newest version\.$/ : /^Choisissez votre carte \(son nom est imprimé sur la carte ou sur sa boîte\), le rôle Repeater et la version la plus récente\.$/);
-    assert.match(text.t("flash.observer.step2", lang), lang === "en" ? /^Under MQTT Observer Firmware, choose your board \(its name is printed on the board or its box\) and role Repeater\.$/ : /^Sous MQTT Observer Firmware, choisissez votre carte \(son nom est imprimé sur la carte ou sur sa boîte\) et le rôle Repeater\.$/);
+    assert.match(text.t("flash.observer.step2", lang), lang === "en" ? /^Under MQTT Observer Firmware, choose your board \(its name is printed on the board or its box\), role Repeater, and the newest version\.$/ : /^Sous MQTT Observer Firmware, choisissez votre carte \(son nom est imprimé sur la carte ou sur sa boîte\), le rôle Repeater et la version la plus récente\.$/);
     assert.match(text.t("bootloader.step1", lang), lang === "en" ? /^Download the `update-…uf2` file for your board from the \{link\}\. Its name includes the board's name, which is printed on the board or its box\.$/ : /^Téléchargez, depuis les \{link\}, le fichier `update-…uf2` de votre carte\. Son nom contient celui de la carte, imprimé sur la carte ou sur sa boîte\.$/);
     assert.ok(text.t("bootloader.mismatch", lang).length > 0);
   }
