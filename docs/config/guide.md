@@ -111,12 +111,14 @@ decides which messages it passes on.
 
 ### Which region is mine?
 
-The [setup tool](index.md) finds it from the town where the repeater will be,
-and the [region map](map.md) shows them all.
+The [setup tool](index.md) finds it from the town, street address or
+coordinates where the repeater will be, and the [region map](map.md) shows them
+all. Coordinates aren't sent to any search; a town or street address is looked
+up with the Government of Canada's place search (geo.ca).
 
 - **Near a provincial border, pick the side it's really on.** The `yow` region
   crosses the Ottawa River: an Ottawa repeater has `yow` and `on`, a Gatineau
-  repeater `yow` and `qc`.
+  repeater `yow` and `qc`. A street address or coordinates settle it.
 - **Towns in the same region share its code.** Ottawa and Gatineau are both
   `yow`.
 - **No zone for your area?** [MeshMapper](https://meshmapper.net/), the
@@ -330,6 +332,12 @@ using.
 :   This line sets the longitude, so maps show it near Belleville.
 
     Untick the map option in the tool and both lines are left out.
+
+`set lat 44.1628`, when you typed a street address or coordinates
+:   Show it on maps at the spot you entered. This line sets the latitude.
+
+`set lon -77.3832`, when you typed a street address or coordinates
+:   This line sets the longitude, so maps show it at the spot you entered.
 
 `password <your new admin password>`
 :   Set the admin password you'll use to manage it from the app. Keep it in your password manager.

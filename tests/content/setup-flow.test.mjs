@@ -257,6 +257,65 @@ test("a town that is missing, oversized or outside Canada is dropped whole", () 
   assert.deepEqual(flow.fromQuery("place=Belleville&town=Kingston&lat=44.23&lon=-76.49").place.name, "Kingston");
 });
 
+test("coordinates typed into the location box are read here, in either decimal style", () => {
+  const belleville = { lat: 44.1628, lon: -77.3832, inCanada: true };
+  for (const typed of ["44.1628, -77.3832", "44.1628,-77.3832", "  44.1628 ,  -77.3832  ", "44.1628; -77.3832", "44.1628;-77.3832",
+    "44,1628; -77,3832", "44.1628 -77.3832", "+44.1628, -77.3832"]) {
+    assert.deepEqual(flow.parseCoordinates(typed), belleville, typed);
+  }
+  // More decimals than a map needs are kept here; the commands and the link round them to 4.
+  assert.deepEqual(flow.parseCoordinates("44.162812, -77.383241"), { lat: 44.162812, lon: -77.383241, inCanada: true });
+  assert.deepEqual(flow.parseCoordinates("45, -75"), { lat: 45, lon: -75, inCanada: true });
+});
+
+test("coordinates outside Canada are read, but flagged, so the page can say so plainly", () => {
+  for (const typed of ["48.8566, 2.3522", "44.1628, 77.3832", "-77.3832, 44.1628", "40.9, -77", "84.1, -77", "44, -142.1", "44, -51.9", "91, -77"]) {
+    const point = flow.parseCoordinates(typed);
+    assert.ok(point, typed);
+    assert.equal(point.inCanada, false, typed);
+  }
+  // The edges of the box are in.
+  assert.equal(flow.parseCoordinates("41, -142").inCanada, true);
+  assert.equal(flow.parseCoordinates("84, -52").inCanada, true);
+});
+
+test("anything that isn't two numbers is not coordinates: a town, an address or a postal code is searched instead", () => {
+  for (const typed of ["", "   ", "Belleville", "111 Wellington Street, Ottawa", "100 Mile House", "K1A 0A9", "44.1628", "44.1628, -77.3832, 12",
+    "44.1.2, -77", "1e3, -77", "44,1628, -77,3832", "44.1628, -77.3832 Ontario", "0x2C, -77", "44.1628,,-77.3832", null, undefined, 44]) {
+    assert.equal(flow.parseCoordinates(typed), null, String(typed));
+  }
+});
+
+test("names are suggested from a street address's municipality, and from the region for coordinates", () => {
+  const address = { name: "111 Wellington Street, Ottawa", province: "on", lat: 45.4231, lon: -75.6988, kind: "address" };
+  assert.equal(flow.suggestName({ type: "repeater", place: address }), "Ottawa_R1");
+  assert.equal(flow.suggestName({ type: "observer", place: { ...address, name: "1 Rue Notre-Dame Est, Montréal" } }), "Montreal_Obs1");
+  const point = { name: "44.1628, -77.3832", province: "on", lat: 44.1628, lon: -77.3832, kind: "coordinates" };
+  assert.equal(flow.suggestName({ type: "repeater", place: point }, "Quinte West"), "QuinteWest_R1");
+  assert.equal(flow.suggestName({ type: "repeater", place: point }), "");             // no region label, no suggestion
+  assert.equal(flow.suggestName({ type: "repeater", place: point, status: "running" }, "Quinte West"), "");
+  // A town still gives its own name, whatever region label comes with it.
+  assert.equal(flow.suggestName({ type: "repeater", place: { name: "Belleville" } }, "Quinte West"), "Belleville_R1");
+});
+
+test("a place from an address or coordinates keeps its kind in a share link, and never the typed search", () => {
+  const address = { name: "111 Wellington Street, Ottawa", province: "on", lat: 45.42312333, lon: -75.69876476, kind: "address" };
+  const q = flow.toQuery({ tag: "yow", province: "on", place: address });
+  assert.match(q, /(?:^|&)town=111%20Wellington%20Street%2C%20Ottawa(?:&|$)/);
+  assert.match(q, /(?:^|&)kind=address(?:&|$)/);
+  assert.match(q, /(?:^|&)lat=45\.4231&lon=-75\.6988(?:&|$)/);
+  assert.doesNotMatch(q, /(?:^|&)place=/);
+  assert.deepEqual(flow.fromQuery(q).place, { ...address, lat: 45.4231, lon: -75.6988 });
+  const point = { name: "44.1628, -77.3832", province: "on", lat: 44.1628, lon: -77.3832, kind: "coordinates" };
+  assert.deepEqual(flow.fromQuery(flow.toQuery({ tag: "ytr", province: "on", place: point })).place, point);
+  // A town has no kind, as before; an unknown kind is dropped and the place read as a town.
+  assert.doesNotMatch(flow.toQuery({ place: { name: "Belleville", lat: 44.1628, lon: -77.3832 } }), /kind=/);
+  assert.doesNotMatch(flow.toQuery({ place: { name: "Belleville", lat: 44.1628, lon: -77.3832, kind: "nonsense" } }), /kind=/);
+  assert.deepEqual(flow.fromQuery("town=Belleville&kind=wizard&lat=44.1628&lon=-77.3832").place, { name: "Belleville", lat: 44.1628, lon: -77.3832 });
+  // A kind on its own, with no place, is nothing.
+  assert.deepEqual(flow.fromQuery("kind=address"), {});
+});
+
 test("the 'I did this' ticks never go into a share link", () => {
   assert.equal(flow.toQuery({ bootloader: true, flashed: true }), "");
   const q = flow.toQuery({ type: "repeater", board: "rak4631", status: "new", bootloader: true, flashed: true });

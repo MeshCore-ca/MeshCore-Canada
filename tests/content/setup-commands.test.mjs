@@ -172,6 +172,18 @@ test("explanations name the regions and the town in plain words", () => {
   assert.equal(why(belleville, "lon"), "This line sets the longitude, so maps show it near Belleville.");
   assert.equal(why(belleville, "lat", "fr"), "Place le répéteur sur les cartes près de la localité (Belleville), pas à son endroit exact. Cette ligne règle la latitude.");
   assert.doesNotMatch(text.t("name.location", "en") + text.t("name.location", "fr"), /centre/);
+  // A street address or coordinates are the spot itself, so the map shows it there, rounded to 4 decimals (about 10 m).
+  for (const place of [{ name: "111 Wellington Street, Ottawa", lat: 45.42312333800001, lon: -75.698764764, kind: "address" },
+    { name: "45.4231, -75.6988", lat: 45.42312333, lon: -75.69876476, kind: "coordinates" }]) {
+    const spot = { ...belleville, tag: "yow", place };
+    const lines = items(cmds.rollup(spot, data, "en"));
+    assert.deepEqual(lines.filter((i) => i.id === "lat" || i.id === "lon").map((i) => i.command), ["set lat 45.4231", "set lon -75.6988"], place.kind);
+    assert.equal(why(spot, "lat"), "Show it on maps at the spot you entered. This line sets the latitude.", place.kind);
+    assert.equal(why(spot, "lon"), "This line sets the longitude, so maps show it at the spot you entered.", place.kind);
+    assert.equal(why(spot, "lat", "fr"), text.t("why.lat-spot", "fr"), place.kind);
+    assert.equal(why(spot, "lon", "fr"), text.t("why.lon-spot", "fr"), place.kind);
+    assert.ok(!items(cmds.rollup({ ...spot, shareLocation: false }, data, "en")).some((i) => i.id === "lat" || i.id === "lon"), place.kind);
+  }
   assert.equal(why({ ...belleville, firmware: "1.14" }, "put-ytr"),
     "Add Quinte West (ytr) to its list of regions. It doesn't pass those messages on until its `region allowf` line.");
   assert.equal(why(belleville, "default", "fr"), "Ajoute l’étiquette ytr aux annonces de ce répéteur.");

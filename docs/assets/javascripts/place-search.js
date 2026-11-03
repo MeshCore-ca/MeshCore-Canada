@@ -101,5 +101,56 @@
     }
     return placeCandidates(rows, query);
   }
-  globalThis.MeshCorePlaceSearch = { normalize: normalize, provinceCode: provinceCode, splitPlaceQuery: splitPlaceQuery, placeCandidates: placeCandidates, distanceKm: distanceKm, lookupQueries: lookupQueries, lookup: lookup };
+
+  // Street addresses. A number with words ("111 Wellington Street, Ottawa") is searched as an
+  // address first; anything else is a town, searched with lookup() as before.
+  function isAddress(query) {
+    var text = String(query || "");
+    return /\d/.test(text) && /\p{L}/u.test(text);
+  }
+
+  // "City Of Ottawa" -> "Ottawa". The French replies say "Ville Of".
+  var MUNICIPALITY_TYPE = /^(?:city|town|township|village|municipality|county|district|regional municipality|rural municipality|ville|canton|municipalit[eé]|cit[eé]) of\s+/i;
+
+  // geo.ca `keys=locate` rows, kept only when they are a civic address (a street number placed on
+  // its street), not the towns, lakes, intersections and whole streets the same reply carries.
+  // Each is named "<number and street>, <municipality>": "111 Wellington Street, Ottawa".
+  function addressCandidates(rows) {
+    if (!Array.isArray(rows)) throw new Error("Invalid place response");
+    var seen = new Set();
+    var places = [];
+    rows.slice(0, 500).forEach(function (row) {
+      if (!row || row.key !== "locate" || !Array.isArray(row.tag) || row.tag.indexOf("INTERPOLATED_POSITION") === -1) return;
+      var province = decode(row.province).slice(0, 80);
+      var parts = decode(row.name).split(",").map(function (part) { return part.trim(); }).filter(Boolean);
+      if (parts.length && provinceCode(parts[parts.length - 1])) parts.pop();
+      if (parts.length < 2) return;
+      var municipality = parts[1].replace(MUNICIPALITY_TYPE, "");
+      var place = { name: (parts[0] + ", " + municipality).slice(0, 80), province: province, lat: Number(row.lat), lon: Number(row.lng), kind: "address" };
+      var key = place.lat + ":" + place.lon;
+      if (!municipality || !provinceCode(province) || !Number.isFinite(place.lat) || !Number.isFinite(place.lon) || place.lat < 41 || place.lat > 84 || place.lon < -142 || place.lon > -52 || seen.has(key)) return;
+      seen.add(key);
+      places.push(place);
+    });
+    return places.slice(0, 5);
+  }
+
+  async function lookupAddress(query, language, request) {
+    var url = "https://geolocator.api.geo.ca/?" + new URLSearchParams({ q: query.trim(), lang: language, keys: "locate" });
+    var response = await request(url);
+    if (!response.ok) throw new Error("Place lookup failed");
+    return addressCandidates(await response.json());
+  }
+
+  // A town or a street address. The two geocoder keys answer separately (asking for both at
+  // once returns nothing), so an address is looked up first and, when no civic address matches
+  // (a town such as 100 Mile House has a number too), the town search runs next.
+  async function find(query, language, request) {
+    if (isAddress(query)) {
+      var addresses = await lookupAddress(query, language, request);
+      if (addresses.length) return addresses;
+    }
+    return lookup(query, language, request);
+  }
+  globalThis.MeshCorePlaceSearch = { normalize: normalize, provinceCode: provinceCode, splitPlaceQuery: splitPlaceQuery, placeCandidates: placeCandidates, distanceKm: distanceKm, lookupQueries: lookupQueries, lookup: lookup, isAddress: isAddress, addressCandidates: addressCandidates, lookupAddress: lookupAddress, find: find };
 })();

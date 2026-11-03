@@ -430,6 +430,104 @@ test("a place deep link fills the search and starts it at the town step", async 
   await expect.poll(() => new URL(page.url()).searchParams.get("tag")).toBe("ykf");
 });
 
+for (const lang of LANGS) {
+  test(`${lang} a street address finds its region, names it after the municipality and maps the exact spot`, async ({ page }) => {
+    const queries = await mockGeocoder(page);
+    await page.goto(siteRoute(`${ROUTES[lang]}?type=repeater&board=heltec-v3&status=new`));
+    await confirmStep(page, "flash");
+    await version(page, "v1.16.0");
+    await expectStep(page, "town");
+    // One box for all three, with examples of each.
+    await expect(page.locator("label[for='setup-town']")).toHaveText(T("town.label", lang));
+    await expect(step(page)).toContainText(plain("town.hint", lang));
+    await searchTown(page, "111 Wellington Street, Ottawa");
+    await expect(page.locator("[data-setup-region]")).toContainText("yow");
+    await expect(page.locator("[data-setup-region]")).toContainText(T("town.region-detail", lang, { town: "111 Wellington Street, Ottawa", province: "Ontario" }));
+    // The address search answered, so the town search wasn't asked.
+    expect(queries).toEqual(["locate:111 Wellington Street, Ottawa"]);
+    // The link carries the place the search found, never the text typed into the box.
+    const url = new URL(page.url());
+    expect(url.searchParams.get("town")).toBe("111 Wellington Street, Ottawa");
+    expect(url.searchParams.get("kind")).toBe("address");
+    expect(url.searchParams.get("place")).toBe(null);
+    await next(page);
+    await answer(page, "role", "city");
+    await expectStep(page, "name");
+    await expect(page.locator("[data-setup-name]")).toHaveValue("Ottawa_R1");
+    await expect(page.locator("[data-setup-location]")).toBeChecked();
+    await expect(page.locator("label:has([data-setup-location])")).toHaveText(T("name.location-spot", lang, { town: "111 Wellington Street, Ottawa" }));
+    await next(page);
+    await expectStep(page, "commands");
+    const lines = await commandLines(page);
+    expect(lines).toContain("set lat 45.4231");
+    expect(lines).toContain("set lon -75.6988");
+    await expect(page.locator('[data-setup-command="lat"]')).toContainText(T("why.lat-spot", lang));
+    await expect(page.locator('[data-setup-command="lon"]')).toContainText(T("why.lon-spot", lang));
+  });
+}
+
+test("several matching addresses: ask which one, with the region each is in", async ({ page }) => {
+  await mockGeocoder(page);
+  await openLink(page, "/config/?type=repeater&board=heltec-v3&status=running&reflash=0", { to: "town" });
+  const choices = page.locator("[data-setup-step] [data-setup-choice]");
+  await searchTown(page, "1 Rue Notre-Dame Est, Montréal");
+  await expect(page.locator("[data-setup-town-message]")).toHaveText(T("town.addresses", "en"));
+  await expect(choices).toHaveCount(2);
+  await expect(page.locator("[data-setup-step] [data-setup-card]")).toContainText(["Quebec · North Bay (yyb)", "Quebec · Montreal (yul)"]);
+  await expect(nextButton(page)).toBeDisabled();
+  await choices.filter({ hasText: "Montréal" }).click();
+  await expect(page.locator("[data-setup-region]")).toContainText("yul");
+  await expect(nextButton(page)).toBeEnabled();
+});
+
+test("a town with a number in its name falls back to the town search; an address with no match says so", async ({ page }) => {
+  const queries = await mockGeocoder(page);
+  await openLink(page, "/config/?type=repeater&board=heltec-v3&status=running&reflash=0", { to: "town" });
+  await searchTown(page, "150 Mile House");
+  await expect(page.locator("[data-setup-region]")).toContainText("yka");
+  expect(queries).toEqual(["locate:150 Mile House", "150 Mile House"]);
+  // Nothing matches: say so plainly, and offer the region code box.
+  await searchTown(page, "999 Nowhere Road, Atlantis");
+  await expect(page.locator("[data-setup-town-message]")).toHaveText(T("town.no-address", "en"));
+  await expect(page.locator("[data-setup-code]")).toBeVisible();
+  await expect(nextButton(page)).toBeDisabled();
+});
+
+for (const lang of LANGS) {
+  test(`${lang} coordinates are read on the page, never sent to a search, and name it after the region`, async ({ page }) => {
+    const queries = await mockGeocoder(page);
+    await page.goto(siteRoute(`${ROUTES[lang]}?type=repeater&board=heltec-v3&status=new`));
+    await confirmStep(page, "flash");
+    await version(page, "v1.16.0");
+    await expectStep(page, "town");
+    // Outside Canada (the longitude's minus sign forgotten): say how to type them.
+    await searchTown(page, "44.1628, 77.3832");
+    await expect(page.locator("[data-setup-town-message]")).toHaveText(plain("town.outside", lang));
+    await expect(nextButton(page)).toBeDisabled();
+    // French decimal commas, with a semicolon between the two.
+    await searchTown(page, lang === "fr" ? "44,162812; -77,383241" : "44.162812, -77.383241");
+    await expect(page.locator("[data-setup-region]")).toContainText("ytr");
+    await expect(page.locator("[data-setup-region]")).toContainText(T("town.region-detail", lang, { town: "44.1628, -77.3832", province: "Ontario" }));
+    expect(queries).toEqual([]);
+    const url = new URL(page.url());
+    expect(url.searchParams.get("kind")).toBe("coordinates");
+    expect(url.searchParams.get("lat")).toBe("44.1628");
+    expect(url.searchParams.get("place")).toBe(null);
+    expect(url.search).not.toMatch(/162812|383241/);
+    await next(page);
+    await answer(page, "role", "city");
+    await expectStep(page, "name");
+    await expect(page.locator("[data-setup-name]")).toHaveValue("QuinteWest_R1");
+    await expect(page.locator("label:has([data-setup-location])")).toHaveText(T("name.location-spot", lang, { town: "44.1628, -77.3832" }));
+    await next(page);
+    const lines = await commandLines(page);
+    expect(lines).toContain("set lat 44.1628");
+    expect(lines).toContain("set lon -77.3832");
+    await expect(page.locator('[data-setup-command="lat"]')).toContainText(T("why.lat-spot", lang));
+    expect(queries).toEqual([]);
+  });
+}
+
 test("firmware reply", async ({ page }) => {
   await page.goto(siteRoute("/config/?type=repeater&board=heltec-v3&status=running&reflash=0"));
   await expectStep(page, "version");

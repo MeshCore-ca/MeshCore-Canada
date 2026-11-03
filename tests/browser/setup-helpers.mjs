@@ -27,14 +27,38 @@ export const PLACES = {
   "St. John's": [row("St. John's", "Newfoundland and Labrador", 47.56494, -52.70931)],
   // The search says Québec; the region map puts this spot in Ontario.
   "Ottawa": [row("Ottawa", "Québec", 45.4215, -75.6972)],
+  "150 Mile House": [row("150 Mile House", "British Columbia", 52.1055556, -121.9277778, "Community")],
   // A spot no region covers (Seattle's coordinates, given a Canadian province so the search keeps it).
   "Faraway": [row("Faraway", "British Columbia", 47.6062, -122.3321)]
 };
 
-export async function mockGeocoder(page, places = PLACES) {
+// Street-address replies (`keys=locate`). A civic address is tagged INTERPOLATED_POSITION; the
+// same reply carries towns, lakes and whole streets, which the tool leaves out.
+const locate = (name, province, lat, lng, tag = "INTERPOLATED_POSITION", category = "Street") => ({ key: "locate", category, name, province, lat, lng, bbox: null, tag: [tag] });
+export const ADDRESSES = {
+  "111 Wellington Street, Ottawa": [
+    locate("111 Wellington Street, City Of Ottawa, Ontario", "Ontario", 45.42312333800001, -75.698764764),
+    locate("Guelph, Wellington, Ontario (City)", "Ontario", 43.5339991, -80.2316544, "LOCATION", "City")
+  ],
+  "1 Rue Notre-Dame Est, Montréal": [
+    locate("1 Rue Notre-Dame Est, Lorrainville, Quebec", "Quebec", 47.353875, -79.3534323),
+    locate("1 Rue Notre-Dame Est, Montréal, Quebec", "Quebec", 45.5065186, -73.5554019)
+  ],
+  // A town with a number in its name: only whole streets match, so the town search runs next.
+  "150 Mile House": [locate("150 Mile Frontage Road, 150 Mile House, British Columbia", "British Columbia", 52.1063076, -121.9285773, "INTERPOLATED_CENTROID")]
+};
+
+// Answers town searches from `places` and street-address searches from `addresses`.
+// Returns the queries asked, in order; an address search is listed as "locate:<query>".
+export async function mockGeocoder(page, places = PLACES, addresses = ADDRESSES) {
   const queries = [];
   await page.route("https://geolocator.api.geo.ca/**", (route) => {
-    const query = new URL(route.request().url()).searchParams.get("q");
+    const params = new URL(route.request().url()).searchParams;
+    const query = params.get("q");
+    if (params.get("keys") === "locate") {
+      queries.push(`locate:${query}`);
+      return route.fulfill({ json: addresses[query] || [] });
+    }
     queries.push(query);
     return route.fulfill({ json: places[query] || [] });
   });

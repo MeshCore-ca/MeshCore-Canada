@@ -136,10 +136,10 @@
   function freshTown() {
     return {
       query: "",
-      status: "idle",    // idle | searching | places | regions | province | mismatch | none | no-match | failed
+      status: "idle",    // idle | searching | places | regions | province | mismatch | none | no-match | outside | failed
       places: [],
       options: [],
-      place: null,       // the place picked from the search, while its region is still open
+      place: null,       // the place picked from the search (a town, an address or coordinates), while its region is still open
       mismatch: null,
       code: "",
       codeUnknown: false,
@@ -491,7 +491,7 @@
     var a = state.answers;
     if (id === "town" || id === "commands" || id === "check") loadData();
     if (id === "name" && a.name === undefined) {
-      var suggested = Flow.suggestName(a);
+      var suggested = Flow.suggestName(a, a.tag ? regionName(a.tag) : "");
       if (suggested) setAnswers(Object.assign({}, a, { name: suggested }));
     }
     if (id === "neighbours" && !Array.isArray(a.neighbours) && state.data && !Place.neighbours(a.tag, state.data).length) {
@@ -908,7 +908,8 @@
     });
     check();
     if (a.place && a.place.name) {
-      body.appendChild(checkboxRow({}, t("name.location", { town: a.place.name }), a.shareLocation !== false, function (checked) {
+      var where = exactSpot(a.place) ? "name.location-spot" : "name.location";
+      body.appendChild(checkboxRow({}, t(where, { town: a.place.name }), a.shareLocation !== false, function (checked) {
         setAnswers(Object.assign({}, state.answers, { shareLocation: checked }));
       }, { "data-setup-location": "" }));
     }
@@ -926,7 +927,7 @@
       el("label", { for: "setup-town", text: t("town.label") }),
       el("div", { class: "setup-search__row" }, [input, el("button", { type: "submit", class: "setup-button" }, t("town.search"))])
     ]);
-    body.appendChild(para(t("town.hint"), { class: "setup-hint" }));
+    body.appendChild(para(rich("town.hint"), { class: "setup-hint" }));
     body.appendChild(form);
     var hint = para(rich("town.map-hint", null, LINKS.map), { class: "setup-hint setup-map-link" });
     hint.querySelector("a").setAttribute("data-setup-map", "");
@@ -969,7 +970,7 @@
       return;
     }
     if (town.status === "places") {
-      box.appendChild(townMessage(t("town.places")));
+      box.appendChild(townMessage(t(town.places[0].kind === "address" ? "town.addresses" : "town.places")));
       box.appendChild(choiceGroup(town.places.map(function (place, index) {
         return choice("place:" + index, place.name, placeDetail(place), { pick: function () { pickPlace(place); } });
       })));
@@ -984,10 +985,12 @@
         var detail = town.status === "province" ? regionName(option.tag) + " (" + option.tag + ")" : provinceName(option.province);
         return choice(option.tag + ":" + option.province, title, detail, { pick: function () { setRegion(option, town.place); } });
       })));
+    } else if (town.status === "outside") {
+      box.appendChild(townMessage(rich("town.outside")));
     } else if (town.status === "none" || town.status === "no-match" || town.status === "failed") {
       if (town.status === "none") box.appendChild(townMessage(rich("town.none", null, LINKS.map)));
       else if (town.status === "failed") box.appendChild(townMessage(rich("town.search-failed", null, LINKS.map)));
-      else box.appendChild(townMessage(t("town.no-match")));
+      else box.appendChild(townMessage(t(Search.isAddress(town.query) ? "town.no-address" : "town.no-match")));
       box.appendChild(codeForm());
     } else if (a.tag && a.province) {
       box.appendChild(regionCard());
@@ -1064,13 +1067,17 @@
     showTown("searching");
     loadData().then(function (data) {
       if (token !== town.token) return;
+      // Coordinates are read here and never sent to a search.
+      var point = Flow.parseCoordinates(query);
+      if (point) return point.inCanada ? pickPlace(coordinatesPlace(point)) : showTown("outside");
       // A region code needs no search.
       var code = Place.fromCode(query, data);
       if (code.length) return offerRegions(code);
       // A search that hangs is stopped, so the person gets the code box instead of waiting forever.
       var controller = typeof AbortController === "function" ? new AbortController() : null;
       var timer = controller && window.setTimeout(function () { controller.abort(); }, SEARCH_TIMEOUT);
-      return Search.lookup(query, lang, function (url) {
+      // A town, or a street address (a number with words), which falls back to the town search.
+      return Search.find(query, lang, function (url) {
         return window.fetch(url, controller ? { signal: controller.signal } : undefined);
       }).then(function (places) {
         window.clearTimeout(timer);
@@ -1086,6 +1093,19 @@
     }, function () {
       if (token === town.token) showTown("idle");
     });
+  }
+
+  // Coordinates typed into the box, as a place. Its name is the rounded point, which is what the
+  // commands and the link use. It has no province: the region map decides which one it is in.
+  function coordinatesPlace(point) {
+    var lat = Math.round(point.lat * 10000) / 10000;
+    var lon = Math.round(point.lon * 10000) / 10000;
+    return { name: lat + ", " + lon, province: "", lat: point.lat, lon: point.lon, kind: "coordinates" };
+  }
+
+  // A street address or coordinates are the spot itself; a town's point is only near the town.
+  function exactSpot(place) {
+    return !!place && (place.kind === "address" || place.kind === "coordinates");
   }
 
   function offerRegions(options) {
@@ -1139,7 +1159,10 @@
   function setRegion(option, place) {
     var next = Flow.resetDependents(state.answers, "place");
     delete next.place;
-    if (place) next.place = { name: place.name, province: option.province, lat: place.lat, lon: place.lon };
+    if (place) {
+      next.place = { name: place.name, province: option.province, lat: place.lat, lon: place.lon };
+      if (exactSpot(place)) next.place.kind = place.kind;
+    }
     next.tag = option.tag;
     next.province = option.province;
     setAnswers(next);

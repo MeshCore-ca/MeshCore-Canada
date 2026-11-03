@@ -116,12 +116,16 @@ West. La région d’un répéteur décide quels messages il relaie.
 
 ### Quelle est ma région?
 
-L’[outil de configuration](index.md) la trouve à partir de la ville où sera le
-répéteur, et la [carte des régions](map.md) les montre toutes.
+L’[outil de configuration](index.md) la trouve à partir de la ville, de
+l’adresse ou des coordonnées où sera le répéteur, et la
+[carte des régions](map.md) les montre toutes. Les coordonnées ne sont envoyées
+à aucune recherche; une ville ou une adresse est cherchée avec l’outil de
+recherche de lieux du gouvernement du Canada (geo.ca).
 
 - **Près d’une frontière provinciale, choisissez le côté où il se trouve
   vraiment.** La région `yow` traverse la rivière des Outaouais : un répéteur
-  d’Ottawa a `yow` et `on`, un répéteur de Gatineau `yow` et `qc`.
+  d’Ottawa a `yow` et `on`, un répéteur de Gatineau `yow` et `qc`. Une adresse
+  ou des coordonnées règlent la question.
 - **Les villes d’une même région partagent son code.** Ottawa et Gatineau sont
   toutes deux dans `yow`.
 - **Aucune zone pour votre secteur?** [MeshMapper](https://meshmapper.net/),
@@ -357,6 +361,12 @@ connexion que vous utilisez.
 :   Cette ligne règle la longitude, pour que les cartes le placent près de la localité (Belleville).
 
     Décochez l’option de carte dans l’outil, et ces deux lignes disparaissent.
+
+`set lat 44.1628`, si vous avez tapé une adresse ou des coordonnées
+:   Place le répéteur sur les cartes à l’endroit que vous avez indiqué. Cette ligne règle la latitude.
+
+`set lon -77.3832`, si vous avez tapé une adresse ou des coordonnées
+:   Cette ligne règle la longitude, pour que les cartes le placent à l’endroit que vous avez indiqué.
 
 `password <votre nouveau mot de passe administrateur>`
 :   Règle le mot de passe administrateur qui vous servira à le gérer depuis l’application. Gardez-le dans votre gestionnaire de mots de passe.

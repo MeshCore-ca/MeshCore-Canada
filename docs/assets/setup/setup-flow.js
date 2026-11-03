@@ -127,6 +127,32 @@
     return { firmware: "1." + minor, tooOld: false };
   }
 
+  // Reads coordinates typed into the location box: latitude then longitude, as decimals.
+  // "44.1628, -77.3832", "44.1628 -77.3832" and "44.1628; -77.3832" all work; with a
+  // semicolon between them, French decimal commas do too ("44,1628; -77,3832").
+  // Returns null for anything else (a town, an address), so it is searched instead.
+  // Coordinates outside Canada come back with inCanada: false, for the page to say so.
+  var NUMBER = "[+-]?\\d+(?:\\.\\d+)?";
+  var NUMBER_FR = "[+-]?\\d+(?:[.,]\\d+)?";
+  var COORDINATES = [
+    new RegExp("^(" + NUMBER_FR + ")\\s*;\\s*(" + NUMBER_FR + ")$"),
+    new RegExp("^(" + NUMBER + ")\\s*,\\s*(" + NUMBER + ")$"),
+    new RegExp("^(" + NUMBER + ")\\s+(" + NUMBER + ")$")
+  ];
+
+  function parseCoordinates(text) {
+    if (typeof text !== "string") return null;
+    var typed = text.trim();
+    for (var i = 0; i < COORDINATES.length; i += 1) {
+      var found = COORDINATES[i].exec(typed);
+      if (!found) continue;
+      var lat = parseFloat(found[1].replace(",", "."));
+      var lon = parseFloat(found[2].replace(",", "."));
+      return { lat: lat, lon: lon, inCanada: inCanada(lat, lon) };
+    }
+    return null;
+  }
+
   // What each answer feeds. Changing the key clears the answers listed against it.
   // "name" is cleared only while it is still the suggested name, not one the person typed.
   var DEPENDENTS = {
@@ -158,13 +184,18 @@
 
   var ACCENTED = { "œ": "oe", "Œ": "OE", "æ": "ae", "Æ": "AE" };
 
-  // A name for a new board, from its town. A board that is already running has a name
-  // people know it by, so nothing is suggested: the person types it to keep it, or a new one.
-  function suggestName(answers) {
+  // A name for a new board, from where it is: a town's own name, a street address's
+  // municipality (the part after its last comma), or for coordinates the region's label,
+  // which the page passes in. A board that is already running has a name people know it
+  // by, so nothing is suggested: the person types it to keep it, or a new one.
+  function suggestName(answers, regionLabel) {
     var a = answers || {};
     if (a.status === "running") return "";
-    var town = a.place && typeof a.place.name === "string" ? a.place.name : "";
-    var letters = town
+    var place = a.place || {};
+    var from = typeof place.name === "string" ? place.name : "";
+    if (place.kind === "address") from = from.split(",").pop();
+    if (place.kind === "coordinates") from = typeof regionLabel === "string" ? regionLabel : "";
+    var letters = from
       .replace(/[ŒœÆæ]/g, function (ch) { return ACCENTED[ch]; })
       .normalize("NFD")
       .replace(/[^A-Za-z]/g, "");
@@ -235,10 +266,15 @@
     flagField("shareLocation")
   ];
 
-  // The picked town travels as town, lat and lon (4 decimals, about 10 m) so a reload or a
+  // The picked place travels as town, lat and lon (4 decimals, about 10 m) so a reload or a
   // language switch needs no new search. It is not called "place": `?place=<text>` is the
-  // deep link that starts the town search. The place's province is the `province` answer.
+  // deep link that starts the search. The place's province is the `province` answer.
+  // `town` is the place's display name: a town, a street address as the geocoder wrote it,
+  // or the rounded coordinates, never the text typed into the search. A place found from
+  // a street address or coordinates also carries `kind`, so the map position is described
+  // as the spot entered rather than "near" a town. A town has no kind.
   var MAX_TOWN = 80;
+  var PLACE_KINDS = ["address", "coordinates"];
   var CANADA = { latMin: 41, latMax: 84, lonMin: -142, lonMax: -52 };
   var DECIMAL_RE = /^-?\d+(\.\d+)?$/;
 
@@ -258,7 +294,9 @@
     var lat = round4(place.lat);
     var lon = round4(place.lon);
     if (!inCanada(lat, lon)) return [];
-    return ["town=" + encodeURIComponent(place.name), "lat=" + lat, "lon=" + lon];
+    var parts = ["town=" + encodeURIComponent(place.name)];
+    if (oneOf(PLACE_KINDS, place.kind)) parts.push("kind=" + place.kind);
+    return parts.concat("lat=" + lat, "lon=" + lon);
   }
 
   function readPlace(params, province) {
@@ -273,6 +311,7 @@
     if (province !== undefined) place.province = province;
     place.lat = lat;
     place.lon = lon;
+    if (oneOf(PLACE_KINDS, params.get("kind"))) place.kind = params.get("kind");
     return place;
   }
 
@@ -307,6 +346,7 @@
     isComplete: isComplete,
     route: route,
     parseVersion: parseVersion,
+    parseCoordinates: parseCoordinates,
     resetDependents: resetDependents,
     suggestName: suggestName,
     toQuery: toQuery,

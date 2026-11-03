@@ -72,7 +72,7 @@ Si Canada n’apparaît pas, suivez les [consignes pour l’ancien préréglage]
     le trafic partagé.
 
 L’[outil de configuration](../config/index.md) choisit votre zone IATA MeshMapper
-d’après votre ville et règle ses portées. Le répéteur a encore d’anciennes
+d’après votre ville, votre adresse ou vos coordonnées et règle ses portées. Le répéteur a encore d’anciennes
 régions? L’outil les retire d’abord :
 [Comprendre les répéteurs](../config/guide.md#old-regions) explique comment.
 

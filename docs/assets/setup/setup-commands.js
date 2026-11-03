@@ -134,8 +134,10 @@
     var located = place && typeof place.name === "string" && place.name &&
       typeof place.lat === "number" && isFinite(place.lat) && typeof place.lon === "number" && isFinite(place.lon);
     if (a.shareLocation !== false && located) {
-      out.push(item("lat", "set lat " + round4(place.lat), say("why.lat", lang, { town: place.name })));
-      out.push(item("lon", "set lon " + round4(place.lon), say("why.lon", lang, { town: place.name })));
+      // A town's search point is only near the town; a street address or coordinates are the spot itself.
+      var spot = place.kind === "address" || place.kind === "coordinates" ? "-spot" : "";
+      out.push(item("lat", "set lat " + round4(place.lat), say("why.lat" + spot, lang, { town: place.name })));
+      out.push(item("lon", "set lon " + round4(place.lon), say("why.lon" + spot, lang, { town: place.name })));
     }
     out.push(item("password", "password <" + say("ph.password", lang) + ">", say(s.running ? "why.password-keep" : "why.password", lang), true));
     return out;

@@ -277,6 +277,98 @@ test("planning tells starter regions and planning extensions apart from MeshMapp
   assert.equal(place.planning("ykf", { name: "Wingham" }, data), null);
 });
 
+// ------------------------------------------------------------ street addresses (place-search.js)
+
+const search = globalThis.MeshCorePlaceSearch;
+// Rows in the shape https://geolocator.api.geo.ca/?keys=locate sends (trimmed). A civic address is
+// tagged INTERPOLATED_POSITION; the same reply also carries towns, lakes, intersections and street centroids.
+const locate = (name, province, lat, lng, category = "Street", tag = "INTERPOLATED_POSITION") => ({ key: "locate", name, province, category, lat, lng, bbox: null, tag: [tag] });
+const WELLINGTON = [
+  locate("111 Wellington Street, City Of Ottawa, Ontario", "Ontario", 45.42312333800001, -75.698764764),
+  locate("Guelph, Wellington, Ontario (City)", "Ontario", 43.5339991, -80.2316544, "City", "LOCATION"),
+  locate("Footner Lake, 5,8-111-19-W5, Alberta (Unincorporated area)", "Alberta", 58.6133333, -117.1633333, "Unincorporated area", "LOCATION"),
+  locate("Route 111 & Route 111 Nord & Rue Principale, Dupuy, Quebec", "Quebec", 48.8206757, -79.3584753, "Intersection", "LOCATION"),
+  locate("Wellington Street, City Of Ottawa, Ontario", "Ontario", 45.42, -75.70, "Street", "INTERPOLATED_CENTROID"),
+];
+
+test("a number with words is a street address; a town, a region code or bare numbers are not", () => {
+  for (const query of ["111 Wellington Street, Ottawa", "111, rue Wellington, Ottawa", "1 Rue Notre-Dame Est, Montréal", "100 Mile House", "K1A 0A9"]) {
+    assert.equal(search.isAddress(query), true, query);
+  }
+  for (const query of ["Belleville", "Saint-Jean, QC", "ytr", "44.1628, -77.3832", "", "  "]) {
+    assert.equal(search.isAddress(query), false, query);
+  }
+});
+
+test("address rows keep only civic addresses, named by street and municipality", () => {
+  assert.deepEqual(search.addressCandidates(WELLINGTON), [
+    { name: "111 Wellington Street, Ottawa", province: "Ontario", lat: 45.42312333800001, lon: -75.698764764, kind: "address" }
+  ]);
+  // The French reply says "Ville Of"; other places are a Town, County or plain name. The province ends the name.
+  const french = [
+    locate("111 Wellington Street, Ville Of Ottawa, Ontario", "Ontario", 45.4231, -75.6988, "Rue"),
+    locate("10 Hastings Street South, Town Of Bancroft, Ontario", "Ontario", 45.0566, -77.8549),
+    locate("50 Picton Main Street, County Of Prince Edward County, Ontario", "Ontario", 44.0072, -77.1405),
+    locate("1 Rue Notre-Dame Est, Montréal, Québec", "Québec", 45.5065186, -73.5554019, "Rue"),
+    locate("1 Rue Saint-Jean, Québec, Quebec", "Quebec", 46.8123, -71.2145),
+  ];
+  assert.deepEqual(search.addressCandidates(french).map((place) => [place.name, place.province]), [
+    ["111 Wellington Street, Ottawa", "Ontario"],
+    ["10 Hastings Street South, Bancroft", "Ontario"],
+    ["50 Picton Main Street, Prince Edward County", "Ontario"],
+    ["1 Rue Notre-Dame Est, Montréal", "Québec"],
+    ["1 Rue Saint-Jean, Québec", "Quebec"],
+  ]);
+});
+
+test("address rows outside Canada, with no province or municipality, or repeated, are left out; at most 5 stay", () => {
+  const rows = [
+    locate("1 Main Street, Seattle, Washington", "Washington", 47.6062, -122.3321),
+    locate("1 Main Street, Nowhere, Ontario", "Ontario", 12, -77),
+    locate("1 Main Street, Ontario", "Ontario", 44.1, -77.1),
+    locate("K1A", null, 45.4236, -75.7008, "PostalCode", "INTERPOLATED_CENTROID"),
+    locate("1 Main Street, Belleville, Ontario", "Ontario", 44.16, -77.38),
+    locate("1 Main Street, Belleville, Ontario", "Ontario", 44.16, -77.38),
+    { key: "geonames", name: "1 Main Street, Picton, Ontario", province: "Ontario", lat: 44.0, lng: -77.1, category: "Street", tag: ["INTERPOLATED_POSITION"] },
+    ...Array.from({ length: 8 }, (_, index) => locate(`${index + 2} Main Street, Kingston, Ontario`, "Ontario", 44.23 + index / 1000, -76.48)),
+  ];
+  const found = search.addressCandidates(rows);
+  assert.equal(found.length, 5);
+  assert.deepEqual(found.slice(0, 2).map((place) => place.name), ["1 Main Street, Belleville", "2 Main Street, Kingston"]);
+  assert.throws(() => search.addressCandidates({}), /Invalid place response/);
+});
+
+test("find asks the street-address search for an address and the town search for a town", async () => {
+  const asked = [];
+  const reply = (rows) => ({ ok: true, json: async () => rows });
+  const request = async (url) => {
+    const params = new URL(url).searchParams;
+    asked.push([params.get("keys"), params.get("q"), params.get("lang")]);
+    if (params.get("keys") === "locate") return reply(params.get("q") === "111 Wellington Street, Ottawa" ? WELLINGTON : [locate("Unsigned, 100 Mile House, British Columbia", "British Columbia", 51.71, -121.44, "Street", "INTERPOLATED_CENTROID")]);
+    return reply(params.get("q") === "Belleville" || params.get("q") === "100 Mile House"
+      ? [{ key: "geonames", name: params.get("q"), province: params.get("q") === "Belleville" ? "Ontario" : "British Columbia", category: "City", lat: params.get("q") === "Belleville" ? 44.1628 : 51.6428, lng: params.get("q") === "Belleville" ? -77.3832 : -121.2956 }]
+      : []);
+  };
+  const address = await search.find("111 Wellington Street, Ottawa", "en", request);
+  assert.deepEqual(address.map((place) => [place.name, place.kind]), [["111 Wellington Street, Ottawa", "address"]]);
+  assert.deepEqual(asked, [["locate", "111 Wellington Street, Ottawa", "en"]]);
+
+  // No civic address matches (a town with a number in its name): the town search is tried next.
+  asked.length = 0;
+  const town = await search.find("100 Mile House", "fr", request);
+  assert.deepEqual(town.map((place) => [place.name, place.kind]), [["100 Mile House", undefined]]);
+  assert.deepEqual(asked, [["locate", "100 Mile House", "fr"], ["geonames", "100 Mile House", "fr"]]);
+
+  // A town goes straight to the town search, exactly as lookup() does.
+  asked.length = 0;
+  assert.deepEqual(await search.find("Belleville", "en", request), await search.lookup("Belleville", "en", request));
+  assert.deepEqual(asked.map((call) => call[0]), ["geonames", "geonames"]);
+
+  // A search that fails says so; the page then offers the region code box.
+  await assert.rejects(search.find("111 Wellington Street, Ottawa", "en", async () => ({ ok: false })), /Place lookup failed/);
+  await assert.rejects(search.find("111 Wellington Street, Ottawa", "en", async () => reply({})), /Invalid place response/);
+});
+
 test("the script loads without the place search and region scripts; only resolve needs them", async () => {
   const sandbox = { URL };
   vm.createContext(sandbox);

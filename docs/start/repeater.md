@@ -68,7 +68,7 @@ If Canada is not listed, follow the [older-preset instructions](../provinces/ind
     affect shared traffic.
 
 The [setup tool](../config/index.md) picks your MeshMapper IATA region from your
-town and sets its scopes. Already running with old regions? The tool clears them
+town, street address or coordinates and sets its scopes. Already running with old regions? The tool clears them
 first: [How repeaters work](../config/guide.md#old-regions) explains how.
 
 A repeater that regularly hears repeaters in another region is an edge repeater.
