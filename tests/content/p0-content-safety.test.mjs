@@ -61,8 +61,8 @@ test("the setup tool erases only new boards and warns to back up a running one f
     fr: /Sauvegardez-la d’abord\. .*sauvegarder sa clé privée.*`get prv\.key`.*Ne l’effacez jamais dans l’outil de programmation : ça supprime son identité/,
   };
   const eraseNew = {
-    en: { esp32: /^Tick Erase device, since it's a new board\./, nrf52: /^Skip Erase Flash unless your board's instructions ask for it\./ },
-    fr: { esp32: /^Cochez Erase device, puisque c’est une carte neuve\./, nrf52: /^N’utilisez Erase Flash que si les instructions de votre carte le demandent\./ },
+    en: { esp32: /^Tick Erase device, since it's a new board\./, nrf52: /^Click Erase Flash, since it's a new board\./ },
+    fr: { esp32: /^Cochez Erase device, puisque c’est une carte neuve\./, nrf52: /^Cliquez sur Erase Flash, puisque c’est une carte neuve\./ },
   };
   const eraseRunning = {
     en: { esp32: /^Leave Erase device unticked\./, nrf52: /^Don't click Erase Flash\./ },

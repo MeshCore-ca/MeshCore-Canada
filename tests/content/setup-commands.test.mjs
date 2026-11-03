@@ -384,7 +384,10 @@ test("flash steps use each flasher's own button names", () => {
   for (const lang of ["en", "fr"]) {
     assert.match(text.t("flash.repeater.step3", lang, { erase: "" }), /Flash!/, lang);
     assert.doesNotMatch(text.t("flash.observer.step3", lang, { erase: "" }), /Flash!/, lang);
-    assert.match(text.t("flash.nrf52.dfu", lang), /Enter DFU mode[\s\S]*Flash!/, lang);
+    assert.match(text.t("flash.nrf52.dfu", lang), /Enter DFU mode/, lang);
+    assert.match(text.t("flash.nrf52.port", lang), /COM/, lang);
+    assert.match(text.t("flash.nrf52.flash", lang), /Flash!/, lang);
+    assert.match(text.t("flash.erase.nrf52-new", lang), /Erase Flash/, lang);
     assert.match(text.t("flash.erase.esp32-new", lang), /Erase device/, lang);
     assert.match(text.t("flash.erase.nrf52-running", lang), /Erase Flash/, lang);
   }

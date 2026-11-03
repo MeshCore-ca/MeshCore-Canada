@@ -1257,12 +1257,17 @@ for (const lang of LANGS) {
 for (const lang of LANGS) {
   test(`${lang} flash step names the flasher's own buttons for each kind of board`, async ({ page }) => {
     const base = ROUTES[lang];
-    // nRF52 repeater: bootloader first, then the MeshCore flasher's Flash! plus the Enter DFU mode note.
+    // nRF52: Enter DFU mode, pick the port, Erase Flash only on a new board, then Flash!, in that order.
+    const nrfSteps = (erase) => [plain("flash.nrf52.dfu", lang), plain("flash.nrf52.port", lang), plain(erase, lang), plain("flash.nrf52.flash", lang)];
+    const listed = async () => (await page.locator("[data-setup-step] ol.setup-steps li").allTextContents()).map(s => s.replace(/\s+/g, " ").trim());
     await page.goto(siteRoute(`${base}?type=repeater&board=nrf52&status=new`));
     await confirmStep(page, "bootloader");
     await expectStep(page, "flash");
-    await expect(step(page)).toContainText(T("flash.repeater.step3", lang, { erase: T("flash.erase.nrf52-new", lang) }));
-    await expect(step(page)).toContainText(T("flash.nrf52.dfu", lang));
+    expect((await listed()).slice(2, 6)).toEqual(nrfSteps("flash.erase.nrf52-new"));
+    await page.goto(siteRoute(`${base}?type=repeater&board=nrf52&status=running&reflash=1`));
+    await confirmStep(page, "bootloader");
+    await expectStep(page, "flash");
+    expect((await listed()).slice(2, 6)).toEqual(nrfSteps("flash.erase.nrf52-running"));
     // ESP32 repeater: the Erase device tick and Flash!, no DFU note.
     await page.goto(siteRoute(`${base}?type=repeater&board=esp32&status=new`));
     await expectStep(page, "flash");
