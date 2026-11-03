@@ -201,13 +201,9 @@
     var next = Object.assign({}, before);
     next[key] = value;
     next = Flow.resetDependents(next, key);
-    // Shared cross-border labels (onny, qcny) suit city and edge repeaters alike, so a role change keeps them.
+    // The cross-border scopes the tool lists suit city and edge repeaters alike, so a role change keeps them.
     // So does a scope the person agreed with a network across the border.
-    if (key === "role" && Array.isArray(before.external)) {
-      var shared = Place.crossBorder(before.province).shared;
-      var kept = before.external.filter(function (id) { return shared.indexOf(id) !== -1; });
-      if (kept.length) next.external = kept;
-    }
+    if (key === "role" && before.external !== undefined) next.external = before.external;
     if (key === "role" && before.custom !== undefined) next.custom = before.custom;
     if (CLEARS_OLDER.indexOf(key) !== -1) state.olderFirmware = false;
     setAnswers(next);
@@ -338,10 +334,12 @@
           return tag !== next.tag && has(data.catalog.hierarchy, tag) && data.catalog.hierarchy[tag].kind === "city";
         });
       }
+      // Only the scopes the tool lists for the province stay: an old link's US network, or a scope from
+      // another province, is dropped without a word.
       if (Array.isArray(next.external)) {
-        var networks = Place.crossBorder(next.province);
-        var allowed = networks.shared.concat(next.role === "edge" ? networks.edgeOnly : []);
-        next.external = next.external.filter(function (id) { return allowed.indexOf(id) !== -1; });
+        var offeredScopes = Place.crossBorder(next.province, data).map(function (item) { return item.scope; });
+        next.external = next.external.filter(function (tag) { return offeredScopes.indexOf(tag) !== -1; });
+        if (!next.external.length) delete next.external;
       }
     }
     if (Flow.toQuery(next) === Flow.toQuery(a)) {
@@ -373,13 +371,6 @@
   function provinceName(code) {
     var entry = state.data && code && has(state.data.catalog.hierarchy, code) ? state.data.catalog.hierarchy[code] : null;
     return entry ? (isFrench && entry.labelFr) || entry.label : String(code || "").toUpperCase();
-  }
-
-  function networkName(id) {
-    var paths = state.data && state.data.catalog.externalRegionPaths;
-    var entry = paths && has(paths, id) ? paths[id] : null;
-    var french = isFrench && (entry && entry.labelFr || (has(Text.networkLabelsFr, id) && Text.networkLabelsFr[id]));
-    return french || (entry ? entry.label : id);
   }
 
   function sayList(values) {
@@ -789,10 +780,10 @@
       answerChoice("role", "city", "city", t("role.city"), t("role.city.detail", { region: region })),
       answerChoice("role", "edge", "edge", t("role.edge"), t("role.edge.detail", { region: region }))
     ]));
-    // A city repeater can carry a shared cross-border label, or one it agreed with a network across the
-    // border (offered in every province); an edge repeater picks networks on the next screen.
+    // A city repeater can carry a cross-border scope the tool lists for its province, or one it agreed with a
+    // network across the border (offered in every province); an edge repeater picks them on the next screen.
     if (a.role === "city") {
-      body.appendChild(networkBoxes(Place.crossBorder(a.province).shared, t("role.shared.question"), t("role.shared.hint")));
+      body.appendChild(scopeBoxes(Place.crossBorder(a.province, state.data), t("role.shared.question"), t("role.shared.hint")));
     }
   }
 
@@ -801,14 +792,19 @@
     return el("label", Object.assign({ class: "setup-check" }, attrs), [box, el("span", null, label)]);
   }
 
-  function networkBoxes(ids, legend, hint) {
+  // The cross-border scopes the tool lists for the province, each with its name and what it is for, then the
+  // box for one the person agreed by hand. Ticked scopes are kept in the list's order.
+  function scopeBoxes(scopes, legend, hint) {
+    var tags = scopes.map(function (item) { return item.scope; });
     var set = el("fieldset", { class: "setup-fieldset" }, [el("legend", { text: legend }), para(hint, { class: "setup-hint" })]);
-    ids.forEach(function (id) {
-      set.appendChild(checkboxRow({ "data-setup-external": id }, networkName(id), (state.answers.external || []).indexOf(id) !== -1, function (checked) {
-        var list = (state.answers.external || []).filter(function (item) { return item !== id; });
-        if (checked) list.push(id);
+    scopes.forEach(function (item) {
+      var label = [el("span", { class: "setup-check__name", text: isFrench ? item.nameFr : item.name }), " ",
+        el("span", { class: "setup-check__why", text: isFrench ? item.descriptionFr : item.description })];
+      set.appendChild(checkboxRow({ "data-setup-external": item.scope }, label, (state.answers.external || []).indexOf(item.scope) !== -1, function (checked) {
+        var list = (state.answers.external || []).filter(function (tag) { return tag !== item.scope; });
+        if (checked) list.push(item.scope);
         var next = Object.assign({}, state.answers);
-        if (list.length) next.external = ids.filter(function (item) { return list.indexOf(item) !== -1; }).concat(list.filter(function (item) { return ids.indexOf(item) === -1; }));
+        if (list.length) next.external = tags.filter(function (tag) { return list.indexOf(tag) !== -1; }).concat(list.filter(function (tag) { return tags.indexOf(tag) === -1; }));
         else delete next.external;
         setAnswers(next);
         updateActions();
@@ -977,8 +973,7 @@
     ]));
 
     body.appendChild(para(link(t("neighbours.meshmapper"), LINKS.meshmapper)));
-    var networks = Place.crossBorder(a.province);
-    body.appendChild(networkBoxes(networks.shared.concat(networks.edgeOnly), t("crossborder.title"), t("crossborder.hint")));
+    body.appendChild(scopeBoxes(Place.crossBorder(a.province, state.data), t("crossborder.title"), t("crossborder.hint")));
   }
 
   function nameBody(body) {

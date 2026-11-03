@@ -55,9 +55,10 @@
     // Listen-only repeater observers have no scopes: stepIds leaves out the role step for them.
     var scoped = steps.indexOf("role") !== -1;
     var edge = scoped && a.role === "edge";
-    var offered = place.crossBorder(a.province);
-    var networks = scoped ? offered.shared.concat(edge ? offered.edgeOnly : []) : [];
-    var external = Array.isArray(a.external) ? a.external.filter(function (id) { return networks.indexOf(id) !== -1; }) : [];
+    // The cross-border scopes the tool lists for this province (data/cross-border-scopes.yml), in its order.
+    // City and edge repeaters can carry any of them; a tag that isn't listed for the province is dropped.
+    var offered = scoped ? place.crossBorder(a.province, data).map(function (item) { return item.scope; }) : [];
+    var external = Array.isArray(a.external) ? offered.filter(function (tag) { return a.external.indexOf(tag) !== -1; }) : [];
     var radio = null;
     if (route === "flash") {
       var chosen = steps.indexOf("radio") !== -1 && options.some(function (option) { return option.id === a.radio; });
@@ -76,35 +77,46 @@
         return typeof tag === "string" && tag !== a.tag && has(hierarchy, tag) && hierarchy[tag].kind === "city";
       }) : [],
       external: external,
-      custom: customScope(a, scoped, external, data)
+      custom: customScope(a, scoped, external)
     };
   }
 
   // A scope typed in by hand, agreed with a network across the border: the clean tag, or null when
   // there is none, it isn't valid, there are no scopes at all (a listen-only repeater observer), or a
-  // ticked network already carries it under a parent (adding it flat would clash with that).
-  function customScope(answers, scoped, external, data) {
+  // ticked scope from the list already is that tag (it would only be added twice).
+  function customScope(answers, scoped, external) {
     if (!scoped || !lib("MeshCoreSetupFlow").isCustom(answers.custom)) return null;
-    var paths = data.catalog.externalRegionPaths || {};
-    var carried = external.some(function (id) { return has(paths, id) && paths[id].path.indexOf(answers.custom) !== -1; });
-    return carried ? null : answers.custom;
+    return external.indexOf(answers.custom) !== -1 ? null : answers.custom;
   }
 
+  // The scope the tool lists under this tag, or null.
+  function listedScope(tag, data) {
+    var scopes = data.crossBorder && Array.isArray(data.crossBorder.scopes) ? data.crossBorder.scopes : [];
+    for (var i = 0; i < scopes.length; i += 1) if (scopes[i].scope === tag) return scopes[i];
+    return null;
+  }
+
+  var LISTED_PREFIX = "listed:";
   var CUSTOM_PREFIX = "custom:";
 
-  // The catalogue as the generator reads it, with a typed-in scope added as one more flat, shared,
-  // unconfirmed cross-border entry, so the generator builds its lines and its "confirm" note.
+  // One more flat, shared, unconfirmed cross-border entry for the generator to build its lines and its
+  // "confirm" note from. This file never builds a `region def` itself.
+  function flatScope(tag, label, labelFr) {
+    var entry = { label: label, path: [tag], sharedScope: true, geographic: false, automatic: false, authority: { status: "proposed" } };
+    if (labelFr) entry.labelFr = labelFr;
+    return entry;
+  }
+
+  // The catalogue as the generator reads it, with the ticked scopes from the list and the typed-in one
+  // added as flat entries. The page's own catalogue is left as it is.
   function catalogFor(s, data) {
-    if (!s.custom) return data.catalog;
+    if (!s.external.length && !s.custom) return data.catalog;
     var paths = Object.assign({}, data.catalog.externalRegionPaths);
-    paths[CUSTOM_PREFIX + s.custom] = {
-      label: s.custom,
-      path: [s.custom],
-      sharedScope: true,
-      geographic: false,
-      automatic: false,
-      authority: { status: "proposed" }
-    };
+    s.external.forEach(function (tag) {
+      var listed = listedScope(tag, data);
+      paths[LISTED_PREFIX + tag] = flatScope(tag, listed.name + " (" + tag + ")", listed.nameFr + " (" + tag + ")");
+    });
+    if (s.custom) paths[CUSTOM_PREFIX + s.custom] = flatScope(s.custom, s.custom);
     return Object.assign({}, data.catalog, { externalRegionPaths: paths });
   }
 
@@ -115,11 +127,11 @@
       province: s.answers.province,
       bridge: s.edge,
       cities: s.cities,
-      external: s.custom ? s.external.concat(CUSTOM_PREFIX + s.custom) : s.external
+      external: s.external.map(function (tag) { return LISTED_PREFIX + tag; }).concat(s.custom ? [CUSTOM_PREFIX + s.custom] : [])
     });
   }
 
-  // "Quinte West (ytr)", "Amérique du Nord (na)", "États-Unis (us)". A typed-in scope that nothing
+  // "Quinte West (ytr)", "Amérique du Nord (na)", "Ontario–New York (onny)". A typed-in scope that nothing
   // else names is shown as "qcx2 (agreed with a network across the border)".
   function tagName(tag, data, lang, custom) {
     var name = knownName(tag, data, lang);
@@ -133,13 +145,8 @@
       var entry = catalog.hierarchy[tag];
       label = (lang === "fr" && entry.labelFr) || entry.label;
     } else {
-      var french = lib("MeshCoreSetupText").tagLabelsFr;
-      if (lang === "fr" && has(french, tag)) label = french[tag];
-      var paths = catalog.externalRegionPaths || {};
-      Object.keys(paths).forEach(function (id) {
-        var labels = paths[id].tagLabels;
-        if (!label && labels && has(labels, tag)) label = labels[tag];
-      });
+      var listed = listedScope(tag, data);
+      if (listed) label = lang === "fr" ? listed.nameFr : listed.name;
     }
     return label && label !== tag ? label + " (" + tag + ")" : tag;
   }
@@ -283,9 +290,8 @@
     if (data.catalog.hierarchy[result.home].provinces.indexOf(result.province) === -1) {
       out.push(say("note.province", lang, { region: tagName(result.home, data, lang) }));
     }
-    var french = lib("MeshCoreSetupText").networkLabelsFr || {};
     result.externalPaths.forEach(function (record) {
-      var name = (lang === "fr" && (record.labelFr || (has(french, record.id) && french[record.id]))) || record.label;
+      var name = (lang === "fr" && record.labelFr) || record.label;
       if (record.status !== "documented") out.push(say("note.network", lang, { network: name }));
     });
     return out;

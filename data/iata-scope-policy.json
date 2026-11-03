@@ -25,22 +25,6 @@
         "source": "MeshCore Canada cross-border scope discussion",
         "sourceUrl": "https://meshcore.ca/config/guide/#cross-border-scopes"
       }
-    },
-    "quebec-new-york": {
-      "label": "Québec–New York (qcny, opt-in)",
-      "labelFr": "Québec–New York (qcny, facultatif)",
-      "country": "us",
-      "path": ["qcny"],
-      "sharedScope": true,
-      "tagLabels": { "qcny": "Québec–New York" },
-      "geographic": false,
-      "automatic": false,
-      "eligibility": "coordinated-cross-border",
-      "authority": {
-        "status": "proposed",
-        "source": "MeshCore Canada cross-border scope discussion",
-        "sourceUrl": "https://meshcore.ca/config/guide/#cross-border-scopes"
-      }
     }
   },
   "minimumFirmware": "1.14",

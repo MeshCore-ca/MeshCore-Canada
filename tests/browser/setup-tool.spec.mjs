@@ -332,7 +332,7 @@ test("a running repeater updated over USB still clears its old regions, without 
   await expect(page.locator("[data-setup-reply-cut]")).toHaveCount(0);
 });
 
-test("edge repeater offers neighbouring regions and Ontario cross-border options", async ({ page }) => {
+test("edge repeater offers nearby regions and the Ontario cross-border scope", async ({ page }) => {
   await page.goto(siteRoute(`/config/?type=repeater&board=esp32&status=new&${BELLEVILLE}`));
   // A shared link never ticks "flashed" for someone else.
   await confirmStep(page, "flash");
@@ -341,32 +341,31 @@ test("edge repeater offers neighbouring regions and Ontario cross-border options
   await next(page);
   await expectStep(page, "role");
   await choose(page, "city");
-  // A city repeater can opt into the shared Ontario–New York label.
-  const onny = page.locator('[data-setup-external="ontario-new-york"] input');
+  // A city repeater can opt into the shared Ontario–New York scope.
+  const onny = page.locator('[data-setup-external="onny"] input');
   await onny.check();
   await choose(page, "edge");
   await next(page);
   await expectStep(page, "neighbours");
   expect(await page.locator("[data-setup-neighbour]").evaluateAll((list) => list.map((box) => box.dataset.setupNeighbour)))
     .toEqual(["xph", "ygk", "yow", "yyz", "yqa", "none"]);
-  expect(await page.locator("[data-setup-external]").evaluateAll((list) => list.map((box) => box.dataset.setupExternal)))
-    .toEqual(["ontario-new-york", "ohio", "pennsylvania", "western-new-york"]);
+  // Ontario lists one scope, and no US network.
+  expect(await page.locator("[data-setup-external]").evaluateAll((list) => list.map((box) => box.dataset.setupExternal))).toEqual(["onny"]);
   // Switching to edge kept the shared label.
   await expect(onny).toBeChecked();
   await expect(page.locator('[data-setup-neighbour="ygk"]')).toContainText("Kingston");
   await expect(nextButton(page)).toBeDisabled();
   await page.locator('[data-setup-neighbour="ygk"] input').check();
-  await page.locator('[data-setup-external="western-new-york"] input').check();
   await next(page);
   await expectStep(page, "name");
   await next(page);
   await location(page);
   await expectStep(page, "commands");
   const lines = await commandLines(page);
-  expect(lines).toContain("region def ytr|* ygk|* on|* onqc|* can|* na|* onny|* us us-ny");
+  expect(lines).toContain("region def ytr|* ygk|* on|* onqc|* can|* na|* onny");
   expect(lines).toContain("region denyf *");
-  await expect(page.locator("[data-setup-notes]")).toContainText(T("note.network", "en", { network: "Ontario–New York (onny, opt-in)" }));
-  // Back to city: neighbours and edge-only networks go, the shared label stays.
+  await expect(page.locator("[data-setup-notes]")).toContainText(T("note.network", "en", { network: "Ontario–New York (onny)" }));
+  // Back to city: the neighbours go, the shared scope stays.
   for (let back = 0; back < 4; back += 1) await page.locator("[data-setup-back]").click();
   await expectStep(page, "role");
   await choose(page, "city");
@@ -381,40 +380,35 @@ test("edge repeater offers neighbouring regions and Ontario cross-border options
   expect(city).toContain("region allowf *");
 });
 
-test("French pages name the cross-border networks in French", async ({ page }) => {
-  await openLink(page, `/fr/config/?type=repeater&board=esp32&status=running&reflash=0&role=edge&${BELLEVILLE}`, { to: "neighbours" });
-  await expect(page.locator('[data-setup-external="pennsylvania"]')).toHaveText("Pennsylvanie");
-  await expect(page.locator('[data-setup-external="western-new-york"]')).toHaveText("Ouest de l’État de New York");
-  await page.locator('[data-setup-neighbour="none"] input').check();
-  await page.locator('[data-setup-external="pennsylvania"] input').check();
-  await next(page);
-  await expectStep(page, "name");
-  await page.locator("[data-setup-name]").fill("Belleville_R1");
-  await next(page);
-  await location(page);
-  await expectStep(page, "commands");
-  await expect(page.locator("[data-setup-notes]")).toContainText(T("note.network", "fr", { network: "Pennsylvanie" }));
-});
-
-test("a Québec repeater is offered the shared Québec–New York label, named in each language", async ({ page }) => {
+test("a Québec repeater is offered Québec–New York and Québec–Vermont, named and described in each language", async ({ page }) => {
+  const words = {
+    en: { qcny: ["Québec–New York", "Applied to repeaters that connect New York and Québec."], qcvt: ["Québec–Vermont", "Applied to repeaters that connect Vermont and Québec."] },
+    fr: { qcny: ["Québec–New York", "Pour les répéteurs qui relient l’État de New York et le Québec."], qcvt: ["Québec–Vermont", "Pour les répéteurs qui relient le Vermont et le Québec."] }
+  };
   for (const lang of LANGS) {
-    const name = lang === "fr" ? "Québec–New York (qcny, facultatif)" : "Québec–New York (qcny, opt-in)";
     await openLink(page, `${ROUTES[lang]}?type=repeater&board=esp32&status=running&reflash=0&role=city&name=Test_R1&town=Montr%C3%A9al&lat=45.5&lon=-73.57&tag=yul&province=qc`, { to: "role" });
-    // The role step offers it to a city repeater, and not Ontario's label.
-    await expect(page.locator("[data-setup-external]")).toHaveCount(1);
-    await expect(page.locator('[data-setup-external="quebec-new-york"]')).toHaveText(name);
-    await expect(page.locator('[data-setup-external="ontario-new-york"]')).toHaveCount(0);
-    await page.locator('[data-setup-external="quebec-new-york"] input').check();
+    // The role step offers both to a city repeater, with what each is for, and not Ontario's scope.
+    expect(await page.locator("[data-setup-external]").evaluateAll((list) => list.map((box) => box.dataset.setupExternal))).toEqual(["qcny", "qcvt"]);
+    for (const tag of ["qcny", "qcvt"]) {
+      const [name, why] = words[lang][tag];
+      await expect(page.locator(`[data-setup-external="${tag}"] .setup-check__name`)).toHaveText(name);
+      await expect(page.locator(`[data-setup-external="${tag}"] .setup-check__why`)).toHaveText(why);
+    }
+    await expect(page.locator('[data-setup-external="onny"]')).toHaveCount(0);
+    await page.locator('[data-setup-external="qcny"] input').check();
+    await page.locator('[data-setup-external="qcvt"] input').check();
     await next(page);
     await nextUntil(page, "commands");
-    expect(await commandLines(page)).toContain("region def yul|* qc|* onqc|* can|* na|* qcny");
-    await expect(page.locator("[data-setup-notes]")).toContainText(T("note.network", lang, { network: name }));
-    // An edge repeater picks it on the neighbours screen, with no US networks beside it.
-    await page.goto(siteRoute(`${ROUTES[lang]}?type=repeater&board=esp32&status=running&reflash=0&role=edge&town=Montr%C3%A9al&lat=45.5&lon=-73.57&tag=yul&province=qc&neighbours=yow&external=quebec-new-york`));
+    expect(await commandLines(page)).toContain("region def yul|* qc|* onqc|* can|* na|* qcny|* qcvt");
+    await expect(page.locator("[data-setup-notes]")).toContainText(T("note.network", lang, { network: `${words[lang].qcny[0]} (qcny)` }));
+    await expect(page.locator("[data-setup-notes]")).toContainText(T("note.network", lang, { network: `${words[lang].qcvt[0]} (qcvt)` }));
+    // An edge repeater picks them on the neighbours screen, with nothing from the US beside them.
+    await page.goto(siteRoute(`${ROUTES[lang]}?type=repeater&board=esp32&status=running&reflash=0&role=edge&town=Montr%C3%A9al&lat=45.5&lon=-73.57&tag=yul&province=qc&neighbours=yow&external=qcny`));
     await version(page, "1.16");
     await nextUntil(page, "neighbours");
-    await expect(page.locator("[data-setup-external]")).toHaveCount(1);
-    await expect(page.locator('[data-setup-external="quebec-new-york"] input')).toBeChecked();
+    await expect(page.locator("[data-setup-external]")).toHaveCount(2);
+    await expect(page.locator('[data-setup-external="qcny"] input')).toBeChecked();
+    await expect(page.locator('[data-setup-external="qcvt"] input')).not.toBeChecked();
   }
 });
 
@@ -1309,7 +1303,10 @@ test("phone width", async ({ page }, testInfo) => {
   await next(page);
   await expectStep(page, "neighbours");
   for (const tag of ["xph", "ygk", "yow", "yqa"]) await page.locator(`[data-setup-neighbour="${tag}"] input`).check();
-  for (const id of ["western-new-york", "ohio", "ontario-new-york", "pennsylvania"]) await page.locator(`[data-setup-external="${id}"] input`).check();
+  await page.locator('[data-setup-external="onny"] input').check();
+  // A scope agreed by hand makes the longest line the tool writes.
+  await page.locator("[data-setup-custom-toggle]").check();
+  await page.locator("[data-setup-custom]").fill("abcdefghijklmnopqrstuvwxy1234");
   await fitsTheScreen(page, "neighbours");
   await next(page);
   await expectStep(page, "name");
@@ -1322,8 +1319,7 @@ test("phone width", async ({ page }, testInfo) => {
   await expectStep(page, "commands");
   await page.locator("[data-setup-help]").first().click();
   const def = page.locator('[data-setup-command="def"] code');
-  // Cross-border networks keep the order the screen lists them in, whatever order they were ticked.
-  await expect(def).toHaveText("region def ytr|* xph|* ygk|* yow|* yqa|* on|* onqc|* can|* na|* onny|* us us-oh|us us-pa|us us-ny");
+  await expect(def).toHaveText("region def ytr|* xph|* ygk|* yow|* yqa|* on|* onqc|* can|* na|* onny|* abcdefghijklmnopqrstuvwxy1234");
   // The long line wraps instead of scrolling.
   expect(await def.evaluate((element) => element.getBoundingClientRect().height > 2 * parseFloat(getComputedStyle(element).lineHeight))).toBe(true);
   await fitsTheScreen(page, "commands");
@@ -1586,11 +1582,10 @@ test("the search box and its results have no serious accessibility problem, in b
 
 // One city in each province or territory, from the region catalogue.
 const PROVINCE_CITIES = { bc: "yka", ab: "yeg", sk: "yxe", mb: "ywg", on: "ytr", qc: "yul", nb: "ysj", ns: "yhz", pe: "yyg", nl: "yyt", yt: "yxy", nt: "yzf", nu: "yfb" };
-// The networks the box lists beside the custom option, by province.
-const LISTED = {
-  city: { on: ["ontario-new-york"], qc: ["quebec-new-york"] },
-  edge: { on: ["ontario-new-york", "ohio", "pennsylvania", "western-new-york"], qc: ["quebec-new-york"], bc: ["oregon", "washington"] }
-};
+// The scopes the box lists beside the custom option, by province (data/cross-border-scopes.yml). A city and an
+// edge repeater are offered the same ones, and no US network is.
+const LISTED = { on: ["onny"], qc: ["qcny", "qcvt"] };
+const US_NETWORKS = /Ohio|Pennsylvan|Western New York|Ouest de l’État de New York|Washington|Oregon/;
 const crossBorderLink = (lang, province, role, extra = "") =>
   `${ROUTES[lang]}?type=repeater&board=esp32&status=running&reflash=0&role=${role}&name=Test_R1&tag=${PROVINCE_CITIES[province]}&province=${province}${extra}`;
 const toggle = (page) => page.locator("[data-setup-custom-toggle]");
@@ -1599,12 +1594,13 @@ const customBox = (page) => page.locator("[data-setup-custom]");
 const customMessage = (page) => page.locator("[data-setup-custom-message]");
 
 for (const province of Object.keys(PROVINCE_CITIES)) {
-  test(`${province}: the cross-border box lists its networks and always offers an agreed scope, at phone width`, async ({ page }) => {
+  test(`${province}: the cross-border box lists its scopes and always offers an agreed scope, at phone width`, async ({ page }) => {
     await page.setViewportSize({ width: 360, height: 740 });
     // A city repeater sees the box on the city-or-edge screen.
     await openLink(page, crossBorderLink("en", province, "city"), { to: "role" });
-    await expect(page.locator("[data-setup-external]")).toHaveCount((LISTED.city[province] || []).length);
-    for (const id of LISTED.city[province] || []) await expect(page.locator(`[data-setup-external="${id}"]`)).toBeVisible();
+    await expect(page.locator("[data-setup-external]")).toHaveCount((LISTED[province] || []).length);
+    for (const id of LISTED[province] || []) await expect(page.locator(`[data-setup-external="${id}"]`)).toBeVisible();
+    await expect(page.locator("[data-setup-step]")).not.toContainText(US_NETWORKS);
     await expect(box(page).locator("> legend")).toHaveText(T("role.shared.question", "en"));
     await expect(toggle(page)).toBeVisible();
     await expect(page.locator("[data-setup-step] label.setup-check").filter({ has: toggle(page) })).toHaveText(T("custom.label", "en"));
@@ -1616,9 +1612,10 @@ for (const province of Object.keys(PROVINCE_CITIES)) {
     await expect(page.locator('label[for="setup-custom"]')).toHaveText(T("custom.name", "en"));
     await expect(page.locator("#setup-custom-hint")).toHaveText(T("custom.hint", "en"));
     await fitsTheScreen(page, `${province} city`);
-    // An edge repeater sees it on the neighbours screen, with the edge-only networks.
+    // An edge repeater sees the same scopes on the neighbours screen.
     await openLink(page, crossBorderLink("en", province, "edge"), { to: "neighbours" });
-    await expect(page.locator("[data-setup-external]")).toHaveCount((LISTED.edge[province] || []).length);
+    await expect(page.locator("[data-setup-external]")).toHaveCount((LISTED[province] || []).length);
+    await expect(page.locator("[data-setup-step]")).not.toContainText(US_NETWORKS);
     await expect(box(page).locator("> legend")).toHaveText(T("crossborder.title", "en"));
     await expect(toggle(page)).toBeVisible();
     await toggle(page).check();
@@ -1626,6 +1623,96 @@ for (const province of Object.keys(PROVINCE_CITIES)) {
     await fitsTheScreen(page, `${province} edge`);
   });
 }
+
+for (const lang of LANGS) {
+  test(`${lang} Ontario lists onny with what it is for, British Columbia lists only the agreed-scope option`, async ({ page }) => {
+    const onny = {
+      en: ["Ontario–New York", "Applied to repeaters that connect New York and Ontario."],
+      fr: ["Ontario–New York", "Pour les répéteurs qui relient l’État de New York et l’Ontario."]
+    }[lang];
+    for (const role of ["city", "edge"]) {
+      await openLink(page, crossBorderLink(lang, "on", role), { to: role === "city" ? "role" : "neighbours" });
+      expect(await page.locator("[data-setup-external]").evaluateAll((list) => list.map((row) => row.dataset.setupExternal))).toEqual(["onny"]);
+      await expect(page.locator('[data-setup-external="onny"] .setup-check__name')).toHaveText(onny[0]);
+      await expect(page.locator('[data-setup-external="onny"] .setup-check__why')).toHaveText(onny[1]);
+      await expect(page.locator("[data-setup-step]")).not.toContainText(US_NETWORKS);
+      await expect(toggle(page)).toBeVisible();
+      // Ticked, with its description beside it, the row still has no serious accessibility problem (colour contrast included).
+      await page.locator('[data-setup-external="onny"] input').check();
+      const found = await new AxeBuilder({ page }).include("[data-setup-step]").withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]).analyze();
+      expect(found.violations.filter((violation) => ["serious", "critical"].includes(violation.impact)).map((violation) => violation.id), `${lang} ${role} ticked scope`).toEqual([]);
+      await openLink(page, crossBorderLink(lang, "bc", role), { to: role === "city" ? "role" : "neighbours" });
+      await expect(page.locator("[data-setup-external]")).toHaveCount(0);
+      await expect(page.locator("[data-setup-step]")).not.toContainText(US_NETWORKS);
+      await expect(toggle(page)).toBeVisible();
+      await expect(page.locator("[data-setup-custom-share]")).toBeVisible();
+    }
+  });
+}
+
+test("the scopes offered come from the published file: a new entry shows up, in the page's language, and works", async ({ page }) => {
+  await page.route("**/assets/regions/cross-border-scopes.json*", async (route) => {
+    const list = await (await route.fetch()).json();
+    list.scopes.push({ scope: "bcwa", name: "British Columbia–Washington", nameFr: "Colombie-Britannique–Washington",
+      description: "Applied to repeaters that connect Washington and British Columbia.", descriptionFr: "Pour les répéteurs qui relient Washington et la Colombie-Britannique.", provinces: ["bc"] });
+    await route.fulfill({ json: list });
+  });
+  for (const lang of LANGS) {
+    await openLink(page, crossBorderLink(lang, "bc", "city"), { to: "role" });
+    expect(await page.locator("[data-setup-external]").evaluateAll((list) => list.map((row) => row.dataset.setupExternal))).toEqual(["bcwa"]);
+    await expect(page.locator('[data-setup-external="bcwa"] .setup-check__name')).toHaveText(lang === "fr" ? "Colombie-Britannique–Washington" : "British Columbia–Washington");
+    await expect(page.locator('[data-setup-external="bcwa"] .setup-check__why')).toHaveText(lang === "fr"
+      ? "Pour les répéteurs qui relient Washington et la Colombie-Britannique." : "Applied to repeaters that connect Washington and British Columbia.");
+    await page.locator('[data-setup-external="bcwa"] input').check();
+    expect(page.url()).toContain("external=bcwa");
+    await next(page);
+    await nextUntil(page, "commands");
+    expect(await commandLines(page)).toContain("region def yka|* bc|* can|* na|* bcwa");
+    await expect(page.locator("[data-setup-notes]")).toContainText(T("note.network", lang, { network: `${lang === "fr" ? "Colombie-Britannique–Washington" : "British Columbia–Washington"} (bcwa)` }));
+  }
+});
+
+test("a share link made before the scopes came from a file still works: the old network ids are read as the scope tags", async ({ page }) => {
+  await openLink(page, `/config/?type=repeater&board=esp32&status=running&reflash=0&role=city&name=Test_R1&${BELLEVILLE}&external=ontario-new-york`, { to: "role" });
+  await expect(page.locator('[data-setup-external="onny"] input')).toBeChecked();
+  await expect.poll(() => page.url()).toContain("external=onny");
+  expect(page.url()).not.toContain("ontario-new-york");
+  await next(page);
+  await nextUntil(page, "commands");
+  expect(await commandLines(page)).toContain("region def ytr|* on|* onqc|* can|* na|* onny");
+  await openLink(page, `/fr/config/?type=repeater&board=esp32&status=running&reflash=0&role=edge&name=Test_R1&town=Montr%C3%A9al&lat=45.5&lon=-73.57&tag=yul&province=qc&neighbours=yow&external=quebec-new-york`, { to: "neighbours" });
+  await expect(page.locator('[data-setup-external="qcny"] input')).toBeChecked();
+  await expect(page.locator('[data-setup-external="qcvt"] input')).not.toBeChecked();
+  expect(page.url()).toContain("external=qcny");
+});
+
+test("a US network in an old share link is dropped without a word, and so is a scope from another province", async ({ page }) => {
+  const ids = "ohio,pennsylvania,western-new-york,washington,oregon,california";
+  for (const [province, tag, extra] of [["on", "ytr", "&neighbours=ygk"], ["bc", "yka", ""]]) {
+    await openLink(page, `/config/?type=repeater&board=esp32&status=running&reflash=0&role=edge&name=Test_R1&tag=${tag}&province=${province}${extra}&external=${ids},qcny`, { to: "neighbours" });
+    await expect(page.locator("[data-setup-external]")).toHaveCount(province === "on" ? 1 : 0);
+    await expect(page.locator("[data-setup-external] input:checked")).toHaveCount(0);
+    await expect(page.locator("[data-setup-step]")).not.toContainText(US_NETWORKS);
+    await expect(page.locator("[role='alert'], .setup-note")).toHaveCount(0);
+    expect(page.url()).not.toMatch(/external=|ohio|oregon|qcny/);
+    await page.locator('[data-setup-neighbour="none"] input').check();
+    await next(page);
+    await nextUntil(page, "commands");
+    const lines = await commandLines(page);
+    expect(lines.filter((line) => line.startsWith("region def "))).toEqual([province === "on" ? "region def ytr|* on|* onqc|* can|* na" : "region def yka|* bc|* can|* na"]);
+    await expect(page.locator("[data-setup-notes] .setup-note--warn")).toHaveCount(0);
+  }
+});
+
+test("the tool says the region list didn't load when the cross-border scopes file is missing, and recovers", async ({ page }) => {
+  let down = true;
+  await page.route("**/assets/regions/cross-border-scopes.json*", (route) => (down ? route.fulfill({ status: 503, body: "" }) : route.continue()));
+  await openLink(page, "/config/?type=repeater&board=esp32&status=running&reflash=0", { to: "town" });
+  await expect(page.locator("[data-setup-step] [role='alert']")).toHaveText(T("tool.load-failed", "en"));
+  down = false;
+  await page.locator("[data-setup-retry]").click();
+  await expect(page.locator("[data-setup-step] [role='alert']")).toHaveCount(0);
+});
 
 for (const lang of LANGS) {
   test(`${lang} a city repeater can carry a scope agreed with a network across the border`, async ({ page }) => {

@@ -1,6 +1,6 @@
 // Place lookups for the guided repeater setup tool: which region and province a
 // town is in, which regions are nearest to it, which radio settings apply and which
-// cross-border networks to offer. Pure data logic. No DOM and no text shown to
+// cross-border scopes to offer. Pure data logic. No DOM and no text shown to
 // people (see setup-text.js).
 //
 // MeshCoreIataScopes and MeshCorePlaceSearch are looked up when a function runs,
@@ -8,16 +8,6 @@
 // load this file without place-search.js.
 (function () {
   "use strict";
-
-  // Cross-border networks by province. The catalogue records no provinces for
-  // them, so this is fixed here. `shared` ones are offered to any repeater in the
-  // province; `edgeOnly` ones only make sense for an edge repeater next to the border.
-  // Every id is a key of the catalogue's `externalRegionPaths`.
-  var CROSS_BORDER = {
-    on: { shared: ["ontario-new-york"], edgeOnly: ["ohio", "pennsylvania", "western-new-york"] },
-    qc: { shared: ["quebec-new-york"], edgeOnly: [] },
-    bc: { shared: [], edgeOnly: ["oregon", "washington"] }
-  };
 
   var KM_PER_DEGREE = 111.195;   // one degree of latitude
 
@@ -55,7 +45,10 @@
     var loaded = await Promise.all([
       fetchJson(get, geometryUrl("iata-boundaries.geojson", catalog.source.boundarySha256), undefined, "Region boundaries unavailable"),
       fetchJson(get, geometryUrl("scope-jurisdictions.geojson", catalog.source.jurisdictionSha256), undefined, "Region boundaries unavailable"),
-      fetchJson(get, new URL("../radio-profiles.json", baseUrl), undefined, "Radio profiles unavailable")
+      fetchJson(get, new URL("../radio-profiles.json", baseUrl), undefined, "Radio profiles unavailable"),
+      // Built from data/cross-border-scopes.yml. Checked with the server on every load, like the catalogue,
+      // so an edited list shows up without a new version number.
+      fetchJson(get, new URL("../regions/cross-border-scopes.json", baseUrl), { cache: "no-cache" }, "Cross-border scopes unavailable")
     ]);
     var profiles = loaded[2];
     if (!Array.isArray(profiles)) throw new Error("Invalid radio profiles");
@@ -63,8 +56,23 @@
       catalog: catalog,
       boundaries: featureCollection(loaded[0], "Invalid region boundaries"),
       jurisdictions: featureCollection(loaded[1], "Invalid region boundaries"),
-      profiles: profiles
+      profiles: profiles,
+      crossBorder: crossBorderFile(loaded[3])
     };
+  }
+
+  var SCOPE_RE = /^[a-z0-9-]{1,29}$/;
+  var SCOPE_TEXT = ["name", "nameFr", "description", "descriptionFr"];
+
+  // The cross-border scopes file as built from the YAML: a list of scopes with their words in both languages.
+  function crossBorderFile(value) {
+    var valid = !!value && Array.isArray(value.scopes) && value.scopes.every(function (item) {
+      return !!item && typeof item.scope === "string" && SCOPE_RE.test(item.scope) &&
+        SCOPE_TEXT.every(function (key) { return typeof item[key] === "string" && item[key].trim() !== ""; }) &&
+        Array.isArray(item.provinces) && item.provinces.every(function (code) { return typeof code === "string"; });
+    });
+    if (!valid) throw new Error("Invalid cross-border scopes");
+    return value;
   }
 
   function provincesOf(catalog, tag) {
@@ -354,11 +362,14 @@
     return result;
   }
 
-  // Cross-border networks for a province code ("on", "qc", "bc"). Fresh arrays each time.
-  function crossBorder(province) {
+  // The cross-border scopes to offer a repeater in a province ("on", "qc", "bc"), from the file the page
+  // loaded: [{ scope, name, nameFr, description, descriptionFr, provinces }], in the file's order. They suit
+  // city and edge repeaters alike. Fresh objects each time; nothing without the loaded data.
+  function crossBorder(province, data) {
     var key = String(province == null ? "" : province).trim().toLowerCase();
-    var entry = has(CROSS_BORDER, key) ? CROSS_BORDER[key] : { shared: [], edgeOnly: [] };
-    return { shared: entry.shared.slice(), edgeOnly: entry.edgeOnly.slice() };
+    var scopes = data && data.crossBorder && Array.isArray(data.crossBorder.scopes) ? data.crossBorder.scopes : [];
+    return scopes.filter(function (item) { return item.provinces.indexOf(key) !== -1; })
+      .map(function (item) { return Object.assign({}, item, { provinces: item.provinces.slice() }); });
   }
 
   globalThis.MeshCoreSetupPlace = {

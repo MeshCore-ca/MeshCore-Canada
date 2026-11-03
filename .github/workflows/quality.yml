@@ -68,6 +68,7 @@ jobs:
       - name: Validate region authority and proposal automation
         run: |
           node scripts/validate-regions.cjs
+          python scripts/build-cross-border-scopes.py --check
           python scripts/verify-iata-geometry.py
           node scripts/validate-legacy-region-data.cjs
           python scripts/verify-region-geometry.py

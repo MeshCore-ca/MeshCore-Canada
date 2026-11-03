@@ -28,10 +28,10 @@
   var ROLES = ["city", "edge"];
 
   var TAG_RE = /^[a-z0-9-]{2,12}$/;      // region and province codes
-  var ID_RE = /^[a-z0-9-]{2,32}$/;       // radio profiles, neighbouring regions, cross-border networks
-  // A scope agreed with a network across the border, typed by hand. The same rule as the region
-  // generator's own check of a scope name (MeshCoreIataScopes budget), so what is accepted here is
-  // never refused there.
+  var ID_RE = /^[a-z0-9-]{2,32}$/;       // radio profiles and neighbouring regions
+  // A scope agreed with a network across the border: one the tool lists, or one typed by hand. The same
+  // rule as the region generator's own check of a scope name (MeshCoreIataScopes budget), so what is
+  // accepted here is never refused there.
   var CUSTOM_RE = /^[a-z0-9-]{1,29}$/;
   // The firmware's own rule for `set name <rest of line>`: it refuses only these characters
   // (CommonCLI isValidName), and keeps at most 31 bytes in its 32-byte name field, so an
@@ -328,6 +328,30 @@
     }
   };
 
+  // Share links made when the tool listed the catalogue's cross-border networks carry the network's id.
+  // The two that became scopes are read as their tags, so those links keep working. Any other id, such as
+  // a US network the tool no longer offers, is shaped like a tag and is left for the page to drop: it
+  // keeps only the tags its list (data/cross-border-scopes.yml) offers for the province.
+  var OLD_NETWORKS = { "ontario-new-york": "onny", "quebec-new-york": "qcny" };
+
+  // The scopes ticked from the tool's list, by tag. Only clean, valid ones are written or read, once each.
+  var externalField = {
+    key: "external",
+    write: function (value) {
+      if (!Array.isArray(value)) return null;
+      return value.filter(isCustom).slice(0, MAX_LIST).join(",");
+    },
+    read: function (text) {
+      var tags = [];
+      text.split(",").forEach(function (item) {
+        var tag = cleanCustom(item);
+        if (Object.prototype.hasOwnProperty.call(OLD_NETWORKS, tag)) tag = OLD_NETWORKS[tag];
+        if (CUSTOM_RE.test(tag) && tags.indexOf(tag) === -1) tags.push(tag);
+      });
+      return tags.slice(0, MAX_LIST);
+    }
+  };
+
   // A scope agreed with a network across the border. Only a clean, valid one is written or read.
   var customField = {
     key: "custom",
@@ -347,7 +371,7 @@
     codeField("radio", ID_RE),
     enumField("role", ROLES),
     listField("neighbours"),
-    listField("external"),
+    externalField,
     customField,
     { key: "name",
       write: function (value) { return isName(value) ? encodeURIComponent(value) : null; },

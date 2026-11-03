@@ -25,6 +25,7 @@ async function fileFetcher(url) {
 }
 
 const catalog = JSON.parse(readFileSync("docs/assets/regions/iata-regions.json", "utf8"));
+const scopeFile = JSON.parse(readFileSync("docs/assets/regions/cross-border-scopes.json", "utf8"));
 const where = (lat, lon, province) => ({ lat, lon, province });
 const pairs = (result) => result.options.map((o) => [o.tag, o.province]);
 let data;
@@ -33,13 +34,15 @@ before(async () => {
   data = await place.loadData(base, fileFetcher);
 });
 
-test("loadData asks for the catalogue, hashed boundaries and jurisdictions, and radio profiles", () => {
+test("loadData asks for the catalogue, hashed boundaries and jurisdictions, radio profiles and the cross-border scopes", () => {
   const urls = requested.filter((href) => href.includes("/assets/"));
   assert.ok(urls.includes("https://meshcore.test/assets/regions/iata-regions.json"));
   assert.ok(urls.includes("https://meshcore.test/assets/regions/iata-boundaries.geojson?v=" + catalog.source.boundarySha256));
   assert.ok(urls.includes("https://meshcore.test/assets/regions/scope-jurisdictions.geojson?v=" + catalog.source.jurisdictionSha256));
   assert.ok(urls.includes("https://meshcore.test/assets/radio-profiles.json"));
-  assert.deepEqual(Object.keys(data).sort(), ["boundaries", "catalog", "jurisdictions", "profiles"]);
+  assert.ok(urls.includes("https://meshcore.test/assets/regions/cross-border-scopes.json"));
+  assert.deepEqual(Object.keys(data).sort(), ["boundaries", "catalog", "crossBorder", "jurisdictions", "profiles"]);
+  assert.deepEqual(data.crossBorder, scopeFile);
   assert.equal(data.boundaries.type, "FeatureCollection");
   assert.equal(data.jurisdictions.type, "FeatureCollection");
   assert.ok(data.profiles.some((profile) => profile.id === "canada"));
@@ -52,6 +55,19 @@ test("loadData fails clearly when a file is missing or is not a boundary collect
     ? { ok: true, json: async () => ({ type: "Feature" }) }
     : fileFetcher(url));
   await assert.rejects(place.loadData(base, wrong), /invalid/i);
+});
+
+test("loadData fails clearly when the cross-border scopes are missing or are not a list of scopes", async () => {
+  const without = async (url) => (String(url).includes("cross-border-scopes") ? { ok: false } : fileFetcher(url));
+  await assert.rejects(place.loadData(base, without), /cross-border scopes unavailable/i);
+  const reply = (value) => async (url) => (String(url).includes("cross-border-scopes") ? { ok: true, json: async () => value } : fileFetcher(url));
+  for (const bad of [null, [], {}, { scopes: "onny" }, { scopes: [null] }, { scopes: [{ scope: "onny" }] },
+    { scopes: [{ ...scopeFile.scopes[0], provinces: "on" }] }, { scopes: [{ ...scopeFile.scopes[0], scope: "ONNY" }] }]) {
+    await assert.rejects(place.loadData(base, reply(bad)), /invalid cross-border scopes/i, JSON.stringify(bad));
+  }
+  // An empty list is a valid file: nothing is offered.
+  const none = await place.loadData(base, reply({ scopes: [] }));
+  assert.deepEqual(place.crossBorder("on", none), []);
 });
 
 test("towns resolve to their region and province", () => {
@@ -368,43 +384,47 @@ test("a group with radio settings that match no profile is left out, never mappe
   assert.deepEqual(place.radioOptions("zzz", synthetic), [{ id: "canada", communities: ["Plain Mesh"], communitiesFr: ["Plain Mesh"] }]);
 });
 
-test("cross-border options depend on the province", () => {
-  assert.deepEqual(place.crossBorder("on"), { shared: ["ontario-new-york"], edgeOnly: ["ohio", "pennsylvania", "western-new-york"] });
-  assert.deepEqual(place.crossBorder("ns"), { shared: [], edgeOnly: [] });
-  assert.deepEqual(place.crossBorder("bc"), { shared: [], edgeOnly: ["oregon", "washington"] });
-  // Québec offers the shared Québec–New York label to city and edge repeaters alike, and no edge-only networks.
-  assert.deepEqual(place.crossBorder("qc"), { shared: ["quebec-new-york"], edgeOnly: [] });
-  assert.deepEqual(place.crossBorder("QC"), place.crossBorder("qc"));
-  assert.deepEqual(place.crossBorder("ON"), place.crossBorder("on"));
-  assert.deepEqual(place.crossBorder(""), { shared: [], edgeOnly: [] });
-  assert.deepEqual(place.crossBorder("toString"), { shared: [], edgeOnly: [] });
+test("cross-border scopes come from the file the page loaded, by province", () => {
+  const scopesFor = (province, from = data) => place.crossBorder(province, from).map((item) => item.scope);
+  assert.deepEqual(scopesFor("on"), ["onny"]);
+  assert.deepEqual(scopesFor("qc"), ["qcny", "qcvt"]);
+  for (const province of ["bc", "ab", "sk", "mb", "nb", "ns", "pe", "nl", "yt", "nt", "nu"]) assert.deepEqual(scopesFor(province), [], province);
+  assert.deepEqual(scopesFor("QC"), scopesFor("qc"));
+  assert.deepEqual(scopesFor(" On "), scopesFor("on"));
+  for (const odd of ["", "toString", "__proto__", undefined, null, 5, "xx"]) assert.deepEqual(scopesFor(odd), [], String(odd));
+  // No US network is offered: only what the file lists.
+  const all = new Set(["on", "qc", "bc", "ab", "ns"].flatMap((province) => scopesFor(province)));
+  assert.deepEqual([...all].sort(), ["onny", "qcny", "qcvt"]);
+  // What it hands over is the whole entry, in both languages, in the file's order.
+  assert.deepEqual(place.crossBorder("qc", data), scopeFile.scopes.filter((item) => item.provinces.includes("qc")));
+  const [onny] = place.crossBorder("on", data);
+  assert.equal(onny.name, "Ontario–New York");
+  assert.match(onny.description, /New York and Ontario/);
+  assert.match(onny.descriptionFr, /l’Ontario/);
+  // A scope offered in two provinces is offered in both; a different file gives a different list.
+  const both = { ...data, crossBorder: { scopes: [{ ...onny, provinces: ["on", "qc"] }, { ...onny, scope: "xx1", provinces: ["qc"] }] } };
+  assert.deepEqual(scopesFor("on", both), ["onny"]);
+  assert.deepEqual(scopesFor("qc", both), ["onny", "xx1"]);
+  assert.deepEqual(scopesFor("bc", both), []);
+  // Without the data there is nothing to offer, and nothing goes wrong.
+  assert.deepEqual(place.crossBorder("on"), []);
+  assert.deepEqual(place.crossBorder("on", {}), []);
 });
 
-test("cross-border networks all exist in the catalogue, and callers cannot change the table", () => {
-  for (const code of ["on", "bc", "qc"]) {
-    const { shared, edgeOnly } = place.crossBorder(code);
-    for (const id of [...shared, ...edgeOnly]) assert.ok(catalog.externalRegionPaths[id], id);
-  }
-  place.crossBorder("on").shared.push("changed");
-  assert.deepEqual(place.crossBorder("on").shared, ["ontario-new-york"]);
-  place.crossBorder("qc").shared.push("changed");
-  assert.deepEqual(place.crossBorder("qc").shared, ["quebec-new-york"]);
+test("callers cannot change the scopes the page loaded", () => {
+  place.crossBorder("qc", data)[0].scope = "changed";
+  place.crossBorder("qc", data)[0].provinces.push("bc");
+  place.crossBorder("qc", data).push({ scope: "extra" });
+  assert.deepEqual(place.crossBorder("qc", data).map((item) => item.scope), ["qcny", "qcvt"]);
+  assert.deepEqual(place.crossBorder("bc", data), []);
 });
 
-test("the Québec–New York scope is an opt-in shared label named in both languages", () => {
-  const record = catalog.externalRegionPaths["quebec-new-york"];
-  assert.equal(record.label, "Québec–New York (qcny, opt-in)");
-  assert.equal(record.labelFr, "Québec–New York (qcny, facultatif)");
-  assert.deepEqual(record.path, ["qcny"]);
-  assert.equal(record.country, "us");
-  assert.equal(record.sharedScope, true);
-  assert.equal(record.geographic, false);
-  assert.equal(record.automatic, false);
-  assert.equal(record.eligibility, "coordinated-cross-border");
-  assert.deepEqual(record.tagLabels, { qcny: "Québec–New York" });
-  assert.equal(record.authority.status, "proposed");
-  // The policy the catalogue was built from carries the same entry.
-  assert.deepEqual(catalog.policy.optionalNetworks["quebec-new-york"], record);
+test("the catalogue no longer carries a second source for the Québec–New York scope", () => {
+  assert.equal(catalog.policy.optionalNetworks["quebec-new-york"], undefined);
+  assert.equal(catalog.externalRegionPaths["quebec-new-york"], undefined);
+  // Ontario–New York and the US networks stay in the catalogue: the region map and its validators still read them.
+  assert.ok(catalog.externalRegionPaths["ontario-new-york"]);
+  assert.ok(catalog.externalRegionPaths["western-new-york"]);
 });
 
 test("planning tells starter regions and planning extensions apart from MeshMapper zones, as the map does", () => {
@@ -576,7 +596,7 @@ test("the script loads without the place search and region scripts; only resolve
   const loaded = await alone.loadData(base, fileFetcher);
   assert.equal(JSON.stringify(alone.search("muskoka", loaded)), JSON.stringify(place.search("muskoka", data)));
   assert.equal(JSON.stringify(alone.radioOptions("yvr", loaded)), JSON.stringify(place.radioOptions("yvr", data)));
-  assert.equal(JSON.stringify(alone.crossBorder("on")), JSON.stringify(place.crossBorder("on")));
+  assert.equal(JSON.stringify(alone.crossBorder("qc", loaded)), JSON.stringify(place.crossBorder("qc", data)));
   assert.equal(JSON.stringify(alone.centre("ytr", loaded)), JSON.stringify(place.centre("ytr", data)));
   assert.throws(() => alone.resolve(where(49.2827, -123.1207, "BC"), loaded), /must be loaded/);
 });

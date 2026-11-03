@@ -205,21 +205,23 @@ test("the page says the tool lists the nearest regions first and has a box to fi
   assert.equal(text.t("neighbours.find", "fr"), "Trouver une autre région");
 });
 
-test("the cross-border section lists onny and qcny, the agreed-scope option, and the link to ask for more", () => {
+test("the cross-border section describes the agreed scopes listed in the tool, the agreed-scope option, and the link to ask for more", () => {
   const sectionOf = (source) => {
     const flatSource = flat(source);
     const start = flatSource.search(/\{ ?#cross-border-scopes ?\}/);
     return flatSource.slice(start, flatSource.indexOf("###", start + 1));
   };
   const words = {
-    en: { exactly: "exactly as you both agreed it (lowercase letters, numbers and dashes)" },
-    fr: { exactly: "exactement comme vous l’avez convenu ensemble (lettres minuscules, chiffres et tirets)" },
+    en: { listed: "the agreed scopes listed in the tool", exactly: "exactly as you both agreed it (lowercase letters, numbers and dashes)" },
+    fr: { listed: "les portées convenues qui figurent dans l’outil", exactly: "exactement comme vous l’avez convenu ensemble (lettres minuscules, chiffres et tirets)" },
   };
   for (const [lang, path] of Object.entries(pages)) {
     const section = sectionOf(read(path));
     assert.ok(section.length > 200, `${path} needs a cross-border section`);
-    assert.match(section, /`onny`/, path);
-    assert.match(section, /`qcny`/, path);
+    assert.ok(section.includes(words[lang].listed), `${path} describes the scopes as ${words[lang].listed}`);
+    // The scopes themselves come from data/cross-border-scopes.yml, so the page doesn't list them, and says nothing
+    // of the US networks the tool no longer offers.
+    assert.doesNotMatch(section, /Western New York|Pennsylvani|Ohio|Washington|Oregon|Ouest de l’État|Pennsylvanie|l’Oregon/, `${path} names no US network`);
     // The option is named as the tool's tick box names it, and says to type the name as agreed.
     assert.ok(section.includes(text.t("custom.label", lang)), `${path} names the agreed-scope option as the tool does`);
     assert.ok(section.includes(words[lang].exactly), `${path} says to type it exactly as agreed`);

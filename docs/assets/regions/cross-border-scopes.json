@@ -1,0 +1,30 @@
+{
+  "schema": "meshcore-canada-cross-border-scopes/v1",
+  "generatedFrom": "data/cross-border-scopes.yml",
+  "scopes": [
+    {
+      "scope": "onny",
+      "name": "Ontario–New York",
+      "nameFr": "Ontario–New York",
+      "description": "Applied to repeaters that connect New York and Ontario.",
+      "descriptionFr": "Pour les répéteurs qui relient l’État de New York et l’Ontario.",
+      "provinces": ["on"]
+    },
+    {
+      "scope": "qcny",
+      "name": "Québec–New York",
+      "nameFr": "Québec–New York",
+      "description": "Applied to repeaters that connect New York and Québec.",
+      "descriptionFr": "Pour les répéteurs qui relient l’État de New York et le Québec.",
+      "provinces": ["qc"]
+    },
+    {
+      "scope": "qcvt",
+      "name": "Québec–Vermont",
+      "nameFr": "Québec–Vermont",
+      "description": "Applied to repeaters that connect Vermont and Québec.",
+      "descriptionFr": "Pour les répéteurs qui relient le Vermont et le Québec.",
+      "provinces": ["qc"]
+    }
+  ]
+}

@@ -362,6 +362,18 @@
   cursor: pointer;
 }
 
+.setup-check__name {
+  display: block;
+  font-weight: 650;
+}
+
+.setup-check__why {
+  display: block;
+  margin-top: 0.15rem;
+  color: var(--mc-color-text-muted);
+  font-size: 0.9em;
+}
+
 .setup-fieldset {
   min-width: 0;
   margin: 1rem 0;

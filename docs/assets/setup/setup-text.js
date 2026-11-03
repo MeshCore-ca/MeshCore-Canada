@@ -751,28 +751,6 @@
     "check.recovery.phone": "S’il ne répond pas après le redémarrage, attendez une minute et reconnectez-vous. Toujours rien? Branchez-le par USB et vérifiez-le dans la Console de l’outil de programmation."
   };
 
-  // French names for cross-border labels the catalogue only names in English.
-  // Canadian regions take their French name from the catalogue (labelFr).
-  var tagLabelsFr = {
-    us: "États-Unis",
-    "us-ny": "New York",
-    "us-pa": "Pennsylvanie",
-    "us-oh": "Ohio",
-    west: "Réseau de l’Ouest",
-    pnw: "Nord-Ouest Pacifique",
-    wa: "Washington",
-    or: "Oregon"
-  };
-
-  // French names for the cross-border networks; the catalogue names most of them in English only.
-  var networkLabelsFr = {
-    "western-new-york": "Ouest de l’État de New York",
-    washington: "État de Washington",
-    oregon: "Oregon",
-    pennsylvania: "Pennsylvanie",
-    ohio: "Ohio"
-  };
-
   var TABLES = { en: Object.freeze(en), fr: Object.freeze(fr) };
   var PLACEHOLDER = /\{([A-Za-z][\w-]*)\}/g;
 
@@ -799,8 +777,6 @@
   globalThis.MeshCoreSetupText = {
     t: t,
     keys: keys,
-    text: TABLES,
-    tagLabelsFr: Object.freeze(tagLabelsFr),
-    networkLabelsFr: Object.freeze(networkLabelsFr)
+    text: TABLES
   };
 }());

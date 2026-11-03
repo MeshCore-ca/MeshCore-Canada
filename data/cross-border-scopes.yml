@@ -1,0 +1,35 @@
+# Cross-border scopes the setup tool offers, on the city-or-edge screen and the
+# neighbours screen. Add one only after operators on both sides have agreed to
+# carry it.
+#
+# To add one, copy an entry below and change it. Every field is needed:
+#   scope                       the label itself: lowercase letters, numbers and
+#                               dashes, at most 29 characters
+#   name, nameFr                what the tool calls it, in English and in French
+#   description, descriptionFr  one short sentence saying who it is for
+#   provinces                   the provinces whose repeaters are offered it,
+#                               for example [on] or [on, qc]
+# Put a sentence in quotes if it contains a colon.
+#
+# After editing, run:  python scripts/build-cross-border-scopes.py
+# That rewrites docs/assets/regions/cross-border-scopes.json, which the tool
+# reads. Commit both files.
+scopes:
+  - scope: onny
+    name: Ontario–New York
+    nameFr: Ontario–New York
+    description: Applied to repeaters that connect New York and Ontario.
+    descriptionFr: Pour les répéteurs qui relient l’État de New York et l’Ontario.
+    provinces: [on]
+  - scope: qcny
+    name: Québec–New York
+    nameFr: Québec–New York
+    description: Applied to repeaters that connect New York and Québec.
+    descriptionFr: Pour les répéteurs qui relient l’État de New York et le Québec.
+    provinces: [qc]
+  - scope: qcvt
+    name: Québec–Vermont
+    nameFr: Québec–Vermont
+    description: Applied to repeaters that connect Vermont and Québec.
+    descriptionFr: Pour les répéteurs qui relient le Vermont et le Québec.
+    provinces: [qc]

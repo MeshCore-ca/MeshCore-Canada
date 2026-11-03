@@ -637,19 +637,16 @@ répéteur, avec leur distance, et offre une case pour trouver une autre région
 ### Étiquettes partagées avec les États-Unis { #cross-border-scopes }
 
 Certains répéteurs sont reliés à un réseau des États-Unis. Pour eux, l’outil
-propose des étiquettes de plus :
+propose les portées convenues qui figurent dans l’outil : des étiquettes que
+les opérateurs des deux côtés ont accepté de relayer. Il montre celles qui
+conviennent à votre province, chacune avec une courte description. Les
+répéteurs de ville comme de bordure peuvent les utiliser. Par exemple, `onny`
+sert aux répéteurs qui relient l’Ontario et l’État de New York.
 
-- **`onny`**, une étiquette partagée Ontario–New York, pour un répéteur de ville
-  ou de bordure en Ontario.
-- **`qcny`**, une étiquette partagée Québec–New York, pour un répéteur de ville
-  ou de bordure au Québec.
-- **Les réseaux américains voisins**, pour les répéteurs de bordure : l’Ouest de
-  l’État de New York, la Pennsylvanie et l’Ohio depuis l’Ontario; Washington et
-  l’Oregon depuis la Colombie-Britannique.
-- **Une autre portée convenue avec un réseau de l’autre côté de la frontière**,
-  pour tout répéteur, dans n’importe quelle province. Tapez le nom de la portée
-  exactement comme vous l’avez convenu ensemble (lettres minuscules, chiffres et
-  tirets).
+Vous pouvez aussi cocher **Une autre portée convenue avec un réseau de l’autre côté de la frontière**,
+pour tout répéteur, dans n’importe quelle province. Tapez le nom de la portée
+exactement comme vous l’avez convenu ensemble (lettres minuscules, chiffres et
+tirets).
 
 Cochez-en un seulement si ce répéteur est relié à ce réseau et que ses
 opérateurs sont d’accord. Dans le doute, laissez-les décochés.

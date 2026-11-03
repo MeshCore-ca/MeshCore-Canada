@@ -153,7 +153,7 @@ test("firmwareFor assumes the newest firmware when flashing and uses the chosen 
 
 test("changing an earlier answer resets what depended on it", () => {
   const a = { type: "observer", board: "nrf52", place: { name: "Belleville" }, tag: "ytr", province: "on",
-    radio: "canada", role: "edge", neighbours: ["ygk"], external: ["western-new-york"], name: "Belleville_R1" };
+    radio: "canada", role: "edge", neighbours: ["ygk"], external: ["onny"], name: "Belleville_R1" };
   assert.equal(flow.resetDependents(a, "type").board, undefined);           // nRF52 invalid for observer
   const town = flow.resetDependents(a, "place");
   for (const key of ["tag","province","radio","neighbours","external","name"]) assert.equal(town[key], undefined);
@@ -289,7 +289,7 @@ test("share links leave out the firmware version, so whoever opens a phone-route
 
 test("share links keep only valid, known answers", () => {
   const a = { type: "observer", repeat: "both", board: "esp32", status: "running", observerFirmware: "yes",
-    tag: "yvr", province: "bc", radio: "bc-mesh", role: "edge", neighbours: ["yxx", "yyj"], external: ["washington"],
+    tag: "yvr", province: "bc", radio: "bc-mesh", role: "edge", neighbours: ["yxx", "yyj"], external: ["onny", "qcvt"],
     name: "Vancouver_Obs1", nameEdited: true, shareLocation: true, reflash: false,
     place: { name: "Vancouver", province: "bc", lat: 49.28, lon: -123.12 } };
   const q = flow.toQuery({ ...a, regionReply: "*^ F", firmware: "1.15" });
@@ -301,8 +301,8 @@ test("share links keep only valid, known answers", () => {
   assert.deepEqual(flow.fromQuery(""), {});
   assert.deepEqual(flow.fromQuery(flow.toQuery({ role: "edge", neighbours: [] })), { role: "edge", neighbours: [] });
 
-  const hostile = flow.fromQuery("type=wizard&board=nope&tag=a&province=%3Cb%3E&name=a%3Ab&neighbours=ygk,%3Cx%3E,,ytr&external=WESTERN-new-york&radio=x&firmware=1.9&reflash=maybe&__proto__=1&place=Belleville&regionReply=x&password=secret");
-  assert.deepEqual(hostile, { neighbours: ["ygk", "ytr"], external: ["western-new-york"] });
+  const hostile = flow.fromQuery("type=wizard&board=nope&tag=a&province=%3Cb%3E&name=a%3Ab&neighbours=ygk,%3Cx%3E,,ytr&external=ONNY,%3Cb%3E,,x*y&radio=x&firmware=1.9&reflash=maybe&__proto__=1&place=Belleville&regionReply=x&password=secret");
+  assert.deepEqual(hostile, { neighbours: ["ygk", "ytr"], external: ["onny"] });
   assert.equal(Object.getPrototypeOf(hostile), Object.prototype);
   assert.doesNotMatch(flow.toQuery({ name: "has:colon", tag: "<b>", password: "secret" }), /secret|colon|<b>|password/);
 });
@@ -571,7 +571,7 @@ test("the role and neighbours steps wait for a ticked custom scope to be valid",
 });
 
 test("a custom scope is cleared when the region or role changes, like the cross-border networks", () => {
-  const a = { place: { name: "Belleville" }, tag: "ytr", province: "on", role: "edge", neighbours: ["ygk"], external: ["western-new-york"], custom: "qcny2", name: "Belleville_R1" };
+  const a = { place: { name: "Belleville" }, tag: "ytr", province: "on", role: "edge", neighbours: ["ygk"], external: ["onny"], custom: "qcny2", name: "Belleville_R1" };
   for (const key of ["place", "tag", "role"]) assert.equal(flow.resetDependents(a, key).custom, undefined, key);
   assert.equal(flow.resetDependents(a, "role").external, undefined);
   // A listen-only repeater observer has no scopes at all.
@@ -582,8 +582,41 @@ test("a custom scope is cleared when the region or role changes, like the cross-
   assert.equal(flow.resetDependents(a, "board").custom, "qcny2");
 });
 
+test("cross-border scopes travel in the share link as their tags, and only clean ones are written or read", () => {
+  const a = { type: "repeater", board: "esp32", status: "new", tag: "yul", province: "qc", role: "city", external: ["qcny", "qcvt"], name: "Montreal_R1" };
+  const q = flow.toQuery(a);
+  assert.match(q, /(?:^|&)external=qcny,qcvt(?:&|$)/);
+  assert.deepEqual(flow.fromQuery(q), a);
+  // Read the way typing is cleaned: case and spaces don't matter, order is kept, repeats collapse.
+  assert.deepEqual(flow.fromQuery("external=QCNY,%20qcvt,qcny"), { external: ["qcny", "qcvt"] });
+  assert.deepEqual(flow.fromQuery("external=onny"), { external: ["onny"] });
+  // Anything the generator would refuse as a scope name is dropped, and an empty list stays empty.
+  assert.deepEqual(flow.fromQuery("external=" + "x".repeat(30) + ",qu%C3%A9bec,a_b,%3Cb%3E,*,onny"), { external: ["onny"] });
+  assert.deepEqual(flow.fromQuery("external="), { external: [] });
+  assert.doesNotMatch(flow.toQuery({ role: "city", external: ["ONNY", "a b", "x".repeat(30), 7, null, "onny"] }), /ONNY|a b|xxxx|null/);
+  assert.match(flow.toQuery({ role: "city", external: ["ONNY", "a b", "onny"] }), /external=onny(?:&|$)/);
+  assert.equal(flow.toQuery({ external: "onny" }), "", "not a list");
+  assert.equal(flow.toQuery({ external: Array.from({ length: 40 }, (_, i) => "s" + i) }).split(",").length, 32, "a device holds at most 32 regions");
+});
+
+test("a share link made before the scopes came from a file still works: the old network ids are read as the scope tags", () => {
+  assert.deepEqual(flow.fromQuery("external=ontario-new-york"), { external: ["onny"] });
+  assert.deepEqual(flow.fromQuery("external=quebec-new-york"), { external: ["qcny"] });
+  assert.deepEqual(flow.fromQuery("external=quebec-new-york,ontario-new-york"), { external: ["qcny", "onny"] });
+  assert.deepEqual(flow.fromQuery("external=Ontario-New-York"), { external: ["onny"] });
+  assert.deepEqual(flow.fromQuery("external=onny,ontario-new-york"), { external: ["onny"] }, "the same scope once");
+  // Written again, the link carries the tag.
+  assert.equal(flow.toQuery(flow.fromQuery("role=city&external=ontario-new-york")), "role=city&external=onny");
+  // The US networks the tool no longer offers are not scopes: a link that held them keeps whatever else it said.
+  // They are shaped like any other tag here, and the page drops every tag its list doesn't offer for the province.
+  const old = flow.fromQuery("role=edge&neighbours=ygk&external=ohio,pennsylvania,western-new-york,washington,oregon");
+  assert.equal(old.role, "edge");
+  assert.deepEqual(old.neighbours, ["ygk"]);
+  for (const id of ["ontario-new-york", "quebec-new-york"]) assert.ok(!old.external.includes(id));
+});
+
 test("a custom scope travels in the share link as custom=<tag>, and a bad one is dropped", () => {
-  const a = { type: "repeater", board: "esp32", status: "new", tag: "ytr", province: "on", role: "city", external: ["ontario-new-york"], custom: "qcny2", name: "Belleville_R1" };
+  const a = { type: "repeater", board: "esp32", status: "new", tag: "ytr", province: "on", role: "city", external: ["onny"], custom: "qcny2", name: "Belleville_R1" };
   const q = flow.toQuery(a);
   assert.match(q, /(?:^|&)custom=qcny2(?:&|$)/);
   assert.deepEqual(flow.fromQuery(q), a);

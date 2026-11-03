@@ -50,25 +50,61 @@ test("a name with spaces and accents goes into set name as typed, with no quotes
   assert.equal(cmds.checks(running, data, "fr").find((c) => c.id === "name").expect, "Doit répondre Café Hilltop.");
 });
 test("edge, cross-border and onny follow the generator", () => {
-  const edge = flat(cmds.rollup({ ...belleville, role: "edge", neighbours: ["ygk"], external: ["western-new-york"] }, data, "en"));
-  assert.ok(edge.includes("region def ytr|* ygk|* on|* onqc|* can|* na|* us us-ny") && edge.includes("region denyf *"));
-  assert.ok(flat(cmds.rollup({ ...belleville, external: ["ontario-new-york"] }, data, "en")).includes("region def ytr|* on|* onqc|* can|* na|* onny"));
+  const edge = flat(cmds.rollup({ ...belleville, role: "edge", neighbours: ["ygk"], external: ["onny"] }, data, "en"));
+  assert.ok(edge.includes("region def ytr|* ygk|* on|* onqc|* can|* na|* onny") && edge.includes("region denyf *"));
+  assert.ok(flat(cmds.rollup({ ...belleville, external: ["onny"] }, data, "en")).includes("region def ytr|* on|* onqc|* can|* na|* onny"));
 });
-test("a Québec city repeater carries qcny only when it is ticked, and an Ontario one never does", () => {
+test("a Québec city repeater carries qcny and qcvt only when they are ticked, and an Ontario one never does", () => {
   const montreal = { ...belleville, place: { name: "Montréal", lat: 45.5, lon: -73.57 }, tag: "yul", province: "qc", name: "Montreal_R1" };
   const scopes = (answers) => flat(cmds.rollup(answers, data, "en")).filter((line) => line.startsWith("region"));
   assert.deepEqual(scopes(montreal), ["region def yul|* qc|* onqc|* can|* na", "region allowf *", "region default yul", "region save"]);
-  assert.deepEqual(scopes({ ...montreal, external: ["quebec-new-york"] }), ["region def yul|* qc|* onqc|* can|* na|* qcny", "region allowf *", "region default yul", "region save"]);
-  // As an edge repeater it keeps the shared label too, and the usual edge lines.
-  assert.ok(scopes({ ...montreal, role: "edge", neighbours: ["yow"], external: ["quebec-new-york"] }).includes("region def yul|* yow|* qc|* onqc|* can|* na|* qcny"));
-  // Neither onny nor qcny is offered across provinces: an answer from the wrong province is dropped.
-  assert.ok(!scopes({ ...belleville, external: ["quebec-new-york"] }).join(" ").includes("qcny"));
-  assert.ok(!scopes({ ...montreal, external: ["ontario-new-york"] }).join(" ").includes("onny"));
-  // The network is named in each language, and the generator's confirm note applies.
-  assert.match(cmds.notes({ ...montreal, external: ["quebec-new-york"] }, data, "en")[0], /Québec–New York \(qcny, opt-in\)/);
-  assert.match(cmds.notes({ ...montreal, external: ["quebec-new-york"] }, data, "fr")[0], /Québec–New York \(qcny, facultatif\)/);
+  assert.deepEqual(scopes({ ...montreal, external: ["qcny"] }), ["region def yul|* qc|* onqc|* can|* na|* qcny", "region allowf *", "region default yul", "region save"]);
+  assert.deepEqual(scopes({ ...montreal, external: ["qcvt"] }), ["region def yul|* qc|* onqc|* can|* na|* qcvt", "region allowf *", "region default yul", "region save"]);
+  assert.ok(scopes({ ...montreal, external: ["qcny", "qcvt"] }).includes("region def yul|* qc|* onqc|* can|* na|* qcny|* qcvt"));
+  // As an edge repeater it keeps the shared labels too, and the usual edge lines.
+  assert.ok(scopes({ ...montreal, role: "edge", neighbours: ["yow"], external: ["qcny"] }).includes("region def yul|* yow|* qc|* onqc|* can|* na|* qcny"));
+  // No scope is offered across provinces: an answer from the wrong province is dropped.
+  assert.ok(!scopes({ ...belleville, external: ["qcny", "qcvt"] }).join(" ").match(/qcny|qcvt/));
+  assert.ok(!scopes({ ...montreal, external: ["onny"] }).join(" ").includes("onny"));
+  // The scope is named in each language, and the generator's confirm note applies.
+  assert.match(cmds.notes({ ...montreal, external: ["qcny"] }, data, "en")[0], /: Québec–New York \(qcny\)\.$/);
+  assert.match(cmds.notes({ ...montreal, external: ["qcny"] }, data, "fr")[0], /: Québec–New York \(qcny\)\.$/);
+  assert.match(cmds.notes({ ...montreal, external: ["qcvt"] }, data, "en")[0], /: Québec–Vermont \(qcvt\)\.$/);
   assert.deepEqual(cmds.notes(montreal, data, "en"), []);
-  assert.match(cmds.rollup({ ...montreal, external: ["quebec-new-york"] }, data, "fr").flatMap((g) => g.items).find((i) => i.id === "def").why, /Québec–New York \(qcny\)\.$/);
+  assert.match(cmds.rollup({ ...montreal, external: ["qcny"] }, data, "fr").flatMap((g) => g.items).find((i) => i.id === "def").why, /Québec–New York \(qcny\)\.$/);
+});
+test("the scopes offered, and their names in each language, come from the file the page loaded", () => {
+  const halifax = { ...belleville, tag: "yhz", province: "ns", place: { name: "Halifax", lat: 44.65, lon: -63.58 } };
+  const listed = { ...data, crossBorder: { scopes: [
+    { scope: "nsme", name: "Nova Scotia–Maine", nameFr: "Nouvelle-Écosse–Maine", description: "d", descriptionFr: "d", provinces: ["ns"] },
+    { scope: "onny", name: "Ontario–New York", nameFr: "Ontario–New York", description: "d", descriptionFr: "d", provinces: ["on", "ns"] }
+  ] } };
+  const scopes = (answers, from, lang = "en") => flat(cmds.rollup(answers, from, lang)).filter((line) => line.startsWith("region"));
+  // Offered where the file says so, and nowhere else.
+  assert.equal(scopes({ ...halifax, external: ["nsme"] }, listed)[0], "region def yhz|* ns|* can|* na|* nsme");
+  assert.equal(scopes({ ...halifax, external: ["nsme", "onny"] }, listed)[0], "region def yhz|* ns|* can|* na|* nsme|* onny");
+  assert.equal(scopes({ ...halifax, external: ["nsme"] }, data)[0], "region def yhz|* ns|* can|* na");
+  assert.equal(scopes({ ...belleville, external: ["nsme"] }, listed)[0], "region def ytr|* on|* onqc|* can|* na");
+  // Without the scope in the file, onny is gone from Ontario too.
+  const none = { ...data, crossBorder: { scopes: [] } };
+  assert.equal(scopes({ ...belleville, external: ["onny"] }, none)[0], "region def ytr|* on|* onqc|* can|* na");
+  // The name in the page's language, in the explanation and in the confirm note.
+  const why = (lang) => cmds.rollup({ ...halifax, external: ["nsme"] }, listed, lang).flatMap((g) => g.items).find((i) => i.id === "def").why;
+  assert.match(why("en"), /Nova Scotia–Maine \(nsme\)\.$/);
+  assert.match(why("fr"), /Nouvelle-Écosse–Maine \(nsme\)\.$/);
+  assert.deepEqual(cmds.notes({ ...halifax, external: ["nsme"] }, listed, "en"), ["Confirm these labels with the operators across the border before you use them: Nova Scotia–Maine (nsme)."]);
+  assert.deepEqual(cmds.notes({ ...halifax, external: ["nsme"] }, listed, "fr"), ["Confirmez ces étiquettes avec les opérateurs de l’autre côté de la frontière avant de les utiliser : Nouvelle-Écosse–Maine (nsme)."]);
+  // The page's catalogue is left as it was: the generator is given a copy.
+  const before = JSON.stringify(Object.keys(data.catalog.externalRegionPaths));
+  scopes({ ...belleville, external: ["onny"], custom: "qcx2" }, data);
+  assert.equal(JSON.stringify(Object.keys(data.catalog.externalRegionPaths)), before);
+});
+test("a US network is not a scope: an answer or an old link that names one adds nothing", () => {
+  const us = ["ohio", "pennsylvania", "western-new-york", "washington", "oregon", "california", "ontario-new-york", "quebec-new-york"];
+  const defOf = (answers) => flat(cmds.rollup(answers, data, "en")).find((line) => line.startsWith("region def"));
+  assert.equal(defOf({ ...belleville, role: "edge", neighbours: ["ygk"], external: us }), "region def ytr|* ygk|* on|* onqc|* can|* na");
+  assert.equal(defOf({ ...belleville, tag: "yvr", province: "bc", radio: "bc-mesh", role: "edge", neighbours: ["yxx"], external: us }), "region def yvr|* yxx|* bc|* can|* na");
+  assert.deepEqual(cmds.notes({ ...belleville, role: "edge", external: us }, data, "en"), []);
 });
 test("the phone route leaves out the radio and clears old regions deepest first", () => {
   const out = flat(cmds.rollup({ ...belleville, status: "running", reflash: false, firmware: "1.15", regionReply: "*^ F\n can F\n  on F\n   ott F" }, data, "en"));
@@ -129,15 +165,15 @@ test("the observer lines follow the MQTT page's order, typed Wi-Fi lines last", 
 
 test("answers that don't apply are ignored, not trusted (hand-edited share links)", () => {
   // A listen-only repeater observer carrying role, neighbours and cross-border networks.
-  const listen = flat(cmds.rollup({ ...observer, repeat: "listen", role: "edge", neighbours: ["ygk"], external: ["western-new-york"] }, data, "en"));
+  const listen = flat(cmds.rollup({ ...observer, repeat: "listen", role: "edge", neighbours: ["ygk"], external: ["onny"] }, data, "en"));
   assert.ok(!listen.some((c) => c.startsWith("region")));
   assert.ok(listen.includes("set repeat off"));
-  // A city repeater carrying neighbours and an edge-only network: neither applies, the shared onny does.
-  const city = flat(cmds.rollup({ ...belleville, neighbours: ["ygk"], external: ["western-new-york", "ontario-new-york"] }, data, "en"));
+  // A city repeater carrying neighbours and a network the tool doesn't offer: neither applies, the listed onny does.
+  const city = flat(cmds.rollup({ ...belleville, neighbours: ["ygk"], external: ["western-new-york", "onny"] }, data, "en"));
   assert.ok(city.includes("region def ytr|* on|* onqc|* can|* na|* onny"));
   assert.ok(city.includes("region allowf *"));
-  // A cross-border network offered in another province is dropped; unknown neighbours are dropped.
-  assert.ok(flat(cmds.rollup({ ...belleville, role: "edge", neighbours: ["nope", "ygk"], external: ["washington"] }, data, "en"))
+  // A cross-border scope offered in another province is dropped; unknown neighbours are dropped.
+  assert.ok(flat(cmds.rollup({ ...belleville, role: "edge", neighbours: ["nope", "ygk"], external: ["qcny"] }, data, "en"))
     .includes("region def ytr|* ygk|* on|* onqc|* can|* na"));
   // A radio choice the region doesn't offer falls back to the Canada settings.
   assert.equal(flat(cmds.rollup({ ...belleville, radio: "bc-mesh" }, data, "en"))[0], "set radio 910.525,62.5,7,5");
@@ -166,7 +202,7 @@ test("the phone route explains why the radio line is missing", () => {
 });
 
 test("every command line gets its own id, and the explanations use why. keys", () => {
-  for (const answers of [observer, { ...belleville, role: "edge", neighbours: ["ygk"], external: ["western-new-york"], status: "running", reflash: false,
+  for (const answers of [observer, { ...belleville, role: "edge", neighbours: ["ygk"], external: ["onny"], status: "running", reflash: false,
     firmware: "1.14", regionReply: "*^ F\n can F\n  on F" }]) {
     const ids = items(cmds.rollup(answers, data, "en")).map((i) => i.id);
     assert.equal(new Set(ids).size, ids.length, ids.join(","));
@@ -210,7 +246,7 @@ test("explanations name the regions and the town in plain words", () => {
   assert.equal(why({ ...belleville, status: "running", reflash: false, firmware: "1.14" }, "put-ytr"),
     "Add Quinte West (ytr) to its list of regions. It doesn't pass those messages on until its `region allowf` line.");
   assert.equal(why(belleville, "default", "fr"), "Ajoute l’étiquette ytr aux annonces de ce répéteur.");
-  assert.match(why({ ...belleville, role: "edge", neighbours: ["ygk"], external: ["western-new-york"] }, "def"), /Kingston \(ygk\).*United States \(us\) and New York \(us-ny\)\.$/);
+  assert.match(why({ ...belleville, role: "edge", neighbours: ["ygk"], external: ["onny"] }, "def"), /Kingston \(ygk\).*North America \(na\) and Ontario–New York \(onny\)\.$/);
   assert.equal(why({ ...belleville, status: "running", reflash: false, firmware: "1.16", regionReply: "*^ F\n ott F" }, "remove-ott"), "Remove the old region ott.");
   assert.equal(why({ ...belleville, tag: "yvr", province: "bc", radio: "bc-mesh" }, "radio"),
     "Use the BC Mesh radio settings: 910.425 MHz, 62.5 kHz, spreading factor 7, coding rate 5. Every device nearby has to match.");
@@ -225,9 +261,9 @@ test("the Canada radio explanation matches the published profile", () => {
 });
 
 test("French output is French, placeholders included", () => {
-  const fr = items(cmds.rollup({ ...observer, role: "edge", neighbours: ["ygk"], external: ["western-new-york"] }, data, "fr"));
+  const fr = items(cmds.rollup({ ...observer, role: "edge", neighbours: ["ygk"], external: ["onny"] }, data, "fr"));
   const why = (id) => fr.find((i) => i.id === id).why;
-  assert.match(why("def"), /^Relaie les messages .*Amérique du Nord \(na\), États-Unis \(us\) et New York \(us-ny\)\.$/);
+  assert.match(why("def"), /^Relaie les messages .*Amérique du Nord \(na\) et Ontario–New York \(onny\)\.$/);
   assert.match(why("deny"), /répéteur de bordure/);
   assert.match(why("radio"), /910,525 MHz, 62,5 kHz/);
   assert.match(why("lat"), /l’endroit que vous avez choisi/);
@@ -235,7 +271,7 @@ test("French output is French, placeholders included", () => {
   assert.equal(fr.find((i) => i.id === "ssid").command, "set wifi.ssid <nom de votre Wi-Fi>");
   assert.equal(fr.find((i) => i.id === "wifi-pwd").command, "set wifi.pwd <mot de passe de votre Wi-Fi>");
   // Commands themselves never change with the language.
-  const en = items(cmds.rollup({ ...observer, role: "edge", neighbours: ["ygk"], external: ["western-new-york"] }, data, "en"));
+  const en = items(cmds.rollup({ ...observer, role: "edge", neighbours: ["ygk"], external: ["onny"] }, data, "en"));
   assert.deepEqual(fr.filter((i) => !i.manual).map((i) => i.command), en.filter((i) => !i.manual).map((i) => i.command));
   for (const check of cmds.checks(observer, data, "fr")) assert.ok(check.expect.length > 10, check.id);
   assert.notEqual(cmds.checks(observer, data, "fr")[0].expect, cmds.checks(observer, data, "en")[0].expect);
@@ -355,14 +391,16 @@ test("the checks' introduction says what they change", () => {
 
 test("cross-border notes are translated, and only where the generator warns", () => {
   assert.deepEqual(cmds.notes(belleville, data, "en"), []);
-  assert.deepEqual(cmds.notes({ ...belleville, role: "edge", neighbours: ["ygk"], external: ["western-new-york"] }, data, "en"), []);
-  const onny = cmds.notes({ ...belleville, external: ["ontario-new-york"] }, data, "fr");
-  assert.equal(onny.length, 1);
-  assert.match(onny[0], /Ontario–New York/);
-  assert.equal(cmds.notes({ ...belleville, role: "edge", external: ["pennsylvania", "ohio"] }, data, "en").length, 2);
+  assert.deepEqual(cmds.notes({ ...belleville, role: "edge", neighbours: ["ygk"], external: ["western-new-york"] }, data, "en"), [], "not a scope the tool offers");
+  const onny = cmds.notes({ ...belleville, external: ["onny"] }, data, "fr");
+  assert.deepEqual(onny, ["Confirmez ces étiquettes avec les opérateurs de l’autre côté de la frontière avant de les utiliser : Ontario–New York (onny)."]);
+  assert.deepEqual(cmds.notes({ ...belleville, external: ["onny"] }, data, "en"),
+    ["Confirm these labels with the operators across the border before you use them: Ontario–New York (onny)."]);
   assert.equal(cmds.notes({ ...belleville, tag: "ytr", province: "qc" }, data, "en").length, 1);
+  // Two listed scopes: a note for each.
+  assert.equal(cmds.notes({ ...belleville, tag: "yul", province: "qc", external: ["qcny", "qcvt"] }, data, "en").length, 2);
   // Nothing is cross-border for a listen-only repeater observer.
-  assert.deepEqual(cmds.notes({ ...observer, repeat: "listen", external: ["ontario-new-york"] }, data, "en"), []);
+  assert.deepEqual(cmds.notes({ ...observer, repeat: "listen", external: ["onny"] }, data, "en"), []);
 });
 
 test("pasted region replies: console prefixes, odd spacing, and never *", () => {
@@ -501,11 +539,11 @@ test("a custom scope comes from the generator, for a city repeater and for an ed
   assert.deepEqual(scopeLines({ ...belleville, custom: "qcx2" }), ["region def ytr|* on|* onqc|* can|* na|* qcx2", "region allowf *", "region default ytr", "region save"]);
   const edge = scopeLines({ ...belleville, role: "edge", neighbours: ["ygk"], custom: "qcx2" });
   assert.deepEqual(edge, ["region def ytr|* ygk|* on|* onqc|* can|* na|* qcx2", "region denyf *", "region default ytr", "region save"]);
-  // Next to a listed network, the custom scope goes last.
-  assert.equal(defLine({ ...belleville, external: ["ontario-new-york"], custom: "qcx2" }), "region def ytr|* on|* onqc|* can|* na|* onny|* qcx2");
-  assert.equal(defLine({ ...belleville, role: "edge", neighbours: ["ygk"], external: ["western-new-york"], custom: "qcx2" }),
-    "region def ytr|* ygk|* on|* onqc|* can|* na|* us us-ny|* qcx2");
-  // Any province, not only the ones with listed networks.
+  // Next to a listed scope, the custom scope goes last.
+  assert.equal(defLine({ ...belleville, external: ["onny"], custom: "qcx2" }), "region def ytr|* on|* onqc|* can|* na|* onny|* qcx2");
+  assert.equal(defLine({ ...belleville, role: "edge", neighbours: ["ygk"], external: ["onny"], custom: "qcx2" }),
+    "region def ytr|* ygk|* on|* onqc|* can|* na|* onny|* qcx2");
+  // Any province, not only the ones with listed scopes.
   const halifax = { ...belleville, tag: "yhz", province: "ns", place: { name: "Halifax", lat: 44.65, lon: -63.58 } };
   assert.match(defLine({ ...halifax, custom: "nsme" }), /^region def yhz\|\* ns\|\* can\|\* na\|\* nsme$/);
   // The older firmware's one-line-per-region form carries it too, and the final checks list it.
@@ -532,14 +570,15 @@ test("a custom scope that is already in the list is not added twice", () => {
   assert.equal(defLine({ ...belleville, custom: "ytr" }), "region def ytr|* on|* onqc|* can|* na");
   assert.equal(defLine({ ...belleville, custom: "na" }), "region def ytr|* on|* onqc|* can|* na");
   assert.equal(defLine({ ...belleville, role: "edge", neighbours: ["ygk"], custom: "ygk" }), "region def ytr|* ygk|* on|* onqc|* can|* na");
-  assert.equal(defLine({ ...belleville, external: ["ontario-new-york"], custom: "onny" }), "region def ytr|* on|* onqc|* can|* na|* onny");
-  // A tag another ticked network already carries under a parent would clash with the plain one: it is left out.
+  // The same as a listed scope that is ticked: once, and one confirm note.
+  assert.equal(defLine({ ...belleville, external: ["onny"], custom: "onny" }), "region def ytr|* on|* onqc|* can|* na|* onny");
+  assert.equal(cmds.notes({ ...belleville, external: ["onny"], custom: "onny" }, data, "en").length, 1);
+  // A tag with a US look is just another flat scope, since the tool offers no US network to clash with.
   assert.equal(defLine({ ...belleville, role: "edge", neighbours: ["ygk"], external: ["western-new-york"], custom: "us-ny" }),
-    "region def ytr|* ygk|* on|* onqc|* can|* na|* us us-ny");
-  assert.equal(defLine({ ...belleville, role: "edge", neighbours: ["ygk"], external: ["western-new-york"], custom: "us" }),
-    "region def ytr|* ygk|* on|* onqc|* can|* na|* us us-ny");
-  // On its own, the same tag is just another flat scope.
+    "region def ytr|* ygk|* on|* onqc|* can|* na|* us-ny");
   assert.equal(defLine({ ...belleville, custom: "us-ny" }), "region def ytr|* on|* onqc|* can|* na|* us-ny");
+  // A listed scope typed by hand where it isn't offered is a flat scope that the tool still names.
+  assert.equal(defLine({ ...belleville, custom: "qcny" }), "region def ytr|* on|* onqc|* can|* na|* qcny");
 });
 
 test("the explanation names a custom scope in each language, and only when nothing else names it", () => {
@@ -553,7 +592,9 @@ test("the explanation names a custom scope in each language, and only when nothi
   // A tag the tool already knows keeps its usual name.
   assert.doesNotMatch(why({ ...belleville, custom: "on" }, "en"), /agreed with/);
   assert.doesNotMatch(why({ ...belleville, custom: "ygk" }, "en"), /agreed with/);
-  assert.doesNotMatch(why({ ...belleville, external: ["ontario-new-york"], custom: "onny" }, "fr"), /convenue/);
+  assert.doesNotMatch(why({ ...belleville, external: ["onny"], custom: "onny" }, "fr"), /convenue/);
+  assert.doesNotMatch(why({ ...belleville, custom: "qcny" }, "fr"), /convenue/, "a scope the tool lists is named, even when it was typed");
+  assert.match(why({ ...belleville, custom: "qcny" }, "fr"), /Québec–New York \(qcny\)\.$/);
   // The one-line-per-region explanations name it the same way.
   const old = { ...belleville, status: "running", reflash: false, firmware: "1.15", custom: "qcx2" };
   assert.equal(why(old, "en", "put-qcx2"), "Pass on messages labelled for qcx2 (agreed with a network across the border).");
@@ -567,7 +608,7 @@ test("the generator's confirm note applies to a custom scope, in both languages"
   assert.deepEqual(note("qcx2", "en"), ["Confirm these labels with the operators across the border before you use them: qcx2."]);
   assert.deepEqual(note("qcx2", "fr"), ["Confirmez ces étiquettes avec les opérateurs de l’autre côté de la frontière avant de les utiliser : qcx2."]);
   // Beside a listed network the note names both.
-  const both = cmds.notes({ ...belleville, external: ["ontario-new-york"], custom: "qcx2" }, data, "en");
+  const both = cmds.notes({ ...belleville, external: ["onny"], custom: "qcx2" }, data, "en");
   assert.equal(both.length, 2);
   assert.match(both[0], /Ontario–New York/);
   assert.match(both[1], /qcx2/);
@@ -578,7 +619,7 @@ test("the generator's confirm note applies to a custom scope, in both languages"
 test("a list too long for the repeater to show back is reported, not thrown, when a custom scope tips it over", () => {
   assert.equal(cmds.fits(belleville, data), true);
   assert.equal(cmds.fits({ ...belleville, custom: "x".repeat(29) }, data), true);
-  assert.equal(cmds.fits({ ...belleville, role: "edge", neighbours: ["ygk"], external: ["western-new-york"], custom: "qcx2" }, data), true);
+  assert.equal(cmds.fits({ ...belleville, role: "edge", neighbours: ["ygk"], external: ["onny"], custom: "qcx2" }, data), true);
   // The tool's own choices all fit today, so shrink the room: three more 29-letter reserved scopes.
   const crowded = structuredClone(data);
   crowded.catalog.policy.reservedScopes.push("a".repeat(29), "b".repeat(29), "c".repeat(29));

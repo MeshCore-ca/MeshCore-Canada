@@ -593,17 +593,14 @@ find any other region.
 ### Labels shared across the border {#cross-border-scopes}
 
 Some repeaters link with a network in the United States. For those, the tool
-offers extra labels:
+offers the agreed scopes listed in the tool: labels that operators on both
+sides have agreed to carry. It shows the ones that suit your province, each
+with a short description. City and edge repeaters can both use them. For
+example, `onny` is for repeaters that connect Ontario and New York.
 
-- **`onny`**, a shared Ontario–New York label, for a city or edge repeater in
-  Ontario.
-- **`qcny`**, a shared Québec–New York label, for a city or edge repeater in
-  Québec.
-- **Nearby US networks**, for edge repeaters: Western New York, Pennsylvania and
-  Ohio from Ontario; Washington and Oregon from British Columbia.
-- **Another scope we've agreed with a network across the border**, for any
-  repeater in any province. Type the scope name exactly as you both agreed it
-  (lowercase letters, numbers and dashes).
+You can also tick **Another scope we've agreed with a network across the
+border**, for any repeater in any province. Type the scope name exactly as you
+both agreed it (lowercase letters, numbers and dashes).
 
 Only tick one if this repeater links with that network and its operators have
 agreed. Not sure? Leave them off.
