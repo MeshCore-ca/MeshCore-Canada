@@ -1411,7 +1411,8 @@
     var view = { L: null, map: null, marker: null };
     var waiting = !Flow.hasPin(a.place);
     var middle = waiting && state.data && a.tag ? Place.centre(a.tag, state.data) : null;
-    var start = waiting ? note("info", t("location.start"), { "data-setup-pin-start": "" }) : null;
+    // Says why the pin is where it is: no place was searched, so it starts in the region's middle.
+    var start = waiting ? note("info", t("location.start", { region: regionName(a.tag) }), { "data-setup-pin-start": "" }) : null;
     var how = para(t("location.how"), { class: "setup-hint", id: "setup-pin-how" });
     var canvas = el("div", { class: "setup-map__canvas", "data-setup-map": "" });
     var status = para(t("location.loading"), { class: "setup-map__status", role: "status", "data-setup-map-status": "" });
@@ -1462,6 +1463,8 @@
       if (view.marker) return view.marker.setLatLng([spot.lat, spot.lon]);
       var marker = view.L.marker([spot.lat, spot.lon], { draggable: true, keyboard: false, alt: t("location.pin"), autoPan: true }).addTo(view.map);
       marker.on("dragend", function () { fromMap(marker.getLatLng()); });
+      // A click on the pin is the pin's: with no listener of its own it would fall through to the map and move the pin.
+      marker.on("click", function () {});
       view.marker = marker;
     }
 
@@ -1516,8 +1519,9 @@
       // The screen was drawn again or left before Leaflet arrived.
       if (!mapBox.isConnected) return;
       L.Icon.Default.imagePath = new URL(LEAFLET.images, SCRIPT_URL).href;
-      // The keyboard way is the boxes, so the map and its pin aren't tab stops; the wheel scrolls the page.
-      var map = L.map(canvas, { zoomControl: false, keyboard: false, scrollWheelZoom: false });
+      // The keyboard way is the boxes, so the map and its pin aren't tab stops; the wheel scrolls the page, and a
+      // double-click doesn't zoom (the + and - buttons and pinching do).
+      var map = L.map(canvas, { zoomControl: false, keyboard: false, scrollWheelZoom: false, doubleClickZoom: false });
       dropMap();
       state.map = map;
       view.L = L;

@@ -876,6 +876,15 @@ test("changing the town clears neighbours and the suggested name", async ({ page
   await mockGeocoder(page);
   await page.goto(siteRoute(`/config/?type=repeater&board=esp32&status=new&role=edge&neighbours=ygk&name=Belleville_R1&${BELLEVILLE}`));
   await confirmStep(page, "flash");
+  // A pin the person placed belongs to the town it was placed for: a different town brings its own point.
+  await nextUntil(page, "location");
+  await pinBox(page, "lat").fill("44.17");
+  await pinBox(page, "lon").fill("-77.39");
+  await expect.poll(() => searchParam(page, "lat")).toBe("44.17");
+  for (const id of ["name", "neighbours", "role", "town"]) {
+    await page.locator("[data-setup-back]").click();
+    await expectStep(page, id);
+  }
   await town(page, "Kingston", "ygk");
   await expectStep(page, "role");
   await expect(page.locator('[data-setup-choice="edge"]')).toHaveAttribute("aria-pressed", "true");
@@ -891,10 +900,14 @@ test("changing the town clears neighbours and the suggested name", async ({ page
   await expectStep(page, "name");
   await expect(page.locator("[data-setup-name]")).toHaveValue("Kingston_R1");
   await next(page);
-  // The new town brings its own pin.
+  // The new town brings its own pin, not the one moved for the old town.
   await expectStep(page, "location");
   await expect(pinBox(page, "lat")).toHaveValue("44.2298");
   await expect(pinBox(page, "lon")).toHaveValue("-76.481");
+  await expect(marker(page)).toBeVisible();
+  expect(searchParam(page, "lat")).toBe("44.2298");
+  expect(searchParam(page, "lon")).toBe("-76.481");
+  expect(page.url()).not.toMatch(/lat=44\.17(?:&|$)|lon=-77\.39(?:&|$)/);
   await next(page);
   await expectStep(page, "commands");
   const lines = await commandLines(page);
@@ -2016,8 +2029,9 @@ test("the map opens close in for an address or coordinates, nearer for a town, a
 
 // A region's middle on a public map would mislead, so with only a region the pin waits there for the person to move it.
 const REGION_ONLY = "/config/?type=repeater&board=esp32&status=running&reflash=0&role=city&name=Test_R1&tag=ytr&province=on";
-async function expectWaitingPin(page) {
-  await expect(page.locator("[data-setup-pin-start]")).toHaveText(T("location.start", "en"));
+async function expectWaitingPin(page, region = "Quinte West", lang = "en") {
+  await expect(page.locator("[data-setup-pin-start]")).toHaveText(T("location.start", lang, { region }));
+  await expect(page.locator("[data-setup-pin-start]")).toContainText(region);
   await expect(marker(page)).toBeVisible();
   // Nothing is kept yet: the boxes are empty, the link holds no spot, and Next waits.
   await expect(pinBox(page, "lat")).toHaveValue("");
@@ -2025,6 +2039,37 @@ async function expectWaitingPin(page) {
   await expect(nextButton(page)).toBeDisabled();
   expect(new URL(page.url()).search).not.toMatch(/(?:^|&)(?:town|kind|lat|lon)=/);
 }
+
+for (const lang of LANGS) {
+  test(`${lang} the waiting line says the pin is in the middle of the region, by the region's name in the page's language`, async ({ page }) => {
+    for (const [tag, province, english, french] of [["ytr", "on", "Quinte West", "Quinte West"], ["yow", "on", "Ottawa–Gatineau", "Ottawa–Gatineau"], ["yyt", "nl", "Newfoundland", "Terre-Neuve"]]) {
+      await openLink(page, `${ROUTES[lang]}?type=repeater&board=esp32&status=running&reflash=0&role=city&name=Test_R1&tag=${tag}&province=${province}`, { to: "location" });
+      await expectWaitingPin(page, lang === "fr" ? french : english, lang);
+    }
+  });
+}
+
+test("a click on the pin leaves it where it is, and a double-click on the map zooms nothing", async ({ page }) => {
+  const requests = [];
+  page.on("request", (request) => requests.push(request.url()));
+  await openLink(page, BELLEVILLE_LINK(), { to: "location" });
+  await expect(marker(page)).toBeVisible();
+  await expect.poll(() => tileZooms(requests)).toEqual([13]);
+  await page.locator("[data-setup-map]").scrollIntoViewIfNeeded();
+  // The middle of the pin's picture is above its tip: if the click went on to the map, the pin would jump up to it.
+  await marker(page).click();
+  await expect(pinBox(page, "lat")).toHaveValue("44.1628");
+  await expect(pinBox(page, "lon")).toHaveValue("-77.3832");
+  expect(searchParam(page, "lat")).toBe("44.1628");
+  expect(searchParam(page, "lon")).toBe("-77.3832");
+  // A double-click doesn't zoom: the + and - buttons and pinching do.
+  const middle = await mapMiddle(page);
+  await page.locator("[data-setup-map]").dblclick({ position: { x: middle.width / 2 + 80, y: middle.height / 2 + 60 } });
+  await page.waitForTimeout(700);
+  expect(tileZooms(requests)).toEqual([13]);
+  await page.locator(".leaflet-control-zoom-in").click();
+  await expect.poll(() => tileZooms(requests)).toEqual([13, 14]);
+});
 
 test("with only a region, the pin waits in its middle and Next waits until the person places it", async ({ page }) => {
   await openLink(page, REGION_ONLY, { to: "location" });

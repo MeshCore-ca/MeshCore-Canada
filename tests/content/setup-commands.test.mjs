@@ -474,8 +474,11 @@ test("the map location step says what it does in plain words, in both languages"
   assert.equal(text.t("location.off", "en"), "Disable location");
   assert.equal(text.t("location.off", "fr"), "Désactiver l’emplacement");
   // With only a region, the pin waits on the region's middle for the person to move it: the middle is no answer.
-  assert.equal(text.t("location.start", "en"), "Move the pin to roughly where the repeater is.");
-  assert.equal(text.t("location.start", "fr"), "Déplacez l’épingle à peu près là où se trouve le répéteur.");
+  // The line says why the pin is where it is, with the region's own name.
+  assert.equal(text.t("location.start", "en", { region: "Quinte West" }),
+    "The pin is in the middle of Quinte West. Move it to roughly where the repeater is, or go back and search for its town.");
+  assert.equal(text.t("location.start", "fr", { region: "Ottawa–Gatineau" }),
+    "L’épingle est au milieu de la région Ottawa–Gatineau. Déplacez-la à peu près là où se trouve le répéteur, ou revenez en arrière et cherchez sa ville.");
   assert.ok(!text.keys().includes("location.centre"), "the old centre line is gone");
   for (const lang of ["en", "fr"]) {
     // The helper text: most people give an approximate spot, and hiding it doesn't stop a fox hunt.

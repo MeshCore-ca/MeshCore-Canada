@@ -28,6 +28,13 @@ ENTRY = """\
     provinces: [on]
 """
 
+CATALOG = {"hierarchy": {
+    "ytr": {"label": "Quinte West", "kind": "city"},
+    "yow": {"label": "Ottawa–Gatineau", "kind": "city"},
+    "on": {"label": "Ontario", "kind": "province"},
+    "onqc": {"label": "Ontario + Québec", "kind": "mesh-scope"},
+}}
+
 POLICY = {
     "provinces": {code: {"label": code.upper()} for code in ["bc", "ab", "on", "qc", "ns"]},
     "meshScopes": {"onqc": ["on", "qc"]},
@@ -41,8 +48,10 @@ class CrossBorderScopesTests(unittest.TestCase):
         self.dir = Path(self.temporary.name)
         self.source = self.dir / "scopes.yml"
         self.policy = self.dir / "policy.json"
+        self.catalog = self.dir / "catalog.json"
         self.output = self.dir / "out" / "cross-border-scopes.json"
         self.policy.write_text(json.dumps(POLICY), encoding="utf-8")
+        self.catalog.write_text(json.dumps(CATALOG), encoding="utf-8")
 
     def tearDown(self) -> None:
         self.temporary.cleanup()
@@ -56,13 +65,13 @@ class CrossBorderScopesTests(unittest.TestCase):
     def run_main(self, *extra: str) -> tuple[int, str]:
         err = io.StringIO()
         with contextlib.redirect_stderr(err), contextlib.redirect_stdout(io.StringIO()):
-            code = MODULE.main(["--source", str(self.source), "--policy", str(self.policy), "--output", str(self.output), *extra])
+            code = MODULE.main(["--source", str(self.source), "--policy", str(self.policy), "--catalog", str(self.catalog), "--output", str(self.output), *extra])
         return code, err.getvalue()
 
     def problems(self, body: str) -> list[str]:
         self.write(body)
         with self.assertRaises(MODULE.ScopeError) as caught:
-            MODULE.load_scopes(self.source, self.policy)
+            MODULE.load_scopes(self.source, self.policy, self.catalog)
         return caught.exception.problems
 
     def entry(self, **changes: str) -> str:
@@ -110,9 +119,9 @@ class CrossBorderScopesTests(unittest.TestCase):
     def test_on_is_a_province_not_a_yes(self) -> None:
         # YAML 1.1 reads an unquoted on as true; the file is written the way people write it.
         self.write(self.scopes(self.entry(provinces="[on, qc]")))
-        self.assertEqual(MODULE.load_scopes(self.source, self.policy)[0]["provinces"], ["on", "qc"])
+        self.assertEqual(MODULE.load_scopes(self.source, self.policy, self.catalog)[0]["provinces"], ["on", "qc"])
         self.write(self.scopes(self.entry(provinces='["on"]')))
-        self.assertEqual(MODULE.load_scopes(self.source, self.policy)[0]["provinces"], ["on"])
+        self.assertEqual(MODULE.load_scopes(self.source, self.policy, self.catalog)[0]["provinces"], ["on"])
         # A real yes or no is still not a province.
         self.assertTrue(any("provinces" in problem for problem in self.problems(self.scopes(self.entry(provinces="[true]")))))
 
@@ -136,12 +145,32 @@ class CrossBorderScopesTests(unittest.TestCase):
             self.assertTrue(any("scope" in problem and "lowercase" in problem for problem in found), f"{bad}: {found}")
         for good in ["a", "x" * 29, "a-b-9"]:
             self.write(self.scopes(self.entry(scope=good)))
-            self.assertEqual(MODULE.load_scopes(self.source, self.policy)[0]["scope"], good)
+            self.assertEqual(MODULE.load_scopes(self.source, self.policy, self.catalog)[0]["scope"], good)
 
     def test_the_scope_may_not_be_a_label_the_tool_already_uses(self) -> None:
         for taken in ["on", "qc", "onqc", "can", "na"]:
             found = self.problems(self.scopes(self.entry(scope=taken)))
             self.assertTrue(any("already used" in problem for problem in found), f"{taken}: {found}")
+
+    def test_the_scope_may_not_be_the_code_of_a_region(self) -> None:
+        # A region and a scope with the same tag would be one label on the air: the region's code is taken.
+        for region in ["ytr", "yow"]:
+            found = self.problems(self.scopes(self.entry(scope=region)))
+            self.assertTrue(any("already used" in problem and "region" in problem for problem in found), f"{region}: {found}")
+        self.write(self.scopes(self.entry(scope="onny")))
+        self.assertEqual(MODULE.load_scopes(self.source, self.policy, self.catalog)[0]["scope"], "onny")
+
+    def test_a_catalogue_that_cannot_be_read_is_said_plainly(self) -> None:
+        self.write(self.scopes(ENTRY))
+        for body in [None, "not json", "{}", '{"hierarchy": []}']:
+            if body is None:
+                self.catalog.unlink()
+            else:
+                self.catalog.write_text(body, encoding="utf-8")
+            code, err = self.run_main()
+            self.assertEqual(code, 1, str(body))
+            self.assertIn("region catalogue", err)
+            self.assertFalse(self.output.exists())
 
     def test_names_and_descriptions_are_needed_in_both_languages(self) -> None:
         for field in ["name", "nameFr", "description", "descriptionFr"]:

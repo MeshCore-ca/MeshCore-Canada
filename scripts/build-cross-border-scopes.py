@@ -21,6 +21,7 @@ import yaml
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "data" / "cross-border-scopes.yml"
 POLICY = ROOT / "data" / "iata-scope-policy.json"
+CATALOG = ROOT / "docs" / "assets" / "regions" / "iata-regions.json"
 OUTPUT = ROOT / "docs" / "assets" / "regions" / "cross-border-scopes.json"
 
 SCHEMA = "meshcore-canada-cross-border-scopes/v1"
@@ -76,6 +77,17 @@ def _policy_names(path: Path) -> tuple[list[str], set[str]]:
     return provinces, used
 
 
+def _catalog_tags(path: Path) -> set[str]:
+    """Every tag the region catalogue uses: regions, provinces and the wider scopes."""
+    try:
+        hierarchy = json.loads(path.read_text(encoding="utf-8"))["hierarchy"]
+        if not isinstance(hierarchy, dict):
+            raise TypeError("hierarchy is not a list of tags")
+    except (OSError, ValueError, KeyError, TypeError) as error:
+        raise ScopeError([f"Can't read the region catalogue {path}: {error}"]) from error
+    return set(hierarchy)
+
+
 def _entry_problems(number: int, entry: Any, provinces: list[str], used: set[str], seen: set[str]) -> list[str]:
     where = f"entry {number}"
     if not isinstance(entry, dict):
@@ -93,7 +105,7 @@ def _entry_problems(number: int, entry: Any, provinces: list[str], used: set[str
         if not isinstance(scope, str) or not SCOPE_RE.match(scope):
             problems.append(f"{where}: scope must be 1 to 29 lowercase letters, numbers or dashes (got {scope!r})")
         elif scope in used:
-            problems.append(f"{where}: scope {scope!r} is already used by the tool for a province or a wider scope")
+            problems.append(f"{where}: scope {scope!r} is already used by the tool for a region, a province or a wider scope")
         elif scope in seen:
             problems.append(f"{where}: scope {scope!r} is listed twice")
         else:
@@ -126,9 +138,14 @@ def _entry_problems(number: int, entry: Any, provinces: list[str], used: set[str
     return problems
 
 
-def load_scopes(source: Path = SOURCE, policy: Path = POLICY) -> list[dict[str, Any]]:
-    """The checked scopes, in the order the file lists them. Raises ScopeError listing every problem."""
+def load_scopes(source: Path = SOURCE, policy: Path = POLICY, catalog: Path = CATALOG) -> list[dict[str, Any]]:
+    """The checked scopes, in the order the file lists them. Raises ScopeError listing every problem.
+
+    A scope can't reuse a tag the catalogue already has, so nobody can be given a region code that is also
+    a scope. The reverse (a new region named like a scope) is caught by tests/content/cross-border-scopes.test.mjs.
+    """
     provinces, used = _policy_names(policy)
+    used |= _catalog_tags(catalog)
     raw = _read_yaml(source)
     if not isinstance(raw, dict) or "scopes" not in raw:
         raise ScopeError(["The file must start with `scopes:` followed by the list of scopes"])
@@ -172,11 +189,12 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--check", action="store_true", help="change nothing; fail if the JSON doesn't match the YAML")
     parser.add_argument("--source", type=Path, default=SOURCE, help=argparse.SUPPRESS)
     parser.add_argument("--policy", type=Path, default=POLICY, help=argparse.SUPPRESS)
+    parser.add_argument("--catalog", type=Path, default=CATALOG, help=argparse.SUPPRESS)
     parser.add_argument("--output", type=Path, default=OUTPUT, help=argparse.SUPPRESS)
     args = parser.parse_args(argv)
 
     try:
-        scopes = load_scopes(args.source, args.policy)
+        scopes = load_scopes(args.source, args.policy, args.catalog)
     except ScopeError as error:
         print(f"{args.source} has problems:", file=sys.stderr)
         for problem in error.problems:
