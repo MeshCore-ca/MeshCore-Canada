@@ -4,28 +4,19 @@
 (function () {
   "use strict";
 
-  // Boards in the official MeshCore web flasher (flasher.meshcore.io, shown at
-  // flasher.meshcore.co.uk) for repeaters. `observerFlasher` is true only for
-  // boards the MQTT Observer Firmware flasher (observer.gessaman.com) lists, which
-  // is ESP32 only. Board names are proper nouns and are not translated; only the
-  // "not listed" entries carry a French name.
-  var BOARDS = [
-    { id: "rak4631", name: "RAK4631 (WisBlock)", chip: "nrf52", observerFlasher: false },
-    { id: "heltec-t114", name: "Heltec T114", chip: "nrf52", observerFlasher: false },
-    { id: "xiao-nrf52840", name: "Seeed XIAO nRF52840", chip: "nrf52", observerFlasher: false },
-    { id: "t-echo", name: "LilyGO T-Echo", chip: "nrf52", observerFlasher: false },
-    { id: "heltec-mesh-solar", name: "Heltec MeshSolar / MeshTower", chip: "nrf52", observerFlasher: false },
-    { id: "sensecap-solar-p1", name: "Seeed SenseCAP Solar Node P1", chip: "nrf52", observerFlasher: false },
-    { id: "other-nrf52", name: "My board isn't listed", nameFr: "Ma carte n’est pas dans la liste", chip: "nrf52", observerFlasher: false },
-    { id: "heltec-v3", name: "Heltec V3", chip: "esp32", observerFlasher: true },
-    { id: "heltec-v4", name: "Heltec V4", chip: "esp32", observerFlasher: true },
-    { id: "heltec-wireless-tracker", name: "Heltec Wireless Tracker", chip: "esp32", observerFlasher: true },
-    { id: "t-beam", name: "LilyGO T-Beam", chip: "esp32", observerFlasher: true },
-    { id: "t-beam-supreme", name: "LilyGO T-Beam Supreme", chip: "esp32", observerFlasher: true },
-    { id: "rak3112", name: "RAK WisBlock 3112", chip: "esp32", observerFlasher: true },
-    { id: "xiao-esp32s3", name: "Seeed XIAO ESP32-S3", chip: "esp32", observerFlasher: true },
-    { id: "other-esp32", name: "My board isn't listed", nameFr: "Ma carte n’est pas dans la liste", chip: "esp32", observerFlasher: false }
-  ];
+  // The board step asks only what kind of board it is, because the kind is all the steps
+  // depend on: an nRF52 repeater updates its bootloader first, and a repeater observer
+  // needs Wi-Fi, so it is ESP32 only. The flasher itself asks for the exact board.
+  var KINDS = ["nrf52", "esp32"];
+
+  // Share links made while the step listed every board carry a board id; each one maps
+  // to its kind, so those links keep working. Links written now carry the kind.
+  var OLD_BOARDS = {
+    "rak4631": "nrf52", "heltec-t114": "nrf52", "xiao-nrf52840": "nrf52", "t-echo": "nrf52",
+    "heltec-mesh-solar": "nrf52", "sensecap-solar-p1": "nrf52", "other-nrf52": "nrf52",
+    "heltec-v3": "esp32", "heltec-v4": "esp32", "heltec-wireless-tracker": "esp32", "t-beam": "esp32",
+    "t-beam-supreme": "esp32", "rak3112": "esp32", "xiao-esp32s3": "esp32", "other-esp32": "esp32"
+  };
 
   var VERSIONS = ["1.14", "1.15", "1.16"];
   var TYPES = ["repeater", "observer"];
@@ -43,14 +34,9 @@
   var MAX_NAME = 31;                     // bytes in UTF-8
   var MAX_LIST = 32;                     // a device holds at most 32 regions
 
-  function board(id) {
-    for (var i = 0; i < BOARDS.length; i += 1) if (BOARDS[i].id === id) return BOARDS[i];
-    return null;
-  }
-
+  // The board answer is the kind itself: "nrf52", "esp32", or null while unanswered.
   function chip(answers) {
-    var found = board(answers.board);
-    return found ? found.chip : null;
+    return oneOf(KINDS, answers.board) ? answers.board : null;
   }
 
   function isText(value, pattern) { return typeof value === "string" && pattern.test(value); }
@@ -111,9 +97,9 @@
       case "type": return oneOf(TYPES, a.type);
       case "repeat": return oneOf(REPEAT, a.repeat);
       case "board": {
-        var found = board(a.board);
-        if (!found || !oneOf(TYPES, a.type)) return false;
-        return a.type !== "observer" || found.chip === "esp32";
+        var kind = chip(a);
+        if (!kind || !oneOf(TYPES, a.type)) return false;
+        return a.type !== "observer" || kind === "esp32";
       }
       case "status": return oneOf(STATUS, a.status);
       case "reflash": return typeof a.reflash === "boolean";
@@ -304,10 +290,21 @@
     };
   }
 
+  // The kind of board, written as is. An older link's board id is read as its kind.
+  var boardField = {
+    key: "board",
+    write: function (value) { return oneOf(KINDS, value) ? value : null; },
+    read: function (text) {
+      text = text.toLowerCase();
+      if (oneOf(KINDS, text)) return text;
+      return Object.prototype.hasOwnProperty.call(OLD_BOARDS, text) ? OLD_BOARDS[text] : undefined;
+    }
+  };
+
   var FIELDS = [
     enumField("type", TYPES),
     enumField("repeat", REPEAT),
-    enumField("board", BOARDS.map(function (item) { return item.id; })),
+    boardField,
     enumField("status", STATUS),
     flagField("reflash"),
     enumField("observerFirmware", YES_NO),
@@ -401,7 +398,7 @@
   }
 
   globalThis.MeshCoreSetupFlow = {
-    BOARDS: BOARDS,
+    KINDS: KINDS,
     VERSIONS: VERSIONS,
     stepIds: stepIds,
     isComplete: isComplete,
