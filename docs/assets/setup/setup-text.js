@@ -227,11 +227,12 @@
 
     // Name it
     "name.question": "Give it a name",
-    "name.hint": "Other people see this. Letters, numbers, `_` and `-`, no spaces.",
+    "name.hint": "Other people see this. Keep it to about 30 letters (accented letters count as two). Spaces are fine, but not `[ ] \\ : , ? *`.",
     "name.help": "The name shows in the MeshCore app and on maps, so people can tell repeaters apart. A place and a number, such as Belleville_R1, works well.",
-    "name.hint.running": "Type the name it has now to keep it, or type a new one. Other people see this. Letters, numbers, `_` and `-`, no spaces.",
+    "name.hint.running": "Type the name it has now to keep it, or type a new one. Other people see this. Keep it to about 30 letters (accented letters count as two). Spaces are fine, but not `[ ] \\ : , ? *`.",
     "name.label": "Name",
-    "name.invalid": "Use only letters, numbers, `_` or `-`, with no spaces or accents, up to {max} characters.",
+    "name.invalid-characters": "Take out any `[ ] \\ : , ? *`: the repeater won't accept them.",
+    "name.too-long": "That's too long. Keep it to about 30 letters (accented letters count as two).",
     "name.location": "Show it on maps near {town} (not its exact spot)",
     "name.location-spot": "Show it on maps at the exact spot you entered ({town})",
 
@@ -557,11 +558,12 @@
 
     // Name it
     "name.question": "Donnez-lui un nom",
-    "name.hint": "Les autres le voient. Lettres, chiffres, `_` et `-`, sans espaces.",
+    "name.hint": "Les autres le voient. Limitez-le à environ 30 lettres (une lettre accentuée compte pour deux). Vous pouvez utiliser des espaces, mais pas `[ ] \\ : , ? *`.",
     "name.help": "Le nom s’affiche dans l’application MeshCore et sur les cartes, pour qu’on puisse distinguer les répéteurs. Un lieu et un numéro, comme Belleville_R1, conviennent bien.",
-    "name.hint.running": "Tapez le nom qu’il a maintenant pour le garder, ou tapez-en un nouveau. Les autres le voient. Lettres, chiffres, `_` et `-`, sans espaces.",
+    "name.hint.running": "Tapez le nom qu’il a maintenant pour le garder, ou tapez-en un nouveau. Les autres le voient. Limitez-le à environ 30 lettres (une lettre accentuée compte pour deux). Vous pouvez utiliser des espaces, mais pas `[ ] \\ : , ? *`.",
     "name.label": "Nom",
-    "name.invalid": "Utilisez seulement des lettres, des chiffres, `_` ou `-`, sans espaces ni accents, jusqu’à {max} caractères.",
+    "name.invalid-characters": "Retirez les `[ ] \\ : , ? *` : le répéteur ne les accepte pas.",
+    "name.too-long": "C’est trop long. Limitez-le à environ 30 lettres (une lettre accentuée compte pour deux).",
     "name.location": "L’afficher sur les cartes près de la localité ({town}), pas à son endroit exact",
     "name.location-spot": "L’afficher sur les cartes à l’endroit exact indiqué ({town})",
 

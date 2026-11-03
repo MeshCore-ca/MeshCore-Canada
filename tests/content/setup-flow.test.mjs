@@ -43,7 +43,7 @@ test("names are suggested from the town; a region from the map answers the town 
   assert.equal(flow.suggestName({ type: "repeater", place: { name: "Belleville" } }), "Belleville_R1");
   assert.equal(flow.suggestName({ type: "observer", place: { name: "Montréal" } }), "Montreal_Obs1");
   assert.equal(flow.isComplete("town", { tag: "yow", province: "qc" }), true);
-  assert.equal(flow.isComplete("name", { name: "Belleville R1" }), false);   // spaces not allowed
+  assert.equal(flow.isComplete("name", { name: "Belleville R1" }), true);    // the firmware takes spaces (Ruling 31)
   assert.equal(flow.isComplete("name", { name: "Belleville_R1" }), true);
 });
 
@@ -56,6 +56,64 @@ test("a running board gets no suggested name: the person types its current name 
   assert.equal(flow.resetDependents({ status: "running", name: "Kingston_R1" }, "status").name, undefined);
   assert.equal(flow.resetDependents({ status: "running", name: "Hilltop", nameEdited: true }, "status").name, "Hilltop");
   assert.equal(flow.isComplete("name", { status: "running" }), false);
+});
+
+// The firmware's rule for `set name <rest of line>` (CommonCLI isValidName, char node_name[32]).
+test("a name can be anything the firmware accepts: spaces and accents too", () => {
+  for (const name of ["Café Hilltop", "Belleville R1", "Mont-Tremblant (QC) #2", "Tour d’eau", "<b>", "x", "📡 Ridge"]) {
+    assert.equal(flow.isComplete("name", { name }), true, name);
+    assert.equal(flow.nameProblem(name), null, name);
+  }
+});
+
+test("a name can't use [ ] \\ : , ? * or control characters", () => {
+  for (const bad of ["[", "]", "\\", ":", ",", "?", "*", "\t", "\n", "\r", "\u0000", "\u001f", "\u007f", "\u0085"]) {
+    const name = "Hill" + bad + "Top";
+    assert.equal(flow.isComplete("name", { name }), false, JSON.stringify(bad));
+    assert.equal(flow.nameProblem(name), "characters", JSON.stringify(bad));
+  }
+});
+
+test("a name fits in 31 bytes, so an accented letter counts as two", () => {
+  assert.equal(flow.nameProblem("A".repeat(31)), null);
+  assert.equal(flow.nameProblem("A".repeat(32)), "long");
+  assert.equal(flow.nameProblem("é".repeat(15) + "A"), null);            // 31 bytes
+  assert.equal(flow.nameProblem("é".repeat(16)), "long");                // 16 letters, 32 bytes
+  assert.equal(flow.nameProblem("Château Hilltop Saint-Rémi R1"), null);  // 29 letters, 31 bytes
+  assert.equal(flow.nameProblem("Château Hilltop Saint-Rémi R12"), "long");
+  assert.equal(flow.nameProblem("📡".repeat(7) + "abc"), null);            // 4 bytes each
+  assert.equal(flow.nameProblem("📡".repeat(8)), "long");
+  assert.equal(flow.isComplete("name", { name: "é".repeat(16) }), false);
+});
+
+test("names are trimmed, and an empty one is not a name", () => {
+  assert.equal(flow.cleanName("  Café Hilltop  "), "Café Hilltop");
+  assert.equal(flow.cleanName("\tHill Top\n"), "Hill Top");
+  assert.equal(flow.cleanName(undefined), "");
+  for (const empty of ["", "   ", "\t"]) assert.equal(flow.nameProblem(empty), "empty", JSON.stringify(empty));
+  assert.equal(flow.isComplete("name", { name: "" }), false);
+  assert.equal(flow.isComplete("name", { name: "   " }), false);
+  // Only a trimmed name is complete: the page trims before it stores one.
+  assert.equal(flow.isComplete("name", { name: " Hilltop " }), false);
+  // Spaces at the ends don't count toward the length.
+  assert.equal(flow.nameProblem("  " + "A".repeat(31) + "  "), null);
+  assert.equal(flow.isComplete("name", { name: 7 }), false);
+});
+
+test("share links carry names with spaces, accents and symbols, and drop ones the firmware refuses", () => {
+  for (const name of ["Café Hilltop", "R&D Hill #2", "50% Ridge=1", "Tour d’eau"]) {
+    const q = flow.toQuery({ name });
+    assert.match(q, /^name=[^ &#=]+$/, name);              // one field, every special character encoded
+    assert.deepEqual(flow.fromQuery(q), { name }, name);
+  }
+  assert.equal(flow.toQuery({ name: "Café Hilltop" }), "name=Caf%C3%A9%20Hilltop");
+  assert.equal(flow.toQuery({ name: "Hill:Top" }), "");
+  assert.equal(flow.toQuery({ name: "é".repeat(16) }), "");
+  assert.deepEqual(flow.fromQuery("name=Hill%3ATop"), {});
+  assert.deepEqual(flow.fromQuery("name=" + encodeURIComponent("é".repeat(16))), {});
+  // A hand-written link with spaces round the name is read trimmed.
+  assert.deepEqual(flow.fromQuery("name=%20%20Hilltop%20"), { name: "Hilltop" });
+  assert.deepEqual(flow.fromQuery("name=Caf%C3%A9+Hilltop"), { name: "Café Hilltop" });
 });
 
 test("ver replies are read leniently", () => {
@@ -148,7 +206,7 @@ test("steps are complete once their own answer is valid", () => {
   assert.equal(flow.isComplete("neighbours", { neighbours: [] }), true);                    // a deliberate "none"
   assert.equal(flow.isComplete("neighbours", {}), false);
   assert.equal(flow.isComplete("name", { name: "A".repeat(32) }), false);
-  assert.equal(flow.isComplete("name", { name: "Café_R1" }), false);
+  assert.equal(flow.isComplete("name", { name: "Café_R1" }), true);
   assert.equal(flow.isComplete("name", {}), false);
   assert.equal(flow.isComplete("nonsense", { type: "repeater" }), false);
 });
@@ -210,10 +268,10 @@ test("share links keep only valid, known answers", () => {
   assert.deepEqual(flow.fromQuery(""), {});
   assert.deepEqual(flow.fromQuery(flow.toQuery({ role: "edge", neighbours: [] })), { role: "edge", neighbours: [] });
 
-  const hostile = flow.fromQuery("type=wizard&board=nope&tag=a&province=%3Cb%3E&name=a%20b&neighbours=ygk,%3Cx%3E,,ytr&external=WESTERN-new-york&radio=x&firmware=1.9&reflash=maybe&__proto__=1&place=Belleville&regionReply=x&password=secret");
+  const hostile = flow.fromQuery("type=wizard&board=nope&tag=a&province=%3Cb%3E&name=a%3Ab&neighbours=ygk,%3Cx%3E,,ytr&external=WESTERN-new-york&radio=x&firmware=1.9&reflash=maybe&__proto__=1&place=Belleville&regionReply=x&password=secret");
   assert.deepEqual(hostile, { neighbours: ["ygk", "ytr"], external: ["western-new-york"] });
   assert.equal(Object.getPrototypeOf(hostile), Object.prototype);
-  assert.doesNotMatch(flow.toQuery({ name: "has space", tag: "<b>", password: "secret" }), /secret|space|<b>|password/);
+  assert.doesNotMatch(flow.toQuery({ name: "has:colon", tag: "<b>", password: "secret" }), /secret|colon|<b>|password/);
 });
 
 test("the chosen town survives a reload: accents kept, coordinates rounded to 4 decimals", () => {

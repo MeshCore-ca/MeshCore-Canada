@@ -323,7 +323,8 @@ using.
 `set name Belleville_R1`
 :   The name other people see.
 
-    Letters, numbers, `_` and `-`, no spaces.
+    Keep it to about 30 letters (accented letters count as two). Spaces are
+    fine, but not `[ ] \ : , ? *`: the repeater won't accept them.
 
 `set lat 44.1628`
 :   Show it on maps near Belleville (not its exact spot). This line sets the latitude.

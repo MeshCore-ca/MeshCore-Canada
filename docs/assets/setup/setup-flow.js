@@ -36,8 +36,11 @@
 
   var TAG_RE = /^[a-z0-9-]{2,12}$/;      // region and province codes
   var ID_RE = /^[a-z0-9-]{2,32}$/;       // radio profiles, neighbouring regions, cross-border networks
-  var NAME_RE = /^[A-Za-z0-9_-]+$/;      // letters, digits, _ and -; no spaces or accents
-  var MAX_NAME = 31;                     // keeps the name inside MeshCore's 32-byte name field
+  // The firmware's own rule for `set name <rest of line>`: it refuses only these characters
+  // (CommonCLI isValidName), and keeps at most 31 bytes in its 32-byte name field, so an
+  // accented letter (2 bytes in UTF-8) counts as two. Control characters are refused here too.
+  var NAME_REFUSED = /[\[\]\\:,?*\u0000-\u001f\u007f-\u009f]/;
+  var MAX_NAME = 31;                     // bytes in UTF-8
   var MAX_LIST = 32;                     // a device holds at most 32 regions
 
   function board(id) {
@@ -51,7 +54,22 @@
   }
 
   function isText(value, pattern) { return typeof value === "string" && pattern.test(value); }
-  function isName(value) { return isText(value, NAME_RE) && value.length <= MAX_NAME; }
+
+  // Leading and trailing spaces are dropped before a name is used.
+  function cleanName(text) { return typeof text === "string" ? text.trim() : ""; }
+
+  // What is wrong with a name: "empty", "characters" (one the firmware refuses) or "long"
+  // (over 31 bytes). null when the firmware will take it.
+  function nameProblem(value) {
+    var name = cleanName(value);
+    if (!name) return "empty";
+    if (NAME_REFUSED.test(name)) return "characters";
+    if (new TextEncoder().encode(name).length > MAX_NAME) return "long";
+    return null;
+  }
+
+  // A name as it is stored: already trimmed, and one the firmware takes.
+  function isName(value) { return typeof value === "string" && value === cleanName(value) && nameProblem(value) === null; }
   function oneOf(list, value) { return list.indexOf(value) !== -1; }
 
   function listenOnly(answers) { return answers.type === "observer" && answers.repeat === "listen"; }
@@ -260,8 +278,8 @@
     listField("neighbours"),
     listField("external"),
     { key: "name",
-      write: function (value) { return isName(value) ? value : null; },
-      read: function (text) { return isName(text) ? text : undefined; } },
+      write: function (value) { return isName(value) ? encodeURIComponent(value) : null; },
+      read: function (text) { text = cleanName(text); return isName(text) ? text : undefined; } },
     flagField("nameEdited"),
     flagField("shareLocation")
   ];
@@ -347,6 +365,8 @@
     route: route,
     parseVersion: parseVersion,
     parseCoordinates: parseCoordinates,
+    cleanName: cleanName,
+    nameProblem: nameProblem,
     resetDependents: resetDependents,
     suggestName: suggestName,
     toQuery: toQuery,

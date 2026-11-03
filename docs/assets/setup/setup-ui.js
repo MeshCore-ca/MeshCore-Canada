@@ -895,13 +895,17 @@
     body.appendChild(para(rich(a.status === "running" ? "name.hint.running" : "name.hint"), { class: "setup-hint", id: "setup-name-hint" }));
     body.appendChild(el("div", { class: "setup-field" }, [el("label", { for: "setup-name", text: t("name.label") }), input]));
     body.appendChild(message);
+    // Says what's wrong as soon as there is something to say; spaces alone need no message.
     function check() {
       message.textContent = "";
-      if (input.value && !Flow.isComplete("name", state.answers)) message.appendChild(note("warn", rich("name.invalid", { max: 31 })));
+      var problem = Flow.nameProblem(input.value);
+      if (problem === "characters") message.appendChild(note("warn", rich("name.invalid-characters")));
+      if (problem === "long") message.appendChild(note("warn", rich("name.too-long")));
     }
     input.addEventListener("input", function () {
       var next = Object.assign({}, state.answers, { nameEdited: true });
-      if (input.value) next.name = input.value; else delete next.name;
+      var name = Flow.cleanName(input.value);
+      if (name) next.name = name; else delete next.name;
       setAnswers(next);
       check();
       updateActions();

@@ -352,7 +352,9 @@ connexion que vous utilisez.
 `set name Belleville_R1`
 :   Le nom que les autres voient.
 
-    Lettres, chiffres, `_` et `-`, sans espaces.
+    Limitez-le à environ 30 lettres (une lettre accentuée compte pour deux).
+    Vous pouvez utiliser des espaces, mais pas `[ ] \ : , ? *` : le répéteur
+    ne les accepte pas.
 
 `set lat 44.1628`
 :   Place le répéteur sur les cartes près de la localité (Belleville), pas à son endroit exact. Cette ligne règle la latitude.

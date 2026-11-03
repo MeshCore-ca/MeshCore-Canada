@@ -528,6 +528,36 @@ for (const lang of LANGS) {
   });
 }
 
+for (const lang of LANGS) {
+  test(`${lang} a name can have spaces and accents; a refused character or a long name says why`, async ({ page }) => {
+    await openLink(page, `${ROUTES[lang]}?type=repeater&board=heltec-v3&status=running&reflash=0&role=city&${BELLEVILLE}`, { to: "name" });
+    const input = page.locator("[data-setup-name]");
+    const message = page.locator("[data-setup-name-message]");
+    await expect(step(page)).toContainText(plain("name.hint.running", lang));
+    await input.fill("Hill:Top");
+    await expect(message).toHaveText(plain("name.invalid-characters", lang));
+    await expect(nextButton(page)).toBeDisabled();
+    // 16 accented letters are 32 bytes: one too many.
+    await input.fill("é".repeat(16));
+    await expect(message).toHaveText(plain("name.too-long", lang));
+    await expect(nextButton(page)).toBeDisabled();
+    // Spaces alone are not a name, and need no message.
+    await input.fill("   ");
+    await expect(message).toHaveText("");
+    await expect(nextButton(page)).toBeDisabled();
+    // Spaces round the name are dropped.
+    await input.fill("  Café Hilltop ");
+    await expect(message).toHaveText("");
+    await expect.poll(() => new URL(page.url()).searchParams.get("name")).toBe("Café Hilltop");
+    await next(page);
+    await expectStep(page, "commands");
+    expect(await commandLines(page)).toContain("set name Café Hilltop");
+    await next(page);
+    await expectStep(page, "check");
+    await expect(page.locator('[data-setup-check="name"]')).toContainText(T("check.name", lang, { name: "Café Hilltop" }));
+  });
+}
+
 test("firmware reply", async ({ page }) => {
   await page.goto(siteRoute("/config/?type=repeater&board=heltec-v3&status=running&reflash=0"));
   await expectStep(page, "version");

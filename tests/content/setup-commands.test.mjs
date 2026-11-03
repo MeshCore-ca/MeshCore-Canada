@@ -42,6 +42,13 @@ test("a running repeater keeps the name the person typed", () => {
   assert.ok(flat(cmds.rollup(running, data, "en")).includes("set name Hilltop-Kingston"));
   assert.equal(cmds.checks(running, data, "en").find((c) => c.id === "name").expect, "Should answer Hilltop-Kingston.");
 });
+test("a name with spaces and accents goes into set name as typed, with no quotes", () => {
+  // The firmware takes the rest of the line as the name.
+  const running = { ...belleville, status: "running", reflash: false, name: "Café Hilltop", nameEdited: true };
+  assert.ok(flat(cmds.rollup(running, data, "en")).includes("set name Café Hilltop"));
+  assert.equal(cmds.checks(running, data, "en").find((c) => c.id === "name").expect, "Should answer Café Hilltop.");
+  assert.equal(cmds.checks(running, data, "fr").find((c) => c.id === "name").expect, "Doit répondre Café Hilltop.");
+});
 test("edge, cross-border and onny follow the generator", () => {
   const edge = flat(cmds.rollup({ ...belleville, role: "edge", neighbours: ["ygk"], external: ["western-new-york"] }, data, "en"));
   assert.ok(edge.includes("region def ytr|* ygk|* on|* onqc|* can|* na|* us us-ny") && edge.includes("region denyf *"));
