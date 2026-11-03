@@ -250,18 +250,39 @@ test("cross-border options depend on the province", () => {
   assert.deepEqual(place.crossBorder("on"), { shared: ["ontario-new-york"], edgeOnly: ["ohio", "pennsylvania", "western-new-york"] });
   assert.deepEqual(place.crossBorder("ns"), { shared: [], edgeOnly: [] });
   assert.deepEqual(place.crossBorder("bc"), { shared: [], edgeOnly: ["oregon", "washington"] });
+  // Québec offers the shared Québec–New York label to city and edge repeaters alike, and no edge-only networks.
+  assert.deepEqual(place.crossBorder("qc"), { shared: ["quebec-new-york"], edgeOnly: [] });
+  assert.deepEqual(place.crossBorder("QC"), place.crossBorder("qc"));
   assert.deepEqual(place.crossBorder("ON"), place.crossBorder("on"));
   assert.deepEqual(place.crossBorder(""), { shared: [], edgeOnly: [] });
   assert.deepEqual(place.crossBorder("toString"), { shared: [], edgeOnly: [] });
 });
 
 test("cross-border networks all exist in the catalogue, and callers cannot change the table", () => {
-  for (const code of ["on", "bc"]) {
+  for (const code of ["on", "bc", "qc"]) {
     const { shared, edgeOnly } = place.crossBorder(code);
     for (const id of [...shared, ...edgeOnly]) assert.ok(catalog.externalRegionPaths[id], id);
   }
   place.crossBorder("on").shared.push("changed");
   assert.deepEqual(place.crossBorder("on").shared, ["ontario-new-york"]);
+  place.crossBorder("qc").shared.push("changed");
+  assert.deepEqual(place.crossBorder("qc").shared, ["quebec-new-york"]);
+});
+
+test("the Québec–New York scope is an opt-in shared label named in both languages", () => {
+  const record = catalog.externalRegionPaths["quebec-new-york"];
+  assert.equal(record.label, "Québec–New York (qcny, opt-in)");
+  assert.equal(record.labelFr, "Québec–New York (qcny, facultatif)");
+  assert.deepEqual(record.path, ["qcny"]);
+  assert.equal(record.country, "us");
+  assert.equal(record.sharedScope, true);
+  assert.equal(record.geographic, false);
+  assert.equal(record.automatic, false);
+  assert.equal(record.eligibility, "coordinated-cross-border");
+  assert.deepEqual(record.tagLabels, { qcny: "Québec–New York" });
+  assert.equal(record.authority.status, "proposed");
+  // The policy the catalogue was built from carries the same entry.
+  assert.deepEqual(catalog.policy.optionalNetworks["quebec-new-york"], record);
 });
 
 test("planning tells starter regions and planning extensions apart from MeshMapper zones, as the map does", () => {

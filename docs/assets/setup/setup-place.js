@@ -15,6 +15,7 @@
   // Every id is a key of the catalogue's `externalRegionPaths`.
   var CROSS_BORDER = {
     on: { shared: ["ontario-new-york"], edgeOnly: ["ohio", "pennsylvania", "western-new-york"] },
+    qc: { shared: ["quebec-new-york"], edgeOnly: [] },
     bc: { shared: [], edgeOnly: ["oregon", "washington"] }
   };
 
@@ -243,7 +244,7 @@
     return result;
   }
 
-  // Cross-border networks for a province code ("on", "bc"). Fresh arrays each time.
+  // Cross-border networks for a province code ("on", "qc", "bc"). Fresh arrays each time.
   function crossBorder(province) {
     var key = String(province == null ? "" : province).trim().toLowerCase();
     var entry = has(CROSS_BORDER, key) ? CROSS_BORDER[key] : { shared: [], edgeOnly: [] };

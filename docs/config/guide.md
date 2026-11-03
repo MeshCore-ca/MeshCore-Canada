@@ -598,6 +598,8 @@ offers extra labels:
 
 - **`onny`**, a shared Ontario–New York label, for a city or edge repeater in
   Ontario.
+- **`qcny`**, a shared Québec–New York label, for a city or edge repeater in
+  Québec.
 - **Nearby US networks**, for edge repeaters: Western New York, Pennsylvania and
   Ohio from Ontario; Washington and Oregon from British Columbia.
 

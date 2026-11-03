@@ -642,6 +642,8 @@ propose des étiquettes de plus :
 
 - **`onny`**, une étiquette partagée Ontario–New York, pour un répéteur de ville
   ou de bordure en Ontario.
+- **`qcny`**, une étiquette partagée Québec–New York, pour un répéteur de ville
+  ou de bordure au Québec.
 - **Les réseaux américains voisins**, pour les répéteurs de bordure : l’Ouest de
   l’État de New York, la Pennsylvanie et l’Ohio depuis l’Ontario; Washington et
   l’Oregon depuis la Colombie-Britannique.

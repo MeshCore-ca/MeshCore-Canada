@@ -54,6 +54,22 @@ test("edge, cross-border and onny follow the generator", () => {
   assert.ok(edge.includes("region def ytr|* ygk|* on|* onqc|* can|* na|* us us-ny") && edge.includes("region denyf *"));
   assert.ok(flat(cmds.rollup({ ...belleville, external: ["ontario-new-york"] }, data, "en")).includes("region def ytr|* on|* onqc|* can|* na|* onny"));
 });
+test("a Québec city repeater carries qcny only when it is ticked, and an Ontario one never does", () => {
+  const montreal = { ...belleville, place: { name: "Montréal", lat: 45.5, lon: -73.57 }, tag: "yul", province: "qc", name: "Montreal_R1" };
+  const scopes = (answers) => flat(cmds.rollup(answers, data, "en")).filter((line) => line.startsWith("region"));
+  assert.deepEqual(scopes(montreal), ["region def yul|* qc|* onqc|* can|* na", "region allowf *", "region default yul", "region save"]);
+  assert.deepEqual(scopes({ ...montreal, external: ["quebec-new-york"] }), ["region def yul|* qc|* onqc|* can|* na|* qcny", "region allowf *", "region default yul", "region save"]);
+  // As an edge repeater it keeps the shared label too, and the usual edge lines.
+  assert.ok(scopes({ ...montreal, role: "edge", neighbours: ["yow"], external: ["quebec-new-york"] }).includes("region def yul|* yow|* qc|* onqc|* can|* na|* qcny"));
+  // Neither onny nor qcny is offered across provinces: an answer from the wrong province is dropped.
+  assert.ok(!scopes({ ...belleville, external: ["quebec-new-york"] }).join(" ").includes("qcny"));
+  assert.ok(!scopes({ ...montreal, external: ["ontario-new-york"] }).join(" ").includes("onny"));
+  // The network is named in each language, and the generator's confirm note applies.
+  assert.match(cmds.notes({ ...montreal, external: ["quebec-new-york"] }, data, "en")[0], /Québec–New York \(qcny, opt-in\)/);
+  assert.match(cmds.notes({ ...montreal, external: ["quebec-new-york"] }, data, "fr")[0], /Québec–New York \(qcny, facultatif\)/);
+  assert.deepEqual(cmds.notes(montreal, data, "en"), []);
+  assert.match(cmds.rollup({ ...montreal, external: ["quebec-new-york"] }, data, "fr").flatMap((g) => g.items).find((i) => i.id === "def").why, /Québec–New York \(qcny\)\.$/);
+});
 test("the phone route leaves out the radio and clears old regions deepest first", () => {
   const out = flat(cmds.rollup({ ...belleville, status: "running", reflash: false, firmware: "1.15", regionReply: "*^ F\n can F\n  on F\n   ott F" }, data, "en"));
   assert.ok(!out.some(c => c.startsWith("set radio")));

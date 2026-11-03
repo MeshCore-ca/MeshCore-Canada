@@ -35,6 +35,26 @@
           "source": "MeshCore Canada cross-border scope discussion",
           "sourceUrl": "https://meshcore.ca/config/guide/#cross-border-scopes"
         }
+      },
+      "quebec-new-york": {
+        "label": "Québec–New York (qcny, opt-in)",
+        "labelFr": "Québec–New York (qcny, facultatif)",
+        "country": "us",
+        "path": [
+          "qcny"
+        ],
+        "sharedScope": true,
+        "tagLabels": {
+          "qcny": "Québec–New York"
+        },
+        "geographic": false,
+        "automatic": false,
+        "eligibility": "coordinated-cross-border",
+        "authority": {
+          "status": "proposed",
+          "source": "MeshCore Canada cross-border scope discussion",
+          "sourceUrl": "https://meshcore.ca/config/guide/#cross-border-scopes"
+        }
       }
     },
     "minimumFirmware": "1.14",
@@ -384,7 +404,7 @@
     "starterCount": 27,
     "boundarySchema": "meshcore-canada-iata-boundaries/v2",
     "planningExtensionCount": 35,
-    "boundarySha256": "452e5545efee8a448d8694d41e521302fa1cc8bf3fcb2be32f39820335801840",
+    "boundarySha256": "d2ad7d8f0275aeef87bff20319d94ac2576a21ea4c3fc9a0b9fdc1950f7fb2e6",
     "meshmapperBoundarySha256": "fa91863cb97392614524a7f058b89f18b6a0b71e51d94979baf134e2921dcab2",
     "jurisdictionSha256": "753d7ad13f089cdeee54cb29c9105706226fa75228193c4eda2d4ecc5ed78349"
   },
@@ -4287,6 +4307,26 @@
       "sharedScope": true,
       "tagLabels": {
         "onny": "Ontario–New York"
+      },
+      "geographic": false,
+      "automatic": false,
+      "eligibility": "coordinated-cross-border",
+      "authority": {
+        "status": "proposed",
+        "source": "MeshCore Canada cross-border scope discussion",
+        "sourceUrl": "https://meshcore.ca/config/guide/#cross-border-scopes"
+      }
+    },
+    "quebec-new-york": {
+      "label": "Québec–New York (qcny, opt-in)",
+      "labelFr": "Québec–New York (qcny, facultatif)",
+      "country": "us",
+      "path": [
+        "qcny"
+      ],
+      "sharedScope": true,
+      "tagLabels": {
+        "qcny": "Québec–New York"
       },
       "geographic": false,
       "automatic": false,

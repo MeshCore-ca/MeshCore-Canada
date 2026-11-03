@@ -25,4 +25,20 @@ for (const locale of ["", "fr/"]) {
     expect(lines).toContain("region allowf *");
     expect(lines).not.toContain("region denyf *");
   });
+
+  test(`${locale || "en/"} setup tool exposes the Québec–New York opt-in scope the same way`, async ({ page }) => {
+    await openLink(page, phoneLink("yul", "qc", { lang, extra: "external=quebec-new-york" }));
+    const city = await commandLines(page);
+    expect(city).toContain("region def yul|* qc|* onqc|* can|* na|* qcny");
+    expect(city).toContain("region allowf *");
+    expect(city).not.toContain("region denyf *");
+  });
+
+  test(`${locale || "en/"} an edge repeater in Québec carries qcny, and Ontario's onny is not applied there`, async ({ page }) => {
+    await openLink(page, phoneLink("yul", "qc", { lang, role: "edge", extra: "neighbours=yow&external=quebec-new-york,ontario-new-york" }));
+    const lines = await commandLines(page);
+    expect(lines).toContain("region def yul|* yow|* qc|* onqc|* can|* na|* qcny");
+    expect(lines).toContain("region denyf *");
+    expect(lines.join("\n")).not.toMatch(/onny/);
+  });
 }

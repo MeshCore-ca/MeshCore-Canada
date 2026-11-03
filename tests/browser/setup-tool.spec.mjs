@@ -384,6 +384,28 @@ test("French pages name the cross-border networks in French", async ({ page }) =
   await expect(page.locator("[data-setup-notes]")).toContainText(T("note.network", "fr", { network: "Pennsylvanie" }));
 });
 
+test("a Québec repeater is offered the shared Québec–New York label, named in each language", async ({ page }) => {
+  for (const lang of LANGS) {
+    const name = lang === "fr" ? "Québec–New York (qcny, facultatif)" : "Québec–New York (qcny, opt-in)";
+    await openLink(page, `${ROUTES[lang]}?type=repeater&board=esp32&status=running&reflash=0&role=city&name=Test_R1&town=Montr%C3%A9al&lat=45.5&lon=-73.57&tag=yul&province=qc`, { to: "role" });
+    // The role step offers it to a city repeater, and not Ontario's label.
+    await expect(page.locator("[data-setup-external]")).toHaveCount(1);
+    await expect(page.locator('[data-setup-external="quebec-new-york"]')).toHaveText(name);
+    await expect(page.locator('[data-setup-external="ontario-new-york"]')).toHaveCount(0);
+    await page.locator('[data-setup-external="quebec-new-york"] input').check();
+    await next(page);
+    await nextUntil(page, "commands");
+    expect(await commandLines(page)).toContain("region def yul|* qc|* onqc|* can|* na|* qcny");
+    await expect(page.locator("[data-setup-notes]")).toContainText(T("note.network", lang, { network: name }));
+    // An edge repeater picks it on the neighbours screen, with no US networks beside it.
+    await page.goto(siteRoute(`${ROUTES[lang]}?type=repeater&board=esp32&status=running&reflash=0&role=edge&town=Montr%C3%A9al&lat=45.5&lon=-73.57&tag=yul&province=qc&neighbours=yow&external=quebec-new-york`));
+    await version(page, "1.16");
+    await nextUntil(page, "neighbours");
+    await expect(page.locator("[data-setup-external]")).toHaveCount(1);
+    await expect(page.locator('[data-setup-external="quebec-new-york"] input')).toBeChecked();
+  }
+});
+
 test("ambiguous and unknown towns", async ({ page }) => {
   const queries = await mockGeocoder(page);
   // A running repeater on the phone route: once its version is in, the next question is the town.
