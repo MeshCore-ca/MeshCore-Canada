@@ -157,12 +157,21 @@ test("a region's centre is where the map pin starts when only the region is know
     assert.ok(middle && Number.isFinite(middle.lat) && Number.isFinite(middle.lon), tag);
     assert.ok(place.resolve(where(middle.lat, middle.lon, ""), data).options.some((o) => o.tag === tag), tag);
   }
+  // A region's middle is no answer by itself: the flow waits for a pin.
+  vm.runInThisContext(readFileSync("docs/assets/setup/setup-flow.js", "utf8"), { filename: "setup-flow.js" });
+  assert.equal(globalThis.MeshCoreSetupFlow.isComplete("location", { tag: "ytr", province: "on" }), false);
   // No region, no centre.
   for (const tag of ["nope", "", undefined, "on", "can"]) assert.equal(place.centre(tag, data), null, String(tag));
   // An outline with no centre given uses the middle of its outline.
   const square = { boundaries: { type: "FeatureCollection", features: [{ type: "Feature", properties: { tag: "zzz" },
     geometry: { type: "Polygon", coordinates: [[[-80, 44], [-78, 44], [-78, 46], [-80, 46], [-80, 44]]] } }] } };
   assert.deepEqual(place.centre("zzz", square), { lat: 45, lon: -79 });
+});
+
+test("a spot with no province claimed gets its province from the boundary, so the map step can tell Ottawa from Gatineau", () => {
+  // Both are in yow; the province (and so the scopes) differs.
+  assert.deepEqual(pairs(place.resolve(where(45.4215, -75.6972, ""), data)), [["yow", "on"]]);
+  assert.deepEqual(pairs(place.resolve(where(45.4765, -75.7013, ""), data)), [["yow", "qc"]]);
 });
 
 test("codes spanning two provinces offer both; aliases work offline", () => {

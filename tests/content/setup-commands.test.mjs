@@ -435,17 +435,20 @@ test("the map location step says what it does in plain words, in both languages"
   assert.equal(text.t("location.question", "fr"), "Où les cartes doivent-elles l’afficher?");
   assert.equal(text.t("location.off", "en"), "Disable location");
   assert.equal(text.t("location.off", "fr"), "Désactiver l’emplacement");
+  // With only a region, the pin waits on the region's middle for the person to move it: the middle is no answer.
+  assert.equal(text.t("location.start", "en"), "Move the pin to roughly where the repeater is.");
+  assert.equal(text.t("location.start", "fr"), "Déplacez l’épingle à peu près là où se trouve le répéteur.");
+  assert.ok(!text.keys().includes("location.centre"), "the old centre line is gone");
   for (const lang of ["en", "fr"]) {
     // The helper text: most people give an approximate spot, and hiding it doesn't stop a fox hunt.
     assert.match(text.t("location.hint", lang), lang === "en" ? /approximate location, a block or two[\s\S]*exact[\s\S]*fox hunting/ : /approximatif, à une rue ou deux[\s\S]*exact[\s\S]*chasse au renard/, lang);
     // Disabled: MeshMapper and the MeshCore maps won't show it.
     assert.match(text.t("location.off-warning", lang), /MeshMapper[\s\S]*MeshCore/, lang);
-    // A pin dragged into another region says where to change the region: the town question, by its own words.
-    const other = text.t("location.other-region", lang, { region: "Kingston (ygk)" });
-    assert.ok(other.startsWith(lang === "en" ? "This spot is in Kingston (ygk)." : "Cet endroit est dans Kingston (ygk)."), other);
+    // A pin dragged into another region or province says where it is and where to change it: the town question, by its own words.
+    const other = text.t("location.other-region", lang, { region: "Ottawa–Gatineau (yow), Québec" });
+    assert.ok(other.startsWith(lang === "en" ? "This spot is in Ottawa–Gatineau (yow), Québec." : "Cet endroit est dans Ottawa–Gatineau (yow), Québec."), other);
+    assert.match(other, lang === "en" ? /region or province/ : /région ou la province/, lang);
     assert.ok(other.includes(text.t("town.question", lang)), `${lang}: names the question to go back to`);
-    // A region with no town starts at its middle, and says so.
-    assert.ok(text.t("location.centre", lang, { region: "Quinte West (ytr)" }).includes("Quinte West (ytr)"), lang);
     // The typed coordinates' message gives an example of each, the longitude negative.
     assert.match(text.t("location.invalid", lang), /`44\.1628`[\s\S]*`-77\.3832`/, lang);
   }

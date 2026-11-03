@@ -1784,19 +1784,102 @@ test("the map opens close in for an address or coordinates, nearer for a town, a
   }
 });
 
-test("with only a region, the pin starts in its middle and says so; moving the pin takes the line away", async ({ page }) => {
-  await openLink(page, "/config/?type=repeater&board=esp32&status=running&reflash=0&role=city&name=Test_R1&tag=ytr&province=on", { to: "location" });
-  await expect(page.locator("[data-setup-pin-centre]")).toHaveText(T("location.centre", "en", { region: "Quinte West (ytr)" }));
-  // The middle of the region's MeshMapper zone.
-  await expect(pinBox(page, "lat")).toHaveValue("44.158");
-  await expect(pinBox(page, "lon")).toHaveValue("-77.3687");
-  await expect(nextButton(page)).toBeEnabled();
+// A region's middle on a public map would mislead, so with only a region the pin waits there for the person to move it.
+const REGION_ONLY = "/config/?type=repeater&board=esp32&status=running&reflash=0&role=city&name=Test_R1&tag=ytr&province=on";
+async function expectWaitingPin(page) {
+  await expect(page.locator("[data-setup-pin-start]")).toHaveText(T("location.start", "en"));
   await expect(marker(page)).toBeVisible();
-  await pinBox(page, "lat").fill("44.16");
-  await expect(page.locator("[data-setup-pin-centre]")).toHaveCount(0);
+  // Nothing is kept yet: the boxes are empty, the link holds no spot, and Next waits.
+  await expect(pinBox(page, "lat")).toHaveValue("");
+  await expect(pinBox(page, "lon")).toHaveValue("");
+  await expect(nextButton(page)).toBeDisabled();
+  expect(new URL(page.url()).search).not.toMatch(/(?:^|&)(?:town|kind|lat|lon)=/);
+}
+
+test("with only a region, the pin waits in its middle and Next waits until the person places it", async ({ page }) => {
+  await openLink(page, REGION_ONLY, { to: "location" });
+  await expectWaitingPin(page);
+  // The pin sits in the middle of the region's MeshMapper zone, shown in the middle of the map.
+  await page.locator("[data-setup-map]").scrollIntoViewIfNeeded();
+  const middle = await mapMiddle(page);
+  const tip = await pinTip(page);
+  expect(Math.hypot(tip.x - middle.x, tip.y - middle.y)).toBeLessThan(3);
+  // Moving away and back doesn't make it an answer.
+  await page.locator("[data-setup-back]").click();
+  await expectStep(page, "name");
   await next(page);
-  expect(await commandLines(page)).toEqual(expect.arrayContaining(["set lat 44.16", "set lon -77.3687"]));
+  await expectStep(page, "location");
+  await expectWaitingPin(page);
+  // A tap on the map places it: Next goes on, the line goes, and the spot is kept.
+  await page.locator("[data-setup-map]").click({ position: { x: middle.width / 2 + 40, y: middle.height / 2 } });
+  await expect(page.locator("[data-setup-pin-start]")).toHaveCount(0);
+  await expect(nextButton(page)).toBeEnabled();
+  const lat = await pinBox(page, "lat").inputValue();
+  const lon = await pinBox(page, "lon").inputValue();
+  expect(lat).not.toBe("");
+  await expect.poll(() => searchParam(page, "lat")).toBe(lat);
+  await next(page);
+  expect(await commandLines(page)).toEqual(expect.arrayContaining([`set lat ${lat}`, `set lon ${lon}`]));
 });
+
+test("with only a region, dragging the pin, typing coordinates or disabling location each lets Next go on", async ({ page }) => {
+  // Dragging the waiting pin.
+  await openLink(page, REGION_ONLY, { to: "location" });
+  await expectWaitingPin(page);
+  await page.locator("[data-setup-map]").scrollIntoViewIfNeeded();
+  const start = await pinTip(page);
+  await page.mouse.move(start.x, start.y - 25);
+  await page.mouse.down();
+  await page.mouse.move(start.x + 30, start.y - 10, { steps: 8 });
+  await page.mouse.move(start.x + 60, start.y + 5, { steps: 8 });
+  await page.mouse.up();
+  await expect(nextButton(page)).toBeEnabled();
+  await expect(pinBox(page, "lat")).not.toHaveValue("");
+  await expect(page.locator("[data-setup-pin-start]")).toHaveCount(0);
+
+  // Typing: one box alone isn't a spot; both are.
+  await openLink(page, REGION_ONLY, { to: "location" });
+  await expectWaitingPin(page);
+  await pinBox(page, "lat").fill("44.16");
+  await expect(nextButton(page)).toBeDisabled();
+  await pinBox(page, "lon").fill("-77.37");
+  await expect(nextButton(page)).toBeEnabled();
+  await expect(page.locator("[data-setup-pin-start]")).toHaveCount(0);
+  await expect.poll(() => searchParam(page, "lat")).toBe("44.16");
+  await next(page);
+  expect(await commandLines(page)).toEqual(expect.arrayContaining(["set lat 44.16", "set lon -77.37"]));
+
+  // Disabling location: Next goes on with no location lines. Turned back on, the pin waits again.
+  await openLink(page, REGION_ONLY, { to: "location" });
+  await expectWaitingPin(page);
+  await page.locator("[data-setup-location-off]").check();
+  await expect(nextButton(page)).toBeEnabled();
+  await page.locator("[data-setup-location-off]").uncheck();
+  await expectWaitingPin(page);
+  await page.locator("[data-setup-location-off]").check();
+  await next(page);
+  expect((await commandLines(page)).some((line) => /^set (lat|lon) /.test(line))).toBe(false);
+});
+
+for (const lang of LANGS) {
+  test(`${lang} a pin moved across a provincial line in the same region says so, and the province stays as chosen`, async ({ page }) => {
+    // Ottawa and Gatineau are both in yow; the province, and so the scopes, differs.
+    await openLink(page, `${ROUTES[lang]}?type=repeater&board=esp32&status=running&reflash=0&role=city&name=Test_R1&town=Ottawa&lat=45.4215&lon=-75.6972&tag=yow&province=on`, { to: "location" });
+    await expect(marker(page)).toBeVisible();
+    await expect(page.locator("[data-setup-other-region]")).toHaveCount(0);
+    await pinBox(page, "lat").fill("45.4765");
+    await pinBox(page, "lon").fill("-75.7013");
+    await pinBox(page, "lon").press("Tab");
+    await expect(page.locator("[data-setup-other-region]")).toHaveText(T("location.other-region", lang, { region: "Ottawa–Gatineau (yow), Québec" }));
+    expect(searchParam(page, "tag")).toBe("yow");
+    expect(searchParam(page, "province")).toBe("on");
+    // Back on the Ontario side, the note goes.
+    await pinBox(page, "lat").fill("45.4215");
+    await pinBox(page, "lon").fill("-75.6972");
+    await pinBox(page, "lon").press("Tab");
+    await expect(page.locator("[data-setup-other-region]")).toHaveCount(0);
+  });
+}
 
 for (const lang of LANGS) {
   test(`${lang} typed coordinates that aren't a spot in Canada say so and hold Next back`, async ({ page }) => {
@@ -1844,7 +1927,7 @@ for (const lang of LANGS) {
     await pinBox(page, "lat").fill("44.2298");
     await pinBox(page, "lon").fill("-76.481");
     await pinBox(page, "lon").press("Tab");
-    await expect(page.locator("[data-setup-other-region]")).toHaveText(T("location.other-region", lang, { region: "Kingston (ygk)" }));
+    await expect(page.locator("[data-setup-other-region]")).toHaveText(T("location.other-region", lang, { region: "Kingston (ygk), Ontario" }));
     expect(searchParam(page, "tag")).toBe("ytr");
     await expect(nextButton(page)).toBeEnabled();
     // Back in its own region, the note goes.

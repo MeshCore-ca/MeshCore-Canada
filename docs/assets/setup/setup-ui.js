@@ -134,7 +134,6 @@
     ticks: {},         // Done ticks, by command id and text; in memory only
     olderFirmware: false,   // "Older than 1.14" was picked at the version step
     map: null,              // the map location step's Leaflet map, while that screen is drawn
-    pinFromCentre: false,   // the pin was put in the middle of the region, since no town or address was given
     pinTyped: false,        // the latitude and longitude boxes hold something that isn't a spot in Canada
     town: freshTown()
   };
@@ -494,7 +493,6 @@
   function arrive(id) {
     var a = state.answers;
     if (id === "town" || id === "location" || id === "commands" || id === "check") loadData();
-    if (id === "location") centrePin();
     if (id === "name" && a.name === undefined) {
       var suggested = Flow.suggestName(a, a.tag ? regionName(a.tag) : "");
       if (suggested) setAnswers(Object.assign({}, a, { name: suggested }));
@@ -509,7 +507,6 @@
     state.ticks = {};
     state.help = {};
     state.olderFirmware = false;
-    state.pinFromCentre = false;
     state.pinTyped = false;
     state.town = freshTown();
     syncUrl();
@@ -1058,7 +1055,6 @@
   function clearPlace() {
     var next = Flow.resetDependents(state.answers, "place");
     delete next.place;
-    state.pinFromCentre = false;
     setAnswers(next);
   }
 
@@ -1192,8 +1188,7 @@
     }
     next.tag = option.tag;
     next.province = option.province;
-    // A new place brings its own pin; with no place, the map step starts in the middle of the region.
-    state.pinFromCentre = false;
+    // A new place brings its own pin; with no place, the map step asks for one.
     setAnswers(next);
     state.town.status = "idle";
     state.town.options = [];
@@ -1277,47 +1272,35 @@
     return next;
   }
 
-  // Only a region is known (a region code, or a link from the region map): the pin starts in its middle.
-  function centrePin() {
-    var a = state.answers;
-    if (a.shareLocation === false || Flow.hasPin(a.place) || !state.data || !a.tag) return;
-    var middle = Place.centre(a.tag, state.data);
-    if (!middle) return;
-    state.pinFromCentre = true;
-    setAnswers(Object.assign({}, a, { place: pinPlace(a.place, middle.lat, middle.lon) }));
-  }
-
   // The data arrived while the map step was showing: a screen still waiting for the region's
   // middle is drawn again; otherwise the map stays as it is and only the region check catches up.
   function locationData() {
     var panel = state.frame.panel;
-    if (panel.querySelector("[data-setup-location-wait]")) {
-      centrePin();
-      return renderStep({});
-    }
+    if (panel.querySelector("[data-setup-location-wait]")) return renderStep({});
     var box = panel.querySelector("[data-setup-pin-region]");
     if (box) regionNote(box);
   }
 
-  // A pin dragged into another region says so, and where to change it. The region isn't changed for the person.
+  // A pin dragged into another region, or across a provincial line inside one (Ottawa to Gatineau, both
+  // yow), says where it is and where to change it: the province changes the scopes too. Nothing is
+  // changed for the person.
   function regionNote(box) {
     var a = state.answers;
     box.textContent = "";
     if (!state.data || !a.tag || a.shareLocation === false || !Flow.hasPin(a.place)) return;
     var found = Place.resolve({ lat: a.place.lat, lon: a.place.lon, province: "" }, state.data).options;
-    if (!found.length || found.some(function (option) { return option.tag === a.tag; })) return;
+    if (!found.length || found.some(function (option) { return option.tag === a.tag && option.province === a.province; })) return;
     var names = [];
     found.forEach(function (option) {
-      var name = regionName(option.tag) + " (" + option.tag + ")";
+      var name = regionName(option.tag) + " (" + option.tag + "), " + provinceName(option.province);
       if (names.indexOf(name) === -1) names.push(name);
     });
     box.appendChild(note("info", t("location.other-region", { region: sayList(names) }), { "data-setup-other-region": "" }));
   }
 
-  // A town's point is somewhere in town; a street address or coordinates are close to the spot; a
-  // region's middle is only a start.
-  function startZoom(place, fromCentre) {
-    if (fromCentre) return 10;
+  // A town's point is somewhere in town; a street address or coordinates are close to the spot. A region's
+  // middle (zoom 10) is only where the pin waits.
+  function startZoom(place) {
     return exactSpot(place) ? 17 : 13;
   }
 
@@ -1338,7 +1321,6 @@
       var next = Object.assign({}, state.answers);
       if (checked) next.shareLocation = false; else delete next.shareLocation;
       setAnswers(next);
-      if (!checked) centrePin();
       renderStep({ focus: "[data-setup-location-off]" });
       // The warning appears after the tick; say it for screen readers.
       if (checked) announce(t("location.off-warning"));
@@ -1348,11 +1330,14 @@
 
   // The map with its pin, and the latitude and longitude boxes, which are the way to set it by
   // keyboard or screen reader. Each follows the other. If the map can't load, the boxes still work.
+  // With no place (only a region is known), the pin waits in the region's middle and nothing is kept
+  // until the person moves it, taps the map or types: a region's middle on a public map would mislead.
   function pinPicker(body) {
     var a = state.answers;
     var view = { L: null, map: null, marker: null };
-    var centre = state.pinFromCentre && Flow.hasPin(a.place)
-      ? note("info", t("location.centre", { region: regionName(a.tag) + " (" + a.tag + ")" }), { "data-setup-pin-centre": "" }) : null;
+    var waiting = !Flow.hasPin(a.place);
+    var middle = waiting && state.data && a.tag ? Place.centre(a.tag, state.data) : null;
+    var start = waiting ? note("info", t("location.start"), { "data-setup-pin-start": "" }) : null;
     var how = para(t("location.how"), { class: "setup-hint", id: "setup-pin-how" });
     var canvas = el("div", { class: "setup-map__canvas", "data-setup-map": "" });
     var status = para(t("location.loading"), { class: "setup-map__status", role: "status", "data-setup-map-status": "" });
@@ -1366,7 +1351,7 @@
     var lonBox = box("lon");
     var message = el("div", { id: "setup-pin-message", class: "setup-message", "data-setup-pin-message": "", "aria-live": "polite" });
     var region = el("div", { "data-setup-pin-region": "", "aria-live": "polite" });
-    append(body, [centre, how, mapBox, el("fieldset", { class: "setup-fieldset setup-fieldset--plain setup-pin" }, [
+    append(body, [start, how, mapBox, el("fieldset", { class: "setup-fieldset setup-fieldset--plain setup-pin" }, [
       el("legend", { text: t("location.typed") }),
       el("div", { class: "setup-pin__fields" }, [
         el("div", { class: "setup-field" }, [el("label", { for: "setup-pin-lat", text: t("location.lat") }), latBox]),
@@ -1385,10 +1370,9 @@
     // The pin is somewhere new: keep it, and put the boxes in step unless they are where it came from.
     function moved(spot, typed) {
       state.pinTyped = false;
-      state.pinFromCentre = false;
-      if (centre) {
-        centre.remove();
-        centre = null;
+      if (start) {
+        start.remove();
+        start = null;
       }
       setAnswers(Object.assign({}, state.answers, { place: pinPlace(state.answers.place, spot.lat, spot.lon) }));
       if (!typed) {
@@ -1412,7 +1396,8 @@
       var point = latlng.wrap();
       var spot = Flow.readPin(String(round4(point.lat)), String(round4(point.lng)));
       if (!spot) {
-        if (Flow.hasPin(state.answers.place)) setMarker(state.answers.place);
+        var back = Flow.hasPin(state.answers.place) ? state.answers.place : middle;
+        if (back) setMarker(back);
         return problem(true);
       }
       setMarker(spot);
@@ -1445,6 +1430,11 @@
       view.marker = null;
       if (!mapBox.isConnected) return;
       how.remove();
+      // No pin to move any more: the failure line says to type the spot.
+      if (start) {
+        start.remove();
+        start = null;
+      }
       mapBox.replaceWith(note("warn", para(t("location.map-failed")), { "data-setup-map-failed": "", role: "status" }));
     }
 
@@ -1463,8 +1453,12 @@
       var tiles = L.tileLayer(TILES, { maxZoom: 19, attribution: tileCredit() }).addTo(map);
       var here = state.answers.place;
       if (Flow.hasPin(here)) {
-        map.setView([here.lat, here.lon], startZoom(here, !!centre));
+        map.setView([here.lat, here.lon], startZoom(here));
         setMarker(here);
+      } else if (middle) {
+        // Shown, not kept: a drag, a tap or the boxes make it the answer.
+        map.setView([middle.lat, middle.lon], 10);
+        setMarker(middle);
       } else {
         map.fitBounds(CANADA_VIEW);
       }

@@ -126,16 +126,25 @@ export async function town(page, query, tag) {
   await expect(page.locator("[data-setup-region]")).toContainText(tag);
   await next(page);
 }
-// The map location step, after the name: the pin starts where the town step found the place (or in the
-// middle of the region), so Next is ready as it is.
+// The map location step, after the name. A pin from the town step lets Next go on as it is. With only a
+// region (a region code, or a link from the region map) the pin waits in the region's middle and Next waits
+// for the person, so journeys that aren't about the map tick Disable location. That leaves the location
+// lines out, as such a link always did.
 export const pinBox = (page, axis) => page.locator(`[data-setup-pin="${axis}"]`);
+async function passLocation(page) {
+  const ready = page.locator('[data-setup-step="location"] [data-setup-next]:not([disabled]), [data-setup-pin-start]');
+  await expect(ready.first()).toBeVisible();
+  if (await page.locator("[data-setup-pin-start]").count()) await page.locator("[data-setup-location-off]").check();
+}
 export async function location(page) {
   await expectStep(page, "location");
+  await passLocation(page);
   await next(page);
 }
 // Presses Next until the tool reaches `id`; every earlier step has to be answered already.
 export async function nextUntil(page, id) {
   for (let count = 0; count < 15 && (await page.locator(`[data-setup-step="${id}"]`).count()) === 0; count += 1) {
+    if (await page.locator('[data-setup-step="location"]').count()) await passLocation(page);
     await next(page);
   }
   await expectStep(page, id);
