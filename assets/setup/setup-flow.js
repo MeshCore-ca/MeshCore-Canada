@@ -28,10 +28,10 @@
   var ROLES = ["city", "edge"];
 
   var TAG_RE = /^[a-z0-9-]{2,12}$/;      // region and province codes
-  var ID_RE = /^[a-z0-9-]{2,32}$/;       // radio profiles, neighbouring regions, cross-border networks
-  // A scope agreed with a network across the border, typed by hand. The same rule as the region
-  // generator's own check of a scope name (MeshCoreIataScopes budget), so what is accepted here is
-  // never refused there.
+  var ID_RE = /^[a-z0-9-]{2,32}$/;       // radio profiles and neighbouring regions
+  // A scope agreed with a network across the border: one the tool lists, or one typed by hand. The same
+  // rule as the region generator's own check of a scope name (MeshCoreIataScopes budget), so what is
+  // accepted here is never refused there.
   var CUSTOM_RE = /^[a-z0-9-]{1,29}$/;
   // The firmware's own rule for `set name <rest of line>`: it refuses only these characters
   // (CommonCLI isValidName), and keeps at most 31 bytes in its 32-byte name field, so an
@@ -120,7 +120,8 @@
       steps.push("role");
       if (a.role === "edge") steps.push("neighbours");
     }
-    steps.push("name", "commands", "check");
+    // Where maps show it gets its own screen after the name: one decision per screen, and the map needs the room.
+    steps.push("name", "location", "commands", "check");
     return steps;
   }
 
@@ -147,6 +148,8 @@
       // An empty list is a deliberate "none"; the screen sets it when the person says so.
       case "neighbours": return Array.isArray(a.neighbours) && customReady(a);
       case "name": return isName(a.name);
+      // Location is on by default, so the pin has to be in Canada; with location disabled nothing more is asked.
+      case "location": return a.shareLocation === false || hasPin(a.place);
       // These two screens hold no answers. The screen decides when to move on.
       case "commands":
       case "check": return true;
@@ -272,7 +275,7 @@
     return letters.slice(0, MAX_NAME - suffix.length) + suffix;
   }
 
-  // Share links: the non-secret answers, plus the picked town (as town, lat and lon).
+  // Share links: the non-secret answers, plus the picked place and its pin (as town, lat and lon).
   // Never carried: pasted device replies; the "I flashed it" / "I updated the
   // bootloader" ticks, which a shared link must not pre-tick for someone else; and
   // the firmware version, which only the person with the board can say.
@@ -325,6 +328,30 @@
     }
   };
 
+  // Share links made when the tool listed the catalogue's cross-border networks carry the network's id.
+  // The two that became scopes are read as their tags, so those links keep working. Any other id, such as
+  // a US network the tool no longer offers, is shaped like a tag and is left for the page to drop: it
+  // keeps only the tags its list (data/cross-border-scopes.yml) offers for the province.
+  var OLD_NETWORKS = { "ontario-new-york": "onny", "quebec-new-york": "qcny" };
+
+  // The scopes ticked from the tool's list, by tag. Only clean, valid ones are written or read, once each.
+  var externalField = {
+    key: "external",
+    write: function (value) {
+      if (!Array.isArray(value)) return null;
+      return value.filter(isCustom).slice(0, MAX_LIST).join(",");
+    },
+    read: function (text) {
+      var tags = [];
+      text.split(",").forEach(function (item) {
+        var tag = cleanCustom(item);
+        if (Object.prototype.hasOwnProperty.call(OLD_NETWORKS, tag)) tag = OLD_NETWORKS[tag];
+        if (CUSTOM_RE.test(tag) && tags.indexOf(tag) === -1) tags.push(tag);
+      });
+      return tags.slice(0, MAX_LIST);
+    }
+  };
+
   // A scope agreed with a network across the border. Only a clean, valid one is written or read.
   var customField = {
     key: "custom",
@@ -344,7 +371,7 @@
     codeField("radio", ID_RE),
     enumField("role", ROLES),
     listField("neighbours"),
-    listField("external"),
+    externalField,
     customField,
     { key: "name",
       write: function (value) { return isName(value) ? encodeURIComponent(value) : null; },
@@ -354,18 +381,41 @@
   ];
 
   // The picked place travels as town, lat and lon (4 decimals, about 10 m) so a reload or a
-  // language switch needs no new search. It is not called "place": `?place=<text>` is the
+  // language switch needs no new search. lat and lon are the map pin: where the search put
+  // it, or where the person moved it. It is not called "place": `?place=<text>` is the
   // deep link that starts the search. The place's province is the `province` answer.
   // `town` is the place's display name: a town, a street address as the geocoder wrote it,
   // or the rounded coordinates, never the text typed into the search. A place found from
-  // a street address or coordinates also carries `kind`, so the map position is described
-  // as the spot entered rather than "near" a town. A town has no kind.
+  // a street address or coordinates also carries `kind`, which the name suggestion and the
+  // map's starting zoom use. A town has no kind.
   var MAX_TOWN = 80;
   var PLACE_KINDS = ["address", "coordinates"];
   var CANADA = { latMin: 41, latMax: 84, lonMin: -142, lonMax: -52 };
   var DECIMAL_RE = /^-?\d+(\.\d+)?$/;
 
   function round4(value) { return Math.round(value * 10000) / 10000; }
+
+  // The map pin is the place's lat and lon: the spot the search found, until the person moves it.
+  function hasPin(place) {
+    return !!place && typeof place.lat === "number" && typeof place.lon === "number" && inCanada(place.lat, place.lon);
+  }
+
+  // One number typed into the latitude or longitude box: a decimal comma is fine, and so is a real minus sign.
+  var PIN_NUMBER = /^[+-]?\d+(?:\.\d+)?$/;
+
+  function pinNumber(text) {
+    if (typeof text !== "string") return NaN;
+    var plain = text.trim().replace(/[\u2212\u2012\u2013\u2014]/g, "-").replace(",", ".");
+    return PIN_NUMBER.test(plain) ? parseFloat(plain) : NaN;
+  }
+
+  // The two boxes under the map, read as a pin: { lat, lon }, or null unless both are plain numbers
+  // and the spot is inside the box the tool uses for Canada.
+  function readPin(latText, lonText) {
+    var lat = pinNumber(latText);
+    var lon = pinNumber(lonText);
+    return inCanada(lat, lon) ? { lat: lat, lon: lon } : null;
+  }
 
   function validTown(name) {
     return typeof name === "string" && name.trim().length > 0 && name.length <= MAX_TOWN;
@@ -410,10 +460,9 @@
       var text = field.write(a[field.key]);
       if (text !== null) parts.push(field.key + "=" + text);
     });
-    // An exact spot (an address or coordinates) the person chose not to show on maps stays out
-    // of the link too; the region answers still bring the region back.
-    var hidden = a.shareLocation === false && a.place && oneOf(PLACE_KINDS, a.place.kind);
-    return parts.concat(hidden ? [] : placeParts(a.place)).join("&");
+    // With location disabled the spot stays out of the link, whatever was searched: the pin can be
+    // dragged to the exact spot even from a town. The region answers still bring the region back.
+    return parts.concat(a.shareLocation === false ? [] : placeParts(a.place)).join("&");
   }
 
   function fromQuery(search) {
@@ -437,6 +486,8 @@
     route: route,
     firmwareFor: firmwareFor,
     parseCoordinates: parseCoordinates,
+    readPin: readPin,
+    hasPin: hasPin,
     looksLikeCoordinates: looksLikeCoordinates,
     cleanName: cleanName,
     cleanCustom: cleanCustom,

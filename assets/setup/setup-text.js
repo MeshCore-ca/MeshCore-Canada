@@ -51,6 +51,7 @@
     "step.role": "City or edge",
     "step.neighbours": "Neighbours",
     "step.name": "Name",
+    "step.location": "Map location",
     "step.commands": "Commands",
     "step.check": "Check it",
 
@@ -223,10 +224,17 @@
 
     // Neighbouring regions (edge)
     "neighbours.question": "Which neighbouring regions does it regularly hear?",
-    "neighbours.hint": "It will also carry messages labelled for these.",
-    "neighbours.help": "An edge repeater lists the neighbouring regions it regularly hears. It will also carry messages labelled for these. They're optional: without them, it still passes on its province's label and the wider ones.",
+    "neighbours.hint": "The nearest regions are listed first. It will also carry messages labelled for the ones you tick.",
+    "neighbours.help": "An edge repeater lists the neighbouring regions it regularly hears. It will also carry messages labelled for these. They're optional: without them, it still passes on its province's label and the wider ones. The nearest regions are listed first. Search for any other.",
+    "neighbours.region": "{region} ({tag}), about {km} km",
+    "neighbours.region.near": "{region} ({tag}), less than 1 km",
     "neighbours.none": "None of these",
-    "neighbours.empty": "The map shows no neighbouring regions for {region}.",
+    "neighbours.find": "Find another region",
+    "neighbours.find.hint": "Type a region name or a region code, for example Muskoka or yqa.",
+    "neighbours.find.none": "No other region matches that. Try the name of a larger city nearby.",
+    "neighbours.find.found": "Regions found: {n}",
+    "neighbours.find.more": "Showing the first {n}. Type more to narrow it down.",
+    "neighbours.added": "{region} ({tag}) added to the list.",
     "neighbours.meshmapper": "See which repeaters it hears on MeshMapper",
     "crossborder.title": "Networks across the border (optional)",
     "crossborder.hint": "Only tick one if this repeater links with that network and its operators have agreed. Not sure? Leave them off.",
@@ -245,9 +253,28 @@
     "name.label": "Name",
     "name.invalid-characters": "Take out any `[ ] \\ : , ? *`: the repeater won't accept them.",
     "name.too-long": "That's too long. Keep it to about 30 letters (accented letters count as two).",
-    "name.location": "Show it on maps near {town} (not its exact spot)",
-    "name.location-spot": "Show it on maps at the exact spot you entered ({town})",
-    "name.location-public": "Anyone can see this spot on public maps.",
+
+    // Where should maps show it?
+    "location.question": "Where should maps show it?",
+    "location.help": "MeshCore maps and tools such as MeshMapper show the repeater where its coordinates say, so people can see where the mesh reaches. Anyone can see the spot you set.",
+    "location.hint": "Most people set an approximate location, a block or two from where the repeater actually is. Some are comfortable giving its exact spot. Note: leaving out the exact spot doesn't stop a skilled radio operator from finding the repeater by tracking its signal (fox hunting).",
+    "location.how": "Drag the pin, or tap the map where it should go.",
+    "location.start": "The pin is in the middle of {region}. Move it to roughly where the repeater is, or go back and search for its town.",
+    "location.map": "Map with the repeater's pin",
+    "location.pin": "Repeater's pin",
+    "location.zoom-in": "Zoom in",
+    "location.zoom-out": "Zoom out",
+    "location.attribution": "© {link} contributors",
+    "location.attribution.link": "OpenStreetMap",
+    "location.loading": "Loading the map…",
+    "location.map-failed": "The map couldn't load. You can still type the coordinates below.",
+    "location.typed": "Or type its coordinates",
+    "location.lat": "Latitude",
+    "location.lon": "Longitude",
+    "location.invalid": "That isn't a spot in Canada. Type the latitude, a number from 41 to 84, such as `44.1628`, and the longitude, from -142 to -52 (negative in Canada), such as `-77.3832`.",
+    "location.other-region": "This spot is in {region}. To change the repeater's region or province, go back to “Where will it be installed?”",
+    "location.off": "Disable location",
+    "location.off-warning": "Without coordinates, mapping and analytics tools like MeshMapper won't put this repeater on a map, and you won't see the extra analytics they offer. It also won't appear on any MeshCore map.",
 
     // Paste the commands
     "commands.question.console": "Paste these into the Console, one at a time",
@@ -298,10 +325,8 @@
     "why.radio": "Use the Canada radio settings: 910.525 MHz, 62.5 kHz, spreading factor 7, coding rate 5. Every device nearby has to match.",
     "why.radio-community": "Use the {profile} radio settings: {settings}. Every device nearby has to match.",
     "why.name": "The name other people see.",
-    "why.lat": "Show it on maps near {town} (not its exact spot). This line sets the latitude.",
-    "why.lon": "This line sets the longitude, so maps show it near {town}.",
-    "why.lat-spot": "Show it on maps at the spot you entered. This line sets the latitude.",
-    "why.lon-spot": "This line sets the longitude, so maps show it at the spot you entered.",
+    "why.lat": "Show it on maps at the spot you picked. This line sets the latitude.",
+    "why.lon": "This line sets the longitude, so maps show it at the spot you picked.",
     "why.password": "Set the admin password you'll use to manage it from the app. Keep it in your password manager.",
     "why.password-keep": "Change the admin password, or skip this line to keep the current one. Keep it in your password manager.",
     "why.hash": "Use longer repeater IDs (3 bytes) in the list of repeaters a message went through, so fewer repeaters share an ID.",
@@ -395,6 +420,7 @@
     "step.role": "Ville ou bordure",
     "step.neighbours": "Régions voisines",
     "step.name": "Nom",
+    "step.location": "Emplacement sur la carte",
     "step.commands": "Commandes",
     "step.check": "Vérification",
 
@@ -567,10 +593,17 @@
 
     // Neighbouring regions (edge)
     "neighbours.question": "Quelles régions voisines entend-il régulièrement?",
-    "neighbours.hint": "Il relaiera aussi les messages étiquetés pour celles-ci.",
-    "neighbours.help": "Un répéteur de bordure liste les régions voisines qu’il entend régulièrement. Il relaiera aussi les messages étiquetés pour celles-ci. Elles sont facultatives : sans elles, il relaie quand même l’étiquette de sa province et les plus larges.",
+    "neighbours.hint": "Les régions les plus proches sont en premier. Il relaiera aussi les messages étiquetés pour celles que vous cochez.",
+    "neighbours.help": "Un répéteur de bordure liste les régions voisines qu’il entend régulièrement. Il relaiera aussi les messages étiquetés pour celles-ci. Elles sont facultatives : sans elles, il relaie quand même l’étiquette de sa province et les plus larges. Les régions les plus proches sont en premier. Cherchez-en une autre au besoin.",
+    "neighbours.region": "{region} ({tag}), à environ {km} km",
+    "neighbours.region.near": "{region} ({tag}), à moins de 1 km",
     "neighbours.none": "Aucune de celles-ci",
-    "neighbours.empty": "La carte n’indique aucune région voisine pour {region}.",
+    "neighbours.find": "Trouver une autre région",
+    "neighbours.find.hint": "Tapez un nom de région ou un code de région, par exemple Muskoka ou yqa.",
+    "neighbours.find.none": "Aucune autre région ne correspond. Essayez le nom d’une grande ville des environs.",
+    "neighbours.find.found": "Régions trouvées : {n}",
+    "neighbours.find.more": "Seules les {n} premières sont affichées. Tapez-en plus pour préciser.",
+    "neighbours.added": "{region} ({tag}) ajoutée à la liste.",
     "neighbours.meshmapper": "Voyez quels répéteurs il entend sur MeshMapper",
     "crossborder.title": "Réseaux de l’autre côté de la frontière (facultatif)",
     "crossborder.hint": "Cochez-en un seulement si ce répéteur est relié à ce réseau et que ses opérateurs sont d’accord. Dans le doute, laissez-les décochés.",
@@ -589,9 +622,28 @@
     "name.label": "Nom",
     "name.invalid-characters": "Retirez les `[ ] \\ : , ? *` : le répéteur ne les accepte pas.",
     "name.too-long": "C’est trop long. Limitez-le à environ 30 lettres (une lettre accentuée compte pour deux).",
-    "name.location": "L’afficher sur les cartes près de la localité ({town}), pas à son endroit exact",
-    "name.location-spot": "L’afficher sur les cartes à l’endroit exact indiqué ({town})",
-    "name.location-public": "Tout le monde peut voir cet endroit sur les cartes publiques.",
+
+    // Where should maps show it?
+    "location.question": "Où les cartes doivent-elles l’afficher?",
+    "location.help": "Les cartes MeshCore et les outils comme MeshMapper placent le répéteur là où ses coordonnées l’indiquent, pour qu’on voie jusqu’où le réseau s’étend. Tout le monde peut voir l’endroit que vous indiquez.",
+    "location.hint": "La plupart des gens indiquent un emplacement approximatif, à une rue ou deux de l’endroit où se trouve vraiment le répéteur. Certains sont à l’aise de donner son endroit exact. À noter : ne pas donner l’endroit exact n’empêche pas un opérateur radio chevronné de trouver le répéteur en suivant son signal (chasse au renard).",
+    "location.how": "Faites glisser l’épingle, ou touchez la carte là où elle doit aller.",
+    "location.start": "L’épingle est au milieu de la région {region}. Déplacez-la à peu près là où se trouve le répéteur, ou revenez en arrière et cherchez sa ville.",
+    "location.map": "Carte avec l’épingle du répéteur",
+    "location.pin": "Épingle du répéteur",
+    "location.zoom-in": "Zoom avant",
+    "location.zoom-out": "Zoom arrière",
+    "location.attribution": "© les contributeurs d’{link}",
+    "location.attribution.link": "OpenStreetMap",
+    "location.loading": "Chargement de la carte…",
+    "location.map-failed": "La carte n’a pas pu se charger. Vous pouvez quand même taper les coordonnées ci-dessous.",
+    "location.typed": "Ou tapez ses coordonnées",
+    "location.lat": "Latitude",
+    "location.lon": "Longitude",
+    "location.invalid": "Ce n’est pas un endroit au Canada. Tapez la latitude, un nombre de 41 à 84, par exemple `44.1628`, et la longitude, de -142 à -52 (négative au Canada), par exemple `-77.3832`.",
+    "location.other-region": "Cet endroit est dans {region}. Pour changer la région ou la province du répéteur, revenez à « Où sera-t-il installé? »",
+    "location.off": "Désactiver l’emplacement",
+    "location.off-warning": "Sans coordonnées, les outils de cartographie et d’analyse comme MeshMapper ne placeront pas ce répéteur sur une carte, et vous ne verrez pas les analyses supplémentaires qu’ils offrent. Il n’apparaîtra pas non plus sur les cartes MeshCore.",
 
     // Paste the commands
     "commands.question.console": "Collez-les dans la Console, une à la fois",
@@ -642,10 +694,8 @@
     "why.radio": "Utilise les réglages radio canadiens : 910,525 MHz, 62,5 kHz, facteur d’étalement 7, taux de codage 5. Tous les appareils des environs doivent avoir les mêmes.",
     "why.radio-community": "Utilise les réglages radio de {profile} : {settings}. Tous les appareils des environs doivent avoir les mêmes.",
     "why.name": "Le nom que les autres voient.",
-    "why.lat": "Place le répéteur sur les cartes près de la localité ({town}), pas à son endroit exact. Cette ligne règle la latitude.",
-    "why.lon": "Cette ligne règle la longitude, pour que les cartes le placent près de la localité ({town}).",
-    "why.lat-spot": "Place le répéteur sur les cartes à l’endroit que vous avez indiqué. Cette ligne règle la latitude.",
-    "why.lon-spot": "Cette ligne règle la longitude, pour que les cartes le placent à l’endroit que vous avez indiqué.",
+    "why.lat": "Place le répéteur sur les cartes à l’endroit que vous avez choisi. Cette ligne règle la latitude.",
+    "why.lon": "Cette ligne règle la longitude, pour que les cartes le placent à l’endroit que vous avez choisi.",
     "why.password": "Règle le mot de passe administrateur qui vous servira à le gérer depuis l’application. Gardez-le dans votre gestionnaire de mots de passe.",
     "why.password-keep": "Change le mot de passe administrateur. Si vous sautez cette ligne, le répéteur conserve l’actuel. Gardez le nouveau dans votre gestionnaire de mots de passe.",
     "why.hash": "Utilise des identifiants de répéteur plus longs (3 octets) dans la liste des répéteurs par lesquels un message est passé, pour que moins de répéteurs partagent le même identifiant.",
@@ -701,28 +751,6 @@
     "check.recovery.phone": "S’il ne répond pas après le redémarrage, attendez une minute et reconnectez-vous. Toujours rien? Branchez-le par USB et vérifiez-le dans la Console de l’outil de programmation."
   };
 
-  // French names for cross-border labels the catalogue only names in English.
-  // Canadian regions take their French name from the catalogue (labelFr).
-  var tagLabelsFr = {
-    us: "États-Unis",
-    "us-ny": "New York",
-    "us-pa": "Pennsylvanie",
-    "us-oh": "Ohio",
-    west: "Réseau de l’Ouest",
-    pnw: "Nord-Ouest Pacifique",
-    wa: "Washington",
-    or: "Oregon"
-  };
-
-  // French names for the cross-border networks; the catalogue names most of them in English only.
-  var networkLabelsFr = {
-    "western-new-york": "Ouest de l’État de New York",
-    washington: "État de Washington",
-    oregon: "Oregon",
-    pennsylvania: "Pennsylvanie",
-    ohio: "Ohio"
-  };
-
   var TABLES = { en: Object.freeze(en), fr: Object.freeze(fr) };
   var PLACEHOLDER = /\{([A-Za-z][\w-]*)\}/g;
 
@@ -749,8 +777,6 @@
   globalThis.MeshCoreSetupText = {
     t: t,
     keys: keys,
-    text: TABLES,
-    tagLabelsFr: Object.freeze(tagLabelsFr),
-    networkLabelsFr: Object.freeze(networkLabelsFr)
+    text: TABLES
   };
 }());

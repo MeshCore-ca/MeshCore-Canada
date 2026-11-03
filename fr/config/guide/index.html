@@ -4685,16 +4685,16 @@ Vous pouvez utiliser des espaces, mais pas <code>[ ] \ : , ? *</code> : le rép�
 ne les accepte pas.</p>
 </dd>
 <dt><code>set lat 44.1628</code></dt>
-<dd>Place le répéteur sur les cartes près de la localité (Belleville), pas à son endroit exact. Cette ligne règle la latitude.</dd>
+<dd>Place le répéteur sur les cartes à l’endroit que vous avez choisi. Cette ligne règle la latitude.</dd>
 <dt><code>set lon -77.3832</code></dt>
 <dd>
-<p>Cette ligne règle la longitude, pour que les cartes le placent près de la localité (Belleville).</p>
-<p>Décochez l’option de carte dans l’outil, et ces deux lignes disparaissent.</p>
+<p>Cette ligne règle la longitude, pour que les cartes le placent à l’endroit que vous avez choisi.</p>
+<p>L’outil affiche une carte avec une épingle là où vous avez dit qu’il sera
+installé. Faites-la glisser, touchez la carte ou tapez les coordonnées. La
+plupart des gens choisissent un endroit à une rue ou deux du répéteur.
+Cochez <strong>Désactiver l’emplacement</strong> et ces deux lignes disparaissent : les
+cartes ne l’afficheront pas.</p>
 </dd>
-<dt><code>set lat 44.1628</code>, si vous avez tapé une adresse ou des coordonnées</dt>
-<dd>Place le répéteur sur les cartes à l’endroit que vous avez indiqué. Cette ligne règle la latitude.</dd>
-<dt><code>set lon -77.3832</code>, si vous avez tapé une adresse ou des coordonnées</dt>
-<dd>Cette ligne règle la longitude, pour que les cartes le placent à l’endroit que vous avez indiqué.</dd>
 <dt><code>password &lt;votre nouveau mot de passe administrateur&gt;</code></dt>
 <dd>Règle le mot de passe administrateur qui vous servira à le gérer depuis l’application. Gardez-le dans votre gestionnaire de mots de passe.</dd>
 <dt><code>password &lt;votre nouveau mot de passe administrateur&gt;</code>, sur un répéteur déjà en service</dt>
@@ -4912,23 +4912,19 @@ bordure gardent ces échanges locaux dans leur région, tandis que les messages
 <p>Un répéteur de bordure liste les régions voisines qu’il entend régulièrement. Il
 relaiera aussi les messages étiquetés pour celles-ci. Elles sont facultatives :
 sans elles, il relaie quand même <code>on</code>, <code>onqc</code> et les autres étiquettes plus
-larges.</p>
+larges. L’outil liste d’abord les cinq régions les plus proches de votre
+répéteur, avec leur distance, et offre une case pour trouver une autre région.</p>
 <h3 id="cross-border-scopes">Étiquettes partagées avec les États-Unis<a class="headerlink" href="#cross-border-scopes" title="Permanent link">&para;</a></h3>
 <p>Certains répéteurs sont reliés à un réseau des États-Unis. Pour eux, l’outil
-propose des étiquettes de plus :</p>
-<ul>
-<li><strong><code>onny</code></strong>, une étiquette partagée Ontario–New York, pour un répéteur de ville
-  ou de bordure en Ontario.</li>
-<li><strong><code>qcny</code></strong>, une étiquette partagée Québec–New York, pour un répéteur de ville
-  ou de bordure au Québec.</li>
-<li><strong>Les réseaux américains voisins</strong>, pour les répéteurs de bordure : l’Ouest de
-  l’État de New York, la Pennsylvanie et l’Ohio depuis l’Ontario; Washington et
-  l’Oregon depuis la Colombie-Britannique.</li>
-<li><strong>Une autre portée convenue avec un réseau de l’autre côté de la frontière</strong>,
-  pour tout répéteur, dans n’importe quelle province. Tapez le nom de la portée
-  exactement comme vous l’avez convenu ensemble (lettres minuscules, chiffres et
-  tirets).</li>
-</ul>
+propose des portées convenues : des étiquettes que les opérateurs des deux côtés
+ont accepté de relayer. Il montre celles qui conviennent à votre province,
+chacune avec une courte description. Les répéteurs de ville comme de bordure
+peuvent les utiliser. Par exemple, <code>onny</code> sert aux répéteurs qui relient
+l’Ontario et l’État de New York.</p>
+<p>Vous pouvez aussi cocher <strong>Une autre portée convenue avec un réseau de l’autre côté de la frontière</strong>,
+pour tout répéteur, dans n’importe quelle province. Tapez le nom de la portée
+exactement comme vous l’avez convenu ensemble (lettres minuscules, chiffres et
+tirets).</p>
 <p>Cochez-en un seulement si ce répéteur est relié à ce réseau et que ses
 opérateurs sont d’accord. Dans le doute, laissez-les décochés.</p>
 <p>Vous utilisez une portée transfrontalière qui n’est pas dans la liste? <a href="../../submit-idea/">Partagez-la avec nous</a> pour qu’on l’ajoute à l’outil.</p>

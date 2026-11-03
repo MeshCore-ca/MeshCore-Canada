@@ -4655,16 +4655,15 @@ using.</p>
 fine, but not <code>[ ] \ : , ? *</code>: the repeater won't accept them.</p>
 </dd>
 <dt><code>set lat 44.1628</code></dt>
-<dd>Show it on maps near Belleville (not its exact spot). This line sets the latitude.</dd>
+<dd>Show it on maps at the spot you picked. This line sets the latitude.</dd>
 <dt><code>set lon -77.3832</code></dt>
 <dd>
-<p>This line sets the longitude, so maps show it near Belleville.</p>
-<p>Untick the map option in the tool and both lines are left out.</p>
+<p>This line sets the longitude, so maps show it at the spot you picked.</p>
+<p>The tool shows a map with a pin where you said it will be installed. Drag
+it, tap the map, or type the coordinates. Most people pick a spot a block
+or two from the repeater. Tick <strong>Disable location</strong> and both lines are left
+out, so maps won't show it.</p>
 </dd>
-<dt><code>set lat 44.1628</code>, when you typed a street address or coordinates</dt>
-<dd>Show it on maps at the spot you entered. This line sets the latitude.</dd>
-<dt><code>set lon -77.3832</code>, when you typed a street address or coordinates</dt>
-<dd>This line sets the longitude, so maps show it at the spot you entered.</dd>
 <dt><code>password &lt;your new admin password&gt;</code></dt>
 <dd>Set the admin password you'll use to manage it from the app. Keep it in your password manager.</dd>
 <dt><code>password &lt;your new admin password&gt;</code>, on a repeater that's already running</dt>
@@ -4868,21 +4867,18 @@ far as their label says.</p>
 </ul>
 <p>An edge repeater lists the neighbouring regions it regularly hears. It will also
 carry messages labelled for these. They're optional: without them, it still
-passes on <code>on</code>, <code>onqc</code> and the other wider labels.</p>
+passes on <code>on</code>, <code>onqc</code> and the other wider labels. The tool lists the five
+regions nearest to your repeater first, with how far each is, and has a box to
+find any other region.</p>
 <h3 id="cross-border-scopes">Labels shared across the border<a class="headerlink" href="#cross-border-scopes" title="Permanent link">&para;</a></h3>
 <p>Some repeaters link with a network in the United States. For those, the tool
-offers extra labels:</p>
-<ul>
-<li><strong><code>onny</code></strong>, a shared Ontario–New York label, for a city or edge repeater in
-  Ontario.</li>
-<li><strong><code>qcny</code></strong>, a shared Québec–New York label, for a city or edge repeater in
-  Québec.</li>
-<li><strong>Nearby US networks</strong>, for edge repeaters: Western New York, Pennsylvania and
-  Ohio from Ontario; Washington and Oregon from British Columbia.</li>
-<li><strong>Another scope we've agreed with a network across the border</strong>, for any
-  repeater in any province. Type the scope name exactly as you both agreed it
-  (lowercase letters, numbers and dashes).</li>
-</ul>
+offers agreed scopes: labels that operators on both sides have agreed to carry.
+It shows the ones that suit your province, each with a short description. City
+and edge repeaters can both use them. For example, <code>onny</code> is for repeaters that
+connect Ontario and New York.</p>
+<p>You can also tick <strong>Another scope we've agreed with a network across the
+border</strong>, for any repeater in any province. Type the scope name exactly as you
+both agreed it (lowercase letters, numbers and dashes).</p>
 <p>Only tick one if this repeater links with that network and its operators have
 agreed. Not sure? Leave them off.</p>
 <p>Using a cross-border scope that isn't listed? <a href="../../submit-idea/">Share it with us</a> so it can be added to the tool.</p>

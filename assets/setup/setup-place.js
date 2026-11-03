@@ -1,6 +1,6 @@
 // Place lookups for the guided repeater setup tool: which region and province a
-// town is in, which regions border it, which radio settings apply and which
-// cross-border networks to offer. Pure data logic. No DOM and no text shown to
+// town is in, which regions are nearest to it, which radio settings apply and which
+// cross-border scopes to offer. Pure data logic. No DOM and no text shown to
 // people (see setup-text.js).
 //
 // MeshCoreIataScopes and MeshCorePlaceSearch are looked up when a function runs,
@@ -9,17 +9,7 @@
 (function () {
   "use strict";
 
-  // Cross-border networks by province. The catalogue records no provinces for
-  // them, so this is fixed here. `shared` ones are offered to any repeater in the
-  // province; `edgeOnly` ones only make sense for an edge repeater next to the border.
-  // Every id is a key of the catalogue's `externalRegionPaths`.
-  var CROSS_BORDER = {
-    on: { shared: ["ontario-new-york"], edgeOnly: ["ohio", "pennsylvania", "western-new-york"] },
-    qc: { shared: ["quebec-new-york"], edgeOnly: [] },
-    bc: { shared: [], edgeOnly: ["oregon", "washington"] }
-  };
-
-  var vertexIndexes = new WeakMap();
+  var KM_PER_DEGREE = 111.195;   // one degree of latitude
 
   function has(object, key) {
     return Object.prototype.hasOwnProperty.call(object, key);
@@ -55,7 +45,10 @@
     var loaded = await Promise.all([
       fetchJson(get, geometryUrl("iata-boundaries.geojson", catalog.source.boundarySha256), undefined, "Region boundaries unavailable"),
       fetchJson(get, geometryUrl("scope-jurisdictions.geojson", catalog.source.jurisdictionSha256), undefined, "Region boundaries unavailable"),
-      fetchJson(get, new URL("../radio-profiles.json", baseUrl), undefined, "Radio profiles unavailable")
+      fetchJson(get, new URL("../radio-profiles.json", baseUrl), undefined, "Radio profiles unavailable"),
+      // Built from data/cross-border-scopes.yml. Checked with the server on every load, like the catalogue,
+      // so an edited list shows up without a new version number.
+      fetchJson(get, new URL("../regions/cross-border-scopes.json", baseUrl), { cache: "no-cache" }, "Cross-border scopes unavailable")
     ]);
     var profiles = loaded[2];
     if (!Array.isArray(profiles)) throw new Error("Invalid radio profiles");
@@ -63,8 +56,23 @@
       catalog: catalog,
       boundaries: featureCollection(loaded[0], "Invalid region boundaries"),
       jurisdictions: featureCollection(loaded[1], "Invalid region boundaries"),
-      profiles: profiles
+      profiles: profiles,
+      crossBorder: crossBorderFile(loaded[3])
     };
+  }
+
+  var SCOPE_RE = /^[a-z0-9-]{1,29}$/;
+  var SCOPE_TEXT = ["name", "nameFr", "description", "descriptionFr"];
+
+  // The cross-border scopes file as built from the YAML: a list of scopes with their words in both languages.
+  function crossBorderFile(value) {
+    var valid = !!value && Array.isArray(value.scopes) && value.scopes.every(function (item) {
+      return !!item && typeof item.scope === "string" && SCOPE_RE.test(item.scope) &&
+        SCOPE_TEXT.every(function (key) { return typeof item[key] === "string" && item[key].trim() !== ""; }) &&
+        Array.isArray(item.provinces) && item.provinces.every(function (code) { return typeof code === "string"; });
+    });
+    if (!valid) throw new Error("Invalid cross-border scopes");
+    return value;
   }
 
   function provincesOf(catalog, tag) {
@@ -165,51 +173,161 @@
     return result;
   }
 
+  function polygonsOf(geometry) {
+    return !geometry ? [] : geometry.type === "Polygon" ? [geometry.coordinates] : geometry.type === "MultiPolygon" ? geometry.coordinates : [];
+  }
+
   function eachPoint(geometry, visit) {
-    var polygons = !geometry ? [] : geometry.type === "Polygon" ? [geometry.coordinates] : geometry.type === "MultiPolygon" ? geometry.coordinates : [];
-    polygons.forEach(function (rings) {
+    polygonsOf(geometry).forEach(function (rings) {
       rings.forEach(function (ring) { ring.forEach(visit); });
     });
   }
 
-  // tag -> (other tag -> number of exact vertices both regions' outlines contain).
-  // Built once for each loaded set of boundaries.
-  function sharedVertices(collection) {
-    var cached = vertexIndexes.get(collection);
-    if (cached) return cached;
-    var tagsAt = new Map();
-    collection.features.forEach(function (feature) {
-      var tag = feature.properties && feature.properties.tag;
-      if (!tag) return;
-      eachPoint(feature.geometry, function (point) {
-        var key = point[0] + "," + point[1];
-        var tags = tagsAt.get(key);
-        if (!tags) tagsAt.set(key, tags = new Set());
-        tags.add(tag);
-      });
+  // A region's middle, where the map pin starts when only the region is known (a region code, or a
+  // link from the region map): the boundary's own `center` ([lon, lat]), or else the middle of its
+  // outline. A MeshMapper zone comes before a planning extension of the same region. null for a tag
+  // with no outline.
+  function centre(tag, data) {
+    var wanted = String(tag == null ? "" : tag).toLowerCase();
+    var features = data.boundaries.features.filter(function (feature) { return feature.properties && feature.properties.tag === wanted; });
+    if (!features.length) return null;
+    var published = features.filter(function (feature) { return feature.properties.regionSource === "meshmapper"; });
+    var feature = (published.length ? published : features)[0];
+    var given = feature.properties.center;
+    if (Array.isArray(given) && typeof given[0] === "number" && typeof given[1] === "number" && isFinite(given[0]) && isFinite(given[1])) return { lat: given[1], lon: given[0] };
+    var box = null;
+    eachPoint(feature.geometry, function (point) {
+      if (!box) box = { west: point[0], east: point[0], south: point[1], north: point[1] };
+      box.west = Math.min(box.west, point[0]);
+      box.east = Math.max(box.east, point[0]);
+      box.south = Math.min(box.south, point[1]);
+      box.north = Math.max(box.north, point[1]);
     });
-    var shared = new Map();
-    tagsAt.forEach(function (tags) {
-      if (tags.size < 2) return;
-      var list = Array.from(tags);
-      list.forEach(function (a) {
-        if (!shared.has(a)) shared.set(a, new Map());
-        var counts = shared.get(a);
-        list.forEach(function (b) {
-          if (a !== b) counts.set(b, (counts.get(b) || 0) + 1);
+    return box ? { lat: (box.south + box.north) / 2, lon: (box.west + box.east) / 2 } : null;
+  }
+
+  function isSpot(point) {
+    return !!point && typeof point.lat === "number" && typeof point.lon === "number" && isFinite(point.lat) && isFinite(point.lon);
+  }
+
+  // Kilometres from the spot to the line from `a` to `b` ([lon, lat] each), on a flat map centred on the
+  // spot. A degree of longitude is scaled by the latitude halfway between the spot and the line, which is
+  // accurate to a few percent at the distances that matter here.
+  function segmentKm(a, b, lat, lon) {
+    var scale = Math.cos(((a[1] + b[1]) / 2 + lat) / 2 * Math.PI / 180) * KM_PER_DEGREE;
+    var ax = (a[0] - lon) * scale;
+    var ay = (a[1] - lat) * KM_PER_DEGREE;
+    var dx = (b[0] - a[0]) * scale;
+    var dy = (b[1] - a[1]) * KM_PER_DEGREE;
+    var length = dx * dx + dy * dy;
+    var along = length ? Math.max(0, Math.min(1, -(ax * dx + ay * dy) / length)) : 0;
+    return Math.hypot(ax + along * dx, ay + along * dy);
+  }
+
+  function outlineKm(features, lat, lon) {
+    var best = Infinity;
+    features.forEach(function (feature) {
+      polygonsOf(feature.geometry).forEach(function (rings) {
+        rings.forEach(function (ring) {
+          for (var i = 1; i < ring.length; i += 1) best = Math.min(best, segmentKm(ring[i - 1], ring[i], lat, lon));
         });
       });
     });
-    vertexIndexes.set(collection, shared);
-    return shared;
+    return best;
   }
 
-  // Regions whose outline shares at least two exact vertices with this region's, sorted.
-  // One shared corner is only a touch, not a border.
-  function neighbours(tag, data) {
-    var counts = sharedVertices(data.boundaries).get(String(tag == null ? "" : tag).toLowerCase());
-    if (!counts) return [];
-    return Array.from(counts.keys()).filter(function (other) { return counts.get(other) >= 2; }).sort();
+  function named(catalog, tag) {
+    var entry = catalog.hierarchy[tag];
+    var result = { tag: tag, name: entry.label || tag.toUpperCase() };
+    if (entry.labelFr) result.nameFr = entry.labelFr;
+    return result;
+  }
+
+  function lowerTags(tags) {
+    return (Array.isArray(tags) ? tags : []).map(function (tag) { return String(tag).toLowerCase(); });
+  }
+
+  function isRegion(catalog, tag) {
+    return has(catalog.hierarchy, tag) && catalog.hierarchy[tag].kind === "city";
+  }
+
+  // The regions nearest a spot ({ lat, lon }), closest first, as [{ tag, name, nameFr, km }]. `km` is the
+  // distance from the spot to the region's outline, 0 if the spot is inside it. Only regions are listed,
+  // never provinces or the wider scopes. Options: `exclude` (tags to leave out, such as the home region)
+  // and `limit` (how many; all by default). Where a region has a MeshMapper zone, that is the outline
+  // measured, not a planning extension beside it, as on the region map. A spot that isn't a spot has none.
+  function nearest(point, data, options) {
+    var scopes = globalThis.MeshCoreIataScopes;
+    if (!scopes) throw new Error("The region script must be loaded first");
+    if (!isSpot(point)) return [];
+    var settings = options || {};
+    var left = lowerTags(settings.exclude);
+    var catalog = data.catalog;
+    var byTag = new Map();
+    data.boundaries.features.forEach(function (feature) {
+      var tag = feature.properties && feature.properties.tag;
+      if (!tag || left.indexOf(tag) !== -1 || !isRegion(catalog, tag)) return;
+      if (!byTag.has(tag)) byTag.set(tag, []);
+      byTag.get(tag).push(feature);
+    });
+    var list = [];
+    byTag.forEach(function (features, tag) {
+      var published = features.filter(function (feature) { return feature.properties.regionSource === "meshmapper"; });
+      if (published.length) features = published;
+      var km = scopes.matches({ features: features }, point.lat, point.lon).length ? 0 : outlineKm(features, point.lat, point.lon);
+      if (!isFinite(km)) return;
+      list.push(Object.assign(named(catalog, tag), { km: Math.round(km * 10) / 10 }));
+    });
+    list.sort(function (a, b) { return a.km - b.km || (a.tag < b.tag ? -1 : a.tag > b.tag ? 1 : 0); });
+    return settings.limit > 0 ? list.slice(0, settings.limit) : list;
+  }
+
+  // Text as compared when searching: no case or accents, and dots, dashes and apostrophes read as spaces,
+  // so "Sault Ste. Marie" and "val d'or" match "Sault Ste Marie" and "Val-d’Or".
+  function words(value) {
+    return fold(value).replace(/[^a-z0-9]+/g, " ").trim();
+  }
+
+  // 0 the typed text is the code, 1 it is a whole name or alias, 2 it starts a name, alias, code or one of
+  // their words, 3 it is somewhere inside one; null when it is in none of them.
+  function rank(candidates, wanted) {
+    var best = null;
+    candidates.forEach(function (candidate) {
+      var score = null;
+      if (candidate.code && candidate.text === wanted) score = 0;
+      else if (candidate.text === wanted) score = 1;
+      else if (candidate.text.indexOf(wanted) === 0 || candidate.text.indexOf(" " + wanted) !== -1) score = 2;
+      else if (candidate.text.indexOf(wanted) !== -1) score = 3;
+      if (score !== null && (best === null || score < best)) best = score;
+    });
+    return best;
+  }
+
+  // Regions whose code, name, French name or alias contains the typed text, best matches first, as
+  // [{ tag, name, nameFr }]. Case, accents, dots and dashes don't matter. Fewer than two letters is too
+  // little to search on and finds nothing. Options: `exclude` (tags to leave out) and `limit` (how many).
+  function search(text, data, options) {
+    var wanted = words(text);
+    if (wanted.length < 2) return [];
+    var settings = options || {};
+    var left = lowerTags(settings.exclude);
+    var catalog = data.catalog;
+    var found = [];
+    Object.keys(catalog.hierarchy).forEach(function (tag) {
+      if (!isRegion(catalog, tag) || left.indexOf(tag) !== -1) return;
+      var entry = catalog.hierarchy[tag];
+      var candidates = [{ text: tag, code: true }];
+      [entry.label, entry.labelFr].concat(has(catalog.aliases, tag) ? catalog.aliases[tag] : []).forEach(function (name) {
+        if (name) candidates.push({ text: words(name) });
+      });
+      var score = rank(candidates, wanted);
+      if (score !== null) found.push({ score: score, sort: words(entry.label || tag), result: named(catalog, tag) });
+    });
+    found.sort(function (a, b) {
+      return a.score - b.score || (a.sort < b.sort ? -1 : a.sort > b.sort ? 1 : 0) || (a.result.tag < b.result.tag ? -1 : 1);
+    });
+    var list = found.map(function (item) { return item.result; });
+    return settings.limit > 0 ? list.slice(0, settings.limit) : list;
   }
 
   function sameRadio(a, b) {
@@ -244,20 +362,25 @@
     return result;
   }
 
-  // Cross-border networks for a province code ("on", "qc", "bc"). Fresh arrays each time.
-  function crossBorder(province) {
+  // The cross-border scopes to offer a repeater in a province ("on", "qc", "bc"), from the file the page
+  // loaded: [{ scope, name, nameFr, description, descriptionFr, provinces }], in the file's order. They suit
+  // city and edge repeaters alike. Fresh objects each time; nothing without the loaded data.
+  function crossBorder(province, data) {
     var key = String(province == null ? "" : province).trim().toLowerCase();
-    var entry = has(CROSS_BORDER, key) ? CROSS_BORDER[key] : { shared: [], edgeOnly: [] };
-    return { shared: entry.shared.slice(), edgeOnly: entry.edgeOnly.slice() };
+    var scopes = data && data.crossBorder && Array.isArray(data.crossBorder.scopes) ? data.crossBorder.scopes : [];
+    return scopes.filter(function (item) { return item.provinces.indexOf(key) !== -1; })
+      .map(function (item) { return Object.assign({}, item, { provinces: item.provinces.slice() }); });
   }
 
   globalThis.MeshCoreSetupPlace = {
     loadData: loadData,
     resolve: resolve,
     planning: planning,
+    centre: centre,
     fromCode: fromCode,
     fromAlias: fromAlias,
-    neighbours: neighbours,
+    nearest: nearest,
+    search: search,
     radioOptions: radioOptions,
     crossBorder: crossBorder
   };
