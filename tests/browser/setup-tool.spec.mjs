@@ -97,6 +97,8 @@ for (const lang of LANGS) {
     await choose(page, "nrf52");
     await expect(page.locator('[data-setup-choice="nrf52"]')).toHaveAttribute("aria-pressed", "true");
     await expect(step(page)).toContainText(T("board.nrf52-next", lang));
+    // The hint reads on its own; the bootloader note that fits the pick follows it.
+    expect(await step(page).locator(".setup-hint, .setup-note").evaluateAll((nodes) => nodes.map((node) => node.className.includes("setup-hint") ? "hint" : "note"))).toEqual(["hint", "note"]);
     await expect.poll(() => new URL(page.url()).searchParams.get("board")).toBe("nrf52");
     await choose(page, "esp32");
     await expect(page.locator('[data-setup-choice="nrf52"]')).toHaveAttribute("aria-pressed", "false");
@@ -117,16 +119,29 @@ for (const lang of LANGS) {
     await expect(page.locator('[data-setup-card="nrf52"]')).toContainText(T("board.no-wifi.detail", lang));
     await expect(page.locator('[data-setup-card="nrf52"]')).toContainText(T("board.nrf52.examples", lang));
     await expect(page.locator('[data-setup-choice="nrf52"]')).toHaveAccessibleDescription(`${T("board.no-wifi.detail", lang)} ${T("board.nrf52.examples", lang)}`);
+    // Nothing picked yet: the reason and the way out are shown, under the hint.
     await expect(step(page)).toContainText(T("board.observer-nrf52", lang));
+    await expect(page.locator("[data-setup-as-repeater]")).toBeVisible();
     await expect(nextButton(page)).toBeDisabled();
     // Clicking the greyed-out card changes nothing.
     await page.locator('[data-setup-card="nrf52"]').click();
     await expect(page.locator('[data-setup-choice="nrf52"]')).toHaveAttribute("aria-pressed", "false");
     await expect(nextButton(page)).toBeDisabled();
-    // An ESP32 board can still be missing from the observer flasher: say so before going on.
+    // An ESP32 board can still be missing from the observer flasher: say so before going on. The nRF52 warning
+    // and its switch have done their job, so they go.
     await choose(page, "esp32");
-    await expect(step(page)).toContainText("observer.gessaman.com");
+    await expect(step(page)).toContainText(T("board.other-observer", lang));
+    await expect(step(page)).not.toContainText(T("board.observer-nrf52", lang));
+    await expect(page.locator("[data-setup-as-repeater]")).toHaveCount(0);
     await expect(nextButton(page)).toBeEnabled();
+    // The hint comes first, then the note that fits the pick.
+    const order = await step(page).locator(".setup-hint, .setup-note").evaluateAll((nodes) => nodes.map((node) => node.className.includes("setup-hint") ? "hint" : "note"));
+    expect(order).toEqual(["hint", "note"]);
+    // The switch to a plain repeater, from a board step with nothing picked.
+    await page.goto(siteRoute(ROUTES[lang]));
+    await answer(page, "type", "observer");
+    await answer(page, "repeat", "both");
+    await expectStep(page, "board");
     await page.locator("[data-setup-as-repeater]").click();
     await expectStep(page, "board");
     await expect(progress(page)).toHaveText(T("nav.progress", lang, { n: 2, total: 10, label: T("step.board", lang) }));
@@ -224,8 +239,11 @@ test("a greyed-out nRF52 board from a link is not picked and can't be clicked", 
   await page.locator('[data-setup-card="nrf52"]').click();
   await expect(nrf).toHaveAttribute("aria-pressed", "false");
   await expect(nextButton(page)).toBeDisabled();
+  // The blocked pick still gets the warning and the switch; choosing ESP32 takes them away.
+  await expect(page.locator("[data-setup-as-repeater]")).toBeVisible();
   await choose(page, "esp32");
   await expect(nextButton(page)).toBeEnabled();
+  await expect(page.locator("[data-setup-as-repeater]")).toHaveCount(0);
 });
 
 test("running repeater via phone", async ({ page }) => {

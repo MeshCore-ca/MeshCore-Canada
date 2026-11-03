@@ -627,15 +627,15 @@
               if (choose("board", kind)) renderStep({ focus: '[data-setup-choice="' + kind + '"]' });
             } });
         })));
-        if (observer) {
+        body.appendChild(para(t("board.hint"), { class: "setup-hint" }));
+        // Then the note that fits the pick. An observer is warned about nRF52 until it picks ESP32.
+        if (observer && a.board !== "esp32") {
           body.appendChild(note("warn", [para(t("board.observer-nrf52")),
             el("button", { type: "button", class: "setup-button setup-button--secondary setup-button--small", "data-setup-as-repeater": "",
               on: { click: function () { choose("type", "repeater"); renderStep({ heading: true }); } } }, t("board.as-repeater"))]));
         }
-        // What the picked kind means.
         if (a.board === "esp32" && observer) body.appendChild(note("info", t("board.other-observer")));
         if (a.board === "nrf52" && !observer) body.appendChild(note("ok", t("board.nrf52-next")));
-        body.appendChild(para(t("board.hint"), { class: "setup-hint" }));
       }
     },
 

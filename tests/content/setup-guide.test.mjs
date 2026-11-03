@@ -187,13 +187,13 @@ test("the board step asks what kind of board it is, with examples and a way to c
     en: {
       question: "What kind of board is it?",
       nrf52: ["nRF52", "Low power, good for solar.", "For example RAK4631 (WisBlock), Heltec T114, LilyGO T-Echo, Seeed XIAO nRF52840."],
-      esp32: ["ESP32", "Has Wi-Fi, which a repeater observer needs.", "For example Heltec V3 or V4, LilyGO T-Beam, Seeed XIAO ESP32-S3."],
+      esp32: ["ESP32", "Has Wi-Fi, which a repeater observer needs.", "For example Heltec V3 or V4, LilyGO T-Beam, RAK 3112, Seeed XIAO ESP32-S3."],
       hint: "Not sure? If the board has Wi-Fi, it's an ESP32. Otherwise it's an nRF52.",
     },
     fr: {
       question: "Quel type de carte est-ce?",
       nrf52: ["nRF52", "Faible consommation, idéale pour l’énergie solaire.", "Par exemple RAK4631 (WisBlock), Heltec T114, LilyGO T-Echo, Seeed XIAO nRF52840."],
-      esp32: ["ESP32", "Dispose du Wi-Fi, dont un répéteur observateur a besoin.", "Par exemple Heltec V3 ou V4, LilyGO T-Beam, Seeed XIAO ESP32-S3."],
+      esp32: ["ESP32", "Dispose du Wi-Fi, dont un répéteur observateur a besoin.", "Par exemple Heltec V3 ou V4, LilyGO T-Beam, RAK 3112, Seeed XIAO ESP32-S3."],
       hint: "Un doute? Si la carte a le Wi-Fi, c’est une ESP32. Sinon, c’est une nRF52.",
     },
   };
@@ -222,15 +222,22 @@ test("the board step asks what kind of board it is, with examples and a way to c
     for (const key of ["bootloader.step1", "flash.repeater.step2", "flash.observer.step2"]) {
       assert.doesNotMatch(text.t(key, lang), /\{board\}/, `${lang} ${key} needs no board name`);
     }
-    assert.match(text.t("flash.repeater.step2", lang), lang === "en" ? /^Choose your board, role Repeater, and the newest version\.$/ : /^Choisissez votre carte, le rôle Repeater et la version la plus récente\.$/);
-    assert.match(text.t("flash.observer.step2", lang), lang === "en" ? /^Under MQTT Observer Firmware, choose your board and role Repeater\.$/ : /^Sous MQTT Observer Firmware, choisissez votre carte et le rôle Repeater\.$/);
-    assert.match(text.t("bootloader.step1", lang), lang === "en" ? /^Download the `update-…uf2` file for your board from the \{link\}\. Its name includes the board's name\.$/ : /^Téléchargez, depuis les \{link\}, le fichier `update-…uf2` de votre carte\. Son nom contient le nom de la carte\.$/);
+    assert.match(text.t("flash.repeater.step2", lang), lang === "en" ? /^Choose your board \(its name is printed on the board or its box\), role Repeater, and the newest version\.$/ : /^Choisissez votre carte \(son nom est imprimé sur la carte ou sur sa boîte\), le rôle Repeater et la version la plus récente\.$/);
+    assert.match(text.t("flash.observer.step2", lang), lang === "en" ? /^Under MQTT Observer Firmware, choose your board \(its name is printed on the board or its box\) and role Repeater\.$/ : /^Sous MQTT Observer Firmware, choisissez votre carte \(son nom est imprimé sur la carte ou sur sa boîte\) et le rôle Repeater\.$/);
+    assert.match(text.t("bootloader.step1", lang), lang === "en" ? /^Download the `update-…uf2` file for your board from the \{link\}\. Its name includes the board's name, which is printed on the board or its box\.$/ : /^Téléchargez, depuis les \{link\}, le fichier `update-…uf2` de votre carte\. Son nom contient celui de la carte, imprimé sur la carte ou sur sa boîte\.$/);
     assert.ok(text.t("bootloader.mismatch", lang).length > 0);
   }
   const ui = read("docs/assets/setup/setup-ui.js");
   assert.doesNotMatch(ui, /Flow\.BOARDS|boardLabel|boardName|setup-group-label|board\.group/, "the screen draws two cards, not a list of boards");
   assert.doesNotMatch(read("docs/assets/setup/setup.css"), /setup-group-label/);
   assert.match(ui, /para\(t\("board\.hint"\)/, "the hint is plain text");
+  // The hint comes straight after the cards; the note that fits the pick follows it.
+  const board = ui.slice(ui.indexOf("    board: {"), ui.indexOf("    status: pair("));
+  assert.ok(board.indexOf('t("board.hint")') < board.indexOf('"board.observer-nrf52"'), "the hint comes before the observer warning");
+  assert.ok(board.indexOf('t("board.hint")') < board.indexOf('"board.other-observer"'), "the hint comes before the observer flasher note");
+  assert.ok(board.indexOf('t("board.hint")') < board.indexOf('"board.nrf52-next"'), "the hint comes before the bootloader note");
+  // An observer who picked ESP32 is not warned about nRF52 any more.
+  assert.match(board, /observer && a\.board !== "esp32"/);
   // Pages that sent people to the old "My board isn't listed" choice now name the ESP32 choice.
   for (const [path, words] of [["docs/hardware/station-g3.md", "choose **ESP32** when it asks what kind of board it is"], ["docs/hardware/station-g3.fr.md", "choisissez **ESP32** quand il demande le type de carte"]]) {
     assert.ok(read(path).includes(words), path);
