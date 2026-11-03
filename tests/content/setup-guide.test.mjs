@@ -205,20 +205,30 @@ test("the page says the tool lists the nearest regions first and has a box to fi
   assert.equal(text.t("neighbours.find", "fr"), "Trouver une autre région");
 });
 
-test("the cross-border section describes the agreed scopes listed in the tool, the agreed-scope option, and the link to ask for more", () => {
+test("the search box asks for a region name or code, not a town, and a miss points to a larger city nearby", () => {
+  // The search covers region names, their aliases and codes, so a town the catalogue doesn't list (Orillia,
+  // Cornwall, Peterborough, Sherbrooke) finds nothing: the words must not promise it.
+  assert.equal(text.t("neighbours.find.hint", "en"), "Type a region name or a region code, for example Muskoka or yqa.");
+  assert.equal(text.t("neighbours.find.hint", "fr"), "Tapez un nom de région ou un code de région, par exemple Muskoka ou yqa.");
+  assert.equal(text.t("neighbours.find.none", "en"), "No other region matches that. Try the name of a larger city nearby.");
+  assert.equal(text.t("neighbours.find.none", "fr"), "Aucune autre région ne correspond. Essayez le nom d’une grande ville des environs.");
+  for (const lang of ["en", "fr"]) assert.doesNotMatch(text.t("neighbours.find.hint", lang), /town|ville/i, lang);
+});
+
+test("the cross-border section describes the agreed scopes, the agreed-scope option, and the link to ask for more", () => {
   const sectionOf = (source) => {
     const flatSource = flat(source);
     const start = flatSource.search(/\{ ?#cross-border-scopes ?\}/);
     return flatSource.slice(start, flatSource.indexOf("###", start + 1));
   };
   const words = {
-    en: { listed: "the agreed scopes listed in the tool", exactly: "exactly as you both agreed it (lowercase letters, numbers and dashes)" },
-    fr: { listed: "les portées convenues qui figurent dans l’outil", exactly: "exactement comme vous l’avez convenu ensemble (lettres minuscules, chiffres et tirets)" },
+    en: { listed: "the tool offers agreed scopes: labels that operators on both sides have agreed to carry", exactly: "exactly as you both agreed it (lowercase letters, numbers and dashes)" },
+    fr: { listed: "l’outil propose des portées convenues : des étiquettes que les opérateurs des deux côtés ont accepté de relayer", exactly: "exactement comme vous l’avez convenu ensemble (lettres minuscules, chiffres et tirets)" },
   };
   for (const [lang, path] of Object.entries(pages)) {
     const section = sectionOf(read(path));
     assert.ok(section.length > 200, `${path} needs a cross-border section`);
-    assert.ok(section.includes(words[lang].listed), `${path} describes the scopes as ${words[lang].listed}`);
+    assert.ok(section.includes(words[lang].listed), `${path} says: ${words[lang].listed}`);
     // The scopes themselves come from data/cross-border-scopes.yml, so the page doesn't list them, and says nothing
     // of the US networks the tool no longer offers.
     assert.doesNotMatch(section, /Western New York|Pennsylvani|Ohio|Washington|Oregon|Ouest de l’État|Pennsylvanie|l’Oregon/, `${path} names no US network`);

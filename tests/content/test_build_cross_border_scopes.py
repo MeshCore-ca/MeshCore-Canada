@@ -160,6 +160,15 @@ class CrossBorderScopesTests(unittest.TestCase):
         self.write(self.scopes(self.entry(scope="onny")))
         self.assertEqual(MODULE.load_scopes(self.source, self.policy, self.catalog)[0]["scope"], "onny")
 
+    def test_a_region_code_from_the_real_catalogue_is_refused(self) -> None:
+        # With no catalogue given, the generator reads docs/assets/regions/iata-regions.json.
+        for region in ["yow", "ytr", "yvr"]:
+            self.write(self.scopes(self.entry(scope=region)))
+            with self.assertRaises(MODULE.ScopeError) as caught:
+                MODULE.load_scopes(self.source, self.policy)
+            self.assertIn(f"scope '{region}' is already used by the tool for a region, a province or a wider scope", caught.exception.problems[0])
+        self.assertIn("iata-regions.json", str(MODULE.CATALOG))
+
     def test_a_catalogue_that_cannot_be_read_is_said_plainly(self) -> None:
         self.write(self.scopes(ENTRY))
         for body in [None, "not json", "{}", '{"hierarchy": []}']:
