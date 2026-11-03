@@ -379,3 +379,14 @@ test("text lookups fail loudly and fill in placeholders", () => {
   // French uses typographic apostrophes, like the rest of the site.
   for (const key of text.keys()) assert.doesNotMatch(text.t(key, "fr"), /'/, key);
 });
+
+test("flash steps use each flasher's own button names", () => {
+  for (const lang of ["en", "fr"]) {
+    assert.match(text.t("flash.repeater.step3", lang, { erase: "" }), /Flash!/, lang);
+    assert.doesNotMatch(text.t("flash.observer.step3", lang, { erase: "" }), /Flash!/, lang);
+    assert.match(text.t("flash.nrf52.dfu", lang), /Enter DFU mode[\s\S]*Flash!/, lang);
+    assert.match(text.t("flash.erase.esp32-new", lang), /Erase device/, lang);
+    assert.match(text.t("flash.erase.nrf52-running", lang), /Erase Flash/, lang);
+  }
+  assert.throws(() => text.t("flash.step3", "en"));
+});

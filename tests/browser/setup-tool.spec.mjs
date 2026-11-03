@@ -1253,3 +1253,25 @@ for (const lang of LANGS) {
     await expectNoSeriousAxe(page, "commands");
   });
 }
+
+for (const lang of LANGS) {
+  test(`${lang} flash step names the flasher's own buttons for each kind of board`, async ({ page }) => {
+    const base = ROUTES[lang];
+    // nRF52 repeater: bootloader first, then the MeshCore flasher's Flash! plus the Enter DFU mode note.
+    await page.goto(siteRoute(`${base}?type=repeater&board=nrf52&status=new`));
+    await confirmStep(page, "bootloader");
+    await expectStep(page, "flash");
+    await expect(step(page)).toContainText(T("flash.repeater.step3", lang, { erase: T("flash.erase.nrf52-new", lang) }));
+    await expect(step(page)).toContainText(T("flash.nrf52.dfu", lang));
+    // ESP32 repeater: the Erase device tick and Flash!, no DFU note.
+    await page.goto(siteRoute(`${base}?type=repeater&board=esp32&status=new`));
+    await expectStep(page, "flash");
+    await expect(step(page)).toContainText(T("flash.repeater.step3", lang, { erase: T("flash.erase.esp32-new", lang) }));
+    await expect(step(page)).not.toContainText(T("flash.nrf52.dfu", lang));
+    // Repeater observer: the observer flasher's button is plain Flash.
+    await page.goto(siteRoute(`${base}?type=observer&repeat=both&board=esp32&status=new`));
+    await expectStep(page, "flash");
+    await expect(step(page)).toContainText(T("flash.observer.step3", lang, { erase: T("flash.erase.esp32-new", lang) }));
+    await expect(step(page)).not.toContainText("Flash!");
+  });
+}

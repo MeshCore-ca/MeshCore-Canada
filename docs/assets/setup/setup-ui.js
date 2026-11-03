@@ -665,7 +665,8 @@
         var kind = a.type === "observer" ? "observer" : "repeater";
         var erase = t("flash.erase." + (a.board === "nrf52" ? "nrf52" : "esp32") + "-" + (a.status === "running" ? "running" : "new"));
         body.appendChild(steps([["flash." + kind + ".step1", null, kind === "observer" ? LINKS.observerFlasher : LINKS.flasher],
-          "flash." + kind + ".step2", ["flash.step3", { erase: erase }], "flash.step4"]));
+          "flash." + kind + ".step2", ["flash." + kind + ".step3", { erase: erase }], "flash.step4"]));
+        if (a.board === "nrf52") body.appendChild(para(t("flash.nrf52.dfu"), { class: "setup-hint" }));
         body.appendChild(para(t("flash.failed"), { class: "setup-hint" }));
         body.appendChild(confirmBox("flashed", "flash.confirm"));
       }
