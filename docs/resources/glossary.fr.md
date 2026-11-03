@@ -96,7 +96,8 @@ utiliser chaque paramètre ou appareil.
 
 **Portée (region scope)**
 :   Une portée est une étiquette sur un message qui indique jusqu’où il doit
-    aller. Vous la réglez sur votre appareil compagnon et sur chaque canal. Voir
+    aller. Vous réglez une portée par défaut sur votre appareil compagnon, et
+    chaque canal peut avoir la sienne. Voir
     [Les portées et les régions](../config/guide.md#scopes-and-regions).
 
 **Préréglage**

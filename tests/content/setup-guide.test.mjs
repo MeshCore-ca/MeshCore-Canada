@@ -264,6 +264,23 @@ test("the glossary points at the setup tool and defines the scope terms in the e
       ["Répéteur de bordure", "city-or-edge"],
     ],
   };
+  // What each new entry says before its "See ..." link, pinned so a wording change is deliberate.
+  const wording = {
+    en: {
+      "Scope": "A scope is a label on a message saying how far it should travel. You set a default on your companion, and a channel can have its own.",
+      "Region": "The area a repeater serves, named after the nearest airport code. A region list is the labels a repeater agrees to pass on.",
+      "Repeater observer": "A repeater that also reports what it hears to live.meshcore.ca, so everyone can see how the mesh is doing. It needs Wi-Fi, so it needs an ESP32 board.",
+      "City repeater": "A repeater that passes on messages with no label, so people nearby who haven't set a scope are still heard. Every repeater that isn't an edge repeater is a city repeater.",
+      "Edge repeater": "A repeater that regularly hears repeaters in another region, for example one between Belleville and Kingston. It doesn't pass on messages with no label, so they don't spill into the next region.",
+    },
+    fr: {
+      "Portée": "Une portée est une étiquette sur un message qui indique jusqu’où il doit aller. Vous réglez une portée par défaut sur votre appareil compagnon, et chaque canal peut avoir la sienne.",
+      "Région": "Le secteur que dessert un répéteur, nommé d’après le code d’aéroport le plus proche. Une liste de régions, ce sont les étiquettes qu’un répéteur accepte de relayer.",
+      "Répéteur observateur": "Un répéteur qui rapporte aussi ce qu’il entend à live.meshcore.ca, pour que tout le monde puisse voir l’état du réseau. Il lui faut le Wi-Fi, donc une carte ESP32.",
+      "Répéteur de ville": "Un répéteur qui relaie les messages sans étiquette, pour que les gens des environs qui n’ont pas réglé de portée soient quand même entendus. Tout répéteur qui n’est pas de bordure est un répéteur de ville.",
+      "Répéteur de bordure": "Un répéteur qui entend régulièrement des répéteurs d’une autre région, par exemple entre Belleville et Kingston. Il ne relaie pas les messages sans étiquette, pour qu’ils ne débordent pas dans la région voisine.",
+    },
+  };
   // A definition-list entry: the bold term (with an optional English name in brackets), then its indented lines.
   const entryOf = (source, term) => source.match(new RegExp(`^\\*\\*${term}(?: \\([^)]*\\))?\\*\\*\n((?::   .*\n?|    .*\n?)+)`, "m"))?.[1];
   for (const [lang, path] of Object.entries(glossaries)) {
@@ -274,6 +291,7 @@ test("the glossary points at the setup tool and defines the scope terms in the e
       const entry = entryOf(source, term);
       assert.ok(entry, `${path} needs an entry for ${term}`);
       assert.ok(entry.includes(`](../config/guide.md#${anchor})`), `${path}: ${term} links to #${anchor}`);
+      assert.ok(flat(entry).replace(/^:\s*/, "").startsWith(`${wording[lang][term]} ${lang === "en" ? "See" : "Voir"} [`), `${path}: ${term} says "${wording[lang][term]}"`);
     }
     // Scope carries the explainer's first sentence and Region its second, word for word.
     const [scopeSentence, regionSentence] = sentences(coreSentence[lang]);
@@ -292,7 +310,7 @@ const channelShots = [
 ];
 
 test("the channel scope steps show each screenshot on both pages, as a link to the full-size file", () => {
-  const sections = {};
+  const alts = {};
   for (const [lang, path] of Object.entries(pages)) {
     const source = read(path);
     const section = source.slice(source.search(/\{ ?#companions ?\}/), source.search(/\{ ?#bots-and-meshmapper ?\}/));
@@ -303,9 +321,12 @@ test("the channel scope steps show each screenshot on both pages, as a link to t
       assert.ok(alt.trim().length > 15, `${path}: ${file} needs alt text that says what it shows`);
       assert.equal(link, file, `${path}: ${file} links to its own full-size file`);
     }
-    sections[lang] = shots.map((shot) => shot[1]);
+    alts[lang] = shots.map((shot) => shot[1]);
   }
-  assert.notDeepEqual(sections.en, sections.fr, "the French page has its own alt text");
+  // Each screenshot has its own French alt text, not the English one left in place.
+  channelShots.forEach((file, index) => {
+    assert.notEqual(alts.fr[index], alts.en[index], `${file}: the French alt text differs from the English`);
+  });
 });
 
 test("every image the explainer pages show exists", () => {
@@ -321,5 +342,29 @@ test("every image the explainer pages show exists", () => {
     for (const [, link] of source.matchAll(/\]\((\.\.\/assets\/images\/[^)\s]+)\)/g)) {
       assert.ok(existsSync(resolve(root, dirname(path), link)), `${path}: ${link} is missing`);
     }
+  }
+});
+
+test("the privacy pages match the setup tool: one name for the place search, the real 10 minutes, no downloads", () => {
+  const ui = read("docs/assets/setup/setup-ui.js");
+  const minutes = Number(ui.match(/Date\.now\(\) - saved\.at < (\d+)\)/)?.[1]) / 60000;
+  assert.equal(minutes, 10, "the language-switch hand-off is read for 10 minutes");
+  const host = read("docs/assets/javascripts/place-search.js").match(/https:\/\/([a-z.]+)\/\?/)?.[1];
+  assert.equal(host, "geolocator.api.geo.ca");
+  const privacy = {
+    en: { path: "docs/privacy.md", place: "Government of Canada’s place search (geo.ca)", old: /Downloaded setup summaries|Natural Resources Canada/ },
+    fr: { path: "docs/privacy.fr.md", place: "outil de recherche de lieux du gouvernement du Canada (geo.ca)", old: /résumés téléchargés|Ressources naturelles Canada/ },
+  };
+  for (const [lang, { path, place, old }] of Object.entries(privacy)) {
+    const source = read(path);
+    assert.doesNotMatch(source, old, `${path}: the sentence about downloads and the other geocoder name are gone`);
+    assert.ok(flat(source).includes(`${place}: \`${host}\``) || flat(source).includes(`${place} : \`${host}\``), `${path}: the setup tool row names the place search and ${host}`);
+    // Every row that sends a place name to the geocoder uses the same name.
+    const rows = source.split("\n").filter((line) => line.startsWith("|") && /geo\.ca|Géolocalisateur|Geolocator/.test(line));
+    assert.equal(rows.length, 3, `${path}: three rows send a place to the geocoder`);
+    for (const row of rows) assert.ok(row.includes(place), `${path}: ${row.slice(0, 50)} uses the tool's name for it`);
+    assert.ok(flat(source).includes(`${minutes} minutes`), `${path}: says ${minutes} minutes`);
+    // Expiry is checked only when the other page reads the entry, so the page must not say it is removed at 10 minutes.
+    assert.doesNotMatch(flat(source), /(after|après) 10 minutes/, `${path}: the entry is ignored, not removed, after ${minutes} minutes`);
   }
 });

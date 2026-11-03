@@ -715,7 +715,8 @@ utilisez plutôt votre propre étiquette.
 
     [![Écran Add Region avec yow tapé](../assets/images/onqc-scopes/companion-15-add-yow.webp){ loading=lazy width="300" height="652" }](../assets/images/onqc-scopes/companion-15-add-yow.webp)
 
-4. **Region has been added!** Touchez votre étiquette pour la sélectionner.
+4. Si vous en avez ajouté une, vous verrez **Region has been added!** Touchez
+   votre étiquette pour la sélectionner.
 
     [![Liste Select Region avec onqc et yow et le message Region has been added](../assets/images/onqc-scopes/companion-16-yow-added.webp){ loading=lazy width="300" height="652" }](../assets/images/onqc-scopes/companion-16-yow-added.webp)
 

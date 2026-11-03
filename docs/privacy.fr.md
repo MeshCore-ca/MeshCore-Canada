@@ -24,10 +24,10 @@ Vous pouvez consulter ce site sans compte MeshCore Canada ni compte GitHub.
 | Action | Données transmises | Destination |
 |---|---|---|
 | Rechercher dans cette documentation | Vos mots de recherche restent dans le navigateur | Nulle part |
-| Trouver des communautés à proximité | La ville recherchée | API Géolocalisateur de Ressources naturelles Canada; les distances sont calculées dans votre navigateur |
+| Trouver des communautés à proximité | La ville recherchée | L’outil de recherche de lieux du gouvernement du Canada (geo.ca); les distances sont calculées dans votre navigateur |
 | Charger les totaux du réseau dans l’en-tête | Votre adresse IP et les renseignements habituels d’une requête Web, sans texte de recherche | Beacon à dev.meshcore.ca |
-| Rechercher un lieu dans les outils de région | Le lieu, le code d’aéroport ou le code postal saisi | Codes IATA vérifiés localement. Noms de lieux transmis à l’API Géolocalisateur de Ressources naturelles Canada; codes postaux transmis à OpenStreetMap ou geocoder.ca |
-| Rechercher une ville ou une adresse dans l’[outil de configuration](config/index.md) | La ville ou l’adresse saisie. Les coordonnées saisies restent dans votre navigateur | API Géolocalisateur de Ressources naturelles Canada (`geolocator.api.geo.ca`) |
+| Rechercher un lieu dans les outils de région | Le lieu, le code d’aéroport ou le code postal saisi | Codes IATA vérifiés localement. Noms de lieux transmis à l’outil de recherche de lieux du gouvernement du Canada (geo.ca); codes postaux transmis à OpenStreetMap ou geocoder.ca |
+| Rechercher une ville ou une adresse dans l’[outil de configuration](config/index.md) | La ville ou l’adresse saisie. Les coordonnées saisies restent dans votre navigateur | L’outil de recherche de lieux du gouvernement du Canada (geo.ca) : `geolocator.api.geo.ca` |
 | Ouvrir la carte interactive des régions | Votre adresse IP et la partie visible de la carte | OpenStreetMap |
 | Vérifier un identifiant de parcours de répéteur | Le premier octet de la clé publique | Beacon à dev.meshcore.ca; les comparaisons régionales et des préfixes plus longs restent dans votre navigateur |
 | Charger le nombre d’étoiles GitHub | Votre adresse IP et les renseignements habituels d’une requête Web | GitHub |
@@ -51,32 +51,36 @@ votre mot de passe administrateur ni votre mot de passe Wi-Fi. Là où une
 commande en exige un, elle affiche un espace réservé que vous remplissez
 vous-même.
 
-- **Partager et reprendre.** L’adresse de la page contient vos réponses non
-  secrètes, comme le nom du répéteur, sa région, et le nom du lieu avec ses
-  coordonnées, pour que vous puissiez partager ou reprendre une configuration.
-  Elle ne contient jamais de mots de passe, de renseignements Wi-Fi ni de
-  réponse `region` collée. Ces adresses peuvent apparaître dans l’historique du
-  navigateur et les journaux du serveur : ne partagez pas une adresse qui
-  contient un emplacement privé.
+- **Partager et reprendre.** Le lien de l’outil (**Copier un lien vers ces
+  réponses**, qui est aussi l’adresse dans votre navigateur) contient vos
+  réponses non secrètes, comme le nom du répéteur, sa région, et le lieu (une
+  ville, ou l’adresse que vous avez choisie) avec ses coordonnées, pour que vous
+  puissiez partager ou reprendre une configuration. Il ne contient jamais de
+  mots de passe, de renseignements Wi-Fi ni de réponse `region` collée. Les
+  liens peuvent apparaître dans l’historique du navigateur et les journaux du
+  serveur : ne partagez pas un lien qui contient un emplacement privé.
 - **Afficher sur les cartes.** Cette option est activée par défaut. Pour une
   adresse ou des coordonnées, l’outil dit : « Tout le monde peut voir cet
   endroit sur les cartes publiques. » Si vous la décochez, l’outil retire de la
   liste les commandes qui règlent l’emplacement du répéteur, et l’adresse ou les
-  coordonnées restent aussi hors de l’adresse de la page.
+  coordonnées restent aussi hors du lien.
 - **Changer de langue.** Pour ne pas vous faire recommencer, l’outil garde vos
   coches, la version du micrologiciel et les réponses collées dans cet onglet du
-  navigateur, seulement le temps du changement. Il les supprime dès que l’autre
-  page les a lues, ou après 10 minutes.
-- **Rien n’est envoyé à MeshMapper.** [Comprendre les répéteurs](config/guide.md)
-  et la carte des régions lisent les fichiers de régions publiés sur ce site.
+  navigateur, seulement le temps du changement. L’autre page les utilise une seule fois,
+  puis les supprime. Passé 10 minutes, ils sont ignorés, et ils disparaissent à
+  la fermeture de l’onglet.
+- **Fichiers de régions.** MeshMapper n’est pas contacté, sauf si vous cliquez
+  sur un lien qui y mène. L’outil de configuration,
+  [Comprendre les répéteurs](config/guide.md) et la carte des régions lisent les
+  fichiers de régions publiés sur ce site.
 
 ## Données enregistrées sur votre appareil
 
-Changer de langue sur la carte des régions conserve votre sélection dans l’URL
-de destination. Elle peut contenir les coordonnées saisies, un lieu, des portées
-de ville et de province et un profil radio. Ces URL peuvent apparaître dans
-l’historique du navigateur et les journaux du serveur. Ne partagez pas un lien
-qui contient un emplacement privé.
+Changer de langue sur la carte des régions conserve votre sélection dans le lien
+vers l’autre page. Il peut contenir les coordonnées saisies, un lieu, des
+portées de ville et de province et un profil radio. Ces liens peuvent apparaître
+dans l’historique du navigateur et les journaux du serveur. Ne partagez pas un
+lien qui contient un emplacement privé.
 
 Les listes de configuration, les brouillons d’idées et le dernier code de
 région Beacon choisi dans l’outil de vérification sont enregistrés uniquement

@@ -666,7 +666,8 @@ own label instead.
 
     [![Add Region screen with yow typed in](../assets/images/onqc-scopes/companion-15-add-yow.webp){ loading=lazy width="300" height="652" }](../assets/images/onqc-scopes/companion-15-add-yow.webp)
 
-4. **Region has been added!** Tap your label to select it.
+4. If you added one, you'll see **Region has been added!** Tap your label to
+   select it.
 
     [![Select Region list with onqc and yow and a Region has been added message](../assets/images/onqc-scopes/companion-16-yow-added.webp){ loading=lazy width="300" height="652" }](../assets/images/onqc-scopes/companion-16-yow-added.webp)
 

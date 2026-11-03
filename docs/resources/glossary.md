@@ -125,9 +125,9 @@ the linked guides explain how to use each setting or device.
 
 ## S-W
 
-**Scope**
-:   A scope is a label on a message saying how far it should travel. You set it
-    on your companion and on each channel. See
+**Scope (region scope)**
+:   A scope is a label on a message saying how far it should travel. You set a
+    default on your companion, and a channel can have its own. See
     [Scopes and regions](../config/guide.md#scopes-and-regions).
 
 **Signal-to-noise ratio (SNR)**
