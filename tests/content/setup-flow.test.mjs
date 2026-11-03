@@ -464,3 +464,72 @@ test("the 'I did this' ticks never go into a share link", () => {
   assert.deepEqual(flow.fromQuery(q), { type: "repeater", board: "nrf52", status: "new" });
   assert.deepEqual(flow.fromQuery("bootloader=1&flashed=1&type=repeater"), { type: "repeater" });
 });
+
+// A scope the person and a network across the border agreed between themselves. It is one flat tag,
+// checked with the generator's own rule (/^[a-z0-9-]{1,29}$/), and stored already trimmed and lower-case.
+
+test("a custom scope is lower-cased and trimmed, and held to the generator's rule", () => {
+  assert.equal(flow.cleanCustom("  QCNY2 "), "qcny2");
+  assert.equal(flow.cleanCustom(undefined), "");
+  assert.equal(flow.cleanCustom(7), "");
+  for (const good of ["qcny2", "a", "on", "a-b-c", "0", "x".repeat(29)]) {
+    assert.equal(flow.customProblem(good), null, good);
+    assert.equal(flow.isCustom(good), true, good);
+  }
+  assert.equal(flow.customProblem("  QCNY2 "), null, "typed text is cleaned before it is judged");
+  assert.equal(flow.customProblem(""), "empty");
+  assert.equal(flow.customProblem("   "), "empty");
+  assert.equal(flow.customProblem(undefined), "empty");
+  for (const bad of ["two words", "qc_ny", "québec", "#qcny", "qc.ny", "qc/ny", "<b>", "x".repeat(30), "qc\nny", "*"]) {
+    assert.equal(flow.customProblem(bad), "characters", bad);
+    assert.equal(flow.isCustom(bad), false, bad);
+  }
+  // A stored answer is already clean: untidy text is not an answer.
+  for (const untidy of ["QCNY2", " qcny2", "qcny2 ", "", undefined, null, 7, ["qcny2"]]) assert.equal(flow.isCustom(untidy), false, String(untidy));
+});
+
+test("the role and neighbours steps wait for a ticked custom scope to be valid", () => {
+  const city = { role: "city" };
+  assert.equal(flow.isComplete("role", city), true);
+  assert.equal(flow.isComplete("role", { ...city, custom: "qcny2" }), true);
+  assert.equal(flow.isComplete("role", { ...city, custom: "" }), false, "ticked but empty");
+  assert.equal(flow.isComplete("role", { ...city, custom: "bad name" }), false, "ticked but invalid");
+  assert.equal(flow.isComplete("role", { ...city, custom: "QCNY2" }), false, "stored text is already lower-case");
+  // An edge repeater types it on the neighbours step, so the role step doesn't hold it back.
+  assert.equal(flow.isComplete("role", { role: "edge", custom: "" }), true);
+  assert.equal(flow.isComplete("neighbours", { neighbours: [] }), true);
+  assert.equal(flow.isComplete("neighbours", { neighbours: ["ygk"], custom: "qcny2" }), true);
+  assert.equal(flow.isComplete("neighbours", { neighbours: [], custom: "" }), false);
+  assert.equal(flow.isComplete("neighbours", { neighbours: [], custom: "bad name" }), false);
+  assert.equal(flow.isComplete("neighbours", { custom: "qcny2" }), false, "still needs the neighbours answer");
+  // Other steps don't care.
+  assert.equal(flow.isComplete("name", { name: "Belleville_R1", custom: "" }), true);
+});
+
+test("a custom scope is cleared when the region or role changes, like the cross-border networks", () => {
+  const a = { place: { name: "Belleville" }, tag: "ytr", province: "on", role: "edge", neighbours: ["ygk"], external: ["western-new-york"], custom: "qcny2", name: "Belleville_R1" };
+  for (const key of ["place", "tag", "role"]) assert.equal(flow.resetDependents(a, key).custom, undefined, key);
+  assert.equal(flow.resetDependents(a, "role").external, undefined);
+  // A listen-only repeater observer has no scopes at all.
+  assert.equal(flow.resetDependents({ type: "observer", repeat: "listen", custom: "qcny2" }, "repeat").custom, undefined);
+  assert.equal(flow.resetDependents({ type: "observer", repeat: "both", custom: "qcny2" }, "repeat").custom, "qcny2");
+  // Other answers leave it be.
+  assert.equal(flow.resetDependents(a, "type").custom, "qcny2");
+  assert.equal(flow.resetDependents(a, "board").custom, "qcny2");
+});
+
+test("a custom scope travels in the share link as custom=<tag>, and a bad one is dropped", () => {
+  const a = { type: "repeater", board: "esp32", status: "new", tag: "ytr", province: "on", role: "city", external: ["ontario-new-york"], custom: "qcny2", name: "Belleville_R1" };
+  const q = flow.toQuery(a);
+  assert.match(q, /(?:^|&)custom=qcny2(?:&|$)/);
+  assert.deepEqual(flow.fromQuery(q), a);
+  assert.deepEqual(flow.fromQuery("custom=a-b-9"), { custom: "a-b-9" });
+  // Written links never hold an empty (ticked but not typed) or invalid one.
+  for (const bad of ["", "bad name", "QCNY2", "x".repeat(30), "québec", undefined, null, 7]) assert.doesNotMatch(flow.toQuery({ role: "city", custom: bad }), /custom/, String(bad));
+  // Read links are cleaned the way typing is, then judged by the same rule.
+  assert.deepEqual(flow.fromQuery("custom=QCNY2"), { custom: "qcny2" });
+  assert.deepEqual(flow.fromQuery("custom=%20qcny2%20"), { custom: "qcny2" });
+  for (const bad of ["custom=", "custom=bad%20name", "custom=" + "x".repeat(30), "custom=qu%C3%A9bec", "custom=%3Cb%3E", "custom=a,b", "custom=*"]) {
+    assert.deepEqual(flow.fromQuery(bad), {}, bad);
+  }
+});

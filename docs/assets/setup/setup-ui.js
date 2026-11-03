@@ -26,6 +26,7 @@
   // Site links, relative to the page so each language keeps its own pages.
   var LINKS = {
     guide: "../config/guide/",
+    idea: "../submit-idea/",
     map: "../config/map/",
     mounting: "../hardware/repeater-mounting-options/",
     flasher: "https://flasher.meshcore.io/",
@@ -175,7 +176,9 @@
 
   function canContinue(id) {
     if (!Flow.isComplete(id, state.answers)) return false;
-    if (id === "town" || id === "commands") return !!state.data;
+    if (id === "town") return !!state.data;
+    // A list too long for the repeater has no commands to move on from.
+    if (id === "commands") return !!state.data && Commands.fits(state.answers, state.data);
     if (id === "radio") return radioOptions().some(function (option) { return option.id === state.answers.radio; });
     return true;
   }
@@ -192,12 +195,14 @@
     var next = Object.assign({}, before);
     next[key] = value;
     next = Flow.resetDependents(next, key);
-    // Shared cross-border labels (onny) suit city and edge repeaters alike, so a role change keeps them.
+    // Shared cross-border labels (onny, qcny) suit city and edge repeaters alike, so a role change keeps them.
+    // So does a scope the person agreed with a network across the border.
     if (key === "role" && Array.isArray(before.external)) {
       var shared = Place.crossBorder(before.province).shared;
       var kept = before.external.filter(function (id) { return shared.indexOf(id) !== -1; });
       if (kept.length) next.external = kept;
     }
+    if (key === "role" && before.custom !== undefined) next.custom = before.custom;
     if (CLEARS_OLDER.indexOf(key) !== -1) state.olderFirmware = false;
     setAnswers(next);
     return true;
@@ -395,7 +400,7 @@
   }
 
   // The element to give focus back to after a screen is drawn again.
-  var FOCUS_KEYS = ["data-setup-choice", "data-setup-help", "data-setup-neighbour", "data-setup-external", "data-done", "data-copy"];
+  var FOCUS_KEYS = ["data-setup-choice", "data-setup-help", "data-setup-neighbour", "data-setup-external", "data-setup-custom-toggle", "data-done", "data-copy"];
 
   function focusSelector(element) {
     if (!element || !state.frame.panel.contains(element)) return null;
@@ -770,10 +775,10 @@
       answerChoice("role", "city", "city", t("role.city"), t("role.city.detail", { region: region })),
       answerChoice("role", "edge", "edge", t("role.edge"), t("role.edge.detail", { region: region }))
     ]));
-    // A city repeater can carry a shared cross-border label; an edge repeater picks networks on the next screen.
-    var shared = Place.crossBorder(a.province).shared;
-    if (a.role === "city" && shared.length) {
-      body.appendChild(networkBoxes(shared, t("role.shared.question"), t("role.shared.hint")));
+    // A city repeater can carry a shared cross-border label, or one it agreed with a network across the
+    // border (offered in every province); an edge repeater picks networks on the next screen.
+    if (a.role === "city") {
+      body.appendChild(networkBoxes(Place.crossBorder(a.province).shared, t("role.shared.question"), t("role.shared.hint")));
     }
   }
 
@@ -795,7 +800,51 @@
         updateActions();
       }));
     });
+    set.appendChild(customBox());
+    set.appendChild(para(rich("custom.share", null, LINKS.idea), { class: "setup-hint", "data-setup-custom-share": "" }));
     return set;
+  }
+
+  // "Another scope we've agreed with a network across the border": a tick, and once it is ticked the
+  // name to type. A name is stored clean (trimmed, lower case); one the generator would refuse is shown
+  // with a plain message, and the Next button waits (see MeshCoreSetupFlow.isComplete).
+  function customBox() {
+    var ticked = state.answers.custom !== undefined;
+    var input = el("input", { type: "text", id: "setup-custom", class: "setup-input", "data-setup-custom": "", value: state.answers.custom || "",
+      autocomplete: "off", autocapitalize: "off", spellcheck: "false", "aria-describedby": "setup-custom-hint setup-custom-message" });
+    var message = el("div", { id: "setup-custom-message", class: "setup-message", "data-setup-custom-message": "", "aria-live": "polite" });
+    var field = el("div", { class: "setup-custom", "data-setup-custom-field": "", hidden: !ticked }, [
+      el("div", { class: "setup-field" }, [el("label", { for: "setup-custom", text: t("custom.name") }),
+        para(t("custom.hint"), { class: "setup-hint", id: "setup-custom-hint" }), input]),
+      message
+    ]);
+    // Says what is wrong once something is typed; an empty box needs no message, the hint says what to type.
+    function check() {
+      message.textContent = "";
+      if (Flow.customProblem(input.value) === "characters") message.appendChild(note("warn", t("custom.invalid")));
+    }
+    function store() {
+      var next = Object.assign({}, state.answers);
+      next.custom = Flow.cleanCustom(input.value);
+      setAnswers(next);
+      check();
+      updateActions();
+    }
+    input.addEventListener("input", store);
+    check();
+    var row = checkboxRow({}, t("custom.label"), ticked, function (checked) {
+      field.hidden = !checked;
+      if (checked) {
+        store();
+        input.focus();
+      } else {
+        var next = Object.assign({}, state.answers);
+        delete next.custom;
+        setAnswers(next);
+        updateActions();
+      }
+    }, { "data-setup-custom-toggle": "" });
+    return el("div", { class: "setup-custom-box" }, [row, field]);
   }
 
   function neighboursBody(body) {
@@ -835,8 +884,7 @@
     sync();
     body.appendChild(para(link(t("neighbours.meshmapper"), LINKS.meshmapper)));
     var networks = Place.crossBorder(a.province);
-    var all = networks.shared.concat(networks.edgeOnly);
-    if (all.length) body.appendChild(networkBoxes(all, t("crossborder.title"), t("crossborder.hint")));
+    body.appendChild(networkBoxes(networks.shared.concat(networks.edgeOnly), t("crossborder.title"), t("crossborder.hint")));
   }
 
   function nameBody(body) {
@@ -1151,6 +1199,7 @@
     state.scopes = null;
     if (!state.data) return loading(body);
     var a = state.answers;
+    if (!Commands.fits(a, state.data)) return body.appendChild(note("warn", t("commands.too-many"), { "data-setup-too-many": "" }));
     var phone = Flow.route(a) === "phone";
     if (phone) {
       body.appendChild(para(rich("commands.where.phone")));
@@ -1270,6 +1319,7 @@
   function checkBody(body) {
     if (!state.data) return loading(body);
     var a = state.answers;
+    if (!Commands.fits(a, state.data)) return body.appendChild(note("warn", t("commands.too-many"), { "data-setup-too-many": "" }));
     var phone = Flow.route(a) === "phone";
     body.appendChild(para(rich(phone ? "check.hint.phone" : "check.hint.console"), { class: "setup-hint" }));
     body.appendChild(el("ol", { class: "setup-commands" }, Commands.checks(a, state.data, lang).map(function (item) {

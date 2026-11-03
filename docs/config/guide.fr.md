@@ -647,9 +647,15 @@ propose des étiquettes de plus :
 - **Les réseaux américains voisins**, pour les répéteurs de bordure : l’Ouest de
   l’État de New York, la Pennsylvanie et l’Ohio depuis l’Ontario; Washington et
   l’Oregon depuis la Colombie-Britannique.
+- **Une autre portée convenue avec un réseau de l’autre côté de la frontière**,
+  pour tout répéteur, dans n’importe quelle province. Tapez le nom de la portée
+  exactement comme vous l’avez convenu ensemble (lettres minuscules, chiffres et
+  tirets).
 
 Cochez-en un seulement si ce répéteur est relié à ce réseau et que ses
 opérateurs sont d’accord. Dans le doute, laissez-les décochés.
+
+Vous utilisez une portée transfrontalière qui n’est pas dans la liste? [Partagez-la avec nous](../submit-idea.md) pour qu’on l’ajoute à l’outil.
 
 ### Encore trop de bruit?
 

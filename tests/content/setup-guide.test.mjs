@@ -182,6 +182,31 @@ test("the page answers the tool's questions in the tool's own words", () => {
   }
 });
 
+test("the cross-border section lists onny and qcny, the agreed-scope option, and the link to ask for more", () => {
+  const sectionOf = (source) => {
+    const flatSource = flat(source);
+    const start = flatSource.search(/\{ ?#cross-border-scopes ?\}/);
+    return flatSource.slice(start, flatSource.indexOf("###", start + 1));
+  };
+  const words = {
+    en: { exactly: "exactly as you both agreed it (lowercase letters, numbers and dashes)" },
+    fr: { exactly: "exactement comme vous l’avez convenu ensemble (lettres minuscules, chiffres et tirets)" },
+  };
+  for (const [lang, path] of Object.entries(pages)) {
+    const section = sectionOf(read(path));
+    assert.ok(section.length > 200, `${path} needs a cross-border section`);
+    assert.match(section, /`onny`/, path);
+    assert.match(section, /`qcny`/, path);
+    // The option is named as the tool's tick box names it, and says to type the name as agreed.
+    assert.ok(section.includes(text.t("custom.label", lang)), `${path} names the agreed-scope option as the tool does`);
+    assert.ok(section.includes(words[lang].exactly), `${path} says to type it exactly as agreed`);
+    // The same line the tool shows under the options, with the link written the way the docs link pages.
+    const feedback = text.t("custom.share", lang).replace("{link}", `[${text.t("custom.share.link", lang)}](../submit-idea.md)`);
+    assert.ok(section.includes(feedback), `${path} is missing: ${feedback}`);
+    assert.ok(existsSync(resolve(root, "docs/submit-idea.md")) && existsSync(resolve(root, "docs/submit-idea.fr.md")), "the idea page exists in both languages");
+  }
+});
+
 test("the board step asks what kind of board it is, with examples and a way to check, in both languages", () => {
   const words = {
     en: {

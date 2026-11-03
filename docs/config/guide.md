@@ -602,9 +602,14 @@ offers extra labels:
   Québec.
 - **Nearby US networks**, for edge repeaters: Western New York, Pennsylvania and
   Ohio from Ontario; Washington and Oregon from British Columbia.
+- **Another scope we've agreed with a network across the border**, for any
+  repeater in any province. Type the scope name exactly as you both agreed it
+  (lowercase letters, numbers and dashes).
 
 Only tick one if this repeater links with that network and its operators have
 agreed. Not sure? Leave them off.
+
+Using a cross-border scope that isn't listed? [Share it with us](../submit-idea.md) so it can be added to the tool.
 
 ### Still too noisy?
 

@@ -1391,3 +1391,208 @@ for (const lang of LANGS) {
     await expect(step(page)).not.toContainText("Flash!");
   });
 }
+
+// ------------------------------------------------------------------ cross-border box: listed networks and an agreed scope
+
+// One city in each province or territory, from the region catalogue.
+const PROVINCE_CITIES = { bc: "yka", ab: "yeg", sk: "yxe", mb: "ywg", on: "ytr", qc: "yul", nb: "ysj", ns: "yhz", pe: "yyg", nl: "yyt", yt: "yxy", nt: "yzf", nu: "yfb" };
+// The networks the box lists beside the custom option, by province.
+const LISTED = {
+  city: { on: ["ontario-new-york"], qc: ["quebec-new-york"] },
+  edge: { on: ["ontario-new-york", "ohio", "pennsylvania", "western-new-york"], qc: ["quebec-new-york"], bc: ["oregon", "washington"] }
+};
+const crossBorderLink = (lang, province, role, extra = "") =>
+  `${ROUTES[lang]}?type=repeater&board=esp32&status=running&reflash=0&role=${role}&name=Test_R1&tag=${PROVINCE_CITIES[province]}&province=${province}${extra}`;
+const toggle = (page) => page.locator("[data-setup-custom-toggle]");
+const box = (page) => page.locator("fieldset", { has: toggle(page) });
+const customBox = (page) => page.locator("[data-setup-custom]");
+const customMessage = (page) => page.locator("[data-setup-custom-message]");
+
+for (const province of Object.keys(PROVINCE_CITIES)) {
+  test(`${province}: the cross-border box lists its networks and always offers an agreed scope, at phone width`, async ({ page }) => {
+    await page.setViewportSize({ width: 360, height: 740 });
+    // A city repeater sees the box on the city-or-edge screen.
+    await openLink(page, crossBorderLink("en", province, "city"), { to: "role" });
+    await expect(page.locator("[data-setup-external]")).toHaveCount((LISTED.city[province] || []).length);
+    for (const id of LISTED.city[province] || []) await expect(page.locator(`[data-setup-external="${id}"]`)).toBeVisible();
+    await expect(box(page).locator("> legend")).toHaveText(T("role.shared.question", "en"));
+    await expect(toggle(page)).toBeVisible();
+    await expect(page.locator("[data-setup-step] label.setup-check").filter({ has: toggle(page) })).toHaveText(T("custom.label", "en"));
+    await expect(toggle(page)).not.toBeChecked();
+    await expect(customBox(page)).toBeHidden();
+    await expect(page.locator("[data-setup-custom-share]")).toBeVisible();
+    await toggle(page).check();
+    await expect(customBox(page)).toBeVisible();
+    await expect(page.locator('label[for="setup-custom"]')).toHaveText(T("custom.name", "en"));
+    await expect(page.locator("#setup-custom-hint")).toHaveText(T("custom.hint", "en"));
+    await fitsTheScreen(page, `${province} city`);
+    // An edge repeater sees it on the neighbours screen, with the edge-only networks.
+    await openLink(page, crossBorderLink("en", province, "edge"), { to: "neighbours" });
+    await expect(page.locator("[data-setup-external]")).toHaveCount((LISTED.edge[province] || []).length);
+    await expect(box(page).locator("> legend")).toHaveText(T("crossborder.title", "en"));
+    await expect(toggle(page)).toBeVisible();
+    await toggle(page).check();
+    await expect(customBox(page)).toBeVisible();
+    await fitsTheScreen(page, `${province} edge`);
+  });
+}
+
+for (const lang of LANGS) {
+  test(`${lang} a city repeater can carry a scope agreed with a network across the border`, async ({ page }) => {
+    await openLink(page, `${ROUTES[lang]}?type=repeater&board=esp32&status=running&reflash=0&role=city&name=Test_R1&${BELLEVILLE}`, { to: "role" });
+    await expect(toggle(page)).not.toBeChecked();
+    await expect(customBox(page)).toBeHidden();
+    // Nothing is asked unless it is ticked.
+    await expect(nextButton(page)).toBeEnabled();
+    await toggle(page).check();
+    await expect(customBox(page)).toBeVisible();
+    await expect(customBox(page)).toBeFocused();
+    await expect(page.locator('label[for="setup-custom"]')).toHaveText(T("custom.name", lang));
+    await expect(page.locator("#setup-custom-hint")).toHaveText(T("custom.hint", lang));
+    // Ticked but still empty: Next waits, and nothing is shouted at someone who hasn't typed yet.
+    await expect(nextButton(page)).toBeDisabled();
+    await expect(customMessage(page)).toHaveText("");
+    // Anything the generator would refuse gets a plain message and keeps Next off.
+    for (const bad of ["two words", "qcx_2", "québec", "x".repeat(30), "#qcx2"]) {
+      await customBox(page).fill(bad);
+      await expect(customMessage(page)).toHaveText(T("custom.invalid", lang));
+      await expect(nextButton(page)).toBeDisabled();
+      expect(page.url()).not.toContain("custom=");
+    }
+    await customBox(page).fill("two words");
+    // The box itself, with its message showing, has no serious accessibility problem (the site's own page furniture is checked elsewhere).
+    const found = await new AxeBuilder({ page }).include("[data-setup-step]").withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]).analyze();
+    expect(found.violations.filter((violation) => ["serious", "critical"].includes(violation.impact)).map((violation) => violation.id), `${lang} agreed scope box`).toEqual([]);
+    // Spaces round it and capitals are fixed for you.
+    await customBox(page).fill("  QcX2 ");
+    await expect(customMessage(page)).toHaveText("");
+    await expect(nextButton(page)).toBeEnabled();
+    expect(page.url()).toContain("custom=qcx2");
+    await next(page);
+    await nextUntil(page, "commands");
+    expect(await commandLines(page)).toContain("region def ytr|* on|* onqc|* can|* na|* qcx2");
+    // The generator's confirm note, and the explanation that names it, in the page's language.
+    await expect(page.locator("[data-setup-notes]")).toContainText(T("note.network", lang, { network: "qcx2" }));
+    await expect(page.locator('[data-setup-command="def"] .setup-command__why')).toContainText(T("tag.custom", lang, { tag: "qcx2" }));
+    // It is still there on the way back, in the box.
+    await page.locator("[data-setup-back]").click();
+    await page.locator("[data-setup-back]").click();
+    await expectStep(page, "role");
+    await expect(toggle(page)).toBeChecked();
+    await expect(customBox(page)).toHaveValue("qcx2");
+    // Unticking drops it from the lines and the link, and Next is free again.
+    await toggle(page).uncheck();
+    await expect(customBox(page)).toBeHidden();
+    await expect(nextButton(page)).toBeEnabled();
+    expect(page.url()).not.toContain("custom=");
+    await next(page);
+    await nextUntil(page, "commands");
+    expect(await commandLines(page)).toContain("region def ytr|* on|* onqc|* can|* na");
+    await expect(page.locator("[data-setup-notes]")).not.toContainText("qcx2");
+  });
+}
+
+test("a custom scope that is already in the list adds nothing, and a bad one in a link is dropped", async ({ page }) => {
+  await openLink(page, `/config/?type=repeater&board=esp32&status=running&reflash=0&role=city&name=Test_R1&custom=on&${BELLEVILLE}`, { to: "role" });
+  await expect(toggle(page)).toBeChecked();
+  await expect(customBox(page)).toHaveValue("on");
+  await next(page);
+  await nextUntil(page, "commands");
+  expect(await commandLines(page)).toContain("region def ytr|* on|* onqc|* can|* na");
+  // Names the generator would refuse never make it out of the link: the box starts unticked.
+  for (const bad of ["bad%20name", "QU%C3%89BEC", "x".repeat(30), ""]) {
+    await openLink(page, `/config/?type=repeater&board=esp32&status=running&reflash=0&role=city&name=Test_R1&custom=${bad}&${BELLEVILLE}`, { to: "role" });
+    await expect(toggle(page)).not.toBeChecked();
+    await expect(nextButton(page)).toBeEnabled();
+  }
+  // Capitals in a link are lowered, as they are when typed.
+  await openLink(page, `/config/?type=repeater&board=esp32&status=running&reflash=0&role=city&name=Test_R1&custom=QCX2&${BELLEVILLE}`, { to: "role" });
+  await expect(customBox(page)).toHaveValue("qcx2");
+});
+
+test("an agreed scope follows a role change and goes when the region changes", async ({ page }) => {
+  await mockGeocoder(page);
+  await openLink(page, `/config/?type=repeater&board=esp32&status=running&reflash=0&role=city&name=Test_R1&custom=qcx2&${BELLEVILLE}`, { to: "role" });
+  await expect(customBox(page)).toHaveValue("qcx2");
+  // City to edge: the scope stays, and the edge screen shows it already ticked.
+  await choose(page, "edge");
+  expect(page.url()).toContain("custom=qcx2");
+  await next(page);
+  await expectStep(page, "neighbours");
+  await expect(toggle(page)).toBeChecked();
+  await expect(customBox(page)).toHaveValue("qcx2");
+  await page.locator('[data-setup-neighbour="ygk"] input').check();
+  await next(page);
+  await nextUntil(page, "commands");
+  const edge = await commandLines(page);
+  expect(edge).toContain("region def ytr|* ygk|* on|* onqc|* can|* na|* qcx2");
+  expect(edge).toContain("region denyf *");
+  // A ticked but empty box on the edge screen holds its own Next, and does not trap the city-or-edge screen.
+  await page.locator("[data-setup-back]").click();
+  await page.locator("[data-setup-back]").click();
+  await expectStep(page, "neighbours");
+  await customBox(page).fill("");
+  await expect(nextButton(page)).toBeDisabled();
+  await page.locator("[data-setup-back]").click();
+  await expectStep(page, "role");
+  await expect(nextButton(page)).toBeEnabled();
+  // Edge to city: it stays too.
+  await choose(page, "city");
+  await expect(toggle(page)).toBeChecked();
+  await customBox(page).fill("qcx2");
+  expect(page.url()).toContain("custom=qcx2");
+  // A different region starts the cross-border choices again.
+  await page.locator("[data-setup-back]").click();
+  await expectStep(page, "town");
+  await searchTown(page, "Kingston");
+  await expect(page.locator("[data-setup-region]")).toContainText("ygk");
+  expect(page.url()).not.toContain("custom=");
+  await next(page);
+  await expectStep(page, "role");
+  await choose(page, "city");
+  await expect(toggle(page)).not.toBeChecked();
+});
+
+for (const lang of LANGS) {
+  test(`${lang} the cross-border box links to the idea page, which opens`, async ({ page }) => {
+    await openLink(page, `${ROUTES[lang]}?type=repeater&board=esp32&status=running&reflash=0&role=city&name=Test_R1&${BELLEVILLE}`, { to: "role" });
+    const line = page.locator("[data-setup-custom-share]");
+    await expect(line).toHaveText(linked("custom.share", lang));
+    const anchor = line.locator("a");
+    await expect(anchor).toHaveText(`${T("custom.share.link", lang)} ${T("link.new-tab", lang)}`);
+    await expect(anchor).toHaveAttribute("target", "_blank");
+    // Relative, so each language keeps its own page.
+    await expect(anchor).toHaveAttribute("href", "../submit-idea/");
+    const href = await anchor.evaluate((a) => a.href);
+    expect(new URL(href).pathname).toBe(lang === "fr" ? "/fr/submit-idea/" : "/submit-idea/");
+    const reply = await page.request.get(href);
+    expect(reply.ok()).toBe(true);
+    expect(await reply.text()).toContain(lang === "fr" ? "Partager une idée" : "Share an idea");
+    // The edge screen shows the same line.
+    await openLink(page, `${ROUTES[lang]}?type=repeater&board=esp32&status=running&reflash=0&role=edge&name=Test_R1&${BELLEVILLE}`, { to: "neighbours" });
+    await expect(page.locator("[data-setup-custom-share] a")).toHaveAttribute("href", "../submit-idea/");
+  });
+}
+
+test("too many scopes for one repeater is said plainly, with no commands and no way forward", async ({ page }) => {
+  // Every choice the tool offers fits today, so give the catalogue three more long reserved scopes to leave no room.
+  await page.route("**/assets/regions/iata-regions.json*", async (route) => {
+    const response = await route.fetch();
+    const catalog = await response.json();
+    catalog.policy.reservedScopes.push("a".repeat(29), "b".repeat(29), "c".repeat(29));
+    await route.fulfill({ response, json: catalog });
+  });
+  const long = "x".repeat(29);
+  await openLink(page, `/config/?type=repeater&board=esp32&status=running&reflash=0&role=city&name=Test_R1&custom=${long}&${BELLEVILLE}`);
+  await expect(page.locator("[data-setup-too-many]")).toHaveText(T("commands.too-many", "en"));
+  await expect(codes(page)).toHaveCount(0);
+  await expect(nextButton(page)).toBeDisabled();
+  // Back and untick it, and the commands come back.
+  await page.locator("[data-setup-back]").click();
+  await page.locator("[data-setup-back]").click();
+  await expectStep(page, "role");
+  await toggle(page).uncheck();
+  await next(page);
+  await nextUntil(page, "commands");
+  expect(await commandLines(page)).toContain("region def ytr|* on|* onqc|* can|* na|* " + "a".repeat(29) + "|* " + "b".repeat(29) + "|* " + "c".repeat(29));
+});

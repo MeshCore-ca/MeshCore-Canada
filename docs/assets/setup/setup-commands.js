@@ -57,6 +57,7 @@
     var edge = scoped && a.role === "edge";
     var offered = place.crossBorder(a.province);
     var networks = scoped ? offered.shared.concat(edge ? offered.edgeOnly : []) : [];
+    var external = Array.isArray(a.external) ? a.external.filter(function (id) { return networks.indexOf(id) !== -1; }) : [];
     var radio = null;
     if (route === "flash") {
       var chosen = steps.indexOf("radio") !== -1 && options.some(function (option) { return option.id === a.radio; });
@@ -74,23 +75,58 @@
       cities: edge && Array.isArray(a.neighbours) ? a.neighbours.filter(function (tag) {
         return typeof tag === "string" && tag !== a.tag && has(hierarchy, tag) && hierarchy[tag].kind === "city";
       }) : [],
-      external: Array.isArray(a.external) ? a.external.filter(function (id) { return networks.indexOf(id) !== -1; }) : []
+      external: external,
+      custom: customScope(a, scoped, external, data)
     };
   }
 
+  // A scope typed in by hand, agreed with a network across the border: the clean tag, or null when
+  // there is none, it isn't valid, there are no scopes at all (a listen-only repeater observer), or a
+  // ticked network already carries it under a parent (adding it flat would clash with that).
+  function customScope(answers, scoped, external, data) {
+    if (!scoped || !lib("MeshCoreSetupFlow").isCustom(answers.custom)) return null;
+    var paths = data.catalog.externalRegionPaths || {};
+    var carried = external.some(function (id) { return has(paths, id) && paths[id].path.indexOf(answers.custom) !== -1; });
+    return carried ? null : answers.custom;
+  }
+
+  var CUSTOM_PREFIX = "custom:";
+
+  // The catalogue as the generator reads it, with a typed-in scope added as one more flat, shared,
+  // unconfirmed cross-border entry, so the generator builds its lines and its "confirm" note.
+  function catalogFor(s, data) {
+    if (!s.custom) return data.catalog;
+    var paths = Object.assign({}, data.catalog.externalRegionPaths);
+    paths[CUSTOM_PREFIX + s.custom] = {
+      label: s.custom,
+      path: [s.custom],
+      sharedScope: true,
+      geographic: false,
+      automatic: false,
+      authority: { status: "proposed" }
+    };
+    return Object.assign({}, data.catalog, { externalRegionPaths: paths });
+  }
+
   function scopeProfile(s, data) {
-    return lib("MeshCoreIataScopes").profile(data.catalog, {
+    return lib("MeshCoreIataScopes").profile(catalogFor(s, data), {
       activation: "activate",
       home: s.answers.tag,
       province: s.answers.province,
       bridge: s.edge,
       cities: s.cities,
-      external: s.external
+      external: s.custom ? s.external.concat(CUSTOM_PREFIX + s.custom) : s.external
     });
   }
 
-  // "Quinte West (ytr)", "Amérique du Nord (na)", "États-Unis (us)"
-  function tagName(tag, data, lang) {
+  // "Quinte West (ytr)", "Amérique du Nord (na)", "États-Unis (us)". A typed-in scope that nothing
+  // else names is shown as "qcx2 (agreed with a neighbouring network)".
+  function tagName(tag, data, lang, custom) {
+    var name = knownName(tag, data, lang);
+    return tag === custom && name === tag ? say("tag.custom", lang, { tag: tag }) : name;
+  }
+
+  function knownName(tag, data, lang) {
     var catalog = data.catalog;
     var label = null;
     if (has(catalog.hierarchy, tag)) {
@@ -160,21 +196,21 @@
     });
   }
 
-  function scopeItem(line, lines, result, data, lang) {
+  function scopeItem(line, lines, result, s, data, lang) {
     var match;
     if (/^region def /.test(line)) {
-      var names = result.tags.map(function (tag) { return tagName(tag, data, lang); });
+      var names = result.tags.map(function (tag) { return tagName(tag, data, lang, s.custom); });
       return item("def", line, say("why.def", lang, { list: list(names, lang) }));
     }
     if ((match = /^region put (\S+)(?: \S+)?$/.exec(line))) {
       // Firmware 1.14 adds a region with forwarding off, and allows it on the next line.
       var separate = lines.indexOf("region allowf " + match[1]) !== -1;
-      return item("put-" + match[1], line, say(separate ? "why.put-add" : "why.put", lang, { name: tagName(match[1], data, lang) }));
+      return item("put-" + match[1], line, say(separate ? "why.put-add" : "why.put", lang, { name: tagName(match[1], data, lang, s.custom) }));
     }
     if (line === "region allowf *") return item("allow", line, say("why.allow", lang));
     if (line === "region denyf *") return item("deny", line, say("why.deny", lang));
     if ((match = /^region allowf (\S+)$/.exec(line))) {
-      return item("allowf-" + match[1], line, say("why.allowf", lang, { name: tagName(match[1], data, lang) }));
+      return item("allowf-" + match[1], line, say("why.allowf", lang, { name: tagName(match[1], data, lang, s.custom) }));
     }
     if ((match = /^region default (\S+)$/.exec(line))) return item("default", line, say("why.default", lang, { tag: match[1] }));
     throw new Error("No explanation for the scope command: " + line);
@@ -193,7 +229,7 @@
     }
     var result = scopeProfile(s, data);
     var lines = lib("MeshCoreIataScopes").commands(result, s.firmware);
-    lines.forEach(function (line) { out.push(scopeItem(line, lines, result, data, lang)); });
+    lines.forEach(function (line) { out.push(scopeItem(line, lines, result, s, data, lang)); });
     // As in MeshCoreScopeMigration.plan: an old home region (^) that is removed gets replaced.
     // Every old name except * is removed here, so any home other than * needs this.
     if (old && old.home && old.home !== "*") {
@@ -255,6 +291,20 @@
       if (record.status !== "documented") out.push(say("note.network", lang, { network: name }));
     });
     return out;
+  }
+
+  // Whether the generator can write the scope lines for these answers. It refuses a list too long for
+  // the repeater to show back (32 regions, or 160 bytes of `region` reply), which a typed-in scope can
+  // tip over. The screens ask first and say so in plain words, instead of running into the error.
+  function fits(answers, data) {
+    var s = situation(answers, data);
+    if (!s.scoped) return true;
+    try {
+      lib("MeshCoreIataScopes").commands(scopeProfile(s, data), s.firmware || "1.16");
+      return true;
+    } catch (error) {
+      return false;
+    }
   }
 
   // The read-only "Check it worked" list.
@@ -340,6 +390,7 @@
     rollup: rollup,
     checks: checks,
     notes: notes,
+    fits: fits,
     regionRemovals: regionRemovals
   };
 }());

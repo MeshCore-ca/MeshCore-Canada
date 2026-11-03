@@ -450,3 +450,103 @@ test("flash steps use each flasher's own button names", () => {
   }
   assert.throws(() => text.t("flash.step3", "en"));
 });
+
+// A scope agreed with a network across the border, typed by hand (answers.custom). It is handed to the
+// generator as one more flat, shared scope; this file never builds a `region def` itself.
+
+const scopeLines = (answers, lang = "en") => flat(cmds.rollup(answers, data, lang)).filter((line) => line.startsWith("region"));
+const defLine = (answers) => scopeLines(answers).find((line) => line.startsWith("region def"));
+
+test("a custom scope comes from the generator, for a city repeater and for an edge repeater", () => {
+  assert.deepEqual(scopeLines({ ...belleville, custom: "qcx2" }), ["region def ytr|* on|* onqc|* can|* na|* qcx2", "region allowf *", "region default ytr", "region save"]);
+  const edge = scopeLines({ ...belleville, role: "edge", neighbours: ["ygk"], custom: "qcx2" });
+  assert.deepEqual(edge, ["region def ytr|* ygk|* on|* onqc|* can|* na|* qcx2", "region denyf *", "region default ytr", "region save"]);
+  // Next to a listed network, the custom scope goes last.
+  assert.equal(defLine({ ...belleville, external: ["ontario-new-york"], custom: "qcx2" }), "region def ytr|* on|* onqc|* can|* na|* onny|* qcx2");
+  assert.equal(defLine({ ...belleville, role: "edge", neighbours: ["ygk"], external: ["western-new-york"], custom: "qcx2" }),
+    "region def ytr|* ygk|* on|* onqc|* can|* na|* us us-ny|* qcx2");
+  // Any province, not only the ones with listed networks.
+  const halifax = { ...belleville, tag: "yhz", province: "ns", place: { name: "Halifax", lat: 44.65, lon: -63.58 } };
+  assert.match(defLine({ ...halifax, custom: "nsme" }), /^region def yhz\|\* ns\|\* can\|\* na\|\* nsme$/);
+  // The older firmware's one-line-per-region form carries it too, and the final checks list it.
+  const old = { ...belleville, status: "running", reflash: false, firmware: "1.14", custom: "qcx2" };
+  assert.ok(scopeLines(old).includes("region put qcx2") && scopeLines(old).includes("region allowf qcx2"));
+  assert.match(cmds.checks({ ...belleville, custom: "qcx2" }, data, "en").find((c) => c.id === "region").expect, /\bqcx2\b/);
+});
+
+test("without a custom scope, or with one that is not a clean valid tag, nothing is added", () => {
+  const plain = defLine(belleville);
+  assert.equal(plain, "region def ytr|* on|* onqc|* can|* na");
+  for (const custom of [undefined, "", "QCX2", " qcx2", "two words", "x".repeat(30), "québec", "*", null, 7, ["qcx2"], { tag: "qcx2" }]) {
+    assert.equal(defLine({ ...belleville, custom }), plain, JSON.stringify(custom));
+  }
+  // A listen-only repeater observer has no scopes, so a hand-edited link can't give it one.
+  const listen = flat(cmds.rollup({ ...observer, repeat: "listen", role: undefined, custom: "qcx2" }, data, "en"));
+  assert.ok(!listen.some((line) => line.startsWith("region") || line.includes("qcx2")));
+  assert.deepEqual(cmds.notes({ ...observer, repeat: "listen", role: undefined, custom: "qcx2" }, data, "en"), []);
+});
+
+test("a custom scope that is already in the list is not added twice", () => {
+  // The generator keeps one of each tag.
+  assert.equal(defLine({ ...belleville, custom: "on" }), "region def ytr|* on|* onqc|* can|* na");
+  assert.equal(defLine({ ...belleville, custom: "ytr" }), "region def ytr|* on|* onqc|* can|* na");
+  assert.equal(defLine({ ...belleville, custom: "na" }), "region def ytr|* on|* onqc|* can|* na");
+  assert.equal(defLine({ ...belleville, role: "edge", neighbours: ["ygk"], custom: "ygk" }), "region def ytr|* ygk|* on|* onqc|* can|* na");
+  assert.equal(defLine({ ...belleville, external: ["ontario-new-york"], custom: "onny" }), "region def ytr|* on|* onqc|* can|* na|* onny");
+  // A tag another ticked network already carries under a parent would clash with the plain one: it is left out.
+  assert.equal(defLine({ ...belleville, role: "edge", neighbours: ["ygk"], external: ["western-new-york"], custom: "us-ny" }),
+    "region def ytr|* ygk|* on|* onqc|* can|* na|* us us-ny");
+  assert.equal(defLine({ ...belleville, role: "edge", neighbours: ["ygk"], external: ["western-new-york"], custom: "us" }),
+    "region def ytr|* ygk|* on|* onqc|* can|* na|* us us-ny");
+  // On its own, the same tag is just another flat scope.
+  assert.equal(defLine({ ...belleville, custom: "us-ny" }), "region def ytr|* on|* onqc|* can|* na|* us-ny");
+});
+
+test("the explanation names a custom scope in each language, and only when nothing else names it", () => {
+  const why = (answers, lang, id = "def") => cmds.rollup(answers, data, lang).flatMap((g) => g.items).find((i) => i.id === id).why;
+  assert.equal(why({ ...belleville, custom: "qcx2" }, "en"),
+    "Pass on messages labelled for Quinte West (ytr), Ontario (on), Ontario + Québec (onqc), Canada (can), North America (na) and qcx2 (agreed with a neighbouring network).");
+  assert.equal(why({ ...belleville, custom: "qcx2" }, "fr"),
+    "Relaie les messages qui portent une de ces étiquettes : Quinte West (ytr), Ontario (on), Ontario + Québec (onqc), Canada (can), Amérique du Nord (na) et qcx2 (convenue avec un réseau voisin).");
+  assert.equal(text.t("tag.custom", "en", { tag: "qcx2" }), "qcx2 (agreed with a neighbouring network)");
+  assert.equal(text.t("tag.custom", "fr", { tag: "qcx2" }), "qcx2 (convenue avec un réseau voisin)");
+  // A tag the tool already knows keeps its usual name.
+  assert.doesNotMatch(why({ ...belleville, custom: "on" }, "en"), /agreed with/);
+  assert.doesNotMatch(why({ ...belleville, custom: "ygk" }, "en"), /agreed with/);
+  assert.doesNotMatch(why({ ...belleville, external: ["ontario-new-york"], custom: "onny" }, "fr"), /convenue/);
+  // The one-line-per-region explanations name it the same way.
+  const old = { ...belleville, status: "running", reflash: false, firmware: "1.15", custom: "qcx2" };
+  assert.equal(why(old, "en", "put-qcx2"), "Pass on messages labelled for qcx2 (agreed with a neighbouring network).");
+  assert.equal(why({ ...old, firmware: "1.14" }, "fr", "put-qcx2"), "Ajoute qcx2 (convenue avec un réseau voisin) à sa liste de régions. Il ne relaie pas ces messages avant sa ligne `region allowf`.");
+  assert.equal(why({ ...old, firmware: "1.14" }, "en", "allowf-qcx2"), "Pass on messages labelled for qcx2 (agreed with a neighbouring network).");
+});
+
+test("the generator's confirm note applies to a custom scope, in both languages", () => {
+  const note = (custom, lang) => cmds.notes({ ...belleville, custom }, data, lang);
+  assert.deepEqual(note(undefined, "en"), []);
+  assert.deepEqual(note("qcx2", "en"), ["Confirm these labels with the operators across the border before you use them: qcx2."]);
+  assert.deepEqual(note("qcx2", "fr"), ["Confirmez ces étiquettes avec les opérateurs de l’autre côté de la frontière avant de les utiliser : qcx2."]);
+  // Beside a listed network the note names both.
+  const both = cmds.notes({ ...belleville, external: ["ontario-new-york"], custom: "qcx2" }, data, "en");
+  assert.equal(both.length, 2);
+  assert.match(both[0], /Ontario–New York/);
+  assert.match(both[1], /qcx2/);
+  // An edge repeater too, and in a province with no listed network.
+  assert.equal(cmds.notes({ ...belleville, role: "edge", neighbours: ["ygk"], custom: "qcx2" }, data, "en").length, 1);
+});
+
+test("a list too long for the repeater to show back is reported, not thrown, when a custom scope tips it over", () => {
+  assert.equal(cmds.fits(belleville, data), true);
+  assert.equal(cmds.fits({ ...belleville, custom: "x".repeat(29) }, data), true);
+  assert.equal(cmds.fits({ ...belleville, role: "edge", neighbours: ["ygk"], external: ["western-new-york"], custom: "qcx2" }, data), true);
+  // The tool's own choices all fit today, so shrink the room: three more 29-letter reserved scopes.
+  const crowded = structuredClone(data);
+  crowded.catalog.policy.reservedScopes.push("a".repeat(29), "b".repeat(29), "c".repeat(29));
+  assert.equal(cmds.fits(belleville, crowded), true);
+  assert.equal(cmds.fits({ ...belleville, custom: "x".repeat(29) }, crowded), false);
+  assert.equal(cmds.fits({ ...belleville, custom: "qcx2" }, crowded), true);
+  // A listen-only repeater observer has no scopes to fit.
+  assert.equal(cmds.fits({ ...observer, repeat: "listen", role: undefined, custom: "x".repeat(29) }, crowded), true);
+  // The generator itself refuses it, which is what the screen must not run into.
+  assert.throws(() => cmds.rollup({ ...belleville, custom: "x".repeat(29) }, crowded, "en"), /Too many scopes/);
+});
