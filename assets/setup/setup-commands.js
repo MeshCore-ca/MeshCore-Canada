@@ -65,6 +65,7 @@
     return {
       answers: a,
       route: route,
+      firmware: lib("MeshCoreSetupFlow").firmwareFor(a),
       observer: a.type === "observer",
       scoped: scoped,
       edge: edge,
@@ -151,7 +152,7 @@
   };
 
   function canada(s, lang) {
-    return lib("MeshCoreIataScopes").standardCommands(s.answers.firmware).map(function (line) {
+    return lib("MeshCoreIataScopes").standardCommands(s.firmware).map(function (line) {
       var setting = /^set (\S+) /.exec(line);
       var id = setting && has(STANDARD, setting[1]) ? STANDARD[setting[1]] : null;
       if (!id) throw new Error("No explanation for the setting: " + line);
@@ -191,7 +192,7 @@
       });
     }
     var result = scopeProfile(s, data);
-    var lines = lib("MeshCoreIataScopes").commands(result, s.answers.firmware);
+    var lines = lib("MeshCoreIataScopes").commands(result, s.firmware);
     lines.forEach(function (line) { out.push(scopeItem(line, lines, result, data, lang)); });
     // As in MeshCoreScopeMigration.plan: an old home region (^) that is removed gets replaced.
     // Every old name except * is removed here, so any home other than * needs this.
