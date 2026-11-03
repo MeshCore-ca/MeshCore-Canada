@@ -29,6 +29,10 @@
 
   var TAG_RE = /^[a-z0-9-]{2,12}$/;      // region and province codes
   var ID_RE = /^[a-z0-9-]{2,32}$/;       // radio profiles, neighbouring regions, cross-border networks
+  // A scope agreed with a network across the border, typed by hand. The same rule as the region
+  // generator's own check of a scope name (MeshCoreIataScopes budget), so what is accepted here is
+  // never refused there.
+  var CUSTOM_RE = /^[a-z0-9-]{1,29}$/;
   // The firmware's own rule for `set name <rest of line>`: it refuses only these characters
   // (CommonCLI isValidName), and keeps at most 31 bytes in its 32-byte name field, so an
   // accented letter (2 bytes in UTF-8) counts as two. Control characters are refused here too.
@@ -55,6 +59,24 @@
     if (new TextEncoder().encode(name).length > MAX_NAME) return "long";
     return null;
   }
+
+  // A custom scope as typed: spaces round it are dropped and capitals become lower case.
+  function cleanCustom(text) { return typeof text === "string" ? text.trim().toLowerCase() : ""; }
+
+  // What is wrong with a custom scope: "empty" or "characters" (anything the generator would refuse,
+  // such as a space, an accent or more than 29 characters). null when it will do.
+  function customProblem(value) {
+    var tag = cleanCustom(value);
+    if (!tag) return "empty";
+    return CUSTOM_RE.test(tag) ? null : "characters";
+  }
+
+  // A custom scope as it is stored: already clean, and one the generator takes.
+  function isCustom(value) { return typeof value === "string" && value === cleanCustom(value) && CUSTOM_RE.test(value); }
+
+  // Whether a ticked custom scope is fine. No custom answer is fine too; an empty one is the box ticked
+  // before anything is typed, which holds the step back.
+  function customReady(answers) { return answers.custom === undefined || isCustom(answers.custom); }
 
   // A name as it is stored: already trimmed, and one the firmware takes.
   function isName(value) { return typeof value === "string" && value === cleanName(value) && nameProblem(value) === null; }
@@ -120,9 +142,10 @@
       case "version": return oneOf(VERSIONS, a.firmware);
       case "town": return isText(a.tag, TAG_RE) && isText(a.province, TAG_RE);
       case "radio": return isText(a.radio, ID_RE);
-      case "role": return oneOf(ROLES, a.role);
+      // A city repeater picks its cross-border scope on this screen; an edge repeater does on the neighbours screen.
+      case "role": return oneOf(ROLES, a.role) && (a.role !== "city" || customReady(a));
       // An empty list is a deliberate "none"; the screen sets it when the person says so.
-      case "neighbours": return Array.isArray(a.neighbours);
+      case "neighbours": return Array.isArray(a.neighbours) && customReady(a);
       case "name": return isName(a.name);
       // These two screens hold no answers. The screen decides when to move on.
       case "commands":
@@ -205,9 +228,9 @@
     status: ["reflash", "observerFirmware", "bootloader", "flashed", "firmware", "regionReply", "name"],
     reflash: ["bootloader", "flashed", "firmware"],
     observerFirmware: ["flashed", "firmware"],
-    place: ["tag", "province", "radio", "neighbours", "external", "name"],
-    tag: ["radio", "neighbours", "external"],
-    role: ["neighbours", "external"]
+    place: ["tag", "province", "radio", "neighbours", "external", "custom", "name"],
+    tag: ["radio", "neighbours", "external", "custom"],
+    role: ["neighbours", "external", "custom"]
   };
 
   function resetDependents(answers, changedKey) {
@@ -220,6 +243,7 @@
       delete next.role;
       delete next.neighbours;
       delete next.external;
+      delete next.custom;
     }
     // A repeater observer is ESP32 only, so an nRF52 board can't stay selected.
     if (next.type === "observer" && chip(next) === "nrf52") delete next.board;
@@ -301,6 +325,13 @@
     }
   };
 
+  // A scope agreed with a network across the border. Only a clean, valid one is written or read.
+  var customField = {
+    key: "custom",
+    write: function (value) { return isCustom(value) ? value : null; },
+    read: function (text) { text = cleanCustom(text); return CUSTOM_RE.test(text) ? text : undefined; }
+  };
+
   var FIELDS = [
     enumField("type", TYPES),
     enumField("repeat", REPEAT),
@@ -314,6 +345,7 @@
     enumField("role", ROLES),
     listField("neighbours"),
     listField("external"),
+    customField,
     { key: "name",
       write: function (value) { return isName(value) ? encodeURIComponent(value) : null; },
       read: function (text) { text = cleanName(text); return isName(text) ? text : undefined; } },
@@ -407,6 +439,9 @@
     parseCoordinates: parseCoordinates,
     looksLikeCoordinates: looksLikeCoordinates,
     cleanName: cleanName,
+    cleanCustom: cleanCustom,
+    customProblem: customProblem,
+    isCustom: isCustom,
     nameProblem: nameProblem,
     resetDependents: resetDependents,
     suggestName: suggestName,
