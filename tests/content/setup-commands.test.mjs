@@ -387,9 +387,12 @@ test("the firmware question is four choices, with the same version labels in bot
   assert.equal(text.t("version.older", "fr"), "Plus ancienne que 1.14");
   assert.equal(text.t("version.1.16.detail", "en"), "Sets the whole region list with one line.");
   assert.equal(text.t("version.1.15.detail", "en"), "Adds one region per line.");
+  // The only thing under "Older than 1.14" is the button; the card already says to update first.
+  assert.equal(text.t("version.update", "en"), "Update its firmware now");
+  assert.equal(text.t("version.update", "fr"), "Mettre à jour son micrologiciel maintenant");
   // The words for typing in a `ver` reply are gone.
   for (const key of ["version.how.console", "version.how.phone", "version.label", "version.placeholder", "version.found", "version.unreadable",
-    "version.v1.14", "version.v1.15", "version.v1.16", "version.phone.step4", "phone.img.ver"]) {
+    "version.v1.14", "version.v1.15", "version.v1.16", "version.phone.step4", "phone.img.ver", "version.too-old"]) {
     assert.ok(!text.keys().includes(key), key);
   }
 });

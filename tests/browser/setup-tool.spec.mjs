@@ -806,8 +806,10 @@ test("Older than 1.14 blocks Next and offers the update, which removes the quest
     await expectStep(page, "version");
     await choose(page, "older");
     await expect(page.locator('[data-setup-choice="older"]')).toHaveAttribute("aria-pressed", "true");
-    await expect(step(page).locator(".setup-note--warn")).toContainText(T("version.too-old", "en"));
-    await expect(page.locator("[data-setup-update]")).toHaveText(T("version.update", "en"));
+    // The card says to update first; under the choices there is only the button, and no second warning.
+    await expect(page.locator('[data-setup-card="older"]')).toContainText(T("version.older.detail", "en"));
+    await expect(step(page).locator(".setup-note")).toHaveCount(0);
+    await expect(page.locator("[data-setup-update]")).toHaveText("Update its firmware now");
     await expect(nextButton(page)).toBeDisabled();
     expect(new URL(page.url()).searchParams.has("firmware")).toBe(false);
     // Picking a supported version takes the note away; picking Older again brings it back.
@@ -1040,8 +1042,10 @@ test("region data loads only when the town step needs it", async ({ page }) => {
   await answer(page, "type", "repeater");
   await answer(page, "board", "esp32");
   await answer(page, "status", "new");
-  await confirmStep(page, "flash");
+  // The flash screen is the last one before the town step, so the data still hasn't been asked for.
+  await expectStep(page, "flash");
   expect(boundaries).toEqual([]);
+  await confirmStep(page, "flash");
   await town(page, "Belleville", "ytr");
   expect(boundaries.length).toBe(1);
 });

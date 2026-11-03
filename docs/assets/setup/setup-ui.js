@@ -730,9 +730,9 @@
       });
     })));
     body.appendChild(para(rich("version.hint"), { class: "setup-hint" }));
+    // The card already says to update first, so all that is left is the way to do it.
     if (state.olderFirmware) {
-      body.appendChild(note("warn", [para(t("version.too-old")),
-        el("button", { type: "button", class: "setup-button setup-button--small", "data-setup-update": "", on: { click: updateFirst } }, t("version.update"))]));
+      body.appendChild(para(el("button", { type: "button", class: "setup-button setup-button--small", "data-setup-update": "", on: { click: updateFirst } }, t("version.update"))));
     }
   }
 

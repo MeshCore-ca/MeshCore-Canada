@@ -157,8 +157,7 @@
     "version.older": "Older than 1.14",
     "version.older.detail": "Region settings don't work: update the firmware first.",
     "version.hint": "Not sure? In the app's Command Line, send `ver`. The reply starts with the version, like v1.15.0.",
-    "version.too-old": "This firmware is too old: region settings need version 1.14 or newer. Update it first, then come back.",
-    "version.update": "Update the firmware",
+    "version.update": "Update its firmware now",
 
     // Where will it be installed?
     "town.question": "Where will it be installed?",
@@ -494,8 +493,7 @@
     "version.older": "Plus ancienne que 1.14",
     "version.older.detail": "Les réglages de région ne fonctionnent pas : mettez d’abord le micrologiciel à jour.",
     "version.hint": "Pas sûr? Dans la Command Line de l’application, envoyez `ver`. La réponse commence par la version, par exemple v1.15.0.",
-    "version.too-old": "Ce micrologiciel est trop ancien : les réglages de région exigent la version 1.14 ou plus récente. Mettez-le d’abord à jour, puis revenez.",
-    "version.update": "Mettre le micrologiciel à jour",
+    "version.update": "Mettre à jour son micrologiciel maintenant",
 
     // Where will it be installed?
     "town.question": "Où sera-t-il installé?",

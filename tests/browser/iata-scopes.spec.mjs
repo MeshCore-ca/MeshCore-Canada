@@ -46,8 +46,7 @@ for (const locale of ["", "fr/"]) {
     await page.goto(siteRoute(phoneLink("yow", "on", { lang })));
     await expectStep(page, "version");
     await choose(page, "older");
-    await expect(step(page)).toContainText(T("version.too-old", lang));
-    await expect(page.locator("[data-setup-update]")).toBeVisible();
+    await expect(page.locator("[data-setup-update]")).toHaveText(T("version.update", lang));
     await expect(nextButton(page)).toBeDisabled();
     await expect(codes(page)).toHaveCount(0);
   });
