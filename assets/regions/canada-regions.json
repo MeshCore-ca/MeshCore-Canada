@@ -3,7 +3,7 @@
   "version": "meshmapper-iata-2026-11-01-starters-2026-11-01",
   "policy": {
     "schema": "meshcore-canada-iata-policy/v1",
-    "proposal": "https://meshcore.ca/proposals/onqc-scopes/",
+    "proposal": "https://meshcore.ca/config/guide/",
     "scopeModel": "flat",
     "meshScopes": {
       "onqc": [
@@ -33,7 +33,7 @@
         "authority": {
           "status": "proposed",
           "source": "MeshCore Canada cross-border scope discussion",
-          "sourceUrl": "https://meshcore.ca/proposals/onqc-scopes/#cross-border-scopes"
+          "sourceUrl": "https://meshcore.ca/config/guide/#cross-border-scopes"
         }
       }
     },
@@ -384,7 +384,7 @@
     "starterCount": 27,
     "boundarySchema": "meshcore-canada-iata-boundaries/v2",
     "planningExtensionCount": 35,
-    "boundarySha256": "2eccd43330c31ea7a0bc5edd01b7bd67cb49c2e89c322e1aa1e387b84afb7785",
+    "boundarySha256": "452e5545efee8a448d8694d41e521302fa1cc8bf3fcb2be32f39820335801840",
     "meshmapperBoundarySha256": "fa91863cb97392614524a7f058b89f18b6a0b71e51d94979baf134e2921dcab2",
     "jurisdictionSha256": "753d7ad13f089cdeee54cb29c9105706226fa75228193c4eda2d4ecc5ed78349"
   },
@@ -1036,67 +1036,67 @@
   "status": {
     "can": {
       "state": "reserved",
-      "source": "https://meshcore.ca/proposals/onqc-scopes/"
+      "source": "https://meshcore.ca/config/guide/"
     },
     "na": {
       "state": "reserved",
-      "source": "https://meshcore.ca/proposals/onqc-scopes/"
+      "source": "https://meshcore.ca/config/guide/"
     },
     "bc": {
       "state": "scope",
-      "source": "https://meshcore.ca/proposals/onqc-scopes/"
+      "source": "https://meshcore.ca/config/guide/"
     },
     "ab": {
       "state": "scope",
-      "source": "https://meshcore.ca/proposals/onqc-scopes/"
+      "source": "https://meshcore.ca/config/guide/"
     },
     "sk": {
       "state": "scope",
-      "source": "https://meshcore.ca/proposals/onqc-scopes/"
+      "source": "https://meshcore.ca/config/guide/"
     },
     "mb": {
       "state": "scope",
-      "source": "https://meshcore.ca/proposals/onqc-scopes/"
+      "source": "https://meshcore.ca/config/guide/"
     },
     "on": {
       "state": "scope",
-      "source": "https://meshcore.ca/proposals/onqc-scopes/"
+      "source": "https://meshcore.ca/config/guide/"
     },
     "qc": {
       "state": "scope",
-      "source": "https://meshcore.ca/proposals/onqc-scopes/"
+      "source": "https://meshcore.ca/config/guide/"
     },
     "nb": {
       "state": "scope",
-      "source": "https://meshcore.ca/proposals/onqc-scopes/"
+      "source": "https://meshcore.ca/config/guide/"
     },
     "ns": {
       "state": "scope",
-      "source": "https://meshcore.ca/proposals/onqc-scopes/"
+      "source": "https://meshcore.ca/config/guide/"
     },
     "pe": {
       "state": "scope",
-      "source": "https://meshcore.ca/proposals/onqc-scopes/"
+      "source": "https://meshcore.ca/config/guide/"
     },
     "nl": {
       "state": "scope",
-      "source": "https://meshcore.ca/proposals/onqc-scopes/"
+      "source": "https://meshcore.ca/config/guide/"
     },
     "yt": {
       "state": "scope",
-      "source": "https://meshcore.ca/proposals/onqc-scopes/"
+      "source": "https://meshcore.ca/config/guide/"
     },
     "nt": {
       "state": "scope",
-      "source": "https://meshcore.ca/proposals/onqc-scopes/"
+      "source": "https://meshcore.ca/config/guide/"
     },
     "nu": {
       "state": "scope",
-      "source": "https://meshcore.ca/proposals/onqc-scopes/"
+      "source": "https://meshcore.ca/config/guide/"
     },
     "onqc": {
       "state": "pilot",
-      "source": "https://meshcore.ca/proposals/onqc-scopes/"
+      "source": "https://meshcore.ca/config/guide/"
     },
     "xcm": {
       "state": "published",
@@ -4294,7 +4294,7 @@
       "authority": {
         "status": "proposed",
         "source": "MeshCore Canada cross-border scope discussion",
-        "sourceUrl": "https://meshcore.ca/proposals/onqc-scopes/#cross-border-scopes"
+        "sourceUrl": "https://meshcore.ca/config/guide/#cross-border-scopes"
       }
     }
   }

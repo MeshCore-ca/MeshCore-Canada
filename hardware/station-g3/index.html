@@ -2386,41 +2386,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../../meshcore/flash-repeater/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Flash a repeater
-  
-
-    
-  </span>
-  
-  
-    
-  
-  
-    <span class="md-status md-status--draft"></span>
-  
-
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../../meshcore/flash-room-server/" class="md-nav__link">
         
   
@@ -2600,7 +2565,7 @@
   <span class="md-ellipsis">
     
   
-    Configure a repeater
+    Set up a repeater
   
 
     
@@ -2636,6 +2601,41 @@
     
   
     Find your region
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--verified"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../config/guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How repeaters work
   
 
     
@@ -2781,10 +2781,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_7" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_8" >
         
           
-          <label class="md-nav__link" for="__nav_4_7" id="__nav_4_7_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4_8" id="__nav_4_8_label" tabindex="0">
             
   
   
@@ -2802,8 +2802,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_7_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_7">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_8">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -2960,41 +2960,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../../analyzer/builds/mqtt-firmware/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    MQTT firmware
-  
-
-    
-  </span>
-  
-  
-    
-  
-  
-    <span class="md-status md-status--draft"></span>
-  
-
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../../analyzer/builds/pymc/" class="md-nav__link">
         
   
@@ -3051,10 +3016,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_8" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_9" >
         
           
-          <label class="md-nav__link" for="__nav_4_8" id="__nav_4_8_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4_9" id="__nav_4_9_label" tabindex="0">
             
   
   
@@ -3072,8 +3037,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_8_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_8">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_9">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -3850,7 +3815,7 @@
 <p>The G3 can put out several watts. 30 dBm is 1 W at the antenna port, before cable loss and antenna gain. Antenna gain adds to the radiated power, so check <a href="../../resources/links/#radio-and-regulatory-references">current ISED rules</a> against your full setup.</p>
 </div>
 <ul>
-<li>Flash a Station G3 build. For a repeater, choose <strong>UnitEng/BQ Voyage Station G3</strong> in the <a href="../../meshcore/flash-repeater/">MeshCore flasher</a>. For an observer, choose <strong>Station G3 (ESP32)</strong> on the <a href="../../analyzer/builds/mqtt-firmware/">MQTT observer flasher</a>. Use a <strong>(2nd RF slot)</strong> build only if the LoRa card is in the second RF slot, which is not the default.</li>
+<li>Flash a Station G3 build. Open the <a href="../../config/">repeater setup tool</a> and choose <strong>My board isn't listed</strong> (ESP32) when it asks for the board. When you reach the flasher, choose <strong>UnitEng/BQ Voyage Station G3</strong> for a repeater, or <strong>Station G3 (ESP32)</strong> in the observer flasher for a <a href="../../config/?type=observer">repeater observer</a>. Use a <strong>(2nd RF slot)</strong> build only if the LoRa card is in the second RF slot, which is not the default.</li>
 <li>Have a data USB-C cable for the MCU board so you can use the console.</li>
 </ul>
 <h2 id="how-the-power-levels-work">How the power levels work<a class="headerlink" href="#how-the-power-levels-work" title="Permanent link">&para;</a></h2>
@@ -4012,8 +3977,8 @@ get tx
 <h2 id="finish-the-setup">Finish the setup<a class="headerlink" href="#finish-the-setup" title="Permanent link">&para;</a></h2>
 <p>The G3-specific settings are done. Continue with the setup for this node's role:</p>
 <ul>
-<li><strong>Repeater:</strong> <a href="../../meshcore/flash-repeater/#configure-the-repeater">Configure the repeater</a>, then <a href="../../config/">set up its regions</a>.</li>
-<li><strong>Observer:</strong> <a href="../../analyzer/builds/mqtt-firmware/#set-up">Build a standalone MQTT observer</a> to add Wi-Fi, your location code, and the MQTT presets.</li>
+<li><strong>Repeater:</strong> <a href="../../config/">Set up a repeater</a> to configure it and its regions.</li>
+<li><strong>Repeater observer:</strong> <a href="../../config/?type=observer">Set up a repeater observer</a> to add Wi-Fi, your location code, and the MQTT presets.</li>
 </ul>
 <h2 id="sources">Sources<a class="headerlink" href="#sources" title="Permanent link">&para;</a></h2>
 <ul>
@@ -4137,7 +4102,7 @@ get tx
   
       <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
-        <script src="../../assets/javascripts/region-profile.js?v=20260926-1"></script>
+        <script src="../../assets/javascripts/region-profile.js?v=20261102-5"></script>
       
         <script src="../../assets/javascripts/i18n-runtime.js?v=20260829-1"></script>
       

@@ -2194,41 +2194,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../flash-repeater/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Flash a repeater
-  
-
-    
-  </span>
-  
-  
-    
-  
-  
-    <span class="md-status md-status--draft"></span>
-  
-
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../flash-room-server/" class="md-nav__link">
         
   
@@ -2408,7 +2373,7 @@
   <span class="md-ellipsis">
     
   
-    Configure a repeater
+    Set up a repeater
   
 
     
@@ -2444,6 +2409,41 @@
     
   
     Find your region
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--verified"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../config/guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How repeaters work
   
 
     
@@ -2589,10 +2589,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_7" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_8" >
         
           
-          <label class="md-nav__link" for="__nav_4_7" id="__nav_4_7_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4_8" id="__nav_4_8_label" tabindex="0">
             
   
   
@@ -2610,8 +2610,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_7_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_7">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_8">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -2768,41 +2768,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../../analyzer/builds/mqtt-firmware/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    MQTT firmware
-  
-
-    
-  </span>
-  
-  
-    
-  
-  
-    <span class="md-status md-status--draft"></span>
-  
-
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../../analyzer/builds/pymc/" class="md-nav__link">
         
   
@@ -2859,10 +2824,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_8" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_9" >
         
           
-          <label class="md-nav__link" for="__nav_4_8" id="__nav_4_8_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4_9" id="__nav_4_9_label" tabindex="0">
             
   
   
@@ -2880,8 +2845,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_8_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_8">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_9">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -3568,7 +3533,7 @@
 <ol>
 <li>Confirm with the local region operator that the repeater must remain in 1-byte mode and that a new ID is required.</li>
 <li>Connect to the repeater and record its current public key with <code>get public.key</code>.</li>
-<li>Over a trusted serial connection, back up the current private key with <code>get prv.key</code> and store it as a secret in a secure location.</li>
+<li>Over a trusted serial connection, or from the MeshCore app's Command Line after logging in to the repeater as admin, back up the current private key with <code>get prv.key</code> and store it as a secret in a secure location.</li>
 <li>Confirm the proposed 2–6 character ID is unused in the local region's coordination record.</li>
 </ol>
 <p>Never post or transmit either private key through an issue, screenshot, public chat, or log. The saved old private key is the rollback path.</p>
@@ -3595,7 +3560,7 @@
 <p>After reboot, run <code>get public.key</code> and confirm its prefix matches the locally approved ID. Recheck admin access, radio settings, region configuration, adverts, and local routing before returning the repeater to service.</p>
 <p>If verification fails, restore the backed-up old private key with <code>set prv.key &lt;OLD-PRIVATE-KEY&gt;</code>, reboot, and confirm the original public key and access are restored.</p>
 <h2 id="recovery">Recovery<a class="headerlink" href="#recovery" title="Permanent link">&para;</a></h2>
-<p>If admin access, the public-key prefix, adverts, region configuration, or routing is wrong, keep the repeater on the bench. Restore the backed-up old private key over the trusted serial connection, reboot, and confirm the complete former state before returning it to service.</p>
+<p>If admin access, the public-key prefix, adverts, region configuration, or routing is wrong, keep the repeater on the bench. Restore the backed-up old private key over the trusted serial connection, or from the MeshCore app's Command Line if you can still log in to the repeater as admin, reboot, and confirm the complete former state before returning it to service.</p>
 <h2 id="record-the-change">Record the change<a class="headerlink" href="#record-the-change" title="Permanent link">&para;</a></h2>
 <p>Record the locally approved ID, operator approval, old/new public-key prefixes, verification, and rollback location without recording either private key in the public maintenance record.</p>
 <h2 id="verification-limits">Verification limits<a class="headerlink" href="#verification-limits" title="Permanent link">&para;</a></h2>
@@ -3716,7 +3681,7 @@
   
       <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
-        <script src="../../assets/javascripts/region-profile.js?v=20260926-1"></script>
+        <script src="../../assets/javascripts/region-profile.js?v=20261102-5"></script>
       
         <script src="../../assets/javascripts/i18n-runtime.js?v=20260829-1"></script>
       

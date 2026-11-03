@@ -43,12 +43,12 @@
       href: "../builds/mctomqtt/"
     },
     "wifi-board": {
-      title: tr("Use standalone MQTT firmware", "Utiliser un micrologiciel MQTT autonome"),
+      title: tr("Set up a repeater observer", "Configurer un répéteur observateur"),
       description: tr(
-        "A supported Wi-Fi LoRa board can listen and publish without a separate computer.",
-        "Une carte LoRa Wi-Fi compatible peut écouter et publier sans ordinateur distinct."
+        "A supported Wi-Fi LoRa board can listen and publish without a separate computer. The setup tool walks you through flashing it and gives you every command.",
+        "Une carte LoRa Wi-Fi compatible peut écouter et publier sans ordinateur distinct. L’outil de configuration vous guide pour la programmer et vous donne chaque commande."
       ),
-      href: "../builds/mqtt-firmware/"
+      href: "../../config/?type=observer"
     }
   };
 

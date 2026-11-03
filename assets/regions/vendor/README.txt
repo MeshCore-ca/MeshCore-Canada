@@ -15,6 +15,6 @@ UMD distribution from npm.
 
 - `lucide.js`: `8c6fb02591ab1afdf712fa06bc9ac41124f48a729cd07aa1b6eec705f7f92f34`
 
-The region tools embed only their 17 SVG icons in regions.js. They no longer
+The region tools embed only their 5 SVG icons in regions.js. They no longer
 download the full Lucide library. The original bundle is retained as the
 reference for the icon consistency test; see lucide-LICENSE for its notices.

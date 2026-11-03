@@ -2194,41 +2194,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../flash-repeater/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Installer le micrologiciel d'un répéteur
-  
-
-    
-  </span>
-  
-  
-    
-  
-  
-    <span class="md-status md-status--draft"></span>
-  
-
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../flash-room-server/" class="md-nav__link">
         
   
@@ -2471,6 +2436,41 @@
   
   
     <li class="md-nav__item">
+      <a href="../../config/guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Comprendre les répéteurs
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--verified"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../analyzer/intro/" class="md-nav__link">
         
   
@@ -2589,10 +2589,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_7" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_8" >
         
           
-          <label class="md-nav__link" for="__nav_4_7" id="__nav_4_7_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4_8" id="__nav_4_8_label" tabindex="0">
             
   
   
@@ -2610,8 +2610,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_7_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_7">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_8">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -2768,41 +2768,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../../analyzer/builds/mqtt-firmware/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Micrologiciel MQTT
-  
-
-    
-  </span>
-  
-  
-    
-  
-  
-    <span class="md-status md-status--draft"></span>
-  
-
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../../analyzer/builds/pymc/" class="md-nav__link">
         
   
@@ -2859,10 +2824,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_8" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_9" >
         
           
-          <label class="md-nav__link" for="__nav_4_8" id="__nav_4_8_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4_9" id="__nav_4_9_label" tabindex="0">
             
   
   
@@ -2880,8 +2845,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_8_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_8">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_9">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -3568,7 +3533,7 @@
 <ol>
 <li>Confirmez auprès de la personne responsable de la région que le répéteur doit rester en mode 1 octet et qu’un nouvel identifiant est nécessaire.</li>
 <li>Connectez-vous au répéteur et notez sa clé publique actuelle avec <code>get public.key</code>.</li>
-<li>À l’aide d’une connexion série fiable, sauvegardez la clé privée actuelle avec <code>get prv.key</code>, puis conservez-la comme secret dans un endroit sécurisé.</li>
+<li>À l’aide d’une connexion série fiable, ou dans la Command Line de l’application MeshCore après vous être connecté au répéteur comme administrateur, sauvegardez la clé privée actuelle avec <code>get prv.key</code>, puis conservez-la comme secret dans un endroit sécurisé.</li>
 <li>Confirmez que l’identifiant proposé de 2 à 6 caractères n’est pas déjà utilisé dans le registre de coordination de la région.</li>
 </ol>
 <p>Ne publiez et ne transmettez jamais une clé privée dans un billet, une capture d’écran, une discussion publique ou un journal. La clé privée précédente que vous avez sauvegardée est votre seul moyen de revenir en arrière.</p>
@@ -3595,7 +3560,7 @@
 <p>Après le redémarrage, exécutez <code>get public.key</code> et confirmez que son préfixe correspond à l’identifiant approuvé localement. Vérifiez de nouveau l’accès administrateur, les réglages radio, la configuration de la région, les annonces et l’acheminement local avant de remettre le répéteur en service.</p>
 <p>Si la vérification échoue, restaurez l’ancienne clé privée sauvegardée avec <code>set prv.key &lt;OLD-PRIVATE-KEY&gt;</code>, redémarrez l’appareil, puis confirmez que la clé publique et les accès d’origine sont rétablis.</p>
 <h2 id="recuperation">Récupération<a class="headerlink" href="#recuperation" title="Permanent link">&para;</a></h2>
-<p>Si l’accès administrateur, le préfixe de la clé publique, les annonces, la configuration de la région ou l’acheminement sont incorrects, gardez le répéteur sur l’établi. Restaurez l’ancienne clé privée sauvegardée au moyen de la connexion série fiable, redémarrez l’appareil, puis confirmez que tout son état précédent est rétabli avant de le remettre en service.</p>
+<p>Si l’accès administrateur, le préfixe de la clé publique, les annonces, la configuration de la région ou l’acheminement sont incorrects, gardez le répéteur sur l’établi. Restaurez l’ancienne clé privée sauvegardée au moyen de la connexion série fiable, ou dans la Command Line de l’application MeshCore si vous pouvez encore vous connecter au répéteur comme administrateur, redémarrez l’appareil, puis confirmez que tout son état précédent est rétabli avant de le remettre en service.</p>
 <h2 id="consigner-le-changement">Consigner le changement<a class="headerlink" href="#consigner-le-changement" title="Permanent link">&para;</a></h2>
 <p>Consignez l’identifiant approuvé localement, l’approbation de la personne responsable, les anciens et nouveaux préfixes de clé publique, le résultat de la vérification et l’emplacement de la sauvegarde, sans inscrire aucune des clés privées dans le dossier d’entretien public.</p>
 <h2 id="limites-de-la-verification">Limites de la vérification<a class="headerlink" href="#limites-de-la-verification" title="Permanent link">&para;</a></h2>
@@ -3716,7 +3681,7 @@
   
       <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
-        <script src="../../../assets/javascripts/region-profile.js?v=20260926-1"></script>
+        <script src="../../../assets/javascripts/region-profile.js?v=20261102-5"></script>
       
         <script src="../../../assets/javascripts/i18n-runtime.js?v=20260829-1"></script>
       

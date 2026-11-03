@@ -2194,41 +2194,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../flash-repeater/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Flash a repeater
-  
-
-    
-  </span>
-  
-  
-    
-  
-  
-    <span class="md-status md-status--draft"></span>
-  
-
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../flash-room-server/" class="md-nav__link">
         
   
@@ -2408,7 +2373,7 @@
   <span class="md-ellipsis">
     
   
-    Configure a repeater
+    Set up a repeater
   
 
     
@@ -2444,6 +2409,41 @@
     
   
     Find your region
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--verified"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../config/guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How repeaters work
   
 
     
@@ -2589,10 +2589,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_7" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_8" >
         
           
-          <label class="md-nav__link" for="__nav_4_7" id="__nav_4_7_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4_8" id="__nav_4_8_label" tabindex="0">
             
   
   
@@ -2610,8 +2610,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_7_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_7">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_8">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -2768,41 +2768,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../../analyzer/builds/mqtt-firmware/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    MQTT firmware
-  
-
-    
-  </span>
-  
-  
-    
-  
-  
-    <span class="md-status md-status--draft"></span>
-  
-
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../../analyzer/builds/pymc/" class="md-nav__link">
         
   
@@ -2859,10 +2824,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_8" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_9" >
         
           
-          <label class="md-nav__link" for="__nav_4_8" id="__nav_4_8_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4_9" id="__nav_4_9_label" tabindex="0">
             
   
   
@@ -2880,8 +2845,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_8_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_8">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_9">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -3974,9 +3939,10 @@ for the Canadian radio settings and <strong>3-byte</strong> paths. See the
 <a href="../../provinces/#canada-baseline">preset details and older-app guidance</a>.</p>
 <p>The separate <strong>USA</strong> preset uses the same radio values but leaves the path-hash
 setting unchanged. <a href="https://github.com/meshcore-dev/MeshCore/issues/3302#issuecomment-5598886579">Upstream preset update</a>.</p>
-<p>The <a href="../../config/">repeater configurator</a> selects IATA regions and generates
-independent scope commands. Its radio and advert ID controls remain separate and
-keep current settings until you choose a change.</p>
+<p>The <a href="../../config/">setup tool</a> finds your repeater's region from its town
+and gives you every command to paste. It always sets 3-byte paths. When you flash
+the repeater, it also sets the Canada radio settings, or your local group's. When
+you send the commands from your phone, it leaves the radio settings as they are.</p>
 <h3 id="what-is-path-hash-mode">What is path hash mode?<a class="headerlink" href="#what-is-path-hash-mode" title="Permanent link">&para;</a></h3>
 <p>Paths record short repeater identifiers of 1, 2, or 3 bytes. On a repeater,
 <code>path.hash.mode</code> controls its own adverts; it does not restrict the path-hash
@@ -3985,7 +3951,7 @@ sizes it can forward. A companion’s setting controls the path size of its outg
 forward all three sizes; older repeaters drop packets using 2- or 3-byte paths.
 Follow your community’s settings while older repeaters are being upgraded.
 See the <a href="https://github.com/meshcore-dev/MeshCore/blob/main/docs/faq.md#39-q-what-is-multibyte-support-what-do-1-byte-2-byte-3-byte-adverts-and-messages-mean">upstream multibyte FAQ</a>.</p>
-<p><a href="../../config/standard/">Read the region standard</a>.</p>
+<p><a href="../../config/guide/#settings">How repeaters work</a> explains each repeater setting.</p>
 <h3 id="do-i-need-an-amateur-radio-licence">Do I need an amateur radio licence?<a class="headerlink" href="#do-i-need-an-amateur-radio-licence" title="Permanent link">&para;</a></h3>
 <p>MeshCore Canada cannot decide which authorization applies to your station.
 You are responsible for legal frequency, power, antenna, and operating choices
@@ -4022,7 +3988,8 @@ and maintainability matter more than screen features.</p>
 </ol>
 <h3 id="how-do-i-start-a-mesh-where-none-is-listed">How do I start a mesh where none is listed?<a class="headerlink" href="#how-do-i-start-a-mesh-where-none-is-listed" title="Permanent link">&para;</a></h3>
 <p>Begin with companions so people can test locally. Add fixed infrastructure only
-after checking placement, power, local coordination, and the region standard.</p>
+after checking placement, power, local coordination, and
+<a href="../../config/guide/#scopes-and-regions">how scopes and regions work</a>.</p>
 <p>When the group is ready, <a href="../../contributing/">add the community</a> so others can
 find its status, contact information, and any reviewed local settings.</p>
 <h2 id="observers-and-troubleshooting">Observers and troubleshooting<a class="headerlink" href="#observers-and-troubleshooting" title="Permanent link">&para;</a></h2>
@@ -4153,7 +4120,7 @@ before sharing screenshots or logs.</p>
   
       <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
-        <script src="../../assets/javascripts/region-profile.js?v=20260926-1"></script>
+        <script src="../../assets/javascripts/region-profile.js?v=20261102-5"></script>
       
         <script src="../../assets/javascripts/i18n-runtime.js?v=20260829-1"></script>
       

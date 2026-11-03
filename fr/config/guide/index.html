@@ -1,0 +1,5287 @@
+
+<!doctype html>
+<html lang="fr" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Ce que font les répéteurs et les répéteurs observateurs, comment les portées et les régions guident les messages, et ce que fait chaque commande.">
+      
+      
+      
+        <link rel="canonical" href="https://meshcore.ca/fr/config/guide/">
+      
+      
+        <link rel="prev" href="../map/">
+      
+      
+        <link rel="next" href="../../analyzer/intro/">
+      
+      
+        
+          
+        
+          
+        
+      
+      
+      <link rel="icon" href="../../../assets/MeshCore-Canada-Favicon.svg">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Comprendre les répéteurs - MeshCore Canada</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/styles/tokens.css?v=20260926-1">
+    
+      <link rel="stylesheet" href="../../../assets/styles/base.css?v=20261029-1">
+    
+      <link rel="stylesheet" href="../../../assets/styles/shell.css?v=20260821-1">
+    
+      <link rel="stylesheet" href="../../../assets/styles/components.css?v=20260926-1">
+    
+      <link rel="stylesheet" href="../../../assets/styles/network-status.css?v=20260905-1">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  
+  
+  
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="MeshCore Canada">
+    <meta property="og:title" content="Comprendre les répéteurs">
+    <meta property="og:description" content="Ce que font les répéteurs et les répéteurs observateurs, comment les portées et les régions guident les messages, et ce que fait chaque commande.">
+    <meta property="og:url" content="https://meshcore.ca/fr/config/guide/">
+    <meta property="og:image" content="https://meshcore.ca/assets/MeshCore-Canada-Logo.png">
+    <meta name="twitter:card" content="summary">
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "Comprendre les r\u00e9p\u00e9teurs",
+        "description": "Ce que font les r\u00e9p\u00e9teurs et les r\u00e9p\u00e9teurs observateurs, comment les port\u00e9es et les r\u00e9gions guident les messages, et ce que fait chaque commande.",
+        "url": "https://meshcore.ca/fr/config/guide/",
+        "isPartOf": {
+          "@type": "WebSite",
+          "name": "MeshCore Canada",
+          "url": "https://meshcore.ca/"
+        }
+      }
+    </script>
+    
+      <link rel="stylesheet" href="../../../assets/setup/scope-demo.css?v=20261102-1">
+    
+  
+
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#comprendre-les-repeteurs" class="md-skip">
+          Aller au contenu
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+        <aside class="md-banner">
+          <div class="md-banner__inner md-grid md-typeset">
+            
+            
+  
+
+          </div>
+          
+        </aside>
+      
+    </div>
+    
+    
+      
+
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="En-tête">
+    <a href="../../" title="MeshCore Canada" class="md-header__button md-logo" aria-label="MeshCore Canada" data-md-component="logo">
+      
+  <img src="../../../assets/MeshCore-Canada-Mark.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            MeshCore Canada
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Comprendre les répéteurs
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+<details class="mc-network" data-network-summary>
+  <summary aria-label="Statistiques du réseau">
+    <span class="mc-network__icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4.93 3.93A9.97 9.97 0 0 0 2 11c0 2.76 1.12 5.26 2.93 7.07l1.41-1.41A7.94 7.94 0 0 1 4 11c0-2.21.89-4.22 2.34-5.66zm14.14 0-1.41 1.41A7.96 7.96 0 0 1 20 11c0 2.22-.89 4.22-2.34 5.66l1.41 1.41A9.97 9.97 0 0 0 22 11c0-2.76-1.12-5.26-2.93-7.07M7.76 6.76A5.98 5.98 0 0 0 6 11c0 1.65.67 3.15 1.76 4.24l1.41-1.41A4 4 0 0 1 8 11c0-1.11.45-2.11 1.17-2.83zm8.48 0-1.41 1.41A4 4 0 0 1 16 11c0 1.11-.45 2.11-1.17 2.83l1.41 1.41A5.98 5.98 0 0 0 18 11c0-1.65-.67-3.15-1.76-4.24M12 9a2 2 0 0 0-2 2 2 2 0 0 0 2 2 2 2 0 0 0 2-2 2 2 0 0 0-2-2m-1 6v4h-1a1 1 0 0 0-1 1H2v2h7a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1h7v-2h-7a1 1 0 0 0-1-1h-1v-4z"/></svg></span>
+    <span class="mc-network__label">Réseau</span>
+    <span class="mc-network__total" data-network-total>—</span>
+  </summary>
+  <div class="mc-network__panel">
+    <p><strong>Appareils connus de Beacon</strong></p>
+    <dl>
+      <dt>Répéteurs</dt><dd data-network-count="repeaters">—</dd>
+      <dt>Compagnons</dt><dd data-network-count="companions">—</dd>
+      <dt>Serveurs de salon</dt><dd data-network-count="rooms">—</dd>
+      <dt>Capteurs</dt><dd data-network-count="sensors">—</dd>
+      <dt data-network-other hidden>Autres</dt><dd data-network-count="other" data-network-other hidden>—</dd>
+    </dl>
+    <p class="mc-network__period" data-network-period>Dernières 24 h</p>
+    <dl>
+      <dt>Observateurs actifs</dt><dd data-network-count="observers">—</dd>
+      <dt>Zones observées</dt><dd data-network-count="areas">—</dd>
+      <dt>Paquets</dt><dd data-network-count="packets">—</dd>
+    </dl>
+    <p class="mc-network__updated" data-network-updated role="status" aria-live="polite">Ouvrez Beacon pour les totaux actuels.</p>
+    <a href="https://dev.meshcore.ca/">Ouvrir Beacon ↗</a>
+  </div>
+</details>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Utiliser le thème clair"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Utiliser le thème clair" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="custom"  aria-label="Utiliser le thème sombre"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Utiliser le thème sombre" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      
+<div class="md-header__option">
+  <div class="md-select">
+    
+    
+    <button class="md-header__button md-icon" aria-label="Sélectionner la langue">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a
+              href="../../../config/guide/"
+              hreflang="en"
+              lang="en"
+              target="_self"
+              class="md-select__link"
+              
+            >
+              English
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a
+              href="./"
+              hreflang="fr"
+              lang="fr"
+              target="_self"
+              class="md-select__link"
+              aria-current="page"
+            >
+              Français
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Rechercher" placeholder="Rechercher" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Recherche">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Effacer" aria-label="Effacer" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initialisation de la recherche
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        
+<a href="https://github.com/MeshCore-ca/MeshCore-Canada" title="Aller au dépôt" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    MeshCore Canada
+    <span
+      class="mc-source__stars"
+      data-mc-repo-stars
+      
+        aria-label="19 étoiles GitHub"
+      
+    >
+      <span aria-hidden="true">★ <span data-mc-repo-star-count>19</span></span>
+    </span>
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Onglets" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../" class="md-tabs__link">
+          
+  
+  
+  Commencer
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../provinces/" class="md-tabs__link">
+          
+  
+  
+  Communautés
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../hardware/" class="md-tabs__link">
+          
+  
+  
+  Appareils et projets
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../tools/" class="md-tabs__link">
+          
+  
+  
+  Outils réseau
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../meshcore/general-overview/" class="md-tabs__link">
+          
+  
+  
+  Comprendre MeshCore
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../about/" class="md-tabs__link">
+          
+  
+  
+  Contribuer
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../" title="MeshCore Canada" class="md-nav__button md-logo" aria-label="MeshCore Canada" data-md-component="logo">
+      
+  <img src="../../../assets/MeshCore-Canada-Mark.svg" alt="logo">
+
+    </a>
+    MeshCore Canada
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/MeshCore-ca/MeshCore-Canada" title="Aller au dépôt" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    MeshCore Canada
+    <span
+      class="mc-source__stars"
+      data-mc-repo-stars
+      
+        aria-label="19 étoiles GitHub"
+      
+    >
+      <span aria-hidden="true">★ <span data-mc-repo-star-count>19</span></span>
+    </span>
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_1" id="__nav_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Commencer
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Commencer
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Bienvenue
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--verified"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../start/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Commencer
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--verified"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../start/choose-a-goal/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Choisir un type d'appareil
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--verified"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../start/companion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appareil compagnon
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--verified"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../start/repeater/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Répéteur
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--verified"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../start/room-server/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Serveur de salon
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--verified"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../start/observer/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Observateur
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--verified"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_1_8" id="__nav_1_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Terminer et obtenir de l'aide
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_1_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Terminer et obtenir de l'aide
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../start/verify/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vérifier votre configuration
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--verified"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../start/get-help/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Obtenir de l'aide
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--verified"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Communautés
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Communautés
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../provinces/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trouver une communauté
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ouest canadien
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Ouest canadien
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../provinces/british-columbia/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Colombie-Britannique
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../provinces/alberta/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Alberta
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../provinces/saskatchewan/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Saskatchewan
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../provinces/manitoba/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Manitoba
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Centre du Canada
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Centre du Canada
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../provinces/ontario/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ontario
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../provinces/quebec/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Québec
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_4" id="__nav_2_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Canada atlantique
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Canada atlantique
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../provinces/new-brunswick/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nouveau-Brunswick
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../provinces/nova-scotia/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nouvelle-Écosse
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../provinces/prince-edward-island/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Île-du-Prince-Édouard
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../provinces/newfoundland-and-labrador/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Terre-Neuve-et-Labrador
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../provinces/territories/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Territoires
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appareils et projets
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Appareils et projets
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../hardware/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Choisir du matériel
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../hardware/recommended-companions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Appareils compagnons
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../hardware/recommended-repeaters/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Répéteurs
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../hardware/station-g3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configurer une Station G3
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../hardware/recommended-antenna/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Antennes
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_6" id="__nav_3_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Répéteur solaire
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Répéteur solaire
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../hardware/repeater-solar-300mw-diy-build/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Monter un répéteur de 300 mW
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../hardware/repeater-solar-1w-diy-build/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Monter un répéteur de 1 W
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../hardware/wire-connector-types/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Types de connecteurs de fils
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_7" id="__nav_3_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Installer un répéteur
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Installer un répéteur
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../hardware/repeater-mounting-options/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Options de montage
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_8" id="__nav_3_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Micrologiciel
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Micrologiciel
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../meshcore/flash-companion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Installer le micrologiciel d'un compagnon
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../meshcore/flash-room-server/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Installer le micrologiciel d'un serveur de salon
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../meshcore/update-repeater-ota/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Mettre un répéteur à jour à distance
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--experimental"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Outils réseau
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Outils réseau
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../tools/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Choisir un outil réseau
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--verified"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configurer un répéteur
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--verified"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../map/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trouver votre région
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--verified"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Comprendre les répéteurs
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--verified"></span>
+  
+
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Comprendre les répéteurs
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--verified"></span>
+  
+
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table des matières">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table des matières
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-a-repeater-is" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ce qu’est un répéteur
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#repeater-observers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ce qu’est un répéteur observateur
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scopes-and-regions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Les portées et les régions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Les portées et les régions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#un-code-deux-noms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Un code, deux noms
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#quelle-est-ma-region" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quelle est ma région?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#les-cinq-etiquettes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Les cinq étiquettes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#comment-un-repeteur-decide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Comment un répéteur décide
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#qui-relaie-quoi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Qui relaie quoi
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scope-demo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Essayez : quelles villes une étiquette atteint-elle?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pourquoi-des-codes-daeroport" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pourquoi des codes d’aéroport?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lire-une-ligne-region-def" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lire une ligne region def
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#route-discovery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Comment les messages trouvent leur chemin d’une ville à l’autre
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ce que fait chaque réglage
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Ce que fait chaque réglage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#reglages-de-base" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Réglages de base
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reglages-de-meshcore-canada" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Réglages de MeshCore Canada
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#portees" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Portées
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#back-up" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sauvegarder un répéteur en service
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#old-regions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Retirer les anciennes régions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#older-firmware" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Micrologiciels plus anciens
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#repeteur-observateur" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Répéteur observateur
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pour-terminer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pour terminer
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#loop-detection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Détection des boucles
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#city-or-edge" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Répéteur de ville ou de bordure
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Répéteur de ville ou de bordure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pourquoi-cest-important" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pourquoi c’est important
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mon-repeteur-est-il-un-repeteur-de-bordure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mon répéteur est-il un répéteur de bordure?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cross-border-scopes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Étiquettes partagées avec les États-Unis
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#encore-trop-de-bruit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Encore trop de bruit?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#companions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Portées des appareils compagnons
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Portées des appareils compagnons">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#donner-une-portee-a-un-canal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Donner une portée à un canal
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bots-and-meshmapper" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Robots et MeshMapper
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#starter-regions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Régions initiales
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Régions initiales">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#planning-extensions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Extensions proposées
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sources
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../analyzer/intro/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configurer un observateur
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../analyzer/verify/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vérifier un observateur
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../analyzer/troubleshooting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dépanner les données du réseau
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_8" id="__nav_4_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Méthodes d'observation
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Méthodes d'observation
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../analyzer/data-collection-access/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Données d'observation et confidentialité
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../analyzer/remoteterm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    RemoteTerm
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../analyzer/builds/mctomqtt/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MCtoMQTT
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../analyzer/builds/meshcore-ha/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home Assistant
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../analyzer/builds/pymc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    PyMC
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_9" id="__nav_4_9_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Références
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Références
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../analyzer/broker-reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Référence des serveurs MQTT
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../analyzer/iata-codes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Codes d'emplacement
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Comprendre MeshCore
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Comprendre MeshCore
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../meshcore/general-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Comprendre MeshCore
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../meshcore/general-howto/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Utiliser MeshCore
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../meshcore/general-faq/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Foire aux questions
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--verified"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../resources/glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Glossaire
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--verified"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../resources/links/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Liens utiles
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--verified"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contribuer
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Contribuer
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../about/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    À propos de MeshCore Canada
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--verified"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contributing/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Façons de contribuer
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--verified"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../submit-idea/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Proposer une idée
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../privacy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Confidentialité du site
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table des matières">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table des matières
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#what-a-repeater-is" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ce qu’est un répéteur
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#repeater-observers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ce qu’est un répéteur observateur
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#scopes-and-regions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Les portées et les régions
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Les portées et les régions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#un-code-deux-noms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Un code, deux noms
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#quelle-est-ma-region" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quelle est ma région?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#les-cinq-etiquettes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Les cinq étiquettes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#comment-un-repeteur-decide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Comment un répéteur décide
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#qui-relaie-quoi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Qui relaie quoi
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#scope-demo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Essayez : quelles villes une étiquette atteint-elle?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pourquoi-des-codes-daeroport" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pourquoi des codes d’aéroport?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#lire-une-ligne-region-def" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Lire une ligne region def
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#route-discovery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Comment les messages trouvent leur chemin d’une ville à l’autre
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#settings" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ce que fait chaque réglage
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Ce que fait chaque réglage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#reglages-de-base" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Réglages de base
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reglages-de-meshcore-canada" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Réglages de MeshCore Canada
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#portees" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Portées
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#back-up" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sauvegarder un répéteur en service
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#old-regions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Retirer les anciennes régions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#older-firmware" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Micrologiciels plus anciens
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#repeteur-observateur" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Répéteur observateur
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pour-terminer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pour terminer
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#loop-detection" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Détection des boucles
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#city-or-edge" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Répéteur de ville ou de bordure
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Répéteur de ville ou de bordure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pourquoi-cest-important" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pourquoi c’est important
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mon-repeteur-est-il-un-repeteur-de-bordure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mon répéteur est-il un répéteur de bordure?
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cross-border-scopes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Étiquettes partagées avec les États-Unis
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#encore-trop-de-bruit" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Encore trop de bruit?
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#companions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Portées des appareils compagnons
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Portées des appareils compagnons">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#donner-une-portee-a-un-canal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Donner une portée à un canal
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bots-and-meshmapper" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Robots et MeshMapper
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#starter-regions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Régions initiales
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Régions initiales">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#planning-extensions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Extensions proposées
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sources
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+                
+
+
+
+  
+
+
+  <nav class="md-path" aria-label="Navigation" >
+    <ol class="md-path__list">
+      
+        
+  
+  
+    <li class="md-path__item">
+      <a href="../../" class="md-path__link">
+        
+  <span class="md-ellipsis">
+    Bienvenue
+  </span>
+
+      </a>
+    </li>
+  
+
+      
+      
+        
+  
+  
+    
+    
+      <li class="md-path__item">
+        <a href="../../tools/" class="md-path__link">
+          
+  <span class="md-ellipsis">
+    Outils réseau
+  </span>
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ol>
+  </nav>
+
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/MeshCore-ca/MeshCore-Canada/edit/main/docs/config/guide.fr.md" title="Editer cette page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+
+
+
+  
+  <h1 id="comprendre-les-repeteurs">Comprendre les répéteurs<a class="headerlink" href="#comprendre-les-repeteurs" title="Permanent link">&para;</a></h1>
+  
+  
+  
+  
+
+  
+
+  
+
+  
+<p>Cette page explique les idées derrière l’<a href="../">outil de configuration</a> : ce
+que fait un répéteur, comment les portées et les régions décident où vont les
+messages, et ce que fait chaque commande de la liste de l’outil. Pas besoin de
+la lire d’abord : l’outil pose une question à la fois et explique chaque
+commande au fur et à mesure.</p>
+<h2 id="what-a-repeater-is">Ce qu’est un répéteur<a class="headerlink" href="#what-a-repeater-is" title="Permanent link">&para;</a></h2>
+<p>Un répéteur relaie les messages pour qu’ils aillent plus loin.</p>
+<p>C’est une radio MeshCore qui reste allumée au même endroit, idéalement en
+hauteur, sur un toit ou un mât. Personne n’y discute directement. Pour discuter,
+on utilise un <strong>appareil compagnon</strong> : la petite radio jumelée à l’application
+MeshCore sur un téléphone ou un ordinateur. Quand un répéteur entend un message,
+il peut le relayer, pour qu’il joigne des gens trop loin pour entendre
+l’appareil compagnon. Chaque répéteur qui relaie un message compte pour un
+<strong>saut</strong>.</p>
+<p>Avant de relayer un message, un répéteur vérifie deux choses :</p>
+<ul>
+<li><strong>Le message porte-t-il l’étiquette d’un secteur qu’il dessert?</strong> C’est sa
+  liste de régions qui en décide. Voir <a href="#scopes-and-regions">Les portées et les régions</a>.</li>
+<li><strong>Le message est-il déjà allé trop loin?</strong> Après 16 sauts, plus aucun
+  répéteur ne le relaie.</li>
+</ul>
+<p>Tous les appareils des environs doivent utiliser les mêmes réglages radio, sinon
+ils ne s’entendent pas. La majeure partie du Canada utilise les réglages radio
+canadiens; certains groupes locaux ont les leurs.</p>
+<p>Pour en configurer un, utilisez l’<a href="../">outil de configuration</a>. Pour le
+matériel et l’emplacement, consultez les <a href="../../hardware/recommended-repeaters/">répéteurs recommandés</a>
+et les <a href="../../hardware/repeater-mounting-options/">options de montage</a>.</p>
+<h2 id="repeater-observers">Ce qu’est un répéteur observateur<a class="headerlink" href="#repeater-observers" title="Permanent link">&para;</a></h2>
+<p>Un répéteur observateur est un répéteur qui rapporte aussi ce qu’il entend à
+live.meshcore.ca, pour que tout le monde puisse voir l’état du réseau. Il lui
+faut le Wi-Fi pour ça.</p>
+<p>C’est pourquoi il lui faut une carte <strong>ESP32</strong> : les cartes nRF52 n’ont pas de
+Wi-Fi. Il utilise le micrologiciel d’observateur de
+l’<a href="https://observer.gessaman.com/">outil de programmation des observateurs</a>,
+sous MQTT Observer Firmware. Ses rapports passent par votre Wi-Fi jusqu’aux deux
+serveurs de MeshCore Canada, avec MQTT (une façon courante pour des appareils
+d’envoyer des rapports à un serveur).</p>
+<p>Il fonctionne de l’une de ces deux façons :</p>
+<ul>
+<li><strong>Relayer et observer :</strong> un répéteur complet qui rapporte aussi ce qu’il
+  entend. C’est le choix de la plupart des gens.</li>
+<li><strong>Écouter seulement :</strong> il rapporte ce qu’il entend à live.meshcore.ca, mais
+  ne relaie jamais rien.</li>
+</ul>
+<p>Dans les deux cas, il rapporte ce qu’il entend. L’écoute seule est utile à
+l’intérieur ou près d’un autre répéteur, là où relayer ne ferait qu’ajouter du
+bruit. Vous pourrez changer plus tard avec <code>set repeat on</code> ou <code>set repeat off</code>.</p>
+<p>Le répéteur observateur n’est qu’un type d’observateur. D’autres utilisent
+RemoteTerm, Home Assistant ou un petit ordinateur branché à une radio :
+<a href="../../analyzer/intro/">Configurer un observateur</a> vous aide à choisir.
+<a href="../../analyzer/data-collection-access/">Données d’observation et confidentialité</a>
+explique ce que contiennent les rapports.</p>
+<h2 id="scopes-and-regions">Les portées et les régions<a class="headerlink" href="#scopes-and-regions" title="Permanent link">&para;</a></h2>
+<p><strong>Une portée est une étiquette sur un message qui indique jusqu’où il doit aller.
+Une liste de régions, ce sont les étiquettes qu’un répéteur accepte de relayer.</strong></p>
+<p>C’est toute l’idée. Par exemple :</p>
+<ul>
+<li><strong>Un message étiqueté <code>ytr</code> reste autour de Belleville.</strong> Les répéteurs de
+  Quinte West ont <code>ytr</code> dans leur liste, donc ils le relaient. Ceux de Kingston
+  ne l’ont pas, donc il s’arrête là.</li>
+<li><strong>Un message étiqueté <code>on</code> traverse l’Ontario</strong>, parce que tous les
+  répéteurs de l’Ontario ont <code>on</code> dans leur liste.</li>
+</ul>
+<h3 id="un-code-deux-noms">Un code, deux noms<a class="headerlink" href="#un-code-deux-noms" title="Permanent link">&para;</a></h3>
+<p>Les mêmes codes courts apparaissent à deux endroits :</p>
+<ul>
+<li><strong>Sur un message, l’étiquette est une portée.</strong> Vous la réglez sur votre
+  appareil compagnon et sur chaque canal. L’application MeshCore l’appelle
+  <em>region scope</em>.</li>
+<li><strong>Sur un répéteur, les étiquettes qu’il relaie sont ses régions</strong>, gardées
+  dans sa liste de régions.</li>
+</ul>
+<p>Une région, c’est aussi le secteur que dessert un répéteur. Les régions portent
+le nom du code d’aéroport le plus proche : Belleville est dans <code>ytr</code>, Quinte
+West. La région d’un répéteur décide quels messages il relaie.</p>
+<h3 id="quelle-est-ma-region">Quelle est ma région?<a class="headerlink" href="#quelle-est-ma-region" title="Permanent link">&para;</a></h3>
+<p>L’<a href="../">outil de configuration</a> la trouve à partir de la ville, de
+l’adresse ou des coordonnées où sera le répéteur, et la
+<a href="../map/">carte des régions</a> les montre toutes. Les coordonnées ne sont envoyées
+à aucune recherche; une ville ou une adresse est cherchée avec l’outil de
+recherche de lieux du gouvernement du Canada (geo.ca).</p>
+<ul>
+<li><strong>Près d’une frontière provinciale, choisissez le côté où il se trouve
+  vraiment.</strong> La région <code>yow</code> traverse la rivière des Outaouais : un répéteur
+  d’Ottawa a <code>yow</code> et <code>on</code>, un répéteur de Gatineau <code>yow</code> et <code>qc</code>. Une adresse
+  ou des coordonnées règlent la question.</li>
+<li><strong>Les villes d’une même région partagent son code.</strong> Ottawa et Gatineau sont
+  toutes deux dans <code>yow</code>.</li>
+<li><strong>Aucune zone pour votre secteur?</strong> <a href="https://meshmapper.net/">MeshMapper</a>,
+  la carte communautaire qui dessine le secteur de chaque région, ne couvre pas
+  tout. La carte des régions montre alors plutôt une
+  <a href="#starter-regions">région initiale</a> de MeshCore Canada.</li>
+<li><strong>Écrivez les codes en minuscules.</strong> Vous pouvez chercher <code>YTR</code>, mais sur les
+  ondes, <code>ytr</code> et <code>YTR</code> sont deux étiquettes différentes.</li>
+</ul>
+<h3 id="les-cinq-etiquettes">Les cinq étiquettes<a class="headerlink" href="#les-cinq-etiquettes" title="Permanent link">&para;</a></h3>
+<p>De la plus petite à la plus grande :</p>
+<table>
+<thead>
+<tr>
+<th>Étiquette</th>
+<th>Exemple</th>
+<th>Ce qu’elle couvre</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Région</td>
+<td><code>ytr</code>, <code>yow</code>, <code>yhz</code></td>
+<td>Un secteur, nommé d’après son code d’aéroport</td>
+</tr>
+<tr>
+<td>Province ou territoire</td>
+<td><code>on</code>, <code>qc</code>, <code>ns</code></td>
+<td>La province où se trouve le répéteur</td>
+</tr>
+<tr>
+<td>Ontario + Québec</td>
+<td><code>onqc</code></td>
+<td>Les deux provinces, comme un seul réseau partagé</td>
+</tr>
+<tr>
+<td>Canada</td>
+<td><code>can</code></td>
+<td>Tout le Canada. Dans chaque liste, pas encore utilisée</td>
+</tr>
+<tr>
+<td>Amérique du Nord</td>
+<td><code>na</code></td>
+<td>Le Canada et les États-Unis. Dans chaque liste, pas encore utilisée</td>
+</tr>
+</tbody>
+</table>
+<p>Un répéteur de Belleville a <code>ytr</code>, <code>on</code>, <code>onqc</code>, <code>can</code> et <code>na</code>. Un répéteur de
+Halifax a <code>yhz</code>, <code>ns</code>, <code>can</code> et <code>na</code> : <code>onqc</code> est réservée à l’Ontario et au
+Québec.</p>
+<p><code>can</code> et <code>na</code> sont dans chaque liste pour que des messages pancanadiens ou
+transfrontaliers puissent un jour fonctionner sans que personne ait à
+reconfigurer son répéteur. Ne les utilisez pas encore sur votre appareil
+compagnon ni dans vos canaux : à elles seules, elles ne permettent pas à un
+message d’atteindre une autre province ou un autre pays.</p>
+<p><strong>Chaque étiquette est indépendante.</strong> Les étiquettes vont de la plus petite à
+la plus grande, mais elles ne s’emboîtent pas : avoir <code>on</code> ne veut pas dire
+avoir <code>ytr</code>. Chaque étiquette doit être dans la liste séparément. C’est
+pourquoi l’outil de configuration met sur chaque répéteur toutes celles qui
+s’appliquent.</p>
+<h3 id="comment-un-repeteur-decide">Comment un répéteur décide<a class="headerlink" href="#comment-un-repeteur-decide" title="Permanent link">&para;</a></h3>
+<p>Quand un message arrive à un répéteur, celui-ci compare son étiquette à sa liste :</p>
+<ul>
+<li><strong>L’étiquette est dans sa liste :</strong> il relaie le message.</li>
+<li><strong>L’étiquette n’est pas dans sa liste :</strong> il ne le relaie pas.</li>
+<li><strong>Aucune étiquette :</strong> le message compte comme <code>*</code>, l’étoile qui veut dire
+  « sans étiquette ». Il est relayé seulement si <code>*</code> est permis, ce que font les
+  répéteurs de ville et pas les répéteurs de bordure. Les anciennes applications
+  envoient des messages sans étiquette, tout comme un appareil compagnon sans
+  portée par défaut.</li>
+<li><strong>Trop de sauts :</strong> après 16 sauts, le message s’arrête, quelle que soit son
+  étiquette.</li>
+</ul>
+<p>La liste d’un répéteur de ville de Belleville contient <code>*</code>, <code>ytr</code>, <code>on</code>, <code>onqc</code>,
+<code>can</code> et <code>na</code>. Donc :</p>
+<table>
+<thead>
+<tr>
+<th>Message</th>
+<th>Étiquette</th>
+<th>Répéteur de ville de Belleville</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Canal de test de Belleville</td>
+<td><code>ytr</code></td>
+<td>Le relaie</td>
+</tr>
+<tr>
+<td>Premier message à une amie à Montréal</td>
+<td><code>onqc</code></td>
+<td>Le relaie</td>
+</tr>
+<tr>
+<td>Quelqu’un avec une ancienne application</td>
+<td>aucune</td>
+<td>Le relaie</td>
+</tr>
+<tr>
+<td>Canal de Kingston</td>
+<td><code>ygk</code></td>
+<td>Ne le relaie pas</td>
+</tr>
+<tr>
+<td>Canal de tout le Québec</td>
+<td><code>qc</code></td>
+<td>Ne le relaie pas</td>
+</tr>
+</tbody>
+</table>
+<p>Le répéteur entend quand même tous les messages : sa liste décide seulement
+lesquels il relaie. Votre appareil compagnon reçoit tout ce qui l’atteint.</p>
+<p>Quelques pièges fréquents :</p>
+<ul>
+<li><strong>L’orthographe doit être exacte.</strong> <code>ytr</code>, <code>YTR</code> et <code>quinte</code> sont trois
+  étiquettes différentes.</li>
+<li><strong>Seuls les messages qui se répandent sont vérifiés.</strong> Les messages de canal,
+  et le premier message privé à un contact, se répandent par tous les
+  répéteurs prêts à les relayer. C’est ce qu’on appelle une <em>diffusion</em> (flood).
+  Dès qu’un message privé a un chemin connu, il suit ce chemin et les étiquettes
+  ne comptent plus.</li>
+<li><strong>Un répéteur sans régions ne relaie que les messages sans étiquette.</strong> Un
+  message étiqueté ne circule qu’une fois que les répéteurs du trajet ont son
+  étiquette.</li>
+<li><strong>Une étiquette n’est ni un cadenas ni une clôture.</strong> N’importe qui peut
+  mettre n’importe quelle étiquette sur un message, et elle ne vérifie pas où
+  vous êtes. Elle indique seulement aux répéteurs s’ils doivent relayer le
+  message.</li>
+</ul>
+<h3 id="qui-relaie-quoi">Qui relaie quoi<a class="headerlink" href="#qui-relaie-quoi" title="Permanent link">&para;</a></h3>
+<p>Voici un bout de réseau entre Belleville et Kingston, avec un répéteur de
+bordure entre les deux :</p>
+<ul>
+<li><strong>Les répéteurs de ville de Belleville</strong> ont <code>*</code>, <code>ytr</code>, <code>on</code>, <code>onqc</code>, <code>can</code>
+  et <code>na</code>.</li>
+<li><strong>Le répéteur de bordure</strong> a <code>ytr</code>, <code>ygk</code>, <code>on</code>, <code>onqc</code>, <code>can</code> et <code>na</code>, mais
+  pas <code>*</code>.</li>
+<li><strong>Les répéteurs de ville de Kingston</strong> ont <code>*</code>, <code>ygk</code>, <code>on</code>, <code>onqc</code>, <code>can</code> et
+  <code>na</code>.</li>
+</ul>
+<p>Chaque répéteur relaie-t-il le message?</p>
+<ul>
+<li><strong>Sans étiquette, envoyé à Belleville :</strong> Belleville le relaie. Le répéteur de
+  bordure ne le relaie pas, donc Kingston n’est pas atteint. Il reste autour de
+  Belleville.</li>
+<li><strong><code>ytr</code>, un canal de Belleville :</strong> Belleville et le répéteur de bordure le
+  relaient. Les répéteurs de Kingston ne le relaient pas, donc il s’arrête là.</li>
+<li><strong><code>ygk</code>, un canal de Kingston :</strong> le répéteur de bordure et Kingston le
+  relaient. Belleville ne le relaie pas, donc il reste autour de Kingston.</li>
+<li><strong><code>on</code>, un canal de l’Ontario :</strong> les trois le relaient, donc il va partout en
+  Ontario.</li>
+<li><strong><code>onqc</code>, la portée par défaut d’un compagnon :</strong> les trois le relaient, donc
+  il va partout en Ontario et au Québec.</li>
+</ul>
+<p>Cette liste montre quels répéteurs relaient un message, pas la couverture radio.
+Quiconque est à portée d’un répéteur entend quand même ce qu’il transmet, et un
+vrai réseau a plus de trajets que celui-ci.</p>
+<h3 id="scope-demo">Essayez : quelles villes une étiquette atteint-elle?<a class="headerlink" href="#scope-demo" title="Permanent link">&para;</a></h3>
+<p>Cet exemple montre quels répéteurs de ville relaient un message, selon
+l’étiquette qu’on y met.</p>
+<div data-scope-demo></div>
+
+<noscript><p>L’exemple a besoin de JavaScript pour fonctionner. Le tableau et la liste ci-dessus montrent la même chose.</p></noscript>
+
+<h3 id="pourquoi-des-codes-daeroport">Pourquoi des codes d’aéroport?<a class="headerlink" href="#pourquoi-des-codes-daeroport" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>MeshMapper les utilise déjà</strong>, par exemple <code>ytr.meshmapper.net</code>.</li>
+<li><strong>MeshCore les utilise déjà ailleurs</strong>, par exemple pour le
+  <a href="../../analyzer/iata-codes/">code d’emplacement que chaque observateur transmet</a>.
+  D’autres noms seulement pour les régions ne feraient qu’ajouter de la
+  confusion.</li>
+<li><strong>Aucun accent ni majuscule où se tromper.</strong> <code>montréal</code>, <code>Montreal</code> et
+  <code>montreal</code> seraient trois étiquettes différentes.</li>
+<li><strong>Ils sont faciles à diviser plus tard.</strong> Si une ville veut un jour son propre
+  secteur, elle peut prendre son propre code d’aéroport et garder sa province
+  et <code>onqc</code>.</li>
+</ul>
+<p>Le code désigne le secteur, pas l’aéroport. Les codes viennent de l’IATA,
+l’association du transport aérien qui attribue les codes d’aéroport. C’est
+pourquoi la carte parle de régions IATA.</p>
+<h3 id="lire-une-ligne-region-def">Lire une ligne <code>region def</code><a class="headerlink" href="#lire-une-ligne-region-def" title="Permanent link">&para;</a></h3>
+<p>Pas besoin de cette section pour configurer un répéteur : l’outil donne la ligne
+exacte. Elle aide quand vous voulez en lire une.</p>
+<div class="highlight"><pre><span></span><code>region def ytr|* on|* onqc|* can|* na
+</code></pre></div>
+<p><code>region def</code> construit la liste du répéteur en une ligne. La commande ajoute
+chaque nom à son tour, et <code>|*</code> veut dire « revenir en haut » avant le suivant :
+les noms se retrouvent côte à côte, pas les uns dans les autres. Envoyez ensuite
+<code>region</code> pour voir la liste :</p>
+<div class="highlight"><pre><span></span><code>*^ F
+ ytr F
+ on F
+ onqc F
+ can F
+ na F
+</code></pre></div>
+<ul>
+<li><strong><code>F</code></strong> veut dire qu’il relaie ces messages.</li>
+<li><strong>La ligne <code>*</code></strong> concerne les messages sans étiquette. Elle a <code>F</code> sur un
+  répéteur de ville et pas de <code>F</code> sur un répéteur de bordure.</li>
+<li><strong><code>^</code></strong> marque sa région d’attache. Sur un nouveau répéteur, il est sur <code>*</code>.
+  Vous pouvez l’ignorer.</li>
+</ul>
+<p><code>region def</code> ajoute seulement des noms. La commande ne retire jamais ceux qui
+sont déjà là : sur un répéteur déjà en service, les anciennes régions sont donc
+retirées d’abord. Voir <a href="#old-regions">Retirer les anciennes régions</a>. Avant la
+version 1.16, le micrologiciel construit la même liste un nom par ligne. Voir
+<a href="#older-firmware">Micrologiciels plus anciens</a>.</p>
+<h3 id="route-discovery">Comment les messages trouvent leur chemin d’une ville à l’autre<a class="headerlink" href="#route-discovery" title="Permanent link">&para;</a></h3>
+<p>Pas besoin d’entendre chaque répéteur du trajet pour écrire à quelqu’un d’une
+autre ville. Le premier message privé à un contact, avant qu’un chemin soit
+connu, se répand dans le réseau avec votre <strong>portée par défaut</strong>. La réponse qui
+indique le chemin à votre appareil compagnon revient avec la portée par défaut
+<strong>de votre contact</strong>. Ensuite, les messages suivent le chemin enregistré et les
+étiquettes ne comptent plus.</p>
+<p>Les deux portées par défaut doivent donc être des étiquettes que les répéteurs
+entre les deux relaient. Les répéteurs configurés avec l’outil en Ontario et au
+Québec ont tous <code>onqc</code> : cette étiquette fonctionne entre Belleville et
+Montréal, dans les deux sens. Une étiquette de région comme <code>ytr</code> s’arrête au
+premier répéteur qui ne l’a pas, juste après Quinte West, et un message sans
+étiquette s’arrête au premier répéteur de bordure. C’est pourquoi les appareils compagnons ont une
+portée par défaut. Voir <a href="#companions">Portées des appareils compagnons</a>.</p>
+<p>Il faut quand même les coordonnées de votre contact et des liaisons radio
+fonctionnelles entre vous. La
+<a href="https://github.com/meshcore-dev/MeshCore/blob/main/docs/faq.md#54-q-how-does-a-node-discover-a-path-to-its-destination-and-then-use-it-to-send-messages-in-the-future-instead-of-flooding-every-message-it-sends-like-meshtastic">FAQ de MeshCore (en anglais)</a>
+explique comment les chemins sont trouvés.</p>
+<h2 id="settings">Ce que fait chaque réglage<a class="headerlink" href="#settings" title="Permanent link">&para;</a></h2>
+<p>L’outil de configuration explique chaque commande de sa liste en une phrase.
+Voici les mêmes explications, réunies au même endroit. Les exemples sont ceux
+d’un répéteur à Belleville, dont la région est <code>ytr</code> (Quinte West). Votre liste
+utilise votre propre ville, votre région et votre nom.</p>
+<p>Vous collez les commandes une à la fois dans la Console de l’outil de
+programmation, ou vous les envoyez depuis la Command Line du répéteur dans
+l’application MeshCore. La plupart répondent <code>OK</code>. Les lignes avec des mots
+entre <code>&lt;</code> et <code>&gt;</code> sont à taper vous-même : l’outil ne demande jamais vos mots de
+passe, donc il ne peut pas les copier pour vous.</p>
+<h3 id="reglages-de-base">Réglages de base<a class="headerlink" href="#reglages-de-base" title="Permanent link">&para;</a></h3>
+<dl>
+<dt><code>set radio 910.525,62.5,7,5</code></dt>
+<dd>Utilise les réglages radio canadiens : 910,525 MHz, 62,5 kHz, facteur d’étalement 7, taux de codage 5. Tous les appareils des environs doivent avoir les mêmes.</dd>
+<dt><code>set radio 910.425,62.5,7,5</code></dt>
+<dd>
+<p>Utilise les réglages radio de BC Mesh : 910,425 MHz, 62,5 kHz, facteur d’étalement 7, taux de codage 5. Tous les appareils des environs doivent avoir les mêmes.</p>
+<p>L’outil demande quels réglages utiliser seulement là où un groupe local,
+comme BC Mesh en Colombie-Britannique, a les siens.</p>
+</dd>
+</dl>
+<p>Quand vous envoyez les commandes depuis votre téléphone, la ligne radio est
+retirée : changer les réglages radio depuis votre téléphone couperait la
+connexion que vous utilisez.</p>
+<dl>
+<dt><code>set name Belleville_R1</code></dt>
+<dd>
+<p>Le nom que les autres voient.</p>
+<p>Limitez-le à environ 30 lettres (une lettre accentuée compte pour deux).
+Vous pouvez utiliser des espaces, mais pas <code>[ ] \ : , ? *</code> : le répéteur
+ne les accepte pas.</p>
+</dd>
+<dt><code>set lat 44.1628</code></dt>
+<dd>Place le répéteur sur les cartes près de la localité (Belleville), pas à son endroit exact. Cette ligne règle la latitude.</dd>
+<dt><code>set lon -77.3832</code></dt>
+<dd>
+<p>Cette ligne règle la longitude, pour que les cartes le placent près de la localité (Belleville).</p>
+<p>Décochez l’option de carte dans l’outil, et ces deux lignes disparaissent.</p>
+</dd>
+<dt><code>set lat 44.1628</code>, si vous avez tapé une adresse ou des coordonnées</dt>
+<dd>Place le répéteur sur les cartes à l’endroit que vous avez indiqué. Cette ligne règle la latitude.</dd>
+<dt><code>set lon -77.3832</code>, si vous avez tapé une adresse ou des coordonnées</dt>
+<dd>Cette ligne règle la longitude, pour que les cartes le placent à l’endroit que vous avez indiqué.</dd>
+<dt><code>password &lt;votre nouveau mot de passe administrateur&gt;</code></dt>
+<dd>Règle le mot de passe administrateur qui vous servira à le gérer depuis l’application. Gardez-le dans votre gestionnaire de mots de passe.</dd>
+<dt><code>password &lt;votre nouveau mot de passe administrateur&gt;</code>, sur un répéteur déjà en service</dt>
+<dd>Change le mot de passe administrateur. Si vous sautez cette ligne, le répéteur conserve l’actuel. Gardez le nouveau dans votre gestionnaire de mots de passe.</dd>
+</dl>
+<h3 id="reglages-de-meshcore-canada">Réglages de MeshCore Canada<a class="headerlink" href="#reglages-de-meshcore-canada" title="Permanent link">&para;</a></h3>
+<p>L’outil donne ces quatre réglages à chaque répéteur, pour que les répéteurs du
+réseau se comportent tous de la même façon. Une <em>annonce</em> (advert) est la façon
+dont un appareil signale aux autres qu’il existe. Ces réglages s’enregistrent
+d’eux-mêmes.</p>
+<dl>
+<dt><code>set path.hash.mode 2</code></dt>
+<dd>Utilise des identifiants de répéteur plus longs (3 octets) dans la liste des répéteurs par lesquels un message est passé, pour que moins de répéteurs partagent le même identifiant.</dd>
+<dt><code>set advert.interval 240</code></dt>
+<dd>S’annonce toutes les 4 heures aux répéteurs qui l’entendent directement.</dd>
+<dt><code>set flood.advert.interval 47</code></dt>
+<dd>S’annonce dans l’ensemble du réseau maillé toutes les 47 heures.</dd>
+<dt><code>set flood.max 16</code></dt>
+<dd>Ne relaie jamais un message après 16 sauts (chaque répéteur qui le relaie compte pour un saut).</dd>
+</dl>
+<h3 id="portees">Portées<a class="headerlink" href="#portees" title="Permanent link">&para;</a></h3>
+<p>Les lignes de portée d’un répéteur de ville de Belleville, avec le
+micrologiciel 1.16 ou plus récent :</p>
+<dl>
+<dt><code>region def ytr|* on|* onqc|* can|* na</code></dt>
+<dd>Relaie les messages qui portent une de ces étiquettes : Quinte West (ytr), Ontario (on), Ontario + Québec (onqc), Canada (can) et Amérique du Nord (na).</dd>
+<dt><code>region allowf *</code></dt>
+<dd>Relaie aussi les messages sans étiquette, comme le fait un répéteur de ville.</dd>
+<dt><code>region denyf *</code></dt>
+<dd>
+<p>Ne relaie pas les messages sans étiquette, pour qu’ils restent dans leur région. C’est ce qui en fait un répéteur de bordure.</p>
+<p>Un répéteur de bordure reçoit cette ligne au lieu de <code>region allowf *</code>.</p>
+</dd>
+<dt><code>region default ytr</code></dt>
+<dd>Ajoute l’étiquette ytr aux annonces de ce répéteur.</dd>
+<dt><code>region save</code></dt>
+<dd>Enregistre les réglages de région.</dd>
+</dl>
+<h3 id="back-up">Sauvegarder un répéteur en service<a class="headerlink" href="#back-up" title="Permanent link">&para;</a></h3>
+<p>Un répéteur déjà en service a une identité : sa clé privée. Les autres appareils
+le reconnaissent par cette clé, et elle ne peut pas être recréée si elle est
+perdue. Avant de le programmer, sauvegardez-le :</p>
+<ol>
+<li>Notez son nom et son mot de passe administrateur.</li>
+<li>Pour sauvegarder sa clé privée, dans l’application MeshCore, ouvrez le
+   répéteur depuis Contacts, connectez-vous comme administrateur, touchez
+   Command Line et envoyez <code>get prv.key</code>. Ou branchez-le par USB, ouvrez la
+   Console dans l’<a href="https://flasher.meshcore.io/">outil de programmation MeshCore</a>
+   et envoyez la même commande. Gardez la réponse dans votre gestionnaire de
+   mots de passe et ne la collez jamais dans un endroit partagé.</li>
+<li>Ne l’effacez jamais dans l’outil de programmation.</li>
+</ol>
+<p>Si la programmation l’efface quand même, par exemple quand vous passez au
+micrologiciel d’observateur, remettez la clé. Juste après la programmation, tant
+qu’il est encore branché, envoyez <code>set prv.key &lt;clé sauvegardée&gt;</code> dans la
+Console de l’outil de programmation, puis <code>reboot</code>. Remplacez
+<code>&lt;clé sauvegardée&gt;</code> par la clé que vous avez sauvegardée. Vous pouvez aussi le
+faire plus tard dans la Command Line de l’application si vous pouvez vous
+connecter comme administrateur ; sinon, branchez-le par USB et utilisez la
+Console de l’outil de programmation. Les deux commandes figurent dans la
+<a href="https://docs.meshcore.io/cli_commands/#view-or-change-this-nodes-identity-private-key">référence des commandes MeshCore (en anglais)</a>.</p>
+<p>Ne partagez jamais la clé privée : quiconque l’a peut se faire passer pour votre
+répéteur.</p>
+<h3 id="old-regions">Retirer les anciennes régions<a class="headerlink" href="#old-regions" title="Permanent link">&para;</a></h3>
+<p>Un répéteur déjà en service peut encore avoir des régions d’une ancienne
+configuration. <code>region def</code> ne les retire pas : la liste de l’outil les retire
+donc d’abord.</p>
+<dl>
+<dt><code>region</code></dt>
+<dd>Affiche les régions qu’il a maintenant. Collez la réponse dans l’outil de configuration pour retirer les anciennes.</dd>
+<dt><code>region remove ott</code></dt>
+<dd>Retire l’ancienne région ott.</dd>
+<dt><code>region home ytr</code></dt>
+<dd>
+<p>Fait de ytr sa région d’attache, puisque son ancienne région d’attache est retirée.</p>
+<p>Cette ligne n’apparaît que si le symbole <code>^</code> de la région d’attache était sur une des anciennes régions.</p>
+</dd>
+</dl>
+<p>L’outil retire d’abord les noms les plus en retrait et ne retire jamais <code>*</code>. Si
+<code>region remove</code> répond <code>Err - not empty</code>, un autre nom est encore en retrait
+sous celui-ci : retirez-le d’abord, puis réessayez. <code>Err - not found</code> veut dire
+qu’il est déjà retiré; ce n’est pas grave.</p>
+<p>Depuis l’application, une longue réponse peut être tronquée. Si la liste semble
+coupée, ou si le répéteur a beaucoup de régions, lancez plutôt <code>region</code> par USB,
+dans la Console de l’outil de programmation.</p>
+<h3 id="older-firmware">Micrologiciels plus anciens<a class="headerlink" href="#older-firmware" title="Permanent link">&para;</a></h3>
+<p>À partir de la version 1.16, le micrologiciel construit toute la liste avec une
+seule ligne <code>region def</code>. Les versions plus anciennes ajoutent un nom par ligne :
+ces lignes se répètent donc pour chaque étiquette.</p>
+<p><strong>Micrologiciel 1.15 :</strong></p>
+<dl>
+<dt><code>region put ytr</code></dt>
+<dd>Relaie les messages qui portent l’étiquette Quinte West (ytr).</dd>
+</dl>
+<p><strong>Micrologiciel 1.14 :</strong></p>
+<dl>
+<dt><code>region put ytr</code></dt>
+<dd>Ajoute Quinte West (ytr) à sa liste de régions. Il ne relaie pas ces messages avant sa ligne <code>region allowf</code>.</dd>
+<dt><code>region allowf ytr</code></dt>
+<dd>Relaie les messages qui portent l’étiquette Quinte West (ytr).</dd>
+</dl>
+<p>La version 1.14 n’a pas de <code>region default</code> : les annonces du répéteur restent
+donc sans étiquette. La mise à jour en vaut la peine. Avant la version 1.14, les
+réglages de région ne fonctionnent pas : mettez d’abord le micrologiciel à jour.</p>
+<h3 id="repeteur-observateur">Répéteur observateur<a class="headerlink" href="#repeteur-observateur" title="Permanent link">&para;</a></h3>
+<p>Ces lignes concernent seulement un répéteur observateur.</p>
+<dl>
+<dt><code>set mqtt.iata YTR</code></dt>
+<dd>
+<p>Indique à live.meshcore.ca de quelle région viennent ses rapports.</p>
+<p>C’est le code de la région, en majuscules.</p>
+</dd>
+<dt><code>set wifi.powersave none</code></dt>
+<dd>Garde le Wi-Fi éveillé pour que les rapports ne soient pas retardés.</dd>
+<dt><code>set mqtt1.preset meshcore-ca-1</code></dt>
+<dd>Envoie ses rapports au serveur principal de MeshCore Canada. Remplace ce qui se trouve dans l’emplacement MQTT 1, la première de ses connexions de serveur enregistrées.</dd>
+<dt><code>set mqtt2.preset meshcore-ca-2</code></dt>
+<dd>
+<p>Envoie aussi ses rapports au serveur de secours de MeshCore Canada. Remplace ce qui se trouve dans l’emplacement MQTT 2, la deuxième de ses connexions de serveur enregistrées.</p>
+<p>Si cette carte envoie déjà ses rapports à un autre réseau dans ces
+emplacements, utilisez plutôt Configure via USB dans l’outil de
+programmation des observateurs pour mettre MeshCore Canada dans des
+emplacements libres (3 à 6).</p>
+</dd>
+<dt><code>set mqtt.status on</code></dt>
+<dd>Envoie un court rapport d’état à la connexion, puis régulièrement, pour que live.meshcore.ca l’affiche en ligne.</dd>
+<dt><code>set mqtt.packets on</code></dt>
+<dd>Rapporte les paquets (messages radio) qu’il entend. C’est l’essentiel de ce qu’il envoie aux serveurs.</dd>
+<dt><code>set mqtt.raw off</code></dt>
+<dd>N’envoie pas en plus une copie brute de chaque paquet. Les serveurs n’en ont pas besoin.</dd>
+<dt><code>set mqtt.rx on</code></dt>
+<dd>Inclut les paquets qu’il reçoit par radio.</dd>
+<dt><code>set mqtt.tx advert</code></dt>
+<dd>Parmi les paquets qu’il envoie lui-même, ne rapporte que ses propres annonces.</dd>
+<dt><code>set bridge.enabled on</code></dt>
+<dd>Active l’envoi par Wi-Fi. C’est l’interrupteur principal de tout ce qu’il rapporte.</dd>
+<dt><code>set repeat on</code></dt>
+<dd>Relaie aussi les messages, comme un répéteur complet.</dd>
+<dt><code>set repeat off</code></dt>
+<dd>Écoute seulement : ne relaie jamais de messages.</dd>
+<dt><code>advert</code></dt>
+<dd>S’annonce tout de suite, pour que les appareils à proximité le voient sans attendre.</dd>
+<dt><code>set wifi.ssid &lt;nom de votre Wi-Fi&gt;</code></dt>
+<dd>Votre réseau Wi-Fi 2,4 GHz. Tapez son nom exactement, sans guillemets.</dd>
+<dt><code>set wifi.pwd &lt;mot de passe de votre Wi-Fi&gt;</code></dt>
+<dd>Le mot de passe de votre Wi-Fi. Ne le collez jamais dans un endroit partagé.</dd>
+</dl>
+<h3 id="pour-terminer">Pour terminer<a class="headerlink" href="#pour-terminer" title="Permanent link">&para;</a></h3>
+<dl>
+<dt><code>reboot</code></dt>
+<dd>Redémarre pour que tous les réglages prennent effet.</dd>
+</dl>
+<p>Après le redémarrage, l’outil propose quelques vérifications, comme <code>ver</code> et
+<code>region</code>. Elles affichent seulement ses réglages. La seule exception est
+<code>clock sync</code>, qui règle son horloge d’après votre téléphone : après un
+redémarrage, son horloge est souvent fausse, et les téléphones peuvent ignorer
+ses annonces tant qu’elle n’est pas réglée. Envoyez-la depuis l’application
+MeshCore. Elle ne fonctionne pas depuis la Console : le répéteur y répond
+seulement que son horloge ne peut pas reculer.</p>
+<h3 id="loop-detection">Détection des boucles<a class="headerlink" href="#loop-detection" title="Permanent link">&para;</a></h3>
+<p>L’outil ne change pas ce réglage. À partir de la version 1.14, le micrologiciel
+peut rejeter les paquets qui repassent sans cesse par le même répéteur, ce qui
+peut calmer une avalanche de paquets répétés. Changez-le seulement avec les
+opérateurs de votre secteur : notez la valeur actuelle avec <code>get loop.detect</code>,
+réglez-la, par exemple, avec <code>set loop.detect moderate</code>, et remettez l’ancienne
+valeur si des messages commencent à se perdre. Consultez la
+<a href="https://docs.meshcore.io/cli_commands/#view-or-change-this-nodes-loop-detection">référence des commandes MeshCore (en anglais)</a>.</p>
+<h2 id="city-or-edge">Répéteur de ville ou de bordure<a class="headerlink" href="#city-or-edge" title="Permanent link">&para;</a></h2>
+<p>Un répéteur de bordure entend régulièrement des répéteurs d’une autre région,
+par exemple entre Belleville et Kingston. Tous les autres sont des répéteurs de
+ville, même en périphérie. Les répéteurs de bordure empêchent les messages sans
+étiquette de déborder dans la région voisine.</p>
+<p>La différence, c’est ce qu’ils font des messages sans étiquette :</p>
+<ul>
+<li><strong>Un répéteur de ville les relaie</strong> (<code>region allowf *</code>), pour que les gens des
+  environs qui n’ont pas réglé de portée soient quand même entendus.</li>
+<li><strong>Un répéteur de bordure ne les relaie pas</strong> (<code>region denyf *</code>). Il a aussi
+  les codes des régions voisines qu’il entend, pour que les messages étiquetés
+  pour l’un ou l’autre côté passent.</li>
+</ul>
+<p>Belleville, répéteur de ville :</p>
+<div class="highlight"><pre><span></span><code>region def ytr|* on|* onqc|* can|* na
+region allowf *
+region default ytr
+</code></pre></div>
+<p>Belleville, répéteur de bordure qui entend aussi Kingston (<code>ygk</code>) :</p>
+<div class="highlight"><pre><span></span><code>region def ytr|* ygk|* on|* onqc|* can|* na
+region denyf *
+region default ytr
+</code></pre></div>
+<h3 id="pourquoi-cest-important">Pourquoi c’est important<a class="headerlink" href="#pourquoi-cest-important" title="Permanent link">&para;</a></h3>
+<p>Sans répéteurs de bordure, chaque message sans étiquette se répandrait de ville
+en ville dans tout le réseau et occuperait les ondes partout. Les répéteurs de
+bordure gardent ces échanges locaux dans leur région, tandis que les messages
+étiquetés vont aussi loin que leur étiquette le permet.</p>
+<h3 id="mon-repeteur-est-il-un-repeteur-de-bordure">Mon répéteur est-il un répéteur de bordure?<a class="headerlink" href="#mon-repeteur-est-il-un-repeteur-de-bordure" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Être près d’une limite ne suffit pas.</strong> Ce qui compte, ce sont les
+  répéteurs qu’il entend régulièrement.</li>
+<li><strong>Vérifiez ses voisins sur <a href="https://meshmapper.net/">MeshMapper</a>.</strong> Cliquez
+  sur votre répéteur pour voir les répéteurs qu’il entend, avec la fréquence et
+  la date des derniers échanges sur chaque liaison. Plusieurs voisins dans une
+  autre région, entendus souvent et récemment, en font un répéteur de bordure.
+  Une seule liaison vue quelques fois, ou pas depuis des semaines, ne compte pas.</li>
+<li><strong>Les villes qui partagent un code forment une seule région.</strong> Ottawa et
+  Gatineau sont toutes deux dans <code>yow</code> : un répéteur entre les deux est un
+  répéteur de ville.</li>
+<li><strong>Réfléchissez bien si c’est le seul répéteur du secteur.</strong> Un répéteur de
+  bordure ne relaie pas les messages des gens des environs qui n’ont pas réglé
+  de portée.</li>
+<li><strong>Tous les répéteurs qui relient les deux mêmes régions devraient être des
+  répéteurs de bordure.</strong> Sinon, les messages sans étiquette contournent la
+  bordure en passant par celui qui ne l’est pas.</li>
+</ul>
+<p>Un répéteur de bordure liste les régions voisines qu’il entend régulièrement. Il
+relaiera aussi les messages étiquetés pour celles-ci. Elles sont facultatives :
+sans elles, il relaie quand même <code>on</code>, <code>onqc</code> et les autres étiquettes plus
+larges.</p>
+<h3 id="cross-border-scopes">Étiquettes partagées avec les États-Unis<a class="headerlink" href="#cross-border-scopes" title="Permanent link">&para;</a></h3>
+<p>Certains répéteurs sont reliés à un réseau des États-Unis. Pour eux, l’outil
+propose des étiquettes de plus :</p>
+<ul>
+<li><strong><code>onny</code></strong>, une étiquette partagée Ontario–New York, pour un répéteur de ville
+  ou de bordure en Ontario.</li>
+<li><strong>Les réseaux américains voisins</strong>, pour les répéteurs de bordure : l’Ouest de
+  l’État de New York, la Pennsylvanie et l’Ohio depuis l’Ontario; Washington et
+  l’Oregon depuis la Colombie-Britannique.</li>
+</ul>
+<p>Cochez-en un seulement si ce répéteur est relié à ce réseau et que ses
+opérateurs sont d’accord. Dans le doute, laissez-les décochés.</p>
+<h3 id="encore-trop-de-bruit">Encore trop de bruit?<a class="headerlink" href="#encore-trop-de-bruit" title="Permanent link">&para;</a></h3>
+<p>Si les messages sans étiquette restent trop nombreux dans une région, les
+répéteurs peuvent aussi limiter leur parcours avec <code>set flood.max.unscoped 3</code>.
+Les messages étiquetés gardent la limite de 16 sauts. L’outil n’ajoute pas
+cette ligne : utilisez-la seulement si les opérateurs de votre secteur sont
+d’accord.</p>
+<h2 id="companions">Portées des appareils compagnons<a class="headerlink" href="#companions" title="Permanent link">&para;</a></h2>
+<p>Votre appareil compagnon met une portée sur ce que vous envoyez. Chaque canal
+peut avoir la sienne, et tout le reste utilise votre <strong>portée par défaut</strong>.</p>
+<div class="admonition note">
+<p class="admonition-title">Réglez dès maintenant votre portée par défaut</p>
+<p>Les répéteurs configurés avec l’<a href="../">outil de configuration de meshcore.ca</a>
+relaient les messages selon leur portée. Les répéteurs de bordure ne
+relaient pas les messages sans portée : sans portée par défaut, vos
+messages risquent de ne pas dépasser votre secteur.</p>
+<ul>
+<li><strong>Ontario ou Québec :</strong> utilisez <code>onqc</code>.</li>
+<li><strong>Ailleurs :</strong> utilisez le code de votre province, comme <code>ns</code> ou <code>bc</code>,
+  sauf si votre communauté a convenu d’autre chose.</li>
+</ul>
+</div>
+<p>Dans l’application MeshCore, version 1.43 ou plus récente, ce réglage se trouve
+sous <strong>Settings → Network Settings → Default Region Scope</strong>. Le
+<a href="../../start/companion/#regler-votre-portee-par-defaut">guide de l’appareil compagnon</a>
+montre chaque étape avec des captures d’écran.</p>
+<p><strong>Pourquoi <code>onqc</code>?</strong> On ne peut pas donner sa propre portée à un seul message
+privé. Le premier message à un contact utilise votre portée par défaut, et la
+réponse qui établit le chemin utilise celle de votre contact (voir
+<a href="#route-discovery">Comment les messages trouvent leur chemin d’une ville à l’autre</a>).
+<code>onqc</code> est relayée dans les deux provinces : elle fonctionne donc entre
+n’importe quelles villes de l’Ontario et du Québec. Ailleurs, aucune étiquette
+n’est partagée entre provinces : le code de votre province est donc la plus
+large en usage. N’utilisez pas encore <code>can</code> ni <code>na</code>.</p>
+<h3 id="donner-une-portee-a-un-canal">Donner une portée à un canal<a class="headerlink" href="#donner-une-portee-a-un-canal" title="Permanent link">&para;</a></h3>
+<p>Un canal sans portée propre utilise votre portée par défaut. Pour donner sa
+propre portée à un canal, choisissez son étiquette dans ce tableau, puis suivez
+les étapes ci-dessous.</p>
+<table>
+<thead>
+<tr>
+<th>Canal</th>
+<th>Portée</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Public</code></td>
+<td><code>onqc</code> en Ontario et au Québec; le code de votre province ailleurs</td>
+</tr>
+<tr>
+<td>Canaux de test, comme <code>#testing</code></td>
+<td>Votre région, par exemple <code>ytr</code></td>
+</tr>
+<tr>
+<td>Canaux de robots, comme <code>#bots</code></td>
+<td>Votre région</td>
+</tr>
+<tr>
+<td>Vos propres canaux</td>
+<td>Votre région, votre province ou <code>onqc</code>, selon l’entente entre les personnes qui les utilisent</td>
+</tr>
+</tbody>
+</table>
+<p>Faites-le pour chaque canal. Les captures d’écran règlent <code>#testing</code> sur <code>yow</code>;
+utilisez plutôt votre propre étiquette.</p>
+<ol>
+<li>
+<p>Touchez <strong>Channels</strong> dans la barre du bas et ouvrez le canal.</p>
+<p><a href="../../../assets/images/onqc-scopes/companion-07-channels.webp"><img alt="Liste des canaux avec Public en haut" height="652" loading="lazy" src="../../../assets/images/onqc-scopes/companion-07-channels.webp" width="300" /></a></p>
+</li>
+<li>
+<p>Touchez <strong>⋮</strong> en haut à droite et choisissez <strong>Set Region Scope</strong>.</p>
+<p><a href="../../../assets/images/onqc-scopes/companion-13-testing-menu.webp"><img alt="Menu du canal #testing avec Set Region Scope" height="652" loading="lazy" src="../../../assets/images/onqc-scopes/companion-13-testing-menu.webp" width="300" /></a></p>
+</li>
+<li>
+<p>Si votre étiquette n’est pas dans la liste, touchez <strong>+</strong>, tapez-la (par
+   exemple <code>yow</code>) et touchez le <strong>crochet</strong>.</p>
+<p><a href="../../../assets/images/onqc-scopes/companion-15-add-yow.webp"><img alt="Écran Add Region avec yow tapé" height="652" loading="lazy" src="../../../assets/images/onqc-scopes/companion-15-add-yow.webp" width="300" /></a></p>
+</li>
+<li>
+<p>Si vous en avez ajouté une, vous verrez <strong>Region has been added!</strong> Touchez
+   votre étiquette pour la sélectionner.</p>
+<p><a href="../../../assets/images/onqc-scopes/companion-16-yow-added.webp"><img alt="Liste Select Region avec onqc et yow et le message Region has been added" height="652" loading="lazy" src="../../../assets/images/onqc-scopes/companion-16-yow-added.webp" width="300" /></a></p>
+</li>
+<li>
+<p>L’en-tête affiche maintenant <strong>Region: yow</strong>. Seuls les répéteurs qui ont cette
+   étiquette dans leur liste de régions relaient les messages de ce canal.</p>
+<p><a href="../../../assets/images/onqc-scopes/companion-17-testing-scoped.webp"><img alt="En-tête du canal #testing affichant Region: yow" height="652" loading="lazy" src="../../../assets/images/onqc-scopes/companion-17-testing-scoped.webp" width="300" /></a></p>
+</li>
+</ol>
+<p>Les messages avec portée sont un peu plus courts : l’application permet moins
+de caractères par message. Sur <code>Public</code>, la limite est passée de 137 à 127
+caractères lors de nos essais.</p>
+<h3 id="bots-and-meshmapper">Robots et MeshMapper<a class="headerlink" href="#bots-and-meshmapper" title="Permanent link">&para;</a></h3>
+<p>Les robots et <a href="https://meshmapper.net/">MeshMapper</a> utilisent l’étiquette de
+leur région, comme <code>ytr</code>, pour que leurs messages restent dans leur secteur.</p>
+<ul>
+<li><strong>Robots :</strong> sur l’appareil compagnon du robot, réglez <strong>Default Region
+  Scope</strong> sur le code de votre région, de la même façon que ci-dessus. Réglez
+  aussi sur votre région les canaux où il publie.</li>
+<li><strong>MeshMapper :</strong> utilisez le code de votre région comme portée pour ses
+  messages.</li>
+</ul>
+<p>Un message étiqueté ne passe que par les répéteurs qui ont son étiquette :
+vérifiez donc que les répéteurs autour de vous ont été configurés avec elle.</p>
+<h2 id="starter-regions">Régions initiales<a class="headerlink" href="#starter-regions" title="Permanent link">&para;</a></h2>
+<p>Là où MeshMapper n’a pas encore de zone, MeshCore Canada comble le vide avec une
+région initiale. Les régions initiales utilisent de vrais codes d’aéroport et
+fonctionnent comme les autres régions, mais <strong>ce ne sont pas des zones
+MeshMapper, et elles ne garantissent aucune couverture radio</strong>. La carte les
+trace avec des contours dorés en pointillé. Vérifiez auprès des opérateurs de
+votre secteur avant de vous y fier.</p>
+<table>
+<thead>
+<tr>
+<th>Secteur</th>
+<th>Région</th>
+<th>Origine du code</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Île-du-Prince-Édouard</td>
+<td><code>yyg</code></td>
+<td><a href="https://flyyyg.com/">Charlottetown</a></td>
+</tr>
+<tr>
+<td>Terre-Neuve</td>
+<td><code>yyt</code></td>
+<td><a href="https://stjohnsairport.com/">Saint-Jean</a></td>
+</tr>
+<tr>
+<td>Labrador</td>
+<td><code>yyr</code></td>
+<td><a href="https://goosebayairport.com/">Happy Valley–Goose Bay</a></td>
+</tr>
+<tr>
+<td>Yukon</td>
+<td><code>yxy</code></td>
+<td><a href="https://yukonairports.ca/contact-information">Whitehorse</a></td>
+</tr>
+<tr>
+<td>Territoires du Nord-Ouest</td>
+<td><code>yzf</code></td>
+<td><a href="https://tc.canada.ca/fr/aviation/exploitation-aeroports-aerodromes/liste-aeroports-appartenant-transports-canada">Yellowknife</a></td>
+</tr>
+<tr>
+<td>Nunavut</td>
+<td><code>yfb</code></td>
+<td><a href="https://tc.canada.ca/fr/aviation/exploitation-aeroports-aerodromes/liste-aeroports-appartenant-transports-canada">Iqaluit</a></td>
+</tr>
+</tbody>
+</table>
+<p>Dans les autres provinces, ces pôles comblent les espaces restants :</p>
+<table>
+<thead>
+<tr>
+<th>Province</th>
+<th>Régions initiales</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>C.-B.</td>
+<td><code>ylw</code> Kelowna, <code>yxs</code> Prince George, <code>yxt</code> Terrace, <code>yxc</code> Cranbrook</td>
+</tr>
+<tr>
+<td>Alb.</td>
+<td><code>ymm</code> Fort McMurray, <code>yqu</code> Grande Prairie</td>
+</tr>
+<tr>
+<td>Sask.</td>
+<td><code>yxe</code> Saskatoon, <code>yqr</code> Regina</td>
+</tr>
+<tr>
+<td>Man.</td>
+<td><code>ybr</code> Brandon, <code>yth</code> Thompson, <code>yyq</code> Churchill</td>
+</tr>
+<tr>
+<td>Ont.</td>
+<td><code>ysb</code> Sudbury, <code>yam</code> Sault-Sainte-Marie, <code>yts</code> Timmins, <code>yqk</code> Kenora</td>
+</tr>
+<tr>
+<td>Qc</td>
+<td><code>yvo</code> Val-d’Or, <code>yzv</code> Sept-Îles, <code>yvp</code> Kuujjuaq</td>
+</tr>
+<tr>
+<td>N.-B.</td>
+<td><code>yqm</code> Moncton, <code>yfc</code> Fredericton</td>
+</tr>
+<tr>
+<td>N.-É.</td>
+<td><code>yqi</code> Yarmouth</td>
+</tr>
+</tbody>
+</table>
+<p>Les terres qu’aucune région ne couvre vont au centre régional le plus proche
+dans leur province : une région MeshMapper ou un des pôles ci-dessus.</p>
+<p>Un répéteur à Charlottetown a <code>yyg</code>, <code>pe</code>, <code>can</code> et <code>na</code>; un répéteur à
+Whitehorse a <code>yxy</code>, <code>yt</code>, <code>can</code> et <code>na</code>. Ni l’un ni l’autre n’utilise <code>onqc</code>.
+L’<a href="../">outil de configuration</a> donne les commandes.</p>
+<h3 id="planning-extensions">Extensions proposées<a class="headerlink" href="#planning-extensions" title="Permanent link">&para;</a></h3>
+<p>Un espace juste à côté d’une région MeshMapper peut reprendre son code comme
+<strong>extension proposée</strong>. Par exemple, le point <code>43.8678, -81.2619</code> près de
+Wingham est dans <code>ykf</code>, pas dans <code>ysb</code> (Sudbury). Goderich est dans <code>yxu</code>, et
+Kincardine dans <code>ylk</code>.</p>
+<p>Les extensions sont des surfaces distinctes en pointillé sur la carte. Elles ne
+changent pas les zones de MeshMapper, et la carte indique quel genre de surface
+contient votre point. Comme les régions initiales, elles doivent être revues
+localement et ne représentent pas la couverture radio mesurée.</p>
+<p>Les régions initiales et les extensions sont de grands points de départ, pas la
+promesse que des villes éloignées peuvent s’entendre. Les zones de MeshMapper
+ont toujours priorité : demandez dans <a href="https://meshmapper.net/">MeshMapper</a>
+l’ajout ou la modification d’une zone. Pour proposer un changement à une région
+initiale ou à une extension, <a href="../../submit-idea/">envoyez une proposition communautaire</a>.</p>
+<p>Les contours suivent les limites des provinces et des territoires de
+Statistique Canada. Le Labrador correspond aux divisions de recensement 10 et
+11; Terre-Neuve couvre le reste de la province.</p>
+<h2 id="sources">Sources<a class="headerlink" href="#sources" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="https://meshmapper.net/">MeshMapper</a> et l’onglet <strong>Données régionales</strong> de la carte</li>
+<li><a href="https://docs.meshcore.io/cli_commands/">Référence des commandes MeshCore (en anglais)</a></li>
+<li><a href="../../../assets/regions/NOTICE.txt">Sources et licences</a></li>
+</ul>
+
+
+
+
+
+
+
+
+
+  
+  
+
+
+
+  
+  <aside class="mc-page-feedback" aria-label="Commentaires sur la page">
+    
+      <p>Cette page vous a-t-elle été utile?</p>
+      <a class="md-button" href="../../submit-idea/?source_page=https%3A//meshcore.ca/fr/config/guide/">Signaler une amélioration</a>
+    
+  </aside>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Retour en haut de la page
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Documentation communautaire pour les utilisateurs de MeshCore au Canada. Sans affiliation avec le projet MeshCore principal.<br> Des agents d’IA contribuent à créer et à maintenir ce site. Seul le contenu relu et approuvé par des personnes est publié.
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+    <a href="https://discord.gg/BESFVMt7yk" target="_blank" rel="noopener" title="MeshCore Canada Discord" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M492.5 69.8c-.2-.3-.4-.6-.8-.7-38.1-17.5-78.4-30-119.7-37.1-.4-.1-.8 0-1.1.1s-.6.4-.8.8c-5.5 9.9-10.5 20.2-14.9 30.6-44.6-6.8-89.9-6.8-134.4 0-4.5-10.5-9.5-20.7-15.1-30.6-.2-.3-.5-.6-.8-.8s-.7-.2-1.1-.2C162.5 39 122.2 51.5 84.1 69c-.3.1-.6.4-.8.7C7.1 183.5-13.8 294.6-3.6 404.2c0 .3.1.5.2.8s.3.4.5.6c44.4 32.9 94 58 146.8 74.2.4.1.8.1 1.1 0s.7-.4.9-.7c11.3-15.4 21.4-31.8 30-48.8.1-.2.2-.5.2-.8s0-.5-.1-.8-.2-.5-.4-.6-.4-.3-.7-.4c-15.8-6.1-31.2-13.4-45.9-21.9-.3-.2-.5-.4-.7-.6s-.3-.6-.3-.9 0-.6.2-.9.3-.5.6-.7c3.1-2.3 6.2-4.7 9.1-7.1.3-.2.6-.4.9-.4s.7 0 1 .1c96.2 43.9 200.4 43.9 295.5 0 .3-.1.7-.2 1-.2s.7.2.9.4c2.9 2.4 6 4.9 9.1 7.2.2.2.4.4.6.7s.2.6.2.9-.1.6-.3.9-.4.5-.6.6c-14.7 8.6-30 15.9-45.9 21.8-.2.1-.5.2-.7.4s-.3.4-.4.7-.1.5-.1.8.1.5.2.8c8.8 17 18.8 33.3 30 48.8.2.3.6.6.9.7s.8.1 1.1 0c52.9-16.2 102.6-41.3 147.1-74.2.2-.2.4-.4.5-.6s.2-.5.2-.8c12.3-126.8-20.5-236.9-86.9-334.5zm-302 267.7c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.4 59.2-52.8 59.2m195.4 0c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.2 59.2-52.8 59.2"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://forum.meshcore.ca/" target="_blank" rel="noopener" title="MeshCore Canada forum" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M384 144c0 97.2-86 176-192 176-26.7 0-52.1-5-75.2-14l-81.6 43.2c-9.3 4.9-20.7 3.2-28.2-4.2s-9.2-18.9-4.2-28.2l35.6-67.2C14.3 220.2 0 183.6 0 144 0 46.8 86-32 192-32s192 78.8 192 176m0 368c-94.1 0-172.4-62.1-188.8-144 120-1.5 224.3-86.9 235.8-202.7 83.3 19.2 145 88.3 145 170.7 0 39.6-14.3 76.2-38.4 105.6l35.6 67.2c4.9 9.3 3.2 20.7-4.2 28.2s-18.9 9.2-28.2 4.2L459.2 498c-23.1 9-48.5 14-75.2 14"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://live.meshcore.ca/" target="_blank" rel="noopener" title="Live MeshCore Canada network tools" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4.93 3.93A9.97 9.97 0 0 0 2 11c0 2.76 1.12 5.26 2.93 7.07l1.41-1.41A7.94 7.94 0 0 1 4 11c0-2.21.89-4.22 2.34-5.66zm14.14 0-1.41 1.41A7.96 7.96 0 0 1 20 11c0 2.22-.89 4.22-2.34 5.66l1.41 1.41A9.97 9.97 0 0 0 22 11c0-2.76-1.12-5.26-2.93-7.07M7.76 6.76A5.98 5.98 0 0 0 6 11c0 1.65.67 3.15 1.76 4.24l1.41-1.41A4 4 0 0 1 8 11c0-1.11.45-2.11 1.17-2.83zm8.48 0-1.41 1.41A4 4 0 0 1 16 11c0 1.11-.45 2.11-1.17 2.83l1.41 1.41A5.98 5.98 0 0 0 18 11c0-1.65-.67-3.15-1.76-4.24M12 9a2 2 0 0 0-2 2 2 2 0 0 0 2 2 2 2 0 0 0 2-2 2 2 0 0 0-2-2m-1 6v4h-1a1 1 0 0 0-1 1H2v2h7a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1h7v-2h-7a1 1 0 0 0-1-1h-1v-4z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://github.com/MeshCore-ca/MeshCore-Canada" target="_blank" rel="noopener" title="MeshCore Canada on GitHub" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.path", "navigation.top", "search.suggest", "search.highlight", "content.code.copy", "content.action.edit", "toc.follow"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copi\u00e9 dans le presse-papier", "clipboard.copy": "Copier dans le presse-papier", "search.result.more.one": "1 de plus sur cette page", "search.result.more.other": "# de plus sur cette page", "search.result.none": "Aucun document trouv\u00e9", "search.result.one": "1 document trouv\u00e9", "search.result.other": "# documents trouv\u00e9s", "search.result.placeholder": "Taper pour d\u00e9marrer la recherche", "search.result.term.missing": "Non trouv\u00e9", "select.version": "S\u00e9lectionner la version"}, "version": null}</script>
+    
+    
+  
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+        <script src="../../../assets/javascripts/region-profile.js?v=20261102-5"></script>
+      
+        <script src="../../../assets/javascripts/i18n-runtime.js?v=20260829-1"></script>
+      
+        <script src="../../../assets/javascripts/bootstrap.js?v=20260821-1"></script>
+      
+        <script src="../../../assets/javascripts/network-status.js?v=20260905-1"></script>
+      
+    
+  
+    
+      <script src="../../../assets/regions/modules/iata-scopes.js?v=20261013-1" defer></script>
+    
+      <script src="../../../assets/setup/scope-demo.js?v=20261102-1" defer></script>
+    
+    
+  
+
+  </body>
+</html>

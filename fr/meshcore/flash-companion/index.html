@@ -16,7 +16,7 @@
         <link rel="prev" href="../../hardware/repeater-mounting-options/">
       
       
-        <link rel="next" href="../flash-repeater/">
+        <link rel="next" href="../flash-room-server/">
       
       
         
@@ -2387,41 +2387,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../flash-repeater/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Installer le micrologiciel d'un répéteur
-  
-
-    
-  </span>
-  
-  
-    
-  
-  
-    <span class="md-status md-status--draft"></span>
-  
-
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../flash-room-server/" class="md-nav__link">
         
   
@@ -2664,6 +2629,41 @@
   
   
     <li class="md-nav__item">
+      <a href="../../config/guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Comprendre les répéteurs
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--verified"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../analyzer/intro/" class="md-nav__link">
         
   
@@ -2782,10 +2782,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_7" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_8" >
         
           
-          <label class="md-nav__link" for="__nav_4_7" id="__nav_4_7_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4_8" id="__nav_4_8_label" tabindex="0">
             
   
   
@@ -2803,8 +2803,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_7_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_7">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_8">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -2961,41 +2961,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../../analyzer/builds/mqtt-firmware/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Micrologiciel MQTT
-  
-
-    
-  </span>
-  
-  
-    
-  
-  
-    <span class="md-status md-status--draft"></span>
-  
-
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../../analyzer/builds/pymc/" class="md-nav__link">
         
   
@@ -3052,10 +3017,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_8" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_9" >
         
           
-          <label class="md-nav__link" for="__nav_4_8" id="__nav_4_8_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4_9" id="__nav_4_9_label" tabindex="0">
             
   
   
@@ -3073,8 +3038,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_8_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_8">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_9">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -3935,20 +3900,20 @@ réglage.</p>
 l’application gère les changements de parcours. Conservez sa valeur par défaut,
 sauf si votre méthode d’essai locale exige un autre réglage.</p>
 <h2 id="choisir-votre-scope">Choisir votre scope<a class="headerlink" href="#choisir-votre-scope" title="Permanent link">&para;</a></h2>
-<div class="admonition warning">
-<p class="admonition-title">ON/QC : attendez la phase 2</p>
-<p>Pour un compagnon personnel, laissez <strong>Default Region Scope</strong> vide et les
-canaux <strong>sans portée</strong> pour le moment. La phase 2 n’est pas ouverte. Elle ne
-peut commencer avant <strong>janvier 2027</strong>, lorsque les répéteurs seront prêts et
-que le déploiement sera annoncé.</p>
+<div class="admonition note">
+<p class="admonition-title">Réglez dès maintenant votre portée par défaut</p>
+<p>Les répéteurs configurés avec l’<a href="../../config/">outil de configuration de meshcore.ca</a>
+relaient les messages selon leur portée. Les répéteurs de bordure ne
+relaient pas les messages sans portée : sans portée par défaut, vos
+messages risquent de ne pas dépasser votre secteur.</p>
+<ul>
+<li><strong>Ontario ou Québec :</strong> utilisez <code>onqc</code>.</li>
+<li><strong>Ailleurs :</strong> utilisez le code de votre province, comme <code>ns</code> ou <code>bc</code>,
+  sauf si votre communauté a convenu d’autre chose.</li>
+</ul>
 </div>
-<p>Installer le micrologiciel ne signifie pas qu’il faut changer les portées.
-Vous pouvez toujours <a href="../../config/map/">trouver votre région IATA</a>.
-Consultez le <a href="../../start/companion/#choisir-un-scope">guide des portées du compagnon</a>
-et l’<a href="../../proposals/onqc-scopes/#ordre-de-deploiement">ordre de déploiement</a>.
-<strong>Quand la phase 2 sera annoncée</strong>, utilisez <code>onqc</code> par défaut et pour le canal
-Public, et votre code de ville pour les tests. Les robots suivent les <a href="../../proposals/onqc-scopes/#robots-et-meshmapper">consignes de fin de phase 1</a>.
-Ailleurs, suivez les réglages de votre communauté; <code>can</code> et <code>na</code> restent réservés à un usage futur.</p>
+<p>Vous pouvez la régler dès que l’application est connectée. Le <a href="../../start/companion/#regler-votre-portee-par-defaut">guide des portées du compagnon</a> montre les étapes dans l’application MeshCore. Vous pouvez aussi <a href="../../config/map/">trouver votre région IATA</a>.
+En Ontario et au Québec, utilisez aussi <code>onqc</code> pour le canal Public et votre code de ville pour les tests. Les robots suivent les <a href="../../config/guide/#bots-and-meshmapper">consignes pour les robots et MeshMapper</a>. Réservez <code>can</code> et <code>na</code> à un usage futur.</p>
 <h2 id="verifier-avant-lutilisation-courante">Vérifier avant l’utilisation courante<a class="headerlink" href="#verifier-avant-lutilisation-courante" title="Permanent link">&para;</a></h2>
 <ol>
 <li>Confirmez que l’application se reconnecte et affiche le nom de l’appareil et les réglages radio attendus.</li>
@@ -4082,7 +4047,7 @@ récupération USB propre à la carte dans le dossier de l’appareil.</p>
   
       <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
-        <script src="../../../assets/javascripts/region-profile.js?v=20260926-1"></script>
+        <script src="../../../assets/javascripts/region-profile.js?v=20261102-5"></script>
       
         <script src="../../../assets/javascripts/i18n-runtime.js?v=20260829-1"></script>
       

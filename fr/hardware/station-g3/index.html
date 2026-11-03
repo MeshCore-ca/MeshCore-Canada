@@ -2386,41 +2386,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../../meshcore/flash-repeater/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Installer le micrologiciel d'un répéteur
-  
-
-    
-  </span>
-  
-  
-    
-  
-  
-    <span class="md-status md-status--draft"></span>
-  
-
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../../meshcore/flash-room-server/" class="md-nav__link">
         
   
@@ -2663,6 +2628,41 @@
   
   
     <li class="md-nav__item">
+      <a href="../../config/guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Comprendre les répéteurs
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--verified"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../analyzer/intro/" class="md-nav__link">
         
   
@@ -2781,10 +2781,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_7" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_8" >
         
           
-          <label class="md-nav__link" for="__nav_4_7" id="__nav_4_7_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4_8" id="__nav_4_8_label" tabindex="0">
             
   
   
@@ -2802,8 +2802,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_7_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_7">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_8">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -2960,41 +2960,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../../analyzer/builds/mqtt-firmware/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Micrologiciel MQTT
-  
-
-    
-  </span>
-  
-  
-    
-  
-  
-    <span class="md-status md-status--draft"></span>
-  
-
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../../analyzer/builds/pymc/" class="md-nav__link">
         
   
@@ -3051,10 +3016,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_8" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_9" >
         
           
-          <label class="md-nav__link" for="__nav_4_8" id="__nav_4_8_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4_9" id="__nav_4_9_label" tabindex="0">
             
   
   
@@ -3072,8 +3037,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_8_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_8">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_9">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -3850,7 +3815,7 @@
 <p>La G3 peut émettre plusieurs watts. 30 dBm correspond à 1 W au port d’antenne, avant les pertes de câble et le gain d’antenne. Le gain d’antenne s’ajoute à la puissance rayonnée : vérifiez les <a href="../../resources/links/#radio-and-regulatory-references">règles actuelles d’ISDE</a> pour l’ensemble de votre installation.</p>
 </div>
 <ul>
-<li>Installez un micrologiciel pour la Station G3. Pour un répéteur, choisissez <strong>UnitEng/BQ Voyage Station G3</strong> dans l’<a href="../../meshcore/flash-repeater/">outil d’installation MeshCore</a>. Pour un observateur, choisissez <strong>Station G3 (ESP32)</strong> dans l’<a href="../../analyzer/builds/mqtt-firmware/">outil d’installation de l’observateur MQTT</a>. N’utilisez une version <strong>(2nd RF slot)</strong> que si la carte LoRa est dans le deuxième emplacement RF, ce qui n’est pas la configuration par défaut.</li>
+<li>Installez un micrologiciel pour la Station G3. Ouvrez l’<a href="../../config/">outil de configuration du répéteur</a> et choisissez <strong>Ma carte n’est pas dans la liste</strong> (ESP32) quand il demande la carte. Dans l’outil de programmation, choisissez <strong>UnitEng/BQ Voyage Station G3</strong> pour un répéteur, ou <strong>Station G3 (ESP32)</strong> dans l’outil de programmation des observateurs pour un <a href="../../config/?type=observer">répéteur observateur</a>. N’utilisez une version <strong>(2nd RF slot)</strong> que si la carte LoRa est dans le deuxième emplacement RF, ce qui n’est pas la configuration par défaut.</li>
 <li>Ayez un câble de données USB-C pour la carte MCU afin d’utiliser la console.</li>
 </ul>
 <h2 id="fonctionnement-des-niveaux-de-puissance">Fonctionnement des niveaux de puissance<a class="headerlink" href="#fonctionnement-des-niveaux-de-puissance" title="Permanent link">&para;</a></h2>
@@ -4012,8 +3977,8 @@ get tx
 <h2 id="terminer-la-configuration">Terminer la configuration<a class="headerlink" href="#terminer-la-configuration" title="Permanent link">&para;</a></h2>
 <p>Les réglages propres à la G3 sont terminés. Poursuivez avec la configuration du rôle de ce nœud :</p>
 <ul>
-<li><strong>Répéteur :</strong> <a href="../../meshcore/flash-repeater/#configurer-le-repeteur">Configurer le répéteur</a>, puis <a href="../../config/">configurer ses régions</a>.</li>
-<li><strong>Observateur :</strong> <a href="../../analyzer/builds/mqtt-firmware/#configuration">Configurer un observateur MQTT autonome</a> pour ajouter le Wi-Fi, votre code d’emplacement et les préréglages MQTT.</li>
+<li><strong>Répéteur :</strong> <a href="../../config/">Configurer un répéteur</a> pour le configurer, lui et ses régions.</li>
+<li><strong>Répéteur observateur :</strong> <a href="../../config/?type=observer">Configurer un répéteur observateur</a> pour ajouter le Wi-Fi, votre code d’emplacement et les préréglages MQTT.</li>
 </ul>
 <h2 id="sources">Sources<a class="headerlink" href="#sources" title="Permanent link">&para;</a></h2>
 <ul>
@@ -4137,7 +4102,7 @@ get tx
   
       <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
-        <script src="../../../assets/javascripts/region-profile.js?v=20260926-1"></script>
+        <script src="../../../assets/javascripts/region-profile.js?v=20261102-5"></script>
       
         <script src="../../../assets/javascripts/i18n-runtime.js?v=20260829-1"></script>
       

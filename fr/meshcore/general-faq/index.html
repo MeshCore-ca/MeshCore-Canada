@@ -2194,41 +2194,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../flash-repeater/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Installer le micrologiciel d'un répéteur
-  
-
-    
-  </span>
-  
-  
-    
-  
-  
-    <span class="md-status md-status--draft"></span>
-  
-
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../flash-room-server/" class="md-nav__link">
         
   
@@ -2471,6 +2436,41 @@
   
   
     <li class="md-nav__item">
+      <a href="../../config/guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Comprendre les répéteurs
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--verified"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../analyzer/intro/" class="md-nav__link">
         
   
@@ -2589,10 +2589,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_7" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_8" >
         
           
-          <label class="md-nav__link" for="__nav_4_7" id="__nav_4_7_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4_8" id="__nav_4_8_label" tabindex="0">
             
   
   
@@ -2610,8 +2610,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_7_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_7">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_8">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -2768,41 +2768,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../../analyzer/builds/mqtt-firmware/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Micrologiciel MQTT
-  
-
-    
-  </span>
-  
-  
-    
-  
-  
-    <span class="md-status md-status--draft"></span>
-  
-
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../../analyzer/builds/pymc/" class="md-nav__link">
         
   
@@ -2859,10 +2824,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_8" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_9" >
         
           
-          <label class="md-nav__link" for="__nav_4_8" id="__nav_4_8_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4_9" id="__nav_4_9_label" tabindex="0">
             
   
   
@@ -2880,8 +2845,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_8_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_8">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_9">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -3974,10 +3939,11 @@ source actuelle.</p>
 <strong>3 octets</strong>. Consultez les <a href="../../provinces/#canada-baseline">détails et les consignes pour les anciennes applications</a>.</p>
 <p>Le préréglage distinct <strong>USA</strong> utilise les mêmes valeurs radio, mais ne modifie pas
 la taille du hachage. <a href="https://github.com/meshcore-dev/MeshCore/issues/3302#issuecomment-5598886579">Annonce du changement</a>.</p>
-<p>Le <a href="../../config/">configurateur de répéteur</a> sélectionne les régions IATA
-et génère des commandes de portées indépendantes. Ses réglages radio et de taille
-d’identifiant d’annonce restent séparés; les valeurs actuelles sont conservées
-tant que vous ne choisissez pas de changement.</p>
+<p>L’<a href="../../config/">outil de configuration</a> trouve la région de votre
+répéteur d’après sa localité et vous donne chaque commande à coller. Il règle
+toujours des parcours de 3 octets. Si vous programmez le répéteur, il règle
+aussi les réglages radio canadiens, ou ceux de votre groupe local. Si vous
+envoyez les commandes depuis votre téléphone, il ne change pas les réglages radio.</p>
 <h3 id="quest-ce-que-le-mode-de-hachage-des-parcours">Qu’est-ce que le mode de hachage des parcours?<a class="headerlink" href="#quest-ce-que-le-mode-de-hachage-des-parcours" title="Permanent link">&para;</a></h3>
 <p>Les parcours contiennent des identifiants courts de répéteur, de 1, 2 ou 3 octets.
 Sur un répéteur, <code>path.hash.mode</code> règle la taille utilisée pour ses propres
@@ -3988,7 +3954,7 @@ micrologiciel 1.14 ou plus récent relaient les trois tailles; les plus anciens
 rejettent les paquets avec des parcours de 2 ou 3 octets. Suivez les réglages de
 votre communauté pendant la mise à jour des anciens répéteurs.
 Consultez la <a href="https://github.com/meshcore-dev/MeshCore/blob/main/docs/faq.md#39-q-what-is-multibyte-support-what-do-1-byte-2-byte-3-byte-adverts-and-messages-mean">FAQ officielle sur les parcours multioctets</a>.</p>
-<p><a href="../../config/standard/">Lire la norme des régions</a>.</p>
+<p><a href="../../config/guide/#settings">Comprendre les répéteurs</a> explique chaque réglage du répéteur.</p>
 <h3 id="dois-je-detenir-un-certificat-doperateur-radioamateur">Dois-je détenir un certificat d’opérateur radioamateur?<a class="headerlink" href="#dois-je-detenir-un-certificat-doperateur-radioamateur" title="Permanent link">&para;</a></h3>
 <p>MeshCore Canada ne peut pas déterminer quelle autorisation s’applique à votre
 station. Vous êtes responsable de respecter les règles concernant la fréquence,
@@ -4031,7 +3997,8 @@ d’entretien comptent davantage que les fonctions de l’écran.</p>
 <h3 id="comment-demarrer-un-reseau-maille-lorsquaucun-nest-repertorie">Comment démarrer un réseau maillé lorsqu’aucun n’est répertorié?<a class="headerlink" href="#comment-demarrer-un-reseau-maille-lorsquaucun-nest-repertorie" title="Permanent link">&para;</a></h3>
 <p>Commencez avec des compagnons pour permettre aux gens de faire des essais
 locaux. Ajoutez une infrastructure fixe seulement après avoir vérifié
-l’emplacement, l’alimentation, la coordination locale et la norme des régions.</p>
+l’emplacement, l’alimentation, la coordination locale et le
+<a href="../../config/guide/#scopes-and-regions">fonctionnement des portées et des régions</a>.</p>
 <p>Lorsque le groupe est prêt, <a href="../../contributing/">ajoutez la communauté</a> afin que
 d’autres personnes puissent trouver son état, ses coordonnées et tout réglage
 local révisé.</p>
@@ -4164,7 +4131,7 @@ des captures d’écran ou des journaux.</p>
   
       <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
-        <script src="../../../assets/javascripts/region-profile.js?v=20260926-1"></script>
+        <script src="../../../assets/javascripts/region-profile.js?v=20261102-5"></script>
       
         <script src="../../../assets/javascripts/i18n-runtime.js?v=20260829-1"></script>
       

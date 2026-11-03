@@ -2194,41 +2194,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../../meshcore/flash-repeater/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Installer le micrologiciel d'un répéteur
-  
-
-    
-  </span>
-  
-  
-    
-  
-  
-    <span class="md-status md-status--draft"></span>
-  
-
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../../meshcore/flash-room-server/" class="md-nav__link">
         
   
@@ -2471,6 +2436,41 @@
   
   
     <li class="md-nav__item">
+      <a href="../../config/guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Comprendre les répéteurs
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--verified"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../analyzer/intro/" class="md-nav__link">
         
   
@@ -2589,10 +2589,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_7" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_8" >
         
           
-          <label class="md-nav__link" for="__nav_4_7" id="__nav_4_7_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4_8" id="__nav_4_8_label" tabindex="0">
             
   
   
@@ -2610,8 +2610,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_7_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_7">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_8">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -2768,41 +2768,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../../analyzer/builds/mqtt-firmware/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Micrologiciel MQTT
-  
-
-    
-  </span>
-  
-  
-    
-  
-  
-    <span class="md-status md-status--draft"></span>
-  
-
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../../analyzer/builds/pymc/" class="md-nav__link">
         
   
@@ -2859,10 +2824,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_8" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_9" >
         
           
-          <label class="md-nav__link" for="__nav_4_8" id="__nav_4_8_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4_9" id="__nav_4_9_label" tabindex="0">
             
   
   
@@ -2880,8 +2845,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_8_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_8">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_9">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -3720,14 +3685,14 @@ observateurs, les paquets, les nœuds et les données cartographiques.</dd>
 <dt><strong>Facteur d’étalement (SF)</strong></dt>
 <dd>Un paramètre LoRa qui influence le temps d’occupation des ondes, le débit
 de données et la réception. Utilisez la valeur indiquée dans vos paramètres
-locaux ou dans le configurateur.</dd>
+locaux ou dans l’<a href="../../config/">outil de configuration</a>.</dd>
 <dt><strong>JSON Web Token (JWT)</strong></dt>
 <dd>Un identifiant à durée limitée utilisé par certains services de données de
 MeshCore Canada. Traitez-le comme un renseignement sensible.</dd>
 <dt><strong>Largeur de bande</strong></dt>
 <dd>Un paramètre radio LoRa qui détermine la partie du spectre utilisée par une
 transmission. Utilisez la valeur indiquée dans vos paramètres locaux ou
-dans le configurateur.</dd>
+dans l’<a href="../../config/">outil de configuration</a>.</dd>
 <dt><strong>LoRa</strong></dt>
 <dd>La modulation radio longue portée et faible puissance utilisée par les
 appareils MeshCore.</dd>
@@ -3752,13 +3717,38 @@ canadienne actuelle.</dd>
 <dt><strong>Observateur</strong></dt>
 <dd>Une radio ou un service qui transmet des données MeshCore aux outils publics.
 L’observation et la répétition sont des fonctions distinctes; un appareil peut faire les deux.</dd>
+<dt><strong>Portée (region scope)</strong></dt>
+<dd>Une portée est une étiquette sur un message qui indique jusqu’où il doit
+aller. Vous réglez une portée par défaut sur votre appareil compagnon, et
+chaque canal peut avoir la sienne. Voir
+<a href="../../config/guide/#scopes-and-regions">Les portées et les régions</a>.</dd>
 <dt><strong>Préréglage</strong></dt>
 <dd>Un ensemble nommé de paramètres radio.</dd>
 <dt><strong>Rapport signal-bruit (SNR)</strong></dt>
 <dd>Une mesure qui compare un signal reçu au bruit de fond.</dd>
+<dt><strong>Région</strong></dt>
+<dd>Le secteur que dessert un répéteur, nommé d’après le code d’aéroport le plus
+proche. Une liste de régions, ce sont les étiquettes qu’un répéteur accepte
+de relayer. Voir
+<a href="../../config/guide/#scopes-and-regions">Les portées et les régions</a>.</dd>
 <dt><strong>Répéteur</strong></dt>
 <dd>Un appareil MeshCore normalement fixe qui relaie les paquets afin
 d’améliorer la couverture du réseau.</dd>
+<dt><strong>Répéteur de bordure</strong></dt>
+<dd>Un répéteur qui entend régulièrement des répéteurs d’une autre région, par
+exemple entre Belleville et Kingston. Il ne relaie pas les messages sans
+étiquette, pour qu’ils ne débordent pas dans la région voisine. Voir
+<a href="../../config/guide/#city-or-edge">Répéteur de ville ou de bordure</a>.</dd>
+<dt><strong>Répéteur de ville</strong></dt>
+<dd>Un répéteur qui relaie les messages sans étiquette, pour que les gens des
+environs qui n’ont pas réglé de portée soient quand même entendus. Tout
+répéteur qui n’est pas de bordure est un répéteur de ville. Voir
+<a href="../../config/guide/#city-or-edge">Répéteur de ville ou de bordure</a>.</dd>
+<dt><strong>Répéteur observateur</strong></dt>
+<dd>Un répéteur qui rapporte aussi ce qu’il entend à live.meshcore.ca, pour que
+tout le monde puisse voir l’état du réseau. Il lui faut le Wi-Fi, donc une
+carte ESP32. Voir
+<a href="../../config/guide/#repeater-observers">Ce qu’est un répéteur observateur</a>.</dd>
 <dt><strong>Serveur de salon (Room Server)</strong></dt>
 <dd>Un appareil MeshCore qui garde un salon partagé accessible aux appareils
 compagnons. Sa fonction principale est d’héberger le salon, et non
@@ -3770,7 +3760,7 @@ d’améliorer la couverture.</dd>
 <dl>
 <dt><strong>Taux de codage (CR)</strong></dt>
 <dd>Un paramètre LoRa de correction des erreurs. Utilisez la valeur indiquée
-dans vos paramètres locaux ou dans le configurateur.</dd>
+dans vos paramètres locaux ou dans l’<a href="../../config/">outil de configuration</a>.</dd>
 <dt><strong>WebSocket</strong></dt>
 <dd>Une connexion Web de longue durée. Certains clients MQTT utilisent
 WebSocket pour joindre un serveur MQTT par les voies réseau Web habituelles.</dd>
@@ -3779,7 +3769,7 @@ WebSocket pour joindre un serveur MQTT par les voies réseau Web habituelles.</d
 <ul>
 <li><a href="../../start/choose-a-goal/">Comparer les types d’appareils MeshCore</a></li>
 <li><a href="../../meshcore/general-faq/">Lire les questions fréquentes</a></li>
-<li><a href="../../config/standard/">Consulter la norme sur les régions</a></li>
+<li><a href="../../config/guide/">Comprendre les répéteurs</a></li>
 <li><a href="../../analyzer/intro/">Choisir une méthode d’observation</a></li>
 </ul>
 
@@ -3898,7 +3888,7 @@ WebSocket pour joindre un serveur MQTT par les voies réseau Web habituelles.</d
   
       <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
-        <script src="../../../assets/javascripts/region-profile.js?v=20260926-1"></script>
+        <script src="../../../assets/javascripts/region-profile.js?v=20261102-5"></script>
       
         <script src="../../../assets/javascripts/i18n-runtime.js?v=20260829-1"></script>
       

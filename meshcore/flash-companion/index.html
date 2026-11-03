@@ -16,7 +16,7 @@
         <link rel="prev" href="../../hardware/repeater-mounting-options/">
       
       
-        <link rel="next" href="../flash-repeater/">
+        <link rel="next" href="../flash-room-server/">
       
       
         
@@ -2387,41 +2387,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../flash-repeater/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Flash a repeater
-  
-
-    
-  </span>
-  
-  
-    
-  
-  
-    <span class="md-status md-status--draft"></span>
-  
-
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../flash-room-server/" class="md-nav__link">
         
   
@@ -2601,7 +2566,7 @@
   <span class="md-ellipsis">
     
   
-    Configure a repeater
+    Set up a repeater
   
 
     
@@ -2637,6 +2602,41 @@
     
   
     Find your region
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--verified"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../config/guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How repeaters work
   
 
     
@@ -2782,10 +2782,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_7" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_8" >
         
           
-          <label class="md-nav__link" for="__nav_4_7" id="__nav_4_7_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4_8" id="__nav_4_8_label" tabindex="0">
             
   
   
@@ -2803,8 +2803,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_7_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_7">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_8">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -2961,41 +2961,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../../analyzer/builds/mqtt-firmware/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    MQTT firmware
-  
-
-    
-  </span>
-  
-  
-    
-  
-  
-    <span class="md-status md-status--draft"></span>
-  
-
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../../analyzer/builds/pymc/" class="md-nav__link">
         
   
@@ -3052,10 +3017,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_8" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_9" >
         
           
-          <label class="md-nav__link" for="__nav_4_8" id="__nav_4_8_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4_9" id="__nav_4_9_label" tabindex="0">
             
   
   
@@ -3073,8 +3038,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_8_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_8">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_9">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -3919,16 +3884,19 @@ then use this guide to back it up, flash it, and join your local mesh. Check the
 <p>If Canada is not listed in your app or flasher, follow the <a href="../../provinces/#canada-baseline">older-preset instructions</a>.</p>
 <p>The optional <strong>Message Settings → Auto Reset Path</strong> preference affects how the app manages changing paths. Leave it at its default unless your local testing process calls for a different setting.</p>
 <h2 id="choose-your-scope">Choose your scope<a class="headerlink" href="#choose-your-scope" title="Permanent link">&para;</a></h2>
-<div class="admonition warning">
-<p class="admonition-title">ON/QC: wait for Phase 2</p>
-<p>For personal companions, leave <strong>Default Region Scope</strong> empty and channels
-<strong>unscoped</strong> for now. Phase 2 is not open. It can start no earlier than
-<strong>January 2027</strong>, after the repeaters are ready and the rollout is announced.</p>
+<div class="admonition note">
+<p class="admonition-title">Set your default scope now</p>
+<p>Repeaters set up with the <a href="../../config/">meshcore.ca setup tool</a> pass messages
+on by scope. Edge repeaters don't pass on messages that have no scope, so
+without a default scope your messages may not reach beyond your own area.</p>
+<ul>
+<li><strong>Ontario or Québec:</strong> use <code>onqc</code>.</li>
+<li><strong>Elsewhere:</strong> use your province's code, such as <code>ns</code> or <code>bc</code>, unless
+  your community has agreed on something else.</li>
+</ul>
 </div>
-<p>Flashing does not mean you should change scopes. You can still <a href="../../config/map/">find your IATA region</a>. Read the <a href="../../start/companion/#choose-a-scope">companion scope guide</a> and <a href="../../proposals/onqc-scopes/#rollout-order">rollout order</a> before changing settings.
-<strong>When Phase 2 is announced</strong>, use <code>onqc</code> for the default and Public channel,
-and your city scope for tests. Bots follow the separate <a href="../../proposals/onqc-scopes/#bots-and-meshmapper">end-of-Phase-1 guidance</a>.
-Elsewhere, follow your community’s settings; <code>can</code> and <code>na</code> remain reserved for future use.</p>
+<p>You can set it once the app is connected. The <a href="../../start/companion/#set-your-default-scope">companion scope guide</a> shows the steps in the MeshCore app. You can also <a href="../../config/map/">find your IATA region</a>.
+In Ontario and Québec, use <code>onqc</code> for the Public channel too, and your city scope for tests. Bots follow the separate <a href="../../config/guide/#bots-and-meshmapper">bot and MeshMapper guidance</a>. Leave <code>can</code> and <code>na</code> for future use.</p>
 <h2 id="verify-before-regular-use">Verify before regular use<a class="headerlink" href="#verify-before-regular-use" title="Permanent link">&para;</a></h2>
 <ol>
 <li>Confirm the app reconnects and shows the expected device name and radio settings.</li>
@@ -4059,7 +4027,7 @@ Elsewhere, follow your community’s settings; <code>can</code> and <code>na</co
   
       <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
-        <script src="../../assets/javascripts/region-profile.js?v=20260926-1"></script>
+        <script src="../../assets/javascripts/region-profile.js?v=20261102-5"></script>
       
         <script src="../../assets/javascripts/i18n-runtime.js?v=20260829-1"></script>
       

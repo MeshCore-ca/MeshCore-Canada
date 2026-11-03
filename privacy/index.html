@@ -2192,41 +2192,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../meshcore/flash-repeater/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Flash a repeater
-  
-
-    
-  </span>
-  
-  
-    
-  
-  
-    <span class="md-status md-status--draft"></span>
-  
-
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../meshcore/flash-room-server/" class="md-nav__link">
         
   
@@ -2406,7 +2371,7 @@
   <span class="md-ellipsis">
     
   
-    Configure a repeater
+    Set up a repeater
   
 
     
@@ -2442,6 +2407,41 @@
     
   
     Find your region
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--verified"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../config/guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    How repeaters work
   
 
     
@@ -2587,10 +2587,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_7" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_8" >
         
           
-          <label class="md-nav__link" for="__nav_4_7" id="__nav_4_7_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4_8" id="__nav_4_8_label" tabindex="0">
             
   
   
@@ -2608,8 +2608,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_7_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_7">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_8">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -2766,41 +2766,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../analyzer/builds/mqtt-firmware/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    MQTT firmware
-  
-
-    
-  </span>
-  
-  
-    
-  
-  
-    <span class="md-status md-status--draft"></span>
-  
-
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../analyzer/builds/pymc/" class="md-nav__link">
         
   
@@ -2857,10 +2822,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_8" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_9" >
         
           
-          <label class="md-nav__link" for="__nav_4_8" id="__nav_4_8_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_4_9" id="__nav_4_9_label" tabindex="0">
             
   
   
@@ -2878,8 +2843,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_8_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_8">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_9">
             <span class="md-nav__icon md-icon"></span>
             
   
@@ -3473,6 +3438,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#the-setup-tool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The setup tool
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#saved-on-your-device" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3574,6 +3550,17 @@
     <span class="md-ellipsis">
       
         Public submissions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-setup-tool" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The setup tool
       
     </span>
   </a>
@@ -3738,7 +3725,7 @@
 <tr>
 <td>Find nearby communities</td>
 <td>The city you submit</td>
-<td>Natural Resources Canada’s Geolocator API; distances are calculated in your browser</td>
+<td>The Government of Canada’s place search (geo.ca); distances are calculated in your browser</td>
 </tr>
 <tr>
 <td>Load header network totals</td>
@@ -3748,7 +3735,12 @@
 <tr>
 <td>Search for a place in the region tools</td>
 <td>The place, airport code, or postal code you enter</td>
-<td>IATA codes are checked locally. Place names go to Natural Resources Canada’s Geolocator API; postal codes use OpenStreetMap or geocoder.ca</td>
+<td>IATA codes are checked locally. Place names go to the Government of Canada’s place search (geo.ca); postal codes use OpenStreetMap or geocoder.ca</td>
+</tr>
+<tr>
+<td>Search for a town or street address in the <a href="../config/">setup tool</a></td>
+<td>The town or address you type. Coordinates you type stay in your browser</td>
+<td>The Government of Canada’s place search (geo.ca): <code>geolocator.api.geo.ca</code></td>
 </tr>
 <tr>
 <td>Open the interactive region map</td>
@@ -3783,12 +3775,37 @@ before submitting. Do not include passwords, private keys, home addresses,
 private coordinates, or other personal information.</p>
 <p>The submission service may keep security and rate-limit logs. A retention
 period has not yet been published.</p>
+<h2 id="the-setup-tool">The setup tool<a class="headerlink" href="#the-setup-tool" title="Permanent link">&para;</a></h2>
+<p>The <a href="../config/">setup tool</a> never asks for or stores your admin password
+or Wi-Fi password. Where a command needs one, it shows a placeholder for you to
+fill in yourself.</p>
+<ul>
+<li><strong>Sharing and resuming.</strong> The tool’s link (<strong>Copy a link to these answers</strong>,
+  which is also the address in your browser) holds your non-secret answers,
+  such as the repeater’s name, its region, and the place (a town, or the street
+  address you picked) with its coordinates, so you can share or resume a setup.
+  It never holds passwords, Wi-Fi details, or a pasted <code>region</code> reply. Links can
+  appear in browser history and server access logs, so don’t share one that
+  holds a private location.</li>
+<li><strong>Show on maps.</strong> This is on by default. For a street address or coordinates,
+  the tool says “Anyone can see this spot on public maps.” If you untick it,
+  the tool leaves the commands that set your repeater’s location out of the
+  list, and an address or coordinates stay out of the link too.</li>
+<li><strong>Switching language.</strong> So you don’t start over, the tool keeps your ticks,
+  firmware version, and pasted replies in that browser tab, for the switch
+  only. The other page uses them once, then removes them. If it doesn’t pick
+  them up within 10 minutes, they’re ignored, and they go when you close the
+  tab.</li>
+<li><strong>Region files.</strong> MeshMapper isn’t contacted unless you click a link to it.
+  The setup tool, <a href="../config/guide/">How repeaters work</a> and the region map read
+  region files published on this site.</li>
+</ul>
 <h2 id="saved-on-your-device">Saved on your device<a class="headerlink" href="#saved-on-your-device" title="Permanent link">&para;</a></h2>
-<p>Switching language or moving between the region map and configurator carries your
-selection in the destination URL. This can include entered coordinates, a location
-label, city and province scopes, and radio-profile choices. These URLs may appear in browser
-history and server access logs. Do not share a link containing a private location.
-Downloaded setup summaries omit exact coordinates and credentials.</p>
+<p>Switching language on the region map carries your selection in the link to the
+other page. This can include entered coordinates, a location label, city and
+province scopes, and radio-profile choices. These links may appear in browser
+history and server access logs. Do not share a link containing a private
+location.</p>
 <p>The retired region editor can download drafts saved in this browser. Downloading
 does not upload or delete them; old drafts are not approved MeshMapper boundaries.</p>
 <p>Setup checklists, idea drafts, and the last Beacon region code selected in the
@@ -3923,7 +3940,7 @@ operators and privacy policies.</p>
   
       <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
       
-        <script src="../assets/javascripts/region-profile.js?v=20260926-1"></script>
+        <script src="../assets/javascripts/region-profile.js?v=20261102-5"></script>
       
         <script src="../assets/javascripts/i18n-runtime.js?v=20260829-1"></script>
       

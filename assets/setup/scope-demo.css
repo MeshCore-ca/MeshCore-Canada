@@ -1,0 +1,152 @@
+/* The "Which towns does this label reach?" example on the explainer page.
+   Colours come from the site's tokens, so light and dark both keep their contrast. */
+
+/* Keep room for the example while it loads, without leaving a gap for readers with no JavaScript. */
+@media (scripting: enabled) {
+  [data-scope-demo]:empty {
+    min-height: 34rem;
+  }
+}
+
+@media (scripting: enabled) and (max-width: 40rem) {
+  [data-scope-demo]:empty {
+    min-height: 66rem;
+  }
+}
+
+.md-typeset .scope-demo {
+  margin: 1rem 0 1.5rem;
+}
+
+.md-typeset .scope-demo__labels {
+  min-width: 0;
+  margin: 0;
+  padding: 0.5rem 0.75rem 0.75rem;
+  border: 1px solid var(--mc-color-border);
+  border-radius: var(--mc-radius-md);
+  color: var(--mc-color-text);
+  background: var(--mc-color-surface);
+}
+
+.md-typeset .scope-demo__labels legend {
+  padding: 0 0.4rem;
+  font-weight: 600;
+}
+
+.md-typeset .scope-demo__option {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  min-height: var(--mc-target-size);
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0.55rem 0.6rem;
+  border-radius: var(--mc-radius-sm);
+  cursor: pointer;
+}
+
+.md-typeset .scope-demo__option:hover {
+  background: var(--scp-any-bg);
+}
+
+.md-typeset .scope-demo__option:has(input:checked) {
+  background: var(--scp-city-bg);
+  box-shadow: inset 0 0 0 1px var(--scp-city);
+}
+
+.md-typeset .scope-demo__option input {
+  flex: none;
+  width: 1.15rem;
+  height: 1.15rem;
+  margin: 0.2rem 0 0;
+  accent-color: var(--mc-color-action);
+  cursor: pointer;
+}
+
+.md-typeset .scope-demo__option input:focus-visible {
+  outline: 3px solid var(--mc-color-focus);
+  outline-offset: 2px;
+}
+
+.md-typeset .scope-demo__option-text {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.md-typeset .scope-demo__result {
+  margin-top: 1rem;
+}
+
+.md-typeset .scope-demo__reason {
+  margin: 0 0 0.75rem;
+}
+
+.md-typeset .scope-demo ul.scope-demo__towns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* ul and li are named so these rules outrank the theme's list styles. */
+.md-typeset .scope-demo ul.scope-demo__towns > li.scope-demo__town {
+  --scope-demo-state: var(--mc-color-border);
+  --scope-demo-state-bg: var(--mc-color-surface);
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  min-width: 0;
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--scope-demo-state);
+  border-left-width: 0.3rem;
+  border-radius: var(--mc-radius-sm);
+  color: var(--mc-color-text);
+  background: var(--scope-demo-state-bg);
+}
+
+.md-typeset .scope-demo ul.scope-demo__towns > li.scope-demo__town[data-passes="true"] {
+  --scope-demo-state: var(--scp-ok);
+  --scope-demo-state-bg: var(--scp-ok-bg);
+}
+
+.md-typeset .scope-demo ul.scope-demo__towns > li.scope-demo__town[data-passes="false"] {
+  --scope-demo-state: var(--scp-drop);
+  --scope-demo-state-bg: var(--scp-drop-bg);
+}
+
+.md-typeset .scope-demo__name {
+  font-weight: 600;
+}
+
+.md-typeset .scope-demo__detail {
+  color: var(--mc-color-text-muted);
+  font-size: 0.85em;
+}
+
+/* The words say whether it passes it on; the colour only backs them up. */
+.md-typeset .scope-demo__verdict {
+  font-weight: 600;
+  color: var(--scope-demo-state);
+}
+
+.md-typeset .scope-demo__note {
+  margin: 0.75rem 0 0;
+  color: var(--mc-color-text-muted);
+  font-size: 0.85em;
+}
+
+.md-typeset .scope-demo__failed {
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--scp-drop);
+  border-radius: var(--mc-radius-sm);
+  background: var(--scp-drop-bg);
+}
+
+@media (forced-colors: active) {
+  .md-typeset .scope-demo ul.scope-demo__towns > li.scope-demo__town {
+    border-color: CanvasText;
+  }
+}
