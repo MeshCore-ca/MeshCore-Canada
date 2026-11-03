@@ -586,7 +586,9 @@ far as their label says.
 
 An edge repeater lists the neighbouring regions it regularly hears. It will also
 carry messages labelled for these. They're optional: without them, it still
-passes on `on`, `onqc` and the other wider labels.
+passes on `on`, `onqc` and the other wider labels. The tool lists the five
+regions nearest to your repeater first, with how far each is, and has a box to
+find any other region.
 
 ### Labels shared across the border {#cross-border-scopes}
 

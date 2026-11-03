@@ -332,9 +332,11 @@
     if (next.tag) {
       var radios = Place.radioOptions(next.tag, data);
       if (next.radio && !radios.some(function (option) { return option.id === next.radio; })) delete next.radio;
+      // Any other region can be ticked, not only the nearest ones: keep what the catalogue knows as a region.
       if (Array.isArray(next.neighbours)) {
-        var offered = Place.neighbours(next.tag, data);
-        next.neighbours = next.neighbours.filter(function (tag) { return offered.indexOf(tag) !== -1; });
+        next.neighbours = next.neighbours.filter(function (tag) {
+          return tag !== next.tag && has(data.catalog.hierarchy, tag) && data.catalog.hierarchy[tag].kind === "city";
+        });
       }
       if (Array.isArray(next.external)) {
         var networks = Place.crossBorder(next.province);
@@ -496,9 +498,6 @@
     if (id === "name" && a.name === undefined) {
       var suggested = Flow.suggestName(a, a.tag ? regionName(a.tag) : "");
       if (suggested) setAnswers(Object.assign({}, a, { name: suggested }));
-    }
-    if (id === "neighbours" && !Array.isArray(a.neighbours) && state.data && !Place.neighbours(a.tag, state.data).length) {
-      setAnswers(Object.assign({}, a, { neighbours: [] }));
     }
   }
 
@@ -862,41 +861,121 @@
     return el("div", { class: "setup-custom-box" }, [row, field]);
   }
 
+  // How many of the nearest regions are listed before the person searches, and how many search results.
+  var NEAREST = 5;
+  var FOUND = 8;
+
+  // Where the nearest regions are measured from: the place the person searched for (or moved the pin to),
+  // else the middle of the home region, as after a link from the region map.
+  function neighbourSpot() {
+    var a = state.answers;
+    return Flow.hasPin(a.place) ? a.place : Place.centre(a.tag, state.data);
+  }
+
+  // "about 40 km": the nearest kilometre, or the nearest ten from 100 km on.
+  function kmWords(km) {
+    var rounded = km >= 100 ? Math.round(km / 10) * 10 : Math.round(km);
+    return rounded.toLocaleString(isFrench ? "fr-CA" : "en-CA");
+  }
+
   function neighboursBody(body) {
     if (!state.data) return loading(body);
     var a = state.answers;
-    var offered = Place.neighbours(a.tag, state.data);
-    body.appendChild(para(t("neighbours.hint"), { class: "setup-hint" }));
-    if (!offered.length) body.appendChild(para(t("neighbours.empty", { region: regionName(a.tag) + " (" + a.tag + ")" })));
+    var away = {};
+    var nearest = Place.nearest(neighbourSpot(), state.data, { exclude: [a.tag] });
+    nearest.forEach(function (item) { away[item.tag] = item.km; });
+    // The nearest five, then every other region already ticked (by distance), as they stay in the list.
+    var shown = nearest.slice(0, NEAREST).map(function (item) { return item.tag; });
+    (Array.isArray(a.neighbours) ? a.neighbours : []).filter(function (tag) { return shown.indexOf(tag) === -1; })
+      .sort(function (x, y) { return (has(away, x) ? away[x] : Infinity) - (has(away, y) ? away[y] : Infinity); })
+      .forEach(function (tag) { shown.push(tag); });
+
+    function label(tag) {
+      var region = regionName(tag);
+      if (!has(away, tag)) return region + " (" + tag + ")";
+      return away[tag] < 1 ? t("neighbours.region.near", { region: region, tag: tag }) : t("neighbours.region", { region: region, tag: tag, km: kmWords(away[tag]) });
+    }
+    function ticked(tag) {
+      return Array.isArray(state.answers.neighbours) && state.answers.neighbours.indexOf(tag) !== -1;
+    }
+
     var set = el("fieldset", { class: "setup-fieldset setup-fieldset--plain" }, el("legend", { class: "setup-sr", text: t("neighbours.question") }));
     var boxes = {};
+    var foundBoxes = {};
+    var noneBox = null;
+    // Every box shows what is ticked: the list, the search results, and "None of these".
     function sync() {
       var list = state.answers.neighbours;
-      offered.forEach(function (tag) { boxes[tag].checked = Array.isArray(list) && list.indexOf(tag) !== -1; });
-      boxes.none.checked = Array.isArray(list) && !list.length;
+      Object.keys(boxes).forEach(function (tag) { boxes[tag].checked = ticked(tag); });
+      Object.keys(foundBoxes).forEach(function (tag) { foundBoxes[tag].checked = ticked(tag); });
+      noneBox.checked = Array.isArray(list) && !list.length;
     }
     function toggle(tag, checked) {
       var next = Object.assign({}, state.answers);
-      if (tag === "none") {
-        if (checked) next.neighbours = []; else delete next.neighbours;
-      } else {
-        var list = (Array.isArray(next.neighbours) ? next.neighbours : []).filter(function (item) { return item !== tag; });
-        if (checked) list.push(tag);
-        list = offered.filter(function (item) { return list.indexOf(item) !== -1; });
-        if (list.length) next.neighbours = list; else delete next.neighbours;
-      }
+      var list = (Array.isArray(next.neighbours) ? next.neighbours : []).filter(function (item) { return item !== tag; });
+      if (checked) list.push(tag);
+      if (list.length) next.neighbours = list.sort(); else delete next.neighbours;
       setAnswers(next);
       sync();
       updateActions();
     }
-    offered.concat("none").forEach(function (tag) {
-      var label = tag === "none" ? t("neighbours.none") : regionName(tag) + " (" + tag + ")";
-      var row = checkboxRow({ "data-setup-neighbour": tag }, label, false, function (checked) { toggle(tag, checked); });
-      boxes[tag] = row.querySelector("input");
-      set.appendChild(row);
+    var noneRow = checkboxRow({ "data-setup-neighbour": "none" }, t("neighbours.none"), false, function (checked) {
+      var next = Object.assign({}, state.answers);
+      if (checked) next.neighbours = []; else delete next.neighbours;
+      setAnswers(next);
+      sync();
+      updateActions();
     });
+    noneBox = noneRow.querySelector("input");
+    set.appendChild(noneRow);
+    // A region is added above "None of these", and stays for as long as this screen does, ticked or not.
+    function addRow(tag) {
+      if (has(boxes, tag)) return;
+      var row = checkboxRow({ "data-setup-neighbour": tag }, label(tag), ticked(tag), function (checked) { toggle(tag, checked); });
+      boxes[tag] = row.querySelector("input");
+      set.insertBefore(row, noneRow);
+    }
+    shown.forEach(addRow);
+    body.appendChild(para(t("neighbours.hint"), { class: "setup-hint" }));
     body.appendChild(set);
     sync();
+
+    // Any other region: a search of the catalogue's names, aliases and codes. Nothing is sent anywhere.
+    var input = el("input", { type: "text", id: "setup-find", class: "setup-input", "data-setup-find": "", autocomplete: "off",
+      autocapitalize: "off", spellcheck: "false", "aria-describedby": "setup-find-hint setup-find-status" });
+    var status = el("p", { id: "setup-find-status", class: "setup-message", "data-setup-find-status": "", role: "status" });
+    var found = el("div", { "data-setup-found-list": "", role: "group", "aria-labelledby": "setup-find-label" });
+    input.addEventListener("input", function () {
+      found.textContent = "";
+      foundBoxes = {};
+      status.textContent = "";
+      if (input.value.trim().length < 2) return;
+      var hits = Place.search(input.value, state.data, { exclude: [a.tag], limit: FOUND + 1 });
+      if (!hits.length) {
+        status.textContent = t("neighbours.find.none");
+        return;
+      }
+      hits.slice(0, FOUND).forEach(function (hit) {
+        var row = checkboxRow({ "data-setup-found": hit.tag }, label(hit.tag), ticked(hit.tag), function (checked) {
+          var added = checked && !has(boxes, hit.tag);
+          if (added) {
+            // Added to the list first; the tick below then shows in the list and in the results.
+            addRow(hit.tag);
+            announce(t("neighbours.added", { region: regionName(hit.tag), tag: hit.tag }));
+          }
+          toggle(hit.tag, checked);
+        });
+        foundBoxes[hit.tag] = row.querySelector("input");
+        found.appendChild(row);
+      });
+      status.textContent = hits.length > FOUND ? t("neighbours.find.more", { n: FOUND }) : t("neighbours.find.found", { n: hits.length });
+    });
+    body.appendChild(el("div", { class: "setup-field" }, [
+      el("label", { for: "setup-find", id: "setup-find-label", text: t("neighbours.find") }),
+      para(t("neighbours.find.hint"), { class: "setup-hint", id: "setup-find-hint" }),
+      input, status, found
+    ]));
+
     body.appendChild(para(link(t("neighbours.meshmapper"), LINKS.meshmapper)));
     var networks = Place.crossBorder(a.province);
     body.appendChild(networkBoxes(networks.shared.concat(networks.edgeOnly), t("crossborder.title"), t("crossborder.hint")));

@@ -631,7 +631,8 @@ bordure gardent ces échanges locaux dans leur région, tandis que les messages
 Un répéteur de bordure liste les régions voisines qu’il entend régulièrement. Il
 relaiera aussi les messages étiquetés pour celles-ci. Elles sont facultatives :
 sans elles, il relaie quand même `on`, `onqc` et les autres étiquettes plus
-larges.
+larges. L’outil liste d’abord les cinq régions les plus proches de votre
+répéteur, avec leur distance, et offre une case pour trouver une autre région.
 
 ### Étiquettes partagées avec les États-Unis { #cross-border-scopes }
 

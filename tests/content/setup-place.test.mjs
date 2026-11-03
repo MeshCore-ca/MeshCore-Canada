@@ -202,40 +202,134 @@ test("aliases ignore case and accents, and a name shared by two provinces lists 
   assert.deepEqual(place.fromAlias("", data), []);
 });
 
-test("neighbours come from shared boundaries", () => {
-  assert.ok(place.neighbours("ytr", data).includes("ygk"));
-  assert.ok(!place.neighbours("ytr", data).includes("ytr"));
-  for (const tag of ["xph", "yow", "ygk", "yqa"]) assert.ok(place.neighbours("ytr", data).includes(tag), tag);
+// ------------------------------------------------------------ the nearest regions, and finding any other
+
+const BELLEVILLE = { lat: 44.16281, lon: -77.38324 };
+const near = (point, options) => place.nearest(point, data, options);
+
+test("the nearest regions to Belleville include Kingston, leave out Quinte West itself, and run closest first", () => {
+  const list = near(BELLEVILLE, { exclude: ["ytr"], limit: 5 });
+  assert.equal(list.length, 5);
+  assert.ok(list.some((item) => item.tag === "ygk"), "Kingston is close to Belleville");
+  assert.ok(!list.some((item) => item.tag === "ytr"), "the home region is left out");
+  assert.deepEqual(list.map((item) => item.km), list.map((item) => item.km).sort((a, b) => a - b));
+  for (const item of list) {
+    assert.equal(typeof item.name, "string", item.tag);
+    assert.ok(Number.isFinite(item.km) && item.km >= 0, item.tag);
+    assert.ok(item.km < 250, `${item.tag} should be near, not ${item.km} km away`);
+  }
+  assert.equal(new Set(list.map((item) => item.tag)).size, 5, "one entry for each region");
+  // Without a limit every other region is listed, still closest first.
+  const all = near(BELLEVILLE, { exclude: ["ytr"] });
+  assert.ok(all.length > 40);
+  assert.deepEqual(all.slice(0, 5), list);
+  assert.deepEqual(all.map((item) => item.km), all.map((item) => item.km).sort((a, b) => a - b));
 });
 
-test("neighbours are sorted, two-way, and exclude regions that only touch at one point", () => {
-  const list = place.neighbours("ytr", data);
-  assert.deepEqual(list, [...list].sort());
-  assert.equal(new Set(list).size, list.length);
-  for (const other of list) assert.ok(place.neighbours(other, data).includes("ytr"), other);
-  assert.ok(!list.includes("yvr"));
-  assert.deepEqual(place.neighbours("nope", data), []);
-  assert.deepEqual(place.neighbours("YTR", data), list);
+test("a spot inside another region is 0 km from it, and the French name comes with the English one", () => {
+  const kingston = near({ lat: 44.2312, lon: -76.486 }, { exclude: ["ytr"], limit: 3 });
+  assert.deepEqual([kingston[0].tag, kingston[0].km], ["ygk", 0]);
+  assert.deepEqual(near(BELLEVILLE, { limit: 1 }).map((item) => [item.tag, item.km]), [["ytr", 0]], "with nothing left out, the region the spot is in comes first");
+  // The English name always comes; the French one only where the catalogue has it.
+  const all = near(BELLEVILLE, {});
+  assert.equal(all.find((item) => item.tag === "yow").name, "Ottawa–Gatineau");
+  assert.equal(all.find((item) => item.tag === "yow").nameFr, undefined);
+  assert.deepEqual(all.find((item) => item.tag === "yyt"), { tag: "yyt", name: "Newfoundland", nameFr: "Terre-Neuve", km: all.find((item) => item.tag === "yyt").km });
 });
 
-test("neighbours need at least two shared vertices", () => {
-  const square = (x, y) => ({ type: "Polygon", coordinates: [[[x, y], [x + 1, y], [x + 1, y + 1], [x, y + 1], [x, y]]] });
-  const feature = (tag, geometry) => ({ type: "Feature", properties: { tag }, geometry });
+test("the tags to leave out are matched in any case, and a spot that is no spot has no neighbours", () => {
+  assert.ok(!near(BELLEVILLE, { exclude: ["YTR", "Ygk"] }).some((item) => ["ytr", "ygk"].includes(item.tag)));
+  for (const bad of [null, undefined, {}, { lat: "44", lon: "-77" }, { lat: NaN, lon: -77 }, { lat: 44, lon: Infinity }]) {
+    assert.deepEqual(near(bad, { limit: 5 }), [], JSON.stringify(bad));
+  }
+});
+
+test("distance is measured to the outline, a MeshMapper zone beats a planning extension, and one entry is kept for each region", () => {
+  const square = (west, south, east, north) => ({ type: "Polygon", coordinates: [[[west, south], [east, south], [east, north], [west, north], [west, south]]] });
+  const feature = (tag, geometry, properties = {}) => ({ type: "Feature", properties: { tag, ...properties }, geometry });
+  const label = (name) => ({ label: name, kind: "city", provinces: ["on"] });
   const synthetic = {
     ...data,
+    catalog: { ...data.catalog, hierarchy: { aaa: label("Aaa"), bbb: label("Bbb"), ccc: label("Ccc"), ddd: label("Ddd"), on: { label: "Ontario", kind: "province" } } },
     boundaries: {
       type: "FeatureCollection",
       features: [
-        feature("aaa", square(0, 0)),
-        feature("bbb", square(1, 0)),   // shares a whole side (2 vertices) with aaa
-        feature("ccc", square(1, 1)),   // touches aaa at one corner only
-        feature("ddd", square(5, 5))
+        feature("aaa", square(1, 44, 2, 46), { regionSource: "meshmapper" }),                  // one degree of longitude east of the spot
+        feature("aaa", square(0.1, 44.9, 0.2, 45.1), { regionSource: "planning", planningKind: "extension" }),   // much closer, but not the zone
+        feature("bbb", square(-3, 44, -2, 46), { regionSource: "meshmapper" }),                // two degrees west
+        feature("ccc", square(-0.5, 47, 0.5, 48), {}),                                         // two degrees north, no source recorded
+        feature("ddd", square(0, 0, 0.5, 0.5), { regionSource: "meshmapper" }),                 // far south
+        feature("on", square(-1, 44.9, 1, 45.1), { regionSource: "meshmapper" })                // a province, not a region
       ]
     }
   };
-  assert.deepEqual(place.neighbours("aaa", synthetic), ["bbb"]);
-  assert.deepEqual(place.neighbours("ccc", synthetic), ["bbb"]);
-  assert.deepEqual(place.neighbours("ddd", synthetic), []);
+  const list = place.nearest({ lat: 45, lon: 0 }, synthetic, {});
+  assert.deepEqual(list.map((item) => item.tag), ["aaa", "bbb", "ccc", "ddd"]);
+  // One degree of longitude at 45 degrees north is 111.32 * cos(45) = 78.7 km.
+  assert.ok(Math.abs(list[0].km - 78.7) < 1.5, String(list[0].km));
+  assert.ok(Math.abs(list[1].km - 157.4) < 3, String(list[1].km));
+  // Two degrees of latitude is 222 km.
+  assert.ok(Math.abs(list[2].km - 222) < 4, String(list[2].km));
+  assert.deepEqual(list.map((item) => item.name), ["Aaa", "Bbb", "Ccc", "Ddd"]);
+  // Inside the outline is 0.
+  assert.equal(place.nearest({ lat: 45, lon: 1.5 }, synthetic, {})[0].km, 0);
+});
+
+test("the nearest regions are told apart from the catalogue's other entries, and read the data the page loaded", () => {
+  const tags = near(BELLEVILLE, {}).map((item) => item.tag);
+  for (const tag of tags) assert.equal(data.catalog.hierarchy[tag].kind, "city", tag);
+  for (const tag of ["on", "qc", "can", "na", "onqc"]) assert.ok(!tags.includes(tag), tag);
+});
+
+test("searching finds a region by its name, its French name, an alias or its code, ignoring case and accents", () => {
+  const tagsOf = (text, options) => place.search(text, data, options).map((item) => item.tag);
+  assert.deepEqual(tagsOf("Muskoka"), ["yqa"]);
+  assert.equal(tagsOf("muskoka")[0], "yqa");
+  assert.equal(tagsOf("YQA")[0], "yqa");
+  assert.equal(tagsOf("  yqa  ")[0], "yqa");
+  // An alias: Belleville is part of Quinte West.
+  assert.equal(tagsOf("belleville")[0], "ytr");
+  assert.equal(tagsOf("BELLEVILLE")[0], "ytr");
+  // Accent-insensitive in both directions.
+  assert.equal(tagsOf("montreal")[0], "yul");
+  assert.equal(tagsOf("Montréal")[0], "yul");
+  assert.equal(tagsOf("TROIS-RIVIERES")[0], "yul");
+  assert.ok(tagsOf("gatineau").includes("yow"));
+  // The French name, with or without its accents and dashes.
+  assert.equal(tagsOf("Terre-Neuve")[0], "yyt");
+  assert.equal(tagsOf("terre neuve")[0], "yyt");
+  assert.equal(tagsOf("Île du Prince Édouard")[0], "yyg");
+  assert.equal(tagsOf("ile-du-prince-edouard")[0], "yyg");
+  // Dots, dashes and apostrophes don't get in the way.
+  assert.equal(tagsOf("sault ste marie")[0], "yam");
+  assert.equal(tagsOf("Sault Ste. Marie")[0], "yam");
+  assert.equal(tagsOf("val d'or")[0], "yvo");
+  // A part of a name is enough.
+  assert.ok(tagsOf("sault").includes("yam"));
+  assert.deepEqual(place.search("muskoka", data)[0], { tag: "yqa", name: "Muskoka" });
+  assert.deepEqual(place.search("terre-neuve", data)[0], { tag: "yyt", name: "Newfoundland", nameFr: "Terre-Neuve" });
+  // Nothing found, or too little typed to search on.
+  assert.deepEqual(place.search("zzzzzz-nowhere", data), []);
+  for (const little of ["", " ", "y", null, undefined]) assert.deepEqual(place.search(little, data), [], String(little));
+});
+
+test("a search lists regions only, never the home region, best matches first, up to the limit", () => {
+  const tagsOf = (text, options) => place.search(text, data, options).map((item) => item.tag);
+  assert.deepEqual(tagsOf("belleville", { exclude: ["ytr"] }), []);
+  assert.deepEqual(tagsOf("belleville", { exclude: ["YTR"] }), []);
+  // Provinces and the wider scopes are not regions to hear.
+  const ontario = tagsOf("ontario");
+  for (const tag of ["on", "can", "na", "onqc"]) assert.ok(!ontario.includes(tag), tag);
+  assert.ok(!tagsOf("canada").includes("can"));
+  // An exact code comes before a name that merely contains the letters.
+  assert.equal(tagsOf("yow")[0], "yow");
+  // The limit caps the list; the same text gives the same order each time.
+  const many = tagsOf("on");
+  assert.ok(many.length > 8, "a short text matches a lot");
+  assert.equal(tagsOf("on", { limit: 8 }).length, 8);
+  assert.deepEqual(tagsOf("on", { limit: 8 }), many.slice(0, 8));
+  assert.deepEqual(tagsOf("on"), many);
+  assert.equal(new Set(many).size, many.length);
 });
 
 test("regions whose groups use different radio settings offer a choice", () => {
@@ -474,13 +568,13 @@ test("find asks the street-address search for an address and the town search for
   await assert.rejects(search.find("111 Wellington Street, Ottawa", "en", async () => reply({})), /Invalid place response/);
 });
 
-test("the script loads without the place search and region scripts; only resolve needs them", async () => {
+test("the script loads without the place search and region scripts; only resolve, planning and nearest need them", async () => {
   const sandbox = { URL };
   vm.createContext(sandbox);
   vm.runInContext(readFileSync("docs/assets/setup/setup-place.js", "utf8"), sandbox, { filename: "setup-place.js" });
   const alone = sandbox.MeshCoreSetupPlace;
   const loaded = await alone.loadData(base, fileFetcher);
-  assert.equal(JSON.stringify(alone.neighbours("ytr", loaded)), JSON.stringify(place.neighbours("ytr", data)));
+  assert.equal(JSON.stringify(alone.search("muskoka", loaded)), JSON.stringify(place.search("muskoka", data)));
   assert.equal(JSON.stringify(alone.radioOptions("yvr", loaded)), JSON.stringify(place.radioOptions("yvr", data)));
   assert.equal(JSON.stringify(alone.crossBorder("on")), JSON.stringify(place.crossBorder("on")));
   assert.equal(JSON.stringify(alone.centre("ytr", loaded)), JSON.stringify(place.centre("ytr", data)));

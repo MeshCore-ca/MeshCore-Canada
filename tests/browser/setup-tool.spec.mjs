@@ -348,7 +348,7 @@ test("edge repeater offers neighbouring regions and Ontario cross-border options
   await next(page);
   await expectStep(page, "neighbours");
   expect(await page.locator("[data-setup-neighbour]").evaluateAll((list) => list.map((box) => box.dataset.setupNeighbour)))
-    .toEqual(["xph", "ygk", "yow", "yqa", "none"]);
+    .toEqual(["xph", "ygk", "yow", "yyz", "yqa", "none"]);
   expect(await page.locator("[data-setup-external]").evaluateAll((list) => list.map((box) => box.dataset.setupExternal)))
     .toEqual(["ontario-new-york", "ohio", "pennsylvania", "western-new-york"]);
   // Switching to edge kept the shared label.
@@ -887,9 +887,9 @@ test("changing the town clears neighbours and the suggested name", async ({ page
   await expect(page.locator('[data-setup-choice="edge"]')).toHaveAttribute("aria-pressed", "true");
   await next(page);
   await expectStep(page, "neighbours");
-  // Kingston's neighbours, none picked yet.
+  // The five regions nearest Kingston, closest first, none picked yet.
   expect(await page.locator("[data-setup-neighbour]").evaluateAll((list) => list.map((box) => box.dataset.setupNeighbour)))
-    .toEqual(["yow", "ytr", "none"]);
+    .toEqual(["ytr", "yow", "xph", "yqa", "yyz", "none"]);
   await expect(page.locator("[data-setup-neighbour] input:checked")).toHaveCount(0);
   await expect(nextButton(page)).toBeDisabled();
   await page.locator('[data-setup-neighbour="none"] input').check();
@@ -1438,6 +1438,149 @@ for (const lang of LANGS) {
     await expect(step(page)).not.toContainText("Flash!");
   });
 }
+
+// ------------------------------------------------------------------ neighbours: the nearest five, and a search for any other
+
+const EDGE_LINK = (lang, extra = "") => `${ROUTES[lang]}?type=repeater&board=esp32&status=running&reflash=0&role=edge&name=Test_R1&${BELLEVILLE}${extra}`;
+const listed = (page) => page.locator("[data-setup-neighbour]").evaluateAll((list) => list.map((box) => box.dataset.setupNeighbour));
+const find = (page) => page.locator("[data-setup-find]");
+const found = (page) => page.locator("[data-setup-found]");
+const foundTags = (page) => found(page).evaluateAll((list) => list.map((row) => row.dataset.setupFound));
+const findStatus = (page) => page.locator("[data-setup-find-status]");
+
+for (const lang of LANGS) {
+  test(`${lang} the neighbours step lists the five nearest regions with how far each is, and keeps the rest`, async ({ page }) => {
+    await page.setViewportSize({ width: 360, height: 740 });
+    await openLink(page, EDGE_LINK(lang), { to: "neighbours" });
+    // Measured from the town the person searched for: Port Hope, Kingston, Ottawa–Gatineau, Toronto, Muskoka.
+    expect(await listed(page)).toEqual(["xph", "ygk", "yow", "yyz", "yqa", "none"]);
+    const away = lang === "fr" ? "à environ" : "about";
+    await expect(page.locator('[data-setup-neighbour="xph"]')).toHaveText(new RegExp(`^Port Hope \\(xph\\), ${away} \\d+ km$`));
+    await expect(page.locator('[data-setup-neighbour="ygk"]')).toHaveText(new RegExp(`^Kingston \\(ygk\\), ${away} \\d+ km$`));
+    await expect(page.locator('[data-setup-neighbour="yow"]')).toContainText("Ottawa–Gatineau (yow)");
+    // The distances only grow down the list.
+    const km = (await page.locator("[data-setup-neighbour]:not([data-setup-neighbour=none])").allTextContents()).map((words) => Number(words.match(/(\d[\d\s\u00a0\u202f,]*) km$/)[1].replace(/\D/g, "")));
+    expect(km).toEqual([...km].sort((a, b) => a - b));
+    expect(km.every((value) => value > 0 && value < 250)).toBe(true);
+    // The home region is never its own neighbour.
+    await expect(page.locator('[data-setup-neighbour="ytr"]')).toHaveCount(0);
+    // The question, the MeshMapper link, the box for any other region and "None of these" are all there.
+    await expect(page.locator('[data-setup-neighbour="none"]')).toHaveText(T("neighbours.none", lang));
+    await expect(page.locator("#setup-question")).toHaveText(T("neighbours.question", lang));
+    await expect(page.locator(".setup-body > .setup-hint").first()).toHaveText(T("neighbours.hint", lang));
+    await expect(page.locator('label[for="setup-find"]')).toHaveText(T("neighbours.find", lang));
+    await expect(page.locator("#setup-find-hint")).toHaveText(T("neighbours.find.hint", lang));
+    await expect(page.locator('[data-setup-step] a[href="https://meshmapper.net/"]')).toContainText(T("neighbours.meshmapper", lang));
+    await fitsTheScreen(page, `${lang} neighbours`);
+    // A region the person ticked stays in the list when the screen is drawn again, even if it isn't one of the nearest.
+    await openLink(page, EDGE_LINK(lang, "&neighbours=ylk,yqa"), { to: "neighbours" });
+    expect(await listed(page)).toEqual(["xph", "ygk", "yow", "yyz", "yqa", "ylk", "none"]);
+    await expect(page.locator('[data-setup-neighbour="ylk"] input')).toBeChecked();
+    await expect(page.locator('[data-setup-neighbour="yqa"] input')).toBeChecked();
+    await expect(page.locator('[data-setup-neighbour="ygk"] input')).not.toBeChecked();
+    await expect(page.locator('[data-setup-neighbour="none"] input')).not.toBeChecked();
+    await expect(nextButton(page)).toBeEnabled();
+    await fitsTheScreen(page, `${lang} neighbours with a ticked region beyond the nearest`);
+  });
+
+  test(`${lang} searching finds any other region by name, alias or code, and ticking one adds it to the list`, async ({ page }) => {
+    await page.setViewportSize({ width: 360, height: 740 });
+    const queries = await mockGeocoder(page);
+    await openLink(page, EDGE_LINK(lang), { to: "neighbours" });
+    await expect(found(page)).toHaveCount(0);
+    await expect(findStatus(page)).toHaveText("");
+    // Barrie is not one of the nearest five: find it by its name, tick it from the results.
+    await find(page).fill("barrie");
+    expect(await foundTags(page)).toEqual(["ylk"]);
+    await expect(found(page)).toContainText("Barrie (ylk)");
+    await expect(findStatus(page)).toHaveText(T("neighbours.find.found", lang, { n: 1 }));
+    await expect(page.locator('[data-setup-found="ylk"] input')).not.toBeChecked();
+    await expect(page.locator('[data-setup-neighbour="ylk"]')).toHaveCount(0);
+    await page.locator('[data-setup-found="ylk"] input').check();
+    // It joins the list above, ticked, before "None of these"; the result stays ticked too.
+    expect(await listed(page)).toEqual(["xph", "ygk", "yow", "yyz", "yqa", "ylk", "none"]);
+    await expect(page.locator('[data-setup-neighbour="ylk"] input')).toBeChecked();
+    await expect(page.locator('[data-setup-found="ylk"] input')).toBeChecked();
+    await expect(page.locator("[data-setup-live]")).toHaveText(T("neighbours.added", lang, { region: "Barrie", tag: "ylk" }));
+    expect(page.url()).toContain("neighbours=ylk");
+    await expect(nextButton(page)).toBeEnabled();
+    await fitsTheScreen(page, `${lang} neighbours with a search result`);
+    // Unticking it in the list leaves its row where it is, unticked, and the result follows.
+    await page.locator('[data-setup-neighbour="ylk"] input').uncheck();
+    await expect(page.locator('[data-setup-found="ylk"] input')).not.toBeChecked();
+    expect(await listed(page)).toContain("ylk");
+    await expect(nextButton(page)).toBeDisabled();
+    // A region already in the list is found too, and ticking either box ticks the other.
+    await find(page).fill("MUSKOKA");
+    expect(await foundTags(page)).toEqual(["yqa"]);
+    await page.locator('[data-setup-found="yqa"] input').check();
+    await expect(page.locator('[data-setup-neighbour="yqa"] input')).toBeChecked();
+    expect(await listed(page)).toEqual(["xph", "ygk", "yow", "yyz", "yqa", "ylk", "none"]);
+    await expect(page.locator("[data-setup-live]")).not.toHaveText(T("neighbours.added", lang, { region: "Muskoka", tag: "yqa" }));
+    // The code works too, in any case.
+    await find(page).fill("YLK");
+    expect(await foundTags(page)).toEqual(["ylk"]);
+    // Ticking a result takes "None of these" off, and "None of these" clears the ticks.
+    await page.locator('[data-setup-neighbour="none"] input').check();
+    await expect(page.locator('[data-setup-neighbour="yqa"] input')).not.toBeChecked();
+    await expect(page.locator('[data-setup-found="ylk"] input')).not.toBeChecked();
+    await page.locator('[data-setup-found="ylk"] input').check();
+    await expect(page.locator('[data-setup-neighbour="none"] input')).not.toBeChecked();
+    // Nothing that matches, one letter, and the home region itself.
+    await find(page).fill("zzzzzz");
+    await expect(found(page)).toHaveCount(0);
+    await expect(findStatus(page)).toHaveText(T("neighbours.find.none", lang));
+    await find(page).fill("b");
+    await expect(found(page)).toHaveCount(0);
+    await expect(findStatus(page)).toHaveText("");
+    await find(page).fill("belleville");
+    await expect(found(page)).toHaveCount(0);
+    await expect(findStatus(page)).toHaveText(T("neighbours.find.none", lang));
+    // A short text matches a lot: eight are shown, with a plain note.
+    await find(page).fill("on");
+    await expect(found(page)).toHaveCount(8);
+    await expect(findStatus(page)).toHaveText(T("neighbours.find.more", lang, { n: 8 }));
+    await fitsTheScreen(page, `${lang} neighbours with eight search results`);
+    // The search is the page's own data: no place search is asked.
+    expect(queries).toEqual([]);
+    // What was ticked is in the commands, and nothing else changed about them.
+    await next(page);
+    await nextUntil(page, "commands");
+    expect(await commandLines(page)).toContain("region def ytr|* ylk|* on|* onqc|* can|* na");
+  });
+}
+
+test("searching understands French names, with or without accents or dashes", async ({ page }) => {
+  await openLink(page, EDGE_LINK("fr"), { to: "neighbours" });
+  await find(page).fill("terre-neuve");
+  expect(await foundTags(page)).toEqual(["yyt"]);
+  await expect(found(page)).toContainText("Terre-Neuve (yyt)");
+  await find(page).fill("Ile du Prince Edouard");
+  expect(await foundTags(page)).toEqual(["yyg"]);
+  await expect(found(page)).toContainText("Île-du-Prince-Édouard (yyg)");
+  // Far away is said with a space before the thousands, in kilometres.
+  await expect(found(page)).toHaveText(/^Île-du-Prince-Édouard \(yyg\), à environ \d[\d\s\u00a0\u202f]* km$/);
+});
+
+test("with no place to measure from, such as after a link from the region map, the nearest are measured from the middle of the region", async ({ page }) => {
+  await openLink(page, `/config/?type=repeater&board=esp32&status=running&reflash=0&role=edge&name=Test_R1&tag=ytr&province=on`, { to: "neighbours" });
+  const tags = await listed(page);
+  expect(tags).toHaveLength(6);
+  expect(tags).not.toContain("ytr");
+  expect(tags.slice(0, 3).sort()).toEqual(["xph", "ygk", "yow"].sort());
+  await expect(page.locator('[data-setup-neighbour="xph"]')).toContainText("(xph)");
+  await expect(page.locator('[data-setup-neighbour="xph"]')).toContainText(" km");
+});
+
+test("the search box and its results have no serious accessibility problem, in both languages", async ({ page }) => {
+  for (const lang of LANGS) {
+    await openLink(page, EDGE_LINK(lang), { to: "neighbours" });
+    await find(page).fill("ba");
+    await expect(found(page).first()).toBeVisible();
+    const result = await new AxeBuilder({ page }).include("[data-setup-step]").withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]).analyze();
+    expect(result.violations.filter((violation) => ["serious", "critical"].includes(violation.impact)).map((violation) => violation.id), `${lang} neighbours search`).toEqual([]);
+  }
+});
 
 // ------------------------------------------------------------------ cross-border box: listed networks and an agreed scope
 

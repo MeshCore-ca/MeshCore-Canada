@@ -191,6 +191,20 @@ test("the page answers the tool's questions in the tool's own words", () => {
   }
 });
 
+test("the page says the tool lists the nearest regions first and has a box to find any other", () => {
+  const words = {
+    en: ["lists the five", "regions nearest to your repeater first", "box to find any other region"],
+    fr: ["liste d’abord les cinq régions les plus proches de votre répéteur", "une case pour trouver une autre région"],
+  };
+  for (const [lang, path] of Object.entries(pages)) {
+    const page = flat(read(path));
+    for (const phrase of words[lang]) assert.ok(page.includes(phrase), `${path} is missing: ${phrase}`);
+  }
+  // The tool's own label for the box is the one the page names.
+  assert.equal(text.t("neighbours.find", "en"), "Find another region");
+  assert.equal(text.t("neighbours.find", "fr"), "Trouver une autre région");
+});
+
 test("the cross-border section lists onny and qcny, the agreed-scope option, and the link to ask for more", () => {
   const sectionOf = (source) => {
     const flatSource = flat(source);
