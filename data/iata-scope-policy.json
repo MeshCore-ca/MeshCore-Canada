@@ -1,6 +1,6 @@
 {
   "schema": "meshcore-canada-iata-policy/v1",
-  "proposal": "https://meshcore.ca/proposals/onqc-scopes/",
+  "proposal": "https://meshcore.ca/config/guide/",
   "scopeModel": "flat",
   "meshScopes": {
     "onqc": [
@@ -23,7 +23,7 @@
       "authority": {
         "status": "proposed",
         "source": "MeshCore Canada cross-border scope discussion",
-        "sourceUrl": "https://meshcore.ca/proposals/onqc-scopes/#cross-border-scopes"
+        "sourceUrl": "https://meshcore.ca/config/guide/#cross-border-scopes"
       }
     }
   },
