@@ -187,14 +187,14 @@ test("the board step asks what kind of board it is, with examples and a way to c
     en: {
       question: "What kind of board is it?",
       nrf52: ["nRF52", "Low power, good for solar.", "For example RAK4631 (WisBlock), Heltec T114, LilyGO T-Echo, Seeed XIAO nRF52840."],
-      esp32: ["ESP32", "Has Wi-Fi. A repeater observer needs one.", "For example Heltec V3 or V4, LilyGO T-Beam, Seeed XIAO ESP32-S3."],
-      hint: "Not sure? Find your board in the {link}: its list shows which kind it is.",
+      esp32: ["ESP32", "Has Wi-Fi, which a repeater observer needs.", "For example Heltec V3 or V4, LilyGO T-Beam, Seeed XIAO ESP32-S3."],
+      hint: "Not sure? If the board has Wi-Fi, it's an ESP32. Otherwise it's an nRF52.",
     },
     fr: {
       question: "Quel type de carte est-ce?",
       nrf52: ["nRF52", "Faible consommation, idéale pour l’énergie solaire.", "Par exemple RAK4631 (WisBlock), Heltec T114, LilyGO T-Echo, Seeed XIAO nRF52840."],
-      esp32: ["ESP32", "Dispose du Wi-Fi. Un répéteur observateur en a besoin.", "Par exemple Heltec V3 ou V4, LilyGO T-Beam, Seeed XIAO ESP32-S3."],
-      hint: "Un doute? Cherchez votre carte dans l’{link} : sa liste indique de quel type elle est.",
+      esp32: ["ESP32", "Dispose du Wi-Fi, dont un répéteur observateur a besoin.", "Par exemple Heltec V3 ou V4, LilyGO T-Beam, Seeed XIAO ESP32-S3."],
+      hint: "Un doute? Si la carte a le Wi-Fi, c’est une ESP32. Sinon, c’est une nRF52.",
     },
   };
   for (const lang of ["en", "fr"]) {
@@ -207,14 +207,14 @@ test("the board step asks what kind of board it is, with examples and a way to c
       assert.equal(text.t(`board.${kind}.examples`, lang), examples, `${lang} ${kind}`);
     }
     assert.equal(text.t("board.hint", lang), expected.hint, lang);
-    assert.ok(text.t("board.hint.link", lang).length > 0, `${lang}: the hint's link has words`);
+    assert.doesNotMatch(text.t("board.hint", lang), /\{link\}/, `${lang}: the hint is plain words, with no link`);
     // The "?" help and the observer notes stay.
     for (const key of ["board.help", "board.observer-nrf52", "board.as-repeater", "board.no-wifi.detail", "board.other-observer", "board.nrf52-next"]) {
       assert.ok(text.t(key, lang).length > 0, `${lang} ${key}`);
     }
   }
   // The grouped list of boards is gone, and no step names a board any more.
-  for (const key of ["board.group.nrf52", "board.group.esp32", "board.other", "board.your-board"]) {
+  for (const key of ["board.group.nrf52", "board.group.esp32", "board.other", "board.your-board", "board.hint.link"]) {
     assert.throws(() => text.t(key, "en"), /Missing setup text/, key);
     assert.throws(() => text.t(key, "fr"), /Missing setup text/, key);
   }
@@ -230,7 +230,7 @@ test("the board step asks what kind of board it is, with examples and a way to c
   const ui = read("docs/assets/setup/setup-ui.js");
   assert.doesNotMatch(ui, /Flow\.BOARDS|boardLabel|boardName|setup-group-label|board\.group/, "the screen draws two cards, not a list of boards");
   assert.doesNotMatch(read("docs/assets/setup/setup.css"), /setup-group-label/);
-  assert.match(ui, /"board\.hint", null, LINKS\.flasher/, "the hint links to the flasher the tool already uses");
+  assert.match(ui, /para\(t\("board\.hint"\)/, "the hint is plain text");
   // Pages that sent people to the old "My board isn't listed" choice now name the ESP32 choice.
   for (const [path, words] of [["docs/hardware/station-g3.md", "choose **ESP32** when it asks what kind of board it is"], ["docs/hardware/station-g3.fr.md", "choisissez **ESP32** quand il demande le type de carte"]]) {
     assert.ok(read(path).includes(words), path);

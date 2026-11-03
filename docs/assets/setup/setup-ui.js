@@ -635,7 +635,7 @@
         // What the picked kind means.
         if (a.board === "esp32" && observer) body.appendChild(note("info", t("board.other-observer")));
         if (a.board === "nrf52" && !observer) body.appendChild(note("ok", t("board.nrf52-next")));
-        body.appendChild(para(rich("board.hint", null, LINKS.flasher), { class: "setup-hint" }));
+        body.appendChild(para(t("board.hint"), { class: "setup-hint" }));
       }
     },
 

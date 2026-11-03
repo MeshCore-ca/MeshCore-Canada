@@ -89,9 +89,9 @@ for (const lang of LANGS) {
       // Read out with the card's name.
       await expect(page.locator(`[data-setup-choice="${kind}"]`)).toHaveAccessibleDescription(`${T(`board.${kind}.detail`, lang)} ${T(`board.${kind}.examples`, lang)}`);
     }
-    // Not sure? The flasher's list says which kind it is.
-    await expect(step(page)).toContainText(linked("board.hint", lang));
-    await expect(step(page).getByRole("link", { name: T("board.hint.link", lang) })).toHaveAttribute("href", "https://flasher.meshcore.io/");
+    // Not sure? Plain words: Wi-Fi means ESP32. No link to leave the tool for.
+    await expect(step(page).getByText(T("board.hint", lang), { exact: true })).toBeVisible();
+    await expect(step(page).locator("a[href*='flasher.meshcore.io']")).toHaveCount(0);
     await expect(nextButton(page)).toBeDisabled();
     // A pick is remembered in the address as the kind, and an nRF52 repeater is told what comes next.
     await choose(page, "nrf52");
