@@ -172,6 +172,29 @@
     });
   }
 
+  // A region's middle, where the map pin starts when only the region is known (a region code, or a
+  // link from the region map): the boundary's own `center` ([lon, lat]), or else the middle of its
+  // outline. A MeshMapper zone comes before a planning extension of the same region. null for a tag
+  // with no outline.
+  function centre(tag, data) {
+    var wanted = String(tag == null ? "" : tag).toLowerCase();
+    var features = data.boundaries.features.filter(function (feature) { return feature.properties && feature.properties.tag === wanted; });
+    if (!features.length) return null;
+    var published = features.filter(function (feature) { return feature.properties.regionSource === "meshmapper"; });
+    var feature = (published.length ? published : features)[0];
+    var given = feature.properties.center;
+    if (Array.isArray(given) && typeof given[0] === "number" && typeof given[1] === "number" && isFinite(given[0]) && isFinite(given[1])) return { lat: given[1], lon: given[0] };
+    var box = null;
+    eachPoint(feature.geometry, function (point) {
+      if (!box) box = { west: point[0], east: point[0], south: point[1], north: point[1] };
+      box.west = Math.min(box.west, point[0]);
+      box.east = Math.max(box.east, point[0]);
+      box.south = Math.min(box.south, point[1]);
+      box.north = Math.max(box.north, point[1]);
+    });
+    return box ? { lat: (box.south + box.north) / 2, lon: (box.west + box.east) / 2 } : null;
+  }
+
   // tag -> (other tag -> number of exact vertices both regions' outlines contain).
   // Built once for each loaded set of boundaries.
   function sharedVertices(collection) {
@@ -255,6 +278,7 @@
     loadData: loadData,
     resolve: resolve,
     planning: planning,
+    centre: centre,
     fromCode: fromCode,
     fromAlias: fromAlias,
     neighbours: neighbours,

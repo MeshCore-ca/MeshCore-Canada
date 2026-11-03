@@ -6,7 +6,7 @@
 // list and MeshCoreSetupText holds every word. This file draws them.
 //
 // Sections: helpers · state · answers and the address bar · region data · screen
-// frame · step screens · town search · commands screen · copy helper · mount.
+// frame · step screens · town search · map location · commands screen · copy helper · mount.
 //
 // Anything from the address bar or the town search (a town's name, for one) is only
 // ever set as text (textContent, text nodes), never as HTML.
@@ -104,6 +104,8 @@
 
   function para(content, attrs) { return el("p", attrs, content); }
 
+  function round4(value) { return Math.round(value * 10000) / 10000; }
+
   function note(kind, content, attrs) {
     var box = el("div", Object.assign({ class: "setup-note setup-note--" + kind }, attrs || {}));
     return append(box, content);
@@ -131,6 +133,9 @@
     help: {},          // open "?" answers, by step
     ticks: {},         // Done ticks, by command id and text; in memory only
     olderFirmware: false,   // "Older than 1.14" was picked at the version step
+    map: null,              // the map location step's Leaflet map, while that screen is drawn
+    pinFromCentre: false,   // the pin was put in the middle of the region, since no town or address was given
+    pinTyped: false,        // the latitude and longitude boxes hold something that isn't a spot in Canada
     town: freshTown()
   };
 
@@ -180,6 +185,8 @@
     // A list too long for the repeater has no commands to move on from.
     if (id === "commands") return !!state.data && Commands.fits(state.answers, state.data);
     if (id === "radio") return radioOptions().some(function (option) { return option.id === state.answers.radio; });
+    // What is typed in the boxes has to be a spot too, not just the pin from before.
+    if (id === "location") return state.answers.shareLocation === false || !state.pinTyped;
     return true;
   }
 
@@ -352,6 +359,7 @@
   function dataArrived() {
     if (!state.frame) return;
     if (state.step === "town") renderTownResults();
+    else if (state.step === "location") locationData();
     else if (DATA_STEPS.indexOf(state.step) !== -1) renderStep({});
     updateActions();
   }
@@ -400,7 +408,8 @@
   }
 
   // The element to give focus back to after a screen is drawn again.
-  var FOCUS_KEYS = ["data-setup-choice", "data-setup-help", "data-setup-neighbour", "data-setup-external", "data-setup-custom-toggle", "data-done", "data-copy"];
+  var FOCUS_KEYS = ["data-setup-choice", "data-setup-help", "data-setup-neighbour", "data-setup-external", "data-setup-custom-toggle",
+    "data-setup-pin", "data-setup-location-off", "data-done", "data-copy"];
 
   function focusSelector(element) {
     if (!element || !state.frame.panel.contains(element)) return null;
@@ -420,6 +429,7 @@
     var id = state.step;
     var screen = SCREENS[id];
     var keep = options.focus || (!options.heading && focusSelector(document.activeElement));
+    dropMap();
 
     var heading = el("h2", { class: "setup-question", id: "setup-question", tabindex: "-1", "aria-describedby": "setup-progress" },
       screen.question ? screen.question() : t(id + ".question"));
@@ -483,7 +493,8 @@
   // What a step sets up when the person reaches it.
   function arrive(id) {
     var a = state.answers;
-    if (id === "town" || id === "commands" || id === "check") loadData();
+    if (id === "town" || id === "location" || id === "commands" || id === "check") loadData();
+    if (id === "location") centrePin();
     if (id === "name" && a.name === undefined) {
       var suggested = Flow.suggestName(a, a.tag ? regionName(a.tag) : "");
       if (suggested) setAnswers(Object.assign({}, a, { name: suggested }));
@@ -498,6 +509,8 @@
     state.ticks = {};
     state.help = {};
     state.olderFirmware = false;
+    state.pinFromCentre = false;
+    state.pinTyped = false;
     state.town = freshTown();
     syncUrl();
     go("type");
@@ -707,6 +720,11 @@
       body: nameBody
     },
 
+    location: {
+      help: function () { return { key: "location.help", anchor: "settings" }; },
+      body: locationBody
+    },
+
     commands: {
       question: function () { return t(Flow.route(state.answers) === "phone" ? "commands.question.phone" : "commands.question.console"); },
       body: commandsBody
@@ -911,14 +929,6 @@
       updateActions();
     });
     check();
-    if (a.place && a.place.name) {
-      var where = exactSpot(a.place) ? "name.location-spot" : "name.location";
-      body.appendChild(checkboxRow({}, t(where, { town: a.place.name }), a.shareLocation !== false, function (checked) {
-        setAnswers(Object.assign({}, state.answers, { shareLocation: checked }));
-      }, { "data-setup-location": "" }));
-      // Ruling 34: on by default for every kind; an exact spot says plainly that it is public.
-      if (exactSpot(a.place)) body.appendChild(para(t("name.location-public"), { class: "setup-hint", "data-setup-location-public": "" }));
-    }
   }
 
   // ------------------------------------------------------------------ town search
@@ -1048,6 +1058,7 @@
   function clearPlace() {
     var next = Flow.resetDependents(state.answers, "place");
     delete next.place;
+    state.pinFromCentre = false;
     setAnswers(next);
   }
 
@@ -1118,6 +1129,7 @@
   }
 
   // A street address or coordinates are the spot itself; a town's point is only near the town.
+  // It decides the kind a place keeps, which the name suggestion and the map's starting zoom use.
   function exactSpot(place) {
     return !!place && (place.kind === "address" || place.kind === "coordinates");
   }
@@ -1180,6 +1192,8 @@
     }
     next.tag = option.tag;
     next.province = option.province;
+    // A new place brings its own pin; with no place, the map step starts in the middle of the region.
+    state.pinFromCentre = false;
     setAnswers(next);
     state.town.status = "idle";
     state.town.options = [];
@@ -1189,6 +1203,288 @@
     renderTownResults();
     var card = state.frame.panel.querySelector("[data-setup-region]");
     if (card) announce(card.textContent);
+  }
+
+  // ------------------------------------------------------------------ map location
+
+  // The site's own copy of Leaflet, the one the region map uses. It loads only when the map
+  // location step opens, so the page itself stays light.
+  var LEAFLET = {
+    script: "../regions/vendor/leaflet/leaflet.js",
+    style: "../regions/vendor/leaflet/leaflet.css",
+    images: "../regions/vendor/leaflet/images/"
+  };
+  var TILES = "https://tile.openstreetmap.org/{z}/{x}/{y}.png";
+  // How long the map's tiles may take before the step says the map couldn't load.
+  var TILE_TIMEOUT = 10000;
+  // The whole country, for a map with no pin on it yet.
+  var CANADA_VIEW = [[41.7, -141], [70, -52.6]];
+  var leafletPromise = null;
+
+  // Resolves with Leaflet once its script and its stylesheet have both loaded. A failure is
+  // forgotten, so coming back to the step tries again.
+  function loadLeaflet() {
+    if (window.L && typeof window.L.map === "function") return Promise.resolve(window.L);
+    if (!leafletPromise) {
+      leafletPromise = new Promise(function (resolve, reject) {
+        var waiting = 2;
+        function loaded() {
+          waiting -= 1;
+          if (!waiting) resolve(window.L);
+        }
+        function failed() {
+          leafletPromise = null;
+          reject(new Error("Leaflet didn't load"));
+        }
+        document.head.appendChild(el("link", { rel: "stylesheet", href: new URL(LEAFLET.style, SCRIPT_URL).href, on: { load: loaded, error: failed } }));
+        document.head.appendChild(el("script", { src: new URL(LEAFLET.script, SCRIPT_URL).href, on: { load: loaded, error: failed } }));
+      });
+    }
+    return leafletPromise;
+  }
+
+  function dropMap() {
+    var map = state.map;
+    state.map = null;
+    if (!map) return;
+    try { map.remove(); } catch (error) { /* it was half built; the screen goes anyway */ }
+  }
+
+  function escapeHtml(value) {
+    return String(value).replace(/[&<>"]/g, function (ch) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[ch]; });
+  }
+
+  // Leaflet takes its credit lines as HTML. Only this file's own words go in, escaped, and the
+  // links open in a new tab like every other link in the tool.
+  function creditLink(words, href) {
+    return '<a href="' + href + '" target="_blank" rel="noopener" data-mc-external-ready="true">' + escapeHtml(words) +
+      '<span class="setup-sr"> ' + escapeHtml(t("link.new-tab")) + "</span></a>";
+  }
+
+  function tileCredit() {
+    return t("location.attribution").split("{link}").map(escapeHtml)
+      .join(creditLink(t("location.attribution.link"), "https://www.openstreetmap.org/copyright"));
+  }
+
+  // The place with its pin moved to lat, lon (4 decimals, about 10 m). A town or an address
+  // keeps its name and kind; a place given as coordinates is named by them, so it keeps saying
+  // where it is. With no place yet, the pin becomes one, given as coordinates.
+  function pinPlace(place, lat, lon) {
+    lat = round4(lat);
+    lon = round4(lon);
+    var next = Object.assign({}, place || { province: state.answers.province, kind: "coordinates" }, { lat: lat, lon: lon });
+    if (next.kind === "coordinates") next.name = lat + ", " + lon;
+    return next;
+  }
+
+  // Only a region is known (a region code, or a link from the region map): the pin starts in its middle.
+  function centrePin() {
+    var a = state.answers;
+    if (a.shareLocation === false || Flow.hasPin(a.place) || !state.data || !a.tag) return;
+    var middle = Place.centre(a.tag, state.data);
+    if (!middle) return;
+    state.pinFromCentre = true;
+    setAnswers(Object.assign({}, a, { place: pinPlace(a.place, middle.lat, middle.lon) }));
+  }
+
+  // The data arrived while the map step was showing: a screen still waiting for the region's
+  // middle is drawn again; otherwise the map stays as it is and only the region check catches up.
+  function locationData() {
+    var panel = state.frame.panel;
+    if (panel.querySelector("[data-setup-location-wait]")) {
+      centrePin();
+      return renderStep({});
+    }
+    var box = panel.querySelector("[data-setup-pin-region]");
+    if (box) regionNote(box);
+  }
+
+  // A pin dragged into another region says so, and where to change it. The region isn't changed for the person.
+  function regionNote(box) {
+    var a = state.answers;
+    box.textContent = "";
+    if (!state.data || !a.tag || a.shareLocation === false || !Flow.hasPin(a.place)) return;
+    var found = Place.resolve({ lat: a.place.lat, lon: a.place.lon, province: "" }, state.data).options;
+    if (!found.length || found.some(function (option) { return option.tag === a.tag; })) return;
+    var names = [];
+    found.forEach(function (option) {
+      var name = regionName(option.tag) + " (" + option.tag + ")";
+      if (names.indexOf(name) === -1) names.push(name);
+    });
+    box.appendChild(note("info", t("location.other-region", { region: sayList(names) }), { "data-setup-other-region": "" }));
+  }
+
+  // A town's point is somewhere in town; a street address or coordinates are close to the spot; a
+  // region's middle is only a start.
+  function startZoom(place, fromCentre) {
+    if (fromCentre) return 10;
+    return exactSpot(place) ? 17 : 13;
+  }
+
+  function locationBody(body) {
+    var a = state.answers;
+    var off = a.shareLocation === false;
+    state.pinTyped = false;
+    body.appendChild(para(t("location.hint"), { class: "setup-hint" }));
+    if (!off && !Flow.hasPin(a.place) && !state.data) {
+      // Only a region is known, and its middle comes with the region data.
+      var wait = el("div", { "data-setup-location-wait": "" });
+      loading(wait);
+      body.appendChild(wait);
+    } else if (!off) {
+      pinPicker(body);
+    }
+    body.appendChild(checkboxRow({}, t("location.off"), off, function (checked) {
+      var next = Object.assign({}, state.answers);
+      if (checked) next.shareLocation = false; else delete next.shareLocation;
+      setAnswers(next);
+      if (!checked) centrePin();
+      renderStep({ focus: "[data-setup-location-off]" });
+      // The warning appears after the tick; say it for screen readers.
+      if (checked) announce(t("location.off-warning"));
+    }, { "data-setup-location-off": "" }));
+    if (off) body.appendChild(note("warn", para(t("location.off-warning")), { "data-setup-location-warning": "" }));
+  }
+
+  // The map with its pin, and the latitude and longitude boxes, which are the way to set it by
+  // keyboard or screen reader. Each follows the other. If the map can't load, the boxes still work.
+  function pinPicker(body) {
+    var a = state.answers;
+    var view = { L: null, map: null, marker: null };
+    var centre = state.pinFromCentre && Flow.hasPin(a.place)
+      ? note("info", t("location.centre", { region: regionName(a.tag) + " (" + a.tag + ")" }), { "data-setup-pin-centre": "" }) : null;
+    var how = para(t("location.how"), { class: "setup-hint", id: "setup-pin-how" });
+    var canvas = el("div", { class: "setup-map__canvas", "data-setup-map": "" });
+    var status = para(t("location.loading"), { class: "setup-map__status", role: "status", "data-setup-map-status": "" });
+    var mapBox = el("div", { class: "setup-map", role: "group", "aria-label": t("location.map"), "aria-describedby": "setup-pin-how" }, [canvas, status]);
+    function box(axis) {
+      return el("input", { type: "text", id: "setup-pin-" + axis, class: "setup-input", "data-setup-pin": axis,
+        value: Flow.hasPin(a.place) ? String(round4(a.place[axis])) : "", autocomplete: "off", autocapitalize: "off", spellcheck: "false",
+        "aria-describedby": "setup-pin-message" });
+    }
+    var latBox = box("lat");
+    var lonBox = box("lon");
+    var message = el("div", { id: "setup-pin-message", class: "setup-message", "data-setup-pin-message": "", "aria-live": "polite" });
+    var region = el("div", { "data-setup-pin-region": "", "aria-live": "polite" });
+    append(body, [centre, how, mapBox, el("fieldset", { class: "setup-fieldset setup-fieldset--plain setup-pin" }, [
+      el("legend", { text: t("location.typed") }),
+      el("div", { class: "setup-pin__fields" }, [
+        el("div", { class: "setup-field" }, [el("label", { for: "setup-pin-lat", text: t("location.lat") }), latBox]),
+        el("div", { class: "setup-field" }, [el("label", { for: "setup-pin-lon", text: t("location.lon") }), lonBox])
+      ]),
+      message
+    ]), region]);
+    regionNote(region);
+
+    function problem(show) {
+      message.textContent = "";
+      [latBox, lonBox].forEach(function (input) { if (show) input.setAttribute("aria-invalid", "true"); else input.removeAttribute("aria-invalid"); });
+      if (show) message.appendChild(note("warn", rich("location.invalid")));
+    }
+
+    // The pin is somewhere new: keep it, and put the boxes in step unless they are where it came from.
+    function moved(spot, typed) {
+      state.pinTyped = false;
+      state.pinFromCentre = false;
+      if (centre) {
+        centre.remove();
+        centre = null;
+      }
+      setAnswers(Object.assign({}, state.answers, { place: pinPlace(state.answers.place, spot.lat, spot.lon) }));
+      if (!typed) {
+        latBox.value = String(round4(spot.lat));
+        lonBox.value = String(round4(spot.lon));
+      }
+      problem(false);
+      updateActions();
+    }
+
+    function setMarker(spot) {
+      if (!view.map) return;
+      if (view.marker) return view.marker.setLatLng([spot.lat, spot.lon]);
+      var marker = view.L.marker([spot.lat, spot.lon], { draggable: true, keyboard: false, alt: t("location.pin"), autoPan: true }).addTo(view.map);
+      marker.on("dragend", function () { fromMap(marker.getLatLng()); });
+      view.marker = marker;
+    }
+
+    // A tap, a click or a drag. Off the edge of Canada, the pin goes back where it was.
+    function fromMap(latlng) {
+      var point = latlng.wrap();
+      var spot = Flow.readPin(String(round4(point.lat)), String(round4(point.lng)));
+      if (!spot) {
+        if (Flow.hasPin(state.answers.place)) setMarker(state.answers.place);
+        return problem(true);
+      }
+      setMarker(spot);
+      moved(spot, false);
+      regionNote(region);
+    }
+
+    // Typing moves the pin as soon as both boxes hold a spot in Canada. What's wrong is said once
+    // the person leaves the box or presses Enter, not at every key.
+    function fromBoxes(done) {
+      var spot = Flow.readPin(latBox.value, lonBox.value);
+      if (!spot) {
+        state.pinTyped = true;
+        if (done) problem(true);
+        return updateActions();
+      }
+      setMarker(spot);
+      if (view.map) view.map.panTo([spot.lat, spot.lon]);
+      moved(spot, true);
+      if (done) regionNote(region);
+    }
+    [latBox, lonBox].forEach(function (input) {
+      input.addEventListener("input", function () { fromBoxes(false); });
+      input.addEventListener("change", function () { fromBoxes(true); });
+    });
+
+    function mapFailed(map) {
+      if (map && state.map === map) dropMap();
+      view.map = null;
+      view.marker = null;
+      if (!mapBox.isConnected) return;
+      how.remove();
+      mapBox.replaceWith(note("warn", para(t("location.map-failed")), { "data-setup-map-failed": "", role: "status" }));
+    }
+
+    loadLeaflet().then(function (L) {
+      // The screen was drawn again or left before Leaflet arrived.
+      if (!mapBox.isConnected) return;
+      L.Icon.Default.imagePath = new URL(LEAFLET.images, SCRIPT_URL).href;
+      // The keyboard way is the boxes, so the map and its pin aren't tab stops; the wheel scrolls the page.
+      var map = L.map(canvas, { zoomControl: false, keyboard: false, scrollWheelZoom: false });
+      dropMap();
+      state.map = map;
+      view.L = L;
+      view.map = map;
+      map.attributionControl.setPrefix(creditLink("Leaflet", "https://leafletjs.com"));
+      L.control.zoom({ zoomInTitle: t("location.zoom-in"), zoomOutTitle: t("location.zoom-out") }).addTo(map);
+      var tiles = L.tileLayer(TILES, { maxZoom: 19, attribution: tileCredit() }).addTo(map);
+      var here = state.answers.place;
+      if (Flow.hasPin(here)) {
+        map.setView([here.lat, here.lon], startZoom(here, !!centre));
+        setMarker(here);
+      } else {
+        map.fitBounds(CANADA_VIEW);
+      }
+      map.on("click", function (event) { fromMap(event.latlng); });
+      window.setTimeout(function () { if (state.map === map) map.invalidateSize(); }, 0);
+      // As on the region map: the first tile in means the map works; every tile failing, or none in time, means it doesn't.
+      var settled = false;
+      var timer = window.setTimeout(function () { settle(false); }, TILE_TIMEOUT);
+      function settle(ok) {
+        if (settled) return;
+        settled = true;
+        window.clearTimeout(timer);
+        if (state.map !== map) return;
+        if (ok) status.remove(); else mapFailed(map);
+      }
+      tiles.once("tileload", function () { settle(true); });
+      tiles.once("load", function () { settle(false); });
+    }).catch(function () {
+      mapFailed(view.map);
+    });
   }
 
   // ------------------------------------------------------------------ commands screen

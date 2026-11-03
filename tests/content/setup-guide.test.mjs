@@ -171,6 +171,15 @@ test("every command explanation in the tool appears on the page, word for word",
   }
 });
 
+test("the settings section explains the map step with the tool's own words for turning it off", () => {
+  for (const [lang, path] of Object.entries(pages)) {
+    const settings = flat(read(path)).split(/\{ ?#settings ?\}/)[1];
+    assert.ok(settings, `${path} has #settings`);
+    assert.ok(settings.includes(`**${text.t("location.off", lang)}**`), `${path}: says to tick ${text.t("location.off", lang)} to leave the lines out`);
+    assert.doesNotMatch(settings, /Untick the map option|Décochez l’option de carte|when you typed a street address|si vous avez tapé une adresse/, `${path}: the old per-kind entries are gone`);
+  }
+});
+
 test("the page answers the tool's questions in the tool's own words", () => {
   for (const [lang, path] of Object.entries(pages)) {
     const page = flat(read(path));
@@ -462,6 +471,11 @@ test("the privacy pages match the setup tool: one name for the place search, the
     assert.equal(rows.length, 3, `${path}: three rows send a place to the geocoder`);
     for (const row of rows) assert.ok(row.includes(place), `${path}: ${row.slice(0, 50)} uses the tool's name for it`);
     assert.ok(flat(source).includes(`${minutes} minutes`), `${path}: says ${minutes} minutes`);
+    // The map step: its tiles come from OpenStreetMap, and the link holds the pin unless location is disabled.
+    const tiles = source.split("\n").filter((line) => line.startsWith("|") && line.includes("config/index.md") && /OpenStreetMap \|$/.test(line.trim()));
+    assert.equal(tiles.length, 1, `${path}: one row for the setup tool's map, which loads OpenStreetMap tiles`);
+    assert.ok(flat(source).includes(`**${text.t("location.off", lang)}**`), `${path}: names the ${text.t("location.off", lang)} tick`);
+    assert.doesNotMatch(flat(source), /Show on maps|Afficher sur les cartes|Anyone can see this spot|Tout le monde peut voir cet endroit/, `${path}: the old map tick is gone`);
     // Expiry is checked only when the other page reads the entry, so the page must not say it is removed at 10 minutes.
     assert.doesNotMatch(flat(source), /(after|après) 10 minutes/, `${path}: the entry is ignored, not removed, after ${minutes} minutes`);
   }

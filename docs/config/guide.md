@@ -327,18 +327,15 @@ using.
     fine, but not `[ ] \ : , ? *`: the repeater won't accept them.
 
 `set lat 44.1628`
-:   Show it on maps near Belleville (not its exact spot). This line sets the latitude.
+:   Show it on maps at the spot you picked. This line sets the latitude.
 
 `set lon -77.3832`
-:   This line sets the longitude, so maps show it near Belleville.
+:   This line sets the longitude, so maps show it at the spot you picked.
 
-    Untick the map option in the tool and both lines are left out.
-
-`set lat 44.1628`, when you typed a street address or coordinates
-:   Show it on maps at the spot you entered. This line sets the latitude.
-
-`set lon -77.3832`, when you typed a street address or coordinates
-:   This line sets the longitude, so maps show it at the spot you entered.
+    The tool shows a map with a pin where you said it will be installed. Drag
+    it, tap the map, or type the coordinates. Most people pick a spot a block
+    or two from the repeater. Tick **Disable location** and both lines are left
+    out, so maps won't show it.
 
 `password <your new admin password>`
 :   Set the admin password you'll use to manage it from the app. Keep it in your password manager.

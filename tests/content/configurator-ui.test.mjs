@@ -36,7 +36,12 @@ test("the setup tool page loads the scope generator before its commands, and not
     assert.ok(loadsBefore(markdown, "assets/regions/modules/iata-scopes.js", "assets/setup/setup-commands.js"), page);
     assert.ok(loadsBefore(markdown, "assets/setup/setup-commands.js", "assets/setup/setup-ui.js"), page);
     assert.ok(!markdown.includes("assets/regions/regions.js"), page);
+    // The map step loads Leaflet itself, only when it opens, so the page stays light.
+    assert.doesNotMatch(markdown, /leaflet/i, page);
   }
+  const ui = read("docs/assets/setup/setup-ui.js");
+  assert.match(ui, /"\.\.\/regions\/vendor\/leaflet\/leaflet\.js"/, "the map step reuses the site's vendored Leaflet");
+  assert.match(ui, /https:\/\/tile\.openstreetmap\.org\/\{z\}\/\{x\}\/\{y\}\.png/, "with OpenStreetMap tiles");
 });
 
 test("the region map script no longer carries the old configurator, and the map page still loads it", () => {

@@ -146,6 +146,25 @@ test("every region's own centre resolves back to that region", () => {
   }
 });
 
+test("a region's centre is where the map pin starts when only the region is known", () => {
+  // The boundary's own centre ([lon, lat]), as the region map uses it.
+  assert.deepEqual(place.centre("ytr", data), { lat: 44.157979, lon: -77.368694 });
+  assert.deepEqual(place.centre("YTR", data), place.centre("ytr", data));
+  // Every region the tool can pick has one, and it is inside that region.
+  for (const [tag, entry] of Object.entries(catalog.hierarchy)) {
+    if (entry.kind !== "city") continue;
+    const middle = place.centre(tag, data);
+    assert.ok(middle && Number.isFinite(middle.lat) && Number.isFinite(middle.lon), tag);
+    assert.ok(place.resolve(where(middle.lat, middle.lon, ""), data).options.some((o) => o.tag === tag), tag);
+  }
+  // No region, no centre.
+  for (const tag of ["nope", "", undefined, "on", "can"]) assert.equal(place.centre(tag, data), null, String(tag));
+  // An outline with no centre given uses the middle of its outline.
+  const square = { boundaries: { type: "FeatureCollection", features: [{ type: "Feature", properties: { tag: "zzz" },
+    geometry: { type: "Polygon", coordinates: [[[-80, 44], [-78, 44], [-78, 46], [-80, 46], [-80, 44]]] } }] } };
+  assert.deepEqual(place.centre("zzz", square), { lat: 45, lon: -79 });
+});
+
 test("codes spanning two provinces offer both; aliases work offline", () => {
   assert.deepEqual(place.fromCode("YOW", data).map((o) => o.province).sort(), ["on", "qc"]);
   assert.deepEqual(place.fromCode(" ytr ", data).map((o) => [o.tag, o.province, o.name]), [["ytr", "on", "Quinte West"]]);
@@ -455,5 +474,6 @@ test("the script loads without the place search and region scripts; only resolve
   assert.equal(JSON.stringify(alone.neighbours("ytr", loaded)), JSON.stringify(place.neighbours("ytr", data)));
   assert.equal(JSON.stringify(alone.radioOptions("yvr", loaded)), JSON.stringify(place.radioOptions("yvr", data)));
   assert.equal(JSON.stringify(alone.crossBorder("on")), JSON.stringify(place.crossBorder("on")));
+  assert.equal(JSON.stringify(alone.centre("ytr", loaded)), JSON.stringify(place.centre("ytr", data)));
   assert.throws(() => alone.resolve(where(49.2827, -123.1207, "BC"), loaded), /must be loaded/);
 });

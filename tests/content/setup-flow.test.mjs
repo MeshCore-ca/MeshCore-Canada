@@ -9,23 +9,23 @@ const flow = globalThis.MeshCoreSetupFlow;
 
 test("a new nRF52 repeater gets the bootloader and flash steps, and no version question", () => {
   assert.deepEqual(flow.stepIds({ type: "repeater", board: "nrf52", status: "new" }),
-    ["type","board","status","bootloader","flash","town","role","name","commands","check"]);
+    ["type","board","status","bootloader","flash","town","role","name","location","commands","check"]);
 });
 
 test("a listen-only repeater observer skips scopes questions", () => {
   assert.deepEqual(flow.stepIds({ type: "observer", repeat: "listen", board: "esp32", status: "new" }),
-    ["type","repeat","board","status","flash","town","name","commands","check"]);
+    ["type","repeat","board","status","flash","town","name","location","commands","check"]);
 });
 
 test("a running repeater that isn't reflashed takes the phone route", () => {
   const a = { type: "repeater", board: "esp32", status: "running", reflash: false };
-  assert.deepEqual(flow.stepIds(a), ["type","board","status","reflash","version","town","role","name","commands","check"]);
+  assert.deepEqual(flow.stepIds(a), ["type","board","status","reflash","version","town","role","name","location","commands","check"]);
   assert.equal(flow.route(a), "phone");
 });
 
 test("a running board becoming a repeater observer must be flashed", () => {
   const a = { type: "observer", repeat: "both", board: "esp32", status: "running", observerFirmware: "no" };
-  assert.deepEqual(flow.stepIds(a), ["type","repeat","board","status","observerFirmware","flash","town","role","name","commands","check"]);
+  assert.deepEqual(flow.stepIds(a), ["type","repeat","board","status","observerFirmware","flash","town","role","name","location","commands","check"]);
   assert.equal(flow.route(a), "flash");
 });
 
@@ -290,7 +290,7 @@ test("share links leave out the firmware version, so whoever opens a phone-route
 test("share links keep only valid, known answers", () => {
   const a = { type: "observer", repeat: "both", board: "esp32", status: "running", observerFirmware: "yes",
     tag: "yvr", province: "bc", radio: "bc-mesh", role: "edge", neighbours: ["yxx", "yyj"], external: ["washington"],
-    name: "Vancouver_Obs1", nameEdited: true, shareLocation: false, reflash: false,
+    name: "Vancouver_Obs1", nameEdited: true, shareLocation: true, reflash: false,
     place: { name: "Vancouver", province: "bc", lat: 49.28, lon: -123.12 } };
   const q = flow.toQuery({ ...a, regionReply: "*^ F", firmware: "1.15" });
   assert.doesNotMatch(q, /^\?|place=|regionReply|firmware/);
@@ -441,20 +441,84 @@ test("a place from an address or coordinates keeps its kind in a share link, and
   assert.deepEqual(flow.fromQuery("kind=address"), {});
 });
 
-test("an exact spot the person chose not to show on maps stays out of the link; the region still comes back", () => {
+test("with location disabled, the spot stays out of the link for every kind of place; the region still comes back", () => {
+  const town = { name: "Belleville", province: "on", lat: 44.1628, lon: -77.3832 };
   const address = { name: "111 Wellington Street, Ottawa", province: "on", lat: 45.4231, lon: -75.6988, kind: "address" };
   const point = { name: "44.1628, -77.3832", province: "on", lat: 44.1628, lon: -77.3832, kind: "coordinates" };
-  for (const place of [address, point]) {
+  // A pin can be dragged to the exact spot whatever was searched, so a town is left out too.
+  for (const place of [town, address, point]) {
+    const label = place.kind || "town";
     const q = flow.toQuery({ tag: "yow", province: "on", place, shareLocation: false });
-    assert.doesNotMatch(q, /(?:^|&)(?:town|kind|lat|lon)=/, place.kind);
-    assert.doesNotMatch(q, /Wellington|44\.1628|77\.3832/, place.kind);
-    assert.deepEqual(flow.fromQuery(q), { tag: "yow", province: "on", shareLocation: false }, place.kind);
-    // Ticked again (or never unticked), the spot is back.
-    assert.match(flow.toQuery({ tag: "yow", province: "on", place, shareLocation: true }), /(?:^|&)lat=/, place.kind);
-    assert.match(flow.toQuery({ tag: "yow", province: "on", place }), /(?:^|&)lat=/, place.kind);
+    assert.doesNotMatch(q, /(?:^|&)(?:town|kind|lat|lon)=/, label);
+    assert.doesNotMatch(q, /Belleville|Wellington|44\.1628|77\.3832|45\.4231/, label);
+    assert.deepEqual(flow.fromQuery(q), { tag: "yow", province: "on", shareLocation: false }, label);
+    // Not disabled (the default), the spot is in the link.
+    assert.match(flow.toQuery({ tag: "yow", province: "on", place, shareLocation: true }), /(?:^|&)lat=/, label);
+    assert.match(flow.toQuery({ tag: "yow", province: "on", place }), /(?:^|&)lat=/, label);
   }
-  // A town is only near the place, so it stays in the link either way.
-  assert.match(flow.toQuery({ place: { name: "Belleville", lat: 44.1628, lon: -77.3832 }, shareLocation: false }), /town=Belleville/);
+});
+
+test("the pin's coordinates travel in the link, rounded to 4 decimals, with the town and kind as before", () => {
+  // The person dragged the pin away from where the search put it: the link holds the pin.
+  for (const place of [{ name: "Belleville", province: "on", lat: 44.21234, lon: -77.45678 },
+    { name: "111 Wellington Street, Ottawa", province: "on", lat: 45.42001, lon: -75.70049, kind: "address" },
+    { name: "44.2123, -77.4568", province: "on", lat: 44.2123, lon: -77.4568, kind: "coordinates" }]) {
+    const label = place.kind || "town";
+    const q = flow.toQuery({ tag: "ytr", province: "on", place });
+    const back = flow.fromQuery(q).place;
+    assert.equal(back.name, place.name, label);
+    assert.equal(back.kind, place.kind, label);
+    assert.equal(back.lat, Math.round(place.lat * 10000) / 10000, label);
+    assert.equal(back.lon, Math.round(place.lon * 10000) / 10000, label);
+    // Read back and written again, it is the same link.
+    assert.equal(flow.toQuery({ tag: "ytr", province: "on", place: back }), q, label);
+  }
+});
+
+test("the map location step is done once the pin is in Canada, or location is disabled", () => {
+  const pin = { name: "Belleville", province: "on", lat: 44.1628, lon: -77.3832 };
+  assert.equal(flow.isComplete("location", { place: pin }), true);
+  assert.equal(flow.isComplete("location", { place: pin, shareLocation: true }), true);
+  assert.equal(flow.isComplete("location", { place: { ...pin, kind: "address" } }), true);
+  // No pin yet: location is on by default, so it waits.
+  assert.equal(flow.isComplete("location", {}), false);
+  assert.equal(flow.isComplete("location", { tag: "ytr", province: "on" }), false);
+  // Disabled, nothing more is needed, with or without a pin.
+  assert.equal(flow.isComplete("location", { shareLocation: false }), true);
+  assert.equal(flow.isComplete("location", { place: pin, shareLocation: false }), true);
+  // A pin outside Canada, or one that isn't two numbers, is not a pin.
+  for (const bad of [{ ...pin, lat: 12 }, { ...pin, lon: -20 }, { ...pin, lat: NaN }, { ...pin, lat: "44.1" }, { name: "Belleville" }]) {
+    assert.equal(flow.isComplete("location", { place: bad }), false, JSON.stringify(bad));
+  }
+});
+
+test("a new town or place resets the pin; other answers leave it where the person put it", () => {
+  const moved = { type: "repeater", board: "esp32", status: "new", tag: "ytr", province: "on", role: "city", name: "Belleville_R1",
+    place: { name: "Belleville", province: "on", lat: 44.2123, lon: -77.4568 } };
+  // The town step stores the new place whole, so its point replaces the dragged pin.
+  const kingston = { name: "Kingston", province: "on", lat: 44.22976, lon: -76.48098 };
+  assert.deepEqual(flow.resetDependents({ ...moved, place: kingston }, "place").place, kingston);
+  // A disabled location stays disabled: the person said not to show it.
+  assert.equal(flow.resetDependents({ ...moved, place: kingston, shareLocation: false }, "place").shareLocation, false);
+  for (const key of ["type", "board", "status", "tag", "role", "name"]) {
+    assert.deepEqual(flow.resetDependents(moved, key).place, moved.place, key);
+  }
+});
+
+test("typed pin coordinates are read in either decimal style, and only inside Canada", () => {
+  assert.deepEqual(flow.readPin("44.1628", "-77.3832"), { lat: 44.1628, lon: -77.3832 });
+  assert.deepEqual(flow.readPin(" 44,1628 ", "-77,3832"), { lat: 44.1628, lon: -77.3832 });   // French decimal commas
+  assert.deepEqual(flow.readPin("+44.1628", "−77.3832"), { lat: 44.1628, lon: -77.3832 }); // a real minus sign
+  assert.deepEqual(flow.readPin("44", "-77"), { lat: 44, lon: -77 });
+  // Outside the box the tool uses for Canada: the longitude's minus sign forgotten, or a latitude too far south.
+  for (const [lat, lon] of [["44.1628", "77.3832"], ["12", "-77"], ["90", "-77"], ["44", "-170"]]) {
+    assert.equal(flow.readPin(lat, lon), null, `${lat}, ${lon}`);
+  }
+  // Anything that isn't one plain number in each box.
+  for (const [lat, lon] of [["", "-77"], ["44.16", ""], ["abc", "-77"], ["44.1628, -77.3832", "-77"], ["0x2C", "-77"], ["1e1", "-77"],
+    ["44.", "-77"], ["44..1", "-77"], [undefined, "-77"], [44.1, -77]]) {
+    assert.equal(flow.readPin(lat, lon), null, `${lat}, ${lon}`);
+  }
 });
 
 test("the 'I did this' ticks never go into a share link", () => {

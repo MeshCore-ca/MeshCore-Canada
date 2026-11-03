@@ -638,6 +638,86 @@
   margin: 0.75rem 0 0;
 }
 
+.setup-input[aria-invalid="true"] {
+  border-color: var(--mc-color-warning);
+}
+
+/* The map location step: a map with a pin, then the two boxes that set it by keyboard.
+   The map is its own stacking context, so Leaflet's layers stay under the site's sticky header. */
+.setup-map {
+  position: relative;
+  z-index: 0;
+  margin: 0.75rem 0;
+  overflow: hidden;
+  border: 1px solid var(--mc-color-border);
+  border-radius: var(--mc-radius-md);
+  background: var(--mc-color-surface-raised);
+}
+
+.setup-map__canvas {
+  height: min(50vh, 28rem);
+  min-height: 15rem;
+}
+
+.md-typeset .setup-tool .setup-map__status {
+  position: absolute;
+  inset: 0;
+  z-index: 1001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  color: var(--mc-color-text-muted);
+  pointer-events: none;
+}
+
+.setup-map .leaflet-container {
+  font: inherit;
+  background: var(--mc-color-surface-raised);
+}
+
+.md-typeset .setup-tool .setup-map .leaflet-bar a,
+.md-typeset .setup-tool .setup-map .leaflet-bar a:hover {
+  width: 2.25rem;
+  height: 2.25rem;
+  line-height: 2.25rem;
+  border-color: var(--mc-color-border);
+  color: var(--mc-color-text);
+  background: var(--mc-color-surface);
+}
+
+.md-typeset .setup-tool .setup-map .leaflet-control-attribution {
+  color: var(--mc-color-text);
+  background: var(--mc-color-surface);
+}
+
+.md-typeset .setup-tool .setup-map .leaflet-control-attribution a {
+  color: var(--md-typeset-a-color);
+}
+
+.setup-map .leaflet-bar a:focus-visible,
+.setup-map .leaflet-control-attribution a:focus-visible {
+  outline: 3px solid var(--mc-color-focus);
+  outline-offset: -3px;
+}
+
+.setup-pin legend {
+  padding: 0;
+  font-weight: 650;
+}
+
+.setup-pin__fields {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 0.75rem;
+}
+
+.md-typeset .setup-tool .setup-pin__fields .setup-field {
+  flex: 1 1 9rem;
+  min-width: 0;
+  margin: 0.4rem 0;
+}
+
 /* Start over, and the question it asks first */
 .md-typeset .setup-tool .setup-restart {
   margin-top: 1.25rem;

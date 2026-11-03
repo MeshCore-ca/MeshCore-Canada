@@ -3,7 +3,7 @@ import { expect, test } from "./site-fixtures.mjs";
 import { siteRoute } from "./site-route.mjs";
 import {
   T, plain, firstSentence, linked, mockGeocoder, step, nextButton, progress, codes, expectStep, next, choose, answer,
-  confirmStep, version, searchTown, town, scopeLines, commandLines, openLink, nextUntil
+  confirmStep, version, searchTown, town, scopeLines, commandLines, openLink, nextUntil, location, pinBox
 } from "./setup-helpers.mjs";
 
 // The guided setup tool at /config/. Shared helpers (the text table, the geocoder mock, the step
@@ -22,7 +22,7 @@ for (const lang of LANGS) {
     await mockGeocoder(page);
     await page.goto(siteRoute(ROUTES[lang]));
     await expectStep(page, "type");
-    await expect(progress(page)).toHaveText(T("nav.progress", lang, { n: 1, total: 9, label: T("step.type", lang) }));
+    await expect(progress(page)).toHaveText(T("nav.progress", lang, { n: 1, total: 10, label: T("step.type", lang) }));
     await expect(nextButton(page)).toBeDisabled();
     await expect(page.locator("[data-setup-back]")).toBeDisabled();
     await answer(page, "type", "repeater");
@@ -33,7 +33,7 @@ for (const lang of LANGS) {
     await expect(page.locator('[data-setup-choice="nrf52"]')).toHaveText(T("board.nrf52", lang));
     await choose(page, "nrf52");
     // An nRF52 board adds the bootloader step.
-    await expect(progress(page)).toHaveText(T("nav.progress", lang, { n: 2, total: 10, label: T("step.board", lang) }));
+    await expect(progress(page)).toHaveText(T("nav.progress", lang, { n: 2, total: 11, label: T("step.board", lang) }));
     await next(page);
     await answer(page, "status", "new");
     await confirmStep(page, "bootloader");
@@ -48,12 +48,18 @@ for (const lang of LANGS) {
     await answer(page, "role", "city");
     await expectStep(page, "name");
     await expect(page.locator("[data-setup-name]")).toHaveValue("Belleville_R1");
-    await expect(page.locator("[data-setup-location]")).toBeChecked();
-    // A town's point is only near the town, so there's no public-spot line.
-    await expect(page.locator("[data-setup-location-public]")).toHaveCount(0);
+    // Where maps show it is the next screen, not a tick on this one.
+    await expect(step(page).locator("input[type=checkbox]")).toHaveCount(0);
+    await next(page);
+    await expectStep(page, "location");
+    await expect(progress(page)).toHaveText(T("nav.progress", lang, { n: 9, total: 11, label: T("step.location", lang) }));
+    // The pin starts at the town the search found, and location is on.
+    await expect(pinBox(page, "lat")).toHaveValue("44.1628");
+    await expect(pinBox(page, "lon")).toHaveValue("-77.3832");
+    await expect(page.locator("[data-setup-location-off]")).not.toBeChecked();
     await next(page);
     await expectStep(page, "commands");
-    await expect(progress(page)).toHaveText(T("nav.progress", lang, { n: 9, total: 10, label: T("step.commands", lang) }));
+    await expect(progress(page)).toHaveText(T("nav.progress", lang, { n: 10, total: 11, label: T("step.commands", lang) }));
     await expect(codes(page)).toHaveText(BELLEVILLE_COMMANDS(lang));
     // Each line has Done; the password line is typed by hand, so it has no Copy.
     await expect(page.locator("[data-setup-command] [data-done]")).toHaveCount(14);
@@ -142,7 +148,7 @@ for (const lang of LANGS) {
     await expectStep(page, "board");
     await page.locator("[data-setup-as-repeater]").click();
     await expectStep(page, "board");
-    await expect(progress(page)).toHaveText(T("nav.progress", lang, { n: 2, total: 9, label: T("step.board", lang) }));
+    await expect(progress(page)).toHaveText(T("nav.progress", lang, { n: 2, total: 10, label: T("step.board", lang) }));
     await expect(page.locator('[data-setup-choice="nrf52"]')).toBeEnabled();
     await expect(page.locator("[data-setup-as-repeater]")).toHaveCount(0);
     await expect(page.locator('[data-setup-card="nrf52"]')).not.toContainText(T("board.no-wifi.detail", lang));
@@ -164,8 +170,8 @@ test("a link made before the kind question still opens: each old board id become
   for (const [old, kind] of cases) {
     await page.goto(siteRoute(`/config/?type=repeater&board=${old}&status=new`));
     // The kind decides the steps: an nRF52 repeater updates its bootloader first.
-    if (kind === "nrf52") await expect(progress(page)).toHaveText(T("nav.progress", "en", { n: 4, total: 10, label: T("step.bootloader", "en") }));
-    else await expect(progress(page)).toHaveText(T("nav.progress", "en", { n: 4, total: 9, label: T("step.flash", "en") }));
+    if (kind === "nrf52") await expect(progress(page)).toHaveText(T("nav.progress", "en", { n: 4, total: 11, label: T("step.bootloader", "en") }));
+    else await expect(progress(page)).toHaveText(T("nav.progress", "en", { n: 4, total: 10, label: T("step.flash", "en") }));
     // The address is rewritten with the kind.
     await expect.poll(() => new URL(page.url()).searchParams.get("board"), old).toBe(kind);
     await page.locator("[data-setup-back]").click();
@@ -223,6 +229,10 @@ for (const lang of LANGS) {
     await page.locator('[data-setup-neighbour="none"] input').check();
     await next(page);
     await expectHelp(page, "name", "settings", lang);
+    // No town was searched, so no name is suggested.
+    await page.locator("[data-setup-name]").fill("Test_R1");
+    await next(page);
+    await expectHelp(page, "location", "settings", lang);
   });
 }
 
@@ -256,7 +266,7 @@ test("running repeater via phone", async ({ page }) => {
   await answer(page, "reflash", "no");
   await expectStep(page, "version");
   // No bootloader or flash steps: everything happens in the app.
-  await expect(progress(page)).toHaveText(T("nav.progress", "en", { n: 5, total: 10, label: T("step.version", "en") }));
+  await expect(progress(page)).toHaveText(T("nav.progress", "en", { n: 5, total: 11, label: T("step.version", "en") }));
   // The app's login steps and screenshots are on the commands screen; this question is only the choice.
   await expect(page.locator("[data-setup-phone-steps]")).toHaveCount(0);
   await version(page, "1.15");
@@ -269,6 +279,7 @@ test("running repeater via phone", async ({ page }) => {
   await expect(nextButton(page)).toBeDisabled();
   await page.locator("[data-setup-name]").fill("Quinte-Hill");
   await next(page);
+  await location(page);
   await expectStep(page, "commands");
   await expect(step(page)).toContainText(T("commands.question.phone", "en"));
   expect(await commandLines(page)).toContain("set name Quinte-Hill");
@@ -349,21 +360,21 @@ test("edge repeater offers neighbouring regions and Ontario cross-border options
   await next(page);
   await expectStep(page, "name");
   await next(page);
+  await location(page);
   await expectStep(page, "commands");
   const lines = await commandLines(page);
   expect(lines).toContain("region def ytr|* ygk|* on|* onqc|* can|* na|* onny|* us us-ny");
   expect(lines).toContain("region denyf *");
   await expect(page.locator("[data-setup-notes]")).toContainText(T("note.network", "en", { network: "Ontario–New York (onny, opt-in)" }));
   // Back to city: neighbours and edge-only networks go, the shared label stays.
-  await page.locator("[data-setup-back]").click();
-  await page.locator("[data-setup-back]").click();
-  await page.locator("[data-setup-back]").click();
+  for (let back = 0; back < 4; back += 1) await page.locator("[data-setup-back]").click();
   await expectStep(page, "role");
   await choose(page, "city");
   await expect(onny).toBeChecked();
   await next(page);
   await expectStep(page, "name");
   await next(page);
+  await location(page);
   await expectStep(page, "commands");
   const city = await commandLines(page);
   expect(city).toContain("region def ytr|* on|* onqc|* can|* na|* onny");
@@ -380,6 +391,7 @@ test("French pages name the cross-border networks in French", async ({ page }) =
   await expectStep(page, "name");
   await page.locator("[data-setup-name]").fill("Belleville_R1");
   await next(page);
+  await location(page);
   await expectStep(page, "commands");
   await expect(page.locator("[data-setup-notes]")).toContainText(T("note.network", "fr", { network: "Pennsylvanie" }));
 });
@@ -556,21 +568,23 @@ for (const lang of LANGS) {
     await answer(page, "role", "city");
     await expectStep(page, "name");
     await expect(page.locator("[data-setup-name]")).toHaveValue("Ottawa_R1");
-    await expect(page.locator("[data-setup-location]")).toBeChecked();
-    await expect(page.locator("label:has([data-setup-location])")).toHaveText(T("name.location-spot", lang, { town: "111 Wellington Street, Ottawa" }));
-    // Ruling 34: on by default, with one plain line saying the spot is public.
-    await expect(page.locator("[data-setup-location-public]")).toHaveText(T("name.location-public", lang));
+    await next(page);
+    // The pin starts at the address, close in.
+    await expectStep(page, "location");
+    await expect(pinBox(page, "lat")).toHaveValue("45.4231");
+    await expect(pinBox(page, "lon")).toHaveValue("-75.6988");
+    await expect(page.locator(".leaflet-marker-icon")).toBeVisible();
     await next(page);
     await expectStep(page, "commands");
     const lines = await commandLines(page);
     expect(lines).toContain("set lat 45.4231");
     expect(lines).toContain("set lon -75.6988");
-    await expect(page.locator('[data-setup-command="lat"]')).toContainText(T("why.lat-spot", lang));
-    await expect(page.locator('[data-setup-command="lon"]')).toContainText(T("why.lon-spot", lang));
+    await expect(page.locator('[data-setup-command="lat"]')).toContainText(T("why.lat", lang));
+    await expect(page.locator('[data-setup-command="lon"]')).toContainText(T("why.lon", lang));
   });
 }
 
-test("unticking the map option leaves an exact spot out of the link and the share link; the region still comes back", async ({ page, context }) => {
+test("disabling location leaves the spot out of the link and the share link; the region still comes back", async ({ page, context }) => {
   await mockGeocoder(page);
   await context.addInitScript(() => {
     window.__copied = [];
@@ -585,7 +599,9 @@ test("unticking the map option leaves an exact spot out of the link and the shar
   await expect.poll(() => new URL(page.url()).searchParams.get("lat")).toBe("44.1628");
   await nextUntil(page, "name");
   await page.locator("[data-setup-name]").fill("Hilltop");
-  await page.locator("[data-setup-location]").uncheck();
+  await next(page);
+  await expectStep(page, "location");
+  await page.locator("[data-setup-location-off]").check();
   const spot = /(?:^|&)(?:town|kind|lat|lon)=|44\.1628|77\.3832/;
   await expect.poll(() => new URL(page.url()).search).not.toMatch(spot);
   const url = new URL(page.url());
@@ -686,12 +702,16 @@ for (const lang of LANGS) {
     await answer(page, "role", "city");
     await expectStep(page, "name");
     await expect(page.locator("[data-setup-name]")).toHaveValue("QuinteWest_R1");
-    await expect(page.locator("label:has([data-setup-location])")).toHaveText(T("name.location-spot", lang, { town: "44.1628, -77.3832" }));
+    await next(page);
+    // The pin starts at the typed coordinates, rounded to 4 decimals.
+    await expectStep(page, "location");
+    await expect(pinBox(page, "lat")).toHaveValue("44.1628");
+    await expect(pinBox(page, "lon")).toHaveValue("-77.3832");
     await next(page);
     const lines = await commandLines(page);
     expect(lines).toContain("set lat 44.1628");
     expect(lines).toContain("set lon -77.3832");
-    await expect(page.locator('[data-setup-command="lat"]')).toContainText(T("why.lat-spot", lang));
+    await expect(page.locator('[data-setup-command="lat"]')).toContainText(T("why.lat", lang));
     expect(queries).toEqual([]);
   });
 }
@@ -718,6 +738,7 @@ for (const lang of LANGS) {
     await expect(message).toHaveText("");
     await expect.poll(() => new URL(page.url()).searchParams.get("name")).toBe("Café Hilltop");
     await next(page);
+    await location(page);
     await expectStep(page, "commands");
     expect(await commandLines(page)).toContain("set name Café Hilltop");
     await next(page);
@@ -876,6 +897,11 @@ test("changing the town clears neighbours and the suggested name", async ({ page
   await expectStep(page, "name");
   await expect(page.locator("[data-setup-name]")).toHaveValue("Kingston_R1");
   await next(page);
+  // The new town brings its own pin.
+  await expectStep(page, "location");
+  await expect(pinBox(page, "lat")).toHaveValue("44.2298");
+  await expect(pinBox(page, "lon")).toHaveValue("-76.481");
+  await next(page);
   await expectStep(page, "commands");
   const lines = await commandLines(page);
   expect(lines).toContain("set name Kingston_R1");
@@ -884,6 +910,8 @@ test("changing the town clears neighbours and the suggested name", async ({ page
   expect(lines.join("\n")).not.toMatch(/ytr|Belleville/);
 
   // A name the person typed is kept when the town changes.
+  await page.locator("[data-setup-back]").click();
+  await expectStep(page, "location");
   await page.locator("[data-setup-back]").click();
   await expectStep(page, "name");
   await page.locator("[data-setup-name]").fill("Hilltop-1");
@@ -920,6 +948,7 @@ test("share link restores answers and holds no secrets", async ({ page, context 
   await expectStep(page, "name");
   await page.locator("[data-setup-name]").fill("Belleville_R1");
   await next(page);
+  await location(page);
   await expectStep(page, "commands");
   await page.locator("[data-setup-reply]").fill("*^ F\n ott F");
   await expect(codes(page)).toContainText(["region remove ott"]);
@@ -1127,7 +1156,7 @@ test("language switch on the commands screen after flashing keeps the place and 
   await page.goto(siteRoute(`/config/?type=repeater&board=nrf52&status=new&role=city&name=Belleville_R1&${BELLEVILLE}`));
   await confirmStep(page, "bootloader");
   await confirmStep(page, "flash");
-  for (const id of ["town", "role", "name"]) {
+  for (const id of ["town", "role", "name", "location"]) {
     await expectStep(page, id);
     await next(page);
   }
@@ -1210,7 +1239,7 @@ test("copy works on plain HTTP", async ({ page }) => {
   await expect(done).toContainText(T("commands.done-ticked", "en"));
   await expect(page.locator("[data-setup-done-count]")).toHaveText(T("commands.progress", "en", { done: 1, total: 14 }));
   await page.locator("[data-setup-back]").click();
-  await expectStep(page, "name");
+  await expectStep(page, "location");
   await next(page);
   await expectStep(page, "commands");
   await expect(page.locator('[data-setup-command="name"] [data-done]')).toHaveAttribute("aria-pressed", "true");
@@ -1221,7 +1250,9 @@ test("copy works on plain HTTP", async ({ page }) => {
 async function fitsTheScreen(page, label) {
   const result = await page.evaluate(() => {
     const width = document.documentElement.clientWidth;
+    // The map box is checked, not the tiles and layers inside it: it clips them, and they run past it by design.
     const wide = Array.from(document.querySelectorAll("[data-setup-tool] *"))
+      .filter((element) => !(element.parentElement && element.parentElement.closest(".setup-map")))
       .filter((element) => element.getClientRects().length && element.getBoundingClientRect().right > width + 1)
       .map((element) => element.tagName + "." + element.className + ":" + (element.textContent || "").slice(0, 40));
     return { page: document.documentElement.scrollWidth - width, wide };
@@ -1284,6 +1315,10 @@ test("phone width", async ({ page }, testInfo) => {
   await expectStep(page, "name");
   await fitsTheScreen(page, "name");
   await next(page);
+  await expectStep(page, "location");
+  await expect(page.locator(".leaflet-marker-icon")).toBeVisible();
+  await fitsTheScreen(page, "location");
+  await next(page);
   await expectStep(page, "commands");
   await page.locator("[data-setup-help]").first().click();
   const def = page.locator('[data-setup-command="def"] code');
@@ -1316,6 +1351,18 @@ test("phone width", async ({ page }, testInfo) => {
   await expectStep(page, "name");
   await page.locator("[data-setup-name]").fill("Belleville_R1");
   await fitsTheScreen(page, "name (phone)");
+  await next(page);
+  await expectStep(page, "location");
+  await page.locator("[data-setup-location-off]").check();
+  await expect(page.locator("[data-setup-location-warning]")).toBeVisible();
+  await fitsTheScreen(page, "location (disabled)");
+  await page.locator("[data-setup-location-off]").uncheck();
+  await expect(page.locator(".leaflet-marker-icon")).toBeVisible();
+  await fitsTheScreen(page, "location (phone)");
+  // About half the screen: room to place the pin, with the boxes and Next still close below.
+  const share = await page.locator("[data-setup-map]").evaluate((element) => element.getBoundingClientRect().height / window.innerHeight);
+  expect(share).toBeGreaterThan(0.3);
+  expect(share).toBeLessThanOrEqual(0.56);
   await next(page);
   await expectStep(page, "commands");
   await page.locator("[data-setup-reply]").fill("*^ F\n can F\n  on F\n   ott F");
@@ -1475,8 +1522,7 @@ for (const lang of LANGS) {
     await expect(page.locator("[data-setup-notes]")).toContainText(T("note.network", lang, { network: "qcx2" }));
     await expect(page.locator('[data-setup-command="def"] .setup-command__why')).toContainText(T("tag.custom", lang, { tag: "qcx2" }));
     // It is still there on the way back, in the box.
-    await page.locator("[data-setup-back]").click();
-    await page.locator("[data-setup-back]").click();
+    for (let back = 0; back < 3; back += 1) await page.locator("[data-setup-back]").click();
     await expectStep(page, "role");
     await expect(toggle(page)).toBeChecked();
     await expect(customBox(page)).toHaveValue("qcx2");
@@ -1528,8 +1574,7 @@ test("an agreed scope follows a role change and goes when the region changes", a
   expect(edge).toContain("region def ytr|* ygk|* on|* onqc|* can|* na|* qcx2");
   expect(edge).toContain("region denyf *");
   // A ticked but empty box on the edge screen holds its own Next, and does not trap the city-or-edge screen.
-  await page.locator("[data-setup-back]").click();
-  await page.locator("[data-setup-back]").click();
+  for (let back = 0; back < 3; back += 1) await page.locator("[data-setup-back]").click();
   await expectStep(page, "neighbours");
   await customBox(page).fill("");
   await expect(nextButton(page)).toBeDisabled();
@@ -1588,11 +1633,311 @@ test("too many scopes for one repeater is said plainly, with no commands and no 
   await expect(codes(page)).toHaveCount(0);
   await expect(nextButton(page)).toBeDisabled();
   // Back and untick it, and the commands come back.
-  await page.locator("[data-setup-back]").click();
-  await page.locator("[data-setup-back]").click();
+  for (let back = 0; back < 3; back += 1) await page.locator("[data-setup-back]").click();
   await expectStep(page, "role");
   await toggle(page).uncheck();
   await next(page);
   await nextUntil(page, "commands");
   expect(await commandLines(page)).toContain("region def ytr|* on|* onqc|* can|* na|* " + "a".repeat(29) + "|* " + "b".repeat(29) + "|* " + "c".repeat(29));
 });
+
+// ------------------------------------------------------------------ map location: a pin on a map, and two boxes
+
+// Every tile is answered by the shared fixture (site-fixtures.mjs) unless a test says otherwise.
+const BELLEVILLE_LINK = (lang = "en", extra = "") =>
+  `${ROUTES[lang]}?type=repeater&board=esp32&status=running&reflash=0&role=city&name=Test_R1&${BELLEVILLE}${extra}`;
+const leafletFiles = (requests) => requests.filter((url) => /\/vendor\/leaflet\/leaflet\.(?:js|css)(?:\?|$)/.test(url));
+const tileZooms = (requests) => [...new Set(requests.filter((url) => url.startsWith("https://tile.openstreetmap.org/"))
+  .map((url) => Number(new URL(url).pathname.split("/")[1])))];
+const marker = (page) => page.locator("[data-setup-map] .leaflet-marker-icon");
+const searchParam = (page, name) => new URL(page.url()).searchParams.get(name);
+// Where the pin points: the bottom middle of Leaflet's default marker (25 × 41, anchored at 12, 41).
+async function pinTip(page) {
+  const box = await marker(page).boundingBox();
+  return { x: box.x + 12.5, y: box.y + 41 };
+}
+async function mapMiddle(page) {
+  const box = await page.locator("[data-setup-map]").boundingBox();
+  return { x: box.x + box.width / 2, y: box.y + box.height / 2, width: box.width, height: box.height };
+}
+// Axe on the tool alone: the site's own furniture is checked by the accessibility spec.
+async function expectToolAxe(page, label) {
+  const found = await new AxeBuilder({ page }).include("[data-setup-tool]").withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"]).analyze();
+  const blocking = found.violations.filter((violation) => ["serious", "critical"].includes(violation.impact))
+    .map((violation) => ({ id: violation.id, targets: violation.nodes.map((node) => node.target) }));
+  expect(blocking, `${label}: ${JSON.stringify(blocking, null, 2)}`).toEqual([]);
+}
+
+for (const lang of LANGS) {
+  test(`${lang} map location: Leaflet loads only here, the pin starts at the town, and the map and the boxes follow each other`, async ({ page }) => {
+    await mockGeocoder(page);
+    const requests = [];
+    page.on("request", (request) => requests.push(request.url()));
+    await page.goto(siteRoute(`${ROUTES[lang]}?type=repeater&board=esp32&status=running&reflash=0`));
+    await version(page, "1.16");
+    await town(page, "Belleville", "ytr");
+    await answer(page, "role", "city");
+    await expectStep(page, "name");
+    await page.locator("[data-setup-name]").fill("Belleville_R1");
+    // Nothing of the map is fetched before its own step.
+    expect(leafletFiles(requests)).toEqual([]);
+    expect(tileZooms(requests)).toEqual([]);
+    await next(page);
+    await expectStep(page, "location");
+    await expect(page.getByRole("heading", { level: 2, name: T("location.question", lang) })).toBeVisible();
+    await expect(step(page)).toContainText(T("location.hint", lang));
+    await expect(step(page)).toContainText(T("location.how", lang));
+    await expect.poll(() => leafletFiles(requests).length).toBe(2);
+    // The pin is Leaflet's own marker, from the site's copy, and it shows.
+    await expect(marker(page)).toBeVisible();
+    await expect(marker(page)).toHaveAttribute("src", /\/vendor\/leaflet\/images\/marker-icon(?:-2x)?\.png$/);
+    await expect(marker(page)).toHaveAttribute("alt", T("location.pin", lang));
+    await expect.poll(() => marker(page).evaluate((image) => image.naturalWidth)).toBeGreaterThan(0);
+    await expect(page.locator("[data-setup-map-status]")).toHaveCount(0);
+    // A town opens at about zoom 13, credited to OpenStreetMap with a link that opens in a new tab.
+    expect(tileZooms(requests)).toEqual([13]);
+    const credit = page.locator('.leaflet-control-attribution a[href="https://www.openstreetmap.org/copyright"]');
+    await expect(credit).toHaveAttribute("target", "_blank");
+    await expect(credit).toHaveText(`${T("location.attribution.link", lang)} ${T("link.new-tab", lang)}`);
+    // The pin and the boxes start at the place the town step found.
+    await expect(pinBox(page, "lat")).toHaveValue("44.1628");
+    await expect(pinBox(page, "lon")).toHaveValue("-77.3832");
+    // Measured on screen, so the whole map is scrolled into view first.
+    await page.locator("[data-setup-map]").scrollIntoViewIfNeeded();
+    let middle = await mapMiddle(page);
+    let tip = await pinTip(page);
+    expect(Math.hypot(tip.x - middle.x, tip.y - middle.y)).toBeLessThan(3);
+
+    // Clicking the map moves the pin there, and the boxes and the link follow, to 4 decimals.
+    await page.locator("[data-setup-map]").click({ position: { x: middle.width / 2 + 60, y: middle.height / 2 + 30 } });
+    await expect(pinBox(page, "lat")).not.toHaveValue("44.1628");
+    middle = await mapMiddle(page);
+    tip = await pinTip(page);
+    expect(Math.hypot(tip.x - (middle.x + 60), tip.y - (middle.y + 30))).toBeLessThan(3);
+    const lat = await pinBox(page, "lat").inputValue();
+    const lon = await pinBox(page, "lon").inputValue();
+    expect(lat).toMatch(/^\d+(?:\.\d{1,4})?$/);
+    expect(Number(lat)).toBeLessThan(44.1628);   // lower on the map is further south
+    expect(Number(lon)).toBeGreaterThan(-77.3832); // and to the right is further east
+    await expect.poll(() => searchParam(page, "lat")).toBe(lat);
+    await expect.poll(() => searchParam(page, "lon")).toBe(lon);
+
+    // Typing in the boxes moves the pin, which the map brings to its middle.
+    await pinBox(page, "lat").fill("44.17");
+    await pinBox(page, "lon").fill("-77.39");
+    middle = await mapMiddle(page);
+    await expect.poll(async () => { const at = await pinTip(page); return Math.hypot(at.x - middle.x, at.y - middle.y); }).toBeLessThan(3);
+    await expect.poll(() => searchParam(page, "lat")).toBe("44.17");
+    await expect.poll(() => searchParam(page, "lon")).toBe("-77.39");
+    // Only the pin moved: the place keeps its name.
+    expect(searchParam(page, "town")).toBe("Belleville");
+    await next(page);
+    await expectStep(page, "commands");
+    const lines = await commandLines(page);
+    expect(lines).toContain("set lat 44.17");
+    expect(lines).toContain("set lon -77.39");
+    await expect(page.locator('[data-setup-command="lat"]')).toContainText(T("why.lat", lang));
+    await expect(page.locator('[data-setup-command="lon"]')).toContainText(T("why.lon", lang));
+    // Back on the map, the pin is where it was left.
+    await page.locator("[data-setup-back]").click();
+    await expectStep(page, "location");
+    await expect(pinBox(page, "lat")).toHaveValue("44.17");
+    await expect(pinBox(page, "lon")).toHaveValue("-77.39");
+  });
+}
+
+test("dragging the pin moves it, and the boxes and the link follow", async ({ page }) => {
+  await openLink(page, BELLEVILLE_LINK(), { to: "location" });
+  await expect(marker(page)).toBeVisible();
+  await page.locator("[data-setup-map]").scrollIntoViewIfNeeded();
+  const start = await pinTip(page);
+  // Take hold of the marker's head, above its tip, and drag it down and to the right.
+  await page.mouse.move(start.x, start.y - 25);
+  await page.mouse.down();
+  await page.mouse.move(start.x + 40, start.y - 5, { steps: 8 });
+  await page.mouse.move(start.x + 80, start.y + 15, { steps: 8 });
+  await page.mouse.up();
+  await expect(pinBox(page, "lat")).not.toHaveValue("44.1628");
+  const tip = await pinTip(page);
+  expect(Math.hypot(tip.x - (start.x + 80), tip.y - (start.y + 40))).toBeLessThan(4);
+  expect(Number(await pinBox(page, "lat").inputValue())).toBeLessThan(44.1628);
+  expect(Number(await pinBox(page, "lon").inputValue())).toBeGreaterThan(-77.3832);
+  await expect.poll(() => searchParam(page, "lat")).toBe(await pinBox(page, "lat").inputValue());
+});
+
+test("the map opens close in for an address or coordinates, nearer for a town, and wide for a region's middle", async ({ page }) => {
+  const cases = [
+    ["town=111%20Wellington%20Street%2C%20Ottawa&kind=address&lat=45.4231&lon=-75.6988&tag=yow&province=on", 17],
+    ["town=44.1628%2C%20-77.3832&kind=coordinates&lat=44.1628&lon=-77.3832&tag=ytr&province=on", 17],
+    [BELLEVILLE, 13],
+    ["tag=ytr&province=on", 10]
+  ];
+  for (const [where, zoom] of cases) {
+    const requests = [];
+    const listen = (request) => requests.push(request.url());
+    page.on("request", listen);
+    await openLink(page, `/config/?type=repeater&board=esp32&status=running&reflash=0&role=city&name=Test_R1&${where}`, { to: "location" });
+    await expect(marker(page)).toBeVisible();
+    await expect(page.locator("[data-setup-map-status]")).toHaveCount(0);
+    expect(tileZooms(requests), where).toEqual([zoom]);
+    page.off("request", listen);
+  }
+});
+
+test("with only a region, the pin starts in its middle and says so; moving the pin takes the line away", async ({ page }) => {
+  await openLink(page, "/config/?type=repeater&board=esp32&status=running&reflash=0&role=city&name=Test_R1&tag=ytr&province=on", { to: "location" });
+  await expect(page.locator("[data-setup-pin-centre]")).toHaveText(T("location.centre", "en", { region: "Quinte West (ytr)" }));
+  // The middle of the region's MeshMapper zone.
+  await expect(pinBox(page, "lat")).toHaveValue("44.158");
+  await expect(pinBox(page, "lon")).toHaveValue("-77.3687");
+  await expect(nextButton(page)).toBeEnabled();
+  await expect(marker(page)).toBeVisible();
+  await pinBox(page, "lat").fill("44.16");
+  await expect(page.locator("[data-setup-pin-centre]")).toHaveCount(0);
+  await next(page);
+  expect(await commandLines(page)).toEqual(expect.arrayContaining(["set lat 44.16", "set lon -77.3687"]));
+});
+
+for (const lang of LANGS) {
+  test(`${lang} typed coordinates that aren't a spot in Canada say so and hold Next back`, async ({ page }) => {
+    await openLink(page, BELLEVILLE_LINK(lang), { to: "location" });
+    const message = page.locator("[data-setup-pin-message]");
+    // The boxes are labelled, and say where their message is.
+    await expect(page.getByLabel(T("location.lat", lang), { exact: true })).toHaveValue("44.1628");
+    await expect(page.getByLabel(T("location.lon", lang), { exact: true })).toHaveValue("-77.3832");
+    await expect(step(page).locator("fieldset legend")).toHaveText(T("location.typed", lang));
+    // The longitude's minus sign forgotten: nothing is said while typing, and Next waits.
+    await pinBox(page, "lon").fill("77.3832");
+    await expect(message).toHaveText("");
+    await expect(nextButton(page)).toBeDisabled();
+    // Leaving the box says what's wrong, plainly.
+    await pinBox(page, "lon").press("Tab");
+    await expect(message).toHaveText(plain("location.invalid", lang));
+    await expect(pinBox(page, "lon")).toHaveAttribute("aria-invalid", "true");
+    await expect(nextButton(page)).toBeDisabled();
+    // The link keeps the last pin that was a spot.
+    expect(searchParam(page, "lon")).toBe("-77.3832");
+    // Fixed, the message goes.
+    await pinBox(page, "lon").fill("-77.3832");
+    await expect(message).toHaveText("");
+    await expect(nextButton(page)).toBeEnabled();
+    for (const bad of ["abc", "44.1628, -77.3832", "", "12"]) {
+      await pinBox(page, "lat").fill(bad);
+      await pinBox(page, "lat").press("Tab");
+      await expect(message, bad).toHaveText(plain("location.invalid", lang));
+      await expect(nextButton(page), bad).toBeDisabled();
+    }
+    // A decimal comma is fine.
+    await pinBox(page, "lat").fill("44,2");
+    await expect(message).toHaveText("");
+    await expect(pinBox(page, "lat")).not.toHaveAttribute("aria-invalid", "true");
+    await expect(nextButton(page)).toBeEnabled();
+    await expect.poll(() => searchParam(page, "lat")).toBe("44.2");
+  });
+}
+
+for (const lang of LANGS) {
+  test(`${lang} a pin moved into another region says so, and the region stays as chosen`, async ({ page }) => {
+    await openLink(page, BELLEVILLE_LINK(lang), { to: "location" });
+    await expect(page.locator("[data-setup-other-region]")).toHaveCount(0);
+    // Kingston is in ygk, next door.
+    await pinBox(page, "lat").fill("44.2298");
+    await pinBox(page, "lon").fill("-76.481");
+    await pinBox(page, "lon").press("Tab");
+    await expect(page.locator("[data-setup-other-region]")).toHaveText(T("location.other-region", lang, { region: "Kingston (ygk)" }));
+    expect(searchParam(page, "tag")).toBe("ytr");
+    await expect(nextButton(page)).toBeEnabled();
+    // Back in its own region, the note goes.
+    await pinBox(page, "lat").fill("44.1628");
+    await pinBox(page, "lon").fill("-77.3832");
+    await pinBox(page, "lon").press("Tab");
+    await expect(page.locator("[data-setup-other-region]")).toHaveCount(0);
+  });
+}
+
+for (const lang of LANGS) {
+  test(`${lang} Disable location shows the warning, hides the map and leaves set lat and set lon out`, async ({ page }) => {
+    await openLink(page, BELLEVILLE_LINK(lang), { to: "location" });
+    await expect(marker(page)).toBeVisible();
+    const off = page.locator("[data-setup-location-off]");
+    await expect(page.locator("label.setup-check").filter({ has: off })).toHaveText(T("location.off", lang));
+    await expect(off).not.toBeChecked();
+    await expect(page.locator("[data-setup-location-warning]")).toHaveCount(0);
+    await off.check();
+    await expect(page.locator("[data-setup-location-warning]")).toHaveText(T("location.off-warning", lang));
+    await expect(page.locator("[data-setup-map]")).toHaveCount(0);
+    await expect(page.locator("[data-setup-pin]")).toHaveCount(0);
+    await expect(off).toBeChecked();
+    await expect(off).toBeFocused();
+    // The spot leaves the link, whatever was searched; the region stays.
+    await expect.poll(() => searchParam(page, "shareLocation")).toBe("0");
+    expect(new URL(page.url()).search).not.toMatch(/(?:^|&)(?:town|kind|lat|lon)=/);
+    expect(searchParam(page, "tag")).toBe("ytr");
+    await expect(nextButton(page)).toBeEnabled();
+    await next(page);
+    await expectStep(page, "commands");
+    const lines = await commandLines(page);
+    expect(lines.some((line) => /^set (lat|lon) /.test(line))).toBe(false);
+    expect(lines).toContain("set name Test_R1");
+    // Turned back on, the pin is where it was.
+    await page.locator("[data-setup-back]").click();
+    await expectStep(page, "location");
+    await expect(off).toBeChecked();
+    await expect(page.locator("[data-setup-location-warning]")).toBeVisible();
+    await off.uncheck();
+    await expect(marker(page)).toBeVisible();
+    await expect(pinBox(page, "lat")).toHaveValue("44.1628");
+    await expect(page.locator("[data-setup-location-warning]")).toHaveCount(0);
+    await expect.poll(() => searchParam(page, "lat")).toBe("44.1628");
+    expect(new URL(page.url()).searchParams.has("shareLocation")).toBe(false);
+  });
+}
+
+test("the map step still works through the boxes when Leaflet or the tiles don't load", async ({ page }) => {
+  await page.route("**/vendor/leaflet/leaflet.js*", (route) => route.abort());
+  await openLink(page, BELLEVILLE_LINK(), { to: "location" });
+  await expect(page.locator("[data-setup-map-failed]")).toHaveText(T("location.map-failed", "en"));
+  await expect(page.locator("[data-setup-map]")).toHaveCount(0);
+  await expect(step(page)).not.toContainText(T("location.how", "en"));
+  await expect(pinBox(page, "lat")).toHaveValue("44.1628");
+  await expect(nextButton(page)).toBeEnabled();
+  await pinBox(page, "lat").fill("44.17");
+  await pinBox(page, "lon").fill("-77.39");
+  await next(page);
+  expect(await commandLines(page)).toEqual(expect.arrayContaining(["set lat 44.17", "set lon -77.39"]));
+
+  // Leaflet loads but no tile does: the same line, and the boxes still work.
+  await page.unroute("**/vendor/leaflet/leaflet.js*");
+  await page.route("https://tile.openstreetmap.org/**", (route) => route.abort());
+  await openLink(page, BELLEVILLE_LINK(), { to: "location" });
+  await expect(page.locator("[data-setup-map-failed]")).toHaveText(T("location.map-failed", "en"));
+  await expect(page.locator("[data-setup-map]")).toHaveCount(0);
+  await expect(pinBox(page, "lat")).toHaveValue("44.1628");
+  await expect(nextButton(page)).toBeEnabled();
+});
+
+for (const lang of LANGS) {
+  test(`${lang} the map location step has no serious accessibility problem, in light and dark, with a message, and disabled`, async ({ page }) => {
+    await openLink(page, BELLEVILLE_LINK(lang), { to: "location" });
+    await expect(marker(page)).toBeVisible();
+    await expect(page.locator("[data-setup-map-status]")).toHaveCount(0);
+    for (const scheme of ["default", "slate"]) {
+      await page.locator(`input[data-md-color-scheme="${scheme}"]`).evaluate((element) => element.click());
+      await expectToolAxe(page, `${lang} map (${scheme})`);
+    }
+    // The boxes are the keyboard way: neither the map nor the pin is a tab stop, and the zoom buttons speak the page's language.
+    await expect(page.locator("[data-setup-map]")).toHaveClass(/leaflet-container/);
+    expect(await page.locator("[data-setup-map]").evaluate((element) => element.hasAttribute("tabindex"))).toBe(false);
+    expect(await marker(page).evaluate((element) => element.hasAttribute("tabindex"))).toBe(false);
+    await expect(page.getByRole("button", { name: T("location.zoom-in", lang), exact: true })).toBeVisible();
+    await expect(page.getByRole("button", { name: T("location.zoom-out", lang), exact: true })).toBeVisible();
+    await expect(page.getByRole("group", { name: T("location.map", lang) })).toBeVisible();
+    await pinBox(page, "lon").fill("77");
+    await pinBox(page, "lon").press("Tab");
+    await expect(page.locator("[data-setup-pin-message]")).not.toHaveText("");
+    await expectToolAxe(page, `${lang} message`);
+    await page.locator("[data-setup-location-off]").check();
+    await expect(page.locator("[data-setup-location-warning]")).toBeVisible();
+    await expectToolAxe(page, `${lang} disabled`);
+  });
+}

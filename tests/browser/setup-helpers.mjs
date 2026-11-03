@@ -126,6 +126,13 @@ export async function town(page, query, tag) {
   await expect(page.locator("[data-setup-region]")).toContainText(tag);
   await next(page);
 }
+// The map location step, after the name: the pin starts where the town step found the place (or in the
+// middle of the region), so Next is ready as it is.
+export const pinBox = (page, axis) => page.locator(`[data-setup-pin="${axis}"]`);
+export async function location(page) {
+  await expectStep(page, "location");
+  await next(page);
+}
 // Presses Next until the tool reaches `id`; every earlier step has to be answered already.
 export async function nextUntil(page, id) {
   for (let count = 0; count < 15 && (await page.locator(`[data-setup-step="${id}"]`).count()) === 0; count += 1) {

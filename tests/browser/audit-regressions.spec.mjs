@@ -2,7 +2,7 @@ import { expect, test } from "./site-fixtures.mjs";
 import AxeBuilder from "@axe-core/playwright";
 import { siteRoute } from "./site-route.mjs";
 import { submissionSha256 } from "../../docs/config/editor/issue.js";
-import { answer, choose, codes, confirmStep, expectStep, next, nextButton, nextUntil, openLink, phoneLink, startPhoneRoute, step, toolRoot, commandLines } from "./setup-helpers.mjs";
+import { answer, choose, codes, confirmStep, expectStep, location, next, nextButton, nextUntil, openLink, phoneLink, startPhoneRoute, step, toolRoot, commandLines } from "./setup-helpers.mjs";
 
 for (const locale of ["", "fr/"]) {
   const lang = locale ? "fr" : "en";
@@ -26,7 +26,7 @@ for (const locale of ["", "fr/"]) {
     expect(lines).toContain("set path.hash.mode 2");
     expect(lines).toContain("region def yvr|* bc|* can|* na");
     // Changing the answer changes the line.
-    for (const id of ["name", "role", "radio"]) {
+    for (const id of ["location", "name", "role", "radio"]) {
       await page.locator("[data-setup-back]").click();
       await expectStep(page, id);
     }
@@ -52,6 +52,7 @@ for (const locale of ["", "fr/"]) {
     await expectStep(page, "name");
     await page.locator("[data-setup-name]").fill("Ottawa_R1");
     await next(page);
+    await location(page);
     await expectStep(page, "commands");
     const lines = await commandLines(page);
     expect(lines).toContain("region put yow");

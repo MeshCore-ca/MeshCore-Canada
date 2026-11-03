@@ -120,7 +120,8 @@
       steps.push("role");
       if (a.role === "edge") steps.push("neighbours");
     }
-    steps.push("name", "commands", "check");
+    // Where maps show it gets its own screen after the name: one decision per screen, and the map needs the room.
+    steps.push("name", "location", "commands", "check");
     return steps;
   }
 
@@ -147,6 +148,8 @@
       // An empty list is a deliberate "none"; the screen sets it when the person says so.
       case "neighbours": return Array.isArray(a.neighbours) && customReady(a);
       case "name": return isName(a.name);
+      // Location is on by default, so the pin has to be in Canada; with location disabled nothing more is asked.
+      case "location": return a.shareLocation === false || hasPin(a.place);
       // These two screens hold no answers. The screen decides when to move on.
       case "commands":
       case "check": return true;
@@ -272,7 +275,7 @@
     return letters.slice(0, MAX_NAME - suffix.length) + suffix;
   }
 
-  // Share links: the non-secret answers, plus the picked town (as town, lat and lon).
+  // Share links: the non-secret answers, plus the picked place and its pin (as town, lat and lon).
   // Never carried: pasted device replies; the "I flashed it" / "I updated the
   // bootloader" ticks, which a shared link must not pre-tick for someone else; and
   // the firmware version, which only the person with the board can say.
@@ -354,18 +357,41 @@
   ];
 
   // The picked place travels as town, lat and lon (4 decimals, about 10 m) so a reload or a
-  // language switch needs no new search. It is not called "place": `?place=<text>` is the
+  // language switch needs no new search. lat and lon are the map pin: where the search put
+  // it, or where the person moved it. It is not called "place": `?place=<text>` is the
   // deep link that starts the search. The place's province is the `province` answer.
   // `town` is the place's display name: a town, a street address as the geocoder wrote it,
   // or the rounded coordinates, never the text typed into the search. A place found from
-  // a street address or coordinates also carries `kind`, so the map position is described
-  // as the spot entered rather than "near" a town. A town has no kind.
+  // a street address or coordinates also carries `kind`, which the name suggestion and the
+  // map's starting zoom use. A town has no kind.
   var MAX_TOWN = 80;
   var PLACE_KINDS = ["address", "coordinates"];
   var CANADA = { latMin: 41, latMax: 84, lonMin: -142, lonMax: -52 };
   var DECIMAL_RE = /^-?\d+(\.\d+)?$/;
 
   function round4(value) { return Math.round(value * 10000) / 10000; }
+
+  // The map pin is the place's lat and lon: the spot the search found, until the person moves it.
+  function hasPin(place) {
+    return !!place && typeof place.lat === "number" && typeof place.lon === "number" && inCanada(place.lat, place.lon);
+  }
+
+  // One number typed into the latitude or longitude box: a decimal comma is fine, and so is a real minus sign.
+  var PIN_NUMBER = /^[+-]?\d+(?:\.\d+)?$/;
+
+  function pinNumber(text) {
+    if (typeof text !== "string") return NaN;
+    var plain = text.trim().replace(/[\u2212\u2012\u2013\u2014]/g, "-").replace(",", ".");
+    return PIN_NUMBER.test(plain) ? parseFloat(plain) : NaN;
+  }
+
+  // The two boxes under the map, read as a pin: { lat, lon }, or null unless both are plain numbers
+  // and the spot is inside the box the tool uses for Canada.
+  function readPin(latText, lonText) {
+    var lat = pinNumber(latText);
+    var lon = pinNumber(lonText);
+    return inCanada(lat, lon) ? { lat: lat, lon: lon } : null;
+  }
 
   function validTown(name) {
     return typeof name === "string" && name.trim().length > 0 && name.length <= MAX_TOWN;
@@ -410,10 +436,9 @@
       var text = field.write(a[field.key]);
       if (text !== null) parts.push(field.key + "=" + text);
     });
-    // An exact spot (an address or coordinates) the person chose not to show on maps stays out
-    // of the link too; the region answers still bring the region back.
-    var hidden = a.shareLocation === false && a.place && oneOf(PLACE_KINDS, a.place.kind);
-    return parts.concat(hidden ? [] : placeParts(a.place)).join("&");
+    // With location disabled the spot stays out of the link, whatever was searched: the pin can be
+    // dragged to the exact spot even from a town. The region answers still bring the region back.
+    return parts.concat(a.shareLocation === false ? [] : placeParts(a.place)).join("&");
   }
 
   function fromQuery(search) {
@@ -437,6 +462,8 @@
     route: route,
     firmwareFor: firmwareFor,
     parseCoordinates: parseCoordinates,
+    readPin: readPin,
+    hasPin: hasPin,
     looksLikeCoordinates: looksLikeCoordinates,
     cleanName: cleanName,
     cleanCustom: cleanCustom,

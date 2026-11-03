@@ -29,6 +29,7 @@ Vous pouvez consulter ce site sans compte MeshCore Canada ni compte GitHub.
 | Rechercher un lieu dans les outils de région | Le lieu, le code d’aéroport ou le code postal saisi | Codes IATA vérifiés localement. Noms de lieux transmis à l’outil de recherche de lieux du gouvernement du Canada (geo.ca); codes postaux transmis à OpenStreetMap ou geocoder.ca |
 | Rechercher une ville ou une adresse dans l’[outil de configuration](config/index.md) | La ville ou l’adresse saisie. Les coordonnées saisies restent dans votre navigateur | L’outil de recherche de lieux du gouvernement du Canada (geo.ca) : `geolocator.api.geo.ca` |
 | Ouvrir la carte interactive des régions | Votre adresse IP et la partie visible de la carte | OpenStreetMap |
+| Placer le répéteur sur la carte dans l’[outil de configuration](config/index.md) | Votre adresse IP et la partie visible de la carte | OpenStreetMap |
 | Vérifier un identifiant de parcours de répéteur | Le premier octet de la clé publique | Beacon à dev.meshcore.ca; les comparaisons régionales et des préfixes plus longs restent dans votre navigateur |
 | Charger le nombre d’étoiles GitHub | Votre adresse IP et les renseignements habituels d’une requête Web | GitHub |
 | Ouvrir un lien externe | Les renseignements habituels d’une requête Web | Le service externe indiqué |
@@ -53,17 +54,19 @@ vous-même.
 
 - **Partager et reprendre.** Le lien de l’outil (**Copier un lien vers ces
   réponses**, qui est aussi l’adresse dans votre navigateur) contient vos
-  réponses non secrètes, comme le nom du répéteur, sa région, et le lieu (une
-  ville, ou l’adresse que vous avez choisie) avec ses coordonnées, pour que vous
-  puissiez partager ou reprendre une configuration. Il ne contient jamais de
+  réponses non secrètes, comme le nom du répéteur, sa région, le lieu choisi
+  (une ville ou une adresse) et les coordonnées de l’épingle que vous avez
+  placée sur la carte, pour que vous puissiez partager ou reprendre une
+  configuration. Il ne contient jamais de
   mots de passe, de renseignements Wi-Fi ni de réponse `region` collée. Les
   liens peuvent apparaître dans l’historique du navigateur et les journaux du
   serveur : ne partagez pas un lien qui contient un emplacement privé.
-- **Afficher sur les cartes.** Cette option est activée par défaut. Pour une
-  adresse ou des coordonnées, l’outil dit : « Tout le monde peut voir cet
-  endroit sur les cartes publiques. » Si vous la décochez, l’outil retire de la
-  liste les commandes qui règlent l’emplacement du répéteur, et l’adresse ou les
-  coordonnées restent aussi hors du lien.
+- **Emplacement sur la carte.** L’outil affiche une carte avec une épingle, que
+  vous pouvez déplacer. Les commandes règlent l’emplacement du répéteur à
+  l’épingle, et tout le monde peut voir cet endroit sur les cartes publiques. La
+  plupart des gens choisissent un endroit à une rue ou deux du répéteur. Si vous
+  cochez **Désactiver l’emplacement**, l’outil retire ces commandes de la liste,
+  et le lieu et l’épingle restent aussi hors du lien.
 - **Changer de langue.** Pour ne pas vous faire recommencer, l’outil garde vos
   coches, la version du micrologiciel et les réponses collées dans cet onglet du
   navigateur, seulement le temps du changement. L’autre page les utilise une seule fois,

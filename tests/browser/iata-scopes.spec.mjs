@@ -1,7 +1,7 @@
 import { expect, test } from "./site-fixtures.mjs";
 import { siteRoute } from "./site-route.mjs";
 import { readFile } from "node:fs/promises";
-import { PHONE_ROUTE, choose, codes, expectStep, mockGeocoder, next, nextButton, nextUntil, answer, openLink, phoneLink, searchTown, startPhoneRoute, step, toolRoot, T, commandLines } from "./setup-helpers.mjs";
+import { PHONE_ROUTE, choose, codes, expectStep, location, mockGeocoder, next, nextButton, nextUntil, answer, openLink, phoneLink, searchTown, startPhoneRoute, step, toolRoot, T, commandLines } from "./setup-helpers.mjs";
 
 for (const locale of ["", "fr/"]) {
   const lang = locale ? "fr" : "en";
@@ -107,6 +107,7 @@ for (const locale of ["", "fr/"]) {
     await nextUntil(page, "name");
     await page.locator("[data-setup-name]").fill("Test_R1");
     await next(page);
+    await location(page);
     await expectStep(page, "commands");
     const lines = await commandLines(page);
     for (const command of ["set path.hash.mode 2", "set advert.interval 240", "set flood.advert.interval 47", "set flood.max 16"]) {

@@ -357,18 +357,16 @@ connexion que vous utilisez.
     ne les accepte pas.
 
 `set lat 44.1628`
-:   Place le répéteur sur les cartes près de la localité (Belleville), pas à son endroit exact. Cette ligne règle la latitude.
+:   Place le répéteur sur les cartes à l’endroit que vous avez choisi. Cette ligne règle la latitude.
 
 `set lon -77.3832`
-:   Cette ligne règle la longitude, pour que les cartes le placent près de la localité (Belleville).
+:   Cette ligne règle la longitude, pour que les cartes le placent à l’endroit que vous avez choisi.
 
-    Décochez l’option de carte dans l’outil, et ces deux lignes disparaissent.
-
-`set lat 44.1628`, si vous avez tapé une adresse ou des coordonnées
-:   Place le répéteur sur les cartes à l’endroit que vous avez indiqué. Cette ligne règle la latitude.
-
-`set lon -77.3832`, si vous avez tapé une adresse ou des coordonnées
-:   Cette ligne règle la longitude, pour que les cartes le placent à l’endroit que vous avez indiqué.
+    L’outil affiche une carte avec une épingle là où vous avez dit qu’il sera
+    installé. Faites-la glisser, touchez la carte ou tapez les coordonnées. La
+    plupart des gens choisissent un endroit à une rue ou deux du répéteur.
+    Cochez **Désactiver l’emplacement** et ces deux lignes disparaissent : les
+    cartes ne l’afficheront pas.
 
 `password <votre nouveau mot de passe administrateur>`
 :   Règle le mot de passe administrateur qui vous servira à le gérer depuis l’application. Gardez-le dans votre gestionnaire de mots de passe.

@@ -167,14 +167,12 @@
     // Flash route only: changing the radio from the phone would cut the link in use (note.radio-phone).
     if (s.radio) out.push(radioItem(s.radio, data, lang));
     out.push(item("name", "set name " + a.name, say("why.name", lang)));
-    var place = a.place;
-    var located = place && typeof place.name === "string" && place.name &&
-      typeof place.lat === "number" && isFinite(place.lat) && typeof place.lon === "number" && isFinite(place.lon);
-    if (a.shareLocation !== false && located) {
-      // A town's search point is only near the town; a street address or coordinates are the spot itself.
-      var spot = place.kind === "address" || place.kind === "coordinates" ? "-spot" : "";
-      out.push(item("lat", "set lat " + round4(place.lat), say("why.lat" + spot, lang, { town: place.name })));
-      out.push(item("lon", "set lon " + round4(place.lon), say("why.lon" + spot, lang, { town: place.name })));
+    // The map pin, which the person placed on the map location step. Left out when location is disabled.
+    var pin = a.place;
+    var pinned = pin && typeof pin.lat === "number" && isFinite(pin.lat) && typeof pin.lon === "number" && isFinite(pin.lon);
+    if (a.shareLocation !== false && pinned) {
+      out.push(item("lat", "set lat " + round4(pin.lat), say("why.lat", lang)));
+      out.push(item("lon", "set lon " + round4(pin.lon), say("why.lon", lang)));
     }
     out.push(item("password", "password <" + say("ph.password", lang) + ">", say(s.running ? "why.password-keep" : "why.password", lang), true));
     return out;
@@ -261,7 +259,7 @@
   }
 
   // Groups in order: basics, canada, scopes (not for listen-only), observer
-  // (repeater observers only), finish. Expects the answers up to the name step.
+  // (repeater observers only), finish. Expects the answers up to the map location step.
   function rollup(answers, data, lang) {
     say("group.basics", lang); // an unknown language fails here, before any work
     var s = situation(answers, data);

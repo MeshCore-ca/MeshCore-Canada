@@ -190,22 +190,22 @@ test("explanations name the regions and the town in plain words", () => {
   assert.equal(why({ ...belleville, role: "edge", neighbours: ["ygk"] }, "deny"),
     "Don't pass on messages with no label, so they stay in their own region. That's what makes it an edge repeater.");
   assert.equal(why(belleville, "default"), "Label this repeater's own announcements with ytr.");
-  // The town search's point can be several km from the town's middle, so the map position is only "near" it.
-  assert.equal(why(belleville, "lat"), "Show it on maps near Belleville (not its exact spot). This line sets the latitude.");
-  assert.equal(why(belleville, "lon"), "This line sets the longitude, so maps show it near Belleville.");
-  assert.equal(why(belleville, "lat", "fr"), "Place le répéteur sur les cartes près de la localité (Belleville), pas à son endroit exact. Cette ligne règle la latitude.");
-  assert.doesNotMatch(text.t("name.location", "en") + text.t("name.location", "fr"), /centre/);
-  // A street address or coordinates are the spot itself, so the map shows it there, rounded to 4 decimals (about 10 m).
+  // The person places the pin on the map step, so whatever was searched, the lines set the spot they picked.
+  assert.equal(why(belleville, "lat"), "Show it on maps at the spot you picked. This line sets the latitude.");
+  assert.equal(why(belleville, "lon"), "This line sets the longitude, so maps show it at the spot you picked.");
+  assert.equal(why(belleville, "lat", "fr"), "Place le répéteur sur les cartes à l’endroit que vous avez choisi. Cette ligne règle la latitude.");
+  assert.equal(why(belleville, "lon", "fr"), "Cette ligne règle la longitude, pour que les cartes le placent à l’endroit que vous avez choisi.");
   for (const place of [{ name: "111 Wellington Street, Ottawa", lat: 45.42312333800001, lon: -75.698764764, kind: "address" },
     { name: "45.4231, -75.6988", lat: 45.42312333, lon: -75.69876476, kind: "coordinates" }]) {
     const spot = { ...belleville, tag: "yow", place };
-    const lines = items(cmds.rollup(spot, data, "en"));
-    assert.deepEqual(lines.filter((i) => i.id === "lat" || i.id === "lon").map((i) => i.command), ["set lat 45.4231", "set lon -75.6988"], place.kind);
-    assert.equal(why(spot, "lat"), "Show it on maps at the spot you entered. This line sets the latitude.", place.kind);
-    assert.equal(why(spot, "lon"), "This line sets the longitude, so maps show it at the spot you entered.", place.kind);
-    assert.equal(why(spot, "lat", "fr"), text.t("why.lat-spot", "fr"), place.kind);
-    assert.equal(why(spot, "lon", "fr"), text.t("why.lon-spot", "fr"), place.kind);
-    assert.ok(!items(cmds.rollup({ ...spot, shareLocation: false }, data, "en")).some((i) => i.id === "lat" || i.id === "lon"), place.kind);
+    for (const lang of ["en", "fr"]) {
+      assert.equal(why(spot, "lat", lang), text.t("why.lat", lang), place.kind);
+      assert.equal(why(spot, "lon", lang), text.t("why.lon", lang), place.kind);
+    }
+  }
+  // One plain pair: the old per-kind wording is gone.
+  for (const key of ["why.lat-spot", "why.lon-spot", "name.location", "name.location-spot", "name.location-public"]) {
+    assert.ok(!text.keys().includes(key), key);
   }
   assert.equal(why({ ...belleville, status: "running", reflash: false, firmware: "1.14" }, "put-ytr"),
     "Add Quinte West (ytr) to its list of regions. It doesn't pass those messages on until its `region allowf` line.");
@@ -230,7 +230,7 @@ test("French output is French, placeholders included", () => {
   assert.match(why("def"), /^Relaie les messages .*Amérique du Nord \(na\), États-Unis \(us\) et New York \(us-ny\)\.$/);
   assert.match(why("deny"), /répéteur de bordure/);
   assert.match(why("radio"), /910,525 MHz, 62,5 kHz/);
-  assert.match(why("lat"), /Belleville/);
+  assert.match(why("lat"), /l’endroit que vous avez choisi/);
   assert.equal(fr.find((i) => i.id === "password").command, "password <votre nouveau mot de passe administrateur>");
   assert.equal(fr.find((i) => i.id === "ssid").command, "set wifi.ssid <nom de votre Wi-Fi>");
   assert.equal(fr.find((i) => i.id === "wifi-pwd").command, "set wifi.pwd <mot de passe de votre Wi-Fi>");
@@ -276,9 +276,23 @@ test("an admin password is only optional on a board that already has one", () =>
   assert.match(why({ ...belleville, status: "running", reflash: false, firmware: "1.16" }), /skip this line/);
 });
 
-test("no location lines unless the person asked to show it on maps", () => {
+test("no location lines when location is disabled, or there is no pin", () => {
   assert.ok(!flat(cmds.rollup({ ...belleville, shareLocation: false }, data, "en")).some((c) => /^set (lat|lon) /.test(c)));
   assert.ok(!flat(cmds.rollup({ ...belleville, place: undefined }, data, "en")).some((c) => /^set (lat|lon) /.test(c)));
+});
+
+test("the location lines take the pin's position, rounded to 4 decimals, for every kind of place", () => {
+  const lines = (answers) => flat(cmds.rollup(answers, data, "en")).filter((c) => /^set (lat|lon) /.test(c));
+  // Dragged from where the search put it: the lines follow the pin, not the town, address or typed coordinates.
+  for (const kind of [undefined, "address", "coordinates"]) {
+    const place = { name: "Belleville", province: "on", lat: 44.21234, lon: -77.45678, kind };
+    assert.deepEqual(lines({ ...belleville, place }), ["set lat 44.2123", "set lon -77.4568"], String(kind));
+    // Location disabled: both lines are left out, whatever was searched.
+    assert.deepEqual(lines({ ...belleville, place, shareLocation: false }), [], String(kind));
+  }
+  // They sit right after the name, before the password.
+  const ids = items(cmds.rollup(belleville, data, "en")).map((i) => i.id);
+  assert.deepEqual(ids.slice(ids.indexOf("name"), ids.indexOf("password") + 1), ["name", "lat", "lon", "password"]);
 });
 
 test("checks say what to expect for this repeater", () => {
@@ -411,6 +425,29 @@ test("the firmware question is four choices, with the same version labels in bot
   for (const key of ["version.how.console", "version.how.phone", "version.label", "version.placeholder", "version.found", "version.unreadable",
     "version.v1.14", "version.v1.15", "version.v1.16", "version.phone.step4", "phone.img.ver", "version.too-old"]) {
     assert.ok(!text.keys().includes(key), key);
+  }
+});
+
+test("the map location step says what it does in plain words, in both languages", () => {
+  assert.equal(text.t("step.location", "en"), "Map location");
+  assert.equal(text.t("step.location", "fr"), "Emplacement sur la carte");
+  assert.equal(text.t("location.question", "en"), "Where should maps show it?");
+  assert.equal(text.t("location.question", "fr"), "Où les cartes doivent-elles l’afficher?");
+  assert.equal(text.t("location.off", "en"), "Disable location");
+  assert.equal(text.t("location.off", "fr"), "Désactiver l’emplacement");
+  for (const lang of ["en", "fr"]) {
+    // The helper text: most people give an approximate spot, and hiding it doesn't stop a fox hunt.
+    assert.match(text.t("location.hint", lang), lang === "en" ? /approximate location, a block or two[\s\S]*exact[\s\S]*fox hunting/ : /approximatif, à une rue ou deux[\s\S]*exact[\s\S]*chasse au renard/, lang);
+    // Disabled: MeshMapper and the MeshCore maps won't show it.
+    assert.match(text.t("location.off-warning", lang), /MeshMapper[\s\S]*MeshCore/, lang);
+    // A pin dragged into another region says where to change the region: the town question, by its own words.
+    const other = text.t("location.other-region", lang, { region: "Kingston (ygk)" });
+    assert.ok(other.startsWith(lang === "en" ? "This spot is in Kingston (ygk)." : "Cet endroit est dans Kingston (ygk)."), other);
+    assert.ok(other.includes(text.t("town.question", lang)), `${lang}: names the question to go back to`);
+    // A region with no town starts at its middle, and says so.
+    assert.ok(text.t("location.centre", lang, { region: "Quinte West (ytr)" }).includes("Quinte West (ytr)"), lang);
+    // The typed coordinates' message gives an example of each, the longitude negative.
+    assert.match(text.t("location.invalid", lang), /`44\.1628`[\s\S]*`-77\.3832`/, lang);
   }
 });
 
