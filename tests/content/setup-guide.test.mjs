@@ -137,6 +137,21 @@ test("the back-up advice says how to save the private key (app or USB) and put i
   }
 });
 
+test("the guide says `clock sync` is sent from the app and doesn't work from the Console", () => {
+  // Serial passes no sender time, so the firmware always answers "clock cannot go backwards" over USB.
+  const words = {
+    en: /`clock sync`[^.]*\. Send it from the MeshCore app\. It doesn't work from the Console/,
+    fr: /`clock sync`[^.]*\. Envoyez-la depuis l’application MeshCore\. Elle ne fonctionne pas depuis la Console/,
+  };
+  for (const [lang, path] of Object.entries(pages)) {
+    const page = flat(read(path));
+    // The paragraph after `reboot`, before the loop detection section.
+    const finish = page.slice(page.indexOf("`reboot`"), page.search(/\{ ?#loop-detection ?\}/));
+    assert.ok(finish.length > 100, path);
+    assert.match(finish, words[lang], path);
+  }
+});
+
 test("the pages say what a scope and a region list are in the same words", () => {
   for (const [lang, path] of Object.entries(pages)) {
     assert.ok(flat(read(path)).includes(coreSentence[lang]), `${path} needs the core sentence`);

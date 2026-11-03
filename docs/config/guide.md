@@ -517,9 +517,11 @@ These lines are only for a repeater observer.
 :   Restart so every setting takes effect.
 
 After it restarts, the tool lists a few checks, such as `ver` and `region`. They
-only show its settings. The one exception is `clock sync`, which sets its clock:
-after a restart its clock is often wrong, and phones may ignore its
-announcements until it's set.
+only show its settings. The one exception is `clock sync`, which sets its clock
+from your phone: after a restart its clock is often wrong, and phones may ignore
+its announcements until it's set. Send it from the MeshCore app. It doesn't work
+from the Console: there the repeater only answers that its clock can't go
+backwards.
 
 ### Loop detection {#loop-detection}
 

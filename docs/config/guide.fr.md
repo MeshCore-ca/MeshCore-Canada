@@ -557,9 +557,11 @@ Ces lignes concernent seulement un répéteur observateur.
 
 Après le redémarrage, l’outil propose quelques vérifications, comme `ver` et
 `region`. Elles affichent seulement ses réglages. La seule exception est
-`clock sync`, qui règle son horloge : après un redémarrage, son horloge est
-souvent fausse, et les téléphones peuvent ignorer ses annonces tant qu’elle
-n’est pas réglée.
+`clock sync`, qui règle son horloge d’après votre téléphone : après un
+redémarrage, son horloge est souvent fausse, et les téléphones peuvent ignorer
+ses annonces tant qu’elle n’est pas réglée. Envoyez-la depuis l’application
+MeshCore. Elle ne fonctionne pas depuis la Console : le répéteur y répond
+seulement que son horloge ne peut pas reculer.
 
 ### Détection des boucles { #loop-detection }
 

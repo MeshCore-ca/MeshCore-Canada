@@ -266,11 +266,12 @@ const CLOCK = {
 test("the checks remind people to set the clock after a restart, before the advert, in plain words", () => {
   const running = { ...belleville, status: "running", reflash: false };
   // Over USB the Console has no phone to take the time from: it shows the clock and says how to set it from the app.
-  // From the app the repeater takes the time from the phone, so there the check is the sync itself.
+  // `clock sync` always fails there (serial passes no sender time; the firmware answers "clock cannot go backwards"),
+  // so the line says so. From the app the repeater takes the time from the phone, so there the check is the sync itself.
   const cases = [
     [belleville, "clock", {
-      en: /^Shows its clock, in UTC\. .* If it's wrong, set it from your phone: in the MeshCore app, open Contacts, tap the repeater, log in as admin, then tap Command Line and send `clock sync`\.$/,
-      fr: /^Affiche son horloge, en UTC\. .* Si elle est fausse, réglez-la depuis votre téléphone : dans l’application MeshCore, ouvrez Contacts, touchez le répéteur, connectez-vous comme administrateur, puis touchez Command Line et envoyez `clock sync`\.$/
+      en: /^Shows its clock, in UTC\. .* If it's wrong, set it from your phone: in the MeshCore app, open Contacts, tap the repeater, log in as admin, then tap Command Line and send `clock sync`\. It doesn't work from the Console\.$/,
+      fr: /^Affiche son horloge, en UTC\. .* Si elle est fausse, réglez-la depuis votre téléphone : dans l’application MeshCore, ouvrez Contacts, touchez le répéteur, connectez-vous comme administrateur, puis touchez Command Line et envoyez `clock sync`\. Cette commande ne fonctionne pas depuis la Console\.$/
     }],
     [running, "clock sync", { en: /^Sets its clock from your phone\. /, fr: /^Règle son horloge d’après votre téléphone\. / }],
   ];
@@ -295,6 +296,9 @@ test("the checks' introduction says only the clock can change", () => {
       assert.match(hint, lang === "en" ? /change nothing, except/ : /ne changent rien, sauf/, `${lang} ${key}`);
     }
     assert.match(text.t("check.hint.phone", lang), /`clock sync`/);
+    // Over USB nothing in the list sets the clock: it is set from the app, and `clock sync` is never offered for the Console.
+    assert.match(text.t("check.hint.console", lang), lang === "en" ? /from the app/ : /depuis l’application/, lang);
+    assert.doesNotMatch(text.t("check.hint.console", lang), /clock sync/, lang);
   }
 });
 

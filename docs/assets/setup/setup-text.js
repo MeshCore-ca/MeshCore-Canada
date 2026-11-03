@@ -325,7 +325,7 @@
 
     // Check it worked
     "check.question": "Check it worked",
-    "check.hint.console": "After it restarts, reconnect the Console and run these. They change nothing, except the clock if it needs setting.",
+    "check.hint.console": "After it restarts, reconnect the Console and run these. They change nothing, except the clock, which you set from the app if it's wrong.",
     "check.hint.phone": "After it restarts, log in again in the app and send these from Command Line. They change nothing, except `clock sync`, which sets its clock.",
     "check.ver": "Shows the firmware version. It should be the one you just flashed.",
     "check.ver.phone": "Shows the firmware version. It should be the same as before.",
@@ -333,7 +333,7 @@
     "check.region.city": "Should list only {tags}, each followed by F, which means it passes those messages on. The * line at the top should also have F, as on every city repeater.",
     "check.region.edge": "Should list only {tags}, each followed by F, which means it passes those messages on. The * line at the top should have no F: that's what makes it an edge repeater.",
     "check.mqtt": "Should show slots 1 and 2, its first two server connections, as connected. If not, check the Wi-Fi name and password.",
-    "check.clock": "Shows its clock, in UTC. After a restart its clock is often wrong, and phones may ignore its announcements until it's set. If it's wrong, set it from your phone: in the MeshCore app, open Contacts, tap the repeater, log in as admin, then tap Command Line and send `clock sync`.",
+    "check.clock": "Shows its clock, in UTC. After a restart its clock is often wrong, and phones may ignore its announcements until it's set. If it's wrong, set it from your phone: in the MeshCore app, open Contacts, tap the repeater, log in as admin, then tap Command Line and send `clock sync`. It doesn't work from the Console.",
     "check.clock.phone": "Sets its clock from your phone. After a restart its clock is often wrong, and phones may ignore its announcements until it's set.",
     "check.advert": "Sends an announcement. A phone running MeshCore nearby should see it appear.",
     "check.live": "Within a few minutes it should appear in the {link}.",
@@ -656,7 +656,7 @@
 
     // Check it worked
     "check.question": "Vérifiez que tout fonctionne",
-    "check.hint.console": "Après le redémarrage, reconnectez la Console et lancez ces commandes. Elles ne changent rien, sauf l’horloge si elle doit être réglée.",
+    "check.hint.console": "Après le redémarrage, reconnectez la Console et lancez ces commandes. Elles ne changent rien, sauf l’horloge, que vous réglez depuis l’application si elle est fausse.",
     "check.hint.phone": "Après le redémarrage, reconnectez-vous dans l’application et envoyez ces commandes depuis Command Line. Elles ne changent rien, sauf `clock sync`, qui règle son horloge.",
     "check.ver": "Affiche la version du micrologiciel. Ce doit être celle que vous venez de programmer.",
     "check.ver.phone": "Affiche la version du micrologiciel. Elle doit être la même qu’avant.",
@@ -664,7 +664,7 @@
     "check.region.city": "Doit afficher seulement {tags}, chacun suivi de F, ce qui veut dire qu’il relaie ces messages. La ligne * en haut doit aussi avoir F, comme sur tout répéteur de ville.",
     "check.region.edge": "Doit afficher seulement {tags}, chacun suivi de F, ce qui veut dire qu’il relaie ces messages. La ligne * en haut ne doit pas avoir de F : c’est ce qui en fait un répéteur de bordure.",
     "check.mqtt": "Doit indiquer que les emplacements 1 et 2, ses deux premières connexions de serveur, sont connectés. Sinon, vérifiez le nom et le mot de passe du Wi-Fi.",
-    "check.clock": "Affiche son horloge, en UTC. Après un redémarrage, son horloge est souvent fausse, et les téléphones peuvent ignorer ses annonces tant qu’elle n’est pas réglée. Si elle est fausse, réglez-la depuis votre téléphone : dans l’application MeshCore, ouvrez Contacts, touchez le répéteur, connectez-vous comme administrateur, puis touchez Command Line et envoyez `clock sync`.",
+    "check.clock": "Affiche son horloge, en UTC. Après un redémarrage, son horloge est souvent fausse, et les téléphones peuvent ignorer ses annonces tant qu’elle n’est pas réglée. Si elle est fausse, réglez-la depuis votre téléphone : dans l’application MeshCore, ouvrez Contacts, touchez le répéteur, connectez-vous comme administrateur, puis touchez Command Line et envoyez `clock sync`. Cette commande ne fonctionne pas depuis la Console.",
     "check.clock.phone": "Règle son horloge d’après votre téléphone. Après un redémarrage, son horloge est souvent fausse, et les téléphones peuvent ignorer ses annonces tant qu’elle n’est pas réglée.",
     "check.advert": "Envoie une annonce. Un téléphone avec MeshCore à proximité devrait la voir apparaître.",
     "check.live": "D’ici quelques minutes, il devrait apparaître dans la {link}.",
