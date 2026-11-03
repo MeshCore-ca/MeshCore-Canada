@@ -110,9 +110,10 @@ export async function confirmStep(page, id) {
   await page.locator("[data-setup-confirm]").check();
   await next(page);
 }
-export async function version(page, reply) {
+// Answers the firmware question ("1.14", "1.15" or "1.16"). Only a board that is left as it is is asked.
+export async function version(page, firmware) {
   await expectStep(page, "version");
-  await page.locator("[data-setup-version]").fill(reply);
+  await choose(page, firmware);
   await next(page);
 }
 export async function searchTown(page, query) {
@@ -145,20 +146,20 @@ export const toolRoot = (lang) => (lang === "fr" ? "/fr/config/" : "/config/");
 export function phoneLink(tag, province, { lang = "en", role = "city", extra = "" } = {}) {
   return `${toolRoot(lang)}?${PHONE_ROUTE}&tag=${tag}&province=${province}&role=${role}&name=Test_R1${extra ? `&${extra}` : ""}`;
 }
-// A link never carries the firmware version: every route asks for the `ver` reply. So a link
-// opens on the version question at the latest. This opens it, answers with `reply`, and
-// presses Next until `to` (the commands, unless said otherwise).
-export async function openLink(page, path, { reply = "v1.16.0", to = "commands" } = {}) {
+// A link never carries the firmware version, so a phone-route link opens on the version question
+// at the latest. This opens it, picks `firmware`, and presses Next until `to` (the commands,
+// unless said otherwise).
+export async function openLink(page, path, { firmware = "1.16", to = "commands" } = {}) {
   await page.goto(siteRoute(path));
-  await version(page, reply);
+  await version(page, firmware);
   await nextUntil(page, to);
 }
 // Types the first answers of the phone route, ending on the town step.
-export async function startPhoneRoute(page, reply = "v1.16.2") {
+export async function startPhoneRoute(page, firmware = "1.16") {
   await answer(page, "type", "repeater");
   await answer(page, "board", "esp32");
   await answer(page, "status", "running");
   await answer(page, "reflash", "no");
-  await version(page, reply);
+  await version(page, firmware);
   await expectStep(page, "town");
 }

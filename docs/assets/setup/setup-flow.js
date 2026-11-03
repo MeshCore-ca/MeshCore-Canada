@@ -1,5 +1,5 @@
 // Step flow for the guided repeater setup tool: which questions apply, whether
-// each one is answered, how a "ver" reply is read, and the share-link format.
+// each one is answered, which firmware the commands are for, and the share-link format.
 // Pure logic only. No DOM, no network, no text shown to people (see setup-text.js).
 (function () {
   "use strict";
@@ -18,7 +18,9 @@
     "t-beam-supreme": "esp32", "rak3112": "esp32", "xiao-esp32s3": "esp32", "other-esp32": "esp32"
   };
 
+  // The firmware versions the commands are written for. A flashed board gets the newest.
   var VERSIONS = ["1.14", "1.15", "1.16"];
+  var NEWEST = "1.16";
   var TYPES = ["repeater", "observer"];
   var REPEAT = ["both", "listen"];
   var STATUS = ["new", "running"];
@@ -70,6 +72,13 @@
     return "flash";
   }
 
+  // The firmware the commands are written for. A board being flashed gets the newest, so it
+  // is never asked; a board left as it is runs whatever the person says it runs.
+  function firmwareFor(answers) {
+    var a = answers || {};
+    return route(a) === "flash" ? NEWEST : a.firmware;
+  }
+
   function stepIds(answers, context) {
     var a = answers || {};
     var flashing = route(a) === "flash";
@@ -80,7 +89,9 @@
     if (a.status === "running" && a.type === "observer") steps.push("observerFirmware");
     if (flashing && a.type === "repeater" && chip(a) === "nrf52") steps.push("bootloader");
     if (flashing) steps.push("flash");
-    steps.push("version", "town");
+    // Only a board that is left as it is can run older firmware; a flashed one gets the newest.
+    if (!flashing) steps.push("version");
+    steps.push("town");
     // The radio settings are only written when flashing; a running repeater keeps its own.
     if (flashing && context && context.radioOptions > 1) steps.push("radio");
     if (!listenOnly(a)) {
@@ -118,17 +129,6 @@
       case "check": return true;
       default: return false;
     }
-  }
-
-  // Reads a reply to the `ver` command (or just a version someone typed).
-  function parseVersion(text) {
-    var found = /(\d+)\.(\d+)/.exec(String(text == null ? "" : text));
-    if (!found) return { firmware: null, tooOld: false };
-    var major = parseInt(found[1], 10);
-    var minor = parseInt(found[2], 10);
-    if (major < 1 || (major === 1 && minor < 14)) return { firmware: null, tooOld: true };
-    if (major > 1 || minor > 16) return { firmware: "1.16", tooOld: false };
-    return { firmware: "1." + minor, tooOld: false };
   }
 
   // Reads coordinates typed into the location box, in the forms people copy from maps:
@@ -251,7 +251,7 @@
   // Share links: the non-secret answers, plus the picked town (as town, lat and lon).
   // Never carried: pasted device replies; the "I flashed it" / "I updated the
   // bootloader" ticks, which a shared link must not pre-tick for someone else; and
-  // the firmware version, because every route asks for the board's own `ver` reply.
+  // the firmware version, which only the person with the board can say.
   // Each field knows how to write and read itself.
   function enumField(key, values) {
     return {
@@ -403,7 +403,7 @@
     stepIds: stepIds,
     isComplete: isComplete,
     route: route,
-    parseVersion: parseVersion,
+    firmwareFor: firmwareFor,
     parseCoordinates: parseCoordinates,
     looksLikeCoordinates: looksLikeCoordinates,
     cleanName: cleanName,

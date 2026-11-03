@@ -1,6 +1,6 @@
 import { expect, test } from "./site-fixtures.mjs";
 import { siteRoute } from "./site-route.mjs";
-import { T, confirmStep, nextUntil, toolRoot, commandLines, version } from "./setup-helpers.mjs";
+import { T, confirmStep, nextUntil, toolRoot, commandLines } from "./setup-helpers.mjs";
 
 for (const locale of ["", "fr/"]) {
   test(`${locale || "en/"} Canada preset guidance is current and the setup tool writes the Canada radio line`, async ({ page }) => {
@@ -19,7 +19,6 @@ for (const locale of ["", "fr/"]) {
     const lang = locale ? "fr" : "en";
     await page.goto(siteRoute(`${toolRoot(lang)}?type=repeater&board=esp32&status=new&tag=yow&province=on&role=city&name=Test_R1`));
     await confirmStep(page, "flash");
-    await version(page, "v1.16.0");
     await nextUntil(page, "commands");
     const lines = await commandLines(page);
     expect(lines).toContain("set radio 910.525,62.5,7,5");

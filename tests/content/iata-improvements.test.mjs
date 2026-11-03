@@ -89,8 +89,8 @@ test("migration detaches retained children before removing obsolete parents", ()
 
 test("setup tool builds firmware-specific scope and standard commands, and the map builds none", () => {
   const tool = read("docs/assets/setup/setup-commands.js");
-  assert.match(tool,/lib\("MeshCoreIataScopes"\)\.commands\(result, s\.answers\.firmware\)/);
-  assert.match(tool,/lib\("MeshCoreIataScopes"\)\.standardCommands\(s\.answers\.firmware\)/);
+  assert.match(tool,/lib\("MeshCoreIataScopes"\)\.commands\(result, s\.firmware\)/);
+  assert.match(tool,/lib\("MeshCoreIataScopes"\)\.standardCommands\(s\.firmware\)/);
   assert.doesNotMatch(read("docs/assets/regions/regions.js"),/iataScopes\.(standardCommands|commands)\(/);
   assert.deepEqual(plain(scope.standardCommands("1.10")),["set advert.interval 240","set flood.advert.interval 47","set flood.max 16"]);
   assert.equal(scope.standardCommands("1.16")[0],"set path.hash.mode 2");

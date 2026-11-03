@@ -22,7 +22,7 @@ for (const lang of LANGS) {
     await mockGeocoder(page);
     await page.goto(siteRoute(ROUTES[lang]));
     await expectStep(page, "type");
-    await expect(progress(page)).toHaveText(T("nav.progress", lang, { n: 1, total: 10, label: T("step.type", lang) }));
+    await expect(progress(page)).toHaveText(T("nav.progress", lang, { n: 1, total: 9, label: T("step.type", lang) }));
     await expect(nextButton(page)).toBeDisabled();
     await expect(page.locator("[data-setup-back]")).toBeDisabled();
     await answer(page, "type", "repeater");
@@ -33,14 +33,12 @@ for (const lang of LANGS) {
     await expect(page.locator('[data-setup-choice="nrf52"]')).toHaveText(T("board.nrf52", lang));
     await choose(page, "nrf52");
     // An nRF52 board adds the bootloader step.
-    await expect(progress(page)).toHaveText(T("nav.progress", lang, { n: 2, total: 11, label: T("step.board", lang) }));
+    await expect(progress(page)).toHaveText(T("nav.progress", lang, { n: 2, total: 10, label: T("step.board", lang) }));
     await next(page);
     await answer(page, "status", "new");
     await confirmStep(page, "bootloader");
     await confirmStep(page, "flash");
-    await expectStep(page, "version");
-    await expect(nextButton(page)).toBeDisabled();
-    await version(page, "MeshCore v1.16.2 (Build: 12-Oct-2026)");
+    // A board that is being flashed gets the newest firmware, so there's no firmware question.
     await expectStep(page, "town");
     await expect(nextButton(page)).toBeDisabled();
     await searchTown(page, "Belleville");
@@ -55,7 +53,7 @@ for (const lang of LANGS) {
     await expect(page.locator("[data-setup-location-public]")).toHaveCount(0);
     await next(page);
     await expectStep(page, "commands");
-    await expect(progress(page)).toHaveText(T("nav.progress", lang, { n: 10, total: 11, label: T("step.commands", lang) }));
+    await expect(progress(page)).toHaveText(T("nav.progress", lang, { n: 9, total: 10, label: T("step.commands", lang) }));
     await expect(codes(page)).toHaveText(BELLEVILLE_COMMANDS(lang));
     // Each line has Done; the password line is typed by hand, so it has no Copy.
     await expect(page.locator("[data-setup-command] [data-done]")).toHaveCount(14);
@@ -144,7 +142,7 @@ for (const lang of LANGS) {
     await expectStep(page, "board");
     await page.locator("[data-setup-as-repeater]").click();
     await expectStep(page, "board");
-    await expect(progress(page)).toHaveText(T("nav.progress", lang, { n: 2, total: 10, label: T("step.board", lang) }));
+    await expect(progress(page)).toHaveText(T("nav.progress", lang, { n: 2, total: 9, label: T("step.board", lang) }));
     await expect(page.locator('[data-setup-choice="nrf52"]')).toBeEnabled();
     await expect(page.locator("[data-setup-as-repeater]")).toHaveCount(0);
     await expect(page.locator('[data-setup-card="nrf52"]')).not.toContainText(T("board.no-wifi.detail", lang));
@@ -166,8 +164,8 @@ test("a link made before the kind question still opens: each old board id become
   for (const [old, kind] of cases) {
     await page.goto(siteRoute(`/config/?type=repeater&board=${old}&status=new`));
     // The kind decides the steps: an nRF52 repeater updates its bootloader first.
-    if (kind === "nrf52") await expect(progress(page)).toHaveText(T("nav.progress", "en", { n: 4, total: 11, label: T("step.bootloader", "en") }));
-    else await expect(progress(page)).toHaveText(T("nav.progress", "en", { n: 4, total: 10, label: T("step.flash", "en") }));
+    if (kind === "nrf52") await expect(progress(page)).toHaveText(T("nav.progress", "en", { n: 4, total: 10, label: T("step.bootloader", "en") }));
+    else await expect(progress(page)).toHaveText(T("nav.progress", "en", { n: 4, total: 9, label: T("step.flash", "en") }));
     // The address is rewritten with the kind.
     await expect.poll(() => new URL(page.url()).searchParams.get("board"), old).toBe(kind);
     await page.locator("[data-setup-back]").click();
@@ -201,6 +199,7 @@ async function expectHelp(page, id, anchor, lang = "en") {
 for (const lang of LANGS) {
   test(`${lang} every question has a ? with a short answer and a link to the guide`, async ({ page }) => {
     // A new board flashed in Vancouver, at the edge: the route that asks the most questions.
+    // The firmware question belongs to the phone route; its ? is checked with the version tests.
     await page.goto(siteRoute(`${ROUTES[lang]}?tag=yvr&province=bc`));
     await expectHelp(page, "type", "what-a-repeater-is", lang);
     await choose(page, "repeater");
@@ -212,9 +211,6 @@ for (const lang of LANGS) {
     await choose(page, "new");
     await next(page);
     await confirmStep(page, "flash");
-    await expectHelp(page, "version", "older-firmware", lang);
-    await page.locator("[data-setup-version]").fill("v1.16.0");
-    await next(page);
     await expectHelp(page, "town", "scopes-and-regions", lang);
     await next(page);
     await expectHelp(page, "radio", "settings", lang);
@@ -261,20 +257,9 @@ test("running repeater via phone", async ({ page }) => {
   await expectStep(page, "version");
   // No bootloader or flash steps: everything happens in the app.
   await expect(progress(page)).toHaveText(T("nav.progress", "en", { n: 5, total: 10, label: T("step.version", "en") }));
-  await expect(step(page)).toContainText(plain("version.how.phone", "en"));
-  const steps = page.locator("[data-setup-phone-steps]");
-  await expect(steps).toContainText(T("commands.phone.step1", "en"));
-  await expect(steps).toContainText(T("commands.phone.step3", "en"));
-  const images = steps.locator("img");
-  expect(await images.evaluateAll((list) => list.map((image) => new URL(image.src).pathname.split("/").pop()))).toEqual([
-    "repeater-01-contacts.webp", "repeater-02-login.webp", "repeater-03-admin.webp", "repeater-05-ver.webp"
-  ]);
-  for (const image of await images.all()) {
-    await expect(image).toHaveAttribute("alt", /\w{4}/);
-    await image.scrollIntoViewIfNeeded();
-    await expect.poll(() => image.evaluate((element) => element.naturalWidth)).toBeGreaterThan(0);
-  }
-  await version(page, "  -> v1.15.1 (Build: 2026-03-02)");
+  // The app's login steps and screenshots are on the commands screen; this question is only the choice.
+  await expect(page.locator("[data-setup-phone-steps]")).toHaveCount(0);
+  await version(page, "1.15");
   await town(page, "Belleville", "ytr");
   await answer(page, "role", "city");
   await expectStep(page, "name");
@@ -287,7 +272,18 @@ test("running repeater via phone", async ({ page }) => {
   await expectStep(page, "commands");
   await expect(step(page)).toContainText(T("commands.question.phone", "en"));
   expect(await commandLines(page)).toContain("set name Quinte-Hill");
-  await expect(page.locator("[data-setup-step] [data-setup-phone-steps] img")).not.toHaveCount(0);
+  const steps = page.locator("[data-setup-phone-steps]");
+  await expect(steps).toContainText(T("commands.phone.step1", "en"));
+  await expect(steps).toContainText(T("commands.phone.step3", "en"));
+  const images = steps.locator("img");
+  expect(await images.evaluateAll((list) => list.map((image) => new URL(image.src).pathname.split("/").pop()))).toEqual([
+    "repeater-01-contacts.webp", "repeater-02-login.webp", "repeater-03-admin.webp"
+  ]);
+  for (const image of await images.all()) {
+    await expect(image).toHaveAttribute("alt", /\w{4}/);
+    await image.scrollIntoViewIfNeeded();
+    await expect.poll(() => image.evaluate((element) => element.naturalWidth)).toBeGreaterThan(0);
+  }
   await expect(page.locator('[data-setup-note="radio-phone"]')).toContainText(firstSentence(T("note.radio-phone", "en")));
   expect((await commandLines(page)).some((line) => line.startsWith("set radio"))).toBe(false);
   // The `region` line comes first, with the paste box right after it.
@@ -319,7 +315,6 @@ test("running repeater via phone", async ({ page }) => {
 test("a running repeater updated over USB still clears its old regions, without the app's cut-off warning", async ({ page }) => {
   await page.goto(siteRoute(`/config/?type=repeater&board=esp32&status=running&reflash=1&role=city&name=Test_R1&${BELLEVILLE}`));
   await confirmStep(page, "flash");
-  await version(page, "v1.16.0");
   await nextUntil(page, "commands");
   await expect(page.locator("[data-setup-reply]")).toBeVisible();
   // Over USB the whole reply comes through.
@@ -328,9 +323,8 @@ test("a running repeater updated over USB still clears its old regions, without 
 
 test("edge repeater offers neighbouring regions and Ontario cross-border options", async ({ page }) => {
   await page.goto(siteRoute(`/config/?type=repeater&board=esp32&status=new&${BELLEVILLE}`));
-  // A shared link never ticks "flashed" for someone else, and never says which firmware is on the board.
+  // A shared link never ticks "flashed" for someone else.
   await confirmStep(page, "flash");
-  await version(page, "v1.16.0");
   await expectStep(page, "town");
   await expect(page.locator("[data-setup-region]")).toContainText("ytr");
   await next(page);
@@ -517,7 +511,6 @@ for (const lang of LANGS) {
     const queries = await mockGeocoder(page);
     await page.goto(siteRoute(`${ROUTES[lang]}?type=repeater&board=esp32&status=new`));
     await confirmStep(page, "flash");
-    await version(page, "v1.16.0");
     await expectStep(page, "town");
     // One box for all three, with examples of each.
     await expect(page.locator("label[for='setup-town']")).toHaveText(T("town.label", lang));
@@ -652,7 +645,6 @@ for (const lang of LANGS) {
     const queries = await mockGeocoder(page);
     await page.goto(siteRoute(`${ROUTES[lang]}?type=repeater&board=esp32&status=new`));
     await confirmStep(page, "flash");
-    await version(page, "v1.16.0");
     await expectStep(page, "town");
     // Outside Canada (the longitude's minus sign forgotten): say how to type them.
     await searchTown(page, "44.1628, 77.3832");
@@ -729,50 +721,120 @@ test("coordinates in every common form stay on the page; ones that can't be read
   expect(queries).toEqual([]);
 });
 
-test("firmware reply", async ({ page }) => {
-  await page.goto(siteRoute("/config/?type=repeater&board=esp32&status=running&reflash=0"));
-  await expectStep(page, "version");
-  const input = page.locator("[data-setup-version]");
-  const message = page.locator("[data-setup-version-message]");
+// The firmware question belongs to a board that is left as it is: it can run anything from 1.14 up.
+const PHONE_LINK = `type=repeater&board=esp32&status=running&reflash=0&role=city&name=Belleville_R1&${BELLEVILLE}`;
+const OLDER_LABEL = { en: "Older than 1.14", fr: "Plus ancienne que 1.14" };
 
-  await input.fill("MeshCore v1.16.2 (Build: 12-Oct-2026)");
-  await expect(message).toHaveText(T("version.found", "en", { version: "1.16.2" }));
-  await expect(nextButton(page)).toBeEnabled();
-  // The version stays out of the address: whoever opens a shared link is asked for their own `ver` reply.
-  expect(new URL(page.url()).searchParams.has("firmware")).toBe(false);
+for (const lang of LANGS) {
+  test(`${lang} the firmware question on the phone route is four choices with a plain hint`, async ({ page }) => {
+    await page.goto(siteRoute(`${ROUTES[lang]}?type=repeater&board=esp32&status=running&reflash=0`));
+    await expectStep(page, "version");
+    await expect(page.getByRole("heading", { level: 2, name: T("version.question", lang) })).toBeVisible();
+    // Four cards, newest first, each with its one-line description. The labels are the same in both languages.
+    await expect(page.locator("[data-setup-step] [data-setup-choice]")).toHaveText(["1.16.0+", "1.15.x", "1.14.x", OLDER_LABEL[lang]]);
+    await expect(page.locator("[data-setup-card]")).toHaveCount(4);
+    for (const value of ["1.16", "1.15", "1.14", "older"]) {
+      const card = page.locator(`[data-setup-card="${value}"]`);
+      await expect(card.getByText(T(`version.${value}.detail`, lang), { exact: true })).toBeVisible();
+      await expect(page.locator(`[data-setup-choice="${value}"]`)).toHaveAccessibleDescription(T(`version.${value}.detail`, lang));
+    }
+    // Not sure? Send `ver`. No box to paste into, and no screenshots here: those are on the commands screen.
+    await expect(step(page).locator(".setup-hint")).toHaveText(plain("version.hint", lang));
+    await expect(step(page).locator(".setup-hint code")).toHaveText("ver");
+    await expect(page.locator("[data-setup-version], [data-setup-phone-steps]")).toHaveCount(0);
+    // Nothing is picked for the person.
+    await expect(step(page).locator('[aria-pressed="true"]')).toHaveCount(0);
+    await expect(nextButton(page)).toBeDisabled();
+    await expectHelp(page, "version", "older-firmware", lang);
+    await choose(page, "1.15");
+    await expect(page.locator('[data-setup-choice="1.15"]')).toHaveAttribute("aria-pressed", "true");
+    await expect(nextButton(page)).toBeEnabled();
+    await choose(page, "1.14");
+    await expect(page.locator('[data-setup-choice="1.15"]')).toHaveAttribute("aria-pressed", "false");
+    // The firmware stays out of the address: it is the one answer a link can't carry.
+    expect(new URL(page.url()).searchParams.has("firmware")).toBe(false);
+  });
+}
 
-  await input.fill("v1.17.0");
-  await expect(message).toHaveText(T("version.found", "en", { version: "1.17.0" }));
-  await expect(nextButton(page)).toBeEnabled();
+test("the picked firmware sets the region lines: 1.16.0+ one def line, 1.15.x put lines, 1.14.x put and allowf lines", async ({ page }) => {
+  await mockGeocoder(page);
+  const expected = {
+    "1.16": ["region", "region def ytr|* on|* onqc|* can|* na", "region allowf *", "region default ytr", "region save"],
+    "1.15": ["region", "region put ytr", "region put on", "region put onqc", "region put can", "region put na", "region allowf *", "region default ytr", "region save"],
+    "1.14": ["region", "region put ytr", "region allowf ytr", "region put on", "region allowf on", "region put onqc", "region allowf onqc",
+      "region put can", "region allowf can", "region put na", "region allowf na", "region allowf *", "region save"]
+  };
+  for (const [firmware, lines] of Object.entries(expected)) {
+    await openLink(page, `/config/?${PHONE_LINK}`, { firmware });
+    // The command on each line, not the `region allowf` an explanation mentions.
+    await expect(page.locator("[data-setup-command] .setup-command__code").first()).toBeVisible();
+    const commands = await page.locator("[data-setup-command] .setup-command__code").allTextContents();
+    expect(scopeLines(commands), firmware).toEqual(lines);
+  }
+});
 
-  // Unreadable: pick the version instead.
-  await input.fill("hello");
-  await expect(message).toContainText(T("version.unreadable", "en"));
-  await expect(nextButton(page)).toBeDisabled();
-  await expect(page.locator('[data-setup-choice="1.14"]')).toBeVisible();
-  await choose(page, "1.15");
-  await expect(nextButton(page)).toBeEnabled();
-  expect(new URL(page.url()).searchParams.has("firmware")).toBe(false);
+test("a board that is flashed is never asked its firmware: the newest is assumed", async ({ page }) => {
+  await mockGeocoder(page);
+  const flashed = [
+    ["a new board", `type=repeater&board=esp32&status=new&role=city&name=Belleville_R1&${BELLEVILLE}`, ["flash"]],
+    ["a running board that is updated", `type=repeater&board=nrf52&status=running&reflash=1&role=city&name=Belleville_R1&${BELLEVILLE}`, ["bootloader", "flash"]],
+    ["a running observer that needs the observer firmware", `type=observer&repeat=both&board=esp32&status=running&observerFirmware=no&role=city&name=Belleville_Obs1&${BELLEVILLE}`, ["flash"]]
+  ];
+  for (const [label, query, confirms] of flashed) {
+    await page.goto(siteRoute(`/config/?${query}`));
+    for (const id of confirms) await confirmStep(page, id);
+    await expectStep(page, "town");
+    await expect(progress(page)).not.toContainText(T("step.version", "en"));
+    await nextUntil(page, "commands");
+    const lines = await commandLines(page);
+    expect(lines.filter((line) => line.startsWith("region def ")), label).toHaveLength(1);
+    expect(lines.some((line) => line.startsWith("region put")), label).toBe(false);
+    expect(lines, label).toContain("region default ytr");
+  }
+});
 
-  // Too old: update first, and the update offers the flash steps.
-  await input.fill("v1.13.1");
-  await expect(message).toContainText(T("version.too-old", "en"));
-  await expect(nextButton(page)).toBeDisabled();
-  await page.locator("[data-setup-update]").click();
-  await expectStep(page, "flash");
-  await expect(progress(page)).toContainText(T("step.flash", "en"));
-  await expect.poll(() => new URL(page.url()).searchParams.get("reflash")).toBe("1");
-  await confirmStep(page, "flash");
-  await expectStep(page, "version");
-  await expect(step(page)).toContainText(plain("version.how.console", "en"));
-  await expect(input).toHaveValue("");
+test("Older than 1.14 blocks Next and offers the update, which removes the question and assumes the newest firmware", async ({ page }) => {
+  await mockGeocoder(page);
+  // The update goes to the flash steps the board needs: a repeater (nRF52 has its bootloader first) or an observer.
+  const boards = [
+    ["type=repeater&board=esp32&status=running&reflash=0", "flash", "reflash", "1"],
+    ["type=repeater&board=nrf52&status=running&reflash=0", "bootloader", "reflash", "1"],
+    ["type=observer&repeat=both&board=esp32&status=running&observerFirmware=yes", "flash", "observerFirmware", "no"]
+  ];
+  for (const [query, first, key, value] of boards) {
+    await page.goto(siteRoute(`/config/?${query}&${BELLEVILLE}&role=city&name=Belleville_R1`));
+    await expectStep(page, "version");
+    await choose(page, "older");
+    await expect(page.locator('[data-setup-choice="older"]')).toHaveAttribute("aria-pressed", "true");
+    await expect(step(page).locator(".setup-note--warn")).toContainText(T("version.too-old", "en"));
+    await expect(page.locator("[data-setup-update]")).toHaveText(T("version.update", "en"));
+    await expect(nextButton(page)).toBeDisabled();
+    expect(new URL(page.url()).searchParams.has("firmware")).toBe(false);
+    // Picking a supported version takes the note away; picking Older again brings it back.
+    await choose(page, "1.14");
+    await expect(page.locator("[data-setup-update]")).toHaveCount(0);
+    await expect(nextButton(page)).toBeEnabled();
+    await choose(page, "older");
+    await expect(nextButton(page)).toBeDisabled();
+    await page.locator("[data-setup-update]").click();
+    await expectStep(page, first);
+    await expect.poll(() => new URL(page.url()).searchParams.get(key)).toBe(value);
+    if (first === "bootloader") await confirmStep(page, "bootloader");
+    await confirmStep(page, "flash");
+    // The board is flashed now, so the version question is gone and the newest firmware is assumed.
+    await expectStep(page, "town");
+    await expect(progress(page)).not.toContainText(T("step.version", "en"));
+    await nextUntil(page, "commands");
+    const lines = await commandLines(page);
+    expect(lines.filter((line) => line.startsWith("region def "))).toHaveLength(1);
+    expect(lines.some((line) => line.startsWith("region put"))).toBe(false);
+  }
 });
 
 test("changing the town clears neighbours and the suggested name", async ({ page }) => {
   await mockGeocoder(page);
   await page.goto(siteRoute(`/config/?type=repeater&board=esp32&status=new&role=edge&neighbours=ygk&name=Belleville_R1&${BELLEVILLE}`));
   await confirmStep(page, "flash");
-  await version(page, "v1.16.0");
   await town(page, "Kingston", "ygk");
   await expectStep(page, "role");
   await expect(page.locator('[data-setup-choice="edge"]')).toHaveAttribute("aria-pressed", "true");
@@ -826,7 +888,7 @@ test("share link restores answers and holds no secrets", async ({ page, context 
   await answer(page, "board", "nrf52");
   await answer(page, "status", "running");
   await answer(page, "reflash", "no");
-  await version(page, "v1.15.1");
+  await version(page, "1.15");
   await town(page, "Belleville", "ytr");
   await answer(page, "role", "city");
   await expectStep(page, "name");
@@ -836,7 +898,7 @@ test("share link restores answers and holds no secrets", async ({ page, context 
   await page.locator("[data-setup-reply]").fill("*^ F\n ott F");
   await expect(codes(page)).toContainText(["region remove ott"]);
   const shared = new URL(page.url());
-  // Everything but the firmware version, which whoever opens the link is asked for.
+  // Everything but the firmware version, which only the person with the board can say.
   expect(Object.fromEntries(shared.searchParams)).toEqual({
     type: "repeater", board: "nrf52", status: "running", reflash: "0",
     tag: "ytr", province: "on", role: "city", name: "Belleville_R1", nameEdited: "1",
@@ -849,11 +911,11 @@ test("share link restores answers and holds no secrets", async ({ page, context 
 
   const other = await context.newPage();
   await other.goto(shared.href);
-  // The link opens on the version question: every route asks for the `ver` reply.
+  // The link opens on the version question, with nothing picked.
   await expectStep(other, "version");
-  await expect(other.locator("[data-setup-version]")).toHaveValue("");
+  await expect(other.locator('[data-setup-step] [data-setup-choice][aria-pressed="true"]')).toHaveCount(0);
   await expect(nextButton(other)).toBeDisabled();
-  await version(other, "v1.15.1");
+  await version(other, "1.15");
   // Every other answer is there, minus the pasted reply.
   await nextUntil(other, "commands");
   const lines = await commandLines(other);
@@ -888,7 +950,6 @@ test("map link opens with the region filled in", async ({ page }) => {
   await answer(page, "board", "esp32");
   await answer(page, "status", "new");
   await confirmStep(page, "flash");
-  await version(page, "v1.16.0");
   await expectStep(page, "town");
   await expect(page.locator("[data-setup-region]")).toContainText("ytr");
   await expect(page.locator("[data-setup-region]")).toContainText("Quinte West");
@@ -981,7 +1042,6 @@ test("region data loads only when the town step needs it", async ({ page }) => {
   await answer(page, "status", "new");
   await confirmStep(page, "flash");
   expect(boundaries).toEqual([]);
-  await version(page, "v1.16.0");
   await town(page, "Belleville", "ytr");
   expect(boundaries.length).toBe(1);
 });
@@ -1039,7 +1099,6 @@ test("language switch on the commands screen after flashing keeps the place and 
   await page.goto(siteRoute(`/config/?type=repeater&board=nrf52&status=new&role=city&name=Belleville_R1&${BELLEVILLE}`));
   await confirmStep(page, "bootloader");
   await confirmStep(page, "flash");
-  await version(page, "v1.15.0");
   for (const id of ["town", "role", "name"]) {
     await expectStep(page, id);
     await next(page);
@@ -1047,7 +1106,7 @@ test("language switch on the commands screen after flashing keeps the place and 
   await expectStep(page, "commands");
   const english = await commandLines(page);
   await page.locator('[data-setup-command="name"] [data-done]').click();
-  // The flashed and bootloader ticks and the firmware version never go in the address, even while switching.
+  // The flashed and bootloader ticks never go in the address, even while switching.
   expect(page.url()).not.toMatch(/flashed|bootloader|firmware|step=/);
   await page.locator(".md-select > button").first().click();
   await page.locator('.md-select__link[hreflang="fr"]').click();
@@ -1056,14 +1115,39 @@ test("language switch on the commands screen after flashing keeps the place and 
   const french = await commandLines(page);
   const notPassword = (line) => !line.startsWith("password ");
   expect(french.filter(notPassword)).toEqual(english.filter(notPassword));
-  // The version came across too: firmware 1.15 still gets one `region put` line per label.
-  expect(french).toContain("region put ytr");
+  // A flashed board gets the newest firmware, so one `region def` line, in either language.
+  expect(french).toContain("region def ytr|* on|* onqc|* can|* na");
   expect(french).toContain(`password <${T("ph.password", "fr")}>`);
   await expect(page.locator('[data-setup-command="name"] [data-done]')).toHaveAttribute("aria-pressed", "true");
   expect(page.url()).not.toMatch(/flashed|bootloader|firmware|step=/);
   // A plain reload is a fresh start of this tab's page: the flash ticks have to be given again.
   await page.reload();
   await expectStep(page, "bootloader");
+});
+
+test("language switch on the phone route keeps the chosen firmware", async ({ page }) => {
+  await page.goto(siteRoute(`/config/?${PHONE_LINK}`));
+  await expectStep(page, "version");
+  await choose(page, "1.14");
+  await page.locator(".md-select > button").first().click();
+  await page.locator('.md-select__link[hreflang="fr"]').click();
+  await expect(page.locator("html")).toHaveAttribute("lang", "fr");
+  // The same question in French, with the pick kept and out of the address.
+  await expectStep(page, "version");
+  await expect(page.locator('[data-setup-choice="1.14"]')).toHaveAttribute("aria-pressed", "true");
+  await expect(nextButton(page)).toBeEnabled();
+  expect(page.url()).not.toMatch(/firmware/);
+  await nextUntil(page, "commands");
+  const french = await commandLines(page);
+  expect(french).toContain("region put ytr");
+  expect(french).toContain("region allowf ytr");
+  expect(french.some((line) => line.startsWith("region default"))).toBe(false);
+  // And back again from the commands screen.
+  await page.locator(".md-select > button").first().click();
+  await page.locator('.md-select__link[hreflang="en"]').click();
+  await expect(page.locator("html")).toHaveAttribute("lang", "en");
+  await expectStep(page, "commands");
+  expect(await commandLines(page)).toContain("region allowf ytr");
 });
 
 test("copy works on plain HTTP", async ({ page }) => {
@@ -1150,11 +1234,6 @@ test("phone width", async ({ page }, testInfo) => {
   await page.locator("[data-setup-confirm]").check();
   await fitsTheScreen(page, "flash");
   await next(page);
-  await expectStep(page, "version");
-  await page.locator("[data-setup-version]").fill("hello");
-  await fitsTheScreen(page, "version");
-  await page.locator("[data-setup-version]").fill("v1.16.0");
-  await next(page);
   await expectStep(page, "town");
   await page.locator("[data-setup-help]").click();
   await searchTown(page, "Saint-Jean");
@@ -1199,7 +1278,11 @@ test("phone width", async ({ page }, testInfo) => {
   await answer(page, "reflash", "no");
   await expectStep(page, "version");
   await fitsTheScreen(page, "version (phone)");
-  await version(page, "v1.16.0");
+  // "Older than 1.14" adds the update note and its button.
+  await choose(page, "older");
+  await expect(page.locator("[data-setup-update]")).toBeVisible();
+  await fitsTheScreen(page, "version (older)");
+  await version(page, "1.16");
   await town(page, "Belleville", "ytr");
   await answer(page, "role", "city");
   await expectStep(page, "name");

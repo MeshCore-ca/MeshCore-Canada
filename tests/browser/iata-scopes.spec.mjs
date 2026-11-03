@@ -1,7 +1,7 @@
 import { expect, test } from "./site-fixtures.mjs";
 import { siteRoute } from "./site-route.mjs";
 import { readFile } from "node:fs/promises";
-import { PHONE_ROUTE, codes, expectStep, mockGeocoder, next, nextButton, nextUntil, answer, openLink, phoneLink, searchTown, startPhoneRoute, step, toolRoot, T, commandLines } from "./setup-helpers.mjs";
+import { PHONE_ROUTE, choose, codes, expectStep, mockGeocoder, next, nextButton, nextUntil, answer, openLink, phoneLink, searchTown, startPhoneRoute, step, toolRoot, T, commandLines } from "./setup-helpers.mjs";
 
 for (const locale of ["", "fr/"]) {
   const lang = locale ? "fr" : "en";
@@ -32,7 +32,7 @@ for (const locale of ["", "fr/"]) {
   }
   test(`${locale || "en/"} older firmware gets explicit permissions and no unsupported advert command`, async ({ page }) => {
     for (const firmware of ["1.14", "1.15"]) {
-      await openLink(page, phoneLink("yow", "on", { lang }), { reply: `v${firmware}.2` });
+      await openLink(page, phoneLink("yow", "on", { lang }), { firmware });
       const lines = await commandLines(page);
       expect(lines).toContain("region put yow");
       expect(lines).toContain("region allowf *");
@@ -45,8 +45,9 @@ for (const locale of ["", "fr/"]) {
     // Firmware below 1.14 gets no commands: the version question says to update first and Next stays off.
     await page.goto(siteRoute(phoneLink("yow", "on", { lang })));
     await expectStep(page, "version");
-    await page.locator("[data-setup-version]").fill("v1.13.1");
-    await expect(page.locator("[data-setup-version-message]")).toContainText(T("version.too-old", lang));
+    await choose(page, "older");
+    await expect(step(page)).toContainText(T("version.too-old", lang));
+    await expect(page.locator("[data-setup-update]")).toBeVisible();
     await expect(nextButton(page)).toBeDisabled();
     await expect(codes(page)).toHaveCount(0);
   });

@@ -18,11 +18,11 @@ page_scripts:
   - assets/regions/modules/iata-scopes.js?v=20261013-1
   - assets/regions/modules/scope-migration.js?v=20260926-2
   - assets/javascripts/place-search.js?v=20261102-9
-  - assets/setup/setup-text.js?v=20261103-5
-  - assets/setup/setup-flow.js?v=20261103-1
+  - assets/setup/setup-text.js?v=20261103-6
+  - assets/setup/setup-flow.js?v=20261103-6
   - assets/setup/setup-place.js?v=20261102-5
-  - assets/setup/setup-commands.js?v=20261102-8
-  - assets/setup/setup-ui.js?v=20261103-5
+  - assets/setup/setup-commands.js?v=20261103-6
+  - assets/setup/setup-ui.js?v=20261103-6
 hide:
   - navigation
   - toc

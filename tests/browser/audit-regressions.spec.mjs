@@ -2,7 +2,7 @@ import { expect, test } from "./site-fixtures.mjs";
 import AxeBuilder from "@axe-core/playwright";
 import { siteRoute } from "./site-route.mjs";
 import { submissionSha256 } from "../../docs/config/editor/issue.js";
-import { answer, choose, codes, confirmStep, expectStep, next, nextButton, nextUntil, openLink, phoneLink, startPhoneRoute, step, toolRoot, commandLines, version } from "./setup-helpers.mjs";
+import { answer, choose, codes, confirmStep, expectStep, next, nextButton, nextUntil, openLink, phoneLink, startPhoneRoute, step, toolRoot, commandLines } from "./setup-helpers.mjs";
 
 for (const locale of ["", "fr/"]) {
   const lang = locale ? "fr" : "en";
@@ -16,7 +16,6 @@ for (const locale of ["", "fr/"]) {
     // Flashing writes the radio, and BC has two groups' settings, so nothing is picked for the person.
     await page.goto(siteRoute(`${toolRoot(lang)}?type=repeater&board=esp32&status=new&tag=mvrd&province=bc&role=city&name=Test_R1`));
     await confirmStep(page, "flash");
-    await version(page, "v1.16.0");
     await nextUntil(page, "radio");
     await expect(step(page).locator('[aria-pressed="true"]')).toHaveCount(0);
     await expect(nextButton(page)).toBeDisabled();
@@ -45,7 +44,7 @@ for (const locale of ["", "fr/"]) {
     // Only the current region goes across: no legacy code, no extra regions, no firmware or role.
     expect(Object.fromEntries(new URL(await link.getAttribute("href")).searchParams)).toEqual({ tag: "yow", province: "on" });
     await link.click();
-    await startPhoneRoute(page, "v1.15.1");
+    await startPhoneRoute(page, "1.15");
     await expect(page.locator("[data-setup-region]")).toContainText("yow");
     await expect(page.locator("[data-setup-region]")).toContainText("Ottawa");
     await next(page);
@@ -133,19 +132,17 @@ for (const locale of ["", "fr/"]) {
   });
 }
 
-test("language switch keeps selected region, firmware, radio, and commands step", async ({ page }) => {
+test("language switch keeps selected region, radio, and commands step", async ({ page }) => {
   await page.goto(siteRoute("/config/?type=repeater&board=esp32&status=new&radio=bc-mesh&tag=yvr&province=bc&role=city&name=Test_R1"));
   await confirmStep(page, "flash");
-  await version(page, "v1.15.1");
   await nextUntil(page, "commands");
-  await expect(codes(page)).toContainText(["set radio 910.425,62.5,7,5", "region put yvr"]);
+  await expect(codes(page)).toContainText(["set radio 910.425,62.5,7,5", "region def yvr|* bc|* can|* na"]);
   await page.locator(".md-select > button").click();
   await page.locator('.md-select__link[hreflang="fr"]').click();
   await expect(page.locator("html")).toHaveAttribute("lang", "fr");
-  // The firmware version travels with the switch, not in the address.
   expect(new URL(page.url()).searchParams.has("firmware")).toBe(false);
   await expectStep(page, "commands");
-  await expect(codes(page)).toContainText(["set radio 910.425,62.5,7,5", "region put yvr"]);
+  await expect(codes(page)).toContainText(["set radio 910.425,62.5,7,5", "region def yvr|* bc|* can|* na"]);
 });
 
 test("map tiles appear while a slow boundary overlay is still loading", async ({ page }) => {

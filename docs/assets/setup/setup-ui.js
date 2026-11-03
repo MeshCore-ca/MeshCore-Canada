@@ -129,7 +129,7 @@
     dataFailed: false,
     help: {},          // open "?" answers, by step
     ticks: {},         // Done ticks, by command id and text; in memory only
-    versionText: "",   // what was typed at the version step
+    olderFirmware: false,   // "Older than 1.14" was picked at the version step
     town: freshTown()
   };
 
@@ -155,8 +155,8 @@
 
   // Steps whose screen shows region data, so it is drawn again when the data arrives.
   var DATA_STEPS = ["town", "radio", "role", "neighbours", "commands", "check"];
-  // Answers whose change also clears the version that was typed.
-  var CLEARS_VERSION = ["type", "board", "status", "reflash", "observerFirmware"];
+  // Answers whose change also clears an "Older than 1.14" pick at the version step.
+  var CLEARS_OLDER = ["type", "board", "status", "reflash", "observerFirmware"];
 
   // ------------------------------------------------- answers and the address bar
 
@@ -198,7 +198,7 @@
       var kept = before.external.filter(function (id) { return shared.indexOf(id) !== -1; });
       if (kept.length) next.external = kept;
     }
-    if (CLEARS_VERSION.indexOf(key) !== -1) state.versionText = "";
+    if (CLEARS_OLDER.indexOf(key) !== -1) state.olderFirmware = false;
     setAnswers(next);
     return true;
   }
@@ -221,9 +221,9 @@
   }
 
   // A language switch loads the other page with the answers in its address. What never
-  // goes in an address (the flashed and bootloader ticks, the firmware version and the
-  // `ver` reply, the pasted `region` reply), the Done ticks and the current step go in
-  // this tab's sessionStorage, for that one load only.
+  // goes in an address (the flashed and bootloader ticks, the firmware version, the
+  // pasted `region` reply), the Done ticks and the current step go in this tab's
+  // sessionStorage, for that one load only.
   var HANDOFF_KEY = "meshcore-setup:language-switch";
 
   function saveForLanguageSwitch() {
@@ -232,7 +232,7 @@
       sessionStorage.setItem(HANDOFF_KEY, JSON.stringify({
         query: Flow.toQuery(a), step: state.step, at: Date.now(),
         bootloader: a.bootloader === true, flashed: a.flashed === true,
-        firmware: typeof a.firmware === "string" ? a.firmware : "", version: state.versionText,
+        firmware: typeof a.firmware === "string" ? a.firmware : "",
         reply: typeof a.regionReply === "string" ? a.regionReply : "",
         ticks: Object.keys(state.ticks).filter(function (key) { return state.ticks[key]; })
       }));
@@ -253,7 +253,6 @@
     if (saved.bootloader === true) state.answers.bootloader = true;
     if (saved.flashed === true) state.answers.flashed = true;
     if (Flow.VERSIONS.indexOf(saved.firmware) !== -1) state.answers.firmware = saved.firmware;
-    if (typeof saved.version === "string") state.versionText = saved.version.slice(0, 200);
     if (typeof saved.reply === "string" && saved.reply) state.answers.regionReply = saved.reply.slice(0, 4000);
     (Array.isArray(saved.ticks) ? saved.ticks : []).forEach(function (key) { if (typeof key === "string") state.ticks[key] = true; });
     return typeof saved.step === "string" ? saved.step : null;
@@ -493,7 +492,7 @@
     state.answers = {};
     state.ticks = {};
     state.help = {};
-    state.versionText = "";
+    state.olderFirmware = false;
     state.town = freshTown();
     syncUrl();
     go("type");
@@ -571,13 +570,12 @@
   }
 
   // The MeshCore app's way to Command Line, with its screenshots.
-  function phoneSteps(withVersion) {
+  function phoneSteps() {
     var shots = [
       ["commands.phone.step1", "repeater-01-contacts.webp", "phone.img.contacts"],
       ["commands.phone.step2", "repeater-02-login.webp", "phone.img.login"],
       ["commands.phone.step3", "repeater-03-admin.webp", "phone.img.admin"]
     ];
-    if (withVersion) shots.push(["version.phone.step4", "repeater-05-ver.webp", "phone.img.ver"]);
     return el("ol", { class: "setup-phone-steps", "data-setup-phone-steps": "" }, shots.map(function (shot) {
       return el("li", null, el("div", { class: "setup-shot" }, [
         el("p", null, rich(shot[0])),
@@ -714,69 +712,34 @@
     }
   };
 
-  // Firmware version: read from the `ver` reply, or picked when the reply can't be read.
+  // Firmware version: asked only for a board that is left as it is, since a flashed one
+  // gets the newest. "Older than 1.14" can't be set up, so it offers the update instead.
+  var FIRMWARE_CHOICES = ["1.16", "1.15", "1.14", "older"];
+
   function versionBody(body) {
-    var phone = Flow.route(state.answers) === "phone";
-    body.appendChild(para(rich(phone ? "version.how.phone" : "version.how.console")));
-    if (phone) body.appendChild(phoneSteps(true));
-    var input = el("input", { type: "text", id: "setup-version", class: "setup-input", "data-setup-version": "", value: state.versionText,
-      placeholder: t("version.placeholder"), autocomplete: "off", autocapitalize: "off", spellcheck: "false" });
-    var message = el("div", { class: "setup-message", "data-setup-version-message": "", "aria-live": "polite" });
-    body.appendChild(el("div", { class: "setup-field" }, [el("label", { for: "setup-version" }, rich("version.label")), input]));
-    body.appendChild(message);
-    input.addEventListener("input", function () {
-      state.versionText = input.value;
-      var next = Object.assign({}, state.answers);
-      var read = Flow.parseVersion(input.value);
-      if (read.firmware) next.firmware = read.firmware; else if (input.value.trim()) delete next.firmware;
-      setAnswers(next);
-      versionMessage(message);
-      updateActions();
-    });
-    versionMessage(message);
-  }
-
-  function versionMessage(box) {
-    var text = state.versionText.trim();
-    var firmware = state.answers.firmware;
-    box.textContent = "";
-    if (!text) {
-      if (firmware) box.appendChild(note("ok", t("version.found", { version: firmware })));
-      return;
-    }
-    var read = Flow.parseVersion(text);
-    if (read.firmware) {
-      var shown = /\d+\.\d+(?:\.\d+)?/.exec(text);
-      box.appendChild(note("ok", t("version.found", { version: shown ? shown[0] : read.firmware })));
-    } else if (read.tooOld) {
-      box.appendChild(note("warn", [para(t("version.too-old")),
+    body.appendChild(choiceGroup(FIRMWARE_CHOICES.map(function (value) {
+      return choice(value, t("version." + value), t("version." + value + ".detail"), {
+        pressed: value === "older" ? state.olderFirmware : state.answers.firmware === value,
+        pick: function () {
+          var next = Object.assign({}, state.answers);
+          if (value === "older") delete next.firmware; else next.firmware = value;
+          state.olderFirmware = value === "older";
+          setAnswers(next);
+          renderStep({ focus: '[data-setup-choice="' + value + '"]' });
+        }
+      });
+    })));
+    body.appendChild(para(rich("version.hint"), { class: "setup-hint" }));
+    if (state.olderFirmware) {
+      body.appendChild(note("warn", [para(t("version.too-old")),
         el("button", { type: "button", class: "setup-button setup-button--small", "data-setup-update": "", on: { click: updateFirst } }, t("version.update"))]));
-    } else {
-      box.appendChild(para(t("version.unreadable")));
-      box.appendChild(choiceGroup(["1.14", "1.15", "1.16"].map(function (version) {
-        return choice(version, t("version.v" + version), null, { pressed: firmware === version, pick: function () {
-          setAnswers(Object.assign({}, state.answers, { firmware: version }));
-          versionMessage(box);
-          updateActions();
-          var again = box.querySelector('[data-setup-choice="' + version + '"]');
-          if (again) again.focus();
-        } });
-      })));
     }
   }
 
-  // Firmware older than 1.14: flash the latest first.
+  // Firmware older than 1.14: flash the latest first. The board is flashed from here on,
+  // so the version question goes away and the newest firmware is assumed.
   function updateFirst() {
-    var a = state.answers;
-    if (Flow.route(a) === "phone") {
-      if (a.type === "observer") choose("observerFirmware", "no"); else choose("reflash", true);
-    } else {
-      var next = Object.assign({}, a);
-      delete next.flashed;
-      delete next.firmware;
-      setAnswers(next);
-    }
-    state.versionText = "";
+    if (state.answers.type === "observer") choose("observerFirmware", "no"); else choose("reflash", true);
     go(stepList().indexOf("bootloader") !== -1 ? "bootloader" : "flash");
   }
 
@@ -1189,7 +1152,7 @@
     var phone = Flow.route(a) === "phone";
     if (phone) {
       body.appendChild(para(rich("commands.where.phone")));
-      body.appendChild(phoneSteps(false));
+      body.appendChild(phoneSteps());
       body.appendChild(para(rich("commands.phone.tip"), { class: "setup-hint" }));
     } else {
       body.appendChild(para(rich("commands.where.console", { flasher: t(a.type === "observer" ? "commands.flasher.observer" : "commands.flasher.repeater") })));

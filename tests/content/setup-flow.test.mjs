@@ -7,14 +7,14 @@ import test from "node:test";
 vm.runInThisContext(readFileSync("docs/assets/setup/setup-flow.js", "utf8"), { filename: "setup-flow.js" });
 const flow = globalThis.MeshCoreSetupFlow;
 
-test("a new nRF52 repeater gets the bootloader, flash and version steps", () => {
+test("a new nRF52 repeater gets the bootloader and flash steps, and no version question", () => {
   assert.deepEqual(flow.stepIds({ type: "repeater", board: "nrf52", status: "new" }),
-    ["type","board","status","bootloader","flash","version","town","role","name","commands","check"]);
+    ["type","board","status","bootloader","flash","town","role","name","commands","check"]);
 });
 
 test("a listen-only repeater observer skips scopes questions", () => {
   assert.deepEqual(flow.stepIds({ type: "observer", repeat: "listen", board: "esp32", status: "new" }),
-    ["type","repeat","board","status","flash","version","town","name","commands","check"]);
+    ["type","repeat","board","status","flash","town","name","commands","check"]);
 });
 
 test("a running repeater that isn't reflashed takes the phone route", () => {
@@ -25,13 +25,13 @@ test("a running repeater that isn't reflashed takes the phone route", () => {
 
 test("a running board becoming a repeater observer must be flashed", () => {
   const a = { type: "observer", repeat: "both", board: "esp32", status: "running", observerFirmware: "no" };
-  assert.deepEqual(flow.stepIds(a), ["type","repeat","board","status","observerFirmware","flash","version","town","role","name","commands","check"]);
+  assert.deepEqual(flow.stepIds(a), ["type","repeat","board","status","observerFirmware","flash","town","role","name","commands","check"]);
   assert.equal(flow.route(a), "flash");
 });
 
 test("edge adds neighbours; a region with two radio setups adds the radio question", () => {
   assert.ok(flow.stepIds({ type: "repeater", board: "esp32", status: "new", role: "edge" }).includes("neighbours"));
-  assert.deepEqual(flow.stepIds({ type: "repeater", board: "esp32", status: "new" }, { radioOptions: 2 }).slice(5, 7), ["town", "radio"]);
+  assert.deepEqual(flow.stepIds({ type: "repeater", board: "esp32", status: "new" }, { radioOptions: 2 }).slice(4, 6), ["town", "radio"]);
 });
 
 test("an nRF52 board can't complete the board step for a repeater observer", () => {
@@ -116,13 +116,39 @@ test("share links carry names with spaces, accents and symbols, and drop ones th
   assert.deepEqual(flow.fromQuery("name=Caf%C3%A9+Hilltop"), { name: "Café Hilltop" });
 });
 
-test("ver replies are read leniently", () => {
-  assert.deepEqual(flow.parseVersion("v1.15.0"), { firmware: "1.15", tooOld: false });
-  assert.deepEqual(flow.parseVersion("MeshCore v1.16.2 (Build: 12-Oct-2026)"), { firmware: "1.16", tooOld: false });
-  assert.deepEqual(flow.parseVersion("v1.17.0"), { firmware: "1.16", tooOld: false });
-  assert.deepEqual(flow.parseVersion("1.14"), { firmware: "1.14", tooOld: false });
-  assert.deepEqual(flow.parseVersion("v1.13.1"), { firmware: null, tooOld: true });
-  assert.deepEqual(flow.parseVersion("hello"), { firmware: null, tooOld: false });
+test("only a board that is reconfigured is asked which firmware it runs", () => {
+  const flashing = [
+    { type: "repeater", board: "esp32", status: "new" },
+    { type: "repeater", board: "nrf52", status: "running", reflash: true },
+    { type: "observer", repeat: "both", board: "esp32", status: "running", observerFirmware: "no" },
+    { type: "repeater" }
+  ];
+  for (const a of flashing) {
+    assert.equal(flow.route(a), "flash");
+    assert.ok(!flow.stepIds(a).includes("version"), JSON.stringify(a));
+  }
+  const phone = [
+    { type: "repeater", board: "esp32", status: "running", reflash: false },
+    { type: "observer", repeat: "both", board: "esp32", status: "running", observerFirmware: "yes" }
+  ];
+  for (const a of phone) {
+    assert.equal(flow.route(a), "phone");
+    const ids = flow.stepIds(a);
+    assert.ok(ids.includes("version"), JSON.stringify(a));
+    assert.equal(ids[ids.indexOf("version") + 1], "town");
+  }
+});
+
+test("firmwareFor assumes the newest firmware when flashing and uses the chosen one on the phone route", () => {
+  assert.equal(flow.firmwareFor({ type: "repeater", board: "esp32", status: "new" }), "1.16");
+  // A leftover answer from the phone route doesn't count once the board is flashed.
+  assert.equal(flow.firmwareFor({ type: "repeater", board: "esp32", status: "running", reflash: true, firmware: "1.14" }), "1.16");
+  assert.equal(flow.firmwareFor({}), "1.16");
+  assert.equal(flow.firmwareFor(), "1.16");
+  const phone = { type: "repeater", board: "esp32", status: "running", reflash: false };
+  for (const firmware of flow.VERSIONS) assert.equal(flow.firmwareFor({ ...phone, firmware }), firmware);
+  assert.equal(flow.firmwareFor(phone), undefined);
+  assert.equal(flow.parseVersion, undefined, "the ver reply is no longer typed in");
 });
 
 test("changing an earlier answer resets what depended on it", () => {
@@ -203,8 +229,8 @@ test("steps are complete once their own answer is valid", () => {
   assert.equal(flow.isComplete("bootloader", { bootloader: true }), true);
   assert.equal(flow.isComplete("bootloader", { bootloader: false }), false);
   assert.equal(flow.isComplete("flash", { flashed: true }), true);
-  assert.equal(flow.isComplete("version", { firmware: "1.15" }), true);
-  assert.equal(flow.isComplete("version", { firmware: "1.13" }), false);
+  for (const firmware of ["1.14", "1.15", "1.16"]) assert.equal(flow.isComplete("version", { firmware }), true, firmware);
+  for (const firmware of ["1.13", "older", "v1.16.0", undefined]) assert.equal(flow.isComplete("version", { firmware }), false, String(firmware));
   assert.equal(flow.isComplete("town", { tag: "ytr" }), false);
   assert.equal(flow.isComplete("radio", { radio: "bc-mesh" }), true);
   assert.equal(flow.isComplete("role", { role: "edge" }), true);
@@ -253,7 +279,7 @@ test("a changed type or board keeps what still applies", () => {
   assert.equal(flow.resetDependents({ type: "observer", board: "nrf52" }, "type").board, undefined);   // an observer can't keep nRF52
 });
 
-test("share links leave out the firmware version, so whoever opens one is asked for the ver reply", () => {
+test("share links leave out the firmware version, so whoever opens a phone-route one is asked which it is", () => {
   const q = flow.toQuery({ type: "repeater", board: "esp32", status: "running", reflash: false, firmware: "1.16" });
   assert.equal(q, "type=repeater&board=esp32&status=running&reflash=0");
   // Older links that still carry it are read without it.

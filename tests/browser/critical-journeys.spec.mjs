@@ -461,7 +461,7 @@ test("mobile setup tool names its progress, question and buttons", async ({ page
   await page.goto(siteRoute("/config/"));
   await expectStep(page, "type");
 
-  const first = T("nav.progress", "en", { n: 1, total: 10, label: T("step.type", "en") });
+  const first = T("nav.progress", "en", { n: 1, total: 9, label: T("step.type", "en") });
   await expect(progress(page)).toHaveText(first);
   // The screen is named by its question, and the progress line describes it.
   const screen = page.getByRole("region", { name: T("type.question", "en") });
@@ -476,7 +476,7 @@ test("mobile setup tool names its progress, question and buttons", async ({ page
   await page.getByRole("button", { name: T("type.repeater", "en"), exact: true }).click();
   await page.getByRole("button", { name: T("nav.next", "en"), exact: true }).click();
   await expectStep(page, "board");
-  const second = T("nav.progress", "en", { n: 2, total: 10, label: T("step.board", "en") });
+  const second = T("nav.progress", "en", { n: 2, total: 9, label: T("step.board", "en") });
   await expect(progress(page)).toHaveText(second);
   await expect(page.getByRole("region", { name: T("board.question", "en") }).getByRole("heading", { level: 2 })).toHaveAccessibleDescription(second);
   await expect(page.getByRole("button", { name: T("nav.back", "en"), exact: true })).toBeEnabled();
