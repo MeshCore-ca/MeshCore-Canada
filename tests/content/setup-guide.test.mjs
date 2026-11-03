@@ -281,3 +281,45 @@ test("the glossary points at the setup tool and defines the scope terms in the e
     assert.ok(flat(entryOf(source, entries[lang][1][0])).includes(regionSentence), `${path}: Region says "${regionSentence}"`);
   }
 });
+
+// The "scope a channel" steps in the companion section, in the order the steps use them.
+const channelShots = [
+  "companion-07-channels.webp",
+  "companion-13-testing-menu.webp",
+  "companion-15-add-yow.webp",
+  "companion-16-yow-added.webp",
+  "companion-17-testing-scoped.webp",
+];
+
+test("the channel scope steps show each screenshot on both pages, as a link to the full-size file", () => {
+  const sections = {};
+  for (const [lang, path] of Object.entries(pages)) {
+    const source = read(path);
+    const section = source.slice(source.search(/\{ ?#companions ?\}/), source.search(/\{ ?#bots-and-meshmapper ?\}/));
+    assert.ok(section.length > 500, `${path} needs the companion section before the bots section`);
+    const shots = [...section.matchAll(/\[!\[([^\]]+)\]\(\.\.\/assets\/images\/onqc-scopes\/([^)\s]+)\)\{ loading=lazy width="300" height="652" \}\]\(\.\.\/assets\/images\/onqc-scopes\/([^)\s]+)\)/g)];
+    assert.deepEqual(shots.map((shot) => shot[2]), channelShots, `${path}: the steps use these screenshots, in this order`);
+    for (const [, alt, file, link] of shots) {
+      assert.ok(alt.trim().length > 15, `${path}: ${file} needs alt text that says what it shows`);
+      assert.equal(link, file, `${path}: ${file} links to its own full-size file`);
+    }
+    sections[lang] = shots.map((shot) => shot[1]);
+  }
+  assert.notDeepEqual(sections.en, sections.fr, "the French page has its own alt text");
+});
+
+test("every image the explainer pages show exists", () => {
+  for (const path of Object.values(pages)) {
+    const source = read(path);
+    const images = [...source.matchAll(/!\[[^\]]*\]\(([^)\s]+)\)/g)].map((match) => match[1]);
+    assert.ok(images.length >= channelShots.length, `${path} should show its screenshots`);
+    for (const image of images) {
+      assert.ok(!/^[a-z]+:/i.test(image), `${path}: ${image} should be a file on this site`);
+      assert.ok(existsSync(resolve(root, dirname(path), image)), `${path}: ${image} is missing`);
+    }
+    // The links to full-size files point at real files too.
+    for (const [, link] of source.matchAll(/\]\((\.\.\/assets\/images\/[^)\s]+)\)/g)) {
+      assert.ok(existsSync(resolve(root, dirname(path), link)), `${path}: ${link} is missing`);
+    }
+  }
+});

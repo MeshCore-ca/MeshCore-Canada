@@ -194,6 +194,22 @@ for (const lang of ["en", "fr"]) {
       expect(wide, "tables wider than the screen").toEqual([]);
     });
 
+    test("the channel steps show their screenshots, each loaded, without sideways scrolling on a phone", async ({ page }) => {
+      await page.setViewportSize({ width: 390, height: 844 });
+      await openDemo(page, lang);
+      const shots = page.locator("article ol img[src*='onqc-scopes/']");
+      expect(await shots.count(), "the channel steps' screenshots").toBe(5);
+      for (let index = 0; index < 5; index += 1) {
+        const shot = shots.nth(index);
+        // They load lazily, so each is scrolled to before it is checked.
+        await shot.scrollIntoViewIfNeeded();
+        await expect.poll(() => shot.evaluate((image) => image.complete && image.naturalWidth > 0), { message: `screenshot ${index + 1} loads` }).toBe(true);
+        await expect(shot.locator("xpath=ancestor::a[1]")).toHaveAttribute("href", /onqc-scopes\/companion-.*\.webp$/);
+      }
+      const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+      expect(overflow, "the page is wider than the screen").toBeLessThanOrEqual(0);
+    });
+
     test("says it could not load, in plain words, when the catalogue is missing", async ({ page }) => {
       await page.route("**/assets/regions/iata-regions.json*", (route) => route.fulfill({ status: 404, body: "" }));
       await page.goto(siteRoute(pages[lang].route), { waitUntil: "load" });

@@ -641,8 +641,7 @@ the widest one in use. Don't use `can` or `na` yet.
 ### Scope a channel
 
 A channel with no scope of its own uses your default scope. To give a channel
-its own, open the channel, tap **⋮**, choose **Set Region Scope** and pick the
-label. If it isn't listed, add it with **+** first.
+its own, pick its label from this table, then follow the steps below.
 
 | Channel | Scope |
 | --- | --- |
@@ -650,6 +649,31 @@ label. If it isn't listed, add it with **+** first.
 | Test channels, such as `#testing` | Your region, such as `ytr` |
 | Bot channels, such as `#bots` | Your region |
 | Your own channels | Your region, your province or `onqc`, as the people using it agree |
+
+Do this for each channel. The screenshots set `#testing` to `yow`; use your
+own label instead.
+
+1. Tap **Channels** in the bottom menu bar and open the channel.
+
+    [![Channels list with Public at the top](../assets/images/onqc-scopes/companion-07-channels.webp){ loading=lazy width="300" height="652" }](../assets/images/onqc-scopes/companion-07-channels.webp)
+
+2. Tap **⋮** in the top right and choose **Set Region Scope**.
+
+    [![#testing channel menu with Set Region Scope](../assets/images/onqc-scopes/companion-13-testing-menu.webp){ loading=lazy width="300" height="652" }](../assets/images/onqc-scopes/companion-13-testing-menu.webp)
+
+3. If your label isn't listed, tap **+**, type it (for example `yow`) and tap the
+   **checkmark**.
+
+    [![Add Region screen with yow typed in](../assets/images/onqc-scopes/companion-15-add-yow.webp){ loading=lazy width="300" height="652" }](../assets/images/onqc-scopes/companion-15-add-yow.webp)
+
+4. **Region has been added!** Tap your label to select it.
+
+    [![Select Region list with onqc and yow and a Region has been added message](../assets/images/onqc-scopes/companion-16-yow-added.webp){ loading=lazy width="300" height="652" }](../assets/images/onqc-scopes/companion-16-yow-added.webp)
+
+5. The header now shows **Region: yow**. Only repeaters with that label on their
+   region list pass this channel's messages on.
+
+    [![#testing channel header showing Region: yow](../assets/images/onqc-scopes/companion-17-testing-scoped.webp){ loading=lazy width="300" height="652" }](../assets/images/onqc-scopes/companion-17-testing-scoped.webp)
 
 Scoped messages are a little shorter: the app allows fewer characters per
 message. On `Public`, the limit dropped from 137 to 127 characters in our

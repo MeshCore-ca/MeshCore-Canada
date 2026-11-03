@@ -689,9 +689,8 @@ large en usage. N’utilisez pas encore `can` ni `na`.
 ### Donner une portée à un canal
 
 Un canal sans portée propre utilise votre portée par défaut. Pour donner sa
-propre portée à un canal, ouvrez-le, touchez **⋮**, choisissez
-**Set Region Scope** et choisissez l’étiquette. Si elle n’est pas dans la liste,
-ajoutez-la d’abord avec **+**.
+propre portée à un canal, choisissez son étiquette dans ce tableau, puis suivez
+les étapes ci-dessous.
 
 | Canal | Portée |
 | --- | --- |
@@ -699,6 +698,31 @@ ajoutez-la d’abord avec **+**.
 | Canaux de test, comme `#testing` | Votre région, par exemple `ytr` |
 | Canaux de robots, comme `#bots` | Votre région |
 | Vos propres canaux | Votre région, votre province ou `onqc`, selon l’entente entre les personnes qui les utilisent |
+
+Faites-le pour chaque canal. Les captures d’écran règlent `#testing` sur `yow`;
+utilisez plutôt votre propre étiquette.
+
+1. Touchez **Channels** dans la barre du bas et ouvrez le canal.
+
+    [![Liste des canaux avec Public en haut](../assets/images/onqc-scopes/companion-07-channels.webp){ loading=lazy width="300" height="652" }](../assets/images/onqc-scopes/companion-07-channels.webp)
+
+2. Touchez **⋮** en haut à droite et choisissez **Set Region Scope**.
+
+    [![Menu du canal #testing avec Set Region Scope](../assets/images/onqc-scopes/companion-13-testing-menu.webp){ loading=lazy width="300" height="652" }](../assets/images/onqc-scopes/companion-13-testing-menu.webp)
+
+3. Si votre étiquette n’est pas dans la liste, touchez **+**, tapez-la (par
+   exemple `yow`) et touchez le **crochet**.
+
+    [![Écran Add Region avec yow tapé](../assets/images/onqc-scopes/companion-15-add-yow.webp){ loading=lazy width="300" height="652" }](../assets/images/onqc-scopes/companion-15-add-yow.webp)
+
+4. **Region has been added!** Touchez votre étiquette pour la sélectionner.
+
+    [![Liste Select Region avec onqc et yow et le message Region has been added](../assets/images/onqc-scopes/companion-16-yow-added.webp){ loading=lazy width="300" height="652" }](../assets/images/onqc-scopes/companion-16-yow-added.webp)
+
+5. L’en-tête affiche maintenant **Region: yow**. Seuls les répéteurs qui ont cette
+   étiquette dans leur liste de régions relaient les messages de ce canal.
+
+    [![En-tête du canal #testing affichant Region: yow](../assets/images/onqc-scopes/companion-17-testing-scoped.webp){ loading=lazy width="300" height="652" }](../assets/images/onqc-scopes/companion-17-testing-scoped.webp)
 
 Les messages avec portée sont un peu plus courts : l’application permet moins
 de caractères par message. Sur `Public`, la limite est passée de 137 à 127
