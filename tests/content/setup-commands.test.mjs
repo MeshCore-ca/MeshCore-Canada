@@ -505,20 +505,20 @@ test("a custom scope that is already in the list is not added twice", () => {
 test("the explanation names a custom scope in each language, and only when nothing else names it", () => {
   const why = (answers, lang, id = "def") => cmds.rollup(answers, data, lang).flatMap((g) => g.items).find((i) => i.id === id).why;
   assert.equal(why({ ...belleville, custom: "qcx2" }, "en"),
-    "Pass on messages labelled for Quinte West (ytr), Ontario (on), Ontario + Québec (onqc), Canada (can), North America (na) and qcx2 (agreed with a neighbouring network).");
+    "Pass on messages labelled for Quinte West (ytr), Ontario (on), Ontario + Québec (onqc), Canada (can), North America (na) and qcx2 (agreed with a network across the border).");
   assert.equal(why({ ...belleville, custom: "qcx2" }, "fr"),
-    "Relaie les messages qui portent une de ces étiquettes : Quinte West (ytr), Ontario (on), Ontario + Québec (onqc), Canada (can), Amérique du Nord (na) et qcx2 (convenue avec un réseau voisin).");
-  assert.equal(text.t("tag.custom", "en", { tag: "qcx2" }), "qcx2 (agreed with a neighbouring network)");
-  assert.equal(text.t("tag.custom", "fr", { tag: "qcx2" }), "qcx2 (convenue avec un réseau voisin)");
+    "Relaie les messages qui portent une de ces étiquettes : Quinte West (ytr), Ontario (on), Ontario + Québec (onqc), Canada (can), Amérique du Nord (na) et qcx2 (convenue avec un réseau de l’autre côté de la frontière).");
+  assert.equal(text.t("tag.custom", "en", { tag: "qcx2" }), "qcx2 (agreed with a network across the border)");
+  assert.equal(text.t("tag.custom", "fr", { tag: "qcx2" }), "qcx2 (convenue avec un réseau de l’autre côté de la frontière)");
   // A tag the tool already knows keeps its usual name.
   assert.doesNotMatch(why({ ...belleville, custom: "on" }, "en"), /agreed with/);
   assert.doesNotMatch(why({ ...belleville, custom: "ygk" }, "en"), /agreed with/);
   assert.doesNotMatch(why({ ...belleville, external: ["ontario-new-york"], custom: "onny" }, "fr"), /convenue/);
   // The one-line-per-region explanations name it the same way.
   const old = { ...belleville, status: "running", reflash: false, firmware: "1.15", custom: "qcx2" };
-  assert.equal(why(old, "en", "put-qcx2"), "Pass on messages labelled for qcx2 (agreed with a neighbouring network).");
-  assert.equal(why({ ...old, firmware: "1.14" }, "fr", "put-qcx2"), "Ajoute qcx2 (convenue avec un réseau voisin) à sa liste de régions. Il ne relaie pas ces messages avant sa ligne `region allowf`.");
-  assert.equal(why({ ...old, firmware: "1.14" }, "en", "allowf-qcx2"), "Pass on messages labelled for qcx2 (agreed with a neighbouring network).");
+  assert.equal(why(old, "en", "put-qcx2"), "Pass on messages labelled for qcx2 (agreed with a network across the border).");
+  assert.equal(why({ ...old, firmware: "1.14" }, "fr", "put-qcx2"), "Ajoute qcx2 (convenue avec un réseau de l’autre côté de la frontière) à sa liste de régions. Il ne relaie pas ces messages avant sa ligne `region allowf`.");
+  assert.equal(why({ ...old, firmware: "1.14" }, "en", "allowf-qcx2"), "Pass on messages labelled for qcx2 (agreed with a network across the border).");
 });
 
 test("the generator's confirm note applies to a custom scope, in both languages", () => {
@@ -549,4 +549,32 @@ test("a list too long for the repeater to show back is reported, not thrown, whe
   assert.equal(cmds.fits({ ...observer, repeat: "listen", role: undefined, custom: "x".repeat(29) }, crowded), true);
   // The generator itself refuses it, which is what the screen must not run into.
   assert.throws(() => cmds.rollup({ ...belleville, custom: "x".repeat(29) }, crowded, "en"), /Too many scopes/);
+});
+
+test("only a list that is too long counts as not fitting; any other generator error is not hidden behind it", () => {
+  // A hand-edited link naming a region or province the generator doesn't know is not a "too many scopes" case.
+  assert.throws(() => cmds.fits({ ...belleville, tag: "zzz" }, data), /Choose an IATA region/);
+  assert.throws(() => cmds.fits({ ...belleville, province: "xx" }, data), /Choose the province or territory/);
+  // Nor is an unsupported firmware version on the phone route.
+  assert.throws(() => cmds.fits({ ...belleville, status: "running", reflash: false, firmware: "9.9" }, data), /supported firmware/);
+  // The real "too many" case still says so, without throwing.
+  const crowded = structuredClone(data);
+  crowded.catalog.policy.reservedScopes.push("a".repeat(29), "b".repeat(29), "c".repeat(29));
+  assert.equal(cmds.fits({ ...belleville, custom: "x".repeat(29) }, crowded), false);
+});
+
+test("the agreed-scope words match in the explanation, the box and the too-many message", () => {
+  // One name for it everywhere: "a network across the border", never "a neighbouring network"
+  // ("neighbouring" is for the neighbouring regions an edge repeater lists).
+  for (const lang of ["en", "fr"]) {
+    for (const key of ["tag.custom", "custom.label", "custom.hint", "commands.too-many"]) {
+      assert.doesNotMatch(text.t(key, lang, { tag: "x" }), /neighbouring network|réseau voisin/, `${lang} ${key}`);
+    }
+  }
+  assert.equal(text.t("tag.custom", "en", { tag: "x" }), "x (agreed with a network across the border)");
+  assert.equal(text.t("tag.custom", "fr", { tag: "x" }), "x (convenue avec un réseau de l’autre côté de la frontière)");
+  assert.match(text.t("commands.too-many", "en"), /the scope you agreed with a network across the border/);
+  assert.match(text.t("commands.too-many", "fr"), /la portée que vous avez convenue avec un réseau de l’autre côté de la frontière/);
+  assert.match(text.t("custom.invalid", "en"), /letters without accents/);
+  assert.match(text.t("custom.invalid", "fr"), /lettres sans accents/);
 });

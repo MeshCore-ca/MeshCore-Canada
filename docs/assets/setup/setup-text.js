@@ -34,7 +34,7 @@
     "help.more": "More in the guide",
     "link.new-tab": "(opens in a new tab)",
     "list.and": "and",
-    "tag.custom": "{tag} (agreed with a neighbouring network)",
+    "tag.custom": "{tag} (agreed with a network across the border)",
 
     // Step labels, for the progress line
     "step.type": "What it is",
@@ -233,7 +233,7 @@
     "custom.label": "Another scope we've agreed with a network across the border",
     "custom.name": "Scope name",
     "custom.hint": "Type the scope you and the other network both carry, exactly as agreed (lowercase letters, numbers and dashes).",
-    "custom.invalid": "That isn't a valid scope name. Use only letters, numbers and dashes, with no spaces, and at most 29 characters.",
+    "custom.invalid": "That isn't a valid scope name. Use only letters without accents, numbers and dashes, with no spaces, and at most 29 characters.",
     "custom.share": "Using a cross-border scope that isn't listed? {link} so it can be added to the tool.",
     "custom.share.link": "Share it with us",
 
@@ -270,7 +270,7 @@
     "commands.done": "Done",
     "commands.done-ticked": "Done ✓",
     "commands.progress": "{done} of {total} done",
-    "commands.too-many": "These choices add too many scopes to fit on one repeater. Go back and untick the scope you added yourself, or a neighbouring region, then come back here.",
+    "commands.too-many": "These choices add too many scopes to fit on one repeater. Go back and untick the scope you agreed with a network across the border, or a neighbouring region, then come back here.",
     "group.basics": "Basics",
     "group.canada": "MeshCore Canada settings",
     "group.scopes": "Scopes",
@@ -378,7 +378,7 @@
     "help.more": "En savoir plus dans le guide",
     "link.new-tab": "(s’ouvre dans un nouvel onglet)",
     "list.and": "et",
-    "tag.custom": "{tag} (convenue avec un réseau voisin)",
+    "tag.custom": "{tag} (convenue avec un réseau de l’autre côté de la frontière)",
 
     // Step labels, for the progress line
     "step.type": "Type d’appareil",
@@ -577,7 +577,7 @@
     "custom.label": "Une autre portée convenue avec un réseau de l’autre côté de la frontière",
     "custom.name": "Nom de la portée",
     "custom.hint": "Tapez la portée que vous et l’autre réseau relayez tous les deux, exactement comme convenu (lettres minuscules, chiffres et tirets).",
-    "custom.invalid": "Ce nom de portée n’est pas valide. Utilisez seulement des lettres, des chiffres et des tirets, sans espaces, et au plus 29 caractères.",
+    "custom.invalid": "Ce nom de portée n’est pas valide. Utilisez seulement des lettres sans accents, des chiffres et des tirets, sans espaces, et au plus 29 caractères.",
     "custom.share": "Vous utilisez une portée transfrontalière qui n’est pas dans la liste? {link} pour qu’on l’ajoute à l’outil.",
     "custom.share.link": "Partagez-la avec nous",
 
@@ -614,7 +614,7 @@
     "commands.done": "Fait",
     "commands.done-ticked": "Fait ✓",
     "commands.progress": "Fait : {done} sur {total}",
-    "commands.too-many": "Ces choix ajoutent trop de portées pour un seul répéteur. Revenez en arrière et décochez la portée que vous avez ajoutée, ou une région voisine, puis revenez ici.",
+    "commands.too-many": "Ces choix ajoutent trop de portées pour un seul répéteur. Revenez en arrière et décochez la portée que vous avez convenue avec un réseau de l’autre côté de la frontière, ou une région voisine, puis revenez ici.",
     "group.basics": "Réglages de base",
     "group.canada": "Réglages de MeshCore Canada",
     "group.scopes": "Portées",

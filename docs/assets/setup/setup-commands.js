@@ -120,7 +120,7 @@
   }
 
   // "Quinte West (ytr)", "Amérique du Nord (na)", "États-Unis (us)". A typed-in scope that nothing
-  // else names is shown as "qcx2 (agreed with a neighbouring network)".
+  // else names is shown as "qcx2 (agreed with a network across the border)".
   function tagName(tag, data, lang, custom) {
     var name = knownName(tag, data, lang);
     return tag === custom && name === tag ? say("tag.custom", lang, { tag: tag }) : name;
@@ -296,6 +296,8 @@
   // Whether the generator can write the scope lines for these answers. It refuses a list too long for
   // the repeater to show back (32 regions, or 160 bytes of `region` reply), which a typed-in scope can
   // tip over. The screens ask first and say so in plain words, instead of running into the error.
+  // Only that refusal counts as "doesn't fit": any other error (an unknown region or province in a
+  // hand-edited link, say) is left to surface as it always has.
   function fits(answers, data) {
     var s = situation(answers, data);
     if (!s.scoped) return true;
@@ -303,7 +305,8 @@
       lib("MeshCoreIataScopes").commands(scopeProfile(s, data), s.firmware || "1.16");
       return true;
     } catch (error) {
-      return false;
+      if (error && /Too many scopes/.test(error.message)) return false;
+      throw error;
     }
   }
 
