@@ -80,7 +80,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          for file in docs/config/editor/*.js docs/assets/javascripts/*.js docs/assets/regions/modules/*.js docs/assets/regions/regions.js; do
+          for file in docs/config/editor/*.js docs/assets/javascripts/*.js docs/assets/regions/modules/*.js docs/assets/regions/regions.js docs/assets/setup/*.js; do
             node --check "$file"
           done
 
