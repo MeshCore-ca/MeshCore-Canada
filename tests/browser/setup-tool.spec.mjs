@@ -921,10 +921,16 @@ test("the region map hands off to the tool", async ({ page }) => {
   await expect.poll(() => new URL(page.url()).searchParams.get("tag")).toBe("ytr");
 });
 
-test("the page credits its region data", async ({ page }) => {
-  for (const [route, words] of [["/config/", "Data sources"], ["/fr/config/", "Sources de données"]]) {
+test("under the tool there is one small line: the region data credit", async ({ page }) => {
+  for (const [route, words] of [["/config/", "Region data: sources and licences"], ["/fr/config/", "Données des régions : sources et licences"]]) {
     await page.goto(siteRoute(route));
-    await expect(page.getByRole("link", { name: words })).toHaveAttribute("href", /assets\/regions\/NOTICE\.txt$/);
+    await expect(page.getByRole("link", { name: words, exact: true })).toHaveAttribute("href", /assets\/regions\/NOTICE\.txt$/);
+    // The guide is in the nav and every "?" links to it, and the page's own feedback block follows: no repeated links here.
+    const line = page.locator(".md-content small", { has: page.getByRole("link", { name: words, exact: true }) });
+    await expect(line).toHaveCount(1);
+    await expect(line.locator("a")).toHaveCount(1);
+    await expect(line).toHaveText(words);
+    await expect(page.locator("a[href*='thoughts-canadian-regions-strategy']")).toHaveCount(0);
   }
 });
 

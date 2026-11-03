@@ -238,6 +238,16 @@ test("the board step asks what kind of board it is, with examples and a way to c
   }
 });
 
+test("under the tool there is only the region data credit, linked to the notice", () => {
+  const credit = { "docs/config/index.md": "Region data: sources and licences", "docs/config/index.fr.md": "Données des régions : sources et licences" };
+  for (const [path, words] of Object.entries(credit)) {
+    const small = read(path).match(/<small>[\s\S]*?<\/small>/g);
+    assert.deepEqual(small, [`<small>[${words}](../assets/regions/NOTICE.txt)</small>`], path);
+    // The guide is in the nav and every "?" links to it; the page's feedback block follows the tool.
+    assert.doesNotMatch(read(path).replace(/<noscript>[\s\S]*?<\/noscript>/, ""), /\]\(guide\.md\)|forum\.meshcore\.ca/, path);
+  }
+});
+
 test("the pages set scopes now: no phase, preparation or activation wording", () => {
   for (const path of Object.values(pages)) {
     const source = read(path);

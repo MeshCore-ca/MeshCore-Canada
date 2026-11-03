@@ -35,4 +35,4 @@ Répondez à quelques questions, une à la fois, et obtenez toutes les commandes
 
 <noscript>L’outil de configuration a besoin de JavaScript. [Comprendre les répéteurs](guide.md) explique chaque étape et chaque commande qu’il afficherait.</noscript>
 
-<small>[Comprendre les répéteurs](guide.md) · [Sources de données](../assets/regions/NOTICE.txt) · [Partager vos commentaires](https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54/46)</small>
+<small>[Données des régions : sources et licences](../assets/regions/NOTICE.txt)</small>

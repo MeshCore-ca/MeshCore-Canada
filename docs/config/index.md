@@ -35,4 +35,4 @@ Answer a few questions, one at a time, and get every command to paste into your 
 
 <noscript>The setup tool needs JavaScript. [How repeaters work](guide.md) explains every step and command it would show.</noscript>
 
-<small>[How repeaters work](guide.md) · [Data sources](../assets/regions/NOTICE.txt) · [Share feedback](https://forum.meshcore.ca/t/thoughts-canadian-regions-strategy/54/46)</small>
+<small>[Region data: sources and licences](../assets/regions/NOTICE.txt)</small>
