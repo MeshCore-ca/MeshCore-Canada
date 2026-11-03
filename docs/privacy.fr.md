@@ -8,7 +8,7 @@ task: understand-site-privacy
 scope: canada-baseline
 status: draft
 owner: site-maintainers
-last_reviewed: 2026-07-22
+last_reviewed: 2026-11-02
 review_by: 2027-01-15
 difficulty: beginner
 estimated_time: 3 minutes
@@ -27,6 +27,7 @@ Vous pouvez consulter ce site sans compte MeshCore Canada ni compte GitHub.
 | Trouver des communautés à proximité | La ville recherchée | API Géolocalisateur de Ressources naturelles Canada; les distances sont calculées dans votre navigateur |
 | Charger les totaux du réseau dans l’en-tête | Votre adresse IP et les renseignements habituels d’une requête Web, sans texte de recherche | Beacon à dev.meshcore.ca |
 | Rechercher un lieu dans les outils de région | Le lieu, le code d’aéroport ou le code postal saisi | Codes IATA vérifiés localement. Noms de lieux transmis à l’API Géolocalisateur de Ressources naturelles Canada; codes postaux transmis à OpenStreetMap ou geocoder.ca |
+| Rechercher une ville ou une adresse dans l’[outil de configuration](config/index.md) | La ville ou l’adresse saisie. Les coordonnées saisies restent dans votre navigateur | API Géolocalisateur de Ressources naturelles Canada (`geolocator.api.geo.ca`) |
 | Ouvrir la carte interactive des régions | Votre adresse IP et la partie visible de la carte | OpenStreetMap |
 | Vérifier un identifiant de parcours de répéteur | Le premier octet de la clé publique | Beacon à dev.meshcore.ca; les comparaisons régionales et des préfixes plus longs restent dans votre navigateur |
 | Charger le nombre d’étoiles GitHub | Votre adresse IP et les renseignements habituels d’une requête Web | GitHub |
@@ -43,14 +44,39 @@ renseignement personnel.
 Le service de soumission peut conserver des journaux de sécurité et de
 limitation du débit. Aucune période de conservation n’a encore été publiée.
 
+## L’outil de configuration
+
+L’[outil de configuration](config/index.md) ne demande ni ne conserve jamais
+votre mot de passe administrateur ni votre mot de passe Wi-Fi. Là où une
+commande en exige un, elle affiche un espace réservé que vous remplissez
+vous-même.
+
+- **Partager et reprendre.** L’adresse de la page contient vos réponses non
+  secrètes, comme le nom du répéteur, sa région, et le nom du lieu avec ses
+  coordonnées, pour que vous puissiez partager ou reprendre une configuration.
+  Elle ne contient jamais de mots de passe, de renseignements Wi-Fi ni de
+  réponse `region` collée. Ces adresses peuvent apparaître dans l’historique du
+  navigateur et les journaux du serveur : ne partagez pas une adresse qui
+  contient un emplacement privé.
+- **Afficher sur les cartes.** Cette option est activée par défaut. Pour une
+  adresse ou des coordonnées, l’outil dit : « Tout le monde peut voir cet
+  endroit sur les cartes publiques. » Si vous la décochez, l’outil retire de la
+  liste les commandes qui règlent l’emplacement du répéteur, et l’adresse ou les
+  coordonnées restent aussi hors de l’adresse de la page.
+- **Changer de langue.** Pour ne pas vous faire recommencer, l’outil garde vos
+  coches, la version du micrologiciel et les réponses collées dans cet onglet du
+  navigateur, seulement le temps du changement. Il les supprime dès que l’autre
+  page les a lues, ou après 10 minutes.
+- **Rien n’est envoyé à MeshMapper.** [Comprendre les répéteurs](config/guide.md)
+  et la carte des régions lisent les fichiers de régions publiés sur ce site.
+
 ## Données enregistrées sur votre appareil
 
-Changer de langue ou passer entre la carte et l’outil de configuration conserve votre
-sélection dans l’URL de destination. Elle peut contenir les coordonnées saisies,
-un lieu, des scopes de ville et de province et un profil radio. Ces URL peuvent apparaître dans
-l’historique du navigateur et les journaux du serveur. Ne partagez pas un lien qui
-contient un emplacement privé. Les résumés téléchargés omettent les coordonnées
-exactes et les identifiants de connexion.
+Changer de langue sur la carte des régions conserve votre sélection dans l’URL
+de destination. Elle peut contenir les coordonnées saisies, un lieu, des portées
+de ville et de province et un profil radio. Ces URL peuvent apparaître dans
+l’historique du navigateur et les journaux du serveur. Ne partagez pas un lien
+qui contient un emplacement privé.
 
 Les listes de configuration, les brouillons d’idées et le dernier code de
 région Beacon choisi dans l’outil de vérification sont enregistrés uniquement
