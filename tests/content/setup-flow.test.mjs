@@ -8,35 +8,35 @@ vm.runInThisContext(readFileSync("docs/assets/setup/setup-flow.js", "utf8"), { f
 const flow = globalThis.MeshCoreSetupFlow;
 
 test("a new nRF52 repeater gets the bootloader, flash and version steps", () => {
-  assert.deepEqual(flow.stepIds({ type: "repeater", board: "rak4631", status: "new" }),
+  assert.deepEqual(flow.stepIds({ type: "repeater", board: "nrf52", status: "new" }),
     ["type","board","status","bootloader","flash","version","town","role","name","commands","check"]);
 });
 
 test("a listen-only repeater observer skips scopes questions", () => {
-  assert.deepEqual(flow.stepIds({ type: "observer", repeat: "listen", board: "heltec-v3", status: "new" }),
+  assert.deepEqual(flow.stepIds({ type: "observer", repeat: "listen", board: "esp32", status: "new" }),
     ["type","repeat","board","status","flash","version","town","name","commands","check"]);
 });
 
 test("a running repeater that isn't reflashed takes the phone route", () => {
-  const a = { type: "repeater", board: "heltec-v3", status: "running", reflash: false };
+  const a = { type: "repeater", board: "esp32", status: "running", reflash: false };
   assert.deepEqual(flow.stepIds(a), ["type","board","status","reflash","version","town","role","name","commands","check"]);
   assert.equal(flow.route(a), "phone");
 });
 
 test("a running board becoming a repeater observer must be flashed", () => {
-  const a = { type: "observer", repeat: "both", board: "heltec-v3", status: "running", observerFirmware: "no" };
+  const a = { type: "observer", repeat: "both", board: "esp32", status: "running", observerFirmware: "no" };
   assert.deepEqual(flow.stepIds(a), ["type","repeat","board","status","observerFirmware","flash","version","town","role","name","commands","check"]);
   assert.equal(flow.route(a), "flash");
 });
 
 test("edge adds neighbours; a region with two radio setups adds the radio question", () => {
-  assert.ok(flow.stepIds({ type: "repeater", board: "heltec-v3", status: "new", role: "edge" }).includes("neighbours"));
-  assert.deepEqual(flow.stepIds({ type: "repeater", board: "heltec-v3", status: "new" }, { radioOptions: 2 }).slice(5, 7), ["town", "radio"]);
+  assert.ok(flow.stepIds({ type: "repeater", board: "esp32", status: "new", role: "edge" }).includes("neighbours"));
+  assert.deepEqual(flow.stepIds({ type: "repeater", board: "esp32", status: "new" }, { radioOptions: 2 }).slice(5, 7), ["town", "radio"]);
 });
 
 test("an nRF52 board can't complete the board step for a repeater observer", () => {
-  assert.equal(flow.isComplete("board", { type: "observer", board: "rak4631" }), false);
-  assert.equal(flow.isComplete("board", { type: "repeater", board: "rak4631" }), true);
+  assert.equal(flow.isComplete("board", { type: "observer", board: "nrf52" }), false);
+  assert.equal(flow.isComplete("board", { type: "repeater", board: "nrf52" }), true);
 });
 
 test("names are suggested from the town; a region from the map answers the town step", () => {
@@ -126,7 +126,7 @@ test("ver replies are read leniently", () => {
 });
 
 test("changing an earlier answer resets what depended on it", () => {
-  const a = { type: "observer", board: "rak4631", place: { name: "Belleville" }, tag: "ytr", province: "on",
+  const a = { type: "observer", board: "nrf52", place: { name: "Belleville" }, tag: "ytr", province: "on",
     radio: "canada", role: "edge", neighbours: ["ygk"], external: ["western-new-york"], name: "Belleville_R1" };
   assert.equal(flow.resetDependents(a, "type").board, undefined);           // nRF52 invalid for observer
   const town = flow.resetDependents(a, "place");
@@ -136,34 +136,38 @@ test("changing an earlier answer resets what depended on it", () => {
 });
 
 test("share links round-trip answers and never carry pasted replies", () => {
-  const a = { type: "repeater", board: "heltec-v3", status: "new", tag: "ytr", province: "on", role: "edge", neighbours: ["ygk"], name: "Belleville_R1", regionReply: "*^ F" };
+  const a = { type: "repeater", board: "esp32", status: "new", tag: "ytr", province: "on", role: "edge", neighbours: ["ygk"], name: "Belleville_R1", regionReply: "*^ F" };
   const q = flow.toQuery(a);
   assert.doesNotMatch(q, /regionReply|%5E/);
-  assert.deepEqual(flow.fromQuery(q), { type: "repeater", board: "heltec-v3", status: "new", tag: "ytr", province: "on", role: "edge", neighbours: ["ygk"], name: "Belleville_R1" });
+  assert.deepEqual(flow.fromQuery(q), { type: "repeater", board: "esp32", status: "new", tag: "ytr", province: "on", role: "edge", neighbours: ["ygk"], name: "Belleville_R1" });
   assert.deepEqual(flow.fromQuery("?tag=YOW&province=qc&step=3"), { tag: "yow", province: "qc" }); // map links; old params ignored
 });
 
 // Beyond the brief: the board list, route edge cases, purity and hostile links.
 
-test("the board list is well formed and matches the flashers' boards", () => {
-  const ids = flow.BOARDS.map(b => b.id);
-  assert.equal(new Set(ids).size, ids.length);
-  for (const b of flow.BOARDS) {
-    assert.ok(b.name && ["nrf52", "esp32"].includes(b.chip), b.id);
-    assert.equal(typeof b.observerFlasher, "boolean", b.id);
-    if (b.chip === "nrf52") assert.equal(b.observerFlasher, false, `${b.id}: the observer firmware is ESP32 only`);
-  }
-  for (const id of ["rak4631", "heltec-t114", "xiao-nrf52840", "t-echo", "heltec-v3", "heltec-v4", "t-beam", "xiao-esp32s3", "other-nrf52", "other-esp32"]) {
-    assert.ok(ids.includes(id), id);
-  }
-  const board = id => flow.BOARDS.find(b => b.id === id);
-  assert.equal(board("rak4631").name, "RAK4631 (WisBlock)");
-  assert.equal(board("heltec-v3").observerFlasher, true);
-  assert.equal(board("heltec-v4").observerFlasher, true);
-  assert.equal(board("heltec-t114").observerFlasher, false);
-  assert.equal(board("other-nrf52").chip, "nrf52");
-  assert.equal(board("other-esp32").chip, "esp32");
-  assert.ok(board("other-nrf52").nameFr && board("other-esp32").nameFr);
+test("the board answer is the kind of board: nrf52 or esp32, and nothing else", () => {
+  assert.deepEqual(flow.KINDS, ["nrf52", "esp32"]);
+  assert.equal(flow.BOARDS, undefined, "the per-board list is gone");
+  assert.equal(flow.toQuery({ board: "nrf52" }), "board=nrf52");
+  assert.equal(flow.toQuery({ board: "esp32" }), "board=esp32");
+  assert.equal(flow.toQuery({ board: "rak4631" }), "", "a board's name is not an answer any more");
+  assert.deepEqual(flow.fromQuery("board=NRF52"), { board: "nrf52" });
+  assert.deepEqual(flow.fromQuery("board=esp32"), { board: "esp32" });
+});
+
+test("a link made before the kind question maps each old board id to its kind", () => {
+  const nrf52 = ["rak4631", "heltec-t114", "xiao-nrf52840", "t-echo", "heltec-mesh-solar", "sensecap-solar-p1", "other-nrf52"];
+  const esp32 = ["heltec-v3", "heltec-v4", "heltec-wireless-tracker", "t-beam", "t-beam-supreme", "rak3112", "xiao-esp32s3", "other-esp32"];
+  for (const id of nrf52) assert.deepEqual(flow.fromQuery(`type=repeater&board=${id}&status=new`), { type: "repeater", board: "nrf52", status: "new" }, id);
+  for (const id of esp32) assert.deepEqual(flow.fromQuery(`type=repeater&board=${id}&status=new`), { type: "repeater", board: "esp32", status: "new" }, id);
+  // The old link steers the same steps as the kind does, and writes the kind back out.
+  assert.ok(flow.stepIds(flow.fromQuery("type=repeater&board=rak4631&status=new")).includes("bootloader"));
+  assert.ok(!flow.stepIds(flow.fromQuery("type=repeater&board=heltec-v3&status=new")).includes("bootloader"));
+  assert.equal(flow.toQuery(flow.fromQuery("type=observer&board=heltec-v4")), "type=observer&board=esp32");
+  assert.equal(flow.isComplete("board", flow.fromQuery("type=observer&board=rak4631")), false, "an old nRF52 observer link is still blocked");
+  assert.equal(flow.isComplete("board", flow.fromQuery("type=observer&board=heltec-v4")), true);
+  // Anything else, including names that exist on every object, is dropped.
+  for (const id of ["nope", "constructor", "__proto__", "toString", ""]) assert.deepEqual(flow.fromQuery(`board=${id}`), {}, id);
 });
 
 test("the route is the phone only for a running board that is not being flashed", () => {
@@ -176,7 +180,7 @@ test("the route is the phone only for a running board that is not being flashed"
 });
 
 test("the phone route skips the flashing and radio questions", () => {
-  const a = { type: "repeater", board: "rak4631", status: "running", reflash: false };
+  const a = { type: "repeater", board: "nrf52", status: "running", reflash: false };
   const ids = flow.stepIds(a, { radioOptions: 2 });
   for (const id of ["bootloader", "flash", "radio"]) assert.ok(!ids.includes(id), id);
   const reflash = flow.stepIds({ ...a, reflash: true }, { radioOptions: 2 });
@@ -188,9 +192,10 @@ test("steps are complete once their own answer is valid", () => {
   assert.equal(flow.isComplete("type", {}), false);
   assert.equal(flow.isComplete("repeat", { repeat: "listen" }), true);
   assert.equal(flow.isComplete("repeat", { repeat: "maybe" }), false);
-  assert.equal(flow.isComplete("board", { type: "observer", board: "other-esp32" }), true);
-  assert.equal(flow.isComplete("board", { type: "observer", board: "other-nrf52" }), false);
-  assert.equal(flow.isComplete("board", { board: "rak4631" }), false);                      // type comes first
+  assert.equal(flow.isComplete("board", { type: "observer", board: "esp32" }), true);
+  assert.equal(flow.isComplete("board", { type: "observer", board: "nrf52" }), false);
+  assert.equal(flow.isComplete("board", { type: "repeater", board: "rak4631" }), false);      // a board's name is not a kind
+  assert.equal(flow.isComplete("board", { board: "nrf52" }), false);                      // type comes first
   assert.equal(flow.isComplete("status", { status: "running" }), true);
   assert.equal(flow.isComplete("reflash", { reflash: false }), true);
   assert.equal(flow.isComplete("reflash", {}), false);
@@ -221,13 +226,13 @@ test("names drop accents, spaces and punctuation", () => {
 });
 
 test("resetDependents returns a new object and clears the flashing confirmations when the route changes", () => {
-  const a = { type: "repeater", board: "rak4631", status: "running", reflash: true, bootloader: true, flashed: true, firmware: "1.15", regionReply: "*^ F" };
+  const a = { type: "repeater", board: "nrf52", status: "running", reflash: true, bootloader: true, flashed: true, firmware: "1.15", regionReply: "*^ F" };
   const copy = JSON.parse(JSON.stringify(a));
   const next = flow.resetDependents(a, "reflash");
   assert.deepEqual(a, copy);
   assert.notEqual(next, a);
   for (const key of ["bootloader", "flashed", "firmware"]) assert.equal(next[key], undefined, key);
-  assert.equal(next.board, "rak4631");
+  assert.equal(next.board, "nrf52");
   assert.equal(next.reflash, true);
   const other = flow.resetDependents(a, "board");
   for (const key of ["bootloader", "flashed", "firmware", "regionReply"]) assert.equal(other[key], undefined, key);
@@ -238,24 +243,26 @@ test("resetDependents returns a new object and clears the flashing confirmations
 });
 
 test("a changed type or board keeps what still applies", () => {
-  const a = { type: "repeater", repeat: "both", board: "heltec-v3", status: "running", reflash: false, observerFirmware: "yes", name: "Belleville_R1" };
+  const a = { type: "repeater", repeat: "both", board: "esp32", status: "running", reflash: false, observerFirmware: "yes", name: "Belleville_R1" };
   const next = flow.resetDependents(a, "type");
   for (const key of ["repeat", "reflash", "observerFirmware", "name"]) assert.equal(next[key], undefined, key);
-  assert.equal(next.board, "heltec-v3");
+  assert.equal(next.board, "esp32");
   assert.equal(next.status, "running");
-  assert.equal(flow.resetDependents({ type: "observer", board: "other-esp32" }, "type").board, "other-esp32");
+  assert.equal(flow.resetDependents({ type: "observer", board: "esp32" }, "type").board, "esp32");
+  assert.equal(flow.resetDependents({ type: "repeater", board: "nrf52" }, "type").board, "nrf52");
+  assert.equal(flow.resetDependents({ type: "observer", board: "nrf52" }, "type").board, undefined);   // an observer can't keep nRF52
 });
 
 test("share links leave out the firmware version, so whoever opens one is asked for the ver reply", () => {
-  const q = flow.toQuery({ type: "repeater", board: "heltec-v3", status: "running", reflash: false, firmware: "1.16" });
-  assert.equal(q, "type=repeater&board=heltec-v3&status=running&reflash=0");
+  const q = flow.toQuery({ type: "repeater", board: "esp32", status: "running", reflash: false, firmware: "1.16" });
+  assert.equal(q, "type=repeater&board=esp32&status=running&reflash=0");
   // Older links that still carry it are read without it.
   assert.deepEqual(flow.fromQuery("type=repeater&firmware=1.16"), { type: "repeater" });
   assert.equal(flow.isComplete("version", flow.fromQuery("firmware=1.15")), false);
 });
 
 test("share links keep only valid, known answers", () => {
-  const a = { type: "observer", repeat: "both", board: "heltec-v4", status: "running", observerFirmware: "yes",
+  const a = { type: "observer", repeat: "both", board: "esp32", status: "running", observerFirmware: "yes",
     tag: "yvr", province: "bc", radio: "bc-mesh", role: "edge", neighbours: ["yxx", "yyj"], external: ["washington"],
     name: "Vancouver_Obs1", nameEdited: true, shareLocation: false, reflash: false,
     place: { name: "Vancouver", province: "bc", lat: 49.28, lon: -123.12 } };
@@ -275,7 +282,7 @@ test("share links keep only valid, known answers", () => {
 });
 
 test("the chosen town survives a reload: accents kept, coordinates rounded to 4 decimals", () => {
-  const a = { type: "repeater", board: "heltec-v3", status: "new", tag: "yul", province: "qc",
+  const a = { type: "repeater", board: "esp32", status: "new", tag: "yul", province: "qc",
     place: { name: "Montréal", province: "qc", lat: 45.501689, lon: -73.567256 } };
   const q = flow.toQuery(a);
   assert.match(q, /(?:^|&)town=Montr%C3%A9al(?:&|$)/);
@@ -426,8 +433,8 @@ test("an exact spot the person chose not to show on maps stays out of the link; 
 
 test("the 'I did this' ticks never go into a share link", () => {
   assert.equal(flow.toQuery({ bootloader: true, flashed: true }), "");
-  const q = flow.toQuery({ type: "repeater", board: "rak4631", status: "new", bootloader: true, flashed: true });
+  const q = flow.toQuery({ type: "repeater", board: "nrf52", status: "new", bootloader: true, flashed: true });
   assert.doesNotMatch(q, /bootloader|flashed/);
-  assert.deepEqual(flow.fromQuery(q), { type: "repeater", board: "rak4631", status: "new" });
+  assert.deepEqual(flow.fromQuery(q), { type: "repeater", board: "nrf52", status: "new" });
   assert.deepEqual(flow.fromQuery("bootloader=1&flashed=1&type=repeater"), { type: "repeater" });
 });

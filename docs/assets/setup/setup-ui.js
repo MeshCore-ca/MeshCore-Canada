@@ -352,17 +352,6 @@
     updateActions();
   }
 
-  function boardOf(a) {
-    return Flow.BOARDS.filter(function (item) { return item.id === a.board; })[0] || null;
-  }
-
-  function boardName(item) { return (isFrench && item.nameFr) || item.name; }
-
-  function boardLabel(a) {
-    var item = boardOf(a);
-    return item && !/^other-/.test(item.id) ? boardName(item) : t("board.your-board");
-  }
-
   function regionName(tag) {
     var entry = state.data && has(state.data.catalog.hierarchy, tag) ? state.data.catalog.hierarchy[tag] : null;
     return entry ? (isFrench && entry.labelFr) || entry.label : String(tag || "").toUpperCase();
@@ -537,17 +526,20 @@
   var detailCount = 0;
 
   // One answer, drawn as a card. The button holds the answer's name and the card's
-  // whole area (see setup.css); the longer description is linked to it, so the
-  // button stays a normal size and screen readers still hear both.
+  // whole area (see setup.css); the longer description (one line, or a list of lines)
+  // is linked to it, so the button stays a normal size and screen readers still hear all of it.
   function choice(value, title, detail, options) {
     options = options || {};
     var disabled = !!options.disabled;
-    var detailId = detail ? "setup-choice-detail-" + (detailCount += 1) : null;
+    var lines = (Array.isArray(detail) ? detail : [detail]).filter(Boolean).map(function (line) {
+      return el("span", { class: "setup-choice__detail", id: "setup-choice-detail-" + (detailCount += 1), text: line });
+    });
     var button = el("button", { type: "button", class: "setup-choice__button", "data-setup-choice": value,
-      "aria-pressed": options.pressed ? "true" : "false", "aria-disabled": disabled ? "true" : null, "aria-describedby": detailId,
+      "aria-pressed": options.pressed ? "true" : "false", "aria-disabled": disabled ? "true" : null,
+      "aria-describedby": lines.map(function (line) { return line.id; }).join(" ") || null,
       on: { click: function () { if (!disabled) options.pick(); } } }, title);
     return el("div", { class: "setup-choice" + (options.pressed ? " is-picked" : "") + (disabled ? " is-disabled" : ""), "data-setup-card": value },
-      [button, detail ? el("span", { class: "setup-choice__detail", id: detailId, text: detail }) : null]);
+      [button].concat(lines));
   }
 
   function choiceGroup(buttons, labelId) {
@@ -626,31 +618,24 @@
       body: function (body) {
         var a = state.answers;
         var observer = a.type === "observer";
-        var picked = boardOf(a);
-        body.appendChild(para(t("board.hint"), { class: "setup-hint" }));
-        // A repeater observer can only use ESP32 boards, so those come first for it.
-        (observer ? ["esp32", "nrf52"] : ["nrf52", "esp32"]).forEach(function (chip) {
-          var labelId = "setup-board-" + chip;
-          // Said right above the greyed-out boards, so they make sense.
-          if (observer && chip === "nrf52") {
-            body.appendChild(note("warn", [para(t("board.observer-nrf52")),
-              el("button", { type: "button", class: "setup-button setup-button--secondary setup-button--small", "data-setup-as-repeater": "",
-                on: { click: function () { choose("type", "repeater"); renderStep({ heading: true }); } } }, t("board.as-repeater"))]));
-          }
-          body.appendChild(para(t("board.group." + chip), { class: "setup-group-label", id: labelId }));
-          body.appendChild(choiceGroup(Flow.BOARDS.filter(function (item) { return item.chip === chip; }).map(function (item) {
-            var blocked = observer && chip === "nrf52";
-            var detail = blocked ? t("board.no-wifi.detail") : t("board." + chip + ".detail");
-            return choice(item.id, boardName(item), detail, { disabled: blocked, pressed: a.board === item.id && !blocked, pick: function () {
-              if (choose("board", item.id)) renderStep({ focus: '[data-setup-choice="' + item.id + '"]' });
+        // A repeater observer needs Wi-Fi, so only ESP32 is open to it; that card comes first.
+        body.appendChild(choiceGroup((observer ? ["esp32", "nrf52"] : ["nrf52", "esp32"]).map(function (kind) {
+          var blocked = observer && kind === "nrf52";
+          // A greyed-out card says why, then still shows the examples that tell the kinds apart.
+          return choice(kind, t("board." + kind), [t(blocked ? "board.no-wifi.detail" : "board." + kind + ".detail"), t("board." + kind + ".examples")],
+            { disabled: blocked, pressed: a.board === kind && !blocked, pick: function () {
+              if (choose("board", kind)) renderStep({ focus: '[data-setup-choice="' + kind + '"]' });
             } });
-          }), labelId));
-          // What the picked board means, right under its group.
-          if (!picked || picked.chip !== chip) return;
-          if (picked.id === "other-esp32" && observer) body.appendChild(note("info", t("board.other-observer")));
-          else if (/^other-/.test(picked.id)) body.appendChild(note("info", t("board.other")));
-          if (chip === "nrf52" && !observer) body.appendChild(note("ok", t("board.nrf52-next")));
-        });
+        })));
+        if (observer) {
+          body.appendChild(note("warn", [para(t("board.observer-nrf52")),
+            el("button", { type: "button", class: "setup-button setup-button--secondary setup-button--small", "data-setup-as-repeater": "",
+              on: { click: function () { choose("type", "repeater"); renderStep({ heading: true }); } } }, t("board.as-repeater"))]));
+        }
+        // What the picked kind means.
+        if (a.board === "esp32" && observer) body.appendChild(note("info", t("board.other-observer")));
+        if (a.board === "nrf52" && !observer) body.appendChild(note("ok", t("board.nrf52-next")));
+        body.appendChild(para(rich("board.hint", null, LINKS.flasher), { class: "setup-hint" }));
       }
     },
 
@@ -667,8 +652,7 @@
     bootloader: {
       help: function () { return { key: "bootloader.help" }; },
       body: function (body) {
-        body.appendChild(steps([["bootloader.step1", { board: boardLabel(state.answers) }, LINKS.otafix],
-          "bootloader.step2", "bootloader.step3", "bootloader.step4"]));
+        body.appendChild(steps([["bootloader.step1", null, LINKS.otafix], "bootloader.step2", "bootloader.step3", "bootloader.step4"]));
         body.appendChild(para(rich("bootloader.mismatch"), { class: "setup-hint" }));
         body.appendChild(confirmBox("bootloader", "bootloader.confirm"));
       }
@@ -679,10 +663,9 @@
       body: function (body) {
         var a = state.answers;
         var kind = a.type === "observer" ? "observer" : "repeater";
-        var item = boardOf(a);
-        var erase = t("flash.erase." + (item && item.chip === "nrf52" ? "nrf52" : "esp32") + "-" + (a.status === "running" ? "running" : "new"));
+        var erase = t("flash.erase." + (a.board === "nrf52" ? "nrf52" : "esp32") + "-" + (a.status === "running" ? "running" : "new"));
         body.appendChild(steps([["flash." + kind + ".step1", null, kind === "observer" ? LINKS.observerFlasher : LINKS.flasher],
-          ["flash." + kind + ".step2", { board: boardLabel(a) }], ["flash.step3", { erase: erase }], "flash.step4"]));
+          "flash." + kind + ".step2", ["flash.step3", { erase: erase }], "flash.step4"]));
         body.appendChild(para(t("flash.failed"), { class: "setup-hint" }));
         body.appendChild(confirmBox("flashed", "flash.confirm"));
       }

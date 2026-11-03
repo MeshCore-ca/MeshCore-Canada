@@ -17,7 +17,7 @@ for (const locale of ["", "fr/"]) {
 
     // The setup tool: flashing a new board writes the Canada radio line and the 3-byte ID setting.
     const lang = locale ? "fr" : "en";
-    await page.goto(siteRoute(`${toolRoot(lang)}?type=repeater&board=heltec-v3&status=new&tag=yow&province=on&role=city&name=Test_R1`));
+    await page.goto(siteRoute(`${toolRoot(lang)}?type=repeater&board=esp32&status=new&tag=yow&province=on&role=city&name=Test_R1`));
     await confirmStep(page, "flash");
     await version(page, "v1.16.0");
     await nextUntil(page, "commands");

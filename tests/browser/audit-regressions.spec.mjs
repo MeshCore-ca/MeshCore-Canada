@@ -14,7 +14,7 @@ for (const locale of ["", "fr/"]) {
     expect(phone.some((line) => line.startsWith("set radio"))).toBe(false);
 
     // Flashing writes the radio, and BC has two groups' settings, so nothing is picked for the person.
-    await page.goto(siteRoute(`${toolRoot(lang)}?type=repeater&board=heltec-v3&status=new&tag=mvrd&province=bc&role=city&name=Test_R1`));
+    await page.goto(siteRoute(`${toolRoot(lang)}?type=repeater&board=esp32&status=new&tag=mvrd&province=bc&role=city&name=Test_R1`));
     await confirmStep(page, "flash");
     await version(page, "v1.16.0");
     await nextUntil(page, "radio");
@@ -134,7 +134,7 @@ for (const locale of ["", "fr/"]) {
 }
 
 test("language switch keeps selected region, firmware, radio, and commands step", async ({ page }) => {
-  await page.goto(siteRoute("/config/?type=repeater&board=heltec-v3&status=new&radio=bc-mesh&tag=yvr&province=bc&role=city&name=Test_R1"));
+  await page.goto(siteRoute("/config/?type=repeater&board=esp32&status=new&radio=bc-mesh&tag=yvr&province=bc&role=city&name=Test_R1"));
   await confirmStep(page, "flash");
   await version(page, "v1.15.1");
   await nextUntil(page, "commands");

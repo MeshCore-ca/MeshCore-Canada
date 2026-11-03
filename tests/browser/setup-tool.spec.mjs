@@ -18,7 +18,7 @@ const BELLEVILLE_COMMANDS = (lang) => ["set radio 910.525,62.5,7,5", "set name B
   "region def ytr|* on|* onqc|* can|* na", "region allowf *", "region default ytr", "region save", "reboot"];
 
 for (const lang of LANGS) {
-  test(`${lang} new RAK4631 city repeater in Belleville, one question per screen`, async ({ page }) => {
+  test(`${lang} new nRF52 city repeater in Belleville, one question per screen`, async ({ page }) => {
     await mockGeocoder(page);
     await page.goto(siteRoute(ROUTES[lang]));
     await expectStep(page, "type");
@@ -29,9 +29,9 @@ for (const lang of LANGS) {
     await expectStep(page, "board");
     await expect(nextButton(page)).toBeDisabled();
     // Chip names show as written: nRF52, not NRF52.
-    await expect(page.locator("#setup-board-nrf52")).toHaveCSS("text-transform", "none");
-    await expect(page.locator("#setup-board-nrf52")).toHaveText(T("board.group.nrf52", lang));
-    await choose(page, "rak4631");
+    await expect(page.locator('[data-setup-choice="nrf52"]')).toHaveCSS("text-transform", "none");
+    await expect(page.locator('[data-setup-choice="nrf52"]')).toHaveText(T("board.nrf52", lang));
+    await choose(page, "nrf52");
     // An nRF52 board adds the bootloader step.
     await expect(progress(page)).toHaveText(T("nav.progress", lang, { n: 2, total: 11, label: T("step.board", lang) }));
     await next(page);
@@ -73,30 +73,68 @@ for (const lang of LANGS) {
     await expect(step(page)).toContainText(T("check.name", lang, { name: "Belleville_R1" }));
   });
 
-  test(`${lang} repeater observer: nRF boards disabled with an explanation and a switch to plain repeater`, async ({ page }) => {
+  test(`${lang} the board step asks what kind of board it is: two choices, each with examples`, async ({ page }) => {
+    await page.goto(siteRoute(ROUTES[lang]));
+    await answer(page, "type", "repeater");
+    await expectStep(page, "board");
+    await expect(page.getByRole("heading", { level: 2, name: T("board.question", lang) })).toBeVisible();
+    // Exactly two cards, nRF52 then ESP32, with no list of boards.
+    await expect(page.locator("[data-setup-step] [data-setup-choice]")).toHaveText([T("board.nrf52", lang), T("board.esp32", lang)]);
+    await expect(page.locator("[data-setup-card]")).toHaveCount(2);
+    for (const kind of ["nrf52", "esp32"]) {
+      const card = page.locator(`[data-setup-card="${kind}"]`);
+      await expect(card.getByText(T(`board.${kind}.detail`, lang), { exact: true })).toBeVisible();
+      await expect(card.getByText(T(`board.${kind}.examples`, lang), { exact: true })).toBeVisible();
+      await expect(page.locator(`[data-setup-choice="${kind}"]`)).toBeEnabled();
+      // Read out with the card's name.
+      await expect(page.locator(`[data-setup-choice="${kind}"]`)).toHaveAccessibleDescription(`${T(`board.${kind}.detail`, lang)} ${T(`board.${kind}.examples`, lang)}`);
+    }
+    // Not sure? The flasher's list says which kind it is.
+    await expect(step(page)).toContainText(linked("board.hint", lang));
+    await expect(step(page).getByRole("link", { name: T("board.hint.link", lang) })).toHaveAttribute("href", "https://flasher.meshcore.io/");
+    await expect(nextButton(page)).toBeDisabled();
+    // A pick is remembered in the address as the kind, and an nRF52 repeater is told what comes next.
+    await choose(page, "nrf52");
+    await expect(page.locator('[data-setup-choice="nrf52"]')).toHaveAttribute("aria-pressed", "true");
+    await expect(step(page)).toContainText(T("board.nrf52-next", lang));
+    await expect.poll(() => new URL(page.url()).searchParams.get("board")).toBe("nrf52");
+    await choose(page, "esp32");
+    await expect(page.locator('[data-setup-choice="nrf52"]')).toHaveAttribute("aria-pressed", "false");
+    await expect(step(page)).not.toContainText(T("board.nrf52-next", lang));
+    await expect.poll(() => new URL(page.url()).searchParams.get("board")).toBe("esp32");
+    await expect(nextButton(page)).toBeEnabled();
+  });
+
+  test(`${lang} repeater observer: nRF52 is disabled with an explanation and a switch to plain repeater`, async ({ page }) => {
     await page.goto(siteRoute(ROUTES[lang]));
     await answer(page, "type", "observer");
     await answer(page, "repeat", "both");
     await expectStep(page, "board");
-    for (const id of ["rak4631", "heltec-t114", "t-echo", "other-nrf52"]) {
-      await expect(page.locator(`[data-setup-choice="${id}"]`)).toBeDisabled();
-    }
-    // The reason is on the card and read out with the board's name.
-    await expect(page.locator('[data-setup-card="rak4631"]')).toContainText(T("board.no-wifi.detail", lang));
-    await expect(page.locator('[data-setup-choice="rak4631"]')).toHaveAccessibleDescription(T("board.no-wifi.detail", lang));
+    await expect(page.locator("[data-setup-step] [data-setup-choice]")).toHaveCount(2);
+    await expect(page.locator('[data-setup-choice="nrf52"]')).toBeDisabled();
+    await expect(page.locator('[data-setup-choice="esp32"]')).toBeEnabled();
+    // The reason is on the card and read out with the kind's name, next to the examples that tell it apart.
+    await expect(page.locator('[data-setup-card="nrf52"]')).toContainText(T("board.no-wifi.detail", lang));
+    await expect(page.locator('[data-setup-card="nrf52"]')).toContainText(T("board.nrf52.examples", lang));
+    await expect(page.locator('[data-setup-choice="nrf52"]')).toHaveAccessibleDescription(`${T("board.no-wifi.detail", lang)} ${T("board.nrf52.examples", lang)}`);
     await expect(step(page)).toContainText(T("board.observer-nrf52", lang));
-    await expect(page.locator('[data-setup-choice="heltec-v3"]')).toBeEnabled();
-    // A board the list doesn't name can still be a repeater observer, if the observer flasher has it.
-    await choose(page, "other-esp32");
+    await expect(nextButton(page)).toBeDisabled();
+    // Clicking the greyed-out card changes nothing.
+    await page.locator('[data-setup-card="nrf52"]').click();
+    await expect(page.locator('[data-setup-choice="nrf52"]')).toHaveAttribute("aria-pressed", "false");
+    await expect(nextButton(page)).toBeDisabled();
+    // An ESP32 board can still be missing from the observer flasher: say so before going on.
+    await choose(page, "esp32");
     await expect(step(page)).toContainText("observer.gessaman.com");
     await expect(nextButton(page)).toBeEnabled();
     await page.locator("[data-setup-as-repeater]").click();
     await expectStep(page, "board");
     await expect(progress(page)).toHaveText(T("nav.progress", lang, { n: 2, total: 10, label: T("step.board", lang) }));
-    await expect(page.locator('[data-setup-choice="rak4631"]')).toBeEnabled();
+    await expect(page.locator('[data-setup-choice="nrf52"]')).toBeEnabled();
     await expect(page.locator("[data-setup-as-repeater]")).toHaveCount(0);
-    await choose(page, "rak4631");
-    await expect(page.locator('[data-setup-choice="rak4631"]')).toHaveAttribute("aria-pressed", "true");
+    await expect(page.locator('[data-setup-card="nrf52"]')).not.toContainText(T("board.no-wifi.detail", lang));
+    await choose(page, "nrf52");
+    await expect(page.locator('[data-setup-choice="nrf52"]')).toHaveAttribute("aria-pressed", "true");
     await next(page);
     await expectStep(page, "status");
     await page.locator("[data-setup-back]").click();
@@ -105,6 +143,30 @@ for (const lang of LANGS) {
     await expect(page.locator('[data-setup-choice="repeater"]')).toHaveAttribute("aria-pressed", "true");
   });
 }
+
+// Links made when the step listed every board carry a board id such as board=rak4631.
+test("a link made before the kind question still opens: each old board id becomes its kind", async ({ page }) => {
+  const cases = [["rak4631", "nrf52"], ["heltec-t114", "nrf52"], ["xiao-nrf52840", "nrf52"], ["other-nrf52", "nrf52"],
+    ["heltec-v3", "esp32"], ["heltec-v4", "esp32"], ["t-beam", "esp32"], ["xiao-esp32s3", "esp32"], ["other-esp32", "esp32"]];
+  for (const [old, kind] of cases) {
+    await page.goto(siteRoute(`/config/?type=repeater&board=${old}&status=new`));
+    // The kind decides the steps: an nRF52 repeater updates its bootloader first.
+    if (kind === "nrf52") await expect(progress(page)).toHaveText(T("nav.progress", "en", { n: 4, total: 11, label: T("step.bootloader", "en") }));
+    else await expect(progress(page)).toHaveText(T("nav.progress", "en", { n: 4, total: 10, label: T("step.flash", "en") }));
+    // The address is rewritten with the kind.
+    await expect.poll(() => new URL(page.url()).searchParams.get("board"), old).toBe(kind);
+    await page.locator("[data-setup-back]").click();
+    await page.locator("[data-setup-back]").click();
+    await expectStep(page, "board");
+    await expect(page.locator(`[data-setup-choice="${kind}"]`), old).toHaveAttribute("aria-pressed", "true");
+  }
+  // An old nRF52 link for an observer stays blocked.
+  await page.goto(siteRoute("/config/?type=observer&repeat=both&board=rak4631"));
+  await expectStep(page, "board");
+  await expect(page.locator('[data-setup-choice="nrf52"]')).toBeDisabled();
+  await expect(page.locator('[data-setup-card="nrf52"]')).not.toHaveClass(/is-picked/);
+  await expect(nextButton(page)).toBeDisabled();
+});
 
 // Each question's "?" opens a short answer and one link to the matching section of the guide.
 async function expectHelp(page, id, anchor, lang = "en") {
@@ -129,7 +191,7 @@ for (const lang of LANGS) {
     await choose(page, "repeater");
     await next(page);
     await expectHelp(page, "board", "repeater-observers", lang);
-    await choose(page, "heltec-v3");
+    await choose(page, "esp32");
     await next(page);
     await expectHelp(page, "status", "back-up", lang);
     await choose(page, "new");
@@ -154,15 +216,15 @@ for (const lang of LANGS) {
 }
 
 test("a greyed-out nRF52 board from a link is not picked and can't be clicked", async ({ page }) => {
-  await page.goto(siteRoute("/config/?type=observer&repeat=both&board=rak4631"));
+  await page.goto(siteRoute("/config/?type=observer&repeat=both&board=nrf52"));
   await expectStep(page, "board");
-  const rak = page.locator('[data-setup-choice="rak4631"]');
-  await expect(rak).toHaveAttribute("aria-pressed", "false");
-  await expect(page.locator('[data-setup-card="rak4631"]')).not.toHaveClass(/is-picked/);
-  await page.locator('[data-setup-card="rak4631"]').click();
-  await expect(rak).toHaveAttribute("aria-pressed", "false");
+  const nrf = page.locator('[data-setup-choice="nrf52"]');
+  await expect(nrf).toHaveAttribute("aria-pressed", "false");
+  await expect(page.locator('[data-setup-card="nrf52"]')).not.toHaveClass(/is-picked/);
+  await page.locator('[data-setup-card="nrf52"]').click();
+  await expect(nrf).toHaveAttribute("aria-pressed", "false");
   await expect(nextButton(page)).toBeDisabled();
-  await choose(page, "heltec-v3");
+  await choose(page, "esp32");
   await expect(nextButton(page)).toBeEnabled();
 });
 
@@ -170,7 +232,7 @@ test("running repeater via phone", async ({ page }) => {
   await mockGeocoder(page);
   await page.goto(siteRoute("/config/"));
   await answer(page, "type", "repeater");
-  await answer(page, "board", "rak4631");
+  await answer(page, "board", "nrf52");
   await expectStep(page, "status");
   await choose(page, "running");
   // The back-up warning says how: the private key comes off with `get prv.key`, from the app's Command Line or over USB.
@@ -237,7 +299,7 @@ test("running repeater via phone", async ({ page }) => {
 });
 
 test("a running repeater updated over USB still clears its old regions, without the app's cut-off warning", async ({ page }) => {
-  await page.goto(siteRoute(`/config/?type=repeater&board=heltec-v3&status=running&reflash=1&role=city&name=Test_R1&${BELLEVILLE}`));
+  await page.goto(siteRoute(`/config/?type=repeater&board=esp32&status=running&reflash=1&role=city&name=Test_R1&${BELLEVILLE}`));
   await confirmStep(page, "flash");
   await version(page, "v1.16.0");
   await nextUntil(page, "commands");
@@ -247,7 +309,7 @@ test("a running repeater updated over USB still clears its old regions, without 
 });
 
 test("edge repeater offers neighbouring regions and Ontario cross-border options", async ({ page }) => {
-  await page.goto(siteRoute(`/config/?type=repeater&board=heltec-v3&status=new&${BELLEVILLE}`));
+  await page.goto(siteRoute(`/config/?type=repeater&board=esp32&status=new&${BELLEVILLE}`));
   // A shared link never ticks "flashed" for someone else, and never says which firmware is on the board.
   await confirmStep(page, "flash");
   await version(page, "v1.16.0");
@@ -297,7 +359,7 @@ test("edge repeater offers neighbouring regions and Ontario cross-border options
 });
 
 test("French pages name the cross-border networks in French", async ({ page }) => {
-  await openLink(page, `/fr/config/?type=repeater&board=heltec-v3&status=running&reflash=0&role=edge&${BELLEVILLE}`, { to: "neighbours" });
+  await openLink(page, `/fr/config/?type=repeater&board=esp32&status=running&reflash=0&role=edge&${BELLEVILLE}`, { to: "neighbours" });
   await expect(page.locator('[data-setup-external="pennsylvania"]')).toHaveText("Pennsylvanie");
   await expect(page.locator('[data-setup-external="western-new-york"]')).toHaveText("Ouest de l’État de New York");
   await page.locator('[data-setup-neighbour="none"] input').check();
@@ -313,7 +375,7 @@ test("French pages name the cross-border networks in French", async ({ page }) =
 test("ambiguous and unknown towns", async ({ page }) => {
   const queries = await mockGeocoder(page);
   // A running repeater on the phone route: once its version is in, the next question is the town.
-  await openLink(page, "/config/?type=repeater&board=heltec-v3&status=running&reflash=0", { to: "town" });
+  await openLink(page, "/config/?type=repeater&board=esp32&status=running&reflash=0", { to: "town" });
   const choices = page.locator("[data-setup-step] [data-setup-choice]");
 
   // Several places share the name: ask which one, never pick.
@@ -372,7 +434,7 @@ test("ambiguous and unknown towns", async ({ page }) => {
 
 for (const lang of LANGS) {
   test(`${lang} a starter region or a planning extension says to check with local operators`, async ({ page }) => {
-    const root = `${ROUTES[lang]}?type=repeater&board=heltec-v3&status=running&reflash=0`;
+    const root = `${ROUTES[lang]}?type=repeater&board=esp32&status=running&reflash=0`;
     const note = page.locator("[data-setup-planning]");
     // Charlottetown is in a starter region.
     await openLink(page, `${root}&tag=yyg&province=pe&town=Charlottetown&lat=46.2382&lon=-63.1311`, { to: "town" });
@@ -394,7 +456,7 @@ for (const lang of LANGS) {
 
 test("town search offline offers a region code and the map", async ({ page }) => {
   await page.route("https://geolocator.api.geo.ca/**", (route) => route.abort());
-  await openLink(page, "/fr/config/?type=repeater&board=heltec-v3&status=running&reflash=0", { to: "town" });
+  await openLink(page, "/fr/config/?type=repeater&board=esp32&status=running&reflash=0", { to: "town" });
   await searchTown(page, "Belleville");
   await expect(page.locator("[data-setup-town-message]")).toHaveText(linked("town.search-failed", "fr"));
   await expect(page.locator("[data-setup-step] a[href$='config/map/']")).not.toHaveCount(0);
@@ -406,7 +468,7 @@ test("town search offline offers a region code and the map", async ({ page }) =>
 test("a town search that never answers gives up and offers the code box", async ({ page }) => {
   await page.clock.install();
   await page.route("https://geolocator.api.geo.ca/**", () => { /* never answers */ });
-  await openLink(page, "/config/?type=repeater&board=heltec-v3&status=running&reflash=0", { to: "town" });
+  await openLink(page, "/config/?type=repeater&board=esp32&status=running&reflash=0", { to: "town" });
   await expect(page.locator("[data-setup-town-results]")).not.toContainText(T("tool.loading", "en"));
   await searchTown(page, "Belleville");
   await expect(page.locator("[data-setup-town-results]")).toContainText(T("town.searching", "en"));
@@ -423,7 +485,7 @@ test("a town search that never answers gives up and offers the code box", async 
 
 test("a place deep link fills the search and starts it at the town step", async ({ page }) => {
   const queries = await mockGeocoder(page);
-  await openLink(page, "/config/?place=Guelph%2C%20Ontario&type=repeater&board=heltec-v3&status=running&reflash=0", { to: "town" });
+  await openLink(page, "/config/?place=Guelph%2C%20Ontario&type=repeater&board=esp32&status=running&reflash=0", { to: "town" });
   await expect(page.locator("[data-setup-town]")).toHaveValue("Guelph, Ontario");
   await expect(page.locator("[data-setup-region]")).toContainText("ykf");
   expect(queries).toEqual(["Guelph"]);
@@ -435,7 +497,7 @@ test("a place deep link fills the search and starts it at the town step", async 
 for (const lang of LANGS) {
   test(`${lang} a street address finds its region, names it after the municipality and maps the exact spot`, async ({ page }) => {
     const queries = await mockGeocoder(page);
-    await page.goto(siteRoute(`${ROUTES[lang]}?type=repeater&board=heltec-v3&status=new`));
+    await page.goto(siteRoute(`${ROUTES[lang]}?type=repeater&board=esp32&status=new`));
     await confirmStep(page, "flash");
     await version(page, "v1.16.0");
     await expectStep(page, "town");
@@ -484,7 +546,7 @@ test("unticking the map option leaves an exact spot out of the link and the shar
       get: () => ({ writeText: (value) => { window.__copied.push(value); return Promise.resolve(); } })
     });
   });
-  await openLink(page, "/config/?type=repeater&board=heltec-v3&status=running&reflash=0&role=city", { to: "town" });
+  await openLink(page, "/config/?type=repeater&board=esp32&status=running&reflash=0&role=city", { to: "town" });
   await searchTown(page, "44.1628, -77.3832");
   await expect(page.locator("[data-setup-region]")).toContainText("ytr");
   await expect.poll(() => new URL(page.url()).searchParams.get("lat")).toBe("44.1628");
@@ -512,7 +574,7 @@ test("unticking the map option leaves an exact spot out of the link and the shar
 
 test("an address match in another street or town is never used: the typed town is searched instead, or the person is asked", async ({ page }) => {
   const queries = await mockGeocoder(page);
-  await openLink(page, "/config/?type=repeater&board=heltec-v3&status=running&reflash=0", { to: "town" });
+  await openLink(page, "/config/?type=repeater&board=esp32&status=running&reflash=0", { to: "town" });
   // Live: the geocoder's only civic match for this is 22 Picton Court in Winnipeg.
   await searchTown(page, "22 Oak Street, Picton");
   await expect(page.locator("[data-setup-region]")).toContainText("ytr");
@@ -534,7 +596,7 @@ test("an address match in another street or town is never used: the typed town i
 
 test("several matching addresses: ask which one, with the region each is in", async ({ page }) => {
   await mockGeocoder(page);
-  await openLink(page, "/config/?type=repeater&board=heltec-v3&status=running&reflash=0", { to: "town" });
+  await openLink(page, "/config/?type=repeater&board=esp32&status=running&reflash=0", { to: "town" });
   const choices = page.locator("[data-setup-step] [data-setup-choice]");
   // No town typed: both streets of that name are what was typed.
   await searchTown(page, "1 Rue Notre-Dame Est");
@@ -554,7 +616,7 @@ test("several matching addresses: ask which one, with the region each is in", as
 
 test("a town with a number in its name falls back to the town search; an address with no match says so", async ({ page }) => {
   const queries = await mockGeocoder(page);
-  await openLink(page, "/config/?type=repeater&board=heltec-v3&status=running&reflash=0", { to: "town" });
+  await openLink(page, "/config/?type=repeater&board=esp32&status=running&reflash=0", { to: "town" });
   await searchTown(page, "150 Mile House");
   await expect(page.locator("[data-setup-region]")).toContainText("yka");
   expect(queries).toEqual(["locate:150 Mile House", "150 Mile House"]);
@@ -570,7 +632,7 @@ test("a town with a number in its name falls back to the town search; an address
 for (const lang of LANGS) {
   test(`${lang} coordinates are read on the page, never sent to a search, and name it after the region`, async ({ page }) => {
     const queries = await mockGeocoder(page);
-    await page.goto(siteRoute(`${ROUTES[lang]}?type=repeater&board=heltec-v3&status=new`));
+    await page.goto(siteRoute(`${ROUTES[lang]}?type=repeater&board=esp32&status=new`));
     await confirmStep(page, "flash");
     await version(page, "v1.16.0");
     await expectStep(page, "town");
@@ -604,7 +666,7 @@ for (const lang of LANGS) {
 
 for (const lang of LANGS) {
   test(`${lang} a name can have spaces and accents; a refused character or a long name says why`, async ({ page }) => {
-    await openLink(page, `${ROUTES[lang]}?type=repeater&board=heltec-v3&status=running&reflash=0&role=city&${BELLEVILLE}`, { to: "name" });
+    await openLink(page, `${ROUTES[lang]}?type=repeater&board=esp32&status=running&reflash=0&role=city&${BELLEVILLE}`, { to: "name" });
     const input = page.locator("[data-setup-name]");
     const message = page.locator("[data-setup-name-message]");
     await expect(step(page)).toContainText(plain("name.hint.running", lang));
@@ -634,7 +696,7 @@ for (const lang of LANGS) {
 
 test("coordinates in every common form stay on the page; ones that can't be read say how to type them", async ({ page }) => {
   const queries = await mockGeocoder(page);
-  await openLink(page, "/config/?type=repeater&board=heltec-v3&status=running&reflash=0", { to: "town" });
+  await openLink(page, "/config/?type=repeater&board=esp32&status=running&reflash=0", { to: "town" });
   for (const typed of ["44,1628 -77,3832", "44,1628, -77,3832", "N44.1628 W77.3832", "44.1628° N, 77.3832° W", "44.1628° N, 77.3832° O",
     "(44.1628, -77.3832)", "44.1628, \u221277.3832", "44°09'46.1\"N 77°22'59.5\"W"]) {
     await searchTown(page, typed);
@@ -650,7 +712,7 @@ test("coordinates in every common form stay on the page; ones that can't be read
 });
 
 test("firmware reply", async ({ page }) => {
-  await page.goto(siteRoute("/config/?type=repeater&board=heltec-v3&status=running&reflash=0"));
+  await page.goto(siteRoute("/config/?type=repeater&board=esp32&status=running&reflash=0"));
   await expectStep(page, "version");
   const input = page.locator("[data-setup-version]");
   const message = page.locator("[data-setup-version-message]");
@@ -690,7 +752,7 @@ test("firmware reply", async ({ page }) => {
 
 test("changing the town clears neighbours and the suggested name", async ({ page }) => {
   await mockGeocoder(page);
-  await page.goto(siteRoute(`/config/?type=repeater&board=heltec-v3&status=new&role=edge&neighbours=ygk&name=Belleville_R1&${BELLEVILLE}`));
+  await page.goto(siteRoute(`/config/?type=repeater&board=esp32&status=new&role=edge&neighbours=ygk&name=Belleville_R1&${BELLEVILLE}`));
   await confirmStep(page, "flash");
   await version(page, "v1.16.0");
   await town(page, "Kingston", "ygk");
@@ -743,7 +805,7 @@ test("share link restores answers and holds no secrets", async ({ page, context 
   });
   await page.goto(siteRoute("/config/"));
   await answer(page, "type", "repeater");
-  await answer(page, "board", "rak4631");
+  await answer(page, "board", "nrf52");
   await answer(page, "status", "running");
   await answer(page, "reflash", "no");
   await version(page, "v1.15.1");
@@ -758,7 +820,7 @@ test("share link restores answers and holds no secrets", async ({ page, context 
   const shared = new URL(page.url());
   // Everything but the firmware version, which whoever opens the link is asked for.
   expect(Object.fromEntries(shared.searchParams)).toEqual({
-    type: "repeater", board: "rak4631", status: "running", reflash: "0",
+    type: "repeater", board: "nrf52", status: "running", reflash: "0",
     tag: "ytr", province: "on", role: "city", name: "Belleville_R1", nameEdited: "1",
     town: "Belleville", lat: "44.1628", lon: "-77.3832"
   });
@@ -789,7 +851,7 @@ test("share link restores answers and holds no secrets", async ({ page, context 
 test("a town name from a link is shown as text, never as markup", async ({ page }) => {
   await page.addInitScript(() => { window.__injected = false; });
   const town = encodeURIComponent('<img src=x onerror="window.__injected=true">');
-  await openLink(page, `/config/?type=repeater&board=heltec-v3&status=running&reflash=0&tag=ytr&province=on&town=${town}&lat=44.1628&lon=-77.3832`, { to: "role" });
+  await openLink(page, `/config/?type=repeater&board=esp32&status=running&reflash=0&tag=ytr&province=on&town=${town}&lat=44.1628&lon=-77.3832`, { to: "role" });
   await page.locator("[data-setup-back]").click();
   await expectStep(page, "town");
   await expect(page.locator("[data-setup-region]")).toContainText('<img src=x onerror="window.__injected=true">');
@@ -805,7 +867,7 @@ test("map link opens with the region filled in", async ({ page }) => {
   // The link holds a region, so the region data starts loading straight away.
   await expect.poll(() => boundaries.length).toBeGreaterThan(0);
   await answer(page, "type", "repeater");
-  await answer(page, "board", "heltec-v3");
+  await answer(page, "board", "esp32");
   await answer(page, "status", "new");
   await confirmStep(page, "flash");
   await version(page, "v1.16.0");
@@ -818,7 +880,7 @@ test("map link opens with the region filled in", async ({ page }) => {
 });
 
 test("start over asks first and sits away from the next button", async ({ page }) => {
-  await openLink(page, `/config/?type=repeater&board=heltec-v3&status=running&reflash=0&role=city&name=Belleville_R1&${BELLEVILLE}`);
+  await openLink(page, `/config/?type=repeater&board=esp32&status=running&reflash=0&role=city&name=Belleville_R1&${BELLEVILLE}`);
   await next(page);
   await expectStep(page, "check");
   await expect(nextButton(page)).toHaveCount(0);
@@ -839,10 +901,10 @@ test("start over asks first and sits away from the next button", async ({ page }
 
 test("old and unknown region codes in a link", async ({ page }) => {
   // An old code moves to its current region.
-  await openLink(page, "/config/?type=repeater&board=heltec-v3&status=running&reflash=0&tag=ott&province=on", { to: "role" });
+  await openLink(page, "/config/?type=repeater&board=esp32&status=running&reflash=0&tag=ott&province=on", { to: "role" });
   await expect.poll(() => new URL(page.url()).searchParams.get("tag")).toBe("yow");
   // A code the map doesn't have is dropped, and the tool goes back to ask for the town.
-  await openLink(page, "/config/?type=repeater&board=heltec-v3&status=running&reflash=0&tag=zzz&province=on&role=city&name=Hilltop", { to: "town" });
+  await openLink(page, "/config/?type=repeater&board=esp32&status=running&reflash=0&tag=zzz&province=on&role=city&name=Hilltop", { to: "town" });
   await expect(step(page)).toContainText(T("town.link-invalid", "en"));
   await expect(nextButton(page)).toBeDisabled();
   expect(new URL(page.url()).searchParams.get("tag")).toBe(null);
@@ -891,7 +953,7 @@ test("region data loads only when the town step needs it", async ({ page }) => {
   await expectStep(page, "type");
   expect(boundaries).toEqual([]);
   await answer(page, "type", "repeater");
-  await answer(page, "board", "heltec-v3");
+  await answer(page, "board", "esp32");
   await answer(page, "status", "new");
   await confirmStep(page, "flash");
   expect(boundaries).toEqual([]);
@@ -903,7 +965,7 @@ test("region data loads only when the town step needs it", async ({ page }) => {
 test("region data that fails to load says so, and can be tried again", async ({ page }) => {
   let down = true;
   await page.route("**/iata-boundaries.geojson*", (route) => (down ? route.fulfill({ status: 503, body: "" }) : route.continue()));
-  await openLink(page, "/config/?type=repeater&board=heltec-v3&status=running&reflash=0", { to: "town" });
+  await openLink(page, "/config/?type=repeater&board=esp32&status=running&reflash=0", { to: "town" });
   await expect(page.locator("[data-setup-step] [role='alert']")).toHaveText(T("tool.load-failed", "en"));
   await expect(nextButton(page)).toBeDisabled();
   down = false;
@@ -915,7 +977,7 @@ test("region data that fails to load says so, and can be tried again", async ({ 
 });
 
 test("a language switch that reopens on the commands waits for slow region data before the lines are read", async ({ page }) => {
-  await openLink(page, `/config/?type=repeater&board=heltec-v3&status=running&reflash=0&role=city&name=Belleville_R1&${BELLEVILLE}`);
+  await openLink(page, `/config/?type=repeater&board=esp32&status=running&reflash=0&role=city&name=Belleville_R1&${BELLEVILLE}`);
   // The other language's page draws the commands screen at once, with a loading panel until the region data arrives.
   let delayed = 0;
   await page.route("**/iata-boundaries.geojson*", async (route) => {
@@ -937,20 +999,20 @@ test("language switch keeps the answers", async ({ page }) => {
   await answer(page, "type", "observer");
   await answer(page, "repeat", "listen");
   await expectStep(page, "board");
-  await choose(page, "heltec-v4");
+  await choose(page, "esp32");
   await page.locator(".md-select > button").first().click();
   await page.locator('.md-select__link[hreflang="fr"]').click();
   await expect(page.locator("html")).toHaveAttribute("lang", "fr");
   // The same screen in French, with the answers kept.
   await expectStep(page, "board");
   await expect(progress(page)).toContainText(T("step.board", "fr"));
-  await expect(page.locator('[data-setup-choice="heltec-v4"]')).toHaveAttribute("aria-pressed", "true");
+  await expect(page.locator('[data-setup-choice="esp32"]')).toHaveAttribute("aria-pressed", "true");
   await next(page);
   await expectStep(page, "status");
 });
 
 test("language switch on the commands screen after flashing keeps the place and the commands", async ({ page }) => {
-  await page.goto(siteRoute(`/config/?type=repeater&board=rak4631&status=new&role=city&name=Belleville_R1&${BELLEVILLE}`));
+  await page.goto(siteRoute(`/config/?type=repeater&board=nrf52&status=new&role=city&name=Belleville_R1&${BELLEVILLE}`));
   await confirmStep(page, "bootloader");
   await confirmStep(page, "flash");
   await version(page, "v1.15.0");
@@ -994,7 +1056,7 @@ test("copy works on plain HTTP", async ({ page }) => {
       return true;
     };
   });
-  await openLink(page, `/config/?type=repeater&board=heltec-v3&status=running&reflash=0&role=city&name=Belleville_R1&${BELLEVILLE}`);
+  await openLink(page, `/config/?type=repeater&board=esp32&status=running&reflash=0&role=city&name=Belleville_R1&${BELLEVILLE}`);
   const line = page.locator('[data-setup-command="name"]');
   const copy = line.locator("[data-copy]");
   await expect(copy).toContainText(T("commands.copy", "en"));
@@ -1051,7 +1113,7 @@ test("phone width", async ({ page }, testInfo) => {
   // The flash route as a repeater observer at the edge, for the longest region def line.
   await page.goto(siteRoute("/config/"));
   const screens = [
-    ["type", "observer"], ["repeat", "both"], ["board", "heltec-v3"], ["status", "new"]
+    ["type", "observer"], ["repeat", "both"], ["board", "esp32"], ["status", "new"]
   ];
   for (const [id, value] of screens) {
     await expectStep(page, id);
@@ -1107,7 +1169,7 @@ test("phone width", async ({ page }, testInfo) => {
   // The phone route, in French.
   await page.goto(siteRoute("/fr/config/"));
   await answer(page, "type", "repeater");
-  await answer(page, "board", "rak4631");
+  await answer(page, "board", "nrf52");
   await answer(page, "status", "running");
   await fitsTheScreen(page, "reflash");
   await answer(page, "reflash", "no");
@@ -1156,7 +1218,7 @@ for (const lang of LANGS) {
     await expectStep(page, "repeat");
     await expect(page.locator("[data-setup-step] h2")).toBeFocused();
 
-    await openLink(page, `${ROUTES[lang]}?type=observer&repeat=both&board=heltec-v3&status=running&observerFirmware=yes&role=edge&neighbours=ygk&name=Belleville_Obs1&${BELLEVILLE}`);
+    await openLink(page, `${ROUTES[lang]}?type=observer&repeat=both&board=esp32&status=running&observerFirmware=yes&role=edge&neighbours=ygk&name=Belleville_Obs1&${BELLEVILLE}`);
     // The MQTT slot warning comes right before the repeater observer lines.
     const slots = page.locator('[data-setup-note="mqtt-slots"]');
     await expect(slots).toContainText(firstSentence(T("note.mqtt-slots", lang)));

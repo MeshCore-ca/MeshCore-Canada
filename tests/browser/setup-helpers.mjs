@@ -138,7 +138,7 @@ export function scopeLines(list) {
 }
 
 // A running repeater changed from the phone: no flash steps and no radio line.
-export const PHONE_ROUTE = "type=repeater&board=heltec-v3&status=running&reflash=0";
+export const PHONE_ROUTE = "type=repeater&board=esp32&status=running&reflash=0";
 export const toolRoot = (lang) => (lang === "fr" ? "/fr/config/" : "/config/");
 // A phone-route link for a region that holds every answer a link can carry. `extra` is more
 // answers as a query string, for example "neighbours=yul". Open it with openLink.
@@ -156,7 +156,7 @@ export async function openLink(page, path, { reply = "v1.16.0", to = "commands" 
 // Types the first answers of the phone route, ending on the town step.
 export async function startPhoneRoute(page, reply = "v1.16.2") {
   await answer(page, "type", "repeater");
-  await answer(page, "board", "heltec-v3");
+  await answer(page, "board", "esp32");
   await answer(page, "status", "running");
   await answer(page, "reflash", "no");
   await version(page, reply);

@@ -30,7 +30,7 @@ before(async () => {
 });
 
 const flat = groups => groups.flatMap(g => g.items.map(i => i.command));
-const belleville = { type: "repeater", board: "rak4631", status: "new", firmware: "1.16", place: { name: "Belleville", lat: 44.16281, lon: -77.38324 },
+const belleville = { type: "repeater", board: "nrf52", status: "new", firmware: "1.16", place: { name: "Belleville", lat: 44.16281, lon: -77.38324 },
   tag: "ytr", province: "on", radio: "canada", role: "city", name: "Belleville_R1", shareLocation: true };
 test("a new Belleville city repeater gets the full rollup", () => {
   assert.deepEqual(flat(cmds.rollup(belleville, data, "en")), ["set radio 910.525,62.5,7,5","set name Belleville_R1","set lat 44.1628","set lon -77.3832",
@@ -61,7 +61,7 @@ test("the phone route leaves out the radio and clears old regions deepest first"
     "region put ytr","region put on","region put onqc","region put can","region put na","region allowf *","region default ytr","region save"]);
 });
 test("a listen-only repeater observer gets observer lines and no scopes", () => {
-  const out = flat(cmds.rollup({ ...belleville, type: "observer", repeat: "listen", board: "heltec-v3", role: undefined, name: "Belleville_Obs1" }, data, "en"));
+  const out = flat(cmds.rollup({ ...belleville, type: "observer", repeat: "listen", board: "esp32", role: undefined, name: "Belleville_Obs1" }, data, "en"));
   assert.ok(!out.some(c => c.startsWith("region")));
   for (const c of ["set mqtt.iata YTR","set mqtt1.preset meshcore-ca-1","set mqtt2.preset meshcore-ca-2","set mqtt.raw off","set mqtt.tx advert","set repeat off","set wifi.pwd <your Wi-Fi password>"]) assert.ok(out.includes(c), c);
 });
@@ -71,8 +71,8 @@ test("BC Mesh radio settings when chosen", () => {
 test("the final checks match the device and role", () => {
   const ids = (a) => cmds.checks(a, data, "en").map(c => c.command);
   assert.deepEqual(ids(belleville), ["ver", "get name", "region", "clock", "advert"]);
-  assert.ok(ids({ ...belleville, type: "observer", repeat: "both", board: "heltec-v3" }).includes("get mqtt.status"));
-  assert.ok(!ids({ ...belleville, type: "observer", repeat: "listen", board: "heltec-v3", role: undefined }).includes("region"));
+  assert.ok(ids({ ...belleville, type: "observer", repeat: "both", board: "esp32" }).includes("get mqtt.status"));
+  assert.ok(!ids({ ...belleville, type: "observer", repeat: "listen", board: "esp32", role: undefined }).includes("region"));
   assert.match(cmds.checks({ ...belleville, role: "edge", neighbours: ["ygk"] }, data, "en").find(c => c.command === "region").expect, /without F|no F/);
 });
 test("region replies are read safely", () => {
@@ -81,7 +81,7 @@ test("region replies are read safely", () => {
   assert.deepEqual(cmds.regionRemovals("nonsense here"), { names: [], readable: false });
 });
 test("every item explains itself in both languages; only manual items hold placeholders", () => {
-  for (const lang of ["en","fr"]) for (const item of cmds.rollup({ ...belleville, type: "observer", repeat: "both", board: "heltec-v3" }, data, lang).flatMap(g => g.items)) {
+  for (const lang of ["en","fr"]) for (const item of cmds.rollup({ ...belleville, type: "observer", repeat: "both", board: "esp32" }, data, lang).flatMap(g => g.items)) {
     assert.ok(item.why.length > 10, item.id);
     assert.equal(/</.test(item.command), item.manual, item.id);
   }
@@ -91,7 +91,7 @@ test("every item explains itself in both languages; only manual items hold place
 // Beyond the brief: the controller's decisions and the review focus.
 
 const items = (groups) => groups.flatMap((g) => g.items);
-const observer = { ...belleville, type: "observer", repeat: "both", board: "heltec-v3", name: "Belleville_Obs1" };
+const observer = { ...belleville, type: "observer", repeat: "both", board: "esp32", name: "Belleville_Obs1" };
 
 test("groups come in a fixed order and leave out what doesn't apply", () => {
   assert.deepEqual(cmds.rollup(belleville, data, "en").map((g) => g.id), ["basics", "canada", "scopes", "finish"]);

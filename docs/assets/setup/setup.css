@@ -273,14 +273,6 @@
   font-size: 0.9rem;
 }
 
-/* Shown as written, so "nRF52" keeps its small n. */
-.md-typeset .setup-tool .setup-group-label {
-  margin: 1.1rem 0 0.2rem;
-  color: var(--mc-color-text-muted);
-  font-size: 0.85rem;
-  font-weight: 700;
-}
-
 /* Notes: warnings, good news, and plain information */
 .md-typeset .setup-tool .setup-note {
   margin: 0.75rem 0;
