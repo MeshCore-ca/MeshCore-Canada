@@ -8,7 +8,7 @@ task: define-meshcore-term
 scope: canada-baseline
 status: verified
 owner: docs-ux
-last_reviewed: 2026-07-22
+last_reviewed: 2026-11-02
 review_by: 2027-01-19
 evidence: Existing MeshCore Canada documentation terminology
 difficulty: beginner
@@ -21,7 +21,7 @@ destructive: false
 Use your browser's **Find** command to jump to a term. Definitions are short;
 the linked guides explain how to use each setting or device.
 
-## A-D
+## A-E
 
 **Advert**
 :   A MeshCore announcement packet that helps nearby nodes learn about a device
@@ -29,15 +29,22 @@ the linked guides explain how to use each setting or device.
 
 **Bandwidth**
 :   A LoRa radio setting that affects how much radio spectrum a transmission
-    uses. Use the value from your local settings or the configurator.
+    uses. Use the value from your local settings or the
+    [setup tool](../config/index.md).
 
 **Broker**
 :   A service that receives and distributes messages for Message Queuing
     Telemetry Transport (MQTT).
 
+**City repeater**
+:   A repeater that passes on messages with no label, so people nearby who
+    haven't set a scope are still heard. Every repeater that isn't an edge
+    repeater is a city repeater. See
+    [City or edge repeater](../config/guide.md#city-or-edge).
+
 **Coding rate (CR)**
 :   A LoRa error-correction setting. Use the value from your local settings or
-    the configurator.
+    the [setup tool](../config/index.md).
 
 **Companion**
 :   A personal MeshCore device used to send and receive messages. It often
@@ -46,6 +53,12 @@ the linked guides explain how to use each setting or device.
 **CoreScope**
 :   MeshCore Canada's public tools for viewing observers, packets, nodes, and
     map data.
+
+**Edge repeater**
+:   A repeater that regularly hears repeaters in another region, for example one
+    between Belleville and Kingston. It doesn't pass on messages with no label,
+    so they don't spill into the next region. See
+    [City or edge repeater](../config/guide.md#city-or-edge).
 
 ## F-M
 
@@ -92,9 +105,19 @@ the linked guides explain how to use each setting or device.
 **Preset**
 :   A named group of radio settings.
 
+**Region**
+:   The area a repeater serves, named after the nearest airport code.
+    A region list is the labels a repeater agrees to pass on. See
+    [Scopes and regions](../config/guide.md#scopes-and-regions).
+
 **Repeater**
 :   A normally fixed MeshCore device that relays packets to extend network
     coverage.
+
+**Repeater observer**
+:   A repeater that also reports what it hears to live.meshcore.ca, so everyone
+    can see how the mesh is doing. It needs Wi-Fi, so it needs an ESP32 board.
+    See [What a repeater observer is](../config/guide.md#repeater-observers).
 
 **Room server**
 :   A MeshCore device that keeps a shared room available to companions. Its
@@ -102,12 +125,17 @@ the linked guides explain how to use each setting or device.
 
 ## S-W
 
+**Scope**
+:   A scope is a label on a message saying how far it should travel. You set it
+    on your companion and on each channel. See
+    [Scopes and regions](../config/guide.md#scopes-and-regions).
+
 **Signal-to-noise ratio (SNR)**
 :   A measurement comparing a received signal with background noise.
 
 **Spreading factor (SF)**
 :   A LoRa setting that affects airtime, data rate, and reception. Use the value
-    from your local settings or the configurator.
+    from your local settings or the [setup tool](../config/index.md).
 
 **WebSocket**
 :   A long-lived web connection. Some MQTT clients use WebSockets to reach a

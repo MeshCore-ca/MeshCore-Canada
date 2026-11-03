@@ -105,7 +105,7 @@ test("app task index keeps accessible images and explicit results", () => {
 test("glossary is grouped, scannable, and expands data acronyms", () => {
   const markdown = read(pages[3]);
 
-  for (const heading of ["A-D", "F-M", "N-R", "S-W"]) {
+  for (const heading of ["A-E", "F-M", "N-R", "S-W"]) {
     assert.match(markdown, new RegExp(`^## ${heading}$`, "m"), heading);
   }
   assert.match(markdown, /Message Queuing Telemetry Transport \(MQTT\)/);

@@ -244,3 +244,40 @@ test("the French page avoids the phrasings the review flagged", () => {
     assert.ok(!flat(source).includes(bad), `guide.fr.md should not say: ${bad}`);
   }
 });
+
+test("the glossary points at the setup tool and defines the scope terms in the explainer's words", () => {
+  const glossaries = { en: "docs/resources/glossary.md", fr: "docs/resources/glossary.fr.md" };
+  // The new entries (term, then the explainer section the entry links to), Scope and Region first.
+  const entries = {
+    en: [
+      ["Scope", "scopes-and-regions"],
+      ["Region", "scopes-and-regions"],
+      ["Repeater observer", "repeater-observers"],
+      ["City repeater", "city-or-edge"],
+      ["Edge repeater", "city-or-edge"],
+    ],
+    fr: [
+      ["Portée", "scopes-and-regions"],
+      ["Région", "scopes-and-regions"],
+      ["Répéteur observateur", "repeater-observers"],
+      ["Répéteur de ville", "city-or-edge"],
+      ["Répéteur de bordure", "city-or-edge"],
+    ],
+  };
+  // A definition-list entry: the bold term (with an optional English name in brackets), then its indented lines.
+  const entryOf = (source, term) => source.match(new RegExp(`^\\*\\*${term}(?: \\([^)]*\\))?\\*\\*\n((?::   .*\n?|    .*\n?)+)`, "m"))?.[1];
+  for (const [lang, path] of Object.entries(glossaries)) {
+    const source = read(path);
+    assert.doesNotMatch(source, /configurator|configurateur/i, `${path} should name the setup tool`);
+    assert.match(source, /\]\(\.\.\/config\/index\.md\)/, `${path} links to the setup tool`);
+    for (const [term, anchor] of entries[lang]) {
+      const entry = entryOf(source, term);
+      assert.ok(entry, `${path} needs an entry for ${term}`);
+      assert.ok(entry.includes(`](../config/guide.md#${anchor})`), `${path}: ${term} links to #${anchor}`);
+    }
+    // Scope carries the explainer's first sentence and Region its second, word for word.
+    const [scopeSentence, regionSentence] = sentences(coreSentence[lang]);
+    assert.ok(flat(entryOf(source, entries[lang][0][0])).includes(scopeSentence), `${path}: Scope says "${scopeSentence}"`);
+    assert.ok(flat(entryOf(source, entries[lang][1][0])).includes(regionSentence), `${path}: Region says "${regionSentence}"`);
+  }
+});

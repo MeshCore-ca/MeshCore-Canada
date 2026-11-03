@@ -8,7 +8,7 @@ task: define-meshcore-term
 scope: canada-baseline
 status: verified
 owner: docs-ux
-last_reviewed: 2026-07-22
+last_reviewed: 2026-11-02
 review_by: 2027-01-19
 evidence: Existing MeshCore Canada documentation terminology
 difficulty: beginner
@@ -53,7 +53,7 @@ utiliser chaque paramètre ou appareil.
 **Facteur d’étalement (SF)**
 :   Un paramètre LoRa qui influence le temps d’occupation des ondes, le débit
     de données et la réception. Utilisez la valeur indiquée dans vos paramètres
-    locaux ou dans le configurateur.
+    locaux ou dans l’[outil de configuration](../config/index.md).
 
 **JSON Web Token (JWT)**
 :   Un identifiant à durée limitée utilisé par certains services de données de
@@ -62,7 +62,7 @@ utiliser chaque paramètre ou appareil.
 **Largeur de bande**
 :   Un paramètre radio LoRa qui détermine la partie du spectre utilisée par une
     transmission. Utilisez la valeur indiquée dans vos paramètres locaux ou
-    dans le configurateur.
+    dans l’[outil de configuration](../config/index.md).
 
 **LoRa**
 :   La modulation radio longue portée et faible puissance utilisée par les
@@ -94,15 +94,44 @@ utiliser chaque paramètre ou appareil.
 :   Une radio ou un service qui transmet des données MeshCore aux outils publics.
     L’observation et la répétition sont des fonctions distinctes; un appareil peut faire les deux.
 
+**Portée (region scope)**
+:   Une portée est une étiquette sur un message qui indique jusqu’où il doit
+    aller. Vous la réglez sur votre appareil compagnon et sur chaque canal. Voir
+    [Les portées et les régions](../config/guide.md#scopes-and-regions).
+
 **Préréglage**
 :   Un ensemble nommé de paramètres radio.
 
 **Rapport signal-bruit (SNR)**
 :   Une mesure qui compare un signal reçu au bruit de fond.
 
+**Région**
+:   Le secteur que dessert un répéteur, nommé d’après le code d’aéroport le plus
+    proche. Une liste de régions, ce sont les étiquettes qu’un répéteur accepte
+    de relayer. Voir
+    [Les portées et les régions](../config/guide.md#scopes-and-regions).
+
 **Répéteur**
 :   Un appareil MeshCore normalement fixe qui relaie les paquets afin
     d’améliorer la couverture du réseau.
+
+**Répéteur de bordure**
+:   Un répéteur qui entend régulièrement des répéteurs d’une autre région, par
+    exemple entre Belleville et Kingston. Il ne relaie pas les messages sans
+    étiquette, pour qu’ils ne débordent pas dans la région voisine. Voir
+    [Répéteur de ville ou de bordure](../config/guide.md#city-or-edge).
+
+**Répéteur de ville**
+:   Un répéteur qui relaie les messages sans étiquette, pour que les gens des
+    environs qui n’ont pas réglé de portée soient quand même entendus. Tout
+    répéteur qui n’est pas de bordure est un répéteur de ville. Voir
+    [Répéteur de ville ou de bordure](../config/guide.md#city-or-edge).
+
+**Répéteur observateur**
+:   Un répéteur qui rapporte aussi ce qu’il entend à live.meshcore.ca, pour que
+    tout le monde puisse voir l’état du réseau. Il lui faut le Wi-Fi, donc une
+    carte ESP32. Voir
+    [Ce qu’est un répéteur observateur](../config/guide.md#repeater-observers).
 
 **Serveur de salon (Room Server)**
 :   Un appareil MeshCore qui garde un salon partagé accessible aux appareils
@@ -116,7 +145,7 @@ utiliser chaque paramètre ou appareil.
 
 **Taux de codage (CR)**
 :   Un paramètre LoRa de correction des erreurs. Utilisez la valeur indiquée
-    dans vos paramètres locaux ou dans le configurateur.
+    dans vos paramètres locaux ou dans l’[outil de configuration](../config/index.md).
 
 
 
