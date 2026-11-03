@@ -291,13 +291,69 @@ const WELLINGTON = [
   locate("Wellington Street, City Of Ottawa, Ontario", "Ontario", 45.42, -75.70, "Street", "INTERPOLATED_CENTROID"),
 ];
 
-test("a number with words is a street address; a town, a region code or bare numbers are not", () => {
-  for (const query of ["111 Wellington Street, Ottawa", "111, rue Wellington, Ottawa", "1 Rue Notre-Dame Est, Montréal", "100 Mile House", "K1A 0A9"]) {
+test("a civic number then words is a street address; a town, a region code, a postal code or bare numbers are not", () => {
+  for (const query of ["111 Wellington Street, Ottawa", "111, rue Wellington, Ottawa", "1 Rue Notre-Dame Est, Montréal", "100 Mile House", "22A Oak Street"]) {
     assert.equal(search.isAddress(query), true, query);
   }
-  for (const query of ["Belleville", "Saint-Jean, QC", "ytr", "44.1628, -77.3832", "", "  "]) {
+  for (const query of ["Belleville", "Saint-Jean, QC", "ytr", "44.1628, -77.3832", "K1A 0A9", "Highway 7, Peterborough", "", "  "]) {
     assert.equal(search.isAddress(query), false, query);
   }
+});
+
+test("a typed address is read as its civic number, the first word of its street name, its town and its province", () => {
+  assert.deepEqual(search.addressQuery("22 Oak Street, Picton"), { number: "22", street: "oak", town: "Picton", province: "" });
+  // French style: a comma after the number, and the street type first.
+  assert.deepEqual(search.addressQuery("111, rue Wellington, Ottawa"), { number: "111", street: "wellington", town: "Ottawa", province: "" });
+  assert.deepEqual(search.addressQuery("8 Birch Street, Trenton, ON"), { number: "8", street: "birch", town: "Trenton", province: "ON" });
+  assert.deepEqual(search.addressQuery("1 Rue de la Gauchetière Ouest, Montréal, Québec"), { number: "1", street: "gauchetiere", town: "Montréal", province: "QC" });
+  assert.deepEqual(search.addressQuery("10 St. Paul Street, Kingston"), { number: "10", street: "paul", town: "Kingston", province: "" });
+  // No town typed: the town part is empty, and the page asks even about a single match.
+  assert.deepEqual(search.addressQuery("100 Mile House"), { number: "100", street: "mile", town: "", province: "" });
+  for (const query of ["Belleville", "K1A 0A9", "44.1628, -77.3832", ""]) assert.equal(search.addressQuery(query), null, query);
+});
+
+test("only addresses that match what was typed are kept: number, street and town, and the province if typed", async () => {
+  const asked = [];
+  const reply = (rows) => ({ ok: true, json: async () => rows });
+  const towns = {
+    Picton: [{ key: "geonames", name: "Picton", province: "Ontario", category: "Community", lat: 44.0061111, lng: -77.1436111 }],
+    Belleville: [{ key: "geonames", name: "Belleville", province: "Ontario", category: "City", lat: 44.2566666, lng: -77.3697222 }],
+    // Live: the town search finds Trenton in Ontario and in Nova Scotia; a typed province keeps one.
+    Trenton: [{ key: "geonames", name: "Trenton", province: "Ontario", category: "Community", lat: 44.11, lng: -77.5786111 },
+      { key: "geonames", name: "Trenton", province: "Nova Scotia", category: "Town", lat: 45.61052, lng: -62.639371 }],
+  };
+  const addresses = {
+    // Live replies, trimmed. The only civic address for "22 Oak Street, Picton" is in Winnipeg.
+    "22 Oak Street, Picton": [locate("22 Picton Court, Winnipeg, Manitoba", "Manitoba", 49.83930382473434, -97.0846334605357)],
+    "12 Elm Street, Belleville": [locate("12 Rue Elm, Danville, Quebec", "Quebec", 45.79, -72.01), locate("12 Elm Street, Grenville, Quebec", "Quebec", 45.63, -74.6)],
+    "5 Maple Avenue, Belleville": [locate("5 Maple Drive, City Of Belleville, Ontario", "Ontario", 44.18, -77.4)],
+    "8 Birch Street, Trenton": [locate("8 Birch Street, Trenton, Nova Scotia", "Nova Scotia", 45.61, -62.64), locate("8 Birch Street, Gore, Quebec", "Quebec", 45.77, -74.25)],
+    "8 Birch Street, Trenton, ON": [locate("8 Birch Street, Trenton, Nova Scotia", "Nova Scotia", 45.61, -62.64)],
+    "112 Wellington Street, Ottawa": WELLINGTON,
+    "111, rue Wellington, Ottawa": [locate("111 Wellington Street, Ville Of Ottawa, Ontario", "Ontario", 45.4231, -75.6988, "Rue")],
+  };
+  const request = async (url) => {
+    const params = new URL(url).searchParams;
+    asked.push(params.get("keys") + ":" + params.get("q"));
+    return reply((params.get("keys") === "locate" ? addresses : towns)[params.get("q")] || []);
+  };
+  const names = async (query) => { asked.length = 0; return (await search.find(query, "en", request)).map((place) => [place.name, place.province, place.kind]); };
+
+  // A match in another town and province is never kept: the town that was typed is searched instead.
+  assert.deepEqual(await names("22 Oak Street, Picton"), [["Picton", "Ontario", undefined]]);
+  assert.deepEqual(asked, ["locate:22 Oak Street, Picton", "geonames:Picton"]);
+  assert.deepEqual(await names("12 Elm Street, Belleville"), [["Belleville", "Ontario", undefined]]);
+  // The wrong civic number is not the address either.
+  assert.deepEqual(await names("112 Wellington Street, Ottawa"), []);
+  assert.deepEqual(asked, ["locate:112 Wellington Street, Ottawa", "geonames:Ottawa"]);
+  // Same number, street name and town: kept, for the page to confirm (Avenue and Drive differ, so it is never picked by itself).
+  assert.deepEqual(await names("5 Maple Avenue, Belleville"), [["5 Maple Drive, Belleville", "Ontario", "address"]]);
+  // Only the Trenton the person typed; a typed province narrows it further.
+  assert.deepEqual(await names("8 Birch Street, Trenton"), [["8 Birch Street, Trenton", "Nova Scotia", "address"]]);
+  assert.deepEqual(await names("8 Birch Street, Trenton, ON"), [["Trenton", "Ontario", undefined]]);
+  assert.deepEqual(asked, ["locate:8 Birch Street, Trenton, ON", "geonames:Trenton"]);
+  // French: "rue Wellington" is Wellington Street, and "Ville Of Ottawa" is Ottawa.
+  assert.deepEqual(await names("111, rue Wellington, Ottawa"), [["111 Wellington Street, Ottawa", "Ontario", "address"]]);
 });
 
 test("address rows keep only civic addresses, named by street and municipality", () => {

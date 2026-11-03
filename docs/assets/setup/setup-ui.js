@@ -136,7 +136,7 @@
   function freshTown() {
     return {
       query: "",
-      status: "idle",    // idle | searching | places | regions | province | mismatch | none | no-match | outside | failed
+      status: "idle",    // idle | searching | places | regions | province | mismatch | none | no-match | outside | format | failed
       places: [],
       options: [],
       place: null,       // the place picked from the search (a town, an address or coordinates), while its region is still open
@@ -144,6 +144,7 @@
       code: "",
       codeUnknown: false,
       deepLink: null,    // ?place=<text>, searched when the person reaches the town step
+      fellBack: false,   // a typed street address wasn't found, so its town was searched instead
       linkInvalid: false,
       token: 0
     };
@@ -916,6 +917,8 @@
       body.appendChild(checkboxRow({}, t(where, { town: a.place.name }), a.shareLocation !== false, function (checked) {
         setAnswers(Object.assign({}, state.answers, { shareLocation: checked }));
       }, { "data-setup-location": "" }));
+      // Ruling 34: on by default for every kind; an exact spot says plainly that it is public.
+      if (exactSpot(a.place)) body.appendChild(para(t("name.location-public"), { class: "setup-hint", "data-setup-location-public": "" }));
     }
   }
 
@@ -969,12 +972,14 @@
     box.textContent = "";
     if (!state.data) return loading(box);
     if (town.linkInvalid) box.appendChild(note("info", t("town.link-invalid")));
+    if (town.fellBack && town.status !== "searching") box.appendChild(note("info", t("town.address-fallback"), { "data-setup-address-fallback": "" }));
     if (town.status === "searching") {
       box.appendChild(para(t("town.searching"), { class: "setup-hint", role: "status" }));
       return;
     }
     if (town.status === "places") {
-      box.appendChild(townMessage(t(town.places[0].kind === "address" ? "town.addresses" : "town.places")));
+      var addresses = town.places[0].kind === "address";
+      box.appendChild(townMessage(t(!addresses ? "town.places" : town.places.length > 1 ? "town.addresses" : "town.address-confirm")));
       box.appendChild(choiceGroup(town.places.map(function (place, index) {
         return choice("place:" + index, place.name, placeDetail(place), { pick: function () { pickPlace(place); } });
       })));
@@ -989,8 +994,8 @@
         var detail = town.status === "province" ? regionName(option.tag) + " (" + option.tag + ")" : provinceName(option.province);
         return choice(option.tag + ":" + option.province, title, detail, { pick: function () { setRegion(option, town.place); } });
       })));
-    } else if (town.status === "outside") {
-      box.appendChild(townMessage(rich("town.outside")));
+    } else if (town.status === "outside" || town.status === "format") {
+      box.appendChild(townMessage(rich(town.status === "outside" ? "town.outside" : "town.coordinates-format")));
     } else if (town.status === "none" || town.status === "no-match" || town.status === "failed") {
       if (town.status === "none") box.appendChild(townMessage(rich("town.none", null, LINKS.map)));
       else if (town.status === "failed") box.appendChild(townMessage(rich("town.search-failed", null, LINKS.map)));
@@ -1067,13 +1072,15 @@
     town.code = "";
     town.codeUnknown = false;
     town.linkInvalid = false;
+    town.fellBack = false;
     clearPlace();
     showTown("searching");
     loadData().then(function (data) {
       if (token !== town.token) return;
-      // Coordinates are read here and never sent to a search.
+      // Coordinates are read here and never sent to a search, even when they can't be read.
       var point = Flow.parseCoordinates(query);
       if (point) return point.inCanada ? pickPlace(coordinatesPlace(point)) : showTown("outside");
+      if (Flow.looksLikeCoordinates(query)) return showTown("format");
       // A region code needs no search.
       var code = Place.fromCode(query, data);
       if (code.length) return offerRegions(code);
@@ -1087,7 +1094,11 @@
         window.clearTimeout(timer);
         if (token !== town.token) return;
         if (!places.length) return showTown("no-match");
-        if (places.length === 1) return pickPlace(places[0]);
+        // A street address that wasn't found was searched as its town: say so.
+        var typed = Search.addressQuery(query);
+        town.fellBack = !!(typed && typed.town) && !places[0].kind;
+        // An address is never used without asking: the geocoder's nearest match can be another street or town.
+        if (places.length === 1 && places[0].kind !== "address") return pickPlace(places[0]);
         town.places = places;
         showTown("places");
       }, function () {
@@ -1148,6 +1159,7 @@
   function useCode(raw) {
     var text = String(raw || "").trim();
     state.town.code = text;
+    state.town.fellBack = false;
     if (!text) return;
     var options = Place.fromCode(text, state.data);
     if (!options.length) options = Place.fromAlias(text, state.data);

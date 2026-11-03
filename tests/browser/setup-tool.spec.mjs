@@ -51,6 +51,8 @@ for (const lang of LANGS) {
     await expectStep(page, "name");
     await expect(page.locator("[data-setup-name]")).toHaveValue("Belleville_R1");
     await expect(page.locator("[data-setup-location]")).toBeChecked();
+    // A town's point is only near the town, so there's no public-spot line.
+    await expect(page.locator("[data-setup-location-public]")).toHaveCount(0);
     await next(page);
     await expectStep(page, "commands");
     await expect(progress(page)).toHaveText(T("nav.progress", lang, { n: 10, total: 11, label: T("step.commands", lang) }));
@@ -441,6 +443,11 @@ for (const lang of LANGS) {
     await expect(page.locator("label[for='setup-town']")).toHaveText(T("town.label", lang));
     await expect(step(page)).toContainText(plain("town.hint", lang));
     await searchTown(page, "111 Wellington Street, Ottawa");
+    // An address is never used without asking, even when it is the only match.
+    await expect(page.locator("[data-setup-town-message]")).toHaveText(T("town.address-confirm", lang));
+    await expect(page.locator("[data-setup-region]")).toHaveCount(0);
+    await expect(nextButton(page)).toBeDisabled();
+    await page.locator("[data-setup-step] [data-setup-choice]").filter({ hasText: "111 Wellington Street, Ottawa" }).click();
     await expect(page.locator("[data-setup-region]")).toContainText("yow");
     await expect(page.locator("[data-setup-region]")).toContainText(T("town.region-detail", lang, { town: "111 Wellington Street, Ottawa", province: "Ontario" }));
     // The address search answered, so the town search wasn't asked.
@@ -456,6 +463,8 @@ for (const lang of LANGS) {
     await expect(page.locator("[data-setup-name]")).toHaveValue("Ottawa_R1");
     await expect(page.locator("[data-setup-location]")).toBeChecked();
     await expect(page.locator("label:has([data-setup-location])")).toHaveText(T("name.location-spot", lang, { town: "111 Wellington Street, Ottawa" }));
+    // Ruling 34: on by default, with one plain line saying the spot is public.
+    await expect(page.locator("[data-setup-location-public]")).toHaveText(T("name.location-public", lang));
     await next(page);
     await expectStep(page, "commands");
     const lines = await commandLines(page);
@@ -466,11 +475,69 @@ for (const lang of LANGS) {
   });
 }
 
+test("unticking the map option leaves an exact spot out of the link and the share link; the region still comes back", async ({ page, context }) => {
+  await mockGeocoder(page);
+  await context.addInitScript(() => {
+    window.__copied = [];
+    Object.defineProperty(Navigator.prototype, "clipboard", {
+      configurable: true,
+      get: () => ({ writeText: (value) => { window.__copied.push(value); return Promise.resolve(); } })
+    });
+  });
+  await openLink(page, "/config/?type=repeater&board=heltec-v3&status=running&reflash=0&role=city", { to: "town" });
+  await searchTown(page, "44.1628, -77.3832");
+  await expect(page.locator("[data-setup-region]")).toContainText("ytr");
+  await expect.poll(() => new URL(page.url()).searchParams.get("lat")).toBe("44.1628");
+  await nextUntil(page, "name");
+  await page.locator("[data-setup-name]").fill("Hilltop");
+  await page.locator("[data-setup-location]").uncheck();
+  const spot = /(?:^|&)(?:town|kind|lat|lon)=|44\.1628|77\.3832/;
+  await expect.poll(() => new URL(page.url()).search).not.toMatch(spot);
+  const url = new URL(page.url());
+  expect(url.searchParams.get("tag")).toBe("ytr");
+  expect(url.searchParams.get("province")).toBe("on");
+  expect(url.searchParams.get("shareLocation")).toBe("0");
+  await page.locator("[data-setup-share]").click();
+  await expect(page.locator("[data-setup-share]")).toHaveText(T("nav.share-done", "en"));
+  const shared = (await page.evaluate(() => window.__copied))[0];
+  expect(new URL(shared).search).not.toMatch(spot);
+  await next(page);
+  expect((await commandLines(page)).some((line) => /^set (lat|lon) /.test(line))).toBe(false);
+  // Opened again, the link brings back the region without the spot.
+  const other = await context.newPage();
+  await openLink(other, new URL(shared).pathname + new URL(shared).search, { to: "town" });
+  await expect(other.locator("[data-setup-region]")).toContainText("ytr");
+  await other.close();
+});
+
+test("an address match in another street or town is never used: the typed town is searched instead, or the person is asked", async ({ page }) => {
+  const queries = await mockGeocoder(page);
+  await openLink(page, "/config/?type=repeater&board=heltec-v3&status=running&reflash=0", { to: "town" });
+  // Live: the geocoder's only civic match for this is 22 Picton Court in Winnipeg.
+  await searchTown(page, "22 Oak Street, Picton");
+  await expect(page.locator("[data-setup-region]")).toContainText("ytr");
+  await expect(page.locator("[data-setup-region]")).toContainText(T("town.region-detail", "en", { town: "Picton", province: "Ontario" }));
+  await expect(page.locator("[data-setup-address-fallback]")).toHaveText(T("town.address-fallback", "en"));
+  await expect(page.locator("[data-setup-step]")).not.toContainText("Winnipeg");
+  expect(queries).toEqual(["locate:22 Oak Street, Picton", "Picton"]);
+  // Picton is a town, so the map position is near it, not at a street spot.
+  await expect.poll(() => new URL(page.url()).searchParams.get("kind")).toBe(null);
+  await expect.poll(() => new URL(page.url()).searchParams.get("town")).toBe("Picton");
+  // The same number, street name and town, but a Drive, not an Avenue: shown, never picked by itself.
+  await searchTown(page, "5 Maple Avenue, Belleville");
+  await expect(page.locator("[data-setup-town-message]")).toHaveText(T("town.address-confirm", "en"));
+  await expect(page.locator("[data-setup-step] [data-setup-choice]")).toHaveText([/5 Maple Drive, Belleville/]);
+  await expect(page.locator("[data-setup-region]")).toHaveCount(0);
+  await expect(page.locator("[data-setup-address-fallback]")).toHaveCount(0);
+  await expect(nextButton(page)).toBeDisabled();
+});
+
 test("several matching addresses: ask which one, with the region each is in", async ({ page }) => {
   await mockGeocoder(page);
   await openLink(page, "/config/?type=repeater&board=heltec-v3&status=running&reflash=0", { to: "town" });
   const choices = page.locator("[data-setup-step] [data-setup-choice]");
-  await searchTown(page, "1 Rue Notre-Dame Est, Montréal");
+  // No town typed: both streets of that name are what was typed.
+  await searchTown(page, "1 Rue Notre-Dame Est");
   await expect(page.locator("[data-setup-town-message]")).toHaveText(T("town.addresses", "en"));
   await expect(choices).toHaveCount(2);
   await expect(page.locator("[data-setup-step] [data-setup-card]")).toContainText(["Quebec · North Bay (yyb)", "Quebec · Montreal (yul)"]);
@@ -478,6 +545,11 @@ test("several matching addresses: ask which one, with the region each is in", as
   await choices.filter({ hasText: "Montréal" }).click();
   await expect(page.locator("[data-setup-region]")).toContainText("yul");
   await expect(nextButton(page)).toBeEnabled();
+  // With the town typed, the one in Lorrainville is not offered.
+  await searchTown(page, "1 Rue Notre-Dame Est, Montréal");
+  await expect(page.locator("[data-setup-town-message]")).toHaveText(T("town.address-confirm", "en"));
+  await expect(choices).toHaveCount(1);
+  await expect(choices).toContainText("1 Rue Notre-Dame Est, Montréal");
 });
 
 test("a town with a number in its name falls back to the town search; an address with no match says so", async ({ page }) => {
@@ -489,6 +561,8 @@ test("a town with a number in its name falls back to the town search; an address
   // Nothing matches: say so plainly, and offer the region code box.
   await searchTown(page, "999 Nowhere Road, Atlantis");
   await expect(page.locator("[data-setup-town-message]")).toHaveText(T("town.no-address", "en"));
+  // The town after the comma was tried too.
+  expect(queries.slice(-2)).toEqual(["locate:999 Nowhere Road, Atlantis", "Atlantis"]);
   await expect(page.locator("[data-setup-code]")).toBeVisible();
   await expect(nextButton(page)).toBeDisabled();
 });
@@ -557,6 +631,23 @@ for (const lang of LANGS) {
     await expect(page.locator('[data-setup-check="name"]')).toContainText(T("check.name", lang, { name: "Café Hilltop" }));
   });
 }
+
+test("coordinates in every common form stay on the page; ones that can't be read say how to type them", async ({ page }) => {
+  const queries = await mockGeocoder(page);
+  await openLink(page, "/config/?type=repeater&board=heltec-v3&status=running&reflash=0", { to: "town" });
+  for (const typed of ["44,1628 -77,3832", "44,1628, -77,3832", "N44.1628 W77.3832", "44.1628° N, 77.3832° W", "44.1628° N, 77.3832° O",
+    "(44.1628, -77.3832)", "44.1628, \u221277.3832", "44°09'46.1\"N 77°22'59.5\"W"]) {
+    await searchTown(page, typed);
+    await expect(page.locator("[data-setup-region]"), typed).toContainText(T("town.region-detail", "en", { town: "44.1628, -77.3832", province: "Ontario" }));
+  }
+  for (const typed of ["44.1628", "N44.1628 N77.3832", "44°61'N 77°W", "44.1628, -77.3832, 12"]) {
+    await searchTown(page, typed);
+    await expect(page.locator("[data-setup-town-message]"), typed).toHaveText(plain("town.coordinates-format", "en"));
+    await expect(nextButton(page)).toBeDisabled();
+  }
+  // None of them reached the place search.
+  expect(queries).toEqual([]);
+});
 
 test("firmware reply", async ({ page }) => {
   await page.goto(siteRoute("/config/?type=repeater&board=heltec-v3&status=running&reflash=0"));

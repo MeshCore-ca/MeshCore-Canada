@@ -17,7 +17,7 @@ difficulty: beginner
 page_styles:
   - assets/regions/regions.css?v=20261102-4
 page_scripts:
-  - assets/javascripts/place-search.js?v=20261102-8
+  - assets/javascripts/place-search.js?v=20261102-9
   - assets/javascripts/radio-profiles.js?v=20260904-1
   - assets/regions/modules/configurator-support.js?v=20260926-1
   - assets/regions/modules/iata-scopes.js?v=20261013-1

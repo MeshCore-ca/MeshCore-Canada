@@ -288,17 +288,18 @@ test("the checks remind people to set the clock after a restart, before the adve
   }
 });
 
-test("the checks' introduction says only the clock can change", () => {
+test("the checks' introduction says what they change", () => {
   for (const lang of ["en", "fr"]) {
     for (const key of ["check.hint.console", "check.hint.phone"]) {
-      const hint = text.t(key, lang);
-      assert.doesNotMatch(hint, /Nothing here changes|Aucune ne change/, `${lang} ${key}`);
-      assert.match(hint, lang === "en" ? /change nothing, except/ : /ne changent rien, sauf/, `${lang} ${key}`);
+      assert.doesNotMatch(text.t(key, lang), /Nothing here changes|Aucune ne change/, `${lang} ${key}`);
     }
-    assert.match(text.t("check.hint.phone", lang), /`clock sync`/);
-    // Over USB nothing in the list sets the clock: it is set from the app, and `clock sync` is never offered for the Console.
-    assert.match(text.t("check.hint.console", lang), lang === "en" ? /from the app/ : /depuis l’application/, lang);
-    assert.doesNotMatch(text.t("check.hint.console", lang), /clock sync/, lang);
+    // From the app, `clock sync` is the one line that changes something.
+    assert.match(text.t("check.hint.phone", lang), lang === "en" ? /change nothing, except `clock sync`/ : /ne changent rien, sauf `clock sync`/);
+    // Over USB nothing in the list changes anything: the clock is set from the app, and `clock sync` is never offered for the Console.
+    assert.match(text.t("check.hint.console", lang), lang === "en"
+      ? /They change nothing\. If its clock is wrong, set it from the app\.$/
+      : /Elles ne changent rien\. Si son horloge est fausse, réglez-la depuis l’application\.$/, lang);
+    assert.doesNotMatch(text.t("check.hint.console", lang), /clock sync|except|sauf/, lang);
   }
 });
 

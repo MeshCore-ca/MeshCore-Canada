@@ -145,30 +145,70 @@
     return { firmware: "1." + minor, tooOld: false };
   }
 
-  // Reads coordinates typed into the location box: latitude then longitude, as decimals.
-  // "44.1628, -77.3832", "44.1628 -77.3832" and "44.1628; -77.3832" all work; with a
-  // semicolon between them, French decimal commas do too ("44,1628; -77,3832").
-  // Returns null for anything else (a town, an address), so it is searched instead.
-  // Coordinates outside Canada come back with inCanada: false, for the page to say so.
-  var NUMBER = "[+-]?\\d+(?:\\.\\d+)?";
-  var NUMBER_FR = "[+-]?\\d+(?:[.,]\\d+)?";
-  var COORDINATES = [
-    new RegExp("^(" + NUMBER_FR + ")\\s*;\\s*(" + NUMBER_FR + ")$"),
-    new RegExp("^(" + NUMBER + ")\\s*,\\s*(" + NUMBER + ")$"),
-    new RegExp("^(" + NUMBER + ")\\s+(" + NUMBER + ")$")
-  ];
+  // Reads coordinates typed into the location box, in the forms people copy from maps:
+  //   44.1628, -77.3832 · 44.1628 -77.3832 · 44,1628; -77,3832 · 44,1628 -77,3832 · (44.1628, -77.3832)
+  //   N44.1628 W77.3832 · 44.1628° N, 77.3832° O · 44°09'46.1"N 77°22'59.5"W · N 44°09.768' W 77°22.992'
+  // Latitude comes first unless N/S/E/W (O is French for west) say otherwise. A decimal comma
+  // needs digits on both sides, so "44,1628, -77,3832" reads as two numbers.
+  // Returns { lat, lon, inCanada }, or null when the text isn't two readable coordinates
+  // (see looksLikeCoordinates for what is never sent to the search anyway).
+  var DECIMAL = "\\d+(?:[.,]\\d+)?";
+  // Degrees (never directly followed by another digit, so "44.1628" can't split in two),
+  // then optional minutes and seconds with their marks.
+  var BODY = "([+-]?" + DECIMAL + ")(?!\\d)\\s*(?:°\\s*)?(?:(" + DECIMAL + ")\\s*'\\s*(?:(" + DECIMAL + ")\\s*\"\\s*)?)?";
+  var SEPARATOR = "\\s*[,;]?\\s*";
+  // Either both letters come before their numbers (N44.16 W77.38) or both after (44.16 N, 77.38 W), or none.
+  var LETTERS_FIRST = new RegExp("^([NSEWO])\\s*" + BODY + SEPARATOR + "([NSEWO])\\s*" + BODY + "$", "i");
+  var LETTERS_AFTER = new RegExp("^" + BODY + "\\s*([NSEWO])?" + SEPARATOR + BODY + "\\s*([NSEWO])?$", "i");
+
+  // Minus signs, degree, minute and second marks as maps and keyboards write them.
+  function plainCoordinates(text) {
+    var typed = String(text).trim()
+      .replace(/[\u2212\u2012\u2013\u2014]/g, "-")             // minus sign and dashes
+      .replace(/[\u00ba\u02da]/g, "°")                         // º and ˚ for the degree mark
+      .replace(/[\u2032\u2019\u2018]/g, "'")                   // prime and curly quotes for minutes
+      .replace(/[\u2033\u201c\u201d]|''/g, '"');               // double prime for seconds
+    var wrapped = /^[(\[{]\s*([\s\S]*?)\s*[)\]}]$/.exec(typed);
+    return wrapped ? wrapped[1] : typed;
+  }
+
+  function number(text) { return parseFloat(text.replace(",", ".")); }
+
+  // One coordinate from its pieces: [letter before, degrees, minutes, seconds, letter after].
+  // null if unreadable (60 minutes or more, or minutes after decimal degrees).
+  function coordinate(pieces) {
+    var degrees = number(pieces[1]);
+    var minutes = pieces[2] ? number(pieces[2]) : 0;
+    var seconds = pieces[3] ? number(pieces[3]) : 0;
+    if (minutes >= 60 || seconds >= 60 || (pieces[2] && /[.,]/.test(pieces[1]))) return null;
+    var size = Math.abs(degrees) + minutes / 60 + seconds / 3600;
+    var hemisphere = (pieces[0] || pieces[4] || "").toUpperCase();
+    var negative = hemisphere ? /[SWO]/.test(hemisphere) : /^-/.test(pieces[1]);
+    return { value: negative ? -size : size, axis: hemisphere ? (/[NS]/.test(hemisphere) ? "lat" : "lon") : "" };
+  }
 
   function parseCoordinates(text) {
     if (typeof text !== "string") return null;
-    var typed = text.trim();
-    for (var i = 0; i < COORDINATES.length; i += 1) {
-      var found = COORDINATES[i].exec(typed);
-      if (!found) continue;
-      var lat = parseFloat(found[1].replace(",", "."));
-      var lon = parseFloat(found[2].replace(",", "."));
-      return { lat: lat, lon: lon, inCanada: inCanada(lat, lon) };
+    var plain = plainCoordinates(text);
+    var first, second, found;
+    if ((found = LETTERS_FIRST.exec(plain))) {
+      first = coordinate([found[1], found[2], found[3], found[4], ""]);
+      second = coordinate([found[5], found[6], found[7], found[8], ""]);
+    } else if ((found = LETTERS_AFTER.exec(plain))) {
+      first = coordinate(["", found[1], found[2], found[3], found[4]]);
+      second = coordinate(["", found[5], found[6], found[7], found[8]]);
     }
-    return null;
+    if (!first || !second) return null;
+    if (first.axis === "lon" || second.axis === "lat") { var swap = first; first = second; second = swap; }
+    if (first.axis === "lon" || second.axis === "lat") return null;   // both say the same axis
+    return { lat: first.value, lon: second.value, inCanada: inCanada(first.value, second.value) };
+  }
+
+  // Text with a digit and no letters but N, S, E, W or O, only numbers and the marks around them,
+  // is coordinates even when it can't be read. It is never sent to a place search.
+  function looksLikeCoordinates(text) {
+    if (typeof text !== "string" || !/\d/.test(text)) return false;
+    return /^[NSEWO]*$/i.test(plainCoordinates(text).replace(/[\d\s.,;:+\-()[\]{}\/°'"]/g, ""));
   }
 
   // What each answer feeds. Changing the key clears the answers listed against it.
@@ -341,7 +381,10 @@
       var text = field.write(a[field.key]);
       if (text !== null) parts.push(field.key + "=" + text);
     });
-    return parts.concat(placeParts(a.place)).join("&");
+    // An exact spot (an address or coordinates) the person chose not to show on maps stays out
+    // of the link too; the region answers still bring the region back.
+    var hidden = a.shareLocation === false && a.place && oneOf(PLACE_KINDS, a.place.kind);
+    return parts.concat(hidden ? [] : placeParts(a.place)).join("&");
   }
 
   function fromQuery(search) {
@@ -365,6 +408,7 @@
     route: route,
     parseVersion: parseVersion,
     parseCoordinates: parseCoordinates,
+    looksLikeCoordinates: looksLikeCoordinates,
     cleanName: cleanName,
     nameProblem: nameProblem,
     resetDependents: resetDependents,

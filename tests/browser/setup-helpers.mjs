@@ -28,6 +28,7 @@ export const PLACES = {
   // The search says Québec; the region map puts this spot in Ontario.
   "Ottawa": [row("Ottawa", "Québec", 45.4215, -75.6972)],
   "150 Mile House": [row("150 Mile House", "British Columbia", 52.1055556, -121.9277778, "Community")],
+  "Picton": [row("Picton", "Ontario", 44.0061111, -77.1436111, "Community")],
   // A spot no region covers (Seattle's coordinates, given a Canadian province so the search keeps it).
   "Faraway": [row("Faraway", "British Columbia", 47.6062, -122.3321)]
 };
@@ -44,6 +45,15 @@ export const ADDRESSES = {
     locate("1 Rue Notre-Dame Est, Lorrainville, Quebec", "Quebec", 47.353875, -79.3534323),
     locate("1 Rue Notre-Dame Est, Montréal, Quebec", "Quebec", 45.5065186, -73.5554019)
   ],
+  // No town typed: both are what was typed.
+  "1 Rue Notre-Dame Est": [
+    locate("1 Rue Notre-Dame Est, Lorrainville, Quebec", "Quebec", 47.353875, -79.3534323),
+    locate("1 Rue Notre-Dame Est, Montréal, Quebec", "Quebec", 45.5065186, -73.5554019)
+  ],
+  // Live: the only civic address the geocoder offers is in another street, town and province.
+  "22 Oak Street, Picton": [locate("22 Picton Court, Winnipeg, Manitoba", "Manitoba", 49.83930382473434, -97.0846334605357)],
+  // Same number, street name and town, but a Drive, not an Avenue.
+  "5 Maple Avenue, Belleville": [locate("5 Maple Drive, City Of Belleville, Ontario", "Ontario", 44.18, -77.4)],
   // A town with a number in its name: only whole streets match, so the town search runs next.
   "150 Mile House": [locate("150 Mile Frontage Road, 150 Mile House, British Columbia", "British Columbia", 52.1063076, -121.9285773, "INTERPOLATED_CENTROID")]
 };

@@ -339,8 +339,42 @@ test("coordinates outside Canada are read, but flagged, so the page can say so p
 
 test("anything that isn't two numbers is not coordinates: a town, an address or a postal code is searched instead", () => {
   for (const typed of ["", "   ", "Belleville", "111 Wellington Street, Ottawa", "100 Mile House", "K1A 0A9", "44.1628", "44.1628, -77.3832, 12",
-    "44.1.2, -77", "1e3, -77", "44,1628, -77,3832", "44.1628, -77.3832 Ontario", "0x2C, -77", "44.1628,,-77.3832", null, undefined, 44]) {
+    "44.1.2, -77", "1e3, -77", "44.1628, -77.3832 Ontario", "0x2C, -77", "44.1628,,-77.3832", null, undefined, 44]) {
     assert.equal(flow.parseCoordinates(typed), null, String(typed));
+  }
+});
+
+// Belleville is 44.1628, -77.3832: 44°09'46.1"N 77°22'59.5"W.
+const near = (point, lat, lon) => point && point.inCanada && Math.abs(point.lat - lat) < 0.00005 && Math.abs(point.lon - lon) < 0.00005;
+
+test("coordinates are read in the other forms people copy: comma decimals, N/S/E/W (or O), degrees, brackets, a real minus sign", () => {
+  for (const typed of [
+    "44,1628 -77,3832", "44,1628, -77,3832", "44,1628,-77,3832",
+    "N44.1628 W77.3832", "N 44.1628, W 77.3832", "44.1628N 77.3832W", "44.1628 N 77.3832 W",
+    "44.1628° N, 77.3832° W", "44.1628°N 77.3832°O", "44,1628° N; 77,3832° O", "n44.1628 w77.3832",
+    "W77.3832 N44.1628",                                       // longitude first, but the letters say which is which
+    "44.1628°, -77.3832°", "(44.1628, -77.3832)", "[44.1628, -77.3832]",
+    "44.1628, \u221277.3832", "44.1628, \u201377.3832",
+    "44°09'46.1\"N 77°22'59.5\"W", "44° 9′ 46.1″ N, 77° 22′ 59.5″ W", "N 44°09.768' W 77°22.992'",
+  ]) {
+    assert.ok(near(flow.parseCoordinates(typed), 44.1628, -77.3832), `${typed} -> ${JSON.stringify(flow.parseCoordinates(typed))}`);
+  }
+  // South and East are read too, and land outside Canada.
+  assert.equal(flow.parseCoordinates("33.86 S, 151.21 E").inCanada, false);
+  assert.ok(flow.parseCoordinates("33.86 S, 151.21 E").lat < 0);
+});
+
+test("coordinate-looking text that can't be read is not coordinates, and is never searched", () => {
+  for (const typed of ["N44.1628 N77.3832", "W44 W77", "44°61'N 77°W", "44°09'75\"N 77°22'W", "N44.1628 -77.3832 W 12"]) {
+    assert.equal(flow.parseCoordinates(typed), null, typed);
+    assert.equal(flow.looksLikeCoordinates(typed), true, typed);
+  }
+  // Text with no letters but N, S, E, W or O and degree or minute marks stays on the page.
+  for (const typed of ["44.1628", "44.1628, -77.3832, 12", "44,1628, -77", "44°09'46\"", "N44", "(44.16)", "44 / -77", "-77.3832 W", "44.1.2, -77"]) {
+    assert.equal(flow.looksLikeCoordinates(typed), true, typed);
+  }
+  for (const typed of ["Belleville", "111 Wellington Street, Ottawa", "100 Mile House", "K1A 0A9", "ytr", "Nord", "", "   ", null]) {
+    assert.equal(flow.looksLikeCoordinates(typed), false, String(typed));
   }
 });
 
@@ -372,6 +406,22 @@ test("a place from an address or coordinates keeps its kind in a share link, and
   assert.deepEqual(flow.fromQuery("town=Belleville&kind=wizard&lat=44.1628&lon=-77.3832").place, { name: "Belleville", lat: 44.1628, lon: -77.3832 });
   // A kind on its own, with no place, is nothing.
   assert.deepEqual(flow.fromQuery("kind=address"), {});
+});
+
+test("an exact spot the person chose not to show on maps stays out of the link; the region still comes back", () => {
+  const address = { name: "111 Wellington Street, Ottawa", province: "on", lat: 45.4231, lon: -75.6988, kind: "address" };
+  const point = { name: "44.1628, -77.3832", province: "on", lat: 44.1628, lon: -77.3832, kind: "coordinates" };
+  for (const place of [address, point]) {
+    const q = flow.toQuery({ tag: "yow", province: "on", place, shareLocation: false });
+    assert.doesNotMatch(q, /(?:^|&)(?:town|kind|lat|lon)=/, place.kind);
+    assert.doesNotMatch(q, /Wellington|44\.1628|77\.3832/, place.kind);
+    assert.deepEqual(flow.fromQuery(q), { tag: "yow", province: "on", shareLocation: false }, place.kind);
+    // Ticked again (or never unticked), the spot is back.
+    assert.match(flow.toQuery({ tag: "yow", province: "on", place, shareLocation: true }), /(?:^|&)lat=/, place.kind);
+    assert.match(flow.toQuery({ tag: "yow", province: "on", place }), /(?:^|&)lat=/, place.kind);
+  }
+  // A town is only near the place, so it stays in the link either way.
+  assert.match(flow.toQuery({ place: { name: "Belleville", lat: 44.1628, lon: -77.3832 }, shareLocation: false }), /town=Belleville/);
 });
 
 test("the 'I did this' ticks never go into a share link", () => {

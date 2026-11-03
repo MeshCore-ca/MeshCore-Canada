@@ -17,7 +17,7 @@ page_styles:
   - assets/styles/communities.css?v=20260905-1
 status_notice: false
 page_scripts:
-  - assets/javascripts/place-search.js?v=20261102-8
+  - assets/javascripts/place-search.js?v=20261102-9
   - assets/javascripts/communities.js?v=20260925-2
 ---
 

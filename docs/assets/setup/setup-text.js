@@ -173,13 +173,16 @@
     "town.extension.link": "What's a planning extension?",
     "town.places": "Several places have that name. Which one?",
     "town.addresses": "Several addresses match. Which one?",
+    "town.address-confirm": "Is this the right address? Pick it, or check what you typed and search again.",
+    "town.address-fallback": "That street address wasn't found, so the town is used instead.",
     "town.regions": "This place sits where regions meet. Which one is it in?",
     "town.none": "No region on the map covers this place yet. Type its region code below if you know it; the {link} shows them all.",
     "town.none.link": "region map",
     "town.mismatch": "The search and the region map disagree about this place's province ({searched} or {found}). Check you picked the right place, or choose a region below.",
     "town.no-match": "No place found. Check the spelling, or type its region code instead.",
-    "town.no-address": "No address found. Check the spelling, or type just the town.",
+    "town.no-address": "No address or town found. Check the spelling, or type its region code instead.",
     "town.outside": "Those coordinates aren't in Canada. Type the latitude first, then the longitude, which is negative in Canada: for example `44.1628, -77.3832`.",
+    "town.coordinates-format": "Those numbers couldn't be read as coordinates. Type them like `44.1628, -77.3832`.",
     "town.search-failed": "The place search isn't answering right now. Coordinates still work, or type the region code below. The {link} shows every code.",
     "town.search-failed.link": "region map",
     "town.code-label": "Region code or name",
@@ -235,6 +238,7 @@
     "name.too-long": "That's too long. Keep it to about 30 letters (accented letters count as two).",
     "name.location": "Show it on maps near {town} (not its exact spot)",
     "name.location-spot": "Show it on maps at the exact spot you entered ({town})",
+    "name.location-public": "Anyone can see this spot on public maps.",
 
     // Paste the commands
     "commands.question.console": "Paste these into the Console, one at a time",
@@ -325,7 +329,7 @@
 
     // Check it worked
     "check.question": "Check it worked",
-    "check.hint.console": "After it restarts, reconnect the Console and run these. They change nothing, except the clock, which you set from the app if it's wrong.",
+    "check.hint.console": "After it restarts, reconnect the Console and run these. They change nothing. If its clock is wrong, set it from the app.",
     "check.hint.phone": "After it restarts, log in again in the app and send these from Command Line. They change nothing, except `clock sync`, which sets its clock.",
     "check.ver": "Shows the firmware version. It should be the one you just flashed.",
     "check.ver.phone": "Shows the firmware version. It should be the same as before.",
@@ -504,13 +508,16 @@
     "town.extension.link": "Qu’est-ce qu’une extension proposée?",
     "town.places": "Plusieurs endroits portent ce nom. Lequel?",
     "town.addresses": "Plusieurs adresses correspondent. Laquelle?",
+    "town.address-confirm": "Est-ce la bonne adresse? Choisissez-la, ou vérifiez ce que vous avez tapé et cherchez de nouveau.",
+    "town.address-fallback": "Cette adresse est introuvable, la ville est donc utilisée à la place.",
     "town.regions": "Cet endroit se trouve à la jonction de plusieurs régions. Dans laquelle est-il?",
     "town.none": "Aucune région de la carte ne couvre encore cet endroit. Tapez son code de région ci-dessous si vous le connaissez; la {link} les montre tous.",
     "town.none.link": "carte des régions",
     "town.mismatch": "La recherche et la carte des régions ne s’entendent pas sur la province de cet endroit ({searched} ou {found}). Vérifiez l’endroit choisi, ou choisissez une région ci-dessous.",
     "town.no-match": "Aucun endroit trouvé. Vérifiez l’orthographe, ou tapez plutôt son code de région.",
-    "town.no-address": "Aucune adresse trouvée. Vérifiez l’orthographe, ou tapez seulement la ville.",
+    "town.no-address": "Aucune adresse ni ville trouvée. Vérifiez l’orthographe, ou tapez plutôt son code de région.",
     "town.outside": "Ces coordonnées ne sont pas au Canada. Tapez d’abord la latitude, puis la longitude, qui est négative au Canada : par exemple `44.1628, -77.3832`.",
+    "town.coordinates-format": "Ces nombres n’ont pas pu être lus comme des coordonnées. Tapez-les comme `44.1628, -77.3832` ou `44,1628; -77,3832`.",
     "town.search-failed": "La recherche de lieux ne répond pas pour l’instant. Les coordonnées fonctionnent quand même, ou tapez le code de région ci-dessous. La {link} montre tous les codes.",
     "town.search-failed.link": "carte des régions",
     "town.code-label": "Code ou nom de la région",
@@ -566,6 +573,7 @@
     "name.too-long": "C’est trop long. Limitez-le à environ 30 lettres (une lettre accentuée compte pour deux).",
     "name.location": "L’afficher sur les cartes près de la localité ({town}), pas à son endroit exact",
     "name.location-spot": "L’afficher sur les cartes à l’endroit exact indiqué ({town})",
+    "name.location-public": "Tout le monde peut voir cet endroit sur les cartes publiques.",
 
     // Paste the commands
     "commands.question.console": "Collez-les dans la Console, une à la fois",
@@ -656,7 +664,7 @@
 
     // Check it worked
     "check.question": "Vérifiez que tout fonctionne",
-    "check.hint.console": "Après le redémarrage, reconnectez la Console et lancez ces commandes. Elles ne changent rien, sauf l’horloge, que vous réglez depuis l’application si elle est fausse.",
+    "check.hint.console": "Après le redémarrage, reconnectez la Console et lancez ces commandes. Elles ne changent rien. Si son horloge est fausse, réglez-la depuis l’application.",
     "check.hint.phone": "Après le redémarrage, reconnectez-vous dans l’application et envoyez ces commandes depuis Command Line. Elles ne changent rien, sauf `clock sync`, qui règle son horloge.",
     "check.ver": "Affiche la version du micrologiciel. Ce doit être celle que vous venez de programmer.",
     "check.ver.phone": "Affiche la version du micrologiciel. Elle doit être la même qu’avant.",
