@@ -5,7 +5,7 @@ export { expect } from "@playwright/test";
 export const TILE_PNG = Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=", "base64");
 
 // Keep routine browser tests off the public aggregate API and the OpenStreetMap tile server
-// (the region map and the setup tool's map location step both draw tiles). Individual tests
+// (the zone finder and the setup tool's map location step both draw tiles). Individual tests
 // can add their own route, which runs first, to exercise errors, payloads, and cache behavior.
 // Tiles are answered for the whole browser context, so a second page a test opens is covered too;
 // a page's own route still comes before it.

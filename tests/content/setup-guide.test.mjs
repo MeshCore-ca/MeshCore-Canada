@@ -13,7 +13,7 @@ const text = globalThis.MeshCoreSetupText;
 
 const pages = { en: "docs/config/guide.md", fr: "docs/config/guide.fr.md" };
 
-// The sections the setup tool's "?" help and the region map link to. Both languages keep these ids.
+// The sections the setup tool's "?" help and the zone finder link to. Both languages keep these ids.
 const anchors = [
   "what-a-repeater-is",
   "repeater-observers",

@@ -30,7 +30,7 @@ firmware, app, and protocol information, use the
 ## What the project maintains
 
 - setup, hardware, and troubleshooting guides;
-- the Canadian community directory and region map;
+- the Canadian community directory and the zone finder;
 - repeater and observer tools; and
 - the [open-source website](https://github.com/MeshCore-ca/MeshCore-Canada){ target="_blank" rel="noopener" }.
 

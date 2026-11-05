@@ -103,7 +103,7 @@ type your own scope if you are elsewhere.
 
     [![Settings showing onqc as the default region scope and a Settings Saved message](../assets/images/onqc-scopes/companion-06-saved.webp){ loading=lazy width="300" height="652" }](../assets/images/onqc-scopes/companion-06-saved.webp)
 
-Find your city code on the [IATA region map](../config/map.md). In Ontario and Québec, also use `onqc` for the Public channel and your city scope, such as `yow`, for test channels: open the channel, tap **⋮** and choose **Set Region Scope**. Leave `can` and `na` for future use.
+Find your city code on the [Find your zone](../config/map.md) page. In Ontario and Québec, also use `onqc` for the Public channel and your city scope, such as `yow`, for test channels: open the channel, tap **⋮** and choose **Set Region Scope**. Leave `can` and `na` for future use.
 
 Bot and MeshMapper operators follow the [bot and MeshMapper instructions](../config/guide.md#bots-and-meshmapper).
 

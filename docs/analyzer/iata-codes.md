@@ -20,11 +20,11 @@ page_scripts:
 
 # Find an observer location code
 
-Use the code shown by the [IATA region map](../config/map.md) for your observer's location. The map identifies published MeshMapper zones and MeshCore Canada starter regions; distance to an airport does not determine the code.
+Use the code shown by the [Find your zone](../config/map.md) page for your observer's location. It identifies published MeshMapper zones and MeshCore Canada starter regions; distance to an airport does not determine the code.
 
 Observer settings use uppercase codes such as `YOW`; on-air scopes use lowercase names such as `yow`. Use the same observer code in every broker entry. Coordinate changes to an existing observer with its operator.
 
-If the map has no assigned region at your location, ask your community which code to use. The quick list below is a reference, not a boundary lookup.
+If the Find your zone page shows no zone at your location, ask your community which code to use. The quick list below is a reference, not a boundary lookup.
 
 <div class="mc-location-tool" id="location-code-tool" data-source="../location-codes.json">
   <div class="mc-location-controls">

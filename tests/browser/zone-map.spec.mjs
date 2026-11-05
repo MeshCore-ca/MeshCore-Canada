@@ -391,6 +391,20 @@ for (const lang of LANGS) {
   }
 }
 
+test("switching language carries nothing across: the other page opens with no zone chosen", async ({ page }) => {
+  // The privacy page says so: the address holds only the zone and province, and the language switch drops even those.
+  await open(page, "en", "?tag=ytr&province=on");
+  await expect(title(page)).toHaveText("YTR · Quinte West");
+  await page.locator(".md-select > button").click();
+  await page.locator('.md-select__link[hreflang="fr"]').click();
+  await expect(page.locator("html")).toHaveAttribute("lang", "fr");
+  const address = new URL(page.url());
+  expect(address.pathname).toMatch(/\/fr\/config\/map\/$/);
+  expect(address.search).toBe("");
+  await expect(page.locator("[data-zone-search]")).toBeVisible();
+  await expect(card(page)).toHaveCount(0);
+});
+
 test("the card is read out: it sits in a live region, and the search status is a status", async ({ page }) => {
   await open(page, "en");
   await expect(page.locator("[data-zone-result]")).toHaveAttribute("aria-live", "polite");

@@ -8,7 +8,7 @@ task: understand-site-privacy
 scope: canada-baseline
 status: draft
 owner: site-maintainers
-last_reviewed: 2026-11-02
+last_reviewed: 2026-11-05
 review_by: 2027-01-15
 difficulty: beginner
 estimated_time: 3 minutes
@@ -26,9 +26,9 @@ You can read this site without a MeshCore Canada or GitHub account.
 | Search this documentation | Your search words stay in the browser | Nowhere |
 | Find nearby communities | The city you submit | The Government of Canada’s place search (geo.ca); distances are calculated in your browser |
 | Load header network totals | Your IP address and standard web request information, without search text | Beacon at dev.meshcore.ca |
-| Search for a place in the region tools | The place, airport code, or postal code you enter | IATA codes are checked locally. Place names go to the Government of Canada’s place search (geo.ca); postal codes use OpenStreetMap or geocoder.ca |
+| Search for a town or street address on [Find your zone](config/map.md) | The town or address you type. Coordinates and zone codes you type stay in your browser | The Government of Canada’s place search (geo.ca): `geolocator.api.geo.ca` |
 | Search for a town or street address in the [setup tool](config/index.md) | The town or address you type. Coordinates you type stay in your browser | The Government of Canada’s place search (geo.ca): `geolocator.api.geo.ca` |
-| Open the interactive region map | Your IP address and the visible map area | OpenStreetMap |
+| Open the map on [Find your zone](config/map.md) | Your IP address and the visible map area | OpenStreetMap |
 | Place the repeater on the map in the [setup tool](config/index.md) | Your IP address and the visible map area | OpenStreetMap |
 | Check a repeater path ID | The first byte of the public key | Beacon at dev.meshcore.ca; regional and longer-prefix comparisons stay in your browser |
 | Load the GitHub star count | Your IP address and standard web request information | GitHub |
@@ -69,16 +69,16 @@ fill in yourself.
   them up within 10 minutes, they’re ignored, and they go when you close the
   tab.
 - **Region files.** MeshMapper isn’t contacted unless you click a link to it.
-  The setup tool, [How repeaters work](config/guide.md) and the region map read
-  region files published on this site.
+  The setup tool, [How repeaters work](config/guide.md) and
+  [Find your zone](config/map.md) read region files published on this site.
 
 ## Saved on your device
 
-Switching language on the region map carries your selection in the link to the
-other page. This can include entered coordinates, a location label, city and
-province scopes, and radio-profile choices. These links may appear in browser
-history and server access logs. Do not share a link containing a private
-location.
+[Find your zone](config/map.md) puts only the zone code and province you picked
+in its address (for example `?tag=ytr&province=on`), so you can share or reload
+the page. It never puts a town, an address, or coordinates there, and switching
+language carries nothing across. Links can appear in browser history and server
+access logs.
 
 The retired region editor can download drafts saved in this browser. Downloading
 does not upload or delete them; old drafts are not approved MeshMapper boundaries.

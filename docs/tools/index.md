@@ -39,13 +39,13 @@ Choose the tool that matches your task.
 
     [:octicons-arrow-right-24: Read how repeaters work](../config/guide.md)
 
--   :material-map-search:{ .lg .middle } **Find your IATA region**
+-   :material-map-search:{ .lg .middle } **Find your zone**
 
     ---
 
-    Find a published MeshMapper zone or a labelled planning region. These boundaries are not radio coverage.
+    Find a published MeshMapper zone or a placeholder zone. These boundaries are not radio coverage.
 
-    [:octicons-arrow-right-24: Find my region](../config/map.md)
+    [:octicons-arrow-right-24: Find my zone](../config/map.md)
 
 -   :material-chart-timeline-variant:{ .lg .middle } **View the live network**
 

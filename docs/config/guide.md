@@ -112,7 +112,7 @@ decides which messages it passes on.
 ### Which region is mine?
 
 The [setup tool](index.md) finds it from the town, street address or
-coordinates where the repeater will be, and the [region map](map.md) shows them
+coordinates where the repeater will be, and [Find your zone](map.md) shows them
 all. Coordinates aren't sent to any search; a town or street address is looked
 up with the Government of Canada's place search (geo.ca).
 
@@ -122,8 +122,8 @@ up with the Government of Canada's place search (geo.ca).
 - **Towns in the same region share its code.** Ottawa and Gatineau are both
   `yow`.
 - **No zone for your area?** [MeshMapper](https://meshmapper.net/), the
-  community map that draws each region's area, doesn't cover everywhere. The
-  region map then shows a MeshCore Canada [starter region](#starter-regions)
+  community map that draws each region's area, doesn't cover everywhere. Find
+  your zone then shows a MeshCore Canada [starter region](#starter-regions)
   instead.
 - **Write codes in lowercase.** You can search for `YTR`, but on the air `ytr`
   and `YTR` are two different labels.
@@ -238,8 +238,8 @@ you could put on it.
   use its own airport code and still keep its province and `onqc`.
 
 The code names the area, not the airport. The codes come from IATA, the airline
-industry group that assigns airport codes, which is why the map calls these
-IATA regions.
+industry group that assigns airport codes, which is why they are called IATA
+codes.
 
 ### Reading a `region def` line
 
@@ -699,8 +699,8 @@ that the repeaters around you have been set up with it.
 
 Where MeshMapper has no zone yet, MeshCore Canada fills the gap with a starter
 region. Starter regions use real airport codes and work like any other region,
-but they're **not MeshMapper zones, and they don't claim radio coverage**. The
-map draws them with dashed gold outlines. Check with local operators before
+but they're **not MeshMapper zones, and they don't claim radio coverage**. Find your
+zone draws them with dashed grey outlines. Check with local operators before
 relying on one.
 
 | Area | Region | Code from |
@@ -739,7 +739,7 @@ A gap right next to a MeshMapper region can use that region's code as a
 is in `ykf`, not Sudbury's `ysb`. Goderich is in `yxu`, and Kincardine in `ylk`.
 
 Extensions are separate dashed areas on the map. They don't change MeshMapper's
-zones, and the map says which kind of area your point is in. Like starter
+zones, and Find your zone says which kind of area your point is in. Like starter
 regions, they need local review and don't show measured radio coverage.
 
 Starter regions and extensions are broad starting points, not a promise that
@@ -753,7 +753,6 @@ Labrador is census divisions 10 and 11; Newfoundland is the rest of the province
 
 ## Sources
 
-- [MeshMapper](https://meshmapper.net/), and the snapshot details in the map's
-  **Region data** view
+- [MeshMapper](https://meshmapper.net/)
 - [MeshCore command reference](https://docs.meshcore.io/cli_commands/)
 - [Data and licence notice](../assets/regions/NOTICE.txt)

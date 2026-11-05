@@ -46,7 +46,7 @@ flashing and every command.
 - Pick a method that matches the radio, operating system, and host you already
   have.
 - Back up configuration before replacing firmware or installing a service.
-- Find your location code on the [IATA region map](../config/map.md). Use the same
+- Find your location code on the [Find your zone](../config/map.md) page. Use the same
   uppercase code in every broker entry; the nearest airport does not determine it.
 
 ## What setup changes

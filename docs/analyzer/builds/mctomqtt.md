@@ -77,7 +77,7 @@ Check the source URL, changed paths, server addresses, backup behaviour, and res
 
 ### 2. Write without restarting
 
-Replace `YOW` with your code from the [IATA region map](../../config/map.md):
+Replace `YOW` with your code from the [Find your zone](../../config/map.md) page:
 
 ```bash
 bash "$workdir/add-meshcore-ca-broker.sh" --device serial-host --iata YOW --no-restart

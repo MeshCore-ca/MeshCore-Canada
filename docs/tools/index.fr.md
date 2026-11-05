@@ -39,13 +39,13 @@ Choisissez un outil selon votre tâche.
 
     [:octicons-arrow-right-24: Lire comment fonctionnent les répéteurs](../config/guide.md)
 
--   :material-map-search:{ .lg .middle } **Trouver votre région IATA**
+-   :material-map-search:{ .lg .middle } **Trouver votre zone**
 
     ---
 
-    Trouvez une zone publiée par MeshMapper ou une région proposée clairement indiquée. Ces limites ne sont pas la couverture radio.
+    Trouvez une zone publiée par MeshMapper ou une zone provisoire. Ces limites ne sont pas la couverture radio.
 
-    [:octicons-arrow-right-24: Trouver ma région](../config/map.md)
+    [:octicons-arrow-right-24: Trouver ma zone](../config/map.md)
 
 -   :material-chart-timeline-variant:{ .lg .middle } **Voir le réseau en direct**
 

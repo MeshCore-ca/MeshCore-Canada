@@ -49,7 +49,7 @@ programmation et chaque commande.
   et au système hôte que vous utilisez déjà.
 - Sauvegardez la configuration avant de remplacer un micrologiciel ou
   d’installer un service.
-- Trouvez votre code sur la [carte des régions IATA](../config/map.md). Utilisez
+- Trouvez votre code sur la page [Trouver votre zone](../config/map.md). Utilisez
   le même code en majuscules pour chaque courtier; l’aéroport le plus proche ne le détermine pas.
 
 ## Ce qui sera modifié

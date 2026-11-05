@@ -75,7 +75,7 @@ for (const locale of ["", "fr/"]) {
     await expect(page.locator(".mc-preset-note")).toContainText(locale ? "3 octets" : "3-byte");
     await page.goto(siteRoute(`/${locale}hardware/`));
     await expect(page.locator(".mc-guide-status")).toHaveCount(0);
-    // The setup tool's town step links to the region map.
+    // The setup tool's town step links to the zone finder.
     await openLink(page, `/${locale}config/?${PHONE_ROUTE}`, { to: "town" });
     const map = page.locator("[data-setup-map]");
     await expect(map).toBeVisible();

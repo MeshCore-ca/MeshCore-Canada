@@ -452,7 +452,7 @@ test("ambiguous and unknown towns", async ({ page }) => {
   await expect(page.locator("[data-setup-code]")).toBeVisible();
   await expect(nextButton(page)).toBeDisabled();
 
-  // The search and the region map disagree about the province: explain and let the person choose.
+  // The search and the zone map disagree about the province: explain and let the person choose.
   await searchTown(page, "Ottawa");
   await expect(step(page)).toContainText(T("town.mismatch", "en", { searched: "Québec", found: "Ontario" }));
   await expect(choices).toHaveCount(2);
@@ -1597,7 +1597,7 @@ test("searching understands French names, with or without accents or dashes", as
   await expect(found(page)).toHaveText(/^Île-du-Prince-Édouard \(yyg\), à environ \d[\d\s\u00a0\u202f]* km$/);
 });
 
-test("with no place to measure from, such as after a link from the region map, the nearest are measured from the middle of the region", async ({ page }) => {
+test("with no place to measure from, such as after a link from the zone finder, the nearest are measured from the middle of the region", async ({ page }) => {
   await openLink(page, `/config/?type=repeater&board=esp32&status=running&reflash=0&role=edge&name=Test_R1&tag=ytr&province=on`, { to: "neighbours" });
   const tags = await listed(page);
   expect(tags).toHaveLength(6);

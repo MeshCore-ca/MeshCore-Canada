@@ -161,8 +161,8 @@ test("repository stars and the human-review notice appear in both languages", as
 
 test("English and French homepages link directly to the zone finder", async ({ page }, testInfo) => {
   for (const [home, lang, linkName, destination, heading] of [
-    ["/", "en", "Find my region", "/config/map/", "Find your zone"],
-    ["/fr/", "fr", "Trouver ma région", "/fr/config/map/", "Trouver votre zone"]
+    ["/", "en", "Find my zone", "/config/map/", "Find your zone"],
+    ["/fr/", "fr", "Trouver ma zone", "/fr/config/map/", "Trouver votre zone"]
   ]) {
     await page.goto(siteRoute(home));
     const link = page.getByRole("link", { name: linkName, exact: true });

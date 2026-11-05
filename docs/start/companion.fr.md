@@ -108,7 +108,7 @@ d’écran utilisent `onqc`; tapez votre propre portée si vous êtes ailleurs.
 
     [![Settings avec onqc comme portée par défaut et le message Settings Saved](../assets/images/onqc-scopes/companion-06-saved.webp){ loading=lazy width="300" height="652" }](../assets/images/onqc-scopes/companion-06-saved.webp)
 
-Trouvez votre code de ville sur la [carte des régions IATA](../config/map.md). En Ontario et au Québec, utilisez aussi `onqc` pour le canal Public et votre code de ville, comme `yow`, pour les canaux de test : ouvrez le canal, touchez **⋮** et choisissez **Set Region Scope**. Réservez `can` et `na` à un usage futur.
+Trouvez votre code de ville sur la page [Trouver votre zone](../config/map.md). En Ontario et au Québec, utilisez aussi `onqc` pour le canal Public et votre code de ville, comme `yow`, pour les canaux de test : ouvrez le canal, touchez **⋮** et choisissez **Set Region Scope**. Réservez `can` et `na` à un usage futur.
 
 Les responsables de robots et de MeshMapper suivent les [consignes pour les robots et MeshMapper](../config/guide.md#bots-and-meshmapper).
 

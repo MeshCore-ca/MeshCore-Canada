@@ -176,7 +176,7 @@ test("every region's own centre resolves back to that region", () => {
 });
 
 test("a region's centre is where the map pin starts when only the region is known", () => {
-  // The boundary's own centre ([lon, lat]), as the region map uses it.
+  // The boundary's own centre ([lon, lat]), as the zone finder uses it.
   assert.deepEqual(place.centre("ytr", data), { lat: 44.157979, lon: -77.368694 });
   assert.deepEqual(place.centre("YTR", data), place.centre("ytr", data));
   // Every region the tool can pick has one, and it is inside that region.
@@ -435,7 +435,7 @@ test("callers cannot change the scopes the page loaded", () => {
 test("the catalogue no longer carries a second source for the Québec–New York scope", () => {
   assert.equal(catalog.policy.optionalNetworks["quebec-new-york"], undefined);
   assert.equal(catalog.externalRegionPaths["quebec-new-york"], undefined);
-  // Ontario–New York and the US networks stay in the catalogue: the region map and its validators still read them.
+  // Ontario–New York and the US networks stay in the catalogue: the setup tool and its validators still read them.
   assert.ok(catalog.externalRegionPaths["ontario-new-york"]);
   assert.ok(catalog.externalRegionPaths["western-new-york"]);
 });

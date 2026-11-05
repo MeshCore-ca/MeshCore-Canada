@@ -84,8 +84,8 @@ test("homepage is task-first and exposes the required decisions", () => {
   assert.match(homepage, /Set up your LoRa radio and join a Canadian mesh/);
   assert.match(homepage, /Start the guided setup\]\(start\/index\.md\)/);
   assert.match(homepage, /Find a community\]\(provinces\/index\.md\)/);
-  assert.match(homepage, /Find my region\]\(config\/map\.md\)/);
-  assert.match(frenchHomepage, /Trouver ma région\]\(config\/map\.md\)/);
+  assert.match(homepage, /Find my zone\]\(config\/map\.md\)/);
+  assert.match(frenchHomepage, /Trouver ma zone\]\(config\/map\.md\)/);
   assert.doesNotMatch(homepage, /mc-place-search|## Find your region|## Use network tools/);
   assert.doesNotMatch(frenchHomepage, /mc-place-search|## Trouver votre région|## Utiliser les outils réseau/);
   assert.match(homepage, /Set up an observer\]\(start\/observer\.md\)\{ \.mc-observer-link \}/);

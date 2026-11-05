@@ -54,13 +54,13 @@ Welcome! We're improving this site. Found something unclear or outdated?
 
     [:octicons-arrow-right-24: Find a community](provinces/index.md)
 
--   :material-map-search:{ .lg .middle } **Find your MeshCore region**
+-   :material-map-search:{ .lg .middle } **Find your zone**
 
     ---
 
-    See which Canadian MeshCore region covers your location.
+    See which MeshCore zone covers your location.
 
-    [:octicons-arrow-right-24: Find my region](config/map.md)
+    [:octicons-arrow-right-24: Find my zone](config/map.md)
 
 </div>
 

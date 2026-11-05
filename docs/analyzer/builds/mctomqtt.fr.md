@@ -86,7 +86,7 @@ Conservez le fichier pour le reste de la configuration.
 
 ### 2. Écrire sans redémarrer
 
-Remplacez `YOW` par votre code de la [carte des régions IATA](../../config/map.md) :
+Remplacez `YOW` par votre code sur la page [Trouver votre zone](../../config/map.md) :
 
 ```bash
 bash "$workdir/add-meshcore-ca-broker.sh" --device serial-host --iata YOW --no-restart

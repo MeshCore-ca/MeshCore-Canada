@@ -25,7 +25,7 @@ export const PLACES = {
   "Saint-Jean": [row("Saint-Jean-sur-Richelieu", "Québec", 45.30713, -73.26259)],
   "Saint John": [row("Saint John", "New Brunswick", 45.27271, -66.06766)],
   "St. John's": [row("St. John's", "Newfoundland and Labrador", 47.56494, -52.70931)],
-  // The search says Québec; the region map puts this spot in Ontario.
+  // The search says Québec; the zone map puts this spot in Ontario.
   "Ottawa": [row("Ottawa", "Québec", 45.4215, -75.6972)],
   "150 Mile House": [row("150 Mile House", "British Columbia", 52.1055556, -121.9277778, "Community")],
   "Picton": [row("Picton", "Ontario", 44.0061111, -77.1436111, "Community")],
@@ -127,7 +127,7 @@ export async function town(page, query, tag) {
   await next(page);
 }
 // The map location step, after the name. A pin from the town step lets Next go on as it is. With only a
-// region (a region code, or a link from the region map) the pin waits in the region's middle and Next waits
+// region (a region code, or a link from the zone finder) the pin waits in the region's middle and Next waits
 // for the person, so journeys that aren't about the map tick Disable location. That leaves the location
 // lines out, as such a link always did.
 export const pinBox = (page, axis) => page.locator(`[data-setup-pin="${axis}"]`);

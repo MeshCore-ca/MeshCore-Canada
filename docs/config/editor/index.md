@@ -25,7 +25,7 @@ For the [MeshCore Canada starter regions](../guide.md#starter-regions),
 separately and do not change MeshMapper's published zones.
 
 [Open MeshMapper](https://meshmapper.net/){ .md-button .md-button--primary }
-[Find your IATA zone](../map.md){ .md-button }
+[Find your zone](../map.md){ .md-button }
 
 ## Saved drafts
 

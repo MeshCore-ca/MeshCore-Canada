@@ -26,7 +26,7 @@ Pour les [régions initiales de MeshCore Canada](../guide.md#starter-regions),
 identifiés séparément et ne modifient pas les zones publiées par MeshMapper.
 
 [Ouvrir MeshMapper](https://meshmapper.net/){ .md-button .md-button--primary }
-[Trouver votre zone IATA](../map.md){ .md-button }
+[Trouver votre zone](../map.md){ .md-button }
 
 ## Brouillons enregistrés
 
