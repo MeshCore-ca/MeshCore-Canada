@@ -523,6 +523,11 @@
   background: var(--scp-ok-bg);
 }
 
+/* "View on map", tucked under the region card it belongs to. */
+.md-typeset .setup-tool .setup-view-map {
+  margin: -0.4rem 0 0.9rem;
+}
+
 .setup-region__tag {
   flex: none;
   color: var(--mc-color-success);

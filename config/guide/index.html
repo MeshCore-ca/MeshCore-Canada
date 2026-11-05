@@ -53,7 +53,7 @@
     
       <link rel="stylesheet" href="../../assets/styles/tokens.css?v=20260926-1">
     
-      <link rel="stylesheet" href="../../assets/styles/base.css?v=20261029-1">
+      <link rel="stylesheet" href="../../assets/styles/base.css?v=20261105-1">
     
       <link rel="stylesheet" href="../../assets/styles/shell.css?v=20260821-1">
     
@@ -91,6 +91,9 @@
         }
       }
     </script>
+    
+    
+    
     
       <link rel="stylesheet" href="../../assets/setup/scope-demo.css?v=20261102-1">
     
@@ -2415,7 +2418,7 @@
   <span class="md-ellipsis">
     
   
-    Find your region
+    Find your zone
   
 
     
@@ -4411,8 +4414,8 @@ nearest airport code: Belleville is in <code>ytr</code>, Quinte West. A repeater
 decides which messages it passes on.</p>
 <h3 id="which-region-is-mine">Which region is mine?<a class="headerlink" href="#which-region-is-mine" title="Permanent link">&para;</a></h3>
 <p>The <a href="../">setup tool</a> finds it from the town, street address or
-coordinates where the repeater will be, and the <a href="../map/">region map</a> shows them
-all. Coordinates aren't sent to any search; a town or street address is looked
+coordinates where the repeater will be, and the <a href="../map/">Find your zone</a> page
+shows them all. Coordinates aren't sent to any search; a town or street address is looked
 up with the Government of Canada's place search (geo.ca).</p>
 <ul>
 <li><strong>Near a provincial border, pick the side it's really on.</strong> The <code>yow</code> region
@@ -4421,8 +4424,8 @@ up with the Government of Canada's place search (geo.ca).</p>
 <li><strong>Towns in the same region share its code.</strong> Ottawa and Gatineau are both
   <code>yow</code>.</li>
 <li><strong>No zone for your area?</strong> <a href="https://meshmapper.net/">MeshMapper</a>, the
-  community map that draws each region's area, doesn't cover everywhere. The
-  region map then shows a MeshCore Canada <a href="#starter-regions">starter region</a>
+  community map that draws each region's area, doesn't cover everywhere. The Find
+  your zone page then shows a MeshCore Canada <a href="#starter-regions">starter region</a>
   instead.</li>
 <li><strong>Write codes in lowercase.</strong> You can search for <code>YTR</code>, but on the air <code>ytr</code>
   and <code>YTR</code> are two different labels.</li>
@@ -4581,8 +4584,8 @@ you could put on it.</p>
   use its own airport code and still keep its province and <code>onqc</code>.</li>
 </ul>
 <p>The code names the area, not the airport. The codes come from IATA, the airline
-industry group that assigns airport codes, which is why the map calls these
-IATA regions.</p>
+industry group that assigns airport codes, which is why they are called IATA
+codes.</p>
 <h3 id="reading-a-region-def-line">Reading a <code>region def</code> line<a class="headerlink" href="#reading-a-region-def-line" title="Permanent link">&para;</a></h3>
 <p>You don't need this to set up a repeater: the tool gives you the exact line. It
 helps when you want to read one.</p>
@@ -4984,8 +4987,8 @@ that the repeaters around you have been set up with it.</p>
 <h2 id="starter-regions">Starter regions<a class="headerlink" href="#starter-regions" title="Permanent link">&para;</a></h2>
 <p>Where MeshMapper has no zone yet, MeshCore Canada fills the gap with a starter
 region. Starter regions use real airport codes and work like any other region,
-but they're <strong>not MeshMapper zones, and they don't claim radio coverage</strong>. The
-map draws them with dashed gold outlines. Check with local operators before
+but they're <strong>not MeshMapper zones, and they don't claim radio coverage</strong>. The Find your
+zone page draws them with dashed grey outlines. Check with local operators before
 relying on one.</p>
 <table>
 <thead>
@@ -5081,7 +5084,7 @@ gives the commands.</p>
 <strong>planning extension</strong>. For example, the Wingham-area point <code>43.8678, -81.2619</code>
 is in <code>ykf</code>, not Sudbury's <code>ysb</code>. Goderich is in <code>yxu</code>, and Kincardine in <code>ylk</code>.</p>
 <p>Extensions are separate dashed areas on the map. They don't change MeshMapper's
-zones, and the map says which kind of area your point is in. Like starter
+zones, and the Find your zone page says which kind of area your point is in. Like starter
 regions, they need local review and don't show measured radio coverage.</p>
 <p>Starter regions and extensions are broad starting points, not a promise that
 distant towns can hear each other. MeshMapper's zones always come first: ask in
@@ -5092,8 +5095,7 @@ change to a starter region or an extension,
 Labrador is census divisions 10 and 11; Newfoundland is the rest of the province.</p>
 <h2 id="sources">Sources<a class="headerlink" href="#sources" title="Permanent link">&para;</a></h2>
 <ul>
-<li><a href="https://meshmapper.net/">MeshMapper</a>, and the snapshot details in the map's
-  <strong>Region data</strong> view</li>
+<li><a href="https://meshmapper.net/">MeshMapper</a></li>
 <li><a href="https://docs.meshcore.io/cli_commands/">MeshCore command reference</a></li>
 <li><a href="../../assets/regions/NOTICE.txt">Data and licence notice</a></li>
 </ul>
@@ -5213,7 +5215,7 @@ Labrador is census divisions 10 and 11; Newfoundland is the rest of the province
   
       <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
-        <script src="../../assets/javascripts/region-profile.js?v=20261102-5"></script>
+        <script src="../../assets/javascripts/region-profile.js?v=20261105-2"></script>
       
         <script src="../../assets/javascripts/i18n-runtime.js?v=20260829-1"></script>
       

@@ -51,7 +51,7 @@
     
       <link rel="stylesheet" href="../assets/styles/tokens.css?v=20260926-1">
     
-      <link rel="stylesheet" href="../assets/styles/base.css?v=20261029-1">
+      <link rel="stylesheet" href="../assets/styles/base.css?v=20261105-1">
     
       <link rel="stylesheet" href="../assets/styles/shell.css?v=20260821-1">
     
@@ -89,6 +89,9 @@
         }
       }
     </script>
+    
+    
+    
     
   
 
@@ -2406,7 +2409,7 @@
   <span class="md-ellipsis">
     
   
-    Find your region
+    Find your zone
   
 
     
@@ -3733,9 +3736,9 @@
 <td>Beacon at dev.meshcore.ca</td>
 </tr>
 <tr>
-<td>Search for a place in the region tools</td>
-<td>The place, airport code, or postal code you enter</td>
-<td>IATA codes are checked locally. Place names go to the Government of Canada’s place search (geo.ca); postal codes use OpenStreetMap or geocoder.ca</td>
+<td>Search for a town or street address on <a href="../config/map/">Find your zone</a></td>
+<td>The town or address you type. Coordinates and zone codes you type stay in your browser</td>
+<td>The Government of Canada’s place search (geo.ca): <code>geolocator.api.geo.ca</code></td>
 </tr>
 <tr>
 <td>Search for a town or street address in the <a href="../config/">setup tool</a></td>
@@ -3743,7 +3746,7 @@
 <td>The Government of Canada’s place search (geo.ca): <code>geolocator.api.geo.ca</code></td>
 </tr>
 <tr>
-<td>Open the interactive region map</td>
+<td>Open the map on <a href="../config/map/">Find your zone</a></td>
 <td>Your IP address and the visible map area</td>
 <td>OpenStreetMap</td>
 </tr>
@@ -3804,15 +3807,15 @@ fill in yourself.</p>
   them up within 10 minutes, they’re ignored, and they go when you close the
   tab.</li>
 <li><strong>Region files.</strong> MeshMapper isn’t contacted unless you click a link to it.
-  The setup tool, <a href="../config/guide/">How repeaters work</a> and the region map read
-  region files published on this site.</li>
+  The setup tool, <a href="../config/guide/">How repeaters work</a> and
+  <a href="../config/map/">Find your zone</a> read region files published on this site.</li>
 </ul>
 <h2 id="saved-on-your-device">Saved on your device<a class="headerlink" href="#saved-on-your-device" title="Permanent link">&para;</a></h2>
-<p>Switching language on the region map carries your selection in the link to the
-other page. This can include entered coordinates, a location label, city and
-province scopes, and radio-profile choices. These links may appear in browser
-history and server access logs. Do not share a link containing a private
-location.</p>
+<p>The <a href="../config/map/">Find your zone</a> page puts only the zone code and province
+you picked in its web address (URL), for example <code>?tag=ytr&amp;province=on</code>, so you
+can share or reload the page. It never puts a town, a street address, or
+coordinates there, and switching language carries nothing across. Links can
+appear in browser history and server access logs.</p>
 <p>The retired region editor can download drafts saved in this browser. Downloading
 does not upload or delete them; old drafts are not approved MeshMapper boundaries.</p>
 <p>Setup checklists, idea drafts, and the last Beacon region code selected in the
@@ -3947,7 +3950,7 @@ operators and privacy policies.</p>
   
       <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
       
-        <script src="../assets/javascripts/region-profile.js?v=20261102-5"></script>
+        <script src="../assets/javascripts/region-profile.js?v=20261105-2"></script>
       
         <script src="../assets/javascripts/i18n-runtime.js?v=20260829-1"></script>
       

@@ -1,0 +1,423 @@
+/* The "Find your zone" page (/config/map/). Text and controls use the site's tokens, so light and dark keep
+   their contrast. The zone colours are the map's own (STYLES in zone-map.js): the map's tiles are light in
+   both themes, so each legend swatch sits on a light, map-coloured chip and looks as it does on the map. */
+
+.md-typeset [data-zone-map] {
+  --zm-you-line: #1f5fd1;
+  --zm-you-fill: #4f8cff;
+  --zm-mesh-line: #b87800;
+  --zm-mesh-fill: #f2b84b;
+  --zm-placeholder-line: #5f6b7a;
+  --zm-placeholder-fill: #8d97a6;
+  --zm-map-height: clamp(18rem, 55vh, 35rem);
+  margin: 1rem 0 1.5rem;
+}
+
+/* Keep room for the finder while it loads, without leaving a gap for readers with no JavaScript. */
+@media (scripting: enabled) {
+  .md-typeset [data-zone-map]:empty {
+    min-height: calc(var(--zm-map-height) + 12rem);
+  }
+}
+
+/* The search */
+.md-typeset .zm-search__label {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-weight: 650;
+}
+
+.md-typeset .zm-search__row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.md-typeset .zm-search__input {
+  flex: 1;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 0.5rem 0.8rem;
+  border: 1.5px solid var(--mc-color-border);
+  border-radius: var(--mc-radius-md);
+  color: var(--mc-color-text);
+  background: var(--mc-color-surface);
+  font: inherit;
+}
+
+.md-typeset .zm-search__input::placeholder {
+  color: var(--mc-color-text-muted);
+  opacity: 1;
+}
+
+.md-typeset .zm-search__button {
+  flex: none;
+  margin: 0;
+  cursor: pointer;
+}
+
+.md-typeset .zm-search__input:focus-visible,
+.md-typeset .zm-search__button:focus-visible,
+.md-typeset .zm-choice:focus-visible,
+.md-typeset .zm-browse__zone:focus-visible,
+.md-typeset .zm-fold > summary:focus-visible,
+.md-typeset .zm-card__title:focus-visible {
+  outline: 3px solid var(--mc-color-focus);
+  outline-offset: 2px;
+}
+
+.md-typeset .zm-card__title:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.md-typeset .zm-hint {
+  margin: 0.4rem 0 0;
+  color: var(--mc-color-text-muted);
+}
+
+.md-typeset .zm-status {
+  min-height: 1.6em;
+  margin: 0.25rem 0 0.4rem;
+  font-weight: 600;
+}
+
+/* Which one? */
+.md-typeset .zm-choices {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  gap: 0.5rem;
+  margin: 0 0 0.75rem;
+}
+
+.md-typeset .zm-choices:empty {
+  display: none;
+}
+
+.md-typeset .zm-choice {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.1rem;
+  min-width: 0;
+  padding: 0.55rem 0.85rem;
+  border: 1.5px solid var(--mc-color-border);
+  border-radius: var(--mc-radius-md);
+  color: var(--mc-color-text);
+  background: var(--mc-color-surface);
+  text-align: left;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+
+.md-typeset .zm-choice:hover {
+  border-color: var(--mc-color-action);
+}
+
+.md-typeset .zm-choice__title {
+  font-weight: 650;
+}
+
+.md-typeset .zm-choice__detail {
+  color: var(--mc-color-text-muted);
+  font-size: 0.85em;
+}
+
+/* The map */
+.md-typeset .zm-map {
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+  border: 1px solid var(--mc-color-border);
+  border-radius: var(--mc-radius-md);
+  background: var(--mc-color-surface-raised);
+  scroll-margin-top: 4rem;
+}
+
+.md-typeset .zm-map__canvas {
+  height: var(--zm-map-height);
+}
+
+.md-typeset .zm-map .leaflet-container {
+  font: inherit;
+  background: var(--mc-color-surface-raised);
+}
+
+/* The theme rounds images; square tiles meet without gaps at their corners. */
+.md-typeset .zm-map img {
+  border-radius: 0;
+}
+
+.md-typeset .zm-map .leaflet-bar a,
+.md-typeset .zm-map .leaflet-bar a:hover {
+  width: 2.25rem;
+  height: 2.25rem;
+  line-height: 2.25rem;
+  border-color: var(--mc-color-border);
+  color: var(--mc-color-text);
+  background: var(--mc-color-surface);
+}
+
+.md-typeset .zm-map .leaflet-control-attribution {
+  color: var(--mc-color-text);
+  background: var(--mc-color-surface);
+}
+
+.md-typeset .zm-map .leaflet-control-attribution a {
+  color: var(--md-typeset-a-color);
+}
+
+.md-typeset .zm-map .leaflet-bar a:focus-visible,
+.md-typeset .zm-map .leaflet-control-attribution a:focus-visible {
+  outline: 3px solid var(--mc-color-focus);
+  outline-offset: -3px;
+}
+
+/* Zone codes, once zoomed in. Dark on a white halo, which reads on the light tiles. */
+.md-typeset .zm-label {
+  pointer-events: none;
+}
+
+.md-typeset .zm-label span {
+  display: inline-block;
+  transform: translate(-50%, -50%);
+  color: #142036;
+  font: 700 0.7rem/1 var(--mc-font-text);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  text-shadow: 0 0 3px #ffffff, 0 0 3px #ffffff, 0 0 3px #ffffff;
+  white-space: nowrap;
+}
+
+.md-typeset .zm-map--far .zm-label {
+  display: none;
+}
+
+.md-typeset .zm-map-failed {
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--mc-color-border);
+  border-radius: var(--mc-radius-md);
+  background: var(--mc-color-surface);
+}
+
+/* The legend, always under the map */
+.md-typeset ul.zm-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 1.25rem;
+  margin: 0.6rem 0.1rem 1rem;
+  padding: 0;
+  list-style: none;
+  color: var(--mc-color-text-muted);
+  font-size: 0.9em;
+}
+
+.md-typeset ul.zm-legend > li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+}
+
+.md-typeset .zm-swatch {
+  --zm-line: var(--zm-placeholder-line);
+  --zm-fill: transparent;
+  flex: none;
+  box-sizing: border-box;
+  width: 1.5rem;
+  height: 1rem;
+  border: 2px solid var(--zm-line);
+  border-radius: 3px;
+  background: linear-gradient(var(--zm-fill), var(--zm-fill)), #f2efe9;
+}
+
+.md-typeset .zm-swatch--you {
+  --zm-line: var(--zm-you-line);
+  --zm-fill: rgb(79 140 255 / 38%);
+  border-width: 3px;
+}
+
+.md-typeset .zm-swatch--mesh {
+  --zm-line: var(--zm-mesh-line);
+  --zm-fill: rgb(242 184 75 / 16%);
+}
+
+.md-typeset .zm-swatch--placeholder {
+  --zm-line: var(--zm-placeholder-line);
+  --zm-fill: rgb(141 151 166 / 6%);
+  border-style: dashed;
+}
+
+/* The card */
+.md-typeset .zm-card {
+  margin: 0 0 1rem;
+  padding: 1rem 1.1rem;
+  border: 1px solid var(--mc-color-border);
+  border-radius: var(--mc-radius-lg);
+  color: var(--mc-color-text);
+  background: var(--mc-color-surface);
+  overflow-wrap: anywhere;
+  scroll-margin-top: 4rem;
+}
+
+.md-typeset .zm-card__title {
+  margin: 0;
+  font-size: 1.4em;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.md-typeset .zm-card__where {
+  margin: 0.15rem 0 0.75rem;
+  color: var(--mc-color-text-muted);
+}
+
+.md-typeset .zm-card__badge {
+  margin: 0 0 0.35rem;
+}
+
+.md-typeset .zm-badge {
+  display: inline-block;
+  padding: 0.15rem 0.65rem;
+  border: 1.5px solid var(--zm-badge-line);
+  border-radius: 999px;
+  color: var(--mc-color-text);
+  background: var(--zm-badge-fill);
+  font-size: 0.85em;
+  font-weight: 700;
+}
+
+.md-typeset .zm-badge--mesh {
+  --zm-badge-line: var(--zm-mesh-line);
+  --zm-badge-fill: rgb(242 184 75 / 22%);
+}
+
+.md-typeset .zm-badge--placeholder {
+  --zm-badge-line: var(--zm-placeholder-line);
+  --zm-badge-fill: rgb(141 151 166 / 18%);
+  border-style: dashed;
+}
+
+.md-typeset .zm-card__line {
+  margin: 0 0 0.9rem;
+}
+
+.md-typeset .zm-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin: 0 0 0.8rem;
+}
+
+.md-typeset .zm-card__actions .md-button {
+  margin: 0;
+}
+
+.md-typeset .zm-card__tell {
+  margin: 0 0 0.6rem;
+}
+
+/* The two folds: plain disclosure lines, not the theme's note boxes. */
+.md-typeset details.zm-fold {
+  margin: 0.5rem 0 0;
+  padding: 0 0.9rem;
+  border: 1px solid var(--mc-color-border);
+  border-radius: var(--mc-radius-md);
+  color: var(--mc-color-text);
+  background: var(--mc-color-surface);
+  box-shadow: none;
+  font-size: inherit;
+}
+
+.md-typeset details.zm-fold > summary {
+  display: flex;
+  align-items: center;
+  min-height: var(--mc-target-size);
+  box-sizing: border-box;
+  margin: 0 -0.9rem;
+  padding: 0.45rem 2.4rem 0.45rem 0.9rem;
+  border-radius: var(--mc-radius-md);
+  color: var(--mc-color-text);
+  background: transparent;
+  font-weight: 650;
+  cursor: pointer;
+}
+
+.md-typeset details.zm-fold > summary::before {
+  display: none;
+}
+
+.md-typeset details.zm-fold > summary::after {
+  top: 50%;
+  margin-top: -0.5rem;
+  background-color: currentColor;
+}
+
+.md-typeset details.zm-fold > ul,
+.md-typeset details.zm-fold > div {
+  margin: 0 0 0.8rem;
+}
+
+.md-typeset .zm-card details.zm-fold {
+  background: var(--mc-color-surface-raised);
+}
+
+.md-typeset .zm-card details.zm-fold > ul {
+  padding-left: 1.2rem;
+}
+
+.md-typeset .zm-card details.zm-fold li {
+  margin: 0.3rem 0;
+}
+
+/* Browse by province or territory */
+.md-typeset .zm-browse {
+  margin-top: 1rem;
+}
+
+.md-typeset ul.zm-browse__provinces,
+.md-typeset ul.zm-browse__zones {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.md-typeset ul.zm-browse__provinces > li.zm-browse__province {
+  margin: 0 0 0.75rem;
+}
+
+.md-typeset .zm-browse__province > strong {
+  display: block;
+  margin-bottom: 0.3rem;
+}
+
+.md-typeset ul.zm-browse__zones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.md-typeset ul.zm-browse__zones > li {
+  margin: 0;
+}
+
+.md-typeset .zm-browse__zone {
+  min-height: 2.25rem;
+  padding: 0.3rem 0.75rem;
+  border: 1px solid var(--mc-color-border);
+  border-radius: var(--mc-radius-sm);
+  color: var(--mc-color-action);
+  background: var(--mc-color-bg);
+  font-size: 0.92em;
+  cursor: pointer;
+}
+
+.md-typeset .zm-browse__zone:hover {
+  border-color: var(--mc-color-action);
+  color: var(--mc-color-action-hover);
+}
+
+@media (forced-colors: active) {
+  .md-typeset .zm-swatch,
+  .md-typeset .zm-badge {
+    forced-color-adjust: none;
+  }
+}

@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Trouvez une zone MeshMapper ou une région initiale de MeshCore Canada par lieu, code IATA ou carte.">
+        <meta name="description" content="Découvrez dans quelle zone (code IATA) se trouve un endroit, et s’il s’agit d’une zone MeshMapper ou d’une zone provisoire.">
       
       
       
@@ -31,7 +31,7 @@
     
     
       
-        <title>Trouver votre région IATA - MeshCore Canada</title>
+        <title>Trouver votre zone - MeshCore Canada</title>
       
     
     
@@ -53,7 +53,7 @@
     
       <link rel="stylesheet" href="../../../assets/styles/tokens.css?v=20260926-1">
     
-      <link rel="stylesheet" href="../../../assets/styles/base.css?v=20261029-1">
+      <link rel="stylesheet" href="../../../assets/styles/base.css?v=20261105-1">
     
       <link rel="stylesheet" href="../../../assets/styles/shell.css?v=20260821-1">
     
@@ -72,8 +72,8 @@
   
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="MeshCore Canada">
-    <meta property="og:title" content="Trouver votre région IATA">
-    <meta property="og:description" content="Trouvez une zone MeshMapper ou une région initiale de MeshCore Canada par lieu, code IATA ou carte.">
+    <meta property="og:title" content="Trouver votre zone">
+    <meta property="og:description" content="Découvrez dans quelle zone (code IATA) se trouve un endroit, et s’il s’agit d’une zone MeshMapper ou d’une zone provisoire.">
     <meta property="og:url" content="https://meshcore.ca/fr/config/map/">
     <meta property="og:image" content="https://meshcore.ca/assets/MeshCore-Canada-Logo.png">
     <meta name="twitter:card" content="summary">
@@ -81,8 +81,8 @@
       {
         "@context": "https://schema.org",
         "@type": "WebPage",
-        "name": "Trouver votre r\u00e9gion IATA",
-        "description": "Trouvez une zone MeshMapper ou une r\u00e9gion initiale de MeshCore Canada par lieu, code IATA ou carte.",
+        "name": "Trouver votre zone",
+        "description": "D\u00e9couvrez dans quelle zone (code IATA) se trouve un endroit, et s\u2019il s\u2019agit d\u2019une zone MeshMapper ou d\u2019une zone provisoire.",
         "url": "https://meshcore.ca/fr/config/map/",
         "isPartOf": {
           "@type": "WebSite",
@@ -92,7 +92,16 @@
       }
     </script>
     
-      <link rel="stylesheet" href="../../../assets/regions/regions.css?v=20261102-4">
+    
+      <link rel="preconnect" href="https://tile.openstreetmap.org">
+    
+    
+      <link rel="preload" href="../../../assets/regions/vendor/leaflet/leaflet.js" as="script">
+    
+      <link rel="preload" href="../../../assets/regions/vendor/leaflet/leaflet.css" as="style">
+    
+    
+      <link rel="stylesheet" href="../../../assets/setup/zone-map.css?v=20261105-2">
     
   
 
@@ -115,7 +124,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#trouver-votre-region-iata" class="md-skip">
+        <a href="#trouver-votre-zone" class="md-skip">
           Aller au contenu
         </a>
       
@@ -161,7 +170,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Trouver votre région IATA
+              Trouver votre zone
             
           </span>
         </div>
@@ -2426,7 +2435,7 @@
   <span class="md-ellipsis">
     
   
-    Trouver votre région
+    Trouver votre zone
   
 
     
@@ -3498,7 +3507,7 @@
 
 
   
-  <h1 id="trouver-votre-region-iata">Trouver votre région IATA<a class="headerlink" href="#trouver-votre-region-iata" title="Permanent link">&para;</a></h1>
+  <h1 id="trouver-votre-zone">Trouver votre zone<a class="headerlink" href="#trouver-votre-zone" title="Permanent link">&para;</a></h1>
   
   
   
@@ -3509,14 +3518,11 @@
   
 
   
-<p>Recherchez un lieu ou choisissez une région IATA. Les traits pleins indiquent les
-limites publiées par MeshMapper. Les pointillés indiquent les <a href="../guide/#starter-regions">régions initiales et extensions proposées</a>
-par MeshCore Canada. Ces limites ne représentent pas la couverture radio mesurée.</p>
-<div data-mcc-regions="map" data-mcc-root="../"></div>
+<p>Découvrez dans quelle zone (code IATA) se trouve un endroit, et s’il s’agit d’une zone MeshMapper ou d’une zone provisoire.</p>
+<div data-zone-map></div>
 
-<noscript>JavaScript est requis. [Comprendre les répéteurs](guide.md) explique les portées et les régions.</noscript>
-
-<p><small><a href="../guide/">Comprendre les répéteurs</a> · <a href="../../../assets/regions/NOTICE.txt">Sources de données</a></small></p>
+<noscript>Cette page a besoin de JavaScript. <a href="../guide/#scopes-and-regions">Comprendre les répéteurs</a> explique les zones.</noscript>
+<p><small><a href="../guide/#scopes-and-regions">Comprendre les zones</a> · <a download="iata-boundaries.geojson" href="../../../assets/regions/iata-boundaries.geojson">Télécharger les tracés des zones</a> · <a href="../../../assets/regions/NOTICE.txt">Sources de données</a></small></p>
 
 
 
@@ -3635,7 +3641,7 @@ par MeshCore Canada. Ces limites ne représentent pas la couverture radio mesur�
   
       <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
-        <script src="../../../assets/javascripts/region-profile.js?v=20261102-5"></script>
+        <script src="../../../assets/javascripts/region-profile.js?v=20261105-2"></script>
       
         <script src="../../../assets/javascripts/i18n-runtime.js?v=20260829-1"></script>
       
@@ -3646,15 +3652,15 @@ par MeshCore Canada. Ces limites ne représentent pas la couverture radio mesur�
     
   
     
-      <script src="../../../assets/javascripts/place-search.js?v=20261102-9" defer></script>
+      <script src="../../../assets/regions/modules/iata-scopes.js?v=20261105-1" defer></script>
     
-      <script src="../../../assets/javascripts/radio-profiles.js?v=20260904-1" defer></script>
+      <script src="../../../assets/javascripts/place-search.js?v=20261105-1" defer></script>
     
-      <script src="../../../assets/regions/modules/configurator-support.js?v=20260926-1" defer></script>
+      <script src="../../../assets/setup/setup-flow.js?v=20261105-1" defer></script>
     
-      <script src="../../../assets/regions/modules/iata-scopes.js?v=20261013-1" defer></script>
+      <script src="../../../assets/setup/setup-place.js?v=20261105-1" defer></script>
     
-      <script src="../../../assets/regions/regions.js?v=20261102-5" defer></script>
+      <script src="../../../assets/setup/zone-map.js?v=20261105-3" defer></script>
     
     
   

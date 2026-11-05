@@ -53,7 +53,7 @@
     
       <link rel="stylesheet" href="../../../assets/styles/tokens.css?v=20260926-1">
     
-      <link rel="stylesheet" href="../../../assets/styles/base.css?v=20261029-1">
+      <link rel="stylesheet" href="../../../assets/styles/base.css?v=20261105-1">
     
       <link rel="stylesheet" href="../../../assets/styles/shell.css?v=20260821-1">
     
@@ -91,6 +91,9 @@
         }
       }
     </script>
+    
+    
+    
     
       <link rel="stylesheet" href="../../../assets/setup/scope-demo.css?v=20261102-1">
     
@@ -2415,7 +2418,7 @@
   <span class="md-ellipsis">
     
   
-    Trouver votre région
+    Trouver votre zone
   
 
     
@@ -4416,8 +4419,8 @@ le nom du code d’aéroport le plus proche : Belleville est dans <code>ytr</cod
 West. La région d’un répéteur décide quels messages il relaie.</p>
 <h3 id="quelle-est-ma-region">Quelle est ma région?<a class="headerlink" href="#quelle-est-ma-region" title="Permanent link">&para;</a></h3>
 <p>L’<a href="../">outil de configuration</a> la trouve à partir de la ville, de
-l’adresse ou des coordonnées où sera le répéteur, et la
-<a href="../map/">carte des régions</a> les montre toutes. Les coordonnées ne sont envoyées
+l’adresse ou des coordonnées où sera le répéteur, et la page
+<a href="../map/">Trouver votre zone</a> les montre toutes. Les coordonnées ne sont envoyées
 à aucune recherche; une ville ou une adresse est cherchée avec l’outil de
 recherche de lieux du gouvernement du Canada (geo.ca).</p>
 <ul>
@@ -4429,7 +4432,7 @@ recherche de lieux du gouvernement du Canada (geo.ca).</p>
   toutes deux dans <code>yow</code>.</li>
 <li><strong>Aucune zone pour votre secteur?</strong> <a href="https://meshmapper.net/">MeshMapper</a>,
   la carte communautaire qui dessine le secteur de chaque région, ne couvre pas
-  tout. La carte des régions montre alors plutôt une
+  tout. La page Trouver votre zone montre alors plutôt une
   <a href="#starter-regions">région initiale</a> de MeshCore Canada.</li>
 <li><strong>Écrivez les codes en minuscules.</strong> Vous pouvez chercher <code>YTR</code>, mais sur les
   ondes, <code>ytr</code> et <code>YTR</code> sont deux étiquettes différentes.</li>
@@ -4605,7 +4608,7 @@ l’étiquette qu’on y met.</p>
 </ul>
 <p>Le code désigne le secteur, pas l’aéroport. Les codes viennent de l’IATA,
 l’association du transport aérien qui attribue les codes d’aéroport. C’est
-pourquoi la carte parle de régions IATA.</p>
+pourquoi on parle de codes IATA.</p>
 <h3 id="lire-une-ligne-region-def">Lire une ligne <code>region def</code><a class="headerlink" href="#lire-une-ligne-region-def" title="Permanent link">&para;</a></h3>
 <p>Pas besoin de cette section pour configurer un répéteur : l’outil donne la ligne
 exacte. Elle aide quand vous voulez en lire une.</p>
@@ -5037,8 +5040,8 @@ vérifiez donc que les répéteurs autour de vous ont été configurés avec ell
 <p>Là où MeshMapper n’a pas encore de zone, MeshCore Canada comble le vide avec une
 région initiale. Les régions initiales utilisent de vrais codes d’aéroport et
 fonctionnent comme les autres régions, mais <strong>ce ne sont pas des zones
-MeshMapper, et elles ne garantissent aucune couverture radio</strong>. La carte les
-trace avec des contours dorés en pointillé. Vérifiez auprès des opérateurs de
+MeshMapper, et elles ne garantissent aucune couverture radio</strong>. La page Trouver votre zone les
+trace avec des contours gris en pointillé. Vérifiez auprès des opérateurs de
 votre secteur avant de vous y fier.</p>
 <table>
 <thead>
@@ -5135,7 +5138,7 @@ L’<a href="../">outil de configuration</a> donne les commandes.</p>
 Wingham est dans <code>ykf</code>, pas dans <code>ysb</code> (Sudbury). Goderich est dans <code>yxu</code>, et
 Kincardine dans <code>ylk</code>.</p>
 <p>Les extensions sont des surfaces distinctes en pointillé sur la carte. Elles ne
-changent pas les zones de MeshMapper, et la carte indique quel genre de surface
+changent pas les zones de MeshMapper, et la page Trouver votre zone indique quel genre de surface
 contient votre point. Comme les régions initiales, elles doivent être revues
 localement et ne représentent pas la couverture radio mesurée.</p>
 <p>Les régions initiales et les extensions sont de grands points de départ, pas la
@@ -5148,7 +5151,7 @@ Statistique Canada. Le Labrador correspond aux divisions de recensement 10 et
 11; Terre-Neuve couvre le reste de la province.</p>
 <h2 id="sources">Sources<a class="headerlink" href="#sources" title="Permanent link">&para;</a></h2>
 <ul>
-<li><a href="https://meshmapper.net/">MeshMapper</a> et l’onglet <strong>Données régionales</strong> de la carte</li>
+<li><a href="https://meshmapper.net/">MeshMapper</a></li>
 <li><a href="https://docs.meshcore.io/cli_commands/">Référence des commandes MeshCore (en anglais)</a></li>
 <li><a href="../../../assets/regions/NOTICE.txt">Sources et licences</a></li>
 </ul>
@@ -5268,7 +5271,7 @@ Statistique Canada. Le Labrador correspond aux divisions de recensement 10 et
   
       <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
-        <script src="../../../assets/javascripts/region-profile.js?v=20261102-5"></script>
+        <script src="../../../assets/javascripts/region-profile.js?v=20261105-2"></script>
       
         <script src="../../../assets/javascripts/i18n-runtime.js?v=20260829-1"></script>
       

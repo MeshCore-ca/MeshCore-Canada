@@ -51,7 +51,7 @@
     
       <link rel="stylesheet" href="../../assets/styles/tokens.css?v=20260926-1">
     
-      <link rel="stylesheet" href="../../assets/styles/base.css?v=20261029-1">
+      <link rel="stylesheet" href="../../assets/styles/base.css?v=20261105-1">
     
       <link rel="stylesheet" href="../../assets/styles/shell.css?v=20260821-1">
     
@@ -89,6 +89,9 @@
         }
       }
     </script>
+    
+    
+    
     
   
 
@@ -2406,7 +2409,7 @@
   <span class="md-ellipsis">
     
   
-    Trouver votre région
+    Trouver votre zone
   
 
     
@@ -3733,9 +3736,9 @@
 <td>Beacon à dev.meshcore.ca</td>
 </tr>
 <tr>
-<td>Rechercher un lieu dans les outils de région</td>
-<td>Le lieu, le code d’aéroport ou le code postal saisi</td>
-<td>Codes IATA vérifiés localement. Noms de lieux transmis à l’outil de recherche de lieux du gouvernement du Canada (geo.ca); codes postaux transmis à OpenStreetMap ou geocoder.ca</td>
+<td>Rechercher une ville ou une adresse sur <a href="../config/map/">Trouver votre zone</a></td>
+<td>La ville ou l’adresse saisie. Les coordonnées et les codes de zone saisis restent dans votre navigateur</td>
+<td>L’outil de recherche de lieux du gouvernement du Canada (geo.ca) : <code>geolocator.api.geo.ca</code></td>
 </tr>
 <tr>
 <td>Rechercher une ville ou une adresse dans l’<a href="../config/">outil de configuration</a></td>
@@ -3743,7 +3746,7 @@
 <td>L’outil de recherche de lieux du gouvernement du Canada (geo.ca) : <code>geolocator.api.geo.ca</code></td>
 </tr>
 <tr>
-<td>Ouvrir la carte interactive des régions</td>
+<td>Ouvrir la carte sur <a href="../config/map/">Trouver votre zone</a></td>
 <td>Votre adresse IP et la partie visible de la carte</td>
 <td>OpenStreetMap</td>
 </tr>
@@ -3809,15 +3812,17 @@ vous-même.</p>
   la fermeture de l’onglet.</li>
 <li><strong>Fichiers de régions.</strong> MeshMapper n’est pas contacté, sauf si vous cliquez
   sur un lien qui y mène. L’outil de configuration,
-  <a href="../config/guide/">Comprendre les répéteurs</a> et la carte des régions lisent les
-  fichiers de régions publiés sur ce site.</li>
+  <a href="../config/guide/">Comprendre les répéteurs</a> et
+  <a href="../config/map/">Trouver votre zone</a> lisent les fichiers de régions publiés sur
+  ce site.</li>
 </ul>
 <h2 id="donnees-enregistrees-sur-votre-appareil">Données enregistrées sur votre appareil<a class="headerlink" href="#donnees-enregistrees-sur-votre-appareil" title="Permanent link">&para;</a></h2>
-<p>Changer de langue sur la carte des régions conserve votre sélection dans le lien
-vers l’autre page. Il peut contenir les coordonnées saisies, un lieu, des
-portées de ville et de province et un profil radio. Ces liens peuvent apparaître
-dans l’historique du navigateur et les journaux du serveur. Ne partagez pas un
-lien qui contient un emplacement privé.</p>
+<p>La page <a href="../config/map/">Trouver votre zone</a> met dans son adresse Web (URL)
+seulement le code de zone et la province que vous avez choisis, par exemple
+<code>?tag=ytr&amp;province=on</code>, pour que vous puissiez partager ou recharger la page.
+Elle n’y met jamais de ville, d’adresse civique ni de coordonnées, et le
+changement de langue ne transmet rien. Les liens peuvent apparaître dans
+l’historique du navigateur et les journaux du serveur.</p>
 <p>Les listes de configuration, les brouillons d’idées et le dernier code de
 région Beacon choisi dans l’outil de vérification sont enregistrés uniquement
 dans votre navigateur lorsque vous utilisez ces fonctions. Les clés publiques
@@ -3955,7 +3960,7 @@ GitHub ou <a href="https://github.com/MeshCore-ca/MeshCore-Canada/issues">ouvrez
   
       <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
-        <script src="../../assets/javascripts/region-profile.js?v=20261102-5"></script>
+        <script src="../../assets/javascripts/region-profile.js?v=20261105-2"></script>
       
         <script src="../../assets/javascripts/i18n-runtime.js?v=20260829-1"></script>
       
