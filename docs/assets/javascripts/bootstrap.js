@@ -220,7 +220,24 @@
     });
   }
 
+  // On small screens Material opens the drawer inside the current page's
+  // section (e.g. "Start" on the home page). Collapse those sections each time
+  // the drawer opens so people always start at the main menu.
+  function openDrawerAtTopLevel() {
+    var drawerToggle = document.getElementById("__drawer");
+    if (!drawerToggle || drawerToggle.dataset.mcTopLevelReady === "true") return;
+    drawerToggle.dataset.mcTopLevelReady = "true";
+    var mobile = window.matchMedia("(max-width: 76.234375em)");
+    drawerToggle.addEventListener("change", function () {
+      if (!drawerToggle.checked || !mobile.matches) return;
+      document.querySelectorAll(".md-nav--primary input.md-nav__toggle").forEach(function (toggle) {
+        toggle.checked = false;
+      });
+    });
+  }
+
   function initialise() {
+    openDrawerAtTopLevel();
     initialiseProgress();
     labelExternalLinks();
     labelThemeControls();
