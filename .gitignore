@@ -9,3 +9,5 @@ node_modules/
 playwright-report/
 test-results/
 lighthouse-report/
+.DS_Store
+.playwright-mcp/
