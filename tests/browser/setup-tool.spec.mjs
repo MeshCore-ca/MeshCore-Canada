@@ -494,6 +494,31 @@ for (const lang of LANGS) {
   });
 }
 
+for (const lang of LANGS) {
+  test(`${lang} once a region is chosen, View on map opens it on the zone map in a new tab`, async ({ page }) => {
+    await mockGeocoder(page);
+    await openLink(page, `${ROUTES[lang]}?type=repeater&board=esp32&status=running&reflash=0`, { to: "town" });
+    const view = page.locator("[data-setup-view-map]");
+    await expect(view).toHaveCount(0);
+    await searchTown(page, "Gatineau");
+    await expect(page.locator("[data-setup-region]")).toContainText("yow");
+    await expect(view).toHaveText(`${T("town.view-map", lang)} ${T("link.new-tab", lang)}`);
+    await expect(view).toHaveAttribute("target", "_blank");
+    const href = new URL(await view.getAttribute("href"), page.url());
+    expect(href.pathname).toBe(`${ROUTES[lang]}map/`);
+    expect(Object.fromEntries(href.searchParams)).toEqual({ tag: "yow", province: "qc" });
+    // Right next to the region card.
+    expect(await view.evaluate((link) => link.parentElement.previousElementSibling.hasAttribute("data-setup-region"))).toBe(true);
+    const [map] = await Promise.all([page.context().waitForEvent("page"), view.click()]);
+    await expect(map.locator("[data-zone-card] h2")).toHaveText("YOW · Ottawa–Gatineau");
+    await expect(map.locator("[data-zone-where]")).toHaveText("Québec");
+    await map.close();
+    // The tool keeps its place.
+    await expectStep(page, "town");
+    await expect(page.locator("[data-setup-region]")).toContainText("yow");
+  });
+}
+
 test("town search offline offers a region code and the map", async ({ page }) => {
   await page.route("https://geolocator.api.geo.ca/**", (route) => route.abort());
   await openLink(page, "/fr/config/?type=repeater&board=esp32&status=running&reflash=0", { to: "town" });
@@ -1051,11 +1076,12 @@ test("old and unknown region codes in a link", async ({ page }) => {
   expect(new URL(page.url()).searchParams.get("tag")).toBe(null);
 });
 
-test("the region map hands off to the tool", async ({ page }) => {
+test("the zone map hands off to the tool", async ({ page }) => {
   await page.goto(siteRoute("/config/map/?tag=ytr&province=on"));
-  const link = page.locator('[data-role="map-text-result"] .mcc-detail-actions a');
+  const link = page.locator("[data-zone-setup]");
   await expect(link).toBeVisible();
-  const href = new URL(await link.getAttribute("href"));
+  const href = new URL(await link.getAttribute("href"), page.url());
+  expect(href.pathname).toBe("/config/");
   expect(Object.fromEntries(href.searchParams)).toEqual({ tag: "ytr", province: "on" });
   await link.click();
   await expectStep(page, "type");

@@ -146,7 +146,7 @@ plugins:
             Network Tools: Outils réseau
             Choose a network tool: Choisir un outil réseau
             Set up a repeater: Configurer un répéteur
-            Find your region: Trouver votre région
+            Find your zone: Trouver votre zone
             How repeaters work: Comprendre les répéteurs
             Set up an observer: Configurer un observateur
             Check an observer: Vérifier un observateur
@@ -259,7 +259,7 @@ nav:
   - Network Tools:
       - Choose a network tool: tools/index.md
       - Set up a repeater: config/index.md
-      - Find your region: config/map.md
+      - Find your zone: config/map.md
       - How repeaters work: config/guide.md
       - Set up an observer: analyzer/intro.md
       - Check an observer: analyzer/verify.md

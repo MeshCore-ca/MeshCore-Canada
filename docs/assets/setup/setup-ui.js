@@ -1083,6 +1083,9 @@
       box.appendChild(codeForm());
     } else if (a.tag && a.province) {
       box.appendChild(regionCard());
+      // The region on the zone map, in a new tab so the tool keeps its place.
+      box.appendChild(para(link(t("town.view-map"), LINKS.map + "?" + new URLSearchParams({ tag: a.tag, province: a.province }), { "data-setup-view-map": "" }),
+        { class: "setup-view-map" }));
       // A starter region or a planning extension isn't a MeshMapper zone: say so, as the map does.
       var kind = Place.planning(a.tag, a.place, state.data);
       var href = kind === "starter" ? LINKS.guide + "#starter-regions" : LINKS.guide + "#planning-extensions";

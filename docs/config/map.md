@@ -1,6 +1,6 @@
 ---
-title: Find your IATA region
-description: Find a MeshMapper zone or MeshCore Canada starter region by place, IATA code or map.
+title: Find your zone
+description: See which zone (IATA code) a place is in, and whether it's a MeshMapper zone or a placeholder.
 audience:
   - meshcore-user
   - repeater-operator
@@ -9,31 +9,28 @@ task: find-region
 scope: canada-baseline
 status: verified
 owner: region-maintainers
-last_reviewed: 2026-09-25
-review_by: 2027-03-24
-tested_with:
-  region_catalog: meshcore-canada-iata-scopes-v1
+last_reviewed: 2026-11-05
+review_by: 2027-05-05
+evidence: tests/browser/zone-map.spec.mjs
 difficulty: beginner
 page_styles:
-  - assets/regions/regions.css?v=20261102-4
+  - assets/setup/zone-map.css?v=20261105-1
 page_scripts:
-  - assets/javascripts/place-search.js?v=20261102-9
-  - assets/javascripts/radio-profiles.js?v=20260904-1
-  - assets/regions/modules/configurator-support.js?v=20260926-1
-  - assets/regions/modules/iata-scopes.js?v=20261013-1
-  - assets/regions/regions.js?v=20261102-5
+  - assets/regions/modules/iata-scopes.js?v=20261105-1
+  - assets/javascripts/place-search.js?v=20261105-1
+  - assets/setup/setup-flow.js?v=20261105-1
+  - assets/setup/setup-place.js?v=20261105-1
+  - assets/setup/zone-map.js?v=20261105-1
 hide:
   - toc
 ---
 
-# Find your IATA region
+# Find your zone
 
-Search for a place or choose an IATA region. Solid outlines are published MeshMapper
-boundaries. Dashed outlines are MeshCore Canada [starter regions and planning extensions](guide.md#starter-regions).
-Neither shows measured radio coverage.
+See which zone (IATA code) a place is in, and whether it's a MeshMapper zone or a placeholder.
 
-<div data-mcc-regions="map" data-mcc-root="../"></div>
+<div data-zone-map></div>
 
-<noscript>JavaScript is required. [How repeaters work](guide.md) explains scopes and regions.</noscript>
+<noscript markdown="span">This page needs JavaScript. [How repeaters work](guide.md#scopes-and-regions) explains zones.</noscript>
 
-<small>[How repeaters work](guide.md) · [Data sources](../assets/regions/NOTICE.txt)</small>
+<small>[How zones work](guide.md#scopes-and-regions) · [Download zone outlines](../assets/regions/iata-boundaries.geojson){ download="iata-boundaries.geojson" } · [Data sources](../assets/regions/NOTICE.txt)</small>

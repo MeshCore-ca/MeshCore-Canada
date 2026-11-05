@@ -1,6 +1,6 @@
 ---
-title: Trouver votre région IATA
-description: Trouvez une zone MeshMapper ou une région initiale de MeshCore Canada par lieu, code IATA ou carte.
+title: Trouver votre zone
+description: Voyez dans quelle zone (code IATA) se trouve un endroit, et s’il s’agit d’une zone MeshMapper ou d’une zone provisoire.
 audience:
   - meshcore-user
   - repeater-operator
@@ -9,31 +9,28 @@ task: find-region
 scope: canada-baseline
 status: verified
 owner: region-maintainers
-last_reviewed: 2026-09-25
-review_by: 2027-03-24
-tested_with:
-  region_catalog: meshcore-canada-iata-scopes-v1
+last_reviewed: 2026-11-05
+review_by: 2027-05-05
+evidence: tests/browser/zone-map.spec.mjs
 difficulty: beginner
 page_styles:
-  - assets/regions/regions.css?v=20261102-4
+  - assets/setup/zone-map.css?v=20261105-1
 page_scripts:
-  - assets/javascripts/place-search.js?v=20261102-9
-  - assets/javascripts/radio-profiles.js?v=20260904-1
-  - assets/regions/modules/configurator-support.js?v=20260926-1
-  - assets/regions/modules/iata-scopes.js?v=20261013-1
-  - assets/regions/regions.js?v=20261102-5
+  - assets/regions/modules/iata-scopes.js?v=20261105-1
+  - assets/javascripts/place-search.js?v=20261105-1
+  - assets/setup/setup-flow.js?v=20261105-1
+  - assets/setup/setup-place.js?v=20261105-1
+  - assets/setup/zone-map.js?v=20261105-1
 hide:
   - toc
 ---
 
-# Trouver votre région IATA
+# Trouver votre zone
 
-Recherchez un lieu ou choisissez une région IATA. Les traits pleins indiquent les
-limites publiées par MeshMapper. Les pointillés indiquent les [régions initiales et extensions proposées](guide.md#starter-regions)
-par MeshCore Canada. Ces limites ne représentent pas la couverture radio mesurée.
+Voyez dans quelle zone (code IATA) se trouve un endroit, et s’il s’agit d’une zone MeshMapper ou d’une zone provisoire.
 
-<div data-mcc-regions="map" data-mcc-root="../"></div>
+<div data-zone-map></div>
 
-<noscript>JavaScript est requis. [Comprendre les répéteurs](guide.md) explique les portées et les régions.</noscript>
+<noscript markdown="span">Cette page a besoin de JavaScript. [Comprendre les répéteurs](guide.md#scopes-and-regions) explique les zones.</noscript>
 
-<small>[Comprendre les répéteurs](guide.md) · [Sources de données](../assets/regions/NOTICE.txt)</small>
+<small>[Comprendre les zones](guide.md#scopes-and-regions) · [Télécharger les tracés des zones](../assets/regions/iata-boundaries.geojson){ download="iata-boundaries.geojson" } · [Sources de données](../assets/regions/NOTICE.txt)</small>

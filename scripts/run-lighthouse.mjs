@@ -17,10 +17,10 @@ const routes = [
   ["fr-config", "/fr/config/"],
   ["guide", "/config/guide/"],
   ["fr-guide", "/fr/config/guide/"],
-  ["map-result", "/config/map/?tag=ott"],
+  ["map-result", "/config/map/?tag=ytr&province=on"],
   ["editor", "/config/editor/"],
-  ["mobile-map-result", "/config/map/?tag=ott", "mobile"],
-  ["mobile-fr-map-result", "/fr/config/map/?tag=ott", "mobile"],
+  ["mobile-map-result", "/config/map/?tag=ytr&province=on", "mobile"],
+  ["mobile-fr-map-result", "/fr/config/map/?tag=ytr&province=on", "mobile"],
   ["mobile-editor", "/config/editor/", "mobile"],
   ["mobile-config", "/config/", "mobile"]
 ];
