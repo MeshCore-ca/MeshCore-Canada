@@ -57,6 +57,15 @@ test("loadData fails clearly when a file is missing or is not a boundary collect
   await assert.rejects(place.loadData(base, wrong), /invalid/i);
 });
 
+test("loadData fails clearly when the radio profiles are missing or are not a list, so no radio default is ever assumed", async () => {
+  const without = async (url) => (String(url).includes("radio-profiles") ? { ok: false } : fileFetcher(url));
+  await assert.rejects(place.loadData(base, without), /radio profiles unavailable/i);
+  const reply = (value) => async (url) => (String(url).includes("radio-profiles") ? { ok: true, json: async () => value } : fileFetcher(url));
+  for (const bad of [null, {}, { id: "canada" }, "canada", 7]) {
+    await assert.rejects(place.loadData(base, reply(bad)), /invalid radio profiles/i, JSON.stringify(bad));
+  }
+});
+
 test("loadData refuses the former census catalogue, whatever file it is served as", async () => {
   const former = JSON.parse(readFileSync("maintenance/legacy-regions/canada-regions.json", "utf8"));
   const serves = async (url) => (String(url).includes("iata-regions.json") ? { ok: true, json: async () => former } : fileFetcher(url));

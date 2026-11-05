@@ -117,7 +117,7 @@ West. La région d’un répéteur décide quels messages il relaie.
 ### Quelle est ma région?
 
 L’[outil de configuration](index.md) la trouve à partir de la ville, de
-l’adresse ou des coordonnées où sera le répéteur, et
+l’adresse ou des coordonnées où sera le répéteur, et la page
 [Trouver votre zone](map.md) les montre toutes. Les coordonnées ne sont envoyées
 à aucune recherche; une ville ou une adresse est cherchée avec l’outil de
 recherche de lieux du gouvernement du Canada (geo.ca).
@@ -130,7 +130,7 @@ recherche de lieux du gouvernement du Canada (geo.ca).
   toutes deux dans `yow`.
 - **Aucune zone pour votre secteur?** [MeshMapper](https://meshmapper.net/),
   la carte communautaire qui dessine le secteur de chaque région, ne couvre pas
-  tout. Trouver votre zone montre alors plutôt une
+  tout. La page Trouver votre zone montre alors plutôt une
   [région initiale](#starter-regions) de MeshCore Canada.
 - **Écrivez les codes en minuscules.** Vous pouvez chercher `YTR`, mais sur les
   ondes, `ytr` et `YTR` sont deux étiquettes différentes.
@@ -752,7 +752,7 @@ vérifiez donc que les répéteurs autour de vous ont été configurés avec ell
 Là où MeshMapper n’a pas encore de zone, MeshCore Canada comble le vide avec une
 région initiale. Les régions initiales utilisent de vrais codes d’aéroport et
 fonctionnent comme les autres régions, mais **ce ne sont pas des zones
-MeshMapper, et elles ne garantissent aucune couverture radio**. Trouver votre zone les
+MeshMapper, et elles ne garantissent aucune couverture radio**. La page Trouver votre zone les
 trace avec des contours gris en pointillé. Vérifiez auprès des opérateurs de
 votre secteur avant de vous y fier.
 
@@ -793,7 +793,7 @@ Wingham est dans `ykf`, pas dans `ysb` (Sudbury). Goderich est dans `yxu`, et
 Kincardine dans `ylk`.
 
 Les extensions sont des surfaces distinctes en pointillé sur la carte. Elles ne
-changent pas les zones de MeshMapper, et Trouver votre zone indique quel genre de surface
+changent pas les zones de MeshMapper, et la page Trouver votre zone indique quel genre de surface
 contient votre point. Comme les régions initiales, elles doivent être revues
 localement et ne représentent pas la couverture radio mesurée.
 

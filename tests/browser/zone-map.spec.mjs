@@ -167,7 +167,7 @@ test("several places, several zones, or a province mismatch: it asks which", asy
   await expect(choices(page)).toHaveCount(0);
   // Focus moves to what was found, not to the top of the page.
   await expect(title(page)).toBeFocused();
-  // The search says Québec; the zone map puts this spot in Ontario.
+  // The search says Québec; the zone outlines put this spot in Ontario.
   await search(page, "Ottawa");
   await expect(status(page)).toHaveText(Z("status.mismatch", "en"));
   await expect(choices(page)).toHaveCount(2);
@@ -351,8 +351,10 @@ test("a link opens the map at its zone before the outlines are in, and keeps tha
   await expect(title(page)).toHaveText("YTR · Quinte West");
   await zonesDrawn(page);
   await expect(page.locator(".zm-label", { hasText: /^ytr$/i })).toBeVisible();
-  // Quinte West fits in that first view, so no second set of tiles was needed.
-  await page.waitForTimeout(300);
+  // Quinte West fits in that first view, so no second set of tiles was needed. Look once the map is idle: no tile
+  // still loading, and two frames drawn, so a refit that was going to ask for tiles has done so.
+  await expect(page.locator(".leaflet-tile-loading")).toHaveCount(0);
+  await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))));
   expect(zooms.slice(before).filter((zoom) => zoom !== zooms[0])).toEqual([]);
 });
 

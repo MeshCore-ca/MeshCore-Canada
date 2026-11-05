@@ -453,7 +453,7 @@ test("ambiguous and unknown towns", async ({ page }) => {
   await expect(page.locator("[data-setup-code]")).toBeVisible();
   await expect(nextButton(page)).toBeDisabled();
 
-  // The search and the zone map disagree about the province: explain and let the person choose.
+  // The search and the zone outlines disagree about the province: explain and let the person choose.
   await searchTown(page, "Ottawa");
   await expect(step(page)).toContainText(T("town.mismatch", "en", { searched: "Québec", found: "Ontario" }));
   await expect(choices).toHaveCount(2);

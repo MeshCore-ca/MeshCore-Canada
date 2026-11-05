@@ -74,11 +74,11 @@ fill in yourself.
 
 ## Saved on your device
 
-[Find your zone](config/map.md) puts only the zone code and province you picked
-in its address (for example `?tag=ytr&province=on`), so you can share or reload
-the page. It never puts a town, an address, or coordinates there, and switching
-language carries nothing across. Links can appear in browser history and server
-access logs.
+The [Find your zone](config/map.md) page puts only the zone code and province
+you picked in its web address (URL), for example `?tag=ytr&province=on`, so you
+can share or reload the page. It never puts a town, a street address, or
+coordinates there, and switching language carries nothing across. Links can
+appear in browser history and server access logs.
 
 The retired region editor can download drafts saved in this browser. Downloading
 does not upload or delete them; old drafts are not approved MeshMapper boundaries.

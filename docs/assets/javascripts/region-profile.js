@@ -4,11 +4,10 @@
   var french = document.documentElement.lang.startsWith("fr");
   var t = function (en, fr) { return french ? fr : en; };
   var esc = function (text) { return String(text).replace(/[&<>"']/g, function (char) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[char]; }); };
-  function href(base, path, tag, province, request) {
+  function href(base, path, tag, province) {
     var url = new URL(path, base);
-    url.searchParams.set(path.startsWith("config/") ? "tag" : "region", tag);
+    url.searchParams.set("tag", tag);
     if (province) url.searchParams.set("province", province);
-    if (request) url.searchParams.set("request", request);
     return esc(url.href);
   }
   var catalogue;

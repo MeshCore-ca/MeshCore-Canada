@@ -112,8 +112,8 @@ decides which messages it passes on.
 ### Which region is mine?
 
 The [setup tool](index.md) finds it from the town, street address or
-coordinates where the repeater will be, and [Find your zone](map.md) shows them
-all. Coordinates aren't sent to any search; a town or street address is looked
+coordinates where the repeater will be, and the [Find your zone](map.md) page
+shows them all. Coordinates aren't sent to any search; a town or street address is looked
 up with the Government of Canada's place search (geo.ca).
 
 - **Near a provincial border, pick the side it's really on.** The `yow` region
@@ -122,8 +122,8 @@ up with the Government of Canada's place search (geo.ca).
 - **Towns in the same region share its code.** Ottawa and Gatineau are both
   `yow`.
 - **No zone for your area?** [MeshMapper](https://meshmapper.net/), the
-  community map that draws each region's area, doesn't cover everywhere. Find
-  your zone then shows a MeshCore Canada [starter region](#starter-regions)
+  community map that draws each region's area, doesn't cover everywhere. The Find
+  your zone page then shows a MeshCore Canada [starter region](#starter-regions)
   instead.
 - **Write codes in lowercase.** You can search for `YTR`, but on the air `ytr`
   and `YTR` are two different labels.
@@ -699,8 +699,8 @@ that the repeaters around you have been set up with it.
 
 Where MeshMapper has no zone yet, MeshCore Canada fills the gap with a starter
 region. Starter regions use real airport codes and work like any other region,
-but they're **not MeshMapper zones, and they don't claim radio coverage**. Find your
-zone draws them with dashed grey outlines. Check with local operators before
+but they're **not MeshMapper zones, and they don't claim radio coverage**. The Find your
+zone page draws them with dashed grey outlines. Check with local operators before
 relying on one.
 
 | Area | Region | Code from |
@@ -739,7 +739,7 @@ A gap right next to a MeshMapper region can use that region's code as a
 is in `ykf`, not Sudbury's `ysb`. Goderich is in `yxu`, and Kincardine in `ylk`.
 
 Extensions are separate dashed areas on the map. They don't change MeshMapper's
-zones, and Find your zone says which kind of area your point is in. Like starter
+zones, and the Find your zone page says which kind of area your point is in. Like starter
 regions, they need local review and don't show measured radio coverage.
 
 Starter regions and extensions are broad starting points, not a promise that

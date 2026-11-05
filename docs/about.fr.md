@@ -31,7 +31,7 @@ plus sur le micrologiciel, les applications et le protocole, consultez la
 ## Ce que nous maintenons
 
 - des guides de configuration, de matériel et de dépannage;
-- le répertoire des communautés canadiennes et l’outil pour trouver votre zone;
+- le répertoire des communautés canadiennes et la page [Trouver votre zone](config/map.md);
 - des outils pour les répéteurs et les observateurs;
 - le [code source du site Web](https://github.com/MeshCore-ca/MeshCore-Canada){ target="_blank" rel="noopener" }.
 

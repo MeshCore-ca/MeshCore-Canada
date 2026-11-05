@@ -25,7 +25,7 @@ page_scripts:
   - assets/javascripts/place-search.js?v=20261105-1
   - assets/setup/setup-flow.js?v=20261105-1
   - assets/setup/setup-place.js?v=20261105-1
-  - assets/setup/zone-map.js?v=20261105-2
+  - assets/setup/zone-map.js?v=20261105-3
 hide:
   - toc
 ---

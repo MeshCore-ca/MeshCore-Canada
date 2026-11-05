@@ -80,12 +80,12 @@ vous-même.
 
 ## Données enregistrées sur votre appareil
 
-[Trouver votre zone](config/map.md) met dans son adresse seulement le code de
-zone et la province que vous avez choisis (par exemple `?tag=ytr&province=on`),
-pour que vous puissiez partager ou recharger la page. Elle n’y met jamais de
-ville, d’adresse ni de coordonnées, et le changement de langue ne transmet rien.
-Les liens peuvent apparaître dans l’historique du navigateur et les journaux du
-serveur.
+La page [Trouver votre zone](config/map.md) met dans son adresse Web (URL)
+seulement le code de zone et la province que vous avez choisis, par exemple
+`?tag=ytr&province=on`, pour que vous puissiez partager ou recharger la page.
+Elle n’y met jamais de ville, d’adresse civique ni de coordonnées, et le
+changement de langue ne transmet rien. Les liens peuvent apparaître dans
+l’historique du navigateur et les journaux du serveur.
 
 Les listes de configuration, les brouillons d’idées et le dernier code de
 région Beacon choisi dans l’outil de vérification sont enregistrés uniquement

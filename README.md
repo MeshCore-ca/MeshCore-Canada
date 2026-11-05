@@ -28,7 +28,9 @@ Open `http://127.0.0.1:4173/`. Rebuild after editing. Build output belongs in
   Keep `data/community-search-anchors.json` in sync when adding listings. These
   are approximate search references, not claimed radio locations or coverage.
 - Region tools: `docs/assets/regions/`, using published MeshMapper IATA zones
-  plus explicitly labelled MeshCore Canada starter regions.
+  plus explicitly labelled MeshCore Canada starter regions. The Find your zone
+  page (`docs/config/map.md`) is drawn by `docs/assets/setup/zone-map.js`, which
+  reads those files through `docs/assets/setup/setup-place.js`.
   Scope policy lives in `data/iata-scope-policy.json`. Follow the refresh steps
   below; the former census boundary editor no longer accepts proposals.
 - Broker settings: `docs/analyzer/observer-config.json`. The build generates the
