@@ -8,13 +8,3 @@ Official distribution from https://leafletjs.com/
 - `leaflet.css`: `337bfca5cabd03b39815b2700febe2b3b7edf55921c59cd49f88ecb328212303`
 
 The CSS differs from upstream only by git CRLF→LF normalization.
-
-## Lucide 0.547.0
-
-UMD distribution from npm.
-
-- `lucide.js`: `8c6fb02591ab1afdf712fa06bc9ac41124f48a729cd07aa1b6eec705f7f92f34`
-
-The region tools embed only their 5 SVG icons in regions.js. They no longer
-download the full Lucide library. The original bundle is retained as the
-reference for the icon consistency test; see lucide-LICENSE for its notices.

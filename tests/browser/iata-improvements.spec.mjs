@@ -1,7 +1,8 @@
 import { test, expect } from "./site-fixtures.mjs";
 import { siteRoute } from "./site-route.mjs";
 import { readFileSync } from "node:fs";
-import { PHONE_ROUTE, T, choose, codes, expectStep, nextButton, nextUntil, openLink, phoneLink, plain, step, toolRoot, commandLines } from "./setup-helpers.mjs";
+import { PHONE_ROUTE, T, choose, codes, nextButton, nextUntil, openLink, phoneLink, plain, step, toolRoot, commandLines } from "./setup-helpers.mjs";
+import { title, where } from "./zone-map-helpers.mjs";
 const catalog = JSON.parse(readFileSync("docs/assets/regions/iata-regions.json", "utf8"));
 
 for (const locale of ["", "fr/"]) {
@@ -23,24 +24,6 @@ for (const locale of ["", "fr/"]) {
     expect(lines).not.toContain("region denyf *");
   });
 
-  test(`${locale || "en/"} ambiguous city search asks for the province and respects the choice`, async ({ page }) => {
-    await page.route("https://geolocator.api.geo.ca/**", route => route.fulfill({ json: [
-      { key:"geonames", name:"Saint-Jean", province:"Québec", category:"Ville", lat:45.307,lng:-73.262 },
-      { key:"geonames", name:"Saint-Jean", province:"New Brunswick", category:"City", lat:45.273,lng:-66.063 },
-      { key:"geonames", name:"Saint-Jean", province:"Newfoundland and Labrador", category:"City", lat:47.56,lng:-52.71 }
-    ] }));
-    await page.goto(siteRoute(`/${locale}config/map/`));
-    const input=page.locator('[data-role="map-input"]');
-    await input.fill("Saint-Jean"); await page.locator('[data-action="map-locate"]').click();
-    await expect(page.locator('[data-role="map-status"] button')).toHaveCount(3);
-    await page.locator('[data-role="map-status"] button').filter({hasText:"New Brunswick"}).click();
-    const result=page.locator('[data-role="map-text-result"]');
-    await expect(result).toContainText("ysj");
-    await input.fill("Saint-Jean, QC"); await page.locator('[data-action="map-locate"]').click();
-    await expect(result).toContainText("yul");
-    await expect(result.locator('.mcc-detail-actions a')).toHaveAttribute("href",/province=qc/);
-  });
-
   test(`${locale || "en/"} a pasted region list removes old names one by one, stays on the page and clears on edit`, async ({ page }) => {
     await openLink(page, phoneLink("yow", "on", { lang }));
     const requests = [];
@@ -56,19 +39,22 @@ for (const locale of ["", "fr/"]) {
     await expect(page.locator("[data-setup-reply-status]")).toHaveText(plain("region.unreadable", lang));
   });
 
-  test(`${locale || "en/"} region profile carries contact, role and contribution context`, async ({ page }) => {
-    await page.goto(siteRoute(`/${locale}config/map/?tag=yow&province=qc`));
-    const profile=page.locator('[data-role="map-text-result"] .mc-region-profile');
-    await expect(profile).toContainText(locale ? "Non confirmés localement" : "Not locally confirmed");
-    await expect(profile).toContainText("Greater Ottawa");
-    await profile.locator('a[href*="provinces/?region=yow"]').click();
+  test(`${locale || "en/"} a region link still reaches the community directory, the start pages, the zone finder and the idea form`, async ({ page }) => {
+    // The directory filtered to a region.
+    await page.goto(siteRoute(`/${locale}provinces/?region=yow&province=qc`));
     await expect(page.locator('[data-community-card]:visible')).toHaveCount(catalog.profiles.yow.communities.length);
     await expect(page.locator('#directory-greater-ottawa-mesh-enthusiasts')).toBeVisible();
     await page.locator('[data-community-clear]').first().click();
     await expect(page.locator('[data-community-card]:visible')).toHaveCount(25);
+    // A start page names the region, and its links lead to the setup tool and to the zone finder on that zone.
     await page.goto(siteRoute(`/${locale}start/companion/?region=yow&province=qc`));
-    await expect(page.locator('[data-region-context]')).toContainText("YOW");
-    await expect(page.locator('[data-region-context] a').last()).toHaveAttribute("href",/config\/\?tag=yow&province=qc/);
+    const banner = page.locator('[data-region-context]');
+    await expect(banner).toContainText("YOW");
+    await expect(banner.locator('a').last()).toHaveAttribute("href", /config\/\?tag=yow&province=qc/);
+    await banner.getByRole("link", { name: locale ? "Voir la région" : "View region", exact: true }).click();
+    await expect(title(page)).toHaveText("YOW · Ottawa–Gatineau");
+    await expect(where(page)).toHaveText("Québec");
+    // The idea form fills in the region it was opened for.
     await page.goto(siteRoute(`/${locale}submit-idea/?region=yow&request=maintainer`));
     await expect(page.locator('#submission-context')).toHaveValue(/IATA.*yow/i);
     await expect(page.locator('#submission-category')).toHaveValue("Regional community information");

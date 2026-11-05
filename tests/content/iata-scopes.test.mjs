@@ -47,6 +47,29 @@ test("southern Ontario gaps use nearby existing codes, not the new Sudbury hub",
   }
 });
 
+test("one zone code can hold a published outline and a planning extension, each source once, and no neighbouring network gets an outline", () => {
+  const seen = new Set();
+  const sourcesOf = tag => combined.features.filter(feature => feature.properties.tag === tag).map(feature => feature.properties.regionSource).sort();
+  for (const feature of combined.features) {
+    const key = `${feature.properties.tag}/${feature.properties.regionSource}`;
+    assert.ok(!seen.has(key), `${key} has two outlines`);
+    seen.add(key);
+    // An extension sits beside a published zone with the same code, so it never needs a second catalogue entry.
+    if (feature.properties.planningKind === "extension") {
+      assert.ok(sourcesOf(feature.properties.tag).includes("meshmapper"), `${feature.properties.tag}: an extension needs the published zone it extends`);
+    }
+  }
+  // Waterloo: MeshMapper's outline and MeshCore Canada's extension at Wingham, under one code and one catalogue entry.
+  assert.deepEqual(sourcesOf("ykf"), ["meshcore-canada", "meshmapper"]);
+  assert.equal(catalog.seeds.filter(seed => seed.tag === "ykf").length, 1);
+  assert.equal(new Set(catalog.seeds.map(seed => seed.tag)).size, catalog.seeds.length, "every zone code is in the catalogue once");
+  // A neighbouring network's tags (us-ny, wa ...) name a path to type, not a place on the Canadian map.
+  const networkTags = new Set(Object.values(catalog.externalRegionPaths).flatMap(record => record.path));
+  assert.ok(networkTags.has("us-ny"));
+  for (const feature of combined.features) assert.ok(!networkTags.has(feature.properties.tag), `${feature.properties.tag} is a neighbouring network's tag`);
+  for (const seed of catalog.seeds) assert.ok(!networkTags.has(seed.tag), `${seed.tag} is a neighbouring network's tag`);
+});
+
 test("six starter regions cover the missing jurisdictions with honest source labels and flat scopes", () => {
   for (const [tag, province, lat, lon] of [
     ["yyg", "pe", 46.2382, -63.1311], ["yyt", "nl", 47.5605, -52.7128],

@@ -1,49 +1,45 @@
 import { expect, test } from "./site-fixtures.mjs";
-import { siteRoute } from "./site-route.mjs";
 import { expectStep, openLink, phoneLink, commandLines } from "./setup-helpers.mjs";
+import { LANGS, Z, badge, card, line, open, search, title } from "./zone-map-helpers.mjs";
 
-for (const locale of ["", "fr/"]) {
-  const lang = locale ? "fr" : "en";
-  test(`${locale || "en/"} map polygons use their published name for hover and selection`, async ({ page }) => {
-    await page.goto(siteRoute(`/${locale}config/map/?lat=42.406519&lon=-82.188273`));
-    const stage = page.locator('.mcc-map-stage');
-    await stage.scrollIntoViewIfNeeded();
-    await expect(stage).toHaveAttribute("aria-busy", "false");
-    const pin = await page.locator('.leaflet-marker-icon').first().boundingBox();
-    expect(pin).not.toBeNull();
-    const atPin = { clientX: pin.x + 12, clientY: pin.y + 41 };
-    const polygon = page.locator('path.leaflet-interactive').first();
-    await polygon.dispatchEvent("mouseover", atPin);
-    await expect(page.locator('.leaflet-tooltip')).toContainText("XCM - Chatham-Kent");
-    await expect(page.locator('.leaflet-tooltip')).not.toContainText("undefined");
-    await polygon.dispatchEvent("click", atPin);
-    await expect(page.locator('[data-role="map-text-result"] .mcc-deterministic-result')).toHaveText(/^Chatham-Kent /);
+// Boundary cases on the "Find your zone" page: a spot inside a zone, just outside one (MeshCore Canada's
+// planning extension), and where each of them leads in the setup tool.
+for (const lang of LANGS) {
+  test(`${lang} a spot in Chatham-Kent gives its zone under its published name`, async ({ page }) => {
+    await open(page, lang);
+    await search(page, "42.406519, -82.188273");
+    await expect(title(page)).toHaveText("XCM · Chatham-Kent");
+    await expect(card(page)).not.toContainText("undefined");
+    await expect(badge(page)).toHaveText(Z("badge.mesh", lang));
   });
 
-  for (const [town,tag,lat,lon] of [["reported Wingham point","ykf",43.8678,-81.2619],["Goderich","yxu",43.743,-81.71],["Kincardine","ylk",44.176,-81.636]]) {
-    test(`${locale || "en/"} ${town} uses a labelled local extension, not YSB`, async ({page}) => {
-      await page.goto(siteRoute(`/${locale}config/map/?lat=${lat}&lon=${lon}`));
-      const result=page.locator('[data-role="map-text-result"]');
-      await expect(result.locator('.mcc-deterministic-result')).toContainText(tag);
-      await expect(result.locator('.mcc-deterministic-result')).not.toContainText("ysb");
-      await expect(result.locator('.mcc-note-warning')).toContainText(locale ? "Extension proposée" : "planning extension");
-      await expect(result.locator('.mc-region-profile')).toContainText(locale ? "Extension proposée par MeshCore Canada" : "MeshCore Canada planning extension");
-      await expect(result.locator('a[href*="guide/#planning-extensions"]')).toHaveCount(1);
-      const configure=result.locator('.mcc-detail-actions a');
-      expect(Object.fromEntries(new URL(await configure.getAttribute("href")).searchParams)).toEqual({ tag, province: "on" });
+  for (const [town, tag, lat, lon] of [["reported Wingham point", "ykf", 43.8678, -81.2619], ["Goderich", "yxu", 43.743, -81.71], ["Kincardine", "ylk", 44.176, -81.636]]) {
+    test(`${lang} ${town} is a labelled local extension of ${tag}, not YSB`, async ({ page }) => {
+      await open(page, lang);
+      await search(page, `${lat}, ${lon}`);
+      await expect(title(page)).toContainText(`${tag.toUpperCase()} · `);
+      await expect(card(page)).not.toContainText(/ysb/i);
+      await expect(badge(page)).toHaveText(Z("badge.extension", lang));
+      await expect(line(page)).toHaveText(Z("line.placeholder", lang));
+      // MeshCore Canada's own outline, so there is no MeshMapper page to open.
+      await expect(page.locator("[data-zone-meshmapper]")).toHaveCount(0);
+      const configure = page.locator("[data-zone-setup]");
+      expect(Object.fromEntries(new URL(await configure.getAttribute("href"), page.url()).searchParams)).toEqual({ tag, province: "on" });
       await configure.click();
       await expectStep(page, "type");
       // The same region in the setup tool.
       await openLink(page, phoneLink(tag, "on", { lang }));
       expect(await commandLines(page)).toContain(`region def ${tag}|* on|* onqc|* can|* na`);
-      expect(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth+1)).toBeTruthy();
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1)).toBeTruthy();
     });
   }
-  test(`${locale || "en/"} published Waterloo stays published`, async ({page}) => {
-    await page.goto(siteRoute(`/${locale}config/map/?lat=43.4643&lon=-80.5204`));
-    const result=page.locator('[data-role="map-text-result"]');
-    await expect(result.locator('.mcc-deterministic-result')).toContainText("ykf");
-    await expect(result.locator('.mcc-note-warning')).toHaveCount(0);
-    await expect(result.locator('.mc-region-profile')).toContainText("MeshMapper");
+
+  test(`${lang} published Waterloo stays published`, async ({ page }) => {
+    await open(page, lang);
+    await search(page, "43.4643, -80.5204");
+    await expect(title(page)).toContainText("YKF · ");
+    await expect(badge(page)).toHaveText(Z("badge.mesh", lang));
+    await expect(line(page)).toHaveText(Z("line.mesh", lang, { code: "YKF" }));
+    await expect(page.locator("[data-zone-meshmapper]")).toHaveAttribute("href", "https://ykf.meshmapper.net/");
   });
 }

@@ -123,12 +123,12 @@ test("MkDocs keeps tool scripts route scoped", async () => {
   ]);
   assert.equal((config.match(/^extra_javascript:/gm) || []).length, 1);
   assert.match(config, /^\s+- assets\/javascripts\/bootstrap\.js(?:\?v=\d{8}-\d+)?$/m);
-  assert.doesNotMatch(config, /^\s+- assets\/regions\/regions\.js(?:\?v=\d{8}-\d+)?$/m);
+  assert.doesNotMatch(config, /^\s+- assets\/setup\/zone-map\.js(?:\?v=\d{8}-\d+)?$/m);
   assert.doesNotMatch(config, /^\s+- javascripts\/submission-form\.js(?:\?v=\d{8}-\d+)?$/m);
   assert.match(submitPage, /^\s+- javascripts\/submission-form\.js(?:\?v=\d{8}-\d+)?$/m);
-  // The region application belongs to the map page; the setup tool page has its own script.
-  assert.match(mapPage, /^\s+- assets\/regions\/regions\.js(?:\?v=\d{8}-\d+)?$/m);
-  assert.doesNotMatch(configPage, /^\s+- assets\/regions\/regions\.js(?:\?v=\d{8}-\d+)?$/m);
+  // The zone finder belongs to the map page; the setup tool page has its own script.
+  assert.match(mapPage, /^\s+- assets\/setup\/zone-map\.js(?:\?v=\d{8}-\d+)?$/m);
+  assert.doesNotMatch(configPage, /^\s+- assets\/setup\/zone-map\.js(?:\?v=\d{8}-\d+)?$/m);
   assert.match(configPage, /^\s+- assets\/setup\/setup-ui\.js(?:\?v=\d{8}-\d+)?$/m);
 });
 

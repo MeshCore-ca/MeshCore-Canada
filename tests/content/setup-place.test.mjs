@@ -57,6 +57,19 @@ test("loadData fails clearly when a file is missing or is not a boundary collect
   await assert.rejects(place.loadData(base, wrong), /invalid/i);
 });
 
+test("loadData refuses the former census catalogue, whatever file it is served as", async () => {
+  const former = JSON.parse(readFileSync("maintenance/legacy-regions/canada-regions.json", "utf8"));
+  const serves = async (url) => (String(url).includes("iata-regions.json") ? { ok: true, json: async () => former } : fileFetcher(url));
+  await assert.rejects(place.loadData(base, serves), /invalid region catalogue/i);
+  // A catalogue that lost one of the parts the tool reads is refused too, not half used.
+  for (const part of ["hierarchy", "aliases", "profiles", "source"]) {
+    const stale = structuredClone(catalog);
+    delete stale[part];
+    const missing = async (url) => (String(url).includes("iata-regions.json") ? { ok: true, json: async () => stale } : fileFetcher(url));
+    await assert.rejects(place.loadData(base, missing), /invalid region catalogue/i, part);
+  }
+});
+
 test("loadData fails clearly when the cross-border scopes are missing or are not a list of scopes", async () => {
   const without = async (url) => (String(url).includes("cross-border-scopes") ? { ok: false } : fileFetcher(url));
   await assert.rejects(place.loadData(base, without), /cross-border scopes unavailable/i);

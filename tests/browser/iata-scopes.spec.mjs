@@ -2,6 +2,7 @@ import { expect, test } from "./site-fixtures.mjs";
 import { siteRoute } from "./site-route.mjs";
 import { readFile } from "node:fs/promises";
 import { PHONE_ROUTE, choose, codes, expectStep, location, mockGeocoder, next, nextButton, nextUntil, answer, openLink, phoneLink, searchTown, startPhoneRoute, step, toolRoot, T, commandLines } from "./setup-helpers.mjs";
+import { Z, badge, line, open, search, title, where } from "./zone-map-helpers.mjs";
 
 for (const locale of ["", "fr/"]) {
   const lang = locale ? "fr" : "en";
@@ -10,16 +11,16 @@ for (const locale of ["", "fr/"]) {
     ["yyr", "nl", 53.303, -60.326], ["yxy", "yt", 60.7212, -135.0568],
     ["yzf", "nt", 62.454, -114.3774], ["yfb", "nu", 63.7467, -68.517],
   ]) {
-    test(`${locale || "en/"} ${tag} starter region resolves and configures without claiming MeshMapper approval`, async ({ page }) => {
-      await page.goto(siteRoute(`/${locale}config/map/?lat=${lat}&lon=${lon}`));
-      const detail = page.locator('[data-role="map-text-result"]');
-      await expect(detail).toContainText(tag);
-      await expect(detail).toContainText(locale ? "Région initiale de MeshCore Canada" : "MeshCore Canada starter region");
-      await expect(detail.locator(`a[href="https://${tag}.meshmapper.net/"]`)).toHaveCount(0);
-      await expect(detail.locator('a[href*="guide/#starter-regions"]')).toHaveAttribute("href", new RegExp(`/${locale}config/guide/#starter-regions$`));
-      // The map hands only the region to the setup tool, which opens on its first question.
-      const configure = detail.locator('.mcc-detail-actions a');
-      expect(Object.fromEntries(new URL(await configure.getAttribute("href")).searchParams)).toEqual({ tag, province });
+    test(`${locale || "en/"} ${tag} starter region is a placeholder, and configures without claiming MeshMapper approval`, async ({ page }) => {
+      await open(page, lang);
+      await search(page, `${lat}, ${lon}`);
+      await expect(title(page)).toContainText(`${tag.toUpperCase()} · `);
+      await expect(badge(page)).toHaveText(Z("badge.starter", lang));
+      await expect(line(page)).toHaveText(Z("line.placeholder", lang));
+      await expect(page.locator("[data-zone-meshmapper], a[href*='.meshmapper.net']")).toHaveCount(0);
+      // The finder hands only the region to the setup tool, which opens on its first question.
+      const configure = page.locator("[data-zone-setup]");
+      expect(Object.fromEntries(new URL(await configure.getAttribute("href"), page.url()).searchParams)).toEqual({ tag, province });
       await configure.click();
       await expectStep(page, "type");
       // The same region in the tool: the flat list for a province outside ON/QC, and no radio line on the phone route.
@@ -116,15 +117,16 @@ for (const locale of ["", "fr/"]) {
     expect(lines).toContain("region def yow|* on|* onqc|* can|* na");
   });
 
-  test(`${locale || "en/"} the map and setup tool use the same MeshMapper zone`, async ({ page }) => {
+  test(`${locale || "en/"} the zone finder and the setup tool use the same MeshMapper zone`, async ({ page }) => {
     const requests = [];
     page.on("request", request => requests.push(request.url()));
-    await page.goto(siteRoute(`/${locale}config/map/?lat=45.4765&lon=-75.7013`));
-    const detail = page.locator('[data-role="map-text-result"]');
-    await expect(detail).toContainText("yow");
-    await expect(detail.locator('a[href="https://yow.meshmapper.net/"]')).toBeVisible();
-    const configure = detail.locator('.mcc-detail-actions a[href*="province=qc"]');
-    await expect(configure).toHaveCount(1);
+    await open(page, lang);
+    await search(page, "45.4765, -75.7013");
+    await expect(title(page)).toHaveText("YOW · Ottawa–Gatineau");
+    await expect(where(page)).toHaveText("45.4765, -75.7013 · Québec");
+    await expect(page.locator("[data-zone-meshmapper]")).toHaveAttribute("href", "https://yow.meshmapper.net/");
+    const configure = page.locator("[data-zone-setup]");
+    expect(Object.fromEntries(new URL(await configure.getAttribute("href"), page.url()).searchParams)).toEqual({ tag: "yow", province: "qc" });
     await configure.click();
     await startPhoneRoute(page);
     await expect(page.locator("[data-setup-region]")).toContainText("yow");

@@ -1,6 +1,7 @@
 import { expect, test } from "./site-fixtures.mjs";
 import { normalizeSiteBaseUrl, resolveSiteRoute, siteRoute } from "./site-route.mjs";
 import { T, expectStep, mockGeocoder, nextButton, progress, startPhoneRoute } from "./setup-helpers.mjs";
+import { Z } from "./zone-map-helpers.mjs";
 
 const criticalRoutes = [
   "/",
@@ -158,10 +159,10 @@ test("repository stars and the human-review notice appear in both languages", as
   );
 });
 
-test("English and French homepages link directly to the region finder", async ({ page }, testInfo) => {
-  for (const [home, linkName, destination, heading, finder, directory] of [
-    ["/", "Find my region", "/config/map/", "Find your IATA region", "Find a region", "Browse all regions"],
-    ["/fr/", "Trouver ma région", "/fr/config/map/", "Trouver votre région IATA", "Trouver une région", "Parcourir toutes les régions"]
+test("English and French homepages link directly to the zone finder", async ({ page }, testInfo) => {
+  for (const [home, lang, linkName, destination, heading] of [
+    ["/", "en", "Find my region", "/config/map/", "Find your zone"],
+    ["/fr/", "fr", "Trouver ma région", "/fr/config/map/", "Trouver votre zone"]
   ]) {
     await page.goto(siteRoute(home));
     const link = page.getByRole("link", { name: linkName, exact: true });
@@ -169,10 +170,11 @@ test("English and French homepages link directly to the region finder", async ({
     await link.click();
     await expect(page).toHaveURL(resolveSiteRoute(testInfo.project.use.baseURL, destination));
     await expect(page.getByRole("heading", { level: 1 })).toContainText(heading);
-    await expect(page.getByRole("button", { name: finder, exact: true })).toHaveAttribute("aria-pressed", "true");
-    const regionDirectory = page.locator("#mcc-region-list");
-    await expect(regionDirectory.getByText(directory, { exact: true })).toBeVisible();
-    await expect(regionDirectory).not.toHaveAttribute("open", "");
+    // It opens on the search, with the list of provinces and territories folded away.
+    await expect(page.getByLabel(Z("search.label", lang), { exact: true })).toBeVisible();
+    const browse = page.locator("[data-zone-browse]");
+    await expect(browse.locator("summary")).toHaveText(Z("browse", lang));
+    await expect(browse).not.toHaveAttribute("open", "");
   }
 });
 
@@ -224,7 +226,7 @@ test("exact IATA code deep links resolve locally without an external request", a
   expect(url.searchParams.has("q")).toBeFalsy();
 });
 
-test("region map loads OpenStreetMap tiles without a consent gate", async ({ page }) => {
+test("zone finder loads OpenStreetMap tiles without a consent gate", async ({ page }) => {
   const tileRequests = [];
   await page.route("https://tile.openstreetmap.org/**", async (route) => {
     tileRequests.push(route.request().url());
@@ -238,11 +240,8 @@ test("region map loads OpenStreetMap tiles without a consent gate", async ({ pag
   await page.goto(siteRoute("/config/map/"), { waitUntil: "domcontentloaded" });
   await expect(page.locator("[data-action='tile-consent']")).toHaveCount(0);
   await expect(page.getByText(/Allow OpenStreetMap tiles/i)).toHaveCount(0);
-  await page.locator(".mcc-map-stage").scrollIntoViewIfNeeded();
-  await expect(page.locator("[data-role='map-area']")).toBeVisible();
-  await expect(page.locator("[data-role='map-loading']")).toBeHidden();
-  await expect(page.locator(".leaflet-tile-loaded").first()).toBeVisible();
-  await expect(page.locator("[data-role='map-ready-status']")).toHaveText("Interactive region map loaded.");
+  await expect(page.locator("[data-zone-map-box]")).toBeVisible();
+  await expect(page.locator("img.leaflet-tile-loaded").first()).toBeVisible();
   await expect.poll(() => tileRequests.length).toBeGreaterThan(0);
 });
 
@@ -406,10 +405,10 @@ test("tool assets remain route scoped", async ({ page }) => {
   const homeAssets = await page.evaluate(() =>
     performance.getEntriesByType("resource").map((entry) => entry.name)
   );
-  expect(homeAssets.some((url) => /assets\/regions\/regions\.(?:css|js)/.test(url))).toBeFalsy();
+  expect(homeAssets.some((url) => /assets\/setup\/(?:zone-map|setup)/.test(url))).toBeFalsy();
   expect(homeAssets.some((url) => /submission-form\.js/.test(url))).toBeFalsy();
 
-  // The setup tool loads its own scripts and styles, not the region map's.
+  // The setup tool loads its own scripts and styles, not the zone finder's.
   await page.goto(siteRoute("/config/"), { waitUntil: "networkidle" });
   const configAssets = await page.evaluate(() =>
     performance.getEntriesByType("resource").map((entry) => entry.name)
@@ -417,15 +416,19 @@ test("tool assets remain route scoped", async ({ page }) => {
   for (const file of ["setup\\.css", "setup-text\\.js", "setup-flow\\.js", "setup-place\\.js", "setup-commands\\.js", "setup-ui\\.js"]) {
     expect(configAssets.some((url) => new RegExp(`assets/setup/${file}`).test(url)), file).toBeTruthy();
   }
-  expect(configAssets.some((url) => /assets\/regions\/regions\.(?:css|js)/.test(url))).toBeFalsy();
+  expect(configAssets.some((url) => /assets\/setup\/zone-map\.(?:css|js)/.test(url))).toBeFalsy();
 
+  // The zone finder loads the place pieces it shares with the tool, but not the tool's own screens or commands.
   await page.goto(siteRoute("/config/map/"), { waitUntil: "networkidle" });
   const mapAssets = await page.evaluate(() =>
     performance.getEntriesByType("resource").map((entry) => entry.name)
   );
-  expect(mapAssets.some((url) => /assets\/regions\/regions\.css/.test(url))).toBeTruthy();
-  expect(mapAssets.some((url) => /assets\/regions\/regions\.js/.test(url))).toBeTruthy();
-  expect(mapAssets.some((url) => /assets\/setup\//.test(url))).toBeFalsy();
+  for (const file of ["zone-map\\.css", "zone-map\\.js", "setup-place\\.js"]) {
+    expect(mapAssets.some((url) => new RegExp(`assets/setup/${file}`).test(url)), file).toBeTruthy();
+  }
+  for (const file of ["setup\\.css", "setup-ui\\.js", "setup-commands\\.js"]) {
+    expect(mapAssets.some((url) => new RegExp(`assets/setup/${file}`).test(url)), file).toBeFalsy();
+  }
 
   await page.goto(siteRoute("/submit-idea/"), { waitUntil: "networkidle" });
   const submitAssets = await page.evaluate(() =>

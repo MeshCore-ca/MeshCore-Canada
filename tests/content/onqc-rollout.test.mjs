@@ -64,17 +64,13 @@ test("the companion pages keep the how-to for the Default Region Scope setting",
 });
 
 test("the scripts no longer tell companions to wait for a later phase", () => {
-  const profile = readFileSync("docs/assets/javascripts/region-profile.js", "utf8");
-  const regions = readFileSync("docs/assets/regions/regions.js", "utf8");
-  for (const [name, source] of [["region-profile.js", profile], ["regions.js", regions]]) {
-    assert.doesNotMatch(source, /Phase 2|phase 2|January 2027|janvier 2027|repeaters first|les répéteurs d’abord/, name);
+  for (const name of ["docs/assets/javascripts/region-profile.js", "docs/assets/setup/zone-map.js"]) {
+    assert.doesNotMatch(readFileSync(name, "utf8"), /Phase 2|phase 2|January 2027|janvier 2027|repeaters first|les répéteurs d’abord/, name);
   }
-  assert.match(profile, /Default Region Scope/);
-  assert.match(profile, /onqc/);
 });
 
-test("standard settings come from the setup tool, not the map, and starter regions stay apart from MeshMapper zones", () => {
-  const script = readFileSync("docs/assets/regions/regions.js", "utf8");
+test("standard settings come from the setup tool, not the zone finder, and starter regions stay apart from MeshMapper zones", () => {
+  const script = readFileSync("docs/assets/setup/zone-map.js", "utf8");
   assert.doesNotMatch(script, /standardCommands|data-onqc-settings-summary|ON\/QC Phase 1/);
   assert.match(readFileSync("docs/assets/setup/setup-commands.js", "utf8"), /\.standardCommands\(s\.firmware\)/);
   for (const french of [false, true]) {
@@ -95,9 +91,6 @@ test("current country-scope guidance uses can in both languages without rewritin
     assert.match(guide, /`can`/, "the explainer names can");
     assert.doesNotMatch(guide, /`ca`/, "the explainer never names the old ca");
   }
-  const map = readFileSync("docs/assets/regions/regions.js", "utf8");
-  assert.match(map, /City, province, mesh scope where defined, can, and na/);
-  assert.doesNotMatch(map, /mesh scope where defined, ca,/);
   assert.match(readFileSync("docs/start/companion.fr.md", "utf8"), /\{#choisir-un-scope\}/, "Keep existing French companion links working");
 });
 

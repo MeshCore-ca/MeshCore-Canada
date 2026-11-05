@@ -99,16 +99,24 @@ for (const seed of data.seeds) {
     assert.ok(!data.policy.reservedScopes.includes(result.companionDefault));
   }
 }
-const source = read("docs/assets/regions/regions.js");
-assert.ok(source.includes('fetchJsonAsset("iata-regions.json"'));
-assert.ok(source.includes('"iata-boundaries.geojson?v="'));
-assert.ok(!source.includes("canada-region-partition"), "The public app must not load the former partition");
-assert.ok(!source.includes('fetchJsonAsset("canada-regions.json"'));
-// The setup tool page builds its commands from the scope generator; the map page runs the region application.
-for (const [page, script] of [["index.md", "assets/setup/setup-commands.js"], ["index.fr.md", "assets/setup/setup-commands.js"], ["map.md", "assets/regions/regions.js"], ["map.fr.md", "assets/regions/regions.js"]]) {
+// The setup tool and the zone finder read the catalogue and the boundaries through setup-place.js.
+const source = read("docs/assets/setup/setup-place.js");
+assert.ok(source.includes('"../regions/iata-regions.json"'));
+assert.ok(source.includes('geometryUrl("iata-boundaries.geojson"'));
+for (const script of ["setup-place.js", "zone-map.js"]) {
+  const text = read("docs/assets/setup/" + script);
+  assert.ok(!text.includes("canada-region-partition"), `${script} must not load the former partition`);
+  assert.ok(!text.includes("canada-regions.json"), `${script} must not load the former catalogue`);
+}
+// The setup tool page builds its commands from the scope generator; the zone finder page reads the same files through setup-place.js.
+for (const [page, script] of [["index.md", "assets/setup/setup-commands.js"], ["index.fr.md", "assets/setup/setup-commands.js"], ["map.md", "assets/setup/zone-map.js"], ["map.fr.md", "assets/setup/zone-map.js"]]) {
   const text = read("docs/config/" + page);
   assert.ok(text.includes("modules/iata-scopes.js") && text.includes(script), `${page} must load iata-scopes.js and ${script}`);
   assert.ok(text.indexOf("modules/iata-scopes.js") < text.indexOf(script), `${page} must load iata-scopes.js before ${script}`);
+}
+for (const page of ["map.md", "map.fr.md"]) {
+  const text = read("docs/config/" + page);
+  assert.ok(text.indexOf("assets/setup/setup-place.js") !== -1 && text.indexOf("assets/setup/setup-place.js") < text.indexOf("assets/setup/zone-map.js"), `${page} must load setup-place.js before zone-map.js`);
 }
 assert.ok(!existsSync(new URL("docs/config/editor/index.html", root)), "The old static editor must not overwrite the replacement landing pages");
 for (const page of ["index.md", "index.fr.md"]) assert.match(read("docs/config/editor/" + page), /https:\/\/meshmapper\.net\//);

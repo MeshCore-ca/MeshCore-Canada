@@ -11,38 +11,6 @@
     if (request) url.searchParams.set("request", request);
     return esc(url.href);
   }
-  function render(data, tag, province, base, resolution) {
-    var profile = data.profiles && data.profiles[tag];
-    if (!profile) return "";
-    var review = profile.settingsReview;
-    var planning = resolution ? resolution.sourceTier === "meshcore-canada" : data.status[tag].state !== "published";
-    var sourceLabel = planning ? (data.status[tag].state === "published" ? t("MeshCore Canada planning extension", "Extension proposée par MeshCore Canada") : t("MeshCore Canada planning region", "Région proposée par MeshCore Canada")) : "MeshMapper";
-    var stale = review.checkedAt && Date.now() - Date.parse(review.checkedAt) > 180 * 86400000;
-    var settings = review.status === "confirmed" ? (stale ? t("Due for a new check", "À revérifier") : t("Locally confirmed", "Confirmés localement")) : t("Not locally confirmed", "Non confirmés localement");
-    var owner = profile.maintainer ? '<a href="' + esc(profile.maintainer.contact) + '">' + esc(profile.maintainer.name) + '</a>' : t("No maintainer listed", "Aucun responsable indiqué");
-    var contacts = profile.communities.map(function (community) {
-      var url = new URL(community.route.replace(/^\//, ""), base);
-      return '<li><a href="' + esc(url.href) + '">' + esc(french ? community.nameFr : community.name) + '</a>' + (community.override ? ' — ' + t("different radio settings listed", "réglages radio différents indiqués") : '') + '</li>';
-    }).join("");
-    return '<section class="mc-region-profile" aria-label="' + t("Region profile", "Fiche régionale") + '"><h3>' + t("Your region", "Votre région") + ': <code>' + esc(tag.toUpperCase()) + '</code></h3>' +
-      '<dl><div><dt>' + t("Boundary source", "Source des limites") + '</dt><dd>' + sourceLabel + ' · ' + esc(planning ? data.source.starterReviewedAt : data.source.fetchedAt.slice(0,10)) + '</dd></div>' +
-      '<div><dt>' + t("Local settings", "Réglages locaux") + '</dt><dd>' + settings + (review.checkedAt ? ' · <a href="' + esc(review.evidence) + '">' + esc(review.checkedAt) + '</a>' : '') + '</dd></div>' +
-      '<div><dt>' + t("Maintainer", "Responsable") + '</dt><dd>' + owner + '</dd></div></dl>' +
-      // Scopes are set now: companions in Ontario and Québec use onqc, elsewhere the province's code.
-      '<p>' + (!province ? t("Choose the province where the repeater is to see which default scope companions should use.", "Choisissez la province où se trouve le répéteur pour voir quelle portée par défaut les compagnons doivent utiliser.") :
-        province === 'on' || province === 'qc' ? t("Set your companion’s Default Region Scope to ", "Réglez dès maintenant la portée par défaut (Default Region Scope) de votre compagnon sur ") + '<code>onqc</code>' + t(" now.", ".") :
-        t("Set your companion’s Default Region Scope to ", "Réglez dès maintenant la portée par défaut (Default Region Scope) de votre compagnon sur ") + '<code>' + esc(province) + '</code>' + t(" now, unless your community has agreed on something else.", ", sauf si votre communauté a convenu d’autre chose.")) + '</p>' +
-      '<p>' + t("A published boundary does not confirm local radio settings or adoption. Directory contacts below are not appointed region maintainers.", "Une limite publiée ne confirme ni les réglages radio ni l’adoption locale. Les contacts ci-dessous ne sont pas des responsables régionaux désignés.") + '</p>' +
-      (contacts ? '<ul>' + contacts + '</ul>' : '<p>' + t("No community contact is listed for this region yet.", "Aucun contact communautaire n’est encore indiqué pour cette région.") + '</p>') +
-      '<p><a href="' + href(base, "provinces/", tag, province) + '">' + t("Community listings", "Communautés") + '</a> · ' +
-      '<a href="' + href(base, "start/companion/", tag, province) + '">' + t("Companion setup", "Configurer un compagnon") + '</a> · ' +
-      '<a href="' + href(base, "start/repeater/", tag, province) + '">' + t("Repeater setup", "Configurer un répéteur") + '</a> · ' +
-      '<a href="' + href(base, "start/observer/", tag, province) + '">' + t("Observer setup", "Configurer un observateur") + '</a> · ' +
-      '<a href="' + href(base, "meshcore/generate-repeater-id/", tag, province) + '">' + t("Optional ID check", "Vérification facultative d’identifiant") + '</a></p>' +
-      '<p><a href="' + href(base, "submit-idea/", tag, province, "maintainer") + '">' + t("Volunteer as maintainer", "Devenir responsable") + '</a> · ' +
-      '<a href="' + href(base, "submit-idea/", tag, province, "settings") + '">' + t("Confirm local settings", "Confirmer les réglages locaux") + '</a> · ' +
-      '<a href="' + href(base, "submit-idea/", tag, province, "boundary") + '">' + t("Suggest a boundary change", "Proposer une limite") + '</a></p></section>';
-  }
   var catalogue;
   function load() {
     if (!catalogue) catalogue = fetch(new URL("../regions/iata-regions.json", scriptUrl), { cache: "no-cache" }).then(function (res) { if (!res.ok) throw new Error("Region data unavailable"); return res.json(); }).catch(function (error) { catalogue = null; throw error; });
@@ -64,7 +32,7 @@
       heading.after(banner);
     }).catch(function () { /* The page remains usable without context data. */ });
   }
-  globalThis.MeshCoreRegionProfile = { render: render, load: load };
+  globalThis.MeshCoreRegionProfile = { load: load };
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init, { once: true }); else init();
   if (window.document$) window.document$.subscribe(init);
 })();

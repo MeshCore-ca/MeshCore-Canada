@@ -1,8 +1,7 @@
 import { expect, test } from "./site-fixtures.mjs";
-import AxeBuilder from "@axe-core/playwright";
 import { siteRoute } from "./site-route.mjs";
 import { submissionSha256 } from "../../docs/config/editor/issue.js";
-import { answer, choose, codes, confirmStep, expectStep, location, next, nextButton, nextUntil, openLink, phoneLink, startPhoneRoute, step, toolRoot, commandLines } from "./setup-helpers.mjs";
+import { PHONE_ROUTE, choose, codes, commandLines, confirmStep, expectStep, nextButton, nextUntil, openLink, phoneLink, step, toolRoot } from "./setup-helpers.mjs";
 
 for (const locale of ["", "fr/"]) {
   const lang = locale ? "fr" : "en";
@@ -37,89 +36,20 @@ for (const locale of ["", "fr/"]) {
     expect(lines).not.toContain("set radio 910.425,62.5,7,5");
   });
 
-  test(`${locale || "en/"} map handoff migrates legacy city aliases without adding a second province`, async ({ page }) => {
-    await page.goto(siteRoute(`/${locale}config/map/?tag=ott&province=on&type=large&regions=mtl&firmware=1.15`));
-    const link = page.locator('[data-role="map-text-result"] .mcc-detail-actions a');
-    await expect(link).toBeVisible();
-    // Only the current region goes across: no legacy code, no extra regions, no firmware or role.
-    expect(Object.fromEntries(new URL(await link.getAttribute("href")).searchParams)).toEqual({ tag: "yow", province: "on" });
-    await link.click();
-    await startPhoneRoute(page, "1.15");
-    await expect(page.locator("[data-setup-region]")).toContainText("yow");
-    await expect(page.locator("[data-setup-region]")).toContainText("Ottawa");
-    await next(page);
-    await answer(page, "role", "city");
-    await expectStep(page, "name");
-    await page.locator("[data-setup-name]").fill("Ottawa_R1");
-    await next(page);
-    await location(page);
-    await expectStep(page, "commands");
+  test(`${locale || "en/"} an old link with a legacy city code opens the tool on the current zone, without a second province`, async ({ page }) => {
+    // A link made before the zones were renamed: ott is now yow, and the old extras (mtl, a role) are not zones.
+    await openLink(page, `${toolRoot(lang)}?${PHONE_ROUTE}&tag=ott&province=on&regions=mtl&role=city&name=Ottawa_R1`, { firmware: "1.15" });
     const lines = await commandLines(page);
     expect(lines).toContain("region put yow");
     expect(lines).not.toContain("region put qc");
+    expect(lines).not.toContain("region put yul");
     expect(lines.some((line) => line.startsWith("set radio"))).toBe(false);
+    // The address now holds the current zone, and nothing of the old extras.
+    const params = new URL(page.url()).searchParams;
+    expect(params.get("tag")).toBe("yow");
+    expect(params.get("province")).toBe("on");
+    expect(params.has("regions")).toBe(false);
   });
-
-  test(`${locale || "en/"} map loads when visible and its keyboard shortcut stays out of the way`, async ({ page }, testInfo) => {
-    const displayRequests = [];
-    page.on("request", (request) => {
-      if (request.url().includes("/iata-boundaries.geojson")) displayRequests.push(request.url());
-    });
-    await page.route("https://tile.openstreetmap.org/**", (route) => route.fulfill({
-      contentType: "image/png",
-      body: Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=", "base64")
-    }));
-    await page.goto(siteRoute(`/${locale}config/map/?tag=ott`));
-    await expect(page.locator('[data-role="map-status"]')).toHaveText(locale ? "Région trouvée." : "Region found.");
-    const shortcut = page.locator(".mcc-skip-map");
-    await expect(shortcut).toHaveCSS("pointer-events", "none");
-    await expect(page.locator('[data-role="map-region-table"]')).toBeEmpty();
-    const panel = page.locator(".mcc-map-panel");
-    expect(await panel.evaluate((element) => element.scrollHeight <= element.clientHeight + 1)).toBeTruthy();
-    if (testInfo.project.name.startsWith("mobile-")) {
-      await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))));
-      expect(displayRequests).toHaveLength(1); // Point lookup and map share one boundary download.
-    }
-    await page.locator(".mcc-map-stage").scrollIntoViewIfNeeded();
-    await expect(page.locator('[data-role="map-loading"]')).toBeHidden();
-    expect(displayRequests).toHaveLength(1);
-    const marker = page.locator(".leaflet-marker-icon");
-    await expect(marker).toBeVisible();
-    await expect(marker).toHaveAttribute("src", /\/vendor\/leaflet\/images\/marker-icon(?:-2x)?\.png$/);
-    await expect.poll(() => marker.evaluate((image) => image.naturalWidth)).toBeGreaterThan(0);
-    await shortcut.focus();
-    await expect(shortcut).toHaveCSS("opacity", "1");
-    await expect(shortcut).toHaveCSS("pointer-events", "auto");
-    const contrast = await new AxeBuilder({ page }).include(".mcc-map-stage").withRules(["color-contrast"]).analyze();
-    expect(contrast.violations).toEqual([]);
-    await shortcut.press("Enter");
-    await expect(page.locator("#mcc-region-list")).toHaveAttribute("open", "");
-    await expect(page.locator('[data-role="table-filter"]')).toBeVisible();
-  });
-
-  for (const scheme of ["default", "slate"]) {
-    test(`${locale || "en/"} ${scheme} focused map controls remain readable`, async ({ page }) => {
-      await page.route("https://tile.openstreetmap.org/**", (route) => route.fulfill({
-        contentType: "image/png",
-        body: Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=", "base64")
-      }));
-      await page.goto(siteRoute(`/${locale}config/map/?tag=ott`));
-      await expect(page.locator('[data-role="map-text-result"]')).toContainText("Ottawa");
-      await page.locator(`input[data-md-color-scheme="${scheme}"]`).evaluate((element) => element.click());
-      await page.locator(".mcc-map-stage").scrollIntoViewIfNeeded();
-      await expect(page.locator(".mcc-map-stage")).toHaveAttribute("aria-busy", "false");
-      const mapContrast = await new AxeBuilder({ page }).include(".mcc-map-stage").withRules(["color-contrast"]).analyze();
-      expect(mapContrast.violations).toEqual([]);
-      const find = page.locator('[data-action="map-locate"]');
-      await find.focus();
-      await find.hover();
-      const results = await new AxeBuilder({ page }).include("[data-mcc-regions]").withRules(["color-contrast"]).analyze();
-      expect(results.violations).toEqual([]);
-      const background = await page.locator(".md-main").evaluate((element) => getComputedStyle(element).backgroundColor);
-      // Region tools now use the shared site background, like the proposal.
-      expect(background).toBe(scheme === "default" ? "rgb(246, 248, 251)" : "rgb(15, 22, 35)");
-    });
-  }
 
   test(`${locale || "en/"} broker reference works without JavaScript`, async ({ browser }) => {
     const context = await browser.newContext({ javaScriptEnabled: false });
@@ -144,67 +74,6 @@ test("language switch keeps selected region, radio, and commands step", async ({
   expect(new URL(page.url()).searchParams.has("firmware")).toBe(false);
   await expectStep(page, "commands");
   await expect(codes(page)).toContainText(["set radio 910.425,62.5,7,5", "region def yvr|* bc|* can|* na"]);
-});
-
-test("map tiles appear while a slow boundary overlay is still loading", async ({ page }) => {
-  let releaseBoundary;
-  const boundaryGate = new Promise(resolve => { releaseBoundary = resolve; });
-  await page.route("**/iata-boundaries.geojson?*", async route => {
-    await boundaryGate;
-    await route.continue();
-  });
-  await page.route("https://tile.openstreetmap.org/**", route => route.fulfill({
-    contentType: "image/png",
-    body: Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=", "base64")
-  }));
-  try {
-    await page.goto(siteRoute("/config/map/?tag=ott"));
-    await page.locator(".mcc-map-stage").scrollIntoViewIfNeeded();
-    await expect(page.locator(".leaflet-tile-loaded").first()).toBeVisible();
-    await expect(page.locator('[data-role="map-loading"]')).toBeHidden();
-    await expect(page.locator('[data-role="map-boundary-status"]')).toBeVisible();
-    releaseBoundary();
-    await expect(page.locator(".mcc-map-stage")).toHaveAttribute("aria-busy", "false");
-    await expect(page.locator('[data-role="map-boundary-status"]')).toBeHidden();
-  } finally { releaseBoundary(); }
-});
-
-test("map retry restores the selected marker after a tile failure", async ({ page }) => {
-  let tilesAvailable = false;
-  await page.route("https://tile.openstreetmap.org/**", route => tilesAvailable ? route.fulfill({
-    contentType: "image/png",
-    body: Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=", "base64")
-  }) : route.abort());
-  await page.goto(siteRoute("/config/map/?tag=ott"));
-  await page.locator(".mcc-map-stage").scrollIntoViewIfNeeded();
-  const retry = page.locator('[data-action="load-map"]');
-  await expect(retry).toBeVisible();
-  tilesAvailable = true;
-  await retry.click();
-  await expect(page.locator(".mcc-map-stage")).toHaveAttribute("aria-busy", "false");
-  await expect(page.locator(".leaflet-marker-icon")).toBeVisible();
-  await expect(page.locator('[data-role="map-text-result"]')).toContainText("Ottawa");
-});
-
-test("Québec city uses its actual coordinates and ambiguous legacy region codes offer choices", async ({ page }) => {
-  let lookedUp = false;
-  await page.route("https://geolocator.api.geo.ca/**", async (route) => {
-    lookedUp = true;
-    await route.fulfill({ json: [{ lat: "46.8139", lng: "-71.2080", name: "Québec", province: "Québec", key: "geonames", category: "Ville" }] });
-  });
-  await page.goto(siteRoute("/fr/config/map/"));
-  const input = page.locator('[data-role="map-input"]');
-  await input.fill("Québec");
-  await page.locator('[data-action="map-locate"]').click();
-  await expect(page.locator('[data-role="map-text-result"]')).toContainText("Québec");
-  expect(lookedUp).toBeTruthy();
-  await input.fill("capnat");
-  await page.locator('[data-action="map-locate"]').click();
-  const choices = page.locator('[data-role="map-status"] button');
-  await expect(choices.first()).toBeVisible();
-  expect(await choices.count()).toBeGreaterThan(1);
-  await choices.first().click();
-  await expect(page.locator('[data-role="map-text-result"]')).toBeVisible();
 });
 
 test("feedback remembers its page and accepts a title and description", async ({ page }) => {

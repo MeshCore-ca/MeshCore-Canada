@@ -1,48 +1,11 @@
-import { readFileSync } from "node:fs";
-import vm from "node:vm";
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "./site-fixtures.mjs";
 import { siteRoute } from "./site-route.mjs";
-import { mockGeocoder } from "./setup-helpers.mjs";
+import { PLACES, mockGeocoder } from "./setup-helpers.mjs";
+import { INTRO, LANGS, ONTARIO, QUEBEC, ROUTES, Z, badge, card, choices, line, linked, open, query, search, status, title, where, zonesDrawn } from "./zone-map-helpers.mjs";
 
-// The "Find your zone" page at /config/map/. Every word comes from zone-map.js's own table, so the
-// tests read the same table instead of copying sentences. Tiles come from site-fixtures.mjs (a 1×1
-// PNG for every OpenStreetMap tile) and the place search from setup-helpers.mjs's geo.ca mock.
-vm.runInThisContext(readFileSync("docs/assets/setup/zone-map.js", "utf8"), { filename: "zone-map.js" });
-const Z = (key, lang, vars) => globalThis.MeshCoreZoneMap.t(key, lang, vars);
-// A string with {link}, as it reads on the page.
-const linked = (key, lang, extra = "") => Z(key, lang).replace("{link}", Z(`${key}.link`, lang) + extra);
-
-const ROUTES = { en: "/config/map/", fr: "/fr/config/map/" };
-const LANGS = ["en", "fr"];
-const INTRO = {
-  en: "See which zone (IATA code) a place is in, and whether it's a MeshMapper zone or a placeholder.",
-  fr: "Voyez dans quelle zone (code IATA) se trouve un endroit, et s’il s’agit d’une zone MeshMapper ou d’une zone provisoire."
-};
-const ONTARIO = { en: "Ontario", fr: "Ontario" };
-const QUEBEC = { en: "Québec", fr: "Québec" };
-
-const card = (page) => page.locator("[data-zone-card]");
-const title = (page) => page.locator("[data-zone-card] h2");
-const where = (page) => page.locator("[data-zone-where]");
-const badge = (page) => page.locator("[data-zone-badge]");
-const line = (page) => page.locator("[data-zone-line]");
-const status = (page) => page.locator("[data-zone-status]");
-const choices = (page) => page.locator("[data-zone-choice]");
-
-async function open(page, lang, query = "") {
-  await page.goto(siteRoute(ROUTES[lang] + query));
-  // The zones are drawn once the browse list is filled: the data is in.
-  await expect(page.locator("[data-zone-pick]").first()).toBeAttached();
-}
-async function search(page, text) {
-  await page.locator("[data-zone-search]").fill(text);
-  await page.locator("[data-zone-search]").press("Enter");
-}
-async function zonesDrawn(page) {
-  await expect(page.locator("path[data-zone]").first()).toBeAttached();
-}
-const query = (page) => Object.fromEntries(new URL(page.url()).searchParams);
+// The "Find your zone" page at /config/map/. The shared helpers (and why the tests read the page's own
+// words) are in zone-map-helpers.mjs.
 
 for (const lang of LANGS) {
   test(`${lang} the page: a title, one line, the search, the map with its legend, and three footer links`, async ({ page }) => {
@@ -150,6 +113,27 @@ test("a street address shows the zone it's in", async ({ page }) => {
   await expect(title(page)).toHaveText("YOW · Ottawa–Gatineau");
   await expect(where(page)).toHaveText("111 Wellington Street, Ottawa · Ontario");
   await expect(badge(page)).toHaveText(Z("badge.mesh", "en"));
+});
+
+test("a province after the town narrows the search to it", async ({ page }) => {
+  await mockGeocoder(page);
+  await open(page, "en");
+  // Without it, Saint-Jean is several places (see the test below); with it, only the one in Québec is left.
+  await search(page, "Saint-Jean, QC");
+  await expect(choices(page)).toHaveCount(0);
+  await expect(title(page)).toContainText("YUL · ");
+  await expect(where(page)).toHaveText("Saint-Jean-sur-Richelieu · Québec");
+  expect(await page.locator("[data-zone-setup]").getAttribute("href")).toBe("../?tag=yul&province=qc");
+});
+
+test("a town is placed at the coordinates the place search gives, in French too", async ({ page }) => {
+  await mockGeocoder(page, { ...PLACES, "Québec": [{ key: "geonames", category: "Ville", name: "Québec", province: "Québec", lat: 46.8139, lng: -71.2080 }] });
+  await open(page, "fr");
+  await search(page, "Québec");
+  await expect(title(page)).toContainText("YQB · ");
+  await expect(where(page)).toHaveText("Québec · Québec");
+  await expect(badge(page)).toHaveText(Z("badge.mesh", "fr"));
+  expect(await page.locator("[data-zone-setup]").getAttribute("href")).toBe("../?tag=yqb&province=qc");
 });
 
 test("coordinates are read here and never sent to the place search", async ({ page }) => {
@@ -359,6 +343,9 @@ test("a link opens the map at its zone before the outlines are in, and keeps tha
   await page.goto(siteRoute("/config/map/?tag=ytr&province=on"));
   await expect.poll(() => zooms.length).toBeGreaterThan(0);
   expect(Math.min(...zooms), "no tiles for the whole of Canada first").toBeGreaterThanOrEqual(7);
+  // The map shows its tiles while the outlines are still on their way, and draws no zone yet.
+  await expect(page.locator("img.leaflet-tile-loaded").first()).toBeAttached();
+  await expect(page.locator("path[data-zone]")).toHaveCount(0);
   const before = zooms.length;
   release();
   await expect(title(page)).toHaveText("YTR · Quinte West");
@@ -368,6 +355,41 @@ test("a link opens the map at its zone before the outlines are in, and keeps tha
   await page.waitForTimeout(300);
   expect(zooms.slice(before).filter((zoom) => zoom !== zooms[0])).toEqual([]);
 });
+
+test("the outline file is downloaded once, for the map and for every search", async ({ page }) => {
+  await mockGeocoder(page);
+  const downloads = [];
+  page.on("request", (request) => { if (request.url().includes("/iata-boundaries.geojson")) downloads.push(request.url()); });
+  await open(page, "en");
+  await zonesDrawn(page);
+  await search(page, "Belleville");
+  await expect(title(page)).toHaveText("YTR · Quinte West");
+  await search(page, "44.1628, -77.3832");
+  await expect(where(page)).toHaveText("44.1628, -77.3832 · Ontario");
+  expect(downloads).toHaveLength(1);
+});
+
+for (const lang of LANGS) {
+  for (const [scheme, action] of [["default", "rgb(20, 88, 176)"], ["slate", "rgb(125, 183, 255)"]]) {
+    test(`${lang} ${scheme} colours: the controls and the card use the site's palette and stay readable`, async ({ page }) => {
+      await open(page, lang, "?tag=ytr&province=on");
+      await expect(title(page)).toHaveText("YTR · Quinte West");
+      await zonesDrawn(page);
+      await page.locator(`input[data-md-color-scheme="${scheme}"]`).evaluate((element) => element.click());
+      const find = page.getByRole("button", { name: Z("search.button", lang), exact: true });
+      // The main buttons are the site's action colour, in light and dark.
+      await expect(find).toHaveCSS("background-color", action);
+      await expect(page.locator("[data-zone-setup]")).toHaveCSS("background-color", action);
+      await find.focus();
+      await find.hover();
+      const contrast = await new AxeBuilder({ page }).include("[data-zone-map]").withRules(["color-contrast"]).analyze();
+      expect(contrast.violations).toEqual([]);
+      // The page sits on the site's own background, not one of its own.
+      await expect(page.locator("body")).toHaveCSS("background-color", scheme === "default" ? "rgb(246, 248, 251)" : "rgb(15, 22, 35)");
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1)).toBe(true);
+    });
+  }
+}
 
 test("the card is read out: it sits in a live region, and the search status is a status", async ({ page }) => {
   await open(page, "en");
@@ -427,6 +449,15 @@ test("on a phone: no sideways scroll, a map about half the screen, and the card 
 
 test("the map didn't load: it says so, and the search and the list still work", async ({ page }) => {
   await page.route("**/regions/vendor/leaflet/leaflet.js", (route) => route.abort());
+  await open(page, "en");
+  await expect(page.locator("[data-zone-map-failed]")).toHaveText(Z("map.failed", "en"));
+  await expect(page.locator("[data-zone-map-box]")).toHaveCount(0);
+  await search(page, "ytr");
+  await expect(title(page)).toHaveText("YTR · Quinte West");
+});
+
+test("the tiles didn't load: the map is replaced by one line, and the search and the list still work", async ({ page }) => {
+  await page.route("https://tile.openstreetmap.org/**", (route) => route.abort());
   await open(page, "en");
   await expect(page.locator("[data-zone-map-failed]")).toHaveText(Z("map.failed", "en"));
   await expect(page.locator("[data-zone-map-box]")).toHaveCount(0);
