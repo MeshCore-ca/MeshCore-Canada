@@ -412,6 +412,7 @@ for (const lang of LANGS) {
     await open(page, lang, "?tag=yow&province=on");
     await expect(where(page)).toHaveText(ONTARIO[lang]);
     await zonesDrawn(page);
+    await expect(page.locator('path[data-zone="yow"][data-zone-source="meshmapper"]')).toBeAttached();
     await page.locator("[data-zone-map-box]").scrollIntoViewIfNeeded();
     const gatineau = await pixelOf(page, 45.4765, -75.7013);
     expect(await page.evaluate(({ x, y }) => document.elementFromPoint(x, y)?.getAttribute("data-zone"), gatineau)).toBe("yow");
@@ -454,6 +455,11 @@ for (const lang of LANGS) {
 test("each MeshMapper outline is drawn over its placeholder, before and after it is chosen", async ({ page }) => {
   await open(page, "en");
   await zonesDrawn(page);
+  // Outlines are drawn in small slices; wait until both of a zone's paths exist.
+  for (const tag of ["ytr", "ykf"]) {
+    await expect(page.locator(`path[data-zone="${tag}"][data-zone-source="meshcore-canada"]`)).toBeAttached();
+    await expect(page.locator(`path[data-zone="${tag}"][data-zone-source="meshmapper"]`)).toBeAttached();
+  }
   const meshmapperOnTop = (tag) => page.evaluate((tag) => {
     const placeholder = document.querySelector(`path[data-zone="${tag}"][data-zone-source="meshcore-canada"]`);
     const zone = document.querySelector(`path[data-zone="${tag}"][data-zone-source="meshmapper"]`);
@@ -496,6 +502,7 @@ test("tapping a zone at phone size selects it and brings the card into view", as
   await page.setViewportSize({ width: 390, height: 844 });
   await open(page, "en");
   await zonesDrawn(page);
+  await expect(page.locator('path[data-zone="yfb"]').first()).toBeAttached();
   await page.locator("[data-zone-map-box]").scrollIntoViewIfNeeded();
   // Iqaluit, in Nunavut's region.
   const iqaluit = await pixelOf(page, 63.7467, -68.517);
@@ -512,7 +519,8 @@ test("the outlines wait for the map's first tiles, unless a search needs them", 
   await page.route("https://tile.openstreetmap.org/**", async (route) => { await tilesHeld; await route.fulfill({ contentType: "image/png", body: TILE_PNG }); });
   const outlines = [];
   page.on("request", (request) => { if (/\.geojson(\?|$)/.test(request.url())) outlines.push(request.url()); });
-  await page.goto(siteRoute(ROUTES.en));
+  // Held tiles keep the page's load event pending in some engines, so only wait for the HTML.
+  await page.goto(siteRoute(ROUTES.en), { waitUntil: "domcontentloaded" });
   await expect(page.locator(".zm-map .leaflet-container")).toBeVisible();
   await page.waitForTimeout(700);
   expect(outlines, "nothing big while the tiles load").toEqual([]);
@@ -528,7 +536,7 @@ test("the outlines don't wait more than a few seconds for slow tiles", async ({ 
   const outlines = [];
   page.on("request", (request) => { if (/\.geojson(\?|$)/.test(request.url())) outlines.push(request.url()); });
   const started = Date.now();
-  await page.goto(siteRoute(ROUTES.en));
+  await page.goto(siteRoute(ROUTES.en), { waitUntil: "domcontentloaded" });
   await expect.poll(() => outlines.length, { timeout: 8000 }).toBe(2);
   expect(Date.now() - started).toBeGreaterThan(2000);
   await expect(page.locator("[data-zone-pick]").first()).toBeAttached();
