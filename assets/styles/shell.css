@@ -54,6 +54,12 @@
   align-items: center;
 }
 
+/* Page review status lives in front matter for maintainers; don't show it as
+   an icon beside every menu item. */
+.md-nav .md-status {
+  display: none;
+}
+
 .md-nav__link--active,
 .md-nav__link:focus,
 .md-nav__link:hover {
