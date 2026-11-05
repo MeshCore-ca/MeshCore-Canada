@@ -5,6 +5,7 @@ import {
   T, plain, firstSentence, linked, mockGeocoder, step, nextButton, progress, codes, expectStep, next, choose, answer,
   confirmStep, version, searchTown, town, scopeLines, commandLines, openLink, nextUntil, location, pinBox
 } from "./setup-helpers.mjs";
+import { Z } from "./zone-map-helpers.mjs";
 
 // The guided setup tool at /config/. Shared helpers (the text table, the geocoder mock, the step
 // helpers) live in setup-helpers.mjs, which the specs that retarget old configurator cases also use.
@@ -516,6 +517,26 @@ for (const lang of LANGS) {
     // The tool keeps its place.
     await expectStep(page, "town");
     await expect(page.locator("[data-setup-region]")).toContainText("yow");
+  });
+}
+
+for (const lang of LANGS) {
+  test(`${lang} View on map tells the zone finder when the spot is in a planning extension`, async ({ page }) => {
+    const root = `${ROUTES[lang]}?type=repeater&board=esp32&status=running&reflash=0`;
+    const view = page.locator("[data-setup-view-map]");
+    const params = async () => Object.fromEntries(new URL(await view.getAttribute("href"), page.url()).searchParams);
+    // The Wingham-area point is just outside Waterloo's MeshMapper zone.
+    await openLink(page, `${root}&tag=ykf&province=on&town=Wingham&lat=43.8678&lon=-81.2619`, { to: "town" });
+    await expect(page.locator("[data-setup-planning]")).toHaveAttribute("data-setup-planning", "extension");
+    expect(await params()).toEqual({ tag: "ykf", province: "on", part: "extension" });
+    const [map] = await Promise.all([page.context().waitForEvent("page"), view.click()]);
+    await expect(map.locator("[data-zone-badge]")).toHaveText(Z("badge.extension", lang));
+    await map.close();
+    // Inside a MeshMapper zone, or in a starter region, there's no part to tell.
+    await openLink(page, `${root}&${BELLEVILLE}`, { to: "town" });
+    expect(await params()).toEqual({ tag: "ytr", province: "on" });
+    await openLink(page, `${root}&tag=yyg&province=pe&town=Charlottetown&lat=46.2382&lon=-63.1311`, { to: "town" });
+    expect(await params()).toEqual({ tag: "yyg", province: "pe" });
   });
 }
 

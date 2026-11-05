@@ -42,6 +42,13 @@
         }
       }
     </script>
+    {# Hints for a page's own heavy assets: greet a server early, and fetch a file the page's script will ask for. #}
+    {% for origin in page.meta.page_preconnects or [] %}
+      <link rel="preconnect" href="{{ origin }}">
+    {% endfor %}
+    {% for asset in page.meta.page_preloads or [] %}
+      <link rel="preload" href="{{ asset | url }}" as="{{ 'style' if asset.split('?')[0].endswith('.css') else 'script' }}">
+    {% endfor %}
     {% for stylesheet in page.meta.page_styles or [] %}
       <link rel="stylesheet" href="{{ stylesheet | url }}">
     {% endfor %}

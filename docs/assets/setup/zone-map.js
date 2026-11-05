@@ -54,6 +54,7 @@
     "more.no-groups": "No local group listed yet.",
     "more.source.mesh": "Outline from MeshMapper.",
     "more.source.placeholder": "Outline drawn by MeshCore Canada.",
+    "more.extension": "Nearby places outside it use this code too, through a MeshCore Canada planning extension (dashed).",
     "more.maintainer": "Maintainer: {name}",
     "more.no-maintainer": "No maintainer listed. {link}",
     "more.no-maintainer.link": "Volunteer",
@@ -73,10 +74,10 @@
     "status.many": "Plus d’une zone couvre cet endroit. Laquelle?",
     "status.mismatch": "La recherche de lieux et la carte des zones ne s’entendent pas sur la province. Laquelle?",
     "status.province": "Cette zone couvre plus d’une province. Laquelle?",
-    "status.nothing": "Rien trouvé. Essayez une ville voisine, ou touchez la carte.",
+    "status.nothing": "Aucun endroit trouvé. Essayez une ville voisine, ou touchez la carte.",
     "status.none": "Aucune zone ne couvre cet endroit.",
     "status.outside": "Ces coordonnées ne sont pas au Canada. Au Canada, la longitude est négative : par exemple 44.1628, -77.3832.",
-    "status.format": "Ces nombres n’ont pas pu être lus comme des coordonnées. Tapez-les comme 44.1628, -77.3832.",
+    "status.format": "Ces nombres n’ont pas pu être lus comme des coordonnées. Tapez-les comme 44.1628, -77.3832 ou 44,1628; -77,3832.",
     "status.failed": "La recherche de lieux n’a pas répondu. Réessayez, ou touchez la carte.",
     "status.load-failed": "Les zones ne se sont pas chargées. Vérifiez votre connexion, puis rechargez la page.",
     "map.label": "Carte des zones",
@@ -94,17 +95,18 @@
     "badge.mesh": "Zone MeshMapper",
     "badge.starter": "Zone provisoire",
     "badge.extension": "Zone provisoire · extension proposée",
-    "line.mesh": "Une zone MeshMapper publiée. Les répéteurs et les observateurs d’ici utilisent le code {code}.",
+    "line.mesh": "Une zone MeshMapper publiée. Les répéteurs et les observateurs de cette zone utilisent le code {code}.",
     "line.placeholder": "Pas encore de zone MeshMapper ici. MeshCore Canada utilise ce tracé en attendant que les opérateurs locaux en publient une sur MeshMapper.",
     "action.setup": "Configurer un répéteur ici",
     "action.meshmapper": "Ouvrir dans MeshMapper",
     "tell": "Un problème avec cette zone? {link}.",
     "tell.link": "Dites-le-nous",
-    "more": "Plus sur cette région",
+    "more": "En savoir plus sur cette région",
     "more.groups": "Groupes locaux :",
     "more.no-groups": "Aucun groupe local indiqué pour l’instant.",
     "more.source.mesh": "Tracé de MeshMapper.",
     "more.source.placeholder": "Tracé dessiné par MeshCore Canada.",
+    "more.extension": "Des endroits voisins, hors de cette zone, utilisent aussi ce code grâce à une extension proposée par MeshCore Canada (en pointillés).",
     "more.maintainer": "Responsable : {name}",
     "more.no-maintainer": "Aucun responsable indiqué. {link}",
     "more.no-maintainer.link": "Devenir responsable",
@@ -146,15 +148,23 @@
     return features(tag, data).filter(function (feature) { return feature.properties.regionSource === "meshmapper"; })[0] || null;
   }
 
+  // Whether MeshCore Canada gives this code a planning extension: places just outside its MeshMapper zone.
+  function hasExtension(tag, data) {
+    return features(tag, data).some(function (feature) { return feature.properties.planningKind === "extension"; });
+  }
+
   // What a zone is, for its badge:
   //   "mesh"       a published MeshMapper zone
   //   "starter"    a MeshCore Canada starter region: MeshMapper has no zone for this code yet
   //   "extension"  the spot is outside the code's MeshMapper zone, in the gap MeshCore Canada gives it
-  // With no spot (a typed code, the list, a link), a code with a MeshMapper zone is "mesh".
-  function kind(tag, point, data) {
+  // A spot decides. With none (a typed code, the list, a link), a code with a MeshMapper zone is "mesh",
+  // unless a link from the setup tool says its spot is in the extension (`part` is "extension") and the
+  // code has one. Any other `part` is ignored.
+  function kind(tag, point, data, part) {
     var planning = globalThis.MeshCoreSetupPlace.planning(tag, point || null, data);
     if (planning) return planning;
-    return published(tag, data) ? "mesh" : "starter";
+    if (!published(tag, data)) return "starter";
+    return !point && part === "extension" && hasExtension(tag, data) ? "extension" : "mesh";
   }
 
   function nameOf(catalog, tag, lang) {
@@ -201,6 +211,7 @@
     text: { en: Object.freeze(en), fr: Object.freeze(fr) },
     styles: STYLES,
     kind: kind,
+    hasExtension: hasExtension,
     groups: groups,
     links: links
   };
@@ -225,6 +236,8 @@
   var CANADA = [[41.7, -141], [70, -52.6]];
   var LABEL_ZOOM = 5;           // zone codes show from this zoom in
   var LINK_ZOOM = 8;            // a zone from the address bar, before its outline is in: most fit at this zoom
+  var OUTLINE_WAIT = 2500;      // the outline files wait for the map's first tiles, but no longer than this
+  var DRAW_SLICE = 8;           // milliseconds of drawing zones before the page gets a turn
   var PHONE = "(max-width: 44.9375em)";
   var ROUTE = /^\/[A-Za-z0-9/_.#-]*$/;
 
@@ -239,9 +252,24 @@
     drawn: false,     // every zone is on the map
     zoomWaiting: false,
     linkView: false,  // the map opened at the zone in the address bar, from the catalogue's seed
-    selected: null,   // { tag, province, point, place }
-    token: 0          // the latest search; older answers are dropped
+    selected: null,   // { tag, province, point, place, part }
+    token: 0,         // the latest search; older answers are dropped
+    outlinesFree: false,
+    outlinesWaiting: []
   };
+
+  // The two outline files are by far the page's biggest. They wait until the map's first tiles are in, so
+  // the map shows sooner on a slow connection, or OUTLINE_WAIT at most. Anything that needs them sooner (a
+  // search, a link to a zone the catalogue can't place, a map that can't load) lets them go at once.
+  function freeOutlines() {
+    if (state.outlinesFree) return;
+    state.outlinesFree = true;
+    state.outlinesWaiting.splice(0).forEach(function (go) { go(); });
+  }
+
+  function outlinesFree() {
+    return state.outlinesFree ? Promise.resolve() : new Promise(function (go) { state.outlinesWaiting.push(go); });
+  }
 
   // ------------------------------------------------------------------ helpers
 
@@ -268,7 +296,7 @@
   // A link that opens in a new tab, and says so to screen readers. The site's stylesheet adds the ↗.
   function newTab(words, href, attrs) {
     return el("a", Object.assign({ href: href, target: "_blank", rel: "noopener", "data-mc-external-ready": "true" }, attrs || {}),
-      [words, el("span", { class: "zm-sr", text: " " + say("link.new-tab") })]);
+      [words, el("span", { class: "mc-visually-hidden", text: " " + say("link.new-tab") })]);
   }
 
   // A string whose {link} becomes a link to `href`; the link's words are the key plus ".link".
@@ -309,8 +337,6 @@
       el("div", { class: "zm-search__row" }, [input, el("button", { type: "submit", class: "md-button md-button--primary zm-search__button", text: say("search.button") })])
     ]);
     var els = {
-      root: root,
-      input: input,
       status: el("p", { class: "zm-status", role: "status", "data-zone-status": "" }),
       choices: el("div", { class: "zm-choices", "data-zone-choices": "" }),
       canvas: el("div", { class: "zm-map__canvas zm-map--far", "data-zone-canvas": "" }),
@@ -361,7 +387,10 @@
   function whenData(token, then) {
     state.dataPromise.then(function (data) {
       if (token === state.token) then(data);
-    }, function () { /* the load failure is already on the page */ });
+    }, function () {
+      // Nothing to search with: say so again, rather than leave "Loading zones…" there.
+      if (token === state.token) status(say("status.load-failed"));
+    });
   }
 
   // Coordinates typed into the box, as a place named by the rounded spot. It has no province: the zone
@@ -376,6 +405,7 @@
     var query = String(raw || "").trim();
     if (!query) return;
     var token = state.token += 1;
+    freeOutlines();
     clearChoices();
     unselect();
     // Coordinates are read here and never sent to a search, even when they can't be read.
@@ -447,7 +477,10 @@
       });
       if (list.length === 1) return pick(list[0]);
     }
-    status(say(result.status === "many" ? "status.many" : "status.mismatch"));
+    // One zone on both sides of a provincial line (Bas-St-Laurent-Gaspésie across Chaleur Bay): only the
+    // province is in question.
+    var oneZone = list.every(function (option) { return option.tag === list[0].tag; });
+    status(say(result.status === "province-mismatch" ? "status.mismatch" : oneZone ? "status.province" : "status.many"));
     offer(list.map(function (option) { return zoneChoice(option, pick); }));
   }
 
@@ -457,7 +490,7 @@
     var data = state.data;
     var tag = choice.tag;
     var code = tag.toUpperCase();
-    var what = kind(tag, choice.point, data);
+    var what = kind(tag, choice.point, data, choice.part);
     var mesh = what === "mesh";
     var outline = published(tag, data);
     var meshmapper = mesh && outline && /^https:\/\//.test(outline.properties.sourceUrl || "") ? outline.properties.sourceUrl : null;
@@ -494,6 +527,7 @@
         el("ul", {}, [
           groupsLine,
           el("li", { text: say(mesh ? "more.source.mesh" : "more.source.placeholder") }),
+          hasExtension(tag, data) ? el("li", { "data-zone-extension": "", text: say("more.extension") }) : null,
           maintainer ? el("li", { text: say("more.maintainer", { name: maintainer }) }) : el("li", {}, withLink("more.no-maintainer", to.maintainer))
         ])
       ])
@@ -515,7 +549,7 @@
     state.els.result.appendChild(box);
     restyle(before);
     if (how !== "tap") zoomTo(choice.tag);
-    remember(choice);
+    remember(choice, box.getAttribute("data-zone-kind") === "extension");
     var heading = box.querySelector("h2");
     if (how === "browse") {
       state.els.mapBox.scrollIntoView({ behavior: motion(), block: "start" });
@@ -538,11 +572,14 @@
     remember(null);
   }
 
-  // The address bar holds the zone, so the page can be shared or reloaded. Nothing else is kept.
-  function remember(choice) {
+  // The address bar holds the zone, so the page can be shared or reloaded, and part=extension when the card
+  // says the spot is in the zone's planning extension. Nothing else is kept.
+  function remember(choice, extension) {
     if (!window.history || typeof window.history.replaceState !== "function") return;
     var url = new URL(window.location.href);
-    url.search = choice ? "?" + new URLSearchParams({ tag: choice.tag, province: choice.province }) : "";
+    var params = choice ? { tag: choice.tag, province: choice.province } : null;
+    if (params && extension) params.part = "extension";
+    url.search = params ? "?" + new URLSearchParams(params) : "";
     window.history.replaceState(window.history.state, "", url.href);
   }
 
@@ -554,7 +591,8 @@
     if (!options.length) return;
     var wanted = String(params.get("province") || "").toLowerCase();
     var option = options.filter(function (item) { return item.province === wanted; })[0] || options[0];
-    select({ tag: option.tag, province: option.province }, "link");
+    // The setup tool says when its spot is in the planning extension. kind() checks the code has one.
+    select({ tag: option.tag, province: option.province, part: params.get("part") === "extension" ? "extension" : null }, "link");
   }
 
   // ------------------------------------------------------------------ the browse list
@@ -611,7 +649,7 @@
   // Leaflet takes its credit lines as HTML. Only this file's own words go in, escaped.
   function creditLink(words, href) {
     return '<a href="' + href + '" target="_blank" rel="noopener" data-mc-external-ready="true">' + escapeHtml(words) +
-      '<span class="zm-sr"> ' + escapeHtml(say("link.new-tab")) + "</span></a>";
+      '<span class="mc-visually-hidden"> ' + escapeHtml(say("link.new-tab")) + "</span></a>";
   }
 
   function tileCredit() {
@@ -620,8 +658,12 @@
 
   function styleFor(feature) {
     var properties = feature.properties;
-    if (state.selected && properties.tag === state.selected.tag) return STYLES.you;
-    return properties.regionSource === "meshmapper" ? STYLES.mesh : STYLES.placeholder;
+    var meshmapper = properties.regionSource === "meshmapper";
+    // The chosen zone is blue; its placeholder parts stay dashed, so the published part stands out.
+    if (state.selected && properties.tag === state.selected.tag) {
+      return meshmapper ? STYLES.you : Object.assign({}, STYLES.you, { dashArray: STYLES.placeholder.dashArray });
+    }
+    return meshmapper ? STYLES.mesh : STYLES.placeholder;
   }
 
   // Redraws the zone that was selected and the one that is now, and puts the new one on top, its
@@ -653,6 +695,8 @@
   }
 
   function mapFailed() {
+    // No tiles to wait for: the search and the list need the outlines now.
+    freeOutlines();
     var map = state.map;
     state.map = null;
     state.drawn = false;
@@ -684,7 +728,7 @@
       (function step() {
         if (state.map !== map) return resolve();
         var started = Date.now();
-        while (index < order.length && Date.now() - started < 30) addZone(L, map, order[index++]);
+        while (index < order.length && Date.now() - started < DRAW_SLICE) addZone(L, map, order[index++]);
         if (index < order.length) return window.setTimeout(step, 0);
         addLabels(L, map, data);
         resolve();
@@ -726,7 +770,10 @@
     var tag = String(new URLSearchParams(window.location.search).get("tag") || "").toLowerCase();
     if (!Place.fromCode(tag, { catalog: catalog }).length) return null;
     var seed = catalog.seeds.filter(function (item) { return item && item.tag === tag; })[0];
-    return seed && isFinite(seed.lat) && isFinite(seed.lon) ? { tag: tag, lat: Number(seed.lat), lon: Number(seed.lon) } : null;
+    if (seed && isFinite(seed.lat) && isFinite(seed.lon)) return { tag: tag, lat: Number(seed.lat), lon: Number(seed.lon) };
+    // A zone the catalogue can't place: only its outline can show where it is, so don't make that wait.
+    freeOutlines();
+    return null;
   }
 
   function startMap(catalogPromise) {
@@ -765,6 +812,8 @@
       }
       tiles.once("tileload", function () { settle(true); });
       tiles.once("load", function () { settle(false); });
+      // The first screen of tiles is in (or failed): the outlines can come now.
+      tiles.once("load", freeOutlines);
       state.dataPromise.then(function (data) {
         return drawZones(L, map, data);
       }).then(function () {
@@ -788,6 +837,8 @@
     if (!Place || !Search || !Flow || !globalThis.MeshCoreIataScopes) {
       state.dataPromise = Promise.reject(new Error("A page script didn't load"));
       state.dataPromise.catch(function () {});
+      // Nothing here can work: one line, not an empty map, a legend and an empty list.
+      [state.els.mapBox, state.els.legend, state.els.browse].forEach(function (node) { node.remove(); });
       status(say("status.load-failed"));
       return;
     }
@@ -796,12 +847,15 @@
     // map can open at a linked zone before the outlines are in.
     var catalogPromise = null;
     state.dataPromise = Place.loadData(SCRIPT_URL, function (url, init) {
+      var path = new URL(String(url), window.location.href).pathname;
+      if (/\.geojson$/.test(path)) return outlinesFree().then(function () { return window.fetch(url, init); });
       var request = window.fetch(url, init);
-      if (!catalogPromise && /\/iata-regions\.json$/.test(new URL(String(url), window.location.href).pathname)) {
+      if (!catalogPromise && /\/iata-regions\.json$/.test(path)) {
         catalogPromise = request.then(function (response) { return response.ok ? response.clone().json() : null; }).catch(function () { return null; });
       }
       return request;
     });
+    window.setTimeout(freeOutlines, OUTLINE_WAIT);
     startMap(catalogPromise || Promise.resolve(null));
     state.dataPromise.then(function (data) {
       state.data = data;

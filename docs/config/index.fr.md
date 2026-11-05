@@ -22,7 +22,7 @@ page_scripts:
   - assets/setup/setup-flow.js?v=20261103-12
   - assets/setup/setup-place.js?v=20261103-12
   - assets/setup/setup-commands.js?v=20261103-12
-  - assets/setup/setup-ui.js?v=20261105-1
+  - assets/setup/setup-ui.js?v=20261105-2
 hide:
   - navigation
   - toc

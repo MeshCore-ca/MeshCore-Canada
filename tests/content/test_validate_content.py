@@ -61,6 +61,29 @@ class ContentValidationTests(unittest.TestCase):
         self.write("index.md", page)
         self.assertEqual([], MODULE.validate_tree(self.docs, self.today))
 
+    def test_page_preloads_must_be_local_assets_that_exist(self) -> None:
+        self.write("assets/lib.js", "console.log('fixture');\n")
+        page = VALID.replace(
+            "evidence: fixture-review",
+            "evidence: fixture-review\npage_preloads:\n  - assets/lib.js\n  - assets/missing.css",
+        )
+        self.write("index.md", page)
+        problems = MODULE.validate_tree(self.docs, self.today)
+        self.assertEqual(["index.md: page_preloads asset does not exist: assets/missing.css"], problems)
+
+    def test_page_preconnects_must_be_https_origins(self) -> None:
+        page = VALID.replace(
+            "evidence: fixture-review",
+            "evidence: fixture-review\npage_preconnects:\n  - https://tile.openstreetmap.org\n"
+            "  - http://insecure.example\n  - https://example.org/path",
+        )
+        self.write("index.md", page)
+        problems = MODULE.validate_tree(self.docs, self.today)
+        self.assertEqual([
+            "index.md: page_preconnects must be HTTPS origins: http://insecure.example",
+            "index.md: page_preconnects must be HTTPS origins: https://example.org/path",
+        ], problems)
+
     def test_missing_front_matter_fails(self) -> None:
         self.write("index.md", "# Missing metadata\n\nThis page has content but no lifecycle contract.")
         problems = MODULE.validate_tree(self.docs, self.today)

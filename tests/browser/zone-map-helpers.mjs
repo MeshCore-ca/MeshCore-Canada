@@ -16,7 +16,7 @@ export const ROUTES = { en: "/config/map/", fr: "/fr/config/map/" };
 export const LANGS = ["en", "fr"];
 export const INTRO = {
   en: "See which zone (IATA code) a place is in, and whether it's a MeshMapper zone or a placeholder.",
-  fr: "Voyez dans quelle zone (code IATA) se trouve un endroit, et s’il s’agit d’une zone MeshMapper ou d’une zone provisoire."
+  fr: "Découvrez dans quelle zone (code IATA) se trouve un endroit, et s’il s’agit d’une zone MeshMapper ou d’une zone provisoire."
 };
 export const ONTARIO = { en: "Ontario", fr: "Ontario" };
 export const QUEBEC = { en: "Québec", fr: "Québec" };
@@ -42,3 +42,23 @@ export async function zonesDrawn(page) {
   await expect(page.locator("path[data-zone]").first()).toBeAttached();
 }
 export const query = (page) => Object.fromEntries(new URL(page.url()).searchParams);
+
+// Where a latitude and longitude are on the screen, worked out from a loaded tile: its address gives its
+// zoom and place in the world, and its box where it is drawn. So a test can tap a real spot (Gatineau,
+// Iqaluit) without the page handing out its map.
+export async function pixelOf(page, lat, lon) {
+  return page.evaluate(([lat, lon]) => {
+    const tiles = [...document.querySelectorAll(".zm-map img.leaflet-tile-loaded")]
+      .map((img) => ({ img, at: /\/(\d+)\/(\d+)\/(\d+)\.png/.exec(img.src) }))
+      .filter((tile) => tile.at)
+      .sort((a, b) => Number(b.at[1]) - Number(a.at[1]));
+    if (!tiles.length) return null;
+    const [, z, x, y] = tiles[0].at.map(Number);
+    const world = 256 * 2 ** z;
+    const sin = Math.sin(lat * Math.PI / 180);
+    const px = (lon + 180) / 360 * world;
+    const py = (0.5 - Math.log((1 + sin) / (1 - sin)) / (4 * Math.PI)) * world;
+    const box = tiles[0].img.getBoundingClientRect();
+    return { x: box.left + (px - x * 256) * box.width / 256, y: box.top + (py - y * 256) * box.height / 256 };
+  }, [lat, lon]);
+}

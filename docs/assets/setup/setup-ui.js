@@ -1083,11 +1083,14 @@
       box.appendChild(codeForm());
     } else if (a.tag && a.province) {
       box.appendChild(regionCard());
-      // The region on the zone map, in a new tab so the tool keeps its place.
-      box.appendChild(para(link(t("town.view-map"), LINKS.map + "?" + new URLSearchParams({ tag: a.tag, province: a.province }), { "data-setup-view-map": "" }),
+      var kind = Place.planning(a.tag, a.place, state.data);
+      // The region on the zone map, in a new tab so the tool keeps its place. A spot in the planning
+      // extension says so (part=extension), so the map shows that badge rather than the MeshMapper zone's.
+      var mapAt = { tag: a.tag, province: a.province };
+      if (kind === "extension") mapAt.part = "extension";
+      box.appendChild(para(link(t("town.view-map"), LINKS.map + "?" + new URLSearchParams(mapAt), { "data-setup-view-map": "" }),
         { class: "setup-view-map" }));
       // A starter region or a planning extension isn't a MeshMapper zone: say so, as the map does.
-      var kind = Place.planning(a.tag, a.place, state.data);
       var href = kind === "starter" ? LINKS.guide + "#starter-regions" : LINKS.guide + "#planning-extensions";
       if (kind) box.appendChild(note("info", para(rich("town." + kind, null, href)), { "data-setup-planning": kind }));
     }

@@ -13,7 +13,6 @@ const zones = globalThis.MeshCoreZoneMap;
 
 const read = (path) => readFileSync(path, "utf8");
 const PAGES = { en: "docs/config/map.md", fr: "docs/config/map.fr.md" };
-const VERSION = "?v=20261105-1";
 const SCRIPTS = [
   "assets/regions/modules/iata-scopes.js",
   "assets/javascripts/place-search.js",
@@ -47,7 +46,7 @@ before(async () => {
 test("the map page is the zone finder: title, one-line intro, verified with its browser spec", () => {
   const expected = {
     en: { title: "Find your zone", intro: "See which zone (IATA code) a place is in, and whether it's a MeshMapper zone or a placeholder." },
-    fr: { title: "Trouver votre zone", intro: "Voyez dans quelle zone (code IATA) se trouve un endroit, et s’il s’agit d’une zone MeshMapper ou d’une zone provisoire." }
+    fr: { title: "Trouver votre zone", intro: "Découvrez dans quelle zone (code IATA) se trouve un endroit, et s’il s’agit d’une zone MeshMapper ou d’une zone provisoire." }
   };
   for (const [lang, path] of Object.entries(PAGES)) {
     const markdown = read(path);
@@ -66,16 +65,29 @@ test("the map page is the zone finder: title, one-line intro, verified with its 
 test("the map page loads the setup tool's pieces, then the zone finder, and nothing of the old region map", () => {
   for (const path of Object.values(PAGES)) {
     const header = frontMatter(read(path));
-    assert.deepEqual(list(header, "page_scripts"), SCRIPTS.map((script) => script + VERSION), path);
-    assert.deepEqual(list(header, "page_styles"), ["assets/setup/zone-map.css" + VERSION], path);
+    // In this order, each with a cache key.
+    const scripts = list(header, "page_scripts");
+    assert.deepEqual(scripts.map((entry) => entry.replace(/\?v=\d{8}-\d+$/, "")), SCRIPTS, path);
+    for (const entry of scripts) assert.match(entry, /\?v=\d{8}-\d+$/, entry);
+    assert.deepEqual(list(header, "page_styles").map((entry) => entry.replace(/\?v=\d{8}-\d+$/, "")), ["assets/setup/zone-map.css"], path);
+    // The tiles' server is greeted, and Leaflet fetched, while the page is still being read: the same
+    // files at the same addresses the script asks for, so nothing is downloaded twice.
+    assert.deepEqual(list(header, "page_preconnects"), ["https://tile.openstreetmap.org"], path);
+    assert.deepEqual(list(header, "page_preloads"), ["assets/regions/vendor/leaflet/leaflet.js", "assets/regions/vendor/leaflet/leaflet.css"], path);
     for (const old of ["regions.js", "regions.css", "configurator-support.js", "radio-profiles.js", "data-mcc-regions"]) {
       assert.ok(!read(path).includes(old), `${path} must not load ${old}`);
     }
-    // Leaflet loads from the script, only when the map is drawn.
-    assert.doesNotMatch(read(path), /leaflet/i, path);
+    // Leaflet is run by the script; the page only hints that it will be wanted.
+    const leaflet = read(path).split("\n").filter((entry) => /leaflet/i.test(entry));
+    assert.deepEqual(leaflet, ["  - assets/regions/vendor/leaflet/leaflet.js", "  - assets/regions/vendor/leaflet/leaflet.css"], path);
   }
   const script = read("docs/assets/setup/zone-map.js");
   assert.match(script, /"\.\.\/regions\/vendor\/leaflet\/leaflet\.js"/, "the site's vendored Leaflet");
+  assert.match(script, /"\.\.\/regions\/vendor\/leaflet\/leaflet\.css"/, "and its stylesheet");
+  // The theme template turns those two lists into link hints.
+  const template = read("overrides/main.html");
+  assert.match(template, /page\.meta\.page_preconnects[\s\S]*rel="preconnect"/);
+  assert.match(template, /page\.meta\.page_preloads[\s\S]*rel="preload"/);
   assert.match(script, /https:\/\/tile\.openstreetmap\.org\/\{z\}\/\{x\}\/\{y\}\.png/, "OpenStreetMap tiles");
   assert.doesNotMatch(script, /innerHTML/, "text from the address bar or the search is never set as HTML");
 });
@@ -148,6 +160,31 @@ test("kind(): a MeshMapper zone, a starter region, and a spot in a planning exte
   // The Wingham-area point is just outside Waterloo's MeshMapper zone.
   assert.equal(zones.kind("ykf", { lat: 43.8678, lon: -81.2619 }, data), "extension");
   assert.equal(zones.kind("ykf", null, data), "mesh");
+});
+
+test("kind(): a link's part=extension shows the extension badge, only for a code that has one", () => {
+  assert.equal(zones.kind("ykf", null, data, "extension"), "extension");
+  assert.equal(zones.kind("ytr", null, data, "extension"), "extension");
+  // A starter region has no extension: the part is ignored.
+  assert.equal(zones.kind("yyg", null, data, "extension"), "starter");
+  // Anything else is ignored too.
+  assert.equal(zones.kind("ytr", null, data, "bogus"), "mesh");
+  assert.equal(zones.kind("ytr", null, data, "EXTENSION"), "mesh");
+  // A spot decides on its own: inside Waterloo's MeshMapper zone it's the zone, whatever the link says.
+  assert.equal(zones.kind("ykf", { lat: 43.4643, lon: -80.5204 }, data, "extension"), "mesh");
+  assert.equal(zones.hasExtension("ytr", data), true);
+  assert.equal(zones.hasExtension("yyg", data), false);
+});
+
+test("the extension sentence and the reviewed French wording", () => {
+  const t = zones.t;
+  assert.equal(t("more.extension", "en"), "Nearby places outside it use this code too, through a MeshCore Canada planning extension (dashed).");
+  assert.match(t("more.extension", "fr"), /extension proposée/);
+  assert.match(t("more.extension", "fr"), /pointillés/);
+  assert.equal(t("status.nothing", "fr"), "Aucun endroit trouvé. Essayez une ville voisine, ou touchez la carte.");
+  assert.match(t("status.format", "fr"), /44,1628; -77,3832/);
+  assert.equal(t("line.mesh", "fr", { code: "YTR" }), "Une zone MeshMapper publiée. Les répéteurs et les observateurs de cette zone utilisent le code YTR.");
+  assert.equal(t("more", "fr"), "En savoir plus sur cette région");
 });
 
 test("groups(): every zone under each province or territory it spans, west to east, names in order", () => {

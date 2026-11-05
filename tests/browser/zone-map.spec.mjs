@@ -1,8 +1,8 @@
 import AxeBuilder from "@axe-core/playwright";
-import { expect, test } from "./site-fixtures.mjs";
+import { TILE_PNG, expect, test } from "./site-fixtures.mjs";
 import { siteRoute } from "./site-route.mjs";
 import { PLACES, mockGeocoder } from "./setup-helpers.mjs";
-import { INTRO, LANGS, ONTARIO, QUEBEC, ROUTES, Z, badge, card, choices, line, linked, open, query, search, status, title, where, zonesDrawn } from "./zone-map-helpers.mjs";
+import { INTRO, LANGS, ONTARIO, QUEBEC, ROUTES, Z, badge, card, choices, line, linked, open, pixelOf, query, search, status, title, where, zonesDrawn } from "./zone-map-helpers.mjs";
 
 // The "Find your zone" page at /config/map/. The shared helpers (and why the tests read the page's own
 // words) are in zone-map-helpers.mjs.
@@ -79,7 +79,7 @@ for (const lang of LANGS) {
     await expect(meshmapper).toHaveAttribute("rel", /noopener/);
     // The words and the new-tab note; the site's stylesheet adds the ↗ to every link that opens a new tab.
     await expect(meshmapper).toHaveText(`${Z("action.meshmapper", lang)} ${Z("link.new-tab", lang)}`);
-    await expect(meshmapper.locator(".zm-sr")).toHaveText(Z("link.new-tab", lang));
+    await expect(meshmapper.locator(".mc-visually-hidden")).toHaveText(Z("link.new-tab", lang));
     // The selection is in the address bar.
     await expect.poll(() => query(page)).toEqual({ tag: "ytr", province: "on" });
     // The map shows the zone up close, codes and all.
@@ -300,7 +300,7 @@ for (const lang of LANGS) {
     });
     expect(spot).not.toBeNull();
     await page.mouse.click(spot.x, spot.y);
-    await expect(title(page)).toHaveText(lang === "fr" ? "YFB · Nunavut" : "YFB · Nunavut");
+    await expect(title(page)).toHaveText("YFB · Nunavut");
     await expect(where(page)).toHaveText("Nunavut");
     await expect(badge(page)).toHaveText(Z("badge.starter", lang));
     await expect.poll(() => query(page)).toEqual({ tag: "yfb", province: "nu" });
@@ -405,6 +405,151 @@ test("switching language carries nothing across: the other page opens with no zo
   await expect(card(page)).toHaveCount(0);
 });
 
+for (const lang of LANGS) {
+  test(`${lang} tapping the Gatineau side of Ottawa–Gatineau gives Québec`, async ({ page }) => {
+    await open(page, lang, "?tag=yow&province=on");
+    await expect(where(page)).toHaveText(ONTARIO[lang]);
+    await zonesDrawn(page);
+    await page.locator("[data-zone-map-box]").scrollIntoViewIfNeeded();
+    const gatineau = await pixelOf(page, 45.4765, -75.7013);
+    expect(await page.evaluate(({ x, y }) => document.elementFromPoint(x, y)?.getAttribute("data-zone"), gatineau)).toBe("yow");
+    await page.mouse.click(gatineau.x, gatineau.y);
+    await expect(where(page)).toHaveText(QUEBEC[lang]);
+    await expect(title(page)).toHaveText("YOW · Ottawa–Gatineau");
+    await expect.poll(() => query(page)).toEqual({ tag: "yow", province: "qc" });
+  });
+
+  test(`${lang} a link can say the spot is in a planning extension; anything else is ignored`, async ({ page }) => {
+    await open(page, lang, "?tag=ykf&province=on&part=extension");
+    await expect(title(page)).toHaveText("YKF · Waterloo");
+    await expect(badge(page)).toHaveText(Z("badge.extension", lang));
+    await expect(line(page)).toHaveText(Z("line.placeholder", lang));
+    await expect(page.locator("[data-zone-meshmapper]")).toHaveCount(0);
+    await expect.poll(() => query(page)).toEqual({ tag: "ykf", province: "on", part: "extension" });
+    // Without it, the code's MeshMapper zone.
+    await open(page, lang, "?tag=ykf&province=on");
+    await expect(badge(page)).toHaveText(Z("badge.mesh", lang));
+    await expect.poll(() => query(page)).toEqual({ tag: "ykf", province: "on" });
+    // A starter region has no extension, and only "extension" is a part.
+    for (const [address, tag, province, kind] of [["?tag=yyg&province=pe&part=extension", "yyg", "pe", "badge.starter"], ["?tag=ytr&province=on&part=Extension", "ytr", "on", "badge.mesh"], ["?tag=ytr&province=on&part=%3Cb%3E", "ytr", "on", "badge.mesh"]]) {
+      await open(page, lang, address);
+      await expect(badge(page)).toHaveText(Z(kind, lang));
+      await expect.poll(() => query(page)).toEqual({ tag, province });
+    }
+  });
+
+  test(`${lang} More about this region says when nearby places use the code through an extension`, async ({ page }) => {
+    await open(page, lang, "?tag=ykf&province=on");
+    await page.locator("[data-zone-more] summary").click();
+    await expect(page.locator("[data-zone-more]")).toContainText(Z("more.extension", lang));
+    // A starter region has none.
+    await open(page, lang, "?tag=yyg&province=pe");
+    await page.locator("[data-zone-more] summary").click();
+    await expect(page.locator("[data-zone-more]")).not.toContainText(Z("more.extension", lang));
+  });
+}
+
+test("each MeshMapper outline is drawn over its placeholder, before and after it is chosen", async ({ page }) => {
+  await open(page, "en");
+  await zonesDrawn(page);
+  const meshmapperOnTop = (tag) => page.evaluate((tag) => {
+    const placeholder = document.querySelector(`path[data-zone="${tag}"][data-zone-source="meshcore-canada"]`);
+    const zone = document.querySelector(`path[data-zone="${tag}"][data-zone-source="meshmapper"]`);
+    return Boolean(placeholder.compareDocumentPosition(zone) & Node.DOCUMENT_POSITION_FOLLOWING);
+  }, tag);
+  expect(await meshmapperOnTop("ytr")).toBe(true);
+  expect(await meshmapperOnTop("ykf")).toBe(true);
+  await search(page, "ytr");
+  await expect(title(page)).toHaveText("YTR · Quinte West");
+  expect(await meshmapperOnTop("ytr")).toBe(true);
+});
+
+test("a chosen zone keeps its extension dashed, so the published part stands out", async ({ page }) => {
+  await open(page, "en", "?tag=ykf&province=on");
+  await zonesDrawn(page);
+  const published = page.locator("path[data-zone='ykf'][data-zone-source='meshmapper']");
+  const extension = page.locator("path[data-zone='ykf'][data-zone-source='meshcore-canada']");
+  await expect(published).toHaveAttribute("stroke-width", "3");
+  await expect(published).not.toHaveAttribute("stroke-dasharray", /./);
+  await expect(extension).toHaveAttribute("stroke-width", "3");
+  await expect(extension).toHaveAttribute("stroke-dasharray", /\d/);
+  // A starter region is all placeholder, so it stays dashed too.
+  await search(page, "yyg");
+  await expect(page.locator("path[data-zone='yyg']").first()).toHaveAttribute("stroke-dasharray", /\d/);
+  await expect(page.locator("path[data-zone='yyg']").first()).toHaveAttribute("stroke-width", "3");
+});
+
+test("a spot in one zone that spans two provinces asks for the province, not the zone", async ({ page }) => {
+  await open(page, "en");
+  // Chaleur Bay, between New Brunswick and the Gaspé: Bas-St-Laurent-Gaspésie covers both shores.
+  await search(page, "48.0, -65.3");
+  await expect(status(page)).toHaveText(Z("status.province", "en"));
+  await expect(choices(page)).toHaveCount(2);
+  await page.locator('[data-zone-choice="yyy:qc"]').click();
+  await expect(title(page)).toContainText("YYY · ");
+  await expect(where(page)).toHaveText("48, -65.3 · Québec");
+});
+
+test("tapping a zone at phone size selects it and brings the card into view", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await open(page, "en");
+  await zonesDrawn(page);
+  await page.locator("[data-zone-map-box]").scrollIntoViewIfNeeded();
+  // Iqaluit, in Nunavut's region.
+  const iqaluit = await pixelOf(page, 63.7467, -68.517);
+  expect(await page.evaluate(({ x, y }) => document.elementFromPoint(x, y)?.getAttribute("data-zone"), iqaluit)).toBe("yfb");
+  await page.mouse.click(iqaluit.x, iqaluit.y);
+  await expect(title(page)).toHaveText("YFB · Nunavut");
+  await expect(title(page)).toBeInViewport();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(0);
+});
+
+test("the outlines wait for the map's first tiles, unless a search needs them", async ({ page }) => {
+  let releaseTiles;
+  const tilesHeld = new Promise((resolve) => { releaseTiles = resolve; });
+  await page.route("https://tile.openstreetmap.org/**", async (route) => { await tilesHeld; await route.fulfill({ contentType: "image/png", body: TILE_PNG }); });
+  const outlines = [];
+  page.on("request", (request) => { if (/\.geojson(\?|$)/.test(request.url())) outlines.push(request.url()); });
+  await page.goto(siteRoute(ROUTES.en));
+  await expect(page.locator(".zm-map .leaflet-container")).toBeVisible();
+  await page.waitForTimeout(700);
+  expect(outlines, "nothing big while the tiles load").toEqual([]);
+  // A search can't wait: it asks for them at once.
+  await search(page, "ytr");
+  await expect.poll(() => outlines.length).toBe(2);
+  await expect(title(page)).toHaveText("YTR · Quinte West");
+  releaseTiles();
+});
+
+test("the outlines don't wait more than a few seconds for slow tiles", async ({ page }) => {
+  await page.route("https://tile.openstreetmap.org/**", () => { /* never answers */ });
+  const outlines = [];
+  page.on("request", (request) => { if (/\.geojson(\?|$)/.test(request.url())) outlines.push(request.url()); });
+  const started = Date.now();
+  await page.goto(siteRoute(ROUTES.en));
+  await expect.poll(() => outlines.length, { timeout: 8000 }).toBe(2);
+  expect(Date.now() - started).toBeGreaterThan(2000);
+  await expect(page.locator("[data-zone-pick]").first()).toBeAttached();
+});
+
+test("the page greets the tile server and fetches Leaflet while it is still being read, once", async ({ page }) => {
+  const leaflet = [];
+  page.on("request", (request) => { if (/vendor\/leaflet\/leaflet\.(js|css)/.test(request.url())) leaflet.push(new URL(request.url()).pathname); });
+  await open(page, "en");
+  await zonesDrawn(page);
+  await expect(page.locator('head link[rel="preconnect"][href="https://tile.openstreetmap.org"]')).toHaveCount(1);
+  await expect(page.locator('head link[rel="preload"][as="script"][href$="vendor/leaflet/leaflet.js"]')).toHaveCount(1);
+  await expect(page.locator('head link[rel="preload"][as="style"][href$="vendor/leaflet/leaflet.css"]')).toHaveCount(1);
+  expect(leaflet.sort()).toEqual(["/assets/regions/vendor/leaflet/leaflet.css", "/assets/regions/vendor/leaflet/leaflet.js"]);
+});
+
+test("a page script didn't load: one plain line, not an empty map", async ({ page }) => {
+  await page.route("**/assets/setup/setup-place.js*", (route) => route.abort());
+  await page.goto(siteRoute(ROUTES.en));
+  await expect(status(page)).toHaveText(Z("status.load-failed", "en"));
+  await expect(page.locator("[data-zone-map-box], [data-zone-legend], [data-zone-browse]")).toHaveCount(0);
+});
+
 test("the card is read out: it sits in a live region, and the search status is a status", async ({ page }) => {
   await open(page, "en");
   await expect(page.locator("[data-zone-result]")).toHaveAttribute("aria-live", "polite");
@@ -479,10 +624,15 @@ test("the tiles didn't load: the map is replaced by one line, and the search and
   await expect(title(page)).toHaveText("YTR · Quinte West");
 });
 
-test("the zones didn't load: a plain message", async ({ page }) => {
+test("the zones didn't load: a plain message, which a search doesn't hide", async ({ page }) => {
   await page.route("**/assets/regions/iata-regions.json*", (route) => route.abort());
   await page.goto(siteRoute(ROUTES.en));
   await expect(status(page)).toHaveText(Z("status.load-failed", "en"));
+  // A search can't run without the zones: the line says so again rather than "Loading zones…" for ever.
+  for (const typed of ["ytr", "44.1628, -77.3832", "Belleville"]) {
+    await search(page, typed);
+    await expect(status(page)).toHaveText(Z("status.load-failed", "en"));
+  }
 });
 
 test("without JavaScript: one line pointing at How repeaters work", async ({ browser }) => {

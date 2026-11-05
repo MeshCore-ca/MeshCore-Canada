@@ -38,7 +38,8 @@ FIXED_SCOPES = {
 SLUG = re.compile(r"^[a-z0-9-]+$")
 H1 = re.compile(r"^#(?!#)\s+(.+?)\s*$", re.MULTILINE)
 HEADING = re.compile(r"^#{2,6}\s+(.+?)\s*$", re.MULTILINE)
-ASSET_KEYS = ("page_styles", "page_scripts", "page_modules")
+ASSET_KEYS = ("page_styles", "page_scripts", "page_modules", "page_preloads")
+HTTPS_ORIGIN = re.compile(r"^https://[a-z0-9.-]+(?::[0-9]+)?$")
 
 
 def parse_date(value: Any) -> dt.date | None:
@@ -183,6 +184,15 @@ def validate_page(path: Path, docs_root: Path, today: dt.date) -> tuple[dict[str
                 continue
             if not asset_path or not (docs_root / asset_path).is_file():
                 errors.append(f"{key} asset does not exist: {value}")
+
+    preconnects = metadata.get("page_preconnects", [])
+    if preconnects is not None:
+        if not isinstance(preconnects, list) or any(not isinstance(value, str) for value in preconnects):
+            errors.append("page_preconnects must be a list of HTTPS origins")
+        else:
+            for value in preconnects:
+                if not HTTPS_ORIGIN.fullmatch(value):
+                    errors.append(f"page_preconnects must be HTTPS origins: {value}")
 
     return metadata, errors
 

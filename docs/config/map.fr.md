@@ -1,6 +1,6 @@
 ---
 title: Trouver votre zone
-description: Voyez dans quelle zone (code IATA) se trouve un endroit, et s’il s’agit d’une zone MeshMapper ou d’une zone provisoire.
+description: Découvrez dans quelle zone (code IATA) se trouve un endroit, et s’il s’agit d’une zone MeshMapper ou d’une zone provisoire.
 audience:
   - meshcore-user
   - repeater-operator
@@ -13,21 +13,26 @@ last_reviewed: 2026-11-05
 review_by: 2027-05-05
 evidence: tests/browser/zone-map.spec.mjs
 difficulty: beginner
+page_preconnects:
+  - https://tile.openstreetmap.org
+page_preloads:
+  - assets/regions/vendor/leaflet/leaflet.js
+  - assets/regions/vendor/leaflet/leaflet.css
 page_styles:
-  - assets/setup/zone-map.css?v=20261105-1
+  - assets/setup/zone-map.css?v=20261105-2
 page_scripts:
   - assets/regions/modules/iata-scopes.js?v=20261105-1
   - assets/javascripts/place-search.js?v=20261105-1
   - assets/setup/setup-flow.js?v=20261105-1
   - assets/setup/setup-place.js?v=20261105-1
-  - assets/setup/zone-map.js?v=20261105-1
+  - assets/setup/zone-map.js?v=20261105-2
 hide:
   - toc
 ---
 
 # Trouver votre zone
 
-Voyez dans quelle zone (code IATA) se trouve un endroit, et s’il s’agit d’une zone MeshMapper ou d’une zone provisoire.
+Découvrez dans quelle zone (code IATA) se trouve un endroit, et s’il s’agit d’une zone MeshMapper ou d’une zone provisoire.
 
 <div data-zone-map></div>
 
