@@ -16,7 +16,7 @@ difficulty: beginner
 estimated_time: 1-2 minutes
 destructive: false
 page_styles:
-  - assets/styles/home.css?v=20260905-1
+  - assets/styles/home.css?v=20261105-1
 hide:
   - toc
 ---
@@ -27,82 +27,62 @@ hide:
 
 <div class="mc-home-hero__art" aria-hidden="true"><img src="assets/canada-network-motif.svg" alt="" width="960" height="420" fetchpriority="high"></div>
 
-Welcome! We're improving this site. Found something unclear or outdated?
-[Open a GitHub issue](https://github.com/MeshCore-ca/MeshCore-Canada/issues/new/choose).
+**A community project for MeshCore deployments in Canada.** We're volunteers,
+and we're not affiliated with the official MeshCore project. This site covers
+how MeshCore is set up across Canada: local communities, recommended hardware,
+radio settings and repeater configuration.
+
+[Join the MeshCore Canada Discord](https://discord.gg/GBCP4xdgNv){ .md-button .md-button--primary } [Forum](https://forum.meshcore.ca/){ .md-button }
 
 <p class="mc-home-hero__credit">Illustrative network · <a href="assets/regions/NOTICE.txt">Map sources</a></p>
 
 </div>
 
-## What are you looking for? { #start-with-your-goal }
+## Where do you want to go? { #where-to-go }
 
 <div class="grid cards" markdown>
 
--   :material-message-text:{ .lg .middle } **New to MeshCore**
+-   :material-rocket-launch:{ .lg .middle } **Get started**
 
-    ---
+    New here? Pick a device and get on the mesh.
 
-    Set up your LoRa radio and join a Canadian mesh.
+    [:octicons-arrow-right-24: Start setup](start/index.md)
 
-    [:octicons-arrow-right-24: Start the guided setup](start/index.md)
+-   :material-map-marker-radius:{ .lg .middle } **Find a community**
 
--   :material-map-marker-radius:{ .lg .middle } **Find people near you**
+    Local groups, contacts and settings near you.
 
-    ---
-
-    Find nearby communities, contacts, and local radio settings.
-
-    [:octicons-arrow-right-24: Find a community](provinces/index.md)
+    [:octicons-arrow-right-24: Browse communities](provinces/index.md)
 
 -   :material-map-search:{ .lg .middle } **Find your zone**
 
-    ---
-
-    See which MeshCore zone covers your location.
+    See which zone covers your location.
 
     [:octicons-arrow-right-24: Find my zone](config/map.md)
 
-</div>
+-   :material-radio-tower:{ .lg .middle } **Set up a repeater**
 
-## What kind of device are you setting up? { #choose-a-role }
+    Build the setup commands for your repeater.
 
-<div class="grid cards" markdown>
+    [:octicons-arrow-right-24: Open the repeater tool](config/index.md)
 
--   :material-cellphone-link:{ .lg .middle } **Personal companion**
+-   :material-chip:{ .lg .middle } **Hardware**
 
-    Send and receive messages.
+    Which radios and antennas to buy or build.
 
-    [:octicons-arrow-right-24: Set up a companion](start/companion.md)
+    [:octicons-arrow-right-24: Choose hardware](hardware/index.md)
 
--   :material-radio-tower:{ .lg .middle } **Repeater**
+-   :material-access-point-network:{ .lg .middle } **Live network**
 
-    Improve local coverage.
+    See who's on the mesh right now.
 
-    [:octicons-arrow-right-24: Set up a repeater](start/repeater.md)
-
--   :material-forum:{ .lg .middle } **Room server**
-
-    Host a persistent room.
-
-    [:octicons-arrow-right-24: Set up a room server](start/room-server.md)
-
--   :material-chart-timeline-variant:{ .lg .middle } **Observer**
-
-    Send network data to CoreScope.
-
-    [:octicons-arrow-right-24: Set up an observer](start/observer.md){ .mc-observer-link }
+    [:octicons-arrow-right-24: Open live.meshcore.ca](https://live.meshcore.ca/)
 
 </div>
 
-Not sure which one fits? [Compare the roles](start/choose-a-goal.md).
+## Canada default radio settings { #canada-baseline }
 
-Need help from a person? Join the [national Discord](https://discord.gg/BESFVMt7yk),
-ask on the [community forum](https://forum.meshcore.ca/), or check the
-[live Canadian network](https://live.meshcore.ca/).
-
-## Canada Default Radio Settings { #canada-baseline }
-
-Use these defaults unless your local community lists different settings.
+Use these unless your local community lists different settings.
 
 <div class="mc-baseline-table" markdown>
 
@@ -115,14 +95,4 @@ Use these defaults unless your local community lists different settings.
 
 </div>
 
-<p class="mc-preset-note">The app’s <strong>Canada</strong> preset keeps the former USA/Canada radio settings and selects <strong>3-byte</strong> paths. The separate <strong>USA</strong> preset leaves the path-hash setting unchanged. <a href="provinces/#canada-baseline">Preset details and older apps</a> · <a href="https://github.com/meshcore-dev/MeshCore/issues/3302#issuecomment-5598886579">Upstream update</a>.</p>
-
-## Improve MeshCore Canada
-
-Found something missing or confusing? [Share an idea](submit-idea.md) or
-[update a community listing](contributing.md).
-
-## About this project
-
-MeshCore Canada is an independent, community-run project.
-[Learn more about MeshCore Canada](about.md) or [contribute](contributing.md).
+<p class="mc-preset-note">No Canada preset in your app? <a href="provinces/#canada-baseline">Preset details and older apps</a>.</p>

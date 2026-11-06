@@ -76,28 +76,20 @@ test("homepage is task-first and exposes the required decisions", () => {
   const homepage = readDoc("index.md");
   const frenchHomepage = readDoc("index.fr.md");
 
-  assert.match(homepage, /Welcome! We're improving this site/);
-  assert.match(homepage, /Open a GitHub issue/);
-  assert.match(homepage, /## What are you looking for\? \{ #start-with-your-goal \}/);
-  assert.match(homepage, /## What kind of device are you setting up\? \{ #choose-a-role \}/);
-  assert.match(homepage, /## Canada Default Radio Settings \{ #canada-baseline \}/);
-  assert.match(homepage, /Set up your LoRa radio and join a Canadian mesh/);
-  assert.match(homepage, /Start the guided setup\]\(start\/index\.md\)/);
-  assert.match(homepage, /Find a community\]\(provinces\/index\.md\)/);
+  for (const page of [homepage, frenchHomepage]) {
+    assert.match(page, /discord\.gg\/GBCP4xdgNv/);
+    assert.match(page, /\{ #canada-baseline \}/);
+    assert.match(page, /\]\(start\/index\.md\)/);
+    assert.match(page, /\]\(provinces\/index\.md\)/);
+    assert.match(page, /\]\(config\/index\.md\)/);
+    assert.match(page, /\]\(hardware\/index\.md\)/);
+    assert.match(page, /live\.meshcore\.ca/);
+    assert.doesNotMatch(page, /mc-place-search|GitHub issue|github\.com\/MeshCore-ca\/MeshCore-Canada\/issues/);
+  }
+  assert.match(homepage, /not affiliated with the official MeshCore project/);
+  assert.match(frenchHomepage, /sans affiliation avec le projet MeshCore officiel/);
   assert.match(homepage, /Find my zone\]\(config\/map\.md\)/);
   assert.match(frenchHomepage, /Trouver ma zone\]\(config\/map\.md\)/);
-  assert.doesNotMatch(homepage, /mc-place-search|## Find your region|## Use network tools/);
-  assert.doesNotMatch(frenchHomepage, /mc-place-search|## Trouver votre région|## Utiliser les outils réseau/);
-  assert.match(homepage, /Set up an observer\]\(start\/observer\.md\)\{ \.mc-observer-link \}/);
-
-  for (const role of [
-    "Personal companion",
-    "Repeater",
-    "Room server",
-    "Observer",
-  ]) {
-    assert.match(homepage, new RegExp(role));
-  }
 });
 
 test("Start offers all roles, an unsure path, and the local-settings handoff", () => {

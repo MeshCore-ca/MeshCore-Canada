@@ -171,7 +171,7 @@ hide:
 
 <details class="submission-alternatives">
   <summary>Autres façons de nous joindre</summary>
-  <p><a href="https://github.com/MeshCore-ca/MeshCore-Canada/issues/new?template=community_idea.yml&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Ffr%2Fsubmit-idea%2F" target="_blank" rel="noopener">Formulaire GitHub</a> (compte requis) · <a href="https://forum.meshcore.ca/" target="_blank" rel="noopener">Forum communautaire</a> · <a href="https://discord.gg/BESFVMt7yk" target="_blank" rel="noopener">Discord</a></p>
+  <p><a href="https://github.com/MeshCore-ca/MeshCore-Canada/issues/new?template=community_idea.yml&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Ffr%2Fsubmit-idea%2F" target="_blank" rel="noopener">Formulaire GitHub</a> (compte requis) · <a href="https://forum.meshcore.ca/" target="_blank" rel="noopener">Forum communautaire</a> · <a href="https://discord.gg/GBCP4xdgNv" target="_blank" rel="noopener">Discord</a></p>
 </details>
 
 ## Et ensuite?

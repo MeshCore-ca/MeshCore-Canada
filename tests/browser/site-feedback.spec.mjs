@@ -72,7 +72,7 @@ for (const locale of ["", "fr/"]) {
     await expect(hero).toBeVisible();
     await expect.poll(() => hero.locator("img").evaluate(image => image.naturalWidth)).toBeGreaterThan(0);
     expect((await hero.boundingBox()).height).toBeLessThan(300);
-    await expect(page.locator(".mc-preset-note")).toContainText(locale ? "3 octets" : "3-byte");
+    await expect(page.locator(".mc-baseline-table")).toContainText(locale ? "3 octets" : "3-byte");
     await page.goto(siteRoute(`/${locale}hardware/`));
     await expect(page.locator(".mc-guide-status")).toHaveCount(0);
     // The setup tool's town step links to the zone finder.

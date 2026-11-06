@@ -43,7 +43,7 @@ for (const suffix of [".md", ".fr.md"]) {
     const directory = read(`docs/provinces/index${suffix}`);
     const home = read(`docs/index${suffix}`);
     const faq = read(`docs/meshcore/general-faq${suffix}`);
-    for (const source of [directory, home, faq]) {
+    for (const source of [directory, faq]) {
       assert.ok(source.includes(announcement), "The completed change needs its exact upstream source");
       assert.match(source, /USA/);
     }
@@ -53,7 +53,7 @@ for (const suffix of [".md", ".fr.md"]) {
     assert.match(directory, /3-byte|3 octets/);
     assert.match(home, /\| (?:Radio preset|Préréglage radio) \| \*\*Canada\*\* \|/);
     assert.doesNotMatch(home, /Planned:|Prévu :/);
-    assert.match(home, /leaves the path-hash setting unchanged|ne modifie pas la taille du hachage/);
+    assert.ok(home.includes("provinces/#canada-baseline"), "The home table links to the preset details");
     assert.doesNotMatch(home, /Canada \(Recommended\)/);
   });
 }

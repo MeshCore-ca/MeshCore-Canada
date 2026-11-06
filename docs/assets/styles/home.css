@@ -5,13 +5,14 @@
   background: linear-gradient(115deg, var(--mc-color-surface), var(--mc-color-surface-raised));
 }
 .mc-home-hero > .mc-home-hero__art {
-  position: absolute; z-index: -1; top: 0; right: 0; height: 100%; width: 68%;
+  position: absolute; z-index: -1; top: 0; right: 0; height: 100%; width: 45%;
   object-fit: contain; pointer-events: none; opacity: 0.9;
-  mask-image: linear-gradient(to right, transparent, #000 28%);
+  mask-image: linear-gradient(to right, transparent, #000 20%);
 }
 .mc-home-hero__art img { width: 100%; height: 100%; object-fit: contain; }
-.mc-home-hero > p { position: relative; max-width: 38ch; margin: 0; }
-.mc-home-hero .mc-home-hero__credit { margin-top: 1rem; font-size: 0.7rem; color: var(--mc-color-text-muted); }
+.mc-home-hero > p { position: relative; max-width: 46ch; margin: 0 0 0.75rem; }
+.mc-home-hero .md-button { margin: 0.25rem 0.5rem 0 0; }
+.mc-home-hero .mc-home-hero__credit { margin: 0.5rem 0 0; font-size: 0.7rem; color: var(--mc-color-text-muted); }
 .mc-preset-note { font-size: 0.85rem; color: var(--mc-color-text-muted); }
 @media (max-width: 45em) {
   .mc-home-hero { padding: 1.25rem; min-height: 10rem; }

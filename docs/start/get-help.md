@@ -35,7 +35,7 @@ or unredacted command output.
 
 - [MeshCore Canada forum](https://forum.meshcore.ca/) — searchable public
   discussions and support.
-- [MeshCore Canada Discord](https://discord.gg/BESFVMt7yk) — live community
+- [MeshCore Canada Discord](https://discord.gg/GBCP4xdgNv) — live community
   chat.
 
 Include:

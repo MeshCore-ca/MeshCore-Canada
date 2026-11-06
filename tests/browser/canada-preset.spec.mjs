@@ -7,9 +7,7 @@ for (const locale of ["", "fr/"]) {
     await page.goto(siteRoute(`/${locale}`));
     const row = page.locator(".mc-baseline-table tr").filter({ hasText: locale ? "Préréglage radio" : "Radio preset" });
     await expect(row.locator("td").last()).toHaveText("Canada");
-    await expect(page.locator(".mc-preset-note")).toContainText(locale ? "3 octets" : "3-byte");
-    await expect(page.locator(".mc-preset-note")).toContainText(locale ? "ne modifie pas" : "unchanged");
-    await expect(page.locator('.mc-preset-note a[href*="issuecomment-5598886579"]')).toHaveCount(1);
+    await expect(page.locator('.mc-preset-note a[href$="provinces/#canada-baseline"]')).toHaveCount(1);
 
     await page.goto(siteRoute(`/${locale}provinces/#canada-baseline`));
     await expect(page.locator("article.md-content__inner")).toContainText("USA/Canada (Recommended)");

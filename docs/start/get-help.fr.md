@@ -36,7 +36,7 @@ renseignements sensibles.
 
 - Le [forum MeshCore Canada](https://forum.meshcore.ca/) offre des discussions
   publiques faciles à rechercher et de l’aide.
-- Le [Discord de MeshCore Canada](https://discord.gg/BESFVMt7yk) permet de
+- Le [Discord de MeshCore Canada](https://discord.gg/GBCP4xdgNv) permet de
   discuter directement avec la communauté.
 
 Indiquez :

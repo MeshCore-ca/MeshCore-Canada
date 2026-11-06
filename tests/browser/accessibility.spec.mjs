@@ -104,8 +104,8 @@ test("keyboard focus is visible on the theme switcher and primary Start action",
       )
     },
     {
-      focus: page.getByRole("link", { name: "Start the guided setup" }),
-      indicator: page.getByRole("link", { name: "Start the guided setup" })
+      focus: page.getByRole("link", { name: "Start setup" }),
+      indicator: page.getByRole("link", { name: "Start setup" })
     }
   ];
 
