@@ -25,7 +25,7 @@ renseignements sensibles.
 
 | Quel est le problème? | Commencez ici |
 |---|---|
-| Vous ne savez pas quel type d’appareil ou quel matériel choisir | [Comparer les types d’appareils](choose-a-goal.md) |
+| Vous ne savez pas quel type d’appareil ou quel matériel choisir | [Comparer les types d’appareils](index.md) |
 | Un appareil à proximité ne voit pas votre annonce | Revérifiez les [étapes de vérification](verify.md) et les paramètres locaux |
 | Vous avez besoin des paramètres locaux ou d’une autre personne pour faire un essai | [Trouver une communauté](../provinces/index.md) |
 | Un observateur est absent ou n’affiche aucune activité récente | [Dépanner un observateur](../analyzer/troubleshooting.md) |

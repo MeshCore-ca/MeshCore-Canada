@@ -1,6 +1,6 @@
 ---
-title: Start with MeshCore in Canada
-description: Choose a MeshCore role and follow a setup guide using Canada or local network settings.
+title: Get started with MeshCore in Canada
+description: Pick the MeshCore device you need and follow its setup guide.
 audience:
   - newcomer
   - first-time-user
@@ -17,19 +17,54 @@ estimated_time: 2-5 minutes
 destructive: false
 ---
 
-# Start with MeshCore
+# Get started
 
-Pick the guide that matches what you want the device to do:
+New to MeshCore? Most people start with a **companion**: a small radio that
+pairs with your phone so you can send messages.
 
-- [Send and receive messages](companion.md) with a companion.
-- [Improve local coverage](repeater.md) with a repeater.
-- [Host a persistent room](room-server.md) with a room server.
-- [Share data with CoreScope](observer.md) with an observer.
+Pick the device you're setting up:
 
-Not sure which one fits? [Compare the roles](choose-a-goal.md).
+<div class="grid cards" markdown>
 
-## Before setup
+-   :material-cellphone-link:{ .lg .middle } **Companion**
 
-Check the [community directory](../provinces/index.md) for local radio settings.
-If none are listed, use the [Canada defaults](../index.md#canada-baseline).
-Each setup guide covers preparation, configuration, and a quick working check.
+    Send and receive messages. Goes with you, paired to your phone.
+
+    [:octicons-arrow-right-24: Set up a companion](companion.md)
+
+-   :material-radio-tower:{ .lg .middle } **Repeater**
+
+    Extends coverage by relaying everyone's messages. Fixed, up high and always powered.
+
+    [:octicons-arrow-right-24: Set up a repeater](repeater.md)
+
+-   :material-forum:{ .lg .middle } **Room server**
+
+    Hosts a shared chat room that keeps recent messages. Fixed and always powered.
+
+    [:octicons-arrow-right-24: Set up a room server](room-server.md)
+
+-   :material-chart-timeline-variant:{ .lg .middle } **Observer**
+
+    Sends what it hears to the CoreScope network maps. Fixed and always powered.
+
+    [:octicons-arrow-right-24: Set up an observer](observer.md)
+
+</div>
+
+## Good to know
+
+- Companions don't relay messages for others. Leave client repeat off on an
+  established mesh unless your local community says otherwise.
+- Room servers can relay, but don't use them that way. Put up a separate
+  repeater instead.
+- Standalone devices with a screen and keyboard, like the T-Deck, aren't
+  recommended for a first device. Their firmware is still rough.
+
+## Radio settings
+
+Use your local community's settings from the
+[community directory](../provinces/index.md). If none are listed, use the
+[Canada defaults](../index.md#canada-baseline).
+
+Not sure what you need? [Ask the community](get-help.md) before buying hardware.

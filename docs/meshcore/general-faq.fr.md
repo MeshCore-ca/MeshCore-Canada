@@ -88,7 +88,7 @@ Choisissez un appareil offert dans le programme officiel de mise à jour
 MeshCore ou dans un guide de MeshCore Canada pour le rôle voulu. La prise en
 charge dépend de la carte et de la cible du micrologiciel.
 
-[Comparez les rôles des appareils](../start/choose-a-goal.md), puis ouvrez le
+[Comparez les rôles des appareils](../start/index.md), puis ouvrez le
 guide du matériel depuis le guide de configuration correspondant.
 
 ### Puis-je réutiliser un appareil qui exécute actuellement Meshtastic?
@@ -114,7 +114,7 @@ d’entretien comptent davantage que les fonctions de l’écran.
 1. [Trouvez la communauté locale](../provinces/index.md).
 2. Suivez ses réglages publiés ou utilisez les réglages canadiens par défaut
    lorsqu’aucun remplacement local n’est indiqué.
-3. Suivez le guide correspondant au [rôle de votre appareil](../start/choose-a-goal.md).
+3. Suivez le guide correspondant au [rôle de votre appareil](../start/index.md).
 4. Envoyez une annonce et demandez à une personne à proximité de confirmer sa réception.
 
 ### Comment démarrer un réseau maillé lorsqu’aucun n’est répertorié?

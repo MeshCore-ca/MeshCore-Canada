@@ -156,7 +156,7 @@ utiliser chaque paramètre ou appareil.
 
 ## Pages connexes
 
-- [Comparer les types d’appareils MeshCore](../start/choose-a-goal.md)
+- [Comparer les types d’appareils MeshCore](../start/index.md)
 - [Lire les questions fréquentes](../meshcore/general-faq.md)
 - [Comprendre les répéteurs](../config/guide.md)
 - [Choisir une méthode d’observation](../analyzer/intro.md)

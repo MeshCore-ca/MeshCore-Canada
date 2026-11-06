@@ -36,7 +36,7 @@ MeshCore is a LoRa mesh network. A device's firmware gives it a specific job.
 - A **room server** keeps a shared room available.
 - An **observer** sends heard network data to CoreScope.
 
-[Compare device roles](../start/choose-a-goal.md).
+[Compare device roles](../start/index.md).
 
 ## Settings in Canada
 

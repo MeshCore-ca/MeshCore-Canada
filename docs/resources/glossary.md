@@ -143,7 +143,7 @@ the linked guides explain how to use each setting or device.
 
 ## Related pages
 
-- [Compare MeshCore roles](../start/choose-a-goal.md)
+- [Compare MeshCore roles](../start/index.md)
 - [Read common questions](../meshcore/general-faq.md)
 - [How repeaters work](../config/guide.md)
 - [Choose an observer method](../analyzer/intro.md)

@@ -1,6 +1,6 @@
 ---
 title: Commencer avec MeshCore au Canada
-description: Choisissez un type d’appareil MeshCore et suivez un guide de configuration avec les paramètres du Canada ou de votre communauté.
+description: Choisissez l’appareil MeshCore dont vous avez besoin et suivez son guide de configuration.
 audience:
   - newcomer
   - first-time-user
@@ -17,21 +17,57 @@ estimated_time: 2-5 minutes
 destructive: false
 ---
 
-# Commencer avec MeshCore
+# Commencer
 
-Choisissez le guide qui correspond à ce que vous voulez faire avec l’appareil :
+Vous découvrez MeshCore? La plupart des gens commencent par un **appareil
+compagnon** : une petite radio jumelée à votre téléphone pour envoyer des
+messages.
 
-- [Envoyer et recevoir des messages](companion.md) avec un appareil compagnon.
-- [Améliorer la couverture locale](repeater.md) avec un répéteur.
-- [Garder un salon partagé accessible](room-server.md) avec un serveur de salon.
-- [Transmettre des données à CoreScope](observer.md) avec un observateur.
+Choisissez l’appareil que vous configurez :
 
-Vous hésitez? [Comparez les types d’appareils](choose-a-goal.md).
+<div class="grid cards" markdown>
 
-## Avant de commencer
+-   :material-cellphone-link:{ .lg .middle } **Appareil compagnon**
 
-Consultez le [répertoire des communautés](../provinces/index.md) pour connaître
-les paramètres radio de votre région. Si aucun paramètre n’est indiqué,
+    Envoyer et recevoir des messages. Vous suit, jumelé à votre téléphone.
+
+    [:octicons-arrow-right-24: Configurer un compagnon](companion.md)
+
+-   :material-radio-tower:{ .lg .middle } **Répéteur**
+
+    Étend la couverture en relayant les messages de tous. Fixe, en hauteur et alimenté en continu.
+
+    [:octicons-arrow-right-24: Configurer un répéteur](repeater.md)
+
+-   :material-forum:{ .lg .middle } **Serveur de salon**
+
+    Héberge un salon partagé qui garde les messages récents. Fixe et alimenté en continu.
+
+    [:octicons-arrow-right-24: Configurer un serveur de salon](room-server.md)
+
+-   :material-chart-timeline-variant:{ .lg .middle } **Observateur**
+
+    Transmet ce qu’il capte aux cartes du réseau CoreScope. Fixe et alimenté en continu.
+
+    [:octicons-arrow-right-24: Configurer un observateur](observer.md)
+
+</div>
+
+## Bon à savoir
+
+- Les appareils compagnons ne relaient pas les messages des autres. Laissez le
+  mode de répétition désactivé sur un réseau établi, sauf indication contraire
+  de votre communauté.
+- Les serveurs de salon peuvent relayer, mais ne les utilisez pas ainsi.
+  Installez plutôt un répéteur distinct.
+- Les appareils autonomes avec écran et clavier, comme le T-Deck, ne sont pas
+  recommandés comme premier appareil. Leur micrologiciel est encore rudimentaire.
+
+## Paramètres radio
+
+Utilisez les paramètres de votre communauté, indiqués dans le
+[répertoire des communautés](../provinces/index.md). Si aucun n’est indiqué,
 utilisez les [valeurs par défaut au Canada](../index.md#canada-baseline).
-Chaque guide explique comment vous préparer, configurer l’appareil et vérifier
-rapidement que tout fonctionne.
+
+Vous hésitez? [Demandez conseil à la communauté](get-help.md) avant d’acheter
+du matériel.

@@ -82,7 +82,7 @@ assuming the device or firmware is faulty.
 Use a device listed by the official MeshCore Flasher or by a MeshCore Canada
 guide for the role you need. Support depends on the board and firmware target.
 
-[Compare device roles](../start/choose-a-goal.md), then open the hardware guide
+[Compare device roles](../start/index.md), then open the hardware guide
 from the matching setup guide.
 
 ### Can I reuse a device that currently runs Meshtastic?
@@ -106,7 +106,7 @@ and maintainability matter more than screen features.
 1. [Find the local community](../provinces/index.md).
 2. Follow its published settings or use the Canadian baseline when no override
    is listed.
-3. Follow the setup guide for your [device role](../start/choose-a-goal.md).
+3. Follow the setup guide for your [device role](../start/index.md).
 4. Send an advert and ask a nearby user to confirm it.
 
 ### How do I start a mesh where none is listed?

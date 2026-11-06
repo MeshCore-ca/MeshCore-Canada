@@ -107,7 +107,7 @@ plugins:
             Start: Commencer
             Welcome: Bienvenue
             Start here: Commencer
-            Choose a role: Choisir un type d'appareil
+            Get started: Commencer
             Companion: Appareil compagnon
             Repeater: Répéteur
             Room server: Serveur de salon
@@ -192,7 +192,8 @@ plugins:
         meshcore/firmware-heltec-v3-wifi.md: meshcore/flash-companion.md
         hardware/repeater-solar-batteries.md: hardware/recommended-repeaters.md
         hardware/overview.md: hardware/index.md
-        meshcore/general-meshcore-roles.md: start/choose-a-goal.md
+        meshcore/general-meshcore-roles.md: start/index.md
+        start/choose-a-goal.md: start/index.md
         meshcore/flash-repeater.md: config/index.md
         analyzer/builds/mqtt-firmware.md: config/index.md
         proposals/onqc-scopes.md: config/guide.md
@@ -215,8 +216,7 @@ markdown_extensions:
 nav:
   - Start:
       - Welcome: index.md
-      - Start here: start/index.md
-      - Choose a role: start/choose-a-goal.md
+      - Get started: start/index.md
       - Companion: start/companion.md
       - Repeater: start/repeater.md
       - Room server: start/room-server.md

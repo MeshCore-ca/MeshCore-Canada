@@ -10,7 +10,6 @@ const docsRoot = resolve(repoRoot, "docs");
 const ownedMarkdown = [
   "index.md",
   "start/index.md",
-  "start/choose-a-goal.md",
   "start/companion.md",
   "start/repeater.md",
   "start/room-server.md",
@@ -92,23 +91,16 @@ test("homepage is task-first and exposes the required decisions", () => {
   assert.match(frenchHomepage, /Trouver ma zone\]\(config\/map\.md\)/);
 });
 
-test("Start offers all roles, an unsure path, and the local-settings handoff", () => {
+test("Start offers all roles and the local-settings handoff", () => {
   const start = readDoc("start/index.md");
 
-  for (const link of [
-    "companion.md",
-    "repeater.md",
-    "room-server.md",
-    "observer.md",
-    "choose-a-goal.md",
-  ]) {
+  for (const link of ["companion.md", "repeater.md", "room-server.md", "observer.md", "get-help.md"]) {
     assert.match(start, new RegExp(`\\]\\(${link.replace(".", "\\.")}\\)`));
   }
 
-  assert.match(start, /Not sure which one fits/);
   assert.match(start, /community directory/);
   assert.match(start, /Canada defaults/);
-  assert.match(start, /preparation, configuration, and a quick working check/);
+  assert.doesNotMatch(start, /Ottawa/);
 });
 
 test("each role guide is direct and reaches verification and support", () => {
@@ -156,6 +148,7 @@ test("retired visitor pages use canonical redirects instead of searchable bridge
 
   for (const [oldPath, currentPath] of [
     ["resources/getting-started.md", "start/index.md"],
+    ["start/choose-a-goal.md", "start/index.md"],
     ["meshcore/firmware-rak-custom-display.md", "meshcore/flash-companion.md"],
     ["meshcore/firmware-heltec-v3-wifi.md", "meshcore/flash-companion.md"],
     ["hardware/repeater-solar-batteries.md", "hardware/recommended-repeaters.md"],

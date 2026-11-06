@@ -36,7 +36,7 @@ MeshCore est un réseau maillé LoRa. Le micrologiciel d’un appareil lui attri
 - Un **serveur de salon** maintient un salon partagé accessible.
 - Un **observateur** transmet à CoreScope les données réseau qu’il reçoit.
 
-[Comparer les rôles des appareils](../start/choose-a-goal.md).
+[Comparer les rôles des appareils](../start/index.md).
 
 ## Réglages au Canada
 

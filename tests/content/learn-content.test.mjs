@@ -56,7 +56,7 @@ test("MeshCore overview explains all four roles and routes users forward", () =>
   for (const role of ["companion", "repeater", "room server", "observer"]) {
     assert.match(markdown, new RegExp(`\\*\\*${role}\\*\\*`, "i"), role);
   }
-  assert.match(markdown, /\[Compare device roles\]\(\.\.\/start\/choose-a-goal\.md\)/);
+  assert.match(markdown, /\[Compare device roles\]\(\.\.\/start\/index\.md\)/);
   assert.match(markdown, /\[Choose a role and start setup\]\(\.\.\/start\/index\.md\)/);
   assert.match(markdown, /MeshCore project split, use the official links/);
   assert.match(markdown, /https:\/\/blog\.meshcore\.io\/2026\/04\/23\/the-split/);

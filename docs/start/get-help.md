@@ -24,7 +24,7 @@ or unredacted command output.
 
 | What is wrong? | Start here |
 |---|---|
-| You are unsure which role or hardware fits | [Compare roles](choose-a-goal.md) |
+| You are unsure which role or hardware fits | [Compare roles](index.md) |
 | A nearby device cannot see your advert | Recheck the [verification steps](verify.md) and local settings |
 | You need local settings or another person to test | [Find a community](../provinces/index.md) |
 | An observer is missing or has no recent activity | [Observer troubleshooting](../analyzer/troubleshooting.md) |
