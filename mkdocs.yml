@@ -195,6 +195,7 @@ plugins:
         hardware/overview.md: hardware/index.md
         meshcore/general-meshcore-roles.md: start/index.md
         start/choose-a-goal.md: start/index.md
+        start/repeater.md: config/index.md
         meshcore/flash-repeater.md: config/index.md
         analyzer/builds/mqtt-firmware.md: config/index.md
         proposals/onqc-scopes.md: config/guide.md
@@ -219,7 +220,7 @@ nav:
       - Welcome: index.md
       - Get started: start/index.md
       - Set up a companion: start/companion.md
-      - Repeater: start/repeater.md
+      - Set up a repeater: config/index.md
       - Room server: start/room-server.md
       - Observer: start/observer.md
       - Finish and support:
@@ -258,7 +259,6 @@ nav:
           - Update a repeater over the air: meshcore/update-repeater-ota.md
   - Network Tools:
       - Choose a network tool: tools/index.md
-      - Set up a repeater: config/index.md
       - Find your zone: config/map.md
       - How repeaters work: config/guide.md
       - Set up an observer: analyzer/intro.md

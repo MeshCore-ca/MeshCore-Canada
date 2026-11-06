@@ -36,7 +36,7 @@ Pick the device you're setting up:
 
     Extends coverage by relaying everyone's messages. Fixed, up high and always powered.
 
-    [:octicons-arrow-right-24: Set up a repeater](repeater.md)
+    [:octicons-arrow-right-24: Set up a repeater](../config/index.md)
 
 -   :material-forum:{ .lg .middle } **Room server**
 

@@ -342,7 +342,7 @@ test("no page or script still links to the region standard", () => {
     "docs/config/index.md", "docs/config/index.fr.md", "docs/config/map.md", "docs/config/map.fr.md",
     "docs/config/editor/index.md", "docs/config/editor/index.fr.md", "docs/meshcore/general-faq.md",
     "docs/meshcore/general-faq.fr.md", "docs/resources/glossary.md", "docs/resources/glossary.fr.md",
-    "docs/start/companion.md", "docs/start/companion.fr.md", "docs/start/repeater.md", "docs/start/repeater.fr.md",
+    "docs/start/companion.md", "docs/start/companion.fr.md",
     "docs/assets/setup/zone-map.js",
   ];
   for (const path of sources) {

@@ -79,8 +79,6 @@ test("paginates the Beacon prefix lookup and rejects an unfiltered response", as
 
 test("loads one shared checker only on English and French repeater ID workflows", () => {
   const pages = [
-    "docs/start/repeater.md",
-    "docs/start/repeater.fr.md",
     "docs/meshcore/generate-repeater-id.md",
     "docs/meshcore/generate-repeater-id.fr.md"
   ];

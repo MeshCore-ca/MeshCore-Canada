@@ -285,7 +285,7 @@ Les options d’adresse et d’INA219 viennent du guide d’origine : elles sél
 - Vérifiez les connexions de l’antenne, du filtre et des câbles RF.
 - Mesurez la sortie USB du gestionnaire d’alimentation avant de brancher la radio.
 - Testez le retour de l’alimentation après une coupure. Si vous avez installé l’INA3221, comparez ses mesures à celles du multimètre.
-- [Programmez et configurez le répéteur](../start/repeater.md), puis vérifiez qu’un compagnon proche reçoit son annonce avant de l’installer.
+- [Programmez et configurez le répéteur](../config/index.md), puis vérifiez qu’un compagnon proche reçoit son annonce avant de l’installer.
 
 ## Dépannage et récupération { #recuperation-et-retour-en-arriere }
 

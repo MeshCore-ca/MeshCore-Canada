@@ -11,7 +11,6 @@ const ownedMarkdown = [
   "index.md",
   "start/index.md",
   "start/companion.md",
-  "start/repeater.md",
   "start/room-server.md",
   "start/observer.md",
   "start/verify.md",
@@ -20,7 +19,6 @@ const ownedMarkdown = [
 
 const rolePages = {
   companion: "start/companion.md",
-  repeater: "start/repeater.md",
   "room-server": "start/room-server.md",
   observer: "start/observer.md",
 };
@@ -94,7 +92,7 @@ test("homepage is task-first and exposes the required decisions", () => {
 test("Start offers all roles and the local-settings handoff", () => {
   const start = readDoc("start/index.md");
 
-  for (const link of ["companion.md", "repeater.md", "room-server.md", "observer.md", "get-help.md"]) {
+  for (const link of ["companion.md", "../config/index.md", "room-server.md", "observer.md", "get-help.md"]) {
     assert.match(start, new RegExp(`\\]\\(${link.replace(".", "\\.")}\\)`));
   }
 
@@ -153,6 +151,7 @@ test("retired visitor pages use canonical redirects instead of searchable bridge
   for (const [oldPath, currentPath] of [
     ["resources/getting-started.md", "start/index.md"],
     ["start/choose-a-goal.md", "start/index.md"],
+    ["start/repeater.md", "config/index.md"],
     ["meshcore/firmware-rak-custom-display.md", "start/companion.md"],
     ["meshcore/firmware-heltec-v3-wifi.md", "start/companion.md"],
     ["meshcore/flash-companion.md", "start/companion.md"],
@@ -193,9 +192,7 @@ test("the repeater bench test says to set the clock after every reboot, and why,
     fr: "Après un redémarrage, son horloge est souvent fausse, et les téléphones peuvent ignorer ses annonces tant qu’elle n’est pas réglée."
   };
   for (const [page, advice, lang] of [
-    ["start/repeater.md", "Each time the repeater reboots, set its clock again with `clock sync` from the MeshCore app before you send the advert.", "en"],
     ["start/verify.md", "Each time it reboots, set its clock again with `clock sync` from the MeshCore app.", "en"],
-    ["start/repeater.fr.md", "Chaque fois que le répéteur redémarre, réglez de nouveau son horloge avec `clock sync` depuis l’application MeshCore avant d’envoyer l’annonce.", "fr"],
     ["start/verify.fr.md", "Chaque fois qu’il redémarre, réglez de nouveau son horloge avec `clock sync` depuis l’application MeshCore.", "fr"],
   ]) {
     const source = readDoc(page);
@@ -205,18 +202,15 @@ test("the repeater bench test says to set the clock after every reboot, and why,
   }
 });
 
-test("the repeater and observer start pages lead to the setup tool without phase wording", () => {
+test("the observer start page leads to the setup tool, and repeater setup is the tool itself", () => {
   for (const french of [false, true]) {
     const suffix = french ? ".fr" : "";
-    const repeater = readDoc(`start/repeater${suffix}.md`);
     const observer = readDoc(`start/observer${suffix}.md`);
-    assert.match(repeater, /\]\(\.\.\/config\/index\.md\)\{ \.md-button \.md-button--primary \}/, "the repeater page's main button opens the tool");
-    assert.match(repeater, /\]\(\.\.\/config\/guide\.md#old-regions\)/, "old regions are explained in the guide");
-    assert.match(repeater, /\]\(\.\.\/config\/guide\.md#loop-detection\)/, "loop detection is explained in the guide");
-    assert.match(repeater, /data-mc-repeater-hash-check/, "the duplicate-ID check stays on the repeater page");
-    assert.doesNotMatch(repeater, /flash-repeater|Start with preparation|coordinate activation|Commencez par la préparation|coordonnez\s+l’activation/);
+    const tool = readDoc(`config/index${suffix}.md`);
     assert.match(observer, /\]\(\.\.\/config\/index\.md\?type=observer\)/, "the observer page links the repeater observer setup");
     assert.doesNotMatch(observer, /mqtt-firmware/);
+    assert.match(tool, /\]\(guide\.md#loop-detection\)/, "loop detection is explained in the guide");
+    assert.match(tool, /`clock sync`/);
   }
 });
 

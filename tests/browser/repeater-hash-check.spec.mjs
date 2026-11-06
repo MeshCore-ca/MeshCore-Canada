@@ -71,7 +71,7 @@ async function runCheck(page, language = "en") {
 
 test("checks a repeater ID by first-byte Beacon lookup and separates local from network collisions", async ({ page }) => {
   const nodeRequests = await mockBeacon(page);
-  await page.goto(siteRoute("/start/repeater/"));
+  await page.goto(siteRoute("/meshcore/generate-repeater-id/"));
   await runCheck(page);
   await expect(page.getByRole("heading", { name: "Check for a duplicate repeater ID" })).toBeVisible();
 
@@ -94,7 +94,7 @@ test("checks a repeater ID by first-byte Beacon lookup and separates local from 
 
 test("French repeater pages render and report collisions in French", async ({ page }) => {
   await mockBeacon(page);
-  await page.goto(siteRoute("/fr/start/repeater/"));
+  await page.goto(siteRoute("/fr/meshcore/generate-repeater-id/"));
   await runCheck(page, "fr");
   await expect(page.getByRole("heading", { name: "Vérifier si l’identifiant est déjà utilisé" })).toBeVisible();
   await expect(page.getByRole("status").filter({ hasText: "1 autre répéteur utilise 05DE00 dans YYZ" })).toBeVisible();
@@ -108,7 +108,7 @@ test("the repeater checker defers Beacon region loading until it is used", async
     iataRequests += 1;
     await route.fulfill({ contentType: "application/json", body: "[]" });
   });
-  await page.goto(siteRoute("/start/repeater/"));
+  await page.goto(siteRoute("/meshcore/generate-repeater-id/"));
   const disclosure = page.locator(".mc-hash-disclosure");
   await expect(disclosure.getByText("Duplicate repeater ID check (optional)", { exact: true })).toBeVisible();
   await expect(disclosure).not.toHaveAttribute("open", "");
@@ -123,7 +123,7 @@ test("the repeater checker defers Beacon region loading until it is used", async
 test("nested pages do not probe page-relative sitemaps or an absent GitHub release", async ({ page }) => {
   const requests = [];
   page.on("request", (request) => requests.push(request.url()));
-  await page.goto(siteRoute("/start/repeater/"));
+  await page.goto(siteRoute("/meshcore/generate-repeater-id/"));
   await expect(page.getByText("Duplicate repeater ID check (optional)", { exact: true })).toBeVisible();
   await page.waitForTimeout(250);
 
@@ -140,7 +140,7 @@ test("the repeater checker mounts without a disruptive layout shift", async ({ p
       });
     }).observe({ type: "layout-shift", buffered: true });
   });
-  await page.goto(siteRoute("/start/repeater/"));
+  await page.goto(siteRoute("/meshcore/generate-repeater-id/"));
   await expect(page.getByText("Duplicate repeater ID check (optional)", { exact: true })).toBeVisible();
   await page.waitForTimeout(250);
   expect(await page.evaluate(() => window.__mcLayoutShift)).toBeLessThan(0.1);
@@ -164,7 +164,7 @@ test("the setup tool does not show the optional ID checker", async ({ page }) =>
 test("collision results become labelled cards without horizontal overflow on a phone", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== "mobile-chromium", "Mobile collision-table contract");
   await mockBeacon(page);
-  await page.goto(siteRoute("/start/repeater/"));
+  await page.goto(siteRoute("/meshcore/generate-repeater-id/"));
   await runCheck(page);
   const layout = await page.locator("[data-mc-repeater-hash-check]").evaluate((host) => ({
     pageWidth: document.documentElement.scrollWidth,

@@ -31,8 +31,17 @@ hide:
 
 Répondez à quelques questions, une à la fois, et obtenez toutes les commandes à coller dans votre répéteur, avec ce que fait chacune.
 
+Avant de commencer : choisissez une [carte compatible](../hardware/recommended-repeaters.md), entendez-vous sur l’emplacement avec votre [communauté locale](../provinces/index.md) et configurez le répéteur sur l’établi avant de l’installer en hauteur.
+
 <div data-setup-tool><p class="setup-fallback">L’outil de configuration n’a pas pu se charger. Rechargez la page.</p></div>
 
 <noscript>L’outil de configuration a besoin de JavaScript. [Comprendre les répéteurs](guide.md) explique chaque étape et chaque commande qu’il afficherait.</noscript>
+
+## Une fois configuré
+
+- Vérifiez qu’un compagnon à proximité reçoit son annonce. Après chaque redémarrage, lancez d’abord `clock sync` depuis l’application MeshCore.
+- Choisissez une [antenne](../hardware/recommended-antenna.md) et un [support](../hardware/repeater-mounting-options.md).
+- Avec le micrologiciel 1.14 ou plus récent, lisez la section sur la [détection des boucles](guide.md#loop-detection) avant de modifier un répéteur communautaire.
+- Un problème? [Obtenez de l’aide](../start/get-help.md).
 
 <small>[Données des régions : sources et licences](../assets/regions/NOTICE.txt)</small>

@@ -37,7 +37,7 @@ Choisissez l’appareil que vous configurez :
 
     Étend la couverture en relayant les messages de tous. Fixe, en hauteur et alimenté en continu.
 
-    [:octicons-arrow-right-24: Configurer un répéteur](repeater.md)
+    [:octicons-arrow-right-24: Configurer un répéteur](../config/index.md)
 
 -   :material-forum:{ .lg .middle } **Serveur de salon**
 

@@ -77,14 +77,14 @@ test("language switch keeps selected region, radio, and commands step", async ({
 });
 
 test("feedback remembers its page and accepts a title and description", async ({ page }) => {
-  await page.goto(siteRoute("/start/repeater/"));
+  await page.goto(siteRoute("/start/room-server/"));
   await page.locator(".mc-page-feedback a").click();
-  await expect(page.locator('input[name="source_page"]')).toHaveValue("https://meshcore.ca/start/repeater/");
+  await expect(page.locator('input[name="source_page"]')).toHaveValue("https://meshcore.ca/start/room-server/");
   await page.locator("#submission-summary").fill("Clarify one instruction");
   await page.locator("#submission-need").fill("The step needs a clearer example.");
   await page.locator("#submission-public").check();
   await page.locator("#review-submission").click();
-  await expect(page.locator("#submission-preview")).toContainText("https://meshcore.ca/start/repeater/");
+  await expect(page.locator("#submission-preview")).toContainText("https://meshcore.ca/start/room-server/");
   await expect(page.locator("#submission-error-summary")).toBeHidden();
 });
 
@@ -105,9 +105,9 @@ for (const locale of ["", "fr/"]) {
         return route.fulfill({ json: { ok: true, issueNumber: 123, issueUrl: "https://github.com/MeshCore-ca/MeshCore-Canada/issues/123",
           submissionSha256: await submissionSha256(posted), duplicate: false } });
       });
-      await page.goto(siteRoute(`/${locale}start/repeater/`));
+      await page.goto(siteRoute(`/${locale}start/room-server/`));
       await page.locator(".mc-page-feedback a").click();
-      await expect(page.locator('input[name="source_page"]')).toHaveValue(`https://meshcore.ca/${locale}start/repeater/`);
+      await expect(page.locator('input[name="source_page"]')).toHaveValue(`https://meshcore.ca/${locale}start/room-server/`);
       await page.locator("#submission-summary").fill("Clarify one instruction");
       await page.locator("#submission-need").fill("The step needs a clearer example.");
       await page.locator("#submission-public").check();
@@ -117,7 +117,7 @@ for (const locale of ["", "fr/"]) {
         await expect(page.locator("#submission-result")).toHaveAttribute("data-state", "success");
         expect(posted.experience).toBe("");
         expect(posted.idea).toBe("");
-        expect(posted.sourcePage).toBe(`https://meshcore.ca/${locale}start/repeater/`);
+        expect(posted.sourcePage).toBe(`https://meshcore.ca/${locale}start/room-server/`);
       } else {
         await expect(page.locator("#submission-anti-spam-status")).toHaveAttribute("data-state", "error");
         await expect(page.locator("#submit-community-idea")).toBeDisabled();

@@ -31,8 +31,17 @@ hide:
 
 Answer a few questions, one at a time, and get every command to paste into your repeater, with what each one does.
 
+Before you start: pick a [supported board](../hardware/recommended-repeaters.md), agree on the site with your [local community](../provinces/index.md), and set it up on the bench before it goes up the mast.
+
 <div data-setup-tool><p class="setup-fallback">The setup tool didn't load. Reload the page.</p></div>
 
 <noscript>The setup tool needs JavaScript. [How repeaters work](guide.md) explains every step and command it would show.</noscript>
+
+## After it's set up
+
+- Check that a nearby companion hears its advert. After any reboot, run `clock sync` from the MeshCore app first.
+- Choose an [antenna](../hardware/recommended-antenna.md) and a [mount](../hardware/repeater-mounting-options.md).
+- On firmware 1.14 or newer, read about [loop detection](guide.md#loop-detection) before changing a community repeater.
+- Something not working? [Get help](../start/get-help.md).
 
 <small>[Region data: sources and licences](../assets/regions/NOTICE.txt)</small>

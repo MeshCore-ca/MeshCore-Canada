@@ -284,7 +284,7 @@ The address and INA219 flags are from the original guide: they select `0x40` and
 - Confirm the antenna, filter, and RF cables are connected.
 - Check that the power manager supplies the expected USB voltage before connecting the radio.
 - Test that power returns after an interruption. If fitted, compare INA3221 readings with a multimeter.
-- [Flash and configure the repeater](../start/repeater.md), then check that a nearby companion receives its advert before installing it.
+- [Flash and configure the repeater](../config/index.md), then check that a nearby companion receives its advert before installing it.
 
 ## Troubleshooting and recovery { #recovery-and-undo }
 
