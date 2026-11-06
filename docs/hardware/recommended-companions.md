@@ -123,4 +123,4 @@ There are standalone devices such as the **T-Deck**, but we recommend starting w
 
 ## Continue setup
 
-Once the exact board is confirmed, [flash and configure the companion](../meshcore/flash-companion.md). After flashing, reboot it and complete a local message test.
+Once the exact board is confirmed, [flash and configure the companion](../start/companion.md). After flashing, reboot it and complete a local message test.

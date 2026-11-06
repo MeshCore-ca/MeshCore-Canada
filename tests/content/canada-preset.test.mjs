@@ -28,7 +28,7 @@ for (const suffix of [".md", ".fr.md"]) {
   test(`${suffix} onboarding and observer pages name Canada and link the older-app fallback`, () => {
     const paths = [
       ...["companion", "repeater", "room-server", "observer"].map(role => `docs/start/${role}${suffix}`),
-      ...["companion", "room-server"].map(role => `docs/meshcore/flash-${role}${suffix}`),
+      `docs/meshcore/flash-room-server${suffix}`,
       `docs/analyzer/intro${suffix}`,
     ];
     for (const path of paths) {

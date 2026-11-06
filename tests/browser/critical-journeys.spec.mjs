@@ -375,7 +375,7 @@ test("site search responds to typed and pasted input", async ({ page }) => {
 });
 
 test("Start progress stores completion markers only", async ({ page }) => {
-  await page.goto(siteRoute("/start/companion/"));
+  await page.goto(siteRoute("/start/repeater/"));
   const first = page.locator("input[data-mc-progress]").first();
   await expect(first).toBeVisible();
   await first.check();

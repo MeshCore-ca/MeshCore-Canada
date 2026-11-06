@@ -9,7 +9,7 @@ for (const locale of ["", "fr/"]) {
   test.describe(`${locale || "en/"} companion scope guidance without JavaScript`, () => {
     test.use({ javaScriptEnabled: false });
     test("all companion entry points tell people to set a default scope now", async ({ page }) => {
-      for (const path of ["start/companion/", "meshcore/flash-companion/", "config/guide/"]) {
+      for (const path of ["start/companion/", "config/guide/"]) {
         await page.goto(siteRoute(`/${locale}${path}`));
         const note = page.locator(".admonition.note").filter({ hasText: locale ? /portée par défaut/i : /set your default scope/i });
         await expect(note).toBeVisible();
@@ -17,10 +17,8 @@ for (const locale of ["", "fr/"]) {
         await expect(note).toContainText(locale ? /code de votre province/ : /your province['’]s code/);
         await expect(note).toContainText(locale ? sentence("Les répéteurs de bordure ne relaient pas les messages sans portée") : /Edge repeaters don['’]t\s+pass on messages that have no\s+scope/);
         await expect(page.locator("article")).not.toContainText(/Phase 2|phase 2|January 2027|janvier 2027/);
-        if (path !== "meshcore/flash-companion/") {
-          await expect(page.locator("article")).toContainText("Network Settings");
-          await expect(page.locator("article")).toContainText("Default Region Scope");
-        }
+        await expect(page.locator("article")).toContainText("Network Settings");
+        await expect(page.locator("article")).toContainText("Default Region Scope");
       }
     });
 

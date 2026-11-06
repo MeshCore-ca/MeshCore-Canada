@@ -116,10 +116,13 @@ test("each role guide is direct and reaches verification and support", () => {
     }
 
     assert.doesNotMatch(page, /\bOutcome:|Your setup path|path is complete/);
-    assert.match(page, /<h2[^>]*>Setup checklist<\/h2>/);
-    assert.match(page, new RegExp(`data-mc-progress-page="${role}"`));
-    assert.match(page, /id="[^"]+" type="checkbox" data-mc-progress/);
-    assert.match(page, /\]\(verify\.md#[^)]+\)/);
+    // Companion is one self-contained page with its own test step; the others still use the checklist.
+    if (role !== "companion") {
+      assert.match(page, /<h2[^>]*>Setup checklist<\/h2>/);
+      assert.match(page, new RegExp(`data-mc-progress-page="${role}"`));
+      assert.match(page, /id="[^"]+" type="checkbox" data-mc-progress/);
+      assert.match(page, /\]\(verify\.md#[^)]+\)/);
+    }
     assert.match(page, /\]\(get-help\.md\)/);
     assert.match(page, /community lists different settings|community\s+publishes different settings/i);
   }
@@ -128,7 +131,8 @@ test("each role guide is direct and reaches verification and support", () => {
 test("progress inputs use stable, unique ids and contain no values", () => {
   const ids = new Set();
 
-  for (const relativePath of Object.values(rolePages)) {
+  for (const [role, relativePath] of Object.entries(rolePages)) {
+    if (role === "companion") continue; // one self-contained page, no checklist
     const page = readDoc(relativePath);
     const inputs = [...page.matchAll(/<input\s+([^>]*data-mc-progress[^>]*)>/g)];
     assert.ok(inputs.length >= 6 && inputs.length <= 7, `${relativePath} must expose six or seven useful progress checks`);
@@ -149,8 +153,9 @@ test("retired visitor pages use canonical redirects instead of searchable bridge
   for (const [oldPath, currentPath] of [
     ["resources/getting-started.md", "start/index.md"],
     ["start/choose-a-goal.md", "start/index.md"],
-    ["meshcore/firmware-rak-custom-display.md", "meshcore/flash-companion.md"],
-    ["meshcore/firmware-heltec-v3-wifi.md", "meshcore/flash-companion.md"],
+    ["meshcore/firmware-rak-custom-display.md", "start/companion.md"],
+    ["meshcore/firmware-heltec-v3-wifi.md", "start/companion.md"],
+    ["meshcore/flash-companion.md", "start/companion.md"],
     ["hardware/repeater-solar-batteries.md", "hardware/recommended-repeaters.md"],
     // The flash guide, the MQTT observer page and the ON/QC proposal now live in the setup tool and its explainer.
     ["meshcore/flash-repeater.md", "config/index.md"],

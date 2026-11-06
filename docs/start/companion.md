@@ -1,6 +1,6 @@
 ---
-title: Start with a companion
-description: Prepare, configure, and verify a personal MeshCore companion for a Canadian community.
+title: Set up a companion
+description: Flash, configure and test a personal MeshCore companion in Canada, all on one page.
 audience:
   - first-time-user
   - companion-owner
@@ -19,51 +19,80 @@ evidence:
   - Content and linked setup paths reviewed on 2026-10-29; radio and installation checks remain operator tasks.
 difficulty: beginner
 estimated_time: 20-30 minutes
-destructive: false
+destructive: true
 requires:
   - supported-companion
   - data-capable-usb-cable
 ---
 
-# Start with a companion
+# Set up a companion
 
-A companion is a personal messaging device. It does not route traffic for
-other users. Most pair with an app; some have their own screen and controls.
-
-[Install and configure a companion](../meshcore/flash-companion.md){ .md-button .md-button--primary }
+A companion is your personal MeshCore radio. It pairs with the MeshCore app on
+your phone so you can send and receive messages. It doesn't relay messages for
+anyone else. Setup takes about 20 to 30 minutes.
 
 ## Before you start
 
-- Check the [recommended companion options](../hardware/recommended-companions.md).
-- Confirm the detailed flashing guide lists your device.
-- Use a data-capable USB cable and a supported browser.
-- Record any identity or settings you need before following an erase step.
+- **A supported device.** See the
+  [recommended companions](../hardware/recommended-companions.md), and check that
+  the [MeshCore flasher](https://meshcore.io/flasher) lists your exact board.
+- **A USB cable that carries data.** Charge-only cables won't work.
+- **Chrome or Edge on a computer.** The flasher needs
+  [Web Serial](https://developer.mozilla.org/en-US/docs/Web/API/Web_Serial_API#browser_compatibility).
+  Some boards also need a USB serial driver.
+- **The MeshCore app** on your phone, version 1.43 or newer.
 
-## Know what flashing changes
+### Used this device before? Back it up first
 
-The linked flashing guide replaces the device firmware and configures it as a
-companion. Stop before erasing if you cannot recover information you need.
+!!! danger "Erase Flash deletes the device's stored data"
+    That includes its identity (private key), name, contacts, channels and
+    radio settings. An erased identity can't be recovered unless you backed it up.
 
+1. Connect with the app that manages it now.
+2. Note its name, radio settings and anything else you'd need to set again.
+3. Export its private key with your app's backup option. Keep it secret: never
+   post it in a screenshot, chat or issue.
+4. Export contacts and channels if your app offers it.
 
+If you can't back up something you need, **stop before Erase Flash** and
+[ask for help](get-help.md).
 
-## Flash the companion
+## 1. Flash the firmware
 
-Follow [Flash and configure a companion](../meshcore/flash-companion.md).
+1. Connect the device to your computer by USB.
+2. Open the [MeshCore flasher](https://meshcore.io/flasher) and select your
+   exact board.
+3. Select **Companion Radio (Bluetooth)** and the firmware version for that board.
+4. Follow the flasher's connection steps. Use **Enter DFU Mode** only if your
+   board asks for it.
+5. New device or deliberate reset? Back up first, then click **Erase Flash** only
+   if your board's instructions require it. For an update, leave erase off.
+6. Click **Flash** and wait for the completion message before unplugging.
 
-## Use the right radio settings
+### Check it worked
 
-Use **Canada** with the **3-byte** path setting unless your
-community lists different settings.
+When it's done, the board restarts as a companion and the app can find it.
 
-If Canada is not listed, follow the [older-preset instructions](../provinces/index.md#canada-baseline).
+### Recovery if flashing fails
 
-!!! warning "Match your local mesh"
-    Check the [community directory](../provinces/index.md). If your community
-    publishes different settings, use those settings instead.
+Don't keep erasing. Leave the device connected, refresh the flasher, put the
+board back in DFU mode, select the same board and companion firmware, and try
+**Flash** again. If the board no longer shows up, [ask for help](get-help.md)
+before trying anything else.
 
-Reboot after changing the radio settings, then send an advert.
+## 2. Name it and set the radio
 
-## Choose a scope
+1. Open the MeshCore app and pair with your companion.
+2. Give it a name that doesn't reveal where you live.
+3. Check the [community directory](../provinces/index.md) for your area's
+   settings. If none are listed, choose **Canada**
+   (`910.525 MHz / 62.5 kHz / SF7 / CR5`) and confirm **3-byte** paths.
+4. Save. The device restarts; reconnect when it's back.
+
+Use **Canada** unless your community lists different settings. If Canada isn't
+in your app, follow the [older-preset instructions](../provinces/index.md#canada-baseline).
+
+## 3. Set your default scope {#choose-a-scope}
 
 !!! note "Set your default scope now"
     Repeaters set up with the [meshcore.ca setup tool](../config/index.md) pass messages
@@ -76,8 +105,7 @@ Reboot after changing the radio settings, then send an advert.
 
 ### Set it in the MeshCore app {#set-your-default-scope}
 
-You need the MeshCore app, version 1.43 or newer. The screenshots use `onqc`;
-type your own scope if you are elsewhere.
+The screenshots use `onqc`; type your own scope if you're elsewhere.
 
 1. Connect your companion to the MeshCore app and tap the **settings cog** in the top right.
 
@@ -103,37 +131,27 @@ type your own scope if you are elsewhere.
 
     [![Settings showing onqc as the default region scope and a Settings Saved message](../assets/images/onqc-scopes/companion-06-saved.webp){ loading=lazy width="300" height="652" }](../assets/images/onqc-scopes/companion-06-saved.webp)
 
-Find your city code on the [Find your zone](../config/map.md) page. In Ontario and Québec, also use `onqc` for the Public channel and your city scope, such as `yow`, for test channels: open the channel, tap **⋮** and choose **Set Region Scope**. Leave `can` and `na` for future use.
+- Find your city code on the [Find your zone](../config/map.md) page.
+- **Ontario and Québec:** also use `onqc` on the Public channel, and your city
+  scope (such as `yow`) on test channels. Open the channel, tap **⋮** and choose
+  **Set Region Scope**.
+- Leave `can` and `na` for future use.
+- Running a bot or MeshMapper? Follow the
+  [bot and MeshMapper instructions](../config/guide.md#bots-and-meshmapper).
 
-Bot and MeshMapper operators follow the [bot and MeshMapper instructions](../config/guide.md#bots-and-meshmapper).
-
-[How repeaters work](../config/guide.md#companions) explains scopes, with examples. Scopes do not change your radio settings.
+[How repeaters work](../config/guide.md#companions) explains scopes with
+examples. Scopes don't change your radio settings.
 
 ## Test it
 
-The companion is ready when:
-
-1. the device shows the Canada settings or your community's settings; and
-2. a nearby known-good device or community member can see its advert.
-
-Use the [companion verification checklist](verify.md#companion).
-
-<section class="mc-start-progress" data-mc-progress-page="companion" aria-labelledby="companion-progress-title">
-  <h2 id="companion-progress-title">Setup checklist</h2>
-  <p>Checks are saved only in this browser.</p>
-  <ol>
-    <li><label><input id="companion-progress-hardware" type="checkbox" data-mc-progress> Confirm compatible hardware</label></li>
-    <li><label><input id="companion-progress-prepare" type="checkbox" data-mc-progress> Back up and prepare</label></li>
-    <li><label><input id="companion-progress-flash" type="checkbox" data-mc-progress> Follow the flashing guide</label></li>
-    <li><label><input id="companion-progress-configure" type="checkbox" data-mc-progress> Apply Canada or local settings</label></li>
-    <li><label><input id="companion-progress-verify-local" type="checkbox" data-mc-progress> Check the device nearby</label></li>
-    <li><label><input id="companion-progress-verify-community" type="checkbox" data-mc-progress> Test with another mesh user</label></li>
-  </ol>
-</section>
+1. Send a message in the **Public** channel.
+2. **Heard X Repeats** means a repeater picked it up. A plain **Sent** doesn't
+   mean your settings are wrong: you may be out of range. Move somewhere with
+   known coverage or ask your community to help test.
+3. Reboot the companion and check that its name and settings stuck.
 
 ## What's next
 
-Keep the local settings recorded and check them again after firmware changes.
-Use [MeshCore how-to guides](../meshcore/general-howto.md) for common messaging
-tasks. [Find your community](../provinces/index.md), then exchange a test message
-with a nearby user. If nobody can see the advert, [get help](get-help.md).
+- [Find your community](../provinces/index.md) and say hello.
+- Learn the app with the [MeshCore how-to guides](../meshcore/general-howto.md).
+- Nobody hears you? [Get help](get-help.md).

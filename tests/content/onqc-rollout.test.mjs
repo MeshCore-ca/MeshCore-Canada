@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 
-const companionPages = ["start/companion", "meshcore/flash-companion", "config/guide"];
+const companionPages = ["start/companion", "config/guide"];
 
 // The admonition that starts with `!!! note "..."`: its title line and its indented body.
 function scopeNote(source, path) {
@@ -46,7 +46,7 @@ test("the companion guide shows the default scope steps with its six screenshots
       assert.ok(image, `${french ? "FR" : "EN"} companion guide needs ${shot} with alt text`);
     }
     // The other pages point to those steps instead of repeating them.
-    for (const page of ["meshcore/flash-companion", "config/guide"]) {
+    for (const page of ["config/guide"]) {
       const other = readFileSync(`docs/${page}${french ? ".fr" : ""}.md`, "utf8");
       assert.match(other, french ? /companion\.md#regler-votre-portee-par-defaut/ : /companion\.md#set-your-default-scope/, page);
     }

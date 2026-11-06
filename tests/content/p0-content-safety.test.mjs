@@ -20,7 +20,7 @@ function countH1(markdown) {
 
 const assignedPages = [
   "docs/hardware/repeater-mounting-options.md",
-  "docs/meshcore/flash-companion.md",
+  "docs/start/companion.md",
   "docs/meshcore/flash-room-server.md",
   "docs/meshcore/update-repeater-ota.md",
   "docs/meshcore/generate-repeater-id.md",
@@ -38,7 +38,7 @@ test("every P0 content page has exactly one H1", () => {
 
 test("destructive flash actions on the guide pages are gated by backup warnings", () => {
   const cases = [
-    ["docs/meshcore/flash-companion.md", "Click **Erase Flash**"],
+    ["docs/start/companion.md", "click **Erase Flash**"],
     ["docs/meshcore/flash-room-server.md", "Click **Erase Flash**"],
   ];
 
@@ -152,7 +152,7 @@ test("remote installer guidance explains impact, review, and rollback before one
 
 test("Canada baseline and local practice are explicitly separated", () => {
   const overview = read("docs/meshcore/general-overview.md");
-  const companion = read("docs/meshcore/flash-companion.md");
+  const companion = read("docs/start/companion.md");
 
   assert.match(overview, /community directory/i);
   assert.match(overview, /Canada defaults/i);

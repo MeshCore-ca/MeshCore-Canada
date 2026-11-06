@@ -109,6 +109,7 @@ plugins:
             Start here: Commencer
             Get started: Commencer
             Companion: Appareil compagnon
+            Set up a companion: Configurer un compagnon
             Repeater: Répéteur
             Room server: Serveur de salon
             Observer: Observateur
@@ -140,7 +141,6 @@ plugins:
             Install a repeater: Installer un répéteur
             Mounting options: Options de montage
             Firmware: Micrologiciel
-            Flash a companion: Installer le micrologiciel d'un compagnon
             Flash a room server: Installer le micrologiciel d'un serveur de salon
             Update a repeater over the air: Mettre un répéteur à jour à distance
             Network Tools: Outils réseau
@@ -188,8 +188,9 @@ plugins:
         regions/standard.md: config/guide.md
         config/standard.md: config/guide.md
         resources/getting-started.md: start/index.md
-        meshcore/firmware-rak-custom-display.md: meshcore/flash-companion.md
-        meshcore/firmware-heltec-v3-wifi.md: meshcore/flash-companion.md
+        meshcore/firmware-rak-custom-display.md: start/companion.md
+        meshcore/firmware-heltec-v3-wifi.md: start/companion.md
+        meshcore/flash-companion.md: start/companion.md
         hardware/repeater-solar-batteries.md: hardware/recommended-repeaters.md
         hardware/overview.md: hardware/index.md
         meshcore/general-meshcore-roles.md: start/index.md
@@ -217,7 +218,7 @@ nav:
   - Start:
       - Welcome: index.md
       - Get started: start/index.md
-      - Companion: start/companion.md
+      - Set up a companion: start/companion.md
       - Repeater: start/repeater.md
       - Room server: start/room-server.md
       - Observer: start/observer.md
@@ -253,7 +254,6 @@ nav:
       - Install a repeater:
           - Mounting options: hardware/repeater-mounting-options.md
       - Firmware:
-          - Flash a companion: meshcore/flash-companion.md
           - Flash a room server: meshcore/flash-room-server.md
           - Update a repeater over the air: meshcore/update-repeater-ota.md
   - Network Tools:

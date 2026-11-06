@@ -84,7 +84,7 @@ ou de commencer les travaux.
 
 Après avoir choisi un appareil pris en charge, suivez le guide correspondant :
 
-- [Programmer un compagnon](../meshcore/flash-companion.md)
+- [Programmer un compagnon](../start/companion.md)
 - [Configurer un répéteur](../config/index.md)
 - [Programmer un serveur de salon](../meshcore/flash-room-server.md)
 

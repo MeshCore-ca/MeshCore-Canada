@@ -124,5 +124,5 @@ Il existe des appareils autonomes comme le **T-Deck**, mais nous recommandons de
 ## Poursuivre la configuration
 
 Lorsque la carte exacte est confirmée,
-[programmez et configurez le compagnon](../meshcore/flash-companion.md).
+[programmez et configurez le compagnon](../start/companion.md).
 Après la programmation, redémarrez-le et effectuez un essai de message local.

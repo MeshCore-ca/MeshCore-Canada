@@ -81,7 +81,7 @@ buying parts or starting work.
 
 After choosing a supported device, follow the matching setup guide:
 
-- [Flash a companion](../meshcore/flash-companion.md)
+- [Flash a companion](../start/companion.md)
 - [Set up a repeater](../config/index.md)
 - [Flash a room server](../meshcore/flash-room-server.md)
 
