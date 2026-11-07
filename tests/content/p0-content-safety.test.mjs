@@ -129,8 +129,9 @@ test("Saskatchewan directory and generated listing agree on the national baselin
   // Directory cards only mention radio settings when a community differs from the Canada defaults.
   assert.doesNotMatch(card("stoonmesh"), /Radio settings/);
   assert.match(card("bc-mesh"), /<strong>Radio settings:<\/strong> Different local settings/);
-  assert.match(sk, /<h3>StoonMesh<\/h3>[\s\S]*?<dd>Uses the Canada defaults<\/dd>/);
-  assert.match(sk, /<h3>YQRMesh<\/h3>[\s\S]*?<dd>Uses the Canada defaults<\/dd>/);
+  assert.match(sk, /<h3>StoonMesh<\/h3>/);
+  assert.match(sk, /<h3>YQRMesh<\/h3>/);
+  assert.doesNotMatch(sk, /<dt>Radio settings<\/dt>/);
   assert.doesNotMatch(sk, /1-byte|Local setting differs/);
 });
 test("remote installer guidance explains impact, review, and rollback before one-liners", () => {

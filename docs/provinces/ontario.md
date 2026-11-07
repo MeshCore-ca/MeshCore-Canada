@@ -35,21 +35,12 @@ card lists different local settings.
 <span class="mc-community-status" data-status="active">Active</span>
 </div>
 <p class="mc-community-area">Eastern Ontario and Western Quebec</p>
-<dl class="mc-community-facts">
-<div><dt>Settings</dt>
-<dd>Uses the Canada defaults</dd></div>
-<div><dt>Listing reviewed</dt>
-<dd>2026-08-29</dd></div>
-</dl>
 <h4>Contacts</h4>
 <ul class="mc-community-contacts">
-<li><strong>Discord:</strong> <a href="https://discord.gg/WSyNd8SfNr" rel="noopener">Greater Ottawa Mesh Enthusiasts Discord</a> <span class="mc-community-external">(external)</span></li>
-<li><strong>Website:</strong> <a href="https://ottawamesh.ca/" rel="noopener">Ottawa Mesh website</a> <span class="mc-community-external">(external)</span></li>
+<li><strong>Discord:</strong> <a href="https://discord.gg/WSyNd8SfNr" rel="noopener">Greater Ottawa Mesh Enthusiasts Discord</a></li>
+<li><strong>Website:</strong> <a href="https://ottawamesh.ca/" rel="noopener">Ottawa Mesh website</a></li>
 </ul>
-<p class="mc-community-contact-health">
-<strong>Contact check:</strong> Links checked on 2026-08-29
-</p>
-<p class="mc-community-card__action"><a href="../../submit-idea/?community=greater-ottawa-mesh-enthusiasts&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Fprovinces%2Fontario%2F%23community-greater-ottawa-mesh-enthusiasts">Update this listing</a></p>
+<p class="mc-community-card__action"><a href="../../submit-idea/?community=greater-ottawa-mesh-enthusiasts&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Fprovinces%2Fontario%2F%23community-greater-ottawa-mesh-enthusiasts"><small>Update this listing</small></a></p>
 </article>
 <article class="mc-community-card mc-community-card--detail" id="community-gta-lora-meshes">
 <div class="mc-community-card__header">
@@ -57,20 +48,11 @@ card lists different local settings.
 <span class="mc-community-status" data-status="active">Active</span>
 </div>
 <p class="mc-community-area">Southern Ontario</p>
-<dl class="mc-community-facts">
-<div><dt>Settings</dt>
-<dd>Uses the Canada defaults</dd></div>
-<div><dt>Listing reviewed</dt>
-<dd>2026-08-29</dd></div>
-</dl>
 <h4>Contacts</h4>
 <ul class="mc-community-contacts">
-<li><strong>Discord:</strong> <a href="https://discord.gg/wSHbeb86r4" rel="noopener">GTA+-Lora-Meshes Discord</a> <span class="mc-community-external">(external)</span></li>
+<li><strong>Discord:</strong> <a href="https://discord.gg/wSHbeb86r4" rel="noopener">GTA+-Lora-Meshes Discord</a></li>
 </ul>
-<p class="mc-community-contact-health">
-<strong>Contact check:</strong> Links checked on 2026-08-29
-</p>
-<p class="mc-community-card__action"><a href="../../submit-idea/?community=gta-lora-meshes&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Fprovinces%2Fontario%2F%23community-gta-lora-meshes">Update this listing</a></p>
+<p class="mc-community-card__action"><a href="../../submit-idea/?community=gta-lora-meshes&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Fprovinces%2Fontario%2F%23community-gta-lora-meshes"><small>Update this listing</small></a></p>
 </article>
 <article class="mc-community-card mc-community-card--detail" id="community-quinte-mesh-network">
 <div class="mc-community-card__header">
@@ -78,21 +60,12 @@ card lists different local settings.
 <span class="mc-community-status" data-status="active">Active</span>
 </div>
 <p class="mc-community-area">Quinte Region, including Belleville, Trenton, Prince Edward County, and nearby areas</p>
-<dl class="mc-community-facts">
-<div><dt>Settings</dt>
-<dd>Uses the Canada defaults</dd></div>
-<div><dt>Listing reviewed</dt>
-<dd>2026-08-29</dd></div>
-</dl>
 <h4>Contacts</h4>
 <ul class="mc-community-contacts">
-<li><strong>Discord:</strong> <a href="https://discord.gg/V5esJEP67X" rel="noopener">Quinte Mesh Network Discord</a> <span class="mc-community-external">(external)</span></li>
-<li><strong>Website:</strong> <a href="https://quintemesh.ca/" rel="noopener">Quinte Mesh Network website</a> <span class="mc-community-external">(external)</span></li>
+<li><strong>Discord:</strong> <a href="https://discord.gg/V5esJEP67X" rel="noopener">Quinte Mesh Network Discord</a></li>
+<li><strong>Website:</strong> <a href="https://quintemesh.ca/" rel="noopener">Quinte Mesh Network website</a></li>
 </ul>
-<p class="mc-community-contact-health">
-<strong>Contact check:</strong> Links checked on 2026-08-29
-</p>
-<p class="mc-community-card__action"><a href="../../submit-idea/?community=quinte-mesh-network&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Fprovinces%2Fontario%2F%23community-quinte-mesh-network">Update this listing</a></p>
+<p class="mc-community-card__action"><a href="../../submit-idea/?community=quinte-mesh-network&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Fprovinces%2Fontario%2F%23community-quinte-mesh-network"><small>Update this listing</small></a></p>
 </article>
 </div>
 

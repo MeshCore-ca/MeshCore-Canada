@@ -35,20 +35,11 @@ sauf si une fiche indique des réglages locaux différents.
 <span class="mc-community-status" data-status="active">Active</span>
 </div>
 <p class="mc-community-area">Comté de Lunenburg</p>
-<dl class="mc-community-facts">
-<div><dt>Réglages</dt>
-<dd>Réglages par défaut du Canada</dd></div>
-<div><dt>Fiche révisée</dt>
-<dd>2026-08-29</dd></div>
-</dl>
 <h4>Coordonnées</h4>
 <ul class="mc-community-contacts">
-<li><strong>Site Web :</strong> <a href="http://www.lunenburgcountymesh.ca" rel="noopener">Site Web de Lunenburg County Mesh</a> <span class="mc-community-external">(externe)</span></li>
+<li><strong>Site Web :</strong> <a href="http://www.lunenburgcountymesh.ca" rel="noopener">Site Web de Lunenburg County Mesh</a></li>
 </ul>
-<p class="mc-community-contact-health">
-<strong>Vérification :</strong> Effectuée le 2026-08-29
-</p>
-<p class="mc-community-card__action"><a href="../../submit-idea/?community=lunenburg-county-mesh&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Ffr%2Fprovinces%2Fnova-scotia%2F%23community-lunenburg-county-mesh">Mettre cette fiche à jour</a></p>
+<p class="mc-community-card__action"><a href="../../submit-idea/?community=lunenburg-county-mesh&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Ffr%2Fprovinces%2Fnova-scotia%2F%23community-lunenburg-county-mesh"><small>Mettre cette fiche à jour</small></a></p>
 </article>
 </div>
 

@@ -36,27 +36,18 @@ card lists different local settings.
 </div>
 <p class="mc-community-area">Alberta</p>
 <p class="mc-community-summary">Building Alberta&#x27;s community-operated off-grid LoRa mesh network</p>
-<dl class="mc-community-facts">
-<div><dt>Settings</dt>
-<dd>Uses the Canada defaults</dd></div>
-<div><dt>Listing reviewed</dt>
-<dd>2026-08-29</dd></div>
-</dl>
 <h4>Contacts</h4>
 <ul class="mc-community-contacts">
-<li><strong>Website:</strong> <a href="https://albertamesh.ca/" rel="noopener">AlbertaMesh.ca</a> <span class="mc-community-external">(external)</span></li>
-<li><strong>Discord:</strong> <a href="https://discord.gg/CznDhsRWnJ" rel="noopener">Alberta MeshCore Discord</a> <span class="mc-community-external">(external)</span></li>
-<li><strong>Website:</strong> <a href="https://albertamesh.ca/airdrie/" rel="noopener">Airdrie regional page</a> <span class="mc-community-external">(external)</span></li>
-<li><strong>Website:</strong> <a href="https://albertamesh.ca/calgary/" rel="noopener">Calgary regional page</a> <span class="mc-community-external">(external)</span></li>
-<li><strong>Website:</strong> <a href="https://albertamesh.ca/edmonton/" rel="noopener">Edmonton regional page</a> <span class="mc-community-external">(external)</span></li>
-<li><strong>Website:</strong> <a href="https://albertamesh.ca/lethbridge/" rel="noopener">Lethbridge regional page</a> <span class="mc-community-external">(external)</span></li>
-<li><strong>Website:</strong> <a href="https://albertamesh.ca/why-meshcore/" rel="noopener">Why MeshCore?</a> <span class="mc-community-external">(external)</span></li>
-<li><strong>Website:</strong> <a href="https://albertamesh.ca/monitoring-tools/" rel="noopener">Monitoring tools</a> <span class="mc-community-external">(external)</span></li>
+<li><strong>Website:</strong> <a href="https://albertamesh.ca/" rel="noopener">AlbertaMesh.ca</a></li>
+<li><strong>Discord:</strong> <a href="https://discord.gg/CznDhsRWnJ" rel="noopener">Alberta MeshCore Discord</a></li>
+<li><strong>Website:</strong> <a href="https://albertamesh.ca/airdrie/" rel="noopener">Airdrie regional page</a></li>
+<li><strong>Website:</strong> <a href="https://albertamesh.ca/calgary/" rel="noopener">Calgary regional page</a></li>
+<li><strong>Website:</strong> <a href="https://albertamesh.ca/edmonton/" rel="noopener">Edmonton regional page</a></li>
+<li><strong>Website:</strong> <a href="https://albertamesh.ca/lethbridge/" rel="noopener">Lethbridge regional page</a></li>
+<li><strong>Website:</strong> <a href="https://albertamesh.ca/why-meshcore/" rel="noopener">Why MeshCore?</a></li>
+<li><strong>Website:</strong> <a href="https://albertamesh.ca/monitoring-tools/" rel="noopener">Monitoring tools</a></li>
 </ul>
-<p class="mc-community-contact-health">
-<strong>Contact check:</strong> Links checked on 2026-08-29
-</p>
-<p class="mc-community-card__action"><a href="../../submit-idea/?community=alberta-meshcore-networks&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Fprovinces%2Falberta%2F%23community-alberta-meshcore-networks">Update this listing</a></p>
+<p class="mc-community-card__action"><a href="../../submit-idea/?community=alberta-meshcore-networks&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Fprovinces%2Falberta%2F%23community-alberta-meshcore-networks"><small>Update this listing</small></a></p>
 </article>
 <article class="mc-community-card mc-community-card--detail" id="community-airdrie-meshcore-network">
 <div class="mc-community-card__header">
@@ -65,24 +56,15 @@ card lists different local settings.
 </div>
 <p class="mc-community-area">Airdrie and Calgary</p>
 <p class="mc-community-summary">Uses the YYC regional identifier shared with the Calgary regional network</p>
-<dl class="mc-community-facts">
-<div><dt>Settings</dt>
-<dd>Uses the Canada defaults</dd></div>
-<div><dt>Listing reviewed</dt>
-<dd>2026-08-29</dd></div>
-</dl>
 <h4>Contacts</h4>
 <ul class="mc-community-contacts">
-<li><strong>Website:</strong> <a href="https://albertamesh.ca/airdrie/" rel="noopener">Airdrie MeshCore Network</a> <span class="mc-community-external">(external)</span></li>
-<li><strong>Website:</strong> <a href="https://albertamesh.ca/airdrie/configuration/" rel="noopener">Airdrie configuration guide</a> <span class="mc-community-external">(external)</span></li>
-<li><strong>Discord:</strong> <a href="https://discord.gg/CznDhsRWnJ" rel="noopener">Alberta MeshCore Discord</a> <span class="mc-community-external">(external)</span></li>
-<li><strong>MeshMapper:</strong> <a href="https://yyc.meshmapper.net/?lat=51.28120&amp;lon=-113.99718&amp;zoom=13.43" rel="noopener">Airdrie network map</a> <span class="mc-community-external">(external)</span></li>
-<li><strong>Website:</strong> <a href="https://waev.app/#/live-map/@51.28107,-113.99966,14.47z" rel="noopener">WAeV live map</a> <span class="mc-community-external">(external)</span></li>
+<li><strong>Website:</strong> <a href="https://albertamesh.ca/airdrie/" rel="noopener">Airdrie MeshCore Network</a></li>
+<li><strong>Website:</strong> <a href="https://albertamesh.ca/airdrie/configuration/" rel="noopener">Airdrie configuration guide</a></li>
+<li><strong>Discord:</strong> <a href="https://discord.gg/CznDhsRWnJ" rel="noopener">Alberta MeshCore Discord</a></li>
+<li><strong>MeshMapper:</strong> <a href="https://yyc.meshmapper.net/?lat=51.28120&amp;lon=-113.99718&amp;zoom=13.43" rel="noopener">Airdrie network map</a></li>
+<li><strong>Website:</strong> <a href="https://waev.app/#/live-map/@51.28107,-113.99966,14.47z" rel="noopener">WAeV live map</a></li>
 </ul>
-<p class="mc-community-contact-health">
-<strong>Contact check:</strong> Links checked on 2026-08-29
-</p>
-<p class="mc-community-card__action"><a href="../../submit-idea/?community=airdrie-meshcore-network&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Fprovinces%2Falberta%2F%23community-airdrie-meshcore-network">Update this listing</a></p>
+<p class="mc-community-card__action"><a href="../../submit-idea/?community=airdrie-meshcore-network&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Fprovinces%2Falberta%2F%23community-airdrie-meshcore-network"><small>Update this listing</small></a></p>
 </article>
 <article class="mc-community-card mc-community-card--detail" id="community-calgary-area-meshcore">
 <div class="mc-community-card__header">
@@ -90,21 +72,12 @@ card lists different local settings.
 <span class="mc-community-status" data-status="active">Active</span>
 </div>
 <p class="mc-community-area">Calgary and area</p>
-<dl class="mc-community-facts">
-<div><dt>Settings</dt>
-<dd>Uses the Canada defaults</dd></div>
-<div><dt>Listing reviewed</dt>
-<dd>2026-08-29</dd></div>
-</dl>
 <h4>Contacts</h4>
 <ul class="mc-community-contacts">
-<li><strong>Telegram:</strong> <a href="https://t.me/meshtAlta" rel="noopener">Calgary topic in Mesh Alberta</a> <span class="mc-community-external">(external)</span></li>
+<li><strong>Telegram:</strong> <a href="https://t.me/meshtAlta" rel="noopener">Calgary topic in Mesh Alberta</a></li>
 <li><strong>Discord:</strong> Canada - Calgary, Alberta &amp; Area regional channel in the MeshCore Discord</li>
 </ul>
-<p class="mc-community-contact-health">
-<strong>Contact check:</strong> Some links still need review
-</p>
-<p class="mc-community-card__action"><a href="../../submit-idea/?community=calgary-area-meshcore&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Fprovinces%2Falberta%2F%23community-calgary-area-meshcore">Update this listing</a></p>
+<p class="mc-community-card__action"><a href="../../submit-idea/?community=calgary-area-meshcore&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Fprovinces%2Falberta%2F%23community-calgary-area-meshcore"><small>Update this listing</small></a></p>
 </article>
 <article class="mc-community-card mc-community-card--detail" id="community-calgary-meshcore-network">
 <div class="mc-community-card__header">
@@ -113,24 +86,15 @@ card lists different local settings.
 </div>
 <p class="mc-community-area">Calgary</p>
 <p class="mc-community-summary">Initial AlbertaMesh.ca launch region</p>
-<dl class="mc-community-facts">
-<div><dt>Settings</dt>
-<dd>Uses the Canada defaults</dd></div>
-<div><dt>Listing reviewed</dt>
-<dd>2026-08-29</dd></div>
-</dl>
 <h4>Contacts</h4>
 <ul class="mc-community-contacts">
-<li><strong>Website:</strong> <a href="https://albertamesh.ca/calgary/" rel="noopener">Calgary community guide</a> <span class="mc-community-external">(external)</span></li>
-<li><strong>Discord:</strong> <a href="https://discord.gg/CznDhsRWnJ" rel="noopener">Alberta MeshCore Discord</a> <span class="mc-community-external">(external)</span></li>
-<li><strong>MeshMapper:</strong> <a href="https://yyc.meshmapper.net/?lat=51.01674&amp;lon=-114.00149&amp;zoom=11.00" rel="noopener">Calgary network map</a> <span class="mc-community-external">(external)</span></li>
-<li><strong>Website:</strong> <a href="https://corescopeyyc.meshmonitoring.com/#/live" rel="noopener">CoreScope YYC</a> <span class="mc-community-external">(external)</span></li>
-<li><strong>Website:</strong> <a href="https://albertamesh.ca/calgary/#rx-channels" rel="noopener">Recommended Calgary RX channels</a> <span class="mc-community-external">(external)</span></li>
+<li><strong>Website:</strong> <a href="https://albertamesh.ca/calgary/" rel="noopener">Calgary community guide</a></li>
+<li><strong>Discord:</strong> <a href="https://discord.gg/CznDhsRWnJ" rel="noopener">Alberta MeshCore Discord</a></li>
+<li><strong>MeshMapper:</strong> <a href="https://yyc.meshmapper.net/?lat=51.01674&amp;lon=-114.00149&amp;zoom=11.00" rel="noopener">Calgary network map</a></li>
+<li><strong>Website:</strong> <a href="https://corescopeyyc.meshmonitoring.com/#/live" rel="noopener">CoreScope YYC</a></li>
+<li><strong>Website:</strong> <a href="https://albertamesh.ca/calgary/#rx-channels" rel="noopener">Recommended Calgary RX channels</a></li>
 </ul>
-<p class="mc-community-contact-health">
-<strong>Contact check:</strong> Links checked on 2026-08-29
-</p>
-<p class="mc-community-card__action"><a href="../../submit-idea/?community=calgary-meshcore-network&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Fprovinces%2Falberta%2F%23community-calgary-meshcore-network">Update this listing</a></p>
+<p class="mc-community-card__action"><a href="../../submit-idea/?community=calgary-meshcore-network&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Fprovinces%2Falberta%2F%23community-calgary-meshcore-network"><small>Update this listing</small></a></p>
 </article>
 <article class="mc-community-card mc-community-card--detail" id="community-edmonton-meshcore-network">
 <div class="mc-community-card__header">
@@ -139,23 +103,14 @@ card lists different local settings.
 </div>
 <p class="mc-community-area">Edmonton</p>
 <p class="mc-community-summary">Edmonton regional community within Alberta MeshCore</p>
-<dl class="mc-community-facts">
-<div><dt>Settings</dt>
-<dd>Uses the Canada defaults</dd></div>
-<div><dt>Listing reviewed</dt>
-<dd>2026-08-29</dd></div>
-</dl>
 <h4>Contacts</h4>
 <ul class="mc-community-contacts">
-<li><strong>Website:</strong> <a href="https://albertamesh.ca/edmonton/" rel="noopener">Edmonton on AlbertaMesh.ca</a> <span class="mc-community-external">(external)</span></li>
-<li><strong>Website:</strong> <a href="https://albertamesh.ca/edmonton/configuration/" rel="noopener">Edmonton configuration guide</a> <span class="mc-community-external">(external)</span></li>
-<li><strong>Discord:</strong> <a href="https://discord.gg/CznDhsRWnJ" rel="noopener">Alberta MeshCore Discord</a> <span class="mc-community-external">(external)</span></li>
-<li><strong>MeshMapper:</strong> <a href="https://yeg.meshmapper.net/?lat=53.45752&amp;lon=-113.58320&amp;zoom=10.03" rel="noopener">Edmonton network map</a> <span class="mc-community-external">(external)</span></li>
+<li><strong>Website:</strong> <a href="https://albertamesh.ca/edmonton/" rel="noopener">Edmonton on AlbertaMesh.ca</a></li>
+<li><strong>Website:</strong> <a href="https://albertamesh.ca/edmonton/configuration/" rel="noopener">Edmonton configuration guide</a></li>
+<li><strong>Discord:</strong> <a href="https://discord.gg/CznDhsRWnJ" rel="noopener">Alberta MeshCore Discord</a></li>
+<li><strong>MeshMapper:</strong> <a href="https://yeg.meshmapper.net/?lat=53.45752&amp;lon=-113.58320&amp;zoom=10.03" rel="noopener">Edmonton network map</a></li>
 </ul>
-<p class="mc-community-contact-health">
-<strong>Contact check:</strong> Links checked on 2026-08-29
-</p>
-<p class="mc-community-card__action"><a href="../../submit-idea/?community=edmonton-meshcore-network&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Fprovinces%2Falberta%2F%23community-edmonton-meshcore-network">Update this listing</a></p>
+<p class="mc-community-card__action"><a href="../../submit-idea/?community=edmonton-meshcore-network&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Fprovinces%2Falberta%2F%23community-edmonton-meshcore-network"><small>Update this listing</small></a></p>
 </article>
 <article class="mc-community-card mc-community-card--detail" id="community-yegmesh-ca">
 <div class="mc-community-card__header">
@@ -164,23 +119,14 @@ card lists different local settings.
 </div>
 <p class="mc-community-area">Edmonton</p>
 <p class="mc-community-summary">Edmonton mesh network community focused on MeshCore</p>
-<dl class="mc-community-facts">
-<div><dt>Settings</dt>
-<dd>Uses the Canada defaults</dd></div>
-<div><dt>Listing reviewed</dt>
-<dd>2026-08-29</dd></div>
-</dl>
 <h4>Contacts</h4>
 <ul class="mc-community-contacts">
-<li><strong>Website:</strong> <a href="https://yegmesh.ca/p/getting-started" rel="noopener">Getting started</a> <span class="mc-community-external">(external)</span></li>
-<li><strong>Website:</strong> <a href="https://yegmesh.ca/p/meshcore-defaults" rel="noopener">MeshCore defaults</a> <span class="mc-community-external">(external)</span></li>
-<li><strong>Discord:</strong> <a href="https://discord.gg/CznDhsRWnJ" rel="noopener">Alberta MeshCore Discord</a> <span class="mc-community-external">(external)</span></li>
-<li><strong>MeshMapper:</strong> <a href="https://yeg.meshmapper.net/?lat=53.45752&amp;lon=-113.58320&amp;zoom=10.03" rel="noopener">Edmonton network map</a> <span class="mc-community-external">(external)</span></li>
+<li><strong>Website:</strong> <a href="https://yegmesh.ca/p/getting-started" rel="noopener">Getting started</a></li>
+<li><strong>Website:</strong> <a href="https://yegmesh.ca/p/meshcore-defaults" rel="noopener">MeshCore defaults</a></li>
+<li><strong>Discord:</strong> <a href="https://discord.gg/CznDhsRWnJ" rel="noopener">Alberta MeshCore Discord</a></li>
+<li><strong>MeshMapper:</strong> <a href="https://yeg.meshmapper.net/?lat=53.45752&amp;lon=-113.58320&amp;zoom=10.03" rel="noopener">Edmonton network map</a></li>
 </ul>
-<p class="mc-community-contact-health">
-<strong>Contact check:</strong> Links checked on 2026-08-29
-</p>
-<p class="mc-community-card__action"><a href="../../submit-idea/?community=yegmesh-ca&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Fprovinces%2Falberta%2F%23community-yegmesh-ca">Update this listing</a></p>
+<p class="mc-community-card__action"><a href="../../submit-idea/?community=yegmesh-ca&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Fprovinces%2Falberta%2F%23community-yegmesh-ca"><small>Update this listing</small></a></p>
 </article>
 <article class="mc-community-card mc-community-card--detail" id="community-yqlmesh">
 <div class="mc-community-card__header">
@@ -189,27 +135,18 @@ card lists different local settings.
 </div>
 <p class="mc-community-area">Lethbridge</p>
 <p class="mc-community-summary">Connecting Lethbridge, one node at a time</p>
-<dl class="mc-community-facts">
-<div><dt>Settings</dt>
-<dd>Uses the Canada defaults</dd></div>
-<div><dt>Listing reviewed</dt>
-<dd>2026-08-29</dd></div>
-</dl>
 <h4>Contacts</h4>
 <ul class="mc-community-contacts">
-<li><strong>Website:</strong> <a href="https://www.yqlmesh.com/" rel="noopener">YQLMesh website</a> <span class="mc-community-external">(external)</span></li>
-<li><strong>Website:</strong> <a href="https://albertamesh.ca/lethbridge/" rel="noopener">Lethbridge regional page</a> <span class="mc-community-external">(external)</span></li>
-<li><strong>Discord:</strong> <a href="https://discord.gg/cFY9GSR37W" rel="noopener">YQLMesh Discord</a> <span class="mc-community-external">(external)</span></li>
-<li><strong>MeshMapper:</strong> <a href="https://yql.meshmapper.net/?lat=49.69091&amp;lon=-112.86356&amp;zoom=12.14" rel="noopener">Lethbridge network map</a> <span class="mc-community-external">(external)</span></li>
-<li><strong>Facebook:</strong> <a href="https://facebook.com/groups/YQLMesh" rel="noopener">YQLMesh Facebook</a> <span class="mc-community-external">(external)</span></li>
-<li><strong>Instagram:</strong> <a href="https://instagram.com/YQLMesh" rel="noopener">YQLMesh Instagram</a> <span class="mc-community-external">(external)</span></li>
-<li><strong>X:</strong> <a href="https://x.com/YQLMesh" rel="noopener">YQLMesh on X</a> <span class="mc-community-external">(external)</span></li>
-<li><strong>Reddit:</strong> <a href="https://www.reddit.com/r/YQLMesh" rel="noopener">YQLMesh subreddit</a> <span class="mc-community-external">(external)</span></li>
+<li><strong>Website:</strong> <a href="https://www.yqlmesh.com/" rel="noopener">YQLMesh website</a></li>
+<li><strong>Website:</strong> <a href="https://albertamesh.ca/lethbridge/" rel="noopener">Lethbridge regional page</a></li>
+<li><strong>Discord:</strong> <a href="https://discord.gg/cFY9GSR37W" rel="noopener">YQLMesh Discord</a></li>
+<li><strong>MeshMapper:</strong> <a href="https://yql.meshmapper.net/?lat=49.69091&amp;lon=-112.86356&amp;zoom=12.14" rel="noopener">Lethbridge network map</a></li>
+<li><strong>Facebook:</strong> <a href="https://facebook.com/groups/YQLMesh" rel="noopener">YQLMesh Facebook</a></li>
+<li><strong>Instagram:</strong> <a href="https://instagram.com/YQLMesh" rel="noopener">YQLMesh Instagram</a></li>
+<li><strong>X:</strong> <a href="https://x.com/YQLMesh" rel="noopener">YQLMesh on X</a></li>
+<li><strong>Reddit:</strong> <a href="https://www.reddit.com/r/YQLMesh" rel="noopener">YQLMesh subreddit</a></li>
 </ul>
-<p class="mc-community-contact-health">
-<strong>Contact check:</strong> Some links still need review
-</p>
-<p class="mc-community-card__action"><a href="../../submit-idea/?community=yqlmesh&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Fprovinces%2Falberta%2F%23community-yqlmesh">Update this listing</a></p>
+<p class="mc-community-card__action"><a href="../../submit-idea/?community=yqlmesh&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Fprovinces%2Falberta%2F%23community-yqlmesh"><small>Update this listing</small></a></p>
 </article>
 <article class="mc-community-card mc-community-card--detail" id="community-southern-alberta">
 <div class="mc-community-card__header">
@@ -217,21 +154,12 @@ card lists different local settings.
 <span class="mc-community-status" data-status="active">Active</span>
 </div>
 <p class="mc-community-area">Southern Alberta, including Cardston, Magrath, Raymond, and nearby areas</p>
-<dl class="mc-community-facts">
-<div><dt>Settings</dt>
-<dd>Uses the Canada defaults</dd></div>
-<div><dt>Listing reviewed</dt>
-<dd>2026-08-29</dd></div>
-</dl>
 <h4>Contacts</h4>
 <ul class="mc-community-contacts">
 <li><strong>Discord:</strong> Canada - Southern Alberta regional channel in the MeshCore Discord</li>
-<li><strong>Telegram:</strong> <a href="https://t.me/meshtAlta" rel="noopener">Cardston topic in Mesh Alberta</a> <span class="mc-community-external">(external)</span></li>
+<li><strong>Telegram:</strong> <a href="https://t.me/meshtAlta" rel="noopener">Cardston topic in Mesh Alberta</a></li>
 </ul>
-<p class="mc-community-contact-health">
-<strong>Contact check:</strong> Some links still need review
-</p>
-<p class="mc-community-card__action"><a href="../../submit-idea/?community=southern-alberta&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Fprovinces%2Falberta%2F%23community-southern-alberta">Update this listing</a></p>
+<p class="mc-community-card__action"><a href="../../submit-idea/?community=southern-alberta&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Fprovinces%2Falberta%2F%23community-southern-alberta"><small>Update this listing</small></a></p>
 </article>
 <article class="mc-community-card mc-community-card--detail" id="community-yyc-meshcore-discord">
 <div class="mc-community-card__header">
@@ -239,28 +167,19 @@ card lists different local settings.
 <span class="mc-community-status" data-status="active">Active</span>
 </div>
 <p class="mc-community-area">Calgary</p>
-<dl class="mc-community-facts">
-<div><dt>Settings</dt>
-<dd>Uses the Canada defaults</dd></div>
-<div><dt>Listing reviewed</dt>
-<dd>2026-08-29</dd></div>
-</dl>
 <h4>Contacts</h4>
 <ul class="mc-community-contacts">
-<li><strong>Discord:</strong> <a href="https://discord.gg/CznDhsRWnJ" rel="noopener">YYC MeshCore Discord</a> <span class="mc-community-external">(external)</span></li>
-<li><strong>Website:</strong> <a href="https://meshmonitoring.com/" rel="noopener">MeshMonitoring</a> <span class="mc-community-external">(external)</span></li>
+<li><strong>Discord:</strong> <a href="https://discord.gg/CznDhsRWnJ" rel="noopener">YYC MeshCore Discord</a></li>
+<li><strong>Website:</strong> <a href="https://meshmonitoring.com/" rel="noopener">MeshMonitoring</a></li>
 </ul>
-<p class="mc-community-contact-health">
-<strong>Contact check:</strong> Links checked on 2026-08-29
-</p>
-<p class="mc-community-card__action"><a href="../../submit-idea/?community=yyc-meshcore-discord&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Fprovinces%2Falberta%2F%23community-yyc-meshcore-discord">Update this listing</a></p>
+<p class="mc-community-card__action"><a href="../../submit-idea/?community=yyc-meshcore-discord&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Fprovinces%2Falberta%2F%23community-yyc-meshcore-discord"><small>Update this listing</small></a></p>
 </article>
 </div>
 
 ## Province-wide contacts
 
 <div class="mc-community-card">
-<p><strong>Telegram:</strong> <a href="https://t.me/MeshCoreCAN" rel="noopener">Alberta topic in MeshCore Canada</a> <span class="mc-community-external">(external)</span></p>
+<p><strong>Telegram:</strong> <a href="https://t.me/MeshCoreCAN" rel="noopener">Alberta topic in MeshCore Canada</a></p>
 <p><strong>Contact check:</strong> Links checked on 2026-08-29</p>
 </div>
 

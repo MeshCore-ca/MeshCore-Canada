@@ -35,21 +35,12 @@ card lists different local settings.
 <span class="mc-community-status" data-status="active">Active</span>
 </div>
 <p class="mc-community-area">Charlevoix, including La Malbaie</p>
-<dl class="mc-community-facts">
-<div><dt>Settings</dt>
-<dd>Uses the Canada defaults</dd></div>
-<div><dt>Listing reviewed</dt>
-<dd>2026-08-29</dd></div>
-</dl>
 <h4>Contacts</h4>
 <ul class="mc-community-contacts">
-<li><strong>Website:</strong> <a href="https://chxmesh.ca/" rel="noopener">Réseau MESH de Charlevoix</a> <span class="mc-community-external">(external)</span></li>
+<li><strong>Website:</strong> <a href="https://chxmesh.ca/" rel="noopener">Réseau MESH de Charlevoix</a></li>
 </ul>
 <p class="mc-community-owner"><strong>Listing contact:</strong> pifane</p>
-<p class="mc-community-contact-health">
-<strong>Contact check:</strong> Links checked on 2026-08-29
-</p>
-<p class="mc-community-card__action"><a href="../../submit-idea/?community=charlevoix-yml&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Fprovinces%2Fquebec%2F%23community-charlevoix-yml">Update this listing</a></p>
+<p class="mc-community-card__action"><a href="../../submit-idea/?community=charlevoix-yml&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Fprovinces%2Fquebec%2F%23community-charlevoix-yml"><small>Update this listing</small></a></p>
 </article>
 <article class="mc-community-card mc-community-card--detail" id="community-mesh-quebec">
 <div class="mc-community-card__header">
@@ -57,20 +48,11 @@ card lists different local settings.
 <span class="mc-community-status" data-status="active">Active</span>
 </div>
 <p class="mc-community-area">Quebec</p>
-<dl class="mc-community-facts">
-<div><dt>Settings</dt>
-<dd>Uses the Canada defaults</dd></div>
-<div><dt>Listing reviewed</dt>
-<dd>2026-08-29</dd></div>
-</dl>
 <h4>Contacts</h4>
 <ul class="mc-community-contacts">
-<li><strong>Telegram:</strong> <a href="https://t.me/meshtQuebec" rel="noopener">Mesh Quebec Telegram</a> <span class="mc-community-external">(external)</span></li>
+<li><strong>Telegram:</strong> <a href="https://t.me/meshtQuebec" rel="noopener">Mesh Quebec Telegram</a></li>
 </ul>
-<p class="mc-community-contact-health">
-<strong>Contact check:</strong> Links checked on 2026-08-29
-</p>
-<p class="mc-community-card__action"><a href="../../submit-idea/?community=mesh-quebec&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Fprovinces%2Fquebec%2F%23community-mesh-quebec">Update this listing</a></p>
+<p class="mc-community-card__action"><a href="../../submit-idea/?community=mesh-quebec&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Fprovinces%2Fquebec%2F%23community-mesh-quebec"><small>Update this listing</small></a></p>
 </article>
 <article class="mc-community-card mc-community-card--detail" id="community-montreal-mesh">
 <div class="mc-community-card__header">
@@ -78,20 +60,11 @@ card lists different local settings.
 <span class="mc-community-status" data-status="active">Active</span>
 </div>
 <p class="mc-community-area">Greater Montreal</p>
-<dl class="mc-community-facts">
-<div><dt>Settings</dt>
-<dd>Uses the Canada defaults</dd></div>
-<div><dt>Listing reviewed</dt>
-<dd>2026-08-29</dd></div>
-</dl>
 <h4>Contacts</h4>
 <ul class="mc-community-contacts">
-<li><strong>Website:</strong> <a href="https://www.montrealmesh.ca" rel="noopener">Montreal Mesh website</a> <span class="mc-community-external">(external)</span></li>
+<li><strong>Website:</strong> <a href="https://www.montrealmesh.ca" rel="noopener">Montreal Mesh website</a></li>
 </ul>
-<p class="mc-community-contact-health">
-<strong>Contact check:</strong> Links checked on 2026-08-29
-</p>
-<p class="mc-community-card__action"><a href="../../submit-idea/?community=montreal-mesh&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Fprovinces%2Fquebec%2F%23community-montreal-mesh">Update this listing</a></p>
+<p class="mc-community-card__action"><a href="../../submit-idea/?community=montreal-mesh&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Fprovinces%2Fquebec%2F%23community-montreal-mesh"><small>Update this listing</small></a></p>
 </article>
 <article class="mc-community-card mc-community-card--detail" id="community-reseau-mesh-capitale-yqb">
 <div class="mc-community-card__header">
@@ -99,20 +72,11 @@ card lists different local settings.
 <span class="mc-community-status" data-status="active">Active</span>
 </div>
 <p class="mc-community-area">Quebec City</p>
-<dl class="mc-community-facts">
-<div><dt>Settings</dt>
-<dd>Uses the Canada defaults</dd></div>
-<div><dt>Listing reviewed</dt>
-<dd>2026-08-29</dd></div>
-</dl>
 <h4>Contacts</h4>
 <ul class="mc-community-contacts">
-<li><strong>Discord:</strong> <a href="https://discord.gg/UhGjTF2MfA" rel="noopener">Réseau Mesh de la Capitale YQB Discord</a> <span class="mc-community-external">(external)</span></li>
+<li><strong>Discord:</strong> <a href="https://discord.gg/UhGjTF2MfA" rel="noopener">Réseau Mesh de la Capitale YQB Discord</a></li>
 </ul>
-<p class="mc-community-contact-health">
-<strong>Contact check:</strong> Links checked on 2026-08-29
-</p>
-<p class="mc-community-card__action"><a href="../../submit-idea/?community=reseau-mesh-capitale-yqb&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Fprovinces%2Fquebec%2F%23community-reseau-mesh-capitale-yqb">Update this listing</a></p>
+<p class="mc-community-card__action"><a href="../../submit-idea/?community=reseau-mesh-capitale-yqb&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Fprovinces%2Fquebec%2F%23community-reseau-mesh-capitale-yqb"><small>Update this listing</small></a></p>
 </article>
 <article class="mc-community-card mc-community-card--detail" id="community-reseau-mesh-saguenay-lac-saint-jean-ytf">
 <div class="mc-community-card__header">
@@ -120,21 +84,12 @@ card lists different local settings.
 <span class="mc-community-status" data-status="active">Active</span>
 </div>
 <p class="mc-community-area">Saguenay–Lac-Saint-Jean (YTF)</p>
-<dl class="mc-community-facts">
-<div><dt>Settings</dt>
-<dd>Uses the Canada defaults</dd></div>
-<div><dt>Listing reviewed</dt>
-<dd>2026-08-29</dd></div>
-</dl>
 <h4>Contacts</h4>
 <ul class="mc-community-contacts">
-<li><strong>Facebook:</strong> <a href="https://www.facebook.com/share/g/1GjkHAyZAM/" rel="noopener">Réseau Mesh du Saguenay Lac st-Jean YTF Facebook</a> <span class="mc-community-external">(external)</span></li>
-<li><strong>MeshMapper:</strong> <a href="https://ytf.meshmapper.net/" rel="noopener">Réseau Mesh du Saguenay Lac st-Jean YTF MeshMapper</a> <span class="mc-community-external">(external)</span></li>
+<li><strong>Facebook:</strong> <a href="https://www.facebook.com/share/g/1GjkHAyZAM/" rel="noopener">Réseau Mesh du Saguenay Lac st-Jean YTF Facebook</a></li>
+<li><strong>MeshMapper:</strong> <a href="https://ytf.meshmapper.net/" rel="noopener">Réseau Mesh du Saguenay Lac st-Jean YTF MeshMapper</a></li>
 </ul>
-<p class="mc-community-contact-health">
-<strong>Contact check:</strong> Some links still need review
-</p>
-<p class="mc-community-card__action"><a href="../../submit-idea/?community=reseau-mesh-saguenay-lac-saint-jean-ytf&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Fprovinces%2Fquebec%2F%23community-reseau-mesh-saguenay-lac-saint-jean-ytf">Update this listing</a></p>
+<p class="mc-community-card__action"><a href="../../submit-idea/?community=reseau-mesh-saguenay-lac-saint-jean-ytf&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Fprovinces%2Fquebec%2F%23community-reseau-mesh-saguenay-lac-saint-jean-ytf"><small>Update this listing</small></a></p>
 </article>
 <article class="mc-community-card mc-community-card--detail" id="community-reseau-libre">
 <div class="mc-community-card__header">
@@ -142,20 +97,11 @@ card lists different local settings.
 <span class="mc-community-status" data-status="active">Active</span>
 </div>
 <p class="mc-community-area">Montreal</p>
-<dl class="mc-community-facts">
-<div><dt>Settings</dt>
-<dd>Uses the Canada defaults</dd></div>
-<div><dt>Listing reviewed</dt>
-<dd>2026-08-29</dd></div>
-</dl>
 <h4>Contacts</h4>
 <ul class="mc-community-contacts">
-<li><strong>Website:</strong> <a href="https://lora.reseaulibre.ca/" rel="noopener">Réseau Libre website</a> <span class="mc-community-external">(external)</span></li>
+<li><strong>Website:</strong> <a href="https://lora.reseaulibre.ca/" rel="noopener">Réseau Libre website</a></li>
 </ul>
-<p class="mc-community-contact-health">
-<strong>Contact check:</strong> Links checked on 2026-08-29
-</p>
-<p class="mc-community-card__action"><a href="../../submit-idea/?community=reseau-libre&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Fprovinces%2Fquebec%2F%23community-reseau-libre">Update this listing</a></p>
+<p class="mc-community-card__action"><a href="../../submit-idea/?community=reseau-libre&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Fprovinces%2Fquebec%2F%23community-reseau-libre"><small>Update this listing</small></a></p>
 </article>
 </div>
 

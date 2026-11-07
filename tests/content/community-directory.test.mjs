@@ -325,12 +325,12 @@ test("all listings inherit the three-byte Canada baseline", () => {
   const quebec = readFileSync(join(provinceDir, "quebec.md"), "utf8");
   assert.match(
     quebec,
-    /<h3>Réseau MESH de Charlevoix \(YML\)<\/h3>[\s\S]*?<strong>Listing contact:<\/strong> pifane[\s\S]*?<strong>Contact check:<\/strong> Links checked on 2026-08-29/,
+    /<h3>Réseau MESH de Charlevoix \(YML\)<\/h3>[\s\S]*?<strong>Listing contact:<\/strong> pifane/,
   );
   const quebecFr = readFileSync(join(provinceDir, "quebec.fr.md"), "utf8");
   assert.match(
     quebecFr,
-    /<h3>Réseau MESH de Charlevoix \(YML\)<\/h3>[\s\S]*?<strong>Contact pour cette fiche :<\/strong> pifane[\s\S]*?<strong>Vérification :<\/strong> Effectuée le 2026-08-29/,
+    /<h3>Réseau MESH de Charlevoix \(YML\)<\/h3>[\s\S]*?<strong>Contact pour cette fiche :<\/strong> pifane/,
   );
 
   const saskatchewan = readFileSync(
@@ -342,7 +342,9 @@ test("all listings inherit the three-byte Canada baseline", () => {
     /This community uses different settings/,
   );
   assert.doesNotMatch(saskatchewan, /1-byte/);
-  assert.match(saskatchewan, /Uses the Canada defaults/);
+  // Cards only mention radio settings when a community differs; the page intro covers the Canada defaults.
+  assert.doesNotMatch(saskatchewan, /<dt>Radio settings<\/dt>/);
+  assert.match(saskatchewan, /Canada defaults/);
   assert.match(
     saskatchewan,
     /<h3>YQRMesh<\/h3>[\s\S]*?No public contact has been provided yet\./,

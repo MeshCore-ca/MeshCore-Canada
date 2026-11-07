@@ -35,23 +35,14 @@ sauf si une fiche indique des réglages locaux différents.
 <span class="mc-community-status" data-status="forming">En formation</span>
 </div>
 <p class="mc-community-area">Sud du Nouveau-Brunswick, y compris Fredericton, Saint John, Moncton et les environs</p>
-<dl class="mc-community-facts">
-<div><dt>Réglages</dt>
-<dd>Réglages par défaut du Canada</dd></div>
-<div><dt>Fiche révisée</dt>
-<dd>2026-08-29</dd></div>
-</dl>
 <p class="mc-community-forming">
 Ce groupe est en formation. Communiquez avec lui pour savoir ce qui fonctionne et où votre aide serait utile.
 </p>
 <h4>Coordonnées</h4>
 <ul class="mc-community-contacts">
-<li><strong>Facebook :</strong> <a href="https://www.facebook.com/groups/613466831163684" rel="noopener">MESHCORE Saint John, N.B.</a> <span class="mc-community-external">(externe)</span></li>
+<li><strong>Facebook :</strong> <a href="https://www.facebook.com/groups/613466831163684" rel="noopener">MESHCORE Saint John, N.B.</a></li>
 </ul>
-<p class="mc-community-contact-health">
-<strong>Vérification :</strong> Pas encore effectuée
-</p>
-<p class="mc-community-card__action"><a href="../../submit-idea/?community=southern-new-brunswick&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Ffr%2Fprovinces%2Fnew-brunswick%2F%23community-southern-new-brunswick">Mettre cette fiche à jour</a></p>
+<p class="mc-community-card__action"><a href="../../submit-idea/?community=southern-new-brunswick&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Ffr%2Fprovinces%2Fnew-brunswick%2F%23community-southern-new-brunswick"><small>Mettre cette fiche à jour</small></a></p>
 </article>
 </div>
 

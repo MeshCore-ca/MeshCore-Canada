@@ -41,10 +41,8 @@ sauf si une fiche indique des réglages locaux différents.
 </div>
 <p class="mc-community-area">Lower Mainland et île de Vancouver</p>
 <dl class="mc-community-facts">
-<div><dt>Réglages</dt>
+<div><dt>Réglages radio</dt>
 <dd>Préréglage radio : <code>Custom</code>; Valeurs radio brutes : <code>910.425 MHz / 62.5 kHz / SF7 / CR5</code></dd></div>
-<div><dt>Fiche révisée</dt>
-<dd>2026-08-29</dd></div>
 </dl>
 <div class="mc-community-override" role="note">
 <strong>Réglages locaux différents</strong>
@@ -52,12 +50,9 @@ sauf si une fiche indique des réglages locaux différents.
 </div>
 <h4>Coordonnées</h4>
 <ul class="mc-community-contacts">
-<li><strong>Site Web :</strong> <a href="https://ridgeline.ve7kod.ca/about" rel="noopener">Carte et outils du réseau Ridgeline</a> <span class="mc-community-external">(externe)</span></li>
+<li><strong>Site Web :</strong> <a href="https://ridgeline.ve7kod.ca/about" rel="noopener">Carte et outils du réseau Ridgeline</a></li>
 </ul>
-<p class="mc-community-contact-health">
-<strong>Vérification :</strong> Effectuée le 2026-08-29
-</p>
-<p class="mc-community-card__action"><a href="../../submit-idea/?community=bc-mesh&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Ffr%2Fprovinces%2Fbritish-columbia%2F%23community-bc-mesh">Mettre cette fiche à jour</a></p>
+<p class="mc-community-card__action"><a href="../../submit-idea/?community=bc-mesh&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Ffr%2Fprovinces%2Fbritish-columbia%2F%23community-bc-mesh"><small>Mettre cette fiche à jour</small></a></p>
 </article>
 <article class="mc-community-card mc-community-card--detail" id="community-salish-mesh">
 <div class="mc-community-card__header">
@@ -65,20 +60,11 @@ sauf si une fiche indique des réglages locaux différents.
 <span class="mc-community-status" data-status="active">Active</span>
 </div>
 <p class="mc-community-area">Mer des Salish et environs</p>
-<dl class="mc-community-facts">
-<div><dt>Réglages</dt>
-<dd>Réglages par défaut du Canada</dd></div>
-<div><dt>Fiche révisée</dt>
-<dd>2026-08-29</dd></div>
-</dl>
 <h4>Coordonnées</h4>
 <ul class="mc-community-contacts">
-<li><strong>Site Web :</strong> <a href="https://salishmesh.net/" rel="noopener">Site Web de Salish Mesh</a> <span class="mc-community-external">(externe)</span></li>
+<li><strong>Site Web :</strong> <a href="https://salishmesh.net/" rel="noopener">Site Web de Salish Mesh</a></li>
 </ul>
-<p class="mc-community-contact-health">
-<strong>Vérification :</strong> Effectuée le 2026-08-29
-</p>
-<p class="mc-community-card__action"><a href="../../submit-idea/?community=salish-mesh&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Ffr%2Fprovinces%2Fbritish-columbia%2F%23community-salish-mesh">Mettre cette fiche à jour</a></p>
+<p class="mc-community-card__action"><a href="../../submit-idea/?community=salish-mesh&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Ffr%2Fprovinces%2Fbritish-columbia%2F%23community-salish-mesh"><small>Mettre cette fiche à jour</small></a></p>
 </article>
 </div>
 

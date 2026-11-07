@@ -35,24 +35,15 @@ sauf si une fiche indique des réglages locaux différents.
 <span class="mc-community-status" data-status="forming">En formation</span>
 </div>
 <p class="mc-community-area">Winnipeg (Manitoba)</p>
-<dl class="mc-community-facts">
-<div><dt>Réglages</dt>
-<dd>Réglages par défaut du Canada</dd></div>
-<div><dt>Fiche révisée</dt>
-<dd>2026-09-24</dd></div>
-</dl>
 <p class="mc-community-forming">
 Ce groupe est en formation. Communiquez avec lui pour savoir ce qui fonctionne et où votre aide serait utile.
 </p>
 <h4>Coordonnées</h4>
 <ul class="mc-community-contacts">
-<li><strong>Site Web :</strong> <a href="https://winnipegmeshcore.neocities.org/" rel="noopener">Site Web de Winnipeg MeshCore</a> <span class="mc-community-external">(externe)</span></li>
-<li><strong>Matrix :</strong> <a href="https://matrix.to/#/#winnipeg-meshcore:matrix.org" rel="noopener">Salon de Winnipeg MeshCore</a> <span class="mc-community-external">(externe)</span></li>
+<li><strong>Site Web :</strong> <a href="https://winnipegmeshcore.neocities.org/" rel="noopener">Site Web de Winnipeg MeshCore</a></li>
+<li><strong>Matrix :</strong> <a href="https://matrix.to/#/#winnipeg-meshcore:matrix.org" rel="noopener">Salon de Winnipeg MeshCore</a></li>
 </ul>
-<p class="mc-community-contact-health">
-<strong>Vérification :</strong> Effectuée le 2026-09-24
-</p>
-<p class="mc-community-card__action"><a href="../../submit-idea/?community=winnipeg-meshcore&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Ffr%2Fprovinces%2Fmanitoba%2F%23community-winnipeg-meshcore">Mettre cette fiche à jour</a></p>
+<p class="mc-community-card__action"><a href="../../submit-idea/?community=winnipeg-meshcore&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Ffr%2Fprovinces%2Fmanitoba%2F%23community-winnipeg-meshcore"><small>Mettre cette fiche à jour</small></a></p>
 </article>
 </div>
 

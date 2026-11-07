@@ -35,20 +35,11 @@ card lists different local settings.
 <span class="mc-community-status" data-status="active">Active</span>
 </div>
 <p class="mc-community-area">Central Saskatchewan</p>
-<dl class="mc-community-facts">
-<div><dt>Settings</dt>
-<dd>Uses the Canada defaults</dd></div>
-<div><dt>Listing reviewed</dt>
-<dd>2026-09-24</dd></div>
-</dl>
 <h4>Contacts</h4>
 <ul class="mc-community-contacts">
-<li><strong>Discord:</strong> <a href="https://discord.gg/StFvPY7BZe" rel="noopener">StoonMesh Discord</a> <span class="mc-community-external">(external)</span></li>
+<li><strong>Discord:</strong> <a href="https://discord.gg/StFvPY7BZe" rel="noopener">StoonMesh Discord</a></li>
 </ul>
-<p class="mc-community-contact-health">
-<strong>Contact check:</strong> Links checked on 2026-09-24
-</p>
-<p class="mc-community-card__action"><a href="../../submit-idea/?community=stoonmesh&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Fprovinces%2Fsaskatchewan%2F%23community-stoonmesh">Update this listing</a></p>
+<p class="mc-community-card__action"><a href="../../submit-idea/?community=stoonmesh&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Fprovinces%2Fsaskatchewan%2F%23community-stoonmesh"><small>Update this listing</small></a></p>
 </article>
 <article class="mc-community-card mc-community-card--detail" id="community-yqrmesh">
 <div class="mc-community-card__header">
@@ -56,14 +47,8 @@ card lists different local settings.
 <span class="mc-community-status" data-status="active">Active</span>
 </div>
 <p class="mc-community-area">Regina and Southern Saskatchewan</p>
-<dl class="mc-community-facts">
-<div><dt>Settings</dt>
-<dd>Uses the Canada defaults</dd></div>
-<div><dt>Listing reviewed</dt>
-<dd>2026-08-29</dd></div>
-</dl>
 <p class="mc-community-no-contact">No public contact has been provided yet.</p>
-<p class="mc-community-card__action"><a href="../../submit-idea/?community=yqrmesh&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Fprovinces%2Fsaskatchewan%2F%23community-yqrmesh">Update this listing</a></p>
+<p class="mc-community-card__action"><a href="../../submit-idea/?community=yqrmesh&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Fprovinces%2Fsaskatchewan%2F%23community-yqrmesh"><small>Update this listing</small></a></p>
 </article>
 </div>
 

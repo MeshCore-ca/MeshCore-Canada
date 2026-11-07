@@ -35,21 +35,12 @@ sauf si une fiche indique des réglages locaux différents.
 <span class="mc-community-status" data-status="active">Active</span>
 </div>
 <p class="mc-community-area">Est de l’Ontario et ouest du Québec</p>
-<dl class="mc-community-facts">
-<div><dt>Réglages</dt>
-<dd>Réglages par défaut du Canada</dd></div>
-<div><dt>Fiche révisée</dt>
-<dd>2026-08-29</dd></div>
-</dl>
 <h4>Coordonnées</h4>
 <ul class="mc-community-contacts">
-<li><strong>Discord :</strong> <a href="https://discord.gg/WSyNd8SfNr" rel="noopener">Discord de Greater Ottawa Mesh Enthusiasts</a> <span class="mc-community-external">(externe)</span></li>
-<li><strong>Site Web :</strong> <a href="https://ottawamesh.ca/" rel="noopener">Site Web d’Ottawa Mesh</a> <span class="mc-community-external">(externe)</span></li>
+<li><strong>Discord :</strong> <a href="https://discord.gg/WSyNd8SfNr" rel="noopener">Discord de Greater Ottawa Mesh Enthusiasts</a></li>
+<li><strong>Site Web :</strong> <a href="https://ottawamesh.ca/" rel="noopener">Site Web d’Ottawa Mesh</a></li>
 </ul>
-<p class="mc-community-contact-health">
-<strong>Vérification :</strong> Effectuée le 2026-08-29
-</p>
-<p class="mc-community-card__action"><a href="../../submit-idea/?community=greater-ottawa-mesh-enthusiasts&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Ffr%2Fprovinces%2Fontario%2F%23community-greater-ottawa-mesh-enthusiasts">Mettre cette fiche à jour</a></p>
+<p class="mc-community-card__action"><a href="../../submit-idea/?community=greater-ottawa-mesh-enthusiasts&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Ffr%2Fprovinces%2Fontario%2F%23community-greater-ottawa-mesh-enthusiasts"><small>Mettre cette fiche à jour</small></a></p>
 </article>
 <article class="mc-community-card mc-community-card--detail" id="community-gta-lora-meshes">
 <div class="mc-community-card__header">
@@ -57,20 +48,11 @@ sauf si une fiche indique des réglages locaux différents.
 <span class="mc-community-status" data-status="active">Active</span>
 </div>
 <p class="mc-community-area">Sud de l’Ontario</p>
-<dl class="mc-community-facts">
-<div><dt>Réglages</dt>
-<dd>Réglages par défaut du Canada</dd></div>
-<div><dt>Fiche révisée</dt>
-<dd>2026-08-29</dd></div>
-</dl>
 <h4>Coordonnées</h4>
 <ul class="mc-community-contacts">
-<li><strong>Discord :</strong> <a href="https://discord.gg/wSHbeb86r4" rel="noopener">Discord de GTA+-Lora-Meshes</a> <span class="mc-community-external">(externe)</span></li>
+<li><strong>Discord :</strong> <a href="https://discord.gg/wSHbeb86r4" rel="noopener">Discord de GTA+-Lora-Meshes</a></li>
 </ul>
-<p class="mc-community-contact-health">
-<strong>Vérification :</strong> Effectuée le 2026-08-29
-</p>
-<p class="mc-community-card__action"><a href="../../submit-idea/?community=gta-lora-meshes&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Ffr%2Fprovinces%2Fontario%2F%23community-gta-lora-meshes">Mettre cette fiche à jour</a></p>
+<p class="mc-community-card__action"><a href="../../submit-idea/?community=gta-lora-meshes&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Ffr%2Fprovinces%2Fontario%2F%23community-gta-lora-meshes"><small>Mettre cette fiche à jour</small></a></p>
 </article>
 <article class="mc-community-card mc-community-card--detail" id="community-quinte-mesh-network">
 <div class="mc-community-card__header">
@@ -78,21 +60,12 @@ sauf si une fiche indique des réglages locaux différents.
 <span class="mc-community-status" data-status="active">Active</span>
 </div>
 <p class="mc-community-area">Région de Quinte, y compris Belleville, Trenton, le comté de Prince Edward et les environs</p>
-<dl class="mc-community-facts">
-<div><dt>Réglages</dt>
-<dd>Réglages par défaut du Canada</dd></div>
-<div><dt>Fiche révisée</dt>
-<dd>2026-08-29</dd></div>
-</dl>
 <h4>Coordonnées</h4>
 <ul class="mc-community-contacts">
-<li><strong>Discord :</strong> <a href="https://discord.gg/V5esJEP67X" rel="noopener">Discord de Quinte Mesh Network</a> <span class="mc-community-external">(externe)</span></li>
-<li><strong>Site Web :</strong> <a href="https://quintemesh.ca/" rel="noopener">Site Web de Quinte Mesh Network</a> <span class="mc-community-external">(externe)</span></li>
+<li><strong>Discord :</strong> <a href="https://discord.gg/V5esJEP67X" rel="noopener">Discord de Quinte Mesh Network</a></li>
+<li><strong>Site Web :</strong> <a href="https://quintemesh.ca/" rel="noopener">Site Web de Quinte Mesh Network</a></li>
 </ul>
-<p class="mc-community-contact-health">
-<strong>Vérification :</strong> Effectuée le 2026-08-29
-</p>
-<p class="mc-community-card__action"><a href="../../submit-idea/?community=quinte-mesh-network&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Ffr%2Fprovinces%2Fontario%2F%23community-quinte-mesh-network">Mettre cette fiche à jour</a></p>
+<p class="mc-community-card__action"><a href="../../submit-idea/?community=quinte-mesh-network&amp;source_page=https%3A%2F%2Fmeshcore.ca%2Ffr%2Fprovinces%2Fontario%2F%23community-quinte-mesh-network"><small>Mettre cette fiche à jour</small></a></p>
 </article>
 </div>
 

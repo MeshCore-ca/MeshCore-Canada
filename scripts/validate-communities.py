@@ -577,8 +577,7 @@ def render_contacts(community: dict[str, Any], *, indent: str = "") -> list[str]
         if contact["url"]:
             value = (
                 f'<a href="{html.escape(contact["url"], quote=True)}" rel="noopener">'
-                f'{html.escape(contact["label"])}</a> '
-                '<span class="mc-community-external">(external)</span>'
+                f'{html.escape(contact["label"])}</a>'
             )
         else:
             value = html.escape(contact["label"])
@@ -862,19 +861,13 @@ def render_community_card(community: dict[str, Any], metadata: dict[str, Any]) -
     ]
     if community.get("summary"):
         lines.append(f'<p class="mc-community-summary">{html.escape(community["summary"])}</p>')
-    lines.extend(
-        [
-        "<dl class=\"mc-community-facts\">",
-        "<div><dt>Settings</dt>",
-        f"<dd>{render_settings(community)}</dd></div>",
-        "<div><dt>Listing reviewed</dt>",
-        f"<dd>{verification_label(community)}</dd></div>",
-        "</dl>",
-        ]
-    )
     if community["settings"]["overrides"]:
         lines.extend(
             [
+                '<dl class="mc-community-facts">',
+                "<div><dt>Radio settings</dt>",
+                f"<dd>{render_settings(community)}</dd></div>",
+                "</dl>",
                 '<div class="mc-community-override" role="note">',
                 "<strong>Local settings override</strong>",
                 "<p>Confirm this setting with the community before changing a node.</p>",
@@ -903,13 +896,6 @@ def render_community_card(community: dict[str, Any], metadata: dict[str, Any]) -
                 '<p class="mc-community-owner"><strong>Listing contact:</strong> '
                 f'{html.escape(community["owner"])}</p>'
             )
-        lines.extend(
-            [
-                '<p class="mc-community-contact-health">',
-                f"<strong>Contact check:</strong> {contact_check_label(community['contacts'])}",
-                "</p>",
-            ]
-        )
     else:
         lines.append(
             '<p class="mc-community-no-contact">No public contact has been provided yet.</p>'
@@ -918,7 +904,7 @@ def render_community_card(community: dict[str, Any], metadata: dict[str, Any]) -
         [
             (
                 f'<p class="mc-community-card__action"><a href="../../submit-idea/?community={community["id"]}&amp;source_page={quote("https://meshcore.ca" + community["canonical_route"], safe="")}">'
-                "Update this listing</a></p>"
+                "<small>Update this listing</small></a></p>"
             ),
             "</article>",
         ]
@@ -1024,8 +1010,7 @@ def render_province_page(data: dict[str, Any], page: dict[str, Any]) -> str:
             if contact["url"]:
                 rendered = (
                     f'<a href="{html.escape(contact["url"], quote=True)}" rel="noopener">'
-                    f'{html.escape(contact["label"])}</a> '
-                    '<span class="mc-community-external">(external)</span>'
+                    f'{html.escape(contact["label"])}</a>'
                 )
             else:
                 rendered = html.escape(contact["label"])
@@ -1180,8 +1165,7 @@ def render_contacts_fr(community: dict[str, Any], *, indent: str = "") -> list[s
         if contact["url"]:
             value = (
                 f'<a href="{html.escape(contact["url"], quote=True)}" rel="noopener">'
-                f'{html.escape(contact_label_fr(contact["label"]))}</a> '
-                '<span class="mc-community-external">(externe)</span>'
+                f'{html.escape(contact_label_fr(contact["label"]))}</a>'
             )
         else:
             value = html.escape(contact_label_fr(contact["label"]))
@@ -1453,19 +1437,13 @@ def render_community_card_fr(
         lines.append(
             f'<p class="mc-community-summary">{html.escape(community_translation["summary"])}</p>'
         )
-    lines.extend(
-        [
-            '<dl class="mc-community-facts">',
-            "<div><dt>Réglages</dt>",
-            f"<dd>{render_settings_fr(community)}</dd></div>",
-            "<div><dt>Fiche révisée</dt>",
-            f"<dd>{verification_label_fr(community)}</dd></div>",
-            "</dl>",
-        ]
-    )
     if community["settings"]["overrides"]:
         lines.extend(
             [
+                '<dl class="mc-community-facts">',
+                "<div><dt>Réglages radio</dt>",
+                f"<dd>{render_settings_fr(community)}</dd></div>",
+                "</dl>",
                 '<div class="mc-community-override" role="note">',
                 "<strong>Réglages locaux différents</strong>",
                 "<p>Confirmez ces réglages auprès de la communauté avant de modifier un nœud.</p>",
@@ -1497,16 +1475,6 @@ def render_community_card_fr(
                 '<p class="mc-community-owner"><strong>Contact pour cette fiche :</strong> '
                 f'{html.escape(community["owner"])}</p>'
             )
-        lines.extend(
-            [
-                '<p class="mc-community-contact-health">',
-                (
-                    "<strong>Vérification :</strong> "
-                    f"{contact_check_label_fr(community['contacts'])}"
-                ),
-                "</p>",
-            ]
-        )
     else:
         lines.append(
             '<p class="mc-community-no-contact">Aucune coordonnée publique n’a encore été fournie.</p>'
@@ -1515,7 +1483,7 @@ def render_community_card_fr(
         [
             (
                 f'<p class="mc-community-card__action"><a href="../../submit-idea/?community={community["id"]}&amp;source_page={quote("https://meshcore.ca/fr" + community["canonical_route"], safe="")}">'
-                "Mettre cette fiche à jour</a></p>"
+                "<small>Mettre cette fiche à jour</small></a></p>"
             ),
             "</article>",
         ]
@@ -1634,8 +1602,7 @@ def render_province_page_fr(
             if contact["url"]:
                 rendered = (
                     f'<a href="{html.escape(contact["url"], quote=True)}" rel="noopener">'
-                    f'{html.escape(contact_label_fr(contact["label"]))}</a> '
-                    '<span class="mc-community-external">(externe)</span>'
+                    f'{html.escape(contact_label_fr(contact["label"]))}</a>'
                 )
             else:
                 rendered = html.escape(contact_label_fr(contact["label"]))
