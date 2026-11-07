@@ -43,7 +43,7 @@ Choose what the device will do, then confirm the exact board and firmware target
   <section class="mc-decision-card">
     <h3>Room server</h3>
     <p>Use this to host a persistent room. Choose a supported board, continuous power, and a secure administration plan.</p>
-    <a class="md-button" href="../meshcore/flash-room-server/">Set up a room server</a>
+    <a class="md-button" href="../start/room-server/">Set up a room server</a>
   </section>
 </div>
 
@@ -83,6 +83,6 @@ After choosing a supported device, follow the matching setup guide:
 
 - [Flash a companion](../start/companion.md)
 - [Set up a repeater](../config/index.md)
-- [Flash a room server](../meshcore/flash-room-server.md)
+- [Flash a room server](../start/room-server.md)
 
 Found an outdated product or compatibility detail? [Share the correction](../submit-idea.md) and include the manufacturer source and date you checked it.

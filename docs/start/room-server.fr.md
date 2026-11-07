@@ -1,6 +1,6 @@
 ---
-title: Commencer avec un serveur de salon
-description: Préparez, configurez et vérifiez un serveur de salon MeshCore persistant pour une communauté canadienne.
+title: Configurer un serveur de salon
+description: Programmez, configurez et testez un serveur de salon MeshCore au Canada, sur une seule page.
 audience:
   - room-server-operator
 task: start-room-server
@@ -18,85 +18,102 @@ evidence:
   - Content and linked setup paths reviewed on 2026-10-29; radio and installation checks remain operator tasks.
 difficulty: intermediate
 estimated_time: 20-30 minutes
-destructive: false
+destructive: true
 requires:
   - supported-room-server
   - data-capable-usb-cable
 ---
 
-# Commencer avec un serveur de salon
+# Configurer un serveur de salon
 
-Un serveur de salon garde un salon partagé accessible. Il ne remplace pas un
-répéteur : utilisez un répéteur pour acheminer le trafic et améliorer la
-couverture.
-
-[Installer et configurer un serveur de salon](../meshcore/flash-room-server.md){ .md-button .md-button--primary }
+Un serveur de salon héberge un salon de discussion partagé sur le réseau. Les
+gens s’y connectent avec un mot de passe invité et peuvent rattraper les
+messages manqués. Ce n’est pas un répéteur : installez un
+[répéteur](../config/index.md) distinct pour la couverture.
 
 ## Avant de commencer
 
-- Confirmez que l’outil de reprogrammation offre le micrologiciel
-  **Room Server** pour votre appareil.
-- Décidez qui entretiendra le salon et conservera un accès physique en cas de
-  panne.
-- Notez l’identité et les paramètres dont vous aurez besoin avant toute étape
-  d’effacement.
-- Préparez des identifiants différents pour les invités et l’administrateur.
+- **Un appareil compatible** pour lequel le
+  [programme de mise à jour MeshCore](https://meshcore.io/flasher) offre le
+  micrologiciel **Room Server**.
+- **Un câble USB de données.** Les câbles de recharge seulement ne fonctionnent pas.
+- **Chrome ou Edge sur un ordinateur.** Le programme exige
+  [Web Serial](https://developer.mozilla.org/en-US/docs/Web/API/Web_Serial_API#browser_compatibility).
+- **Une personne responsable.** Décidez qui garde le mot de passe
+  administrateur et peut brancher l’appareil par USB au besoin.
 
-## Ce qui sera modifié
+### Appareil déjà utilisé? Sauvegardez-le d’abord
 
-Le guide lié remplace le micrologiciel et configure l’identité du serveur de
-salon, les identifiants d’accès et les paramètres radio.
+!!! danger "Erase Flash supprime les données du serveur de salon"
+    Cela comprend son identité (clé privée), les messages du salon, les accès
+    invité et administrateur, son nom et ses réglages radio.
 
+1. Notez son nom, ses réglages radio et ses réglages d’accès.
+2. Sauvegardez sa clé privée avec un outil compatible. Gardez-la secrète.
+3. Conservez les mots de passe dans un gestionnaire de mots de passe, jamais
+   dans une capture d’écran, un billet ou une discussion.
 
+Si vous ne pouvez pas sauvegarder quelque chose d’important,
+**arrêtez-vous avant Erase Flash** et [demandez de l’aide](get-help.md).
 
-## Installer le micrologiciel du serveur de salon
+## 1. Programmer le micrologiciel
 
-Suivez le guide [Reprogrammer et configurer un serveur de
-salon](../meshcore/flash-room-server.md). Il explique comment choisir
-l’appareil, installer le micrologiciel, configurer les accès et récupérer
-l’appareil en cas de problème.
+1. Branchez l’appareil à votre ordinateur par USB.
+2. Ouvrez le [programme de mise à jour MeshCore](https://meshcore.io/flasher) et
+   sélectionnez votre carte exacte.
+3. Sélectionnez **Room Server** et la version du micrologiciel pour cette carte.
+4. Suivez les étapes de connexion du programme. Utilisez **Enter DFU Mode**
+   seulement si votre carte le demande.
+5. Appareil neuf ou réinitialisation voulue? Sauvegardez d’abord, puis cliquez
+   sur **Erase Flash** seulement si les instructions de votre carte l’exigent.
+   Pour une mise à jour, laissez l’effacement désactivé.
+6. Cliquez sur **Flash** et attendez le message de fin avant de débrancher.
 
-## Choisir les bons paramètres radio
+### Vérifier que ça a fonctionné
 
-Utilisez le préréglage **Canada** et le hachage des chemins
-sur **3 octets**, sauf si votre communauté indique d’autres paramètres.
+L’appareil redémarre comme serveur de salon, et **Configure via USB** dans le
+programme peut s’y connecter.
 
-Si Canada n’apparaît pas, suivez les [consignes pour l’ancien préréglage](../provinces/index.md#canada-baseline).
+### Récupération si la programmation échoue
 
-!!! warning "Utilisez les mêmes paramètres que votre communauté"
-    Consultez le [répertoire des communautés](../provinces/index.md). Si votre
-    communauté publie d’autres paramètres, utilisez-les.
+N’effacez pas l’appareil à répétition. Laissez-le branché, actualisez le
+programme, remettez la carte en mode DFU, sélectionnez la même carte et le
+micrologiciel **Room Server**, puis réessayez **Flash**. Si la carte n’apparaît
+plus, [demandez de l’aide](get-help.md) avant d’essayer autre chose.
 
-Gardez les identifiants de l’administrateur confidentiels. Partagez uniquement
-les renseignements d’accès destinés aux personnes invitées dans le salon.
+## 2. Le nommer et régler les mots de passe et la radio
 
-## Tester le serveur
+1. Dans le programme, cliquez sur **Configure via USB** et connectez-vous à l’appareil.
+2. Donnez-lui un nom qui ne révèle pas un emplacement privé.
+3. Choisissez un **mot de passe invité** (partagé avec les personnes qui
+   rejoignent le salon) et un **mot de passe administrateur** différent (gardé
+   privé). Conservez-les dans un gestionnaire de mots de passe.
+4. Consultez le [répertoire des communautés](../provinces/index.md) pour les
+   réglages de votre région. Si aucun n’est indiqué, choisissez **Canada**
+   (`910.525 MHz / 62.5 kHz / SF7 / CR5`) et des parcours de **3 octets**
+   (`set path.hash.mode 2`).
+5. Enregistrez et redémarrez.
 
-Le serveur de salon est prêt lorsque :
+Utilisez **Canada**, sauf si votre communauté indique d’autres paramètres. Si
+Canada n’est pas offert, suivez les
+[consignes pour l’ancien préréglage](../provinces/index.md#canada-baseline).
 
-1. un appareil compagnon à proximité découvre son annonce;
-2. le compagnon peut entrer avec les identifiants des invités;
-3. l’administrateur peut toujours le récupérer et l’entretenir.
+## Tester l’appareil
 
-Utilisez la [liste de vérification du serveur de salon](verify.md#room-server).
+Faites-le sur l’établi avant de l’installer dans un endroit difficile d’accès.
+
+1. Envoyez une annonce depuis le serveur de salon.
+2. Vérifiez qu’un compagnon à proximité le trouve.
+3. Connectez-vous depuis le compagnon avec le mot de passe invité.
+4. Redémarrez-le et vérifiez que son nom, ses mots de passe et ses réglages
+   radio sont conservés.
+
+En cas d’échec, gardez-le branché par USB, programmez-le de nouveau et refaites
+l’essai.
 
 ## Et ensuite?
 
-Notez qui entretient le salon et comment obtenir de l’aide. Demandez à un
-membre de la communauté à proximité de faire un essai avec un deuxième
-compagnon. Revérifiez la découverte et l’accès des invités après tout
-changement de micrologiciel, d’identifiants ou de paramètres radio. En cas
-d’échec, [obtenez de l’aide](get-help.md).
-
-<section class="mc-start-progress" data-mc-progress-page="room-server" aria-labelledby="room-server-progress-title">
-  <h2 id="room-server-progress-title">Liste de vérification</h2>
-  <p>Cette liste est enregistrée uniquement dans ce navigateur.</p>
-  <ol>
-    <li><label><input id="room-server-progress-hardware" type="checkbox" data-mc-progress> Confirmer que le matériel est compatible</label></li>
-    <li><label><input id="room-server-progress-prepare" type="checkbox" data-mc-progress> Sauvegarder les données et préparer l’appareil</label></li>
-    <li><label><input id="room-server-progress-flash" type="checkbox" data-mc-progress> Suivre le guide d’installation du micrologiciel</label></li>
-    <li><label><input id="room-server-progress-configure" type="checkbox" data-mc-progress> Appliquer les paramètres d’accès et les paramètres locaux</label></li>
-    <li><label><input id="room-server-progress-verify-local" type="checkbox" data-mc-progress> Vérifier le serveur de salon à proximité</label></li>
-    <li><label><input id="room-server-progress-verify-community" type="checkbox" data-mc-progress> Tester la découverte et l’accès des invités</label></li>
-  </ol>
-</section>
+- Annoncez le salon à votre [communauté locale](../provinces/index.md) et
+  expliquez comment obtenir le mot de passe invité.
+- Demandez à une personne à proximité de l’essayer depuis son propre compagnon.
+- Un problème? [Obtenez de l’aide](get-help.md).

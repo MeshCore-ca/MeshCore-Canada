@@ -110,6 +110,7 @@ plugins:
             Get started: Commencer
             Companion: Appareil compagnon
             Set up a companion: Configurer un compagnon
+            Set up a room server: Configurer un serveur de salon
             Repeater: Répéteur
             Room server: Serveur de salon
             Observer: Observateur
@@ -141,7 +142,6 @@ plugins:
             Install a repeater: Installer un répéteur
             Mounting options: Options de montage
             Firmware: Micrologiciel
-            Flash a room server: Installer le micrologiciel d'un serveur de salon
             Update a repeater over the air: Mettre un répéteur à jour à distance
             Network Tools: Outils réseau
             Choose a network tool: Choisir un outil réseau
@@ -191,6 +191,7 @@ plugins:
         meshcore/firmware-rak-custom-display.md: start/companion.md
         meshcore/firmware-heltec-v3-wifi.md: start/companion.md
         meshcore/flash-companion.md: start/companion.md
+        meshcore/flash-room-server.md: start/room-server.md
         hardware/repeater-solar-batteries.md: hardware/recommended-repeaters.md
         hardware/overview.md: hardware/index.md
         meshcore/general-meshcore-roles.md: start/index.md
@@ -221,7 +222,7 @@ nav:
       - Get started: start/index.md
       - Set up a companion: start/companion.md
       - Set up a repeater: config/index.md
-      - Room server: start/room-server.md
+      - Set up a room server: start/room-server.md
       - Observer: start/observer.md
       - Finish and support:
           - Check your setup: start/verify.md
@@ -255,7 +256,6 @@ nav:
       - Install a repeater:
           - Mounting options: hardware/repeater-mounting-options.md
       - Firmware:
-          - Flash a room server: meshcore/flash-room-server.md
           - Update a repeater over the air: meshcore/update-repeater-ota.md
   - Network Tools:
       - Choose a network tool: tools/index.md

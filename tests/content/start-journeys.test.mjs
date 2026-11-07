@@ -115,7 +115,7 @@ test("each role guide is direct and reaches verification and support", () => {
 
     assert.doesNotMatch(page, /\bOutcome:|Your setup path|path is complete/);
     // Companion is one self-contained page with its own test step; the others still use the checklist.
-    if (role !== "companion") {
+    if (role !== "companion" && role !== "room-server") {
       assert.match(page, /<h2[^>]*>Setup checklist<\/h2>/);
       assert.match(page, new RegExp(`data-mc-progress-page="${role}"`));
       assert.match(page, /id="[^"]+" type="checkbox" data-mc-progress/);
@@ -130,7 +130,7 @@ test("progress inputs use stable, unique ids and contain no values", () => {
   const ids = new Set();
 
   for (const [role, relativePath] of Object.entries(rolePages)) {
-    if (role === "companion") continue; // one self-contained page, no checklist
+    if (role === "companion" || role === "room-server") continue; // one self-contained page, no checklist
     const page = readDoc(relativePath);
     const inputs = [...page.matchAll(/<input\s+([^>]*data-mc-progress[^>]*)>/g)];
     assert.ok(inputs.length >= 6 && inputs.length <= 7, `${relativePath} must expose six or seven useful progress checks`);
@@ -155,6 +155,7 @@ test("retired visitor pages use canonical redirects instead of searchable bridge
     ["meshcore/firmware-rak-custom-display.md", "start/companion.md"],
     ["meshcore/firmware-heltec-v3-wifi.md", "start/companion.md"],
     ["meshcore/flash-companion.md", "start/companion.md"],
+    ["meshcore/flash-room-server.md", "start/room-server.md"],
     ["hardware/repeater-solar-batteries.md", "hardware/recommended-repeaters.md"],
     // The flash guide, the MQTT observer page and the ON/QC proposal now live in the setup tool and its explainer.
     ["meshcore/flash-repeater.md", "config/index.md"],

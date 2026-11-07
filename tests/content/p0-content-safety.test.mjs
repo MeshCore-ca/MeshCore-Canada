@@ -21,7 +21,7 @@ function countH1(markdown) {
 const assignedPages = [
   "docs/hardware/repeater-mounting-options.md",
   "docs/start/companion.md",
-  "docs/meshcore/flash-room-server.md",
+  "docs/start/room-server.md",
   "docs/meshcore/update-repeater-ota.md",
   "docs/meshcore/generate-repeater-id.md",
   "docs/meshcore/general-overview.md",
@@ -39,7 +39,7 @@ test("every P0 content page has exactly one H1", () => {
 test("destructive flash actions on the guide pages are gated by backup warnings", () => {
   const cases = [
     ["docs/start/companion.md", "click **Erase Flash**"],
-    ["docs/meshcore/flash-room-server.md", "Click **Erase Flash**"],
+    ["docs/start/room-server.md", "click **Erase Flash**"],
   ];
 
   for (const [file, destructiveAction] of cases) {

@@ -19,7 +19,6 @@ const hardwarePages = [
 ];
 
 const firmwarePages = [
-  "docs/meshcore/flash-room-server.md",
   "docs/meshcore/general-overview.md",
   "docs/meshcore/generate-repeater-id.md",
   "docs/meshcore/update-repeater-ota.md",
@@ -146,7 +145,6 @@ test("hardware landing makes both solar build guides easy to find", () => {
 
 test("destructive firmware flows expose preflight, backup, verification, and recovery", () => {
   const destructivePages = [
-    "docs/meshcore/flash-room-server.md",
     "docs/meshcore/generate-repeater-id.md",
     "docs/meshcore/update-repeater-ota.md",
   ];
@@ -162,26 +160,20 @@ test("destructive firmware flows expose preflight, backup, verification, and rec
     assert.match(source, /private key|identity/i, `${path} must protect identity`);
   }
 
-  for (const path of [
-    "docs/meshcore/flash-room-server.md",
-  ]) {
-    const source = read(path);
-    assert.ok(
-      source.search(/back up|backup/i) < source.indexOf("Click **Erase Flash**"),
-      `${path} backup must precede erase`,
-    );
-  }
+
 });
 
-test("the companion page backs up before it erases and says how to recover", () => {
-  const source = read("docs/start/companion.md");
-  const erase = source.indexOf("click **Erase Flash**");
-  assert.match(frontMatter(source), /^destructive: true$/m);
-  assert.ok(erase > 0, "companion page names the erase step");
-  assert.ok(source.indexOf("!!! danger") < erase, "the danger warning comes before erase");
-  assert.ok(source.search(/back up|backup/i) < erase, "backup comes before erase");
-  assert.match(source, /private key/);
-  assert.match(source, /^### Recovery if flashing fails$/m);
+test("the one-page setup guides back up before they erase and say how to recover", () => {
+  for (const path of ["docs/start/companion.md", "docs/start/room-server.md"]) {
+    const source = read(path);
+    const erase = source.indexOf("click **Erase Flash**");
+    assert.match(frontMatter(source), /^destructive: true$/m, path);
+    assert.ok(erase > 0, `${path} names the erase step`);
+    assert.ok(source.indexOf("!!! danger") < erase, `${path}: the danger warning comes before erase`);
+    assert.ok(source.search(/back up|backup/i) < erase, `${path}: backup comes before erase`);
+    assert.match(source, /private key/, path);
+    assert.match(source, /^### Recovery if flashing fails$/m, path);
+  }
 });
 
 test("hardware images have useful alternative text", () => {

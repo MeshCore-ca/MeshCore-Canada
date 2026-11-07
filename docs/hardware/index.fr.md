@@ -45,7 +45,7 @@ la carte exacte et la cible du micrologiciel dans le
   <section class="mc-decision-card">
     <h3>Serveur de salon</h3>
     <p>Utilisez-le pour héberger un salon persistant. Choisissez une carte prise en charge, une alimentation continue et un plan d’administration sécurisé.</p>
-    <a class="md-button" href="../meshcore/flash-room-server/">Configurer un serveur de salon</a>
+    <a class="md-button" href="../start/room-server/">Configurer un serveur de salon</a>
   </section>
 </div>
 
@@ -86,7 +86,7 @@ Après avoir choisi un appareil pris en charge, suivez le guide correspondant :
 
 - [Programmer un compagnon](../start/companion.md)
 - [Configurer un répéteur](../config/index.md)
-- [Programmer un serveur de salon](../meshcore/flash-room-server.md)
+- [Programmer un serveur de salon](../start/room-server.md)
 
 Vous avez trouvé un produit ou un renseignement de compatibilité périmé?
 [Signalez la correction](../submit-idea.md) en indiquant la source du fabricant
