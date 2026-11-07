@@ -7,6 +7,16 @@ import { gunzipSync, gzipSync } from "node:zlib";
 
 import { postprocessSite, brokerReferenceRows } from "../../scripts/postprocess-site.mjs";
 
+test("the bilingual preview banner links to open reviews, not a retired PR", async () => {
+  const template = await readFile(new URL("../../overrides/main.html", import.meta.url), "utf8");
+  const notice = template.match(/<span data-preview-notice>[\s\S]*?<\/span>/)?.[0];
+  assert.ok(notice);
+  assert.match(notice, /href="https:\/\/github\.com\/MeshCore-ca\/MeshCore-Canada\/pulls"/);
+  assert.match(notice, /Open pull requests/);
+  assert.match(notice, /Demandes de fusion ouvertes/);
+  assert.doesNotMatch(notice, /\/pull\/\d+|PR #\d+/);
+});
+
 test("broker reference is built from the shared validated configuration", async () => {
   const config = JSON.parse(await readFile(new URL("../../docs/analyzer/observer-config.json", import.meta.url), "utf8"));
   for (const french of [false, true]) {
