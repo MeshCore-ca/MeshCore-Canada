@@ -12,7 +12,6 @@ const ownedMarkdown = [
   "start/index.md",
   "start/companion.md",
   "start/room-server.md",
-  "start/verify.md",
   "start/get-help.md",
 ];
 
@@ -125,6 +124,7 @@ test("retired visitor pages use canonical redirects instead of searchable bridge
     ["start/choose-a-goal.md", "start/index.md"],
     ["start/repeater.md", "config/index.md"],
     ["start/observer.md", "analyzer/intro.md"],
+    ["start/verify.md", "start/get-help.md"],
     ["meshcore/firmware-rak-custom-display.md", "start/companion.md"],
     ["meshcore/firmware-heltec-v3-wifi.md", "start/companion.md"],
     ["meshcore/flash-companion.md", "start/companion.md"],
@@ -166,11 +166,11 @@ test("the repeater bench test says to set the clock after every reboot, and why,
     fr: "Après un redémarrage, son horloge est souvent fausse, et les téléphones peuvent ignorer ses annonces tant qu’elle n’est pas réglée."
   };
   for (const [page, advice, lang] of [
-    ["start/verify.md", "Each time it reboots, set its clock again with `clock sync` from the MeshCore app.", "en"],
-    ["start/verify.fr.md", "Chaque fois qu’il redémarre, réglez de nouveau son horloge avec `clock sync` depuis l’application MeshCore.", "fr"],
+    ["config/index.md", "Each time it reboots, set its clock again with `clock sync` from the MeshCore app.", "en"],
+    ["config/index.fr.md", "Chaque fois qu’il redémarre, réglez de nouveau son horloge avec `clock sync` depuis l’application MeshCore.", "fr"],
   ]) {
     const source = readDoc(page);
-    const section = flat(page.startsWith("start/verify") ? source.slice(source.search(/^## (Repeater|Répéteur)/m)) : source);
+    const section = flat(source);
     assert.ok(section.includes(`${advice} ${why[lang]}`), page);
     assert.doesNotMatch(section, /stale advert|advert timing|heure d’annonce périmée/, `${page}: no jargon`);
   }

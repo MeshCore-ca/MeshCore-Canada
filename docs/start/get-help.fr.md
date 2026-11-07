@@ -19,45 +19,39 @@ destructive: false
 
 # Obtenir de l’aide
 
-Commencez par décrire le problème. Ne publiez aucun mot de passe, aucune clé
-privée, aucun emplacement précis ni aucune sortie de commande qui contient des
-renseignements sensibles.
+Le moyen le plus rapide d’obtenir de l’aide est de demander à la communauté :
 
-| Quel est le problème? | Commencez ici |
+[Demander sur Discord](https://discord.gg/GBCP4xdgNv){ .md-button .md-button--primary } [Demander sur le forum](https://forum.meshcore.ca/){ .md-button }
+
+Ne publiez jamais de mot de passe, de clé privée, d’emplacement précis ni de
+sortie de commande contenant des renseignements sensibles.
+
+## Quoi indiquer
+
+- le type et le modèle de votre appareil;
+- la page et l’étape où vous êtes bloqué;
+- ce que vous attendiez, et ce qui s’est produit à la place;
+- le préréglage radio utilisé (Canada ou celui de votre communauté);
+- le texte de l’erreur, sans les valeurs sensibles.
+
+## Problèmes courants
+
+| Quel est le problème? | Essayez ceci |
 |---|---|
-| Vous ne savez pas quel type d’appareil ou quel matériel choisir | [Comparer les types d’appareils](index.md) |
-| Un appareil à proximité ne voit pas votre annonce | Revérifiez les [étapes de vérification](verify.md) et les paramètres locaux |
-| Vous avez besoin des paramètres locaux ou d’une autre personne pour faire un essai | [Trouver une communauté](../provinces/index.md) |
-| Un observateur est absent ou n’affiche aucune activité récente | [Dépanner un observateur](../analyzer/troubleshooting.md) |
-| Vous cherchez une réponse courante sur MeshCore | [Consulter la FAQ MeshCore](../meshcore/general-faq.md) |
-| Une page manque ou contient une erreur | [Partager une idée](../submit-idea.md) |
+| Vous ne savez pas quel appareil choisir | [Commencer](index.md) |
+| Personne n’entend votre annonce | Revérifiez les réglages radio et l’étape **Tester** de votre page de configuration |
+| Vous avez besoin des réglages locaux ou d’une personne pour faire un essai | [Trouver une communauté](../provinces/index.md) |
+| Un observateur est absent ou silencieux | [Dépanner un observateur](../analyzer/troubleshooting.md) |
+| Une question générale sur MeshCore | [FAQ MeshCore](../meshcore/general-faq.md) |
+| Une page du site contient une erreur ou un oubli | [Partager une idée](../submit-idea.md) |
 
-## Demander à la communauté
+Ne changez qu’une chose à la fois, puis refaites l’essai. Le résultat est
+beaucoup plus facile à comprendre.
 
-- Le [forum MeshCore Canada](https://forum.meshcore.ca/) offre des discussions
-  publiques faciles à rechercher et de l’aide.
-- Le [Discord de MeshCore Canada](https://discord.gg/GBCP4xdgNv) permet de
-  discuter directement avec la communauté.
+## Arrêtez-vous et demandez avant de réessayer si
 
-Indiquez :
-
-- le type et le modèle de l’appareil;
-- le guide suivi et l’étape où vous vous êtes arrêté;
-- ce que vous vous attendiez à voir;
-- ce qui s’est plutôt produit;
-- le nom du réglage canadien ou local, sans aucun secret;
-- le texte de l’erreur, après avoir retiré les valeurs sensibles.
-
-## Arrêtez-vous avant de réessayer si
-
-- la prochaine étape effacerait des données qui ne sont pas sauvegardées;
+- la prochaine étape effacerait des données non sauvegardées;
 - le matériel est chaud, endommagé, mouillé ou câblé de façon inattendue;
 - vous risquez de perdre le seul moyen d’accéder à un nœud éloigné;
-- une personne responsable du réseau local indique que les paramètres proposés
-  entrent en conflit avec le réseau.
-
-## Essayez un seul changement à la fois
-
-Retournez à la page [Vérifier votre configuration](verify.md) après chaque
-changement. Il est beaucoup plus facile de comprendre le résultat lorsque vous
-ne modifiez qu’une seule chose à la fois.
+- une personne responsable du réseau local indique que vos réglages entrent en
+  conflit avec le réseau.

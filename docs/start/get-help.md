@@ -19,42 +19,38 @@ destructive: false
 
 # Get help
 
-Start with the symptom. Do not post passwords, private keys, precise locations,
-or unredacted command output.
+The quickest way to get help is to ask the community:
 
-| What is wrong? | Start here |
+[Ask on Discord](https://discord.gg/GBCP4xdgNv){ .md-button .md-button--primary } [Ask on the forum](https://forum.meshcore.ca/){ .md-button }
+
+Never post passwords, private keys, precise locations or unredacted command
+output.
+
+## What to include
+
+- your device type and model;
+- the page and step where you got stuck;
+- what you expected, and what happened instead;
+- the radio preset you're using (Canada or your community's);
+- any error text, with sensitive values removed.
+
+## Common problems
+
+| What's wrong? | Try this |
 |---|---|
-| You are unsure which role or hardware fits | [Compare roles](index.md) |
-| A nearby device cannot see your advert | Recheck the [verification steps](verify.md) and local settings |
-| You need local settings or another person to test | [Find a community](../provinces/index.md) |
-| An observer is missing or has no recent activity | [Observer troubleshooting](../analyzer/troubleshooting.md) |
-| You need a common MeshCore answer | [MeshCore FAQ](../meshcore/general-faq.md) |
-| A page is missing or incorrect | [Share an idea](../submit-idea.md) |
+| Not sure which device you need | [Get started](index.md) |
+| Nobody hears your advert | Recheck the radio settings and the **Test it** step on your setup page |
+| You need local settings or someone to test with | [Find a community](../provinces/index.md) |
+| An observer is missing or quiet | [Observer troubleshooting](../analyzer/troubleshooting.md) |
+| A general MeshCore question | [MeshCore FAQ](../meshcore/general-faq.md) |
+| A page here is wrong or missing something | [Share an idea](../submit-idea.md) |
 
-## Ask the community
+Change one thing at a time, then test again. It makes the result much easier to
+understand.
 
-- [MeshCore Canada forum](https://forum.meshcore.ca/) — searchable public
-  discussions and support.
-- [MeshCore Canada Discord](https://discord.gg/GBCP4xdgNv) — live community
-  chat.
+## Stop and ask before you retry if
 
-Include:
-
-- the device role and model;
-- the guide and step where you stopped;
-- what you expected;
-- what happened instead;
-- the Canada or local setting name, without secrets;
-- any error text after removing sensitive values.
-
-## Stop before retrying when
-
-- the next step would erase data you have not backed up;
-- the hardware is hot, damaged, wet, or wired unexpectedly;
-- you would lose the only way to reach a remote node;
-- a local operator says the proposed settings conflict with the mesh.
-
-## Try one change at a time
-
-Return to [Check your setup](verify.md) after making one change. Testing one
-change at a time makes the result easier to understand.
+- the next step would erase data you haven't backed up;
+- the hardware is hot, damaged, wet or wired unexpectedly;
+- you'd lose your only way to reach a remote node;
+- a local operator says your settings conflict with the mesh.

@@ -39,7 +39,7 @@ Before you start: pick a [supported board](../hardware/recommended-repeaters.md)
 
 ## After it's set up
 
-- Check that a nearby companion hears its advert. After any reboot, run `clock sync` from the MeshCore app first.
+- Check that a nearby companion hears its advert. Each time it reboots, set its clock again with `clock sync` from the MeshCore app. After a restart its clock is often wrong, and phones may ignore its announcements until it's set.
 - Choose an [antenna](../hardware/recommended-antenna.md) and a [mount](../hardware/repeater-mounting-options.md).
 - On firmware 1.14 or newer, read about [loop detection](guide.md#loop-detection) before changing a community repeater.
 - Something not working? [Get help](../start/get-help.md).

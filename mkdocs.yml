@@ -114,8 +114,6 @@ plugins:
             Repeater: Répéteur
             Room server: Serveur de salon
             Observer: Observateur
-            Finish and support: Terminer et obtenir de l'aide
-            Check your setup: Vérifier votre configuration
             Get help: Obtenir de l'aide
             Communities: Communautés
             Find a community: Trouver une communauté
@@ -198,6 +196,7 @@ plugins:
         start/choose-a-goal.md: start/index.md
         start/repeater.md: config/index.md
         start/observer.md: analyzer/intro.md
+        start/verify.md: start/get-help.md
         meshcore/flash-repeater.md: config/index.md
         analyzer/builds/mqtt-firmware.md: config/index.md
         proposals/onqc-scopes.md: config/guide.md
@@ -225,9 +224,7 @@ nav:
       - Set up a repeater: config/index.md
       - Set up a room server: start/room-server.md
       - Set up an observer: analyzer/intro.md
-      - Finish and support:
-          - Check your setup: start/verify.md
-          - Get help: start/get-help.md
+      - Get help: start/get-help.md
   - Communities:
       - Find a community: provinces/index.md
       - Western Canada:

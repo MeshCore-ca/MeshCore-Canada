@@ -39,7 +39,7 @@ Avant de commencer : choisissez une [carte compatible](../hardware/recommended-r
 
 ## Une fois configuré
 
-- Vérifiez qu’un compagnon à proximité reçoit son annonce. Après chaque redémarrage, lancez d’abord `clock sync` depuis l’application MeshCore.
+- Vérifiez qu’un compagnon à proximité reçoit son annonce. Chaque fois qu’il redémarre, réglez de nouveau son horloge avec `clock sync` depuis l’application MeshCore. Après un redémarrage, son horloge est souvent fausse, et les téléphones peuvent ignorer ses annonces tant qu’elle n’est pas réglée.
 - Choisissez une [antenne](../hardware/recommended-antenna.md) et un [support](../hardware/repeater-mounting-options.md).
 - Avec le micrologiciel 1.14 ou plus récent, lisez la section sur la [détection des boucles](guide.md#loop-detection) avant de modifier un répéteur communautaire.
 - Un problème? [Obtenez de l’aide](../start/get-help.md).
