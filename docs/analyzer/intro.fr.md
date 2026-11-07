@@ -14,8 +14,6 @@ estimated_time: 5 minutes
 destructive: false
 page_styles:
   - assets/styles/analyzer.css?v=20261019-1
-page_scripts:
-  - assets/javascripts/analyzer-method-chooser.js?v=20261102-5
 ---
 
 # Configurer un observateur de réseau
@@ -42,23 +40,6 @@ d’apprendre MQTT avant de choisir une méthode.
 ## Choisir votre méthode
 
 Commencez par l’outil qui gère déjà votre radio.
-
-<div class="mc-method-chooser" id="observer-method-chooser">
-  <label for="observer-method">
-    <strong>Quel élément fait déjà partie de votre installation?</strong>
-    <select id="observer-method">
-      <option value="">Choisissez une option</option>
-      <option value="remote-term">RemoteTerm gère la radio</option>
-      <option value="home-assistant">Home Assistant utilise l’intégration MeshCore</option>
-      <option value="pymc">Un service de répéteur PyMC est déjà en fonction</option>
-      <option value="usb-host">Un ordinateur Linux ou macOS reste près d’une radio USB</option>
-      <option value="wifi-board">Une carte LoRa Wi-Fi compatible peut servir uniquement d’observateur</option>
-    </select>
-  </label>
-  <div class="mc-method-result" id="observer-method-result" role="status" tabindex="-1" hidden></div>
-</div>
-
-Les mêmes choix figurent dans ce tableau :
 
 | Votre installation actuelle | Méthode recommandée | Hôte qui doit rester en fonction |
 |---|---|---|

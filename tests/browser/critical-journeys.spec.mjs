@@ -374,32 +374,6 @@ test("site search responds to typed and pasted input", async ({ page }) => {
   await expect(page.locator(".md-search-result__item")).not.toHaveCount(0);
 });
 
-test("Start progress stores completion markers only", async ({ page }) => {
-  await page.goto(siteRoute("/start/observer/"));
-  const first = page.locator("input[data-mc-progress]").first();
-  await expect(first).toBeVisible();
-  await first.check();
-  await page.reload();
-  await expect(first).toBeChecked();
-
-  const stored = await page.evaluate(() =>
-    Object.entries(window.localStorage).filter(([key]) =>
-      key.startsWith("meshcore-canada:progress:v1:")
-    )
-  );
-  expect(stored).toHaveLength(1);
-  expect(stored[0][1]).toBe("done");
-  expect(JSON.stringify(stored)).not.toMatch(/password|credential|coordinate|private.key/i);
-
-  await first.uncheck();
-  const remainingProgress = await page.evaluate(() =>
-    Object.keys(window.localStorage).filter((key) =>
-      key.startsWith("meshcore-canada:progress:v1:")
-    )
-  );
-  expect(remainingProgress).toEqual([]);
-});
-
 test("tool assets remain route scoped", async ({ page }) => {
   await page.goto(siteRoute("/"), { waitUntil: "networkidle" });
   const homeAssets = await page.evaluate(() =>

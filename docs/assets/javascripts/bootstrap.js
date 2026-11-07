@@ -1,45 +1,6 @@
 (function () {
   "use strict";
 
-  var storagePrefix = "meshcore-canada:progress:v1:";
-
-  function storageKey(input) {
-    var pageKey = input.closest("[data-mc-progress-page]");
-    var scope = pageKey ? pageKey.getAttribute("data-mc-progress-page") : window.location.pathname;
-    return storagePrefix + scope + ":" + input.id;
-  }
-
-  function readProgress(input) {
-    try {
-      return window.localStorage.getItem(storageKey(input)) === "done";
-    } catch (_error) {
-      return false;
-    }
-  }
-
-  function writeProgress(input) {
-    try {
-      if (input.checked) {
-        window.localStorage.setItem(storageKey(input), "done");
-      } else {
-        window.localStorage.removeItem(storageKey(input));
-      }
-    } catch (_error) {
-      // The journey still works when storage is blocked or unavailable.
-    }
-  }
-
-  function initialiseProgress() {
-    document.querySelectorAll("input[type='checkbox'][data-mc-progress]").forEach(function (input) {
-      if (!input.id || input.dataset.mcProgressReady === "true") return;
-      input.dataset.mcProgressReady = "true";
-      input.checked = readProgress(input);
-      input.addEventListener("change", function () {
-        writeProgress(input);
-      });
-    });
-  }
-
   function labelExternalLinks() {
     document.querySelectorAll("a[target='_blank']").forEach(function (link) {
       if (link.dataset.mcExternalReady === "true") return;
@@ -238,7 +199,6 @@
 
   function initialise() {
     openDrawerAtTopLevel();
-    initialiseProgress();
     labelExternalLinks();
     labelThemeControls();
     initialiseSearchInputs();

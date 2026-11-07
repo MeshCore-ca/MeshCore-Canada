@@ -49,7 +49,7 @@ Choisissez l’appareil que vous configurez :
 
     Transmet ce qu’il capte aux cartes du réseau CoreScope. Fixe et alimenté en continu.
 
-    [:octicons-arrow-right-24: Configurer un observateur](observer.md)
+    [:octicons-arrow-right-24: Configurer un observateur](../analyzer/intro.md)
 
 </div>
 

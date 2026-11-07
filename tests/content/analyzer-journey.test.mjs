@@ -67,7 +67,6 @@ test("every Analyzer page has required, unique metadata and route-scoped styles"
 
 test("intro explains the path before MQTT details and recommends every method", () => {
   const source = read("docs/analyzer/intro.md");
-  const chooser = read("docs/assets/javascripts/analyzer-method-chooser.js");
   const radio = source.indexOf("<strong>Radio</strong>");
   const observer = source.indexOf("<strong>Observer</strong>");
   const infrastructure = source.indexOf("<strong>MeshCore Canada</strong>");
@@ -75,15 +74,13 @@ test("intro explains the path before MQTT details and recommends every method", 
 
   assert.ok(radio >= 0 && radio < observer && observer < infrastructure && infrastructure < viewer);
   assert.ok(source.indexOf("The shared servers use MQTT") > viewer);
-  assert.match(source, /id="observer-method-chooser"/);
-  assert.match(source, /assets\/javascripts\/analyzer-method-chooser\.js/);
   for (const method of ["RemoteTerm", "Home Assistant", "PyMC", "MCtoMQTT", "Repeater observer"]) {
     assert.match(source, new RegExp(method));
   }
-  for (const path of ["../remoteterm/", "../builds/meshcore-ha/", "../builds/pymc/", "../builds/mctomqtt/", "../../config/?type=observer"]) {
-    assert.ok(chooser.includes(`href: "${path}"`), `chooser must resolve ${path} from /analyzer/intro/`);
+  for (const link of ["remoteterm.md", "builds/meshcore-ha.md", "builds/pymc.md", "builds/mctomqtt.md", "../config/index.md?type=observer"]) {
+    assert.ok(source.includes(`](${link})`), `the method table links ${link}`);
   }
-  assert.doesNotMatch(chooser, /mqtt-firmware/, "the standalone firmware method is now the repeater observer in the setup tool");
+  assert.doesNotMatch(source, /mqtt-firmware|observer-method-chooser/);
   assert.match(source, /broker connection.*not.*finish|Setup is not finished.*connected/is);
 });
 

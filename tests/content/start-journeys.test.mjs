@@ -12,7 +12,6 @@ const ownedMarkdown = [
   "start/index.md",
   "start/companion.md",
   "start/room-server.md",
-  "start/observer.md",
   "start/verify.md",
   "start/get-help.md",
 ];
@@ -20,7 +19,6 @@ const ownedMarkdown = [
 const rolePages = {
   companion: "start/companion.md",
   "room-server": "start/room-server.md",
-  observer: "start/observer.md",
 };
 
 const readDoc = (relativePath) =>
@@ -92,7 +90,7 @@ test("homepage is task-first and exposes the required decisions", () => {
 test("Start offers all roles and the local-settings handoff", () => {
   const start = readDoc("start/index.md");
 
-  for (const link of ["companion.md", "../config/index.md", "room-server.md", "observer.md", "get-help.md"]) {
+  for (const link of ["companion.md", "../config/index.md", "room-server.md", "../analyzer/intro.md", "get-help.md"]) {
     assert.match(start, new RegExp(`\\]\\(${link.replace(".", "\\.")}\\)`));
   }
 
@@ -114,34 +112,8 @@ test("each role guide is direct and reaches verification and support", () => {
     }
 
     assert.doesNotMatch(page, /\bOutcome:|Your setup path|path is complete/);
-    // Companion is one self-contained page with its own test step; the others still use the checklist.
-    if (role !== "companion" && role !== "room-server") {
-      assert.match(page, /<h2[^>]*>Setup checklist<\/h2>/);
-      assert.match(page, new RegExp(`data-mc-progress-page="${role}"`));
-      assert.match(page, /id="[^"]+" type="checkbox" data-mc-progress/);
-      assert.match(page, /\]\(verify\.md#[^)]+\)/);
-    }
     assert.match(page, /\]\(get-help\.md\)/);
     assert.match(page, /community lists different settings|community\s+publishes different settings/i);
-  }
-});
-
-test("progress inputs use stable, unique ids and contain no values", () => {
-  const ids = new Set();
-
-  for (const [role, relativePath] of Object.entries(rolePages)) {
-    if (role === "companion" || role === "room-server") continue; // one self-contained page, no checklist
-    const page = readDoc(relativePath);
-    const inputs = [...page.matchAll(/<input\s+([^>]*data-mc-progress[^>]*)>/g)];
-    assert.ok(inputs.length >= 6 && inputs.length <= 7, `${relativePath} must expose six or seven useful progress checks`);
-
-    for (const [, attributes] of inputs) {
-      const id = attributes.match(/\bid="([^"]+)"/)?.[1];
-      assert.ok(id, `${relativePath} progress input needs an id`);
-      assert.ok(!ids.has(id), `duplicate progress id: ${id}`);
-      assert.doesNotMatch(attributes, /\bvalue=/i);
-      ids.add(id);
-    }
   }
 });
 
@@ -152,6 +124,7 @@ test("retired visitor pages use canonical redirects instead of searchable bridge
     ["resources/getting-started.md", "start/index.md"],
     ["start/choose-a-goal.md", "start/index.md"],
     ["start/repeater.md", "config/index.md"],
+    ["start/observer.md", "analyzer/intro.md"],
     ["meshcore/firmware-rak-custom-display.md", "start/companion.md"],
     ["meshcore/firmware-heltec-v3-wifi.md", "start/companion.md"],
     ["meshcore/flash-companion.md", "start/companion.md"],
@@ -203,15 +176,15 @@ test("the repeater bench test says to set the clock after every reboot, and why,
   }
 });
 
-test("the observer start page leads to the setup tool, and repeater setup is the tool itself", () => {
+test("repeater and observer setup open the tool and the method table directly", () => {
   for (const french of [false, true]) {
     const suffix = french ? ".fr" : "";
-    const observer = readDoc(`start/observer${suffix}.md`);
     const tool = readDoc(`config/index${suffix}.md`);
-    assert.match(observer, /\]\(\.\.\/config\/index\.md\?type=observer\)/, "the observer page links the repeater observer setup");
-    assert.doesNotMatch(observer, /mqtt-firmware/);
+    const observer = readDoc(`analyzer/intro${suffix}.md`);
     assert.match(tool, /\]\(guide\.md#loop-detection\)/, "loop detection is explained in the guide");
     assert.match(tool, /`clock sync`/);
+    assert.match(observer, /\]\(\.\.\/config\/index\.md\?type=observer\)/, "the method table links the repeater observer setup");
+    assert.doesNotMatch(observer, /mqtt-firmware|observer-method-chooser/);
   }
 });
 

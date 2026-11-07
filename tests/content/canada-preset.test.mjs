@@ -27,7 +27,7 @@ test("Canada's named preset matches the announced RF values and CLI byte mapping
 for (const suffix of [".md", ".fr.md"]) {
   test(`${suffix} onboarding and observer pages name Canada and link the older-app fallback`, () => {
     const paths = [
-      ...["companion", "room-server", "observer"].map(role => `docs/start/${role}${suffix}`),
+      ...["companion", "room-server"].map(role => `docs/start/${role}${suffix}`),
       `docs/analyzer/intro${suffix}`,
     ];
     for (const path of paths) {

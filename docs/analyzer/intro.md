@@ -14,8 +14,6 @@ estimated_time: 5 minutes
 destructive: false
 page_styles:
   - assets/styles/analyzer.css?v=20261019-1
-page_scripts:
-  - assets/javascripts/analyzer-method-chooser.js?v=20261102-5
 ---
 
 # Set up a network observer
@@ -39,23 +37,6 @@ The shared servers use MQTT, but you do not need to learn MQTT before choosing a
 ## Choose your setup
 
 Start with what already manages your radio.
-
-<div class="mc-method-chooser" id="observer-method-chooser">
-  <label for="observer-method">
-    <strong>What is already part of this setup?</strong>
-    <select id="observer-method">
-      <option value="">Choose one</option>
-      <option value="remote-term">RemoteTerm manages the radio</option>
-      <option value="home-assistant">Home Assistant has the MeshCore integration</option>
-      <option value="pymc">A PyMC repeater service is already running</option>
-      <option value="usb-host">A Linux or macOS computer stays beside a USB radio</option>
-      <option value="wifi-board">A supported Wi-Fi LoRa board can be dedicated to observing</option>
-    </select>
-  </label>
-  <div class="mc-method-result" id="observer-method-result" role="status" tabindex="-1" hidden></div>
-</div>
-
-The same choices are listed here:
 
 | Your current setup | Recommended method | Host that must stay on |
 |---|---|---|

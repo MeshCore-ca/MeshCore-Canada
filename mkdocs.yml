@@ -51,7 +51,7 @@ extra_css:
 extra_javascript:
   - assets/javascripts/region-profile.js?v=20261105-2
   - assets/javascripts/i18n-runtime.js?v=20260829-1
-  - assets/javascripts/bootstrap.js?v=20261105-1
+  - assets/javascripts/bootstrap.js?v=20261106-1
   - assets/javascripts/network-status.js?v=20260905-1
 
 extra:
@@ -197,6 +197,7 @@ plugins:
         meshcore/general-meshcore-roles.md: start/index.md
         start/choose-a-goal.md: start/index.md
         start/repeater.md: config/index.md
+        start/observer.md: analyzer/intro.md
         meshcore/flash-repeater.md: config/index.md
         analyzer/builds/mqtt-firmware.md: config/index.md
         proposals/onqc-scopes.md: config/guide.md
@@ -223,7 +224,7 @@ nav:
       - Set up a companion: start/companion.md
       - Set up a repeater: config/index.md
       - Set up a room server: start/room-server.md
-      - Observer: start/observer.md
+      - Set up an observer: analyzer/intro.md
       - Finish and support:
           - Check your setup: start/verify.md
           - Get help: start/get-help.md
@@ -261,7 +262,6 @@ nav:
       - Choose a network tool: tools/index.md
       - Find your zone: config/map.md
       - How repeaters work: config/guide.md
-      - Set up an observer: analyzer/intro.md
       - Check an observer: analyzer/verify.md
       - Troubleshoot network data: analyzer/troubleshooting.md
       - Observer methods:
