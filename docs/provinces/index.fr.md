@@ -18,7 +18,7 @@ page_styles:
 status_notice: false
 page_scripts:
   - assets/javascripts/place-search.js?v=20261102-9
-  - assets/javascripts/communities.js?v=20260925-2
+  - assets/javascripts/communities.js?v=20261107-1
 ---
 
 <!-- Généré par scripts/validate-communities.py à partir de data/communities.json et data/communities.fr.json. Ne pas modifier à la main. -->
@@ -28,33 +28,11 @@ page_scripts:
 Filtrez la liste par communauté ou province, ou cherchez votre ville pour trouver les communautés les plus proches.
 <noscript><p>La recherche de villes nécessite JavaScript. Toutes les communautés sont indiquées ci-dessous.</p></noscript>
 
-!!! note "Les renseignements sur les communautés peuvent changer"
-    Ces renseignements pourraient être périmés !
-
-<div class="mc-directory-summary" aria-label="Résumé du répertoire">
-<span><strong>25</strong> fiches</span>
-<span><strong>23</strong> fiches actives</span>
-<span><strong>2</strong> fiches en formation</span>
-<span><strong>1</strong> fiche avec des réglages locaux différents</span>
-</div>
-
 <form class="mc-directory-tools" data-community-directory data-community-locale="fr">
   <div class="mc-directory-tools__search">
     <label for="community-search">Lieu, province, communauté ou alias</label>
     <input id="community-search" type="search" name="community" autocomplete="address-level2" maxlength="160" placeholder="Essayez Cambridge, ON ou YQL">
   </div>
-  <div class="mc-directory-tools__filter">
-    <label for="community-status">État</label>
-    <select id="community-status">
-      <option value="">Tous les états</option>
-      <option value="active">Active</option>
-      <option value="forming">En formation</option>
-    </select>
-  </div>
-  <label class="mc-directory-tools__check">
-    <input id="community-override" type="checkbox">
-    Possède des réglages locaux différents
-  </label>
   <div class="mc-directory-actions"><button class="md-button md-button--primary" type="submit" data-community-locate>Trouver à proximité</button>
   <button class="md-button" type="button" data-community-clear>Effacer</button></div>
   <output class="mc-directory-tools__count" data-community-count aria-live="polite">
@@ -68,7 +46,7 @@ Filtrez la liste par communauté ou province, ou cherchez votre ville pour trouv
 
 <div class="mc-community-empty" data-community-empty hidden>
   <h2>Aucune communauté correspondante</h2>
-  <p>Choisissez Trouver à proximité pour chercher votre ville, ou effacez les filtres.</p>
+  <p>Choisissez Trouver à proximité pour chercher votre ville, ou effacez la recherche.</p>
   <button class="md-button" type="button" data-community-clear>Effacer la recherche</button>
   <p><a href="../submit-idea/">Ajouter une communauté manquante</a></p>
 </div>
@@ -82,13 +60,11 @@ Filtrez la liste par communauté ou province, ou cherchez votre ville pour trouv
 <span class="mc-community-status" data-status="active">Active</span>
 </div>
 <p class="mc-community-area">Lower Mainland et île de Vancouver</p>
-<p><strong>Province ou territoire :</strong> <a href="british-columbia/">Colombie-Britannique</a></p>
-<p><strong>Réglages :</strong> Réglages locaux différents — Préréglage radio : <code>Custom</code>; Valeurs radio brutes : <code>910.425 MHz / 62.5 kHz / SF7 / CR5</code></p>
-<p><strong>Fiche révisée :</strong> 2026-08-29</p>
+<p><strong>Réglages radio :</strong> Réglages locaux différents — Préréglage radio : <code>Custom</code>; Valeurs radio brutes : <code>910.425 MHz / 62.5 kHz / SF7 / CR5</code></p>
 <ul class="mc-community-contacts">
-<li><strong>Site Web :</strong> <a href="https://ridgeline.ve7kod.ca/about" rel="noopener">Carte et outils du réseau Ridgeline</a> <span class="mc-community-external">(externe)</span></li>
+<li><a href="https://ridgeline.ve7kod.ca/about" rel="noopener">Carte et outils du réseau Ridgeline</a></li>
 </ul>
-<p class="mc-community-card__action"><a href="british-columbia/#community-bc-mesh">Voir les détails de la fiche</a></p>
+<p class="mc-community-card__action"><a href="british-columbia/#community-bc-mesh">Plus de détails</a></p>
 </article>
 <article class="mc-community-card" id="directory-salish-mesh" data-community-card data-community-status="active" data-community-override="false" data-community-search="salish mesh salish sea and surrounding area mer des salish et environs bc british columbia colombie-britannique salish sea" data-community-points="[{&quot;label&quot;:&quot;Metro Vancouver&quot;,&quot;lat&quot;:49.28173,&quot;lon&quot;:-123.11928},{&quot;label&quot;:&quot;Capital / Victoria&quot;,&quot;lat&quot;:48.43719,&quot;lon&quot;:-123.361624}]">
 <div class="mc-community-card__header">
@@ -96,13 +72,10 @@ Filtrez la liste par communauté ou province, ou cherchez votre ville pour trouv
 <span class="mc-community-status" data-status="active">Active</span>
 </div>
 <p class="mc-community-area">Mer des Salish et environs</p>
-<p><strong>Province ou territoire :</strong> <a href="british-columbia/">Colombie-Britannique</a></p>
-<p><strong>Réglages :</strong> Réglages par défaut du Canada</p>
-<p><strong>Fiche révisée :</strong> 2026-08-29</p>
 <ul class="mc-community-contacts">
-<li><strong>Site Web :</strong> <a href="https://salishmesh.net/" rel="noopener">Site Web de Salish Mesh</a> <span class="mc-community-external">(externe)</span></li>
+<li><a href="https://salishmesh.net/" rel="noopener">Site Web de Salish Mesh</a></li>
 </ul>
-<p class="mc-community-card__action"><a href="british-columbia/#community-salish-mesh">Voir les détails de la fiche</a></p>
+<p class="mc-community-card__action"><a href="british-columbia/#community-salish-mesh">Plus de détails</a></p>
 </article>
 <article class="mc-community-card" id="directory-alberta-meshcore-networks" data-community-card data-community-status="active" data-community-override="false" data-community-search="alberta meshcore networks alberta ab airdrie calgary edmonton lethbridge albertamesh albertamesh.ca alberta meshcore building alberta&#x27;s community-operated off-grid lora mesh network developpement du reseau maille lora hors reseau de l’alberta, exploite par la communaute" data-community-points="[{&quot;label&quot;:&quot;Calgary region&quot;,&quot;lat&quot;:51.016738,&quot;lon&quot;:-114.001493},{&quot;label&quot;:&quot;Edmonton metro&quot;,&quot;lat&quot;:53.551268,&quot;lon&quot;:-113.491265},{&quot;label&quot;:&quot;Lethbridge &amp; deep south&quot;,&quot;lat&quot;:49.684963,&quot;lon&quot;:-112.834123}]">
 <div class="mc-community-card__header">
@@ -111,20 +84,11 @@ Filtrez la liste par communauté ou province, ou cherchez votre ville pour trouv
 </div>
 <p class="mc-community-area">Alberta</p>
 <p class="mc-community-summary">Développement du réseau maillé LoRa hors réseau de l’Alberta, exploité par la communauté</p>
-<p><strong>Province ou territoire :</strong> <a href="alberta/">Alberta</a></p>
-<p><strong>Réglages :</strong> Réglages par défaut du Canada</p>
-<p><strong>Fiche révisée :</strong> 2026-08-29</p>
 <ul class="mc-community-contacts">
-<li><strong>Site Web :</strong> <a href="https://albertamesh.ca/" rel="noopener">AlbertaMesh.ca</a> <span class="mc-community-external">(externe)</span></li>
-<li><strong>Discord :</strong> <a href="https://discord.gg/CznDhsRWnJ" rel="noopener">Discord d’Alberta MeshCore</a> <span class="mc-community-external">(externe)</span></li>
-<li><strong>Site Web :</strong> <a href="https://albertamesh.ca/airdrie/" rel="noopener">Page régionale d’Airdrie</a> <span class="mc-community-external">(externe)</span></li>
-<li><strong>Site Web :</strong> <a href="https://albertamesh.ca/calgary/" rel="noopener">Page régionale de Calgary</a> <span class="mc-community-external">(externe)</span></li>
-<li><strong>Site Web :</strong> <a href="https://albertamesh.ca/edmonton/" rel="noopener">Page régionale d’Edmonton</a> <span class="mc-community-external">(externe)</span></li>
-<li><strong>Site Web :</strong> <a href="https://albertamesh.ca/lethbridge/" rel="noopener">Page régionale de Lethbridge</a> <span class="mc-community-external">(externe)</span></li>
-<li><strong>Site Web :</strong> <a href="https://albertamesh.ca/why-meshcore/" rel="noopener">Pourquoi MeshCore?</a> <span class="mc-community-external">(externe)</span></li>
-<li><strong>Site Web :</strong> <a href="https://albertamesh.ca/monitoring-tools/" rel="noopener">Outils de surveillance</a> <span class="mc-community-external">(externe)</span></li>
+<li><a href="https://discord.gg/CznDhsRWnJ" rel="noopener">Discord d’Alberta MeshCore</a></li>
+<li><a href="https://albertamesh.ca/" rel="noopener">AlbertaMesh.ca</a></li>
 </ul>
-<p class="mc-community-card__action"><a href="alberta/#community-alberta-meshcore-networks">Voir les détails de la fiche</a></p>
+<p class="mc-community-card__action"><a href="alberta/#community-alberta-meshcore-networks">Plus de détails</a></p>
 </article>
 <article class="mc-community-card" id="directory-airdrie-meshcore-network" data-community-card data-community-status="active" data-community-override="false" data-community-search="airdrie meshcore network airdrie and calgary airdrie et calgary ab alberta airdrie calgary albertamesh airdrie yyc uses the yyc regional identifier shared with the calgary regional network utilise l’identifiant regional yyc partage avec le reseau regional de calgary" data-community-points="[{&quot;label&quot;:&quot;Airdrie and Calgary&quot;,&quot;lat&quot;:51.2812,&quot;lon&quot;:-113.99718}]">
 <div class="mc-community-card__header">
@@ -133,17 +97,11 @@ Filtrez la liste par communauté ou province, ou cherchez votre ville pour trouv
 </div>
 <p class="mc-community-area">Airdrie et Calgary</p>
 <p class="mc-community-summary">Utilise l’identifiant régional YYC partagé avec le réseau régional de Calgary</p>
-<p><strong>Province ou territoire :</strong> <a href="alberta/">Alberta</a></p>
-<p><strong>Réglages :</strong> Réglages par défaut du Canada</p>
-<p><strong>Fiche révisée :</strong> 2026-08-29</p>
 <ul class="mc-community-contacts">
-<li><strong>Site Web :</strong> <a href="https://albertamesh.ca/airdrie/" rel="noopener">Réseau MeshCore d’Airdrie</a> <span class="mc-community-external">(externe)</span></li>
-<li><strong>Site Web :</strong> <a href="https://albertamesh.ca/airdrie/configuration/" rel="noopener">Guide de configuration d’Airdrie</a> <span class="mc-community-external">(externe)</span></li>
-<li><strong>Discord :</strong> <a href="https://discord.gg/CznDhsRWnJ" rel="noopener">Discord d’Alberta MeshCore</a> <span class="mc-community-external">(externe)</span></li>
-<li><strong>MeshMapper :</strong> <a href="https://yyc.meshmapper.net/?lat=51.28120&amp;lon=-113.99718&amp;zoom=13.43" rel="noopener">Carte du réseau d’Airdrie</a> <span class="mc-community-external">(externe)</span></li>
-<li><strong>Site Web :</strong> <a href="https://waev.app/#/live-map/@51.28107,-113.99966,14.47z" rel="noopener">Carte en direct de WAeV</a> <span class="mc-community-external">(externe)</span></li>
+<li><a href="https://discord.gg/CznDhsRWnJ" rel="noopener">Discord d’Alberta MeshCore</a></li>
+<li><a href="https://albertamesh.ca/airdrie/" rel="noopener">Réseau MeshCore d’Airdrie</a></li>
 </ul>
-<p class="mc-community-card__action"><a href="alberta/#community-airdrie-meshcore-network">Voir les détails de la fiche</a></p>
+<p class="mc-community-card__action"><a href="alberta/#community-airdrie-meshcore-network">Plus de détails</a></p>
 </article>
 <article class="mc-community-card" id="directory-calgary-area-meshcore" data-community-card data-community-status="active" data-community-override="false" data-community-search="calgary and area meshcore calgary and area calgary et environs ab alberta calgary yyc" data-community-points="[{&quot;label&quot;:&quot;Calgary region&quot;,&quot;lat&quot;:51.016738,&quot;lon&quot;:-114.001493}]">
 <div class="mc-community-card__header">
@@ -151,14 +109,10 @@ Filtrez la liste par communauté ou province, ou cherchez votre ville pour trouv
 <span class="mc-community-status" data-status="active">Active</span>
 </div>
 <p class="mc-community-area">Calgary et environs</p>
-<p><strong>Province ou territoire :</strong> <a href="alberta/">Alberta</a></p>
-<p><strong>Réglages :</strong> Réglages par défaut du Canada</p>
-<p><strong>Fiche révisée :</strong> 2026-08-29</p>
 <ul class="mc-community-contacts">
-<li><strong>Telegram :</strong> <a href="https://t.me/meshtAlta" rel="noopener">Sujet sur Calgary dans Mesh Alberta</a> <span class="mc-community-external">(externe)</span></li>
-<li><strong>Discord :</strong> Canal régional Canada — Calgary, Alberta et environs sur le Discord de MeshCore</li>
+<li><a href="https://t.me/meshtAlta" rel="noopener">Sujet sur Calgary dans Mesh Alberta</a></li>
 </ul>
-<p class="mc-community-card__action"><a href="alberta/#community-calgary-area-meshcore">Voir les détails de la fiche</a></p>
+<p class="mc-community-card__action"><a href="alberta/#community-calgary-area-meshcore">Plus de détails</a></p>
 </article>
 <article class="mc-community-card" id="directory-calgary-meshcore-network" data-community-card data-community-status="active" data-community-override="false" data-community-search="calgary meshcore network calgary ab alberta albertamesh calgary yyc calgary meshcore initial albertamesh.ca launch region premiere region lancee sur albertamesh.ca" data-community-points="[{&quot;label&quot;:&quot;Calgary&quot;,&quot;lat&quot;:51.01674,&quot;lon&quot;:-114.00149}]">
 <div class="mc-community-card__header">
@@ -167,17 +121,11 @@ Filtrez la liste par communauté ou province, ou cherchez votre ville pour trouv
 </div>
 <p class="mc-community-area">Calgary</p>
 <p class="mc-community-summary">Première région lancée sur AlbertaMesh.ca</p>
-<p><strong>Province ou territoire :</strong> <a href="alberta/">Alberta</a></p>
-<p><strong>Réglages :</strong> Réglages par défaut du Canada</p>
-<p><strong>Fiche révisée :</strong> 2026-08-29</p>
 <ul class="mc-community-contacts">
-<li><strong>Site Web :</strong> <a href="https://albertamesh.ca/calgary/" rel="noopener">Guide de la communauté de Calgary</a> <span class="mc-community-external">(externe)</span></li>
-<li><strong>Discord :</strong> <a href="https://discord.gg/CznDhsRWnJ" rel="noopener">Discord d’Alberta MeshCore</a> <span class="mc-community-external">(externe)</span></li>
-<li><strong>MeshMapper :</strong> <a href="https://yyc.meshmapper.net/?lat=51.01674&amp;lon=-114.00149&amp;zoom=11.00" rel="noopener">Carte du réseau de Calgary</a> <span class="mc-community-external">(externe)</span></li>
-<li><strong>Site Web :</strong> <a href="https://corescopeyyc.meshmonitoring.com/#/live" rel="noopener">CoreScope YYC</a> <span class="mc-community-external">(externe)</span></li>
-<li><strong>Site Web :</strong> <a href="https://albertamesh.ca/calgary/#rx-channels" rel="noopener">Canaux RX recommandés à Calgary</a> <span class="mc-community-external">(externe)</span></li>
+<li><a href="https://discord.gg/CznDhsRWnJ" rel="noopener">Discord d’Alberta MeshCore</a></li>
+<li><a href="https://albertamesh.ca/calgary/" rel="noopener">Guide de la communauté de Calgary</a></li>
 </ul>
-<p class="mc-community-card__action"><a href="alberta/#community-calgary-meshcore-network">Voir les détails de la fiche</a></p>
+<p class="mc-community-card__action"><a href="alberta/#community-calgary-meshcore-network">Plus de détails</a></p>
 </article>
 <article class="mc-community-card" id="directory-edmonton-meshcore-network" data-community-card data-community-status="active" data-community-override="false" data-community-search="edmonton meshcore network edmonton ab alberta albertamesh edmonton yeg edmonton regional community within alberta meshcore communaute regionale d’edmonton au sein d’alberta meshcore" data-community-points="[{&quot;label&quot;:&quot;Edmonton&quot;,&quot;lat&quot;:53.45752,&quot;lon&quot;:-113.5832}]">
 <div class="mc-community-card__header">
@@ -186,16 +134,11 @@ Filtrez la liste par communauté ou province, ou cherchez votre ville pour trouv
 </div>
 <p class="mc-community-area">Edmonton</p>
 <p class="mc-community-summary">Communauté régionale d’Edmonton au sein d’Alberta MeshCore</p>
-<p><strong>Province ou territoire :</strong> <a href="alberta/">Alberta</a></p>
-<p><strong>Réglages :</strong> Réglages par défaut du Canada</p>
-<p><strong>Fiche révisée :</strong> 2026-08-29</p>
 <ul class="mc-community-contacts">
-<li><strong>Site Web :</strong> <a href="https://albertamesh.ca/edmonton/" rel="noopener">Edmonton sur AlbertaMesh.ca</a> <span class="mc-community-external">(externe)</span></li>
-<li><strong>Site Web :</strong> <a href="https://albertamesh.ca/edmonton/configuration/" rel="noopener">Guide de configuration d’Edmonton</a> <span class="mc-community-external">(externe)</span></li>
-<li><strong>Discord :</strong> <a href="https://discord.gg/CznDhsRWnJ" rel="noopener">Discord d’Alberta MeshCore</a> <span class="mc-community-external">(externe)</span></li>
-<li><strong>MeshMapper :</strong> <a href="https://yeg.meshmapper.net/?lat=53.45752&amp;lon=-113.58320&amp;zoom=10.03" rel="noopener">Carte du réseau d’Edmonton</a> <span class="mc-community-external">(externe)</span></li>
+<li><a href="https://discord.gg/CznDhsRWnJ" rel="noopener">Discord d’Alberta MeshCore</a></li>
+<li><a href="https://albertamesh.ca/edmonton/" rel="noopener">Edmonton sur AlbertaMesh.ca</a></li>
 </ul>
-<p class="mc-community-card__action"><a href="alberta/#community-edmonton-meshcore-network">Voir les détails de la fiche</a></p>
+<p class="mc-community-card__action"><a href="alberta/#community-edmonton-meshcore-network">Plus de détails</a></p>
 </article>
 <article class="mc-community-card" id="directory-yegmesh-ca" data-community-card data-community-status="active" data-community-override="false" data-community-search="yegmesh.ca edmonton ab alberta yeg yeg mesh yegmesh edmonton mesh network community focused on meshcore communaute du reseau maille d’edmonton axee sur meshcore" data-community-points="[{&quot;label&quot;:&quot;Edmonton&quot;,&quot;lat&quot;:53.45752,&quot;lon&quot;:-113.5832}]">
 <div class="mc-community-card__header">
@@ -204,16 +147,11 @@ Filtrez la liste par communauté ou province, ou cherchez votre ville pour trouv
 </div>
 <p class="mc-community-area">Edmonton</p>
 <p class="mc-community-summary">Communauté du réseau maillé d’Edmonton axée sur MeshCore</p>
-<p><strong>Province ou territoire :</strong> <a href="alberta/">Alberta</a></p>
-<p><strong>Réglages :</strong> Réglages par défaut du Canada</p>
-<p><strong>Fiche révisée :</strong> 2026-08-29</p>
 <ul class="mc-community-contacts">
-<li><strong>Site Web :</strong> <a href="https://yegmesh.ca/p/getting-started" rel="noopener">Bien démarrer</a> <span class="mc-community-external">(externe)</span></li>
-<li><strong>Site Web :</strong> <a href="https://yegmesh.ca/p/meshcore-defaults" rel="noopener">Réglages par défaut de MeshCore</a> <span class="mc-community-external">(externe)</span></li>
-<li><strong>Discord :</strong> <a href="https://discord.gg/CznDhsRWnJ" rel="noopener">Discord d’Alberta MeshCore</a> <span class="mc-community-external">(externe)</span></li>
-<li><strong>MeshMapper :</strong> <a href="https://yeg.meshmapper.net/?lat=53.45752&amp;lon=-113.58320&amp;zoom=10.03" rel="noopener">Carte du réseau d’Edmonton</a> <span class="mc-community-external">(externe)</span></li>
+<li><a href="https://discord.gg/CznDhsRWnJ" rel="noopener">Discord d’Alberta MeshCore</a></li>
+<li><a href="https://yegmesh.ca/p/getting-started" rel="noopener">Bien démarrer</a></li>
 </ul>
-<p class="mc-community-card__action"><a href="alberta/#community-yegmesh-ca">Voir les détails de la fiche</a></p>
+<p class="mc-community-card__action"><a href="alberta/#community-yegmesh-ca">Plus de détails</a></p>
 </article>
 <article class="mc-community-card" id="directory-yqlmesh" data-community-card data-community-status="active" data-community-override="false" data-community-search="yqlmesh lethbridge ab alberta yql connecting lethbridge, one node at a time relier lethbridge, un nœud a la fois" data-community-points="[{&quot;label&quot;:&quot;Lethbridge&quot;,&quot;lat&quot;:49.69091,&quot;lon&quot;:-112.86356}]">
 <div class="mc-community-card__header">
@@ -222,20 +160,11 @@ Filtrez la liste par communauté ou province, ou cherchez votre ville pour trouv
 </div>
 <p class="mc-community-area">Lethbridge</p>
 <p class="mc-community-summary">Relier Lethbridge, un nœud à la fois</p>
-<p><strong>Province ou territoire :</strong> <a href="alberta/">Alberta</a></p>
-<p><strong>Réglages :</strong> Réglages par défaut du Canada</p>
-<p><strong>Fiche révisée :</strong> 2026-08-29</p>
 <ul class="mc-community-contacts">
-<li><strong>Site Web :</strong> <a href="https://www.yqlmesh.com/" rel="noopener">Site Web de YQLMesh</a> <span class="mc-community-external">(externe)</span></li>
-<li><strong>Site Web :</strong> <a href="https://albertamesh.ca/lethbridge/" rel="noopener">Page régionale de Lethbridge</a> <span class="mc-community-external">(externe)</span></li>
-<li><strong>Discord :</strong> <a href="https://discord.gg/cFY9GSR37W" rel="noopener">YQLMesh Discord</a> <span class="mc-community-external">(externe)</span></li>
-<li><strong>MeshMapper :</strong> <a href="https://yql.meshmapper.net/?lat=49.69091&amp;lon=-112.86356&amp;zoom=12.14" rel="noopener">Carte du réseau de Lethbridge</a> <span class="mc-community-external">(externe)</span></li>
-<li><strong>Facebook :</strong> <a href="https://facebook.com/groups/YQLMesh" rel="noopener">YQLMesh Facebook</a> <span class="mc-community-external">(externe)</span></li>
-<li><strong>Instagram :</strong> <a href="https://instagram.com/YQLMesh" rel="noopener">YQLMesh Instagram</a> <span class="mc-community-external">(externe)</span></li>
-<li><strong>X :</strong> <a href="https://x.com/YQLMesh" rel="noopener">YQLMesh sur X</a> <span class="mc-community-external">(externe)</span></li>
-<li><strong>Reddit :</strong> <a href="https://www.reddit.com/r/YQLMesh" rel="noopener">Communauté Reddit de YQLMesh</a> <span class="mc-community-external">(externe)</span></li>
+<li><a href="https://discord.gg/cFY9GSR37W" rel="noopener">YQLMesh Discord</a></li>
+<li><a href="https://www.yqlmesh.com/" rel="noopener">Site Web de YQLMesh</a></li>
 </ul>
-<p class="mc-community-card__action"><a href="alberta/#community-yqlmesh">Voir les détails de la fiche</a></p>
+<p class="mc-community-card__action"><a href="alberta/#community-yqlmesh">Plus de détails</a></p>
 </article>
 <article class="mc-community-card" id="directory-southern-alberta" data-community-card data-community-status="active" data-community-override="false" data-community-search="southern alberta southern alberta, including cardston, magrath, raymond, and nearby areas sud de l’alberta, y compris cardston, magrath, raymond et les environs ab alberta cardston magrath raymond" data-community-points="[{&quot;label&quot;:&quot;Lethbridge &amp; deep south&quot;,&quot;lat&quot;:49.684963,&quot;lon&quot;:-112.834123}]">
 <div class="mc-community-card__header">
@@ -243,14 +172,10 @@ Filtrez la liste par communauté ou province, ou cherchez votre ville pour trouv
 <span class="mc-community-status" data-status="active">Active</span>
 </div>
 <p class="mc-community-area">Sud de l’Alberta, y compris Cardston, Magrath, Raymond et les environs</p>
-<p><strong>Province ou territoire :</strong> <a href="alberta/">Alberta</a></p>
-<p><strong>Réglages :</strong> Réglages par défaut du Canada</p>
-<p><strong>Fiche révisée :</strong> 2026-08-29</p>
 <ul class="mc-community-contacts">
-<li><strong>Discord :</strong> Canal régional Canada — Sud de l’Alberta sur le Discord de MeshCore</li>
-<li><strong>Telegram :</strong> <a href="https://t.me/meshtAlta" rel="noopener">Sujet sur Cardston dans Mesh Alberta</a> <span class="mc-community-external">(externe)</span></li>
+<li><a href="https://t.me/meshtAlta" rel="noopener">Sujet sur Cardston dans Mesh Alberta</a></li>
 </ul>
-<p class="mc-community-card__action"><a href="alberta/#community-southern-alberta">Voir les détails de la fiche</a></p>
+<p class="mc-community-card__action"><a href="alberta/#community-southern-alberta">Plus de détails</a></p>
 </article>
 <article class="mc-community-card" id="directory-yyc-meshcore-discord" data-community-card data-community-status="active" data-community-override="false" data-community-search="yyc meshcore discord group calgary ab alberta yyc" data-community-points="[{&quot;label&quot;:&quot;Calgary region&quot;,&quot;lat&quot;:51.016738,&quot;lon&quot;:-114.001493}]">
 <div class="mc-community-card__header">
@@ -258,14 +183,11 @@ Filtrez la liste par communauté ou province, ou cherchez votre ville pour trouv
 <span class="mc-community-status" data-status="active">Active</span>
 </div>
 <p class="mc-community-area">Calgary</p>
-<p><strong>Province ou territoire :</strong> <a href="alberta/">Alberta</a></p>
-<p><strong>Réglages :</strong> Réglages par défaut du Canada</p>
-<p><strong>Fiche révisée :</strong> 2026-08-29</p>
 <ul class="mc-community-contacts">
-<li><strong>Discord :</strong> <a href="https://discord.gg/CznDhsRWnJ" rel="noopener">Discord de YYC MeshCore</a> <span class="mc-community-external">(externe)</span></li>
-<li><strong>Site Web :</strong> <a href="https://meshmonitoring.com/" rel="noopener">MeshMonitoring</a> <span class="mc-community-external">(externe)</span></li>
+<li><a href="https://discord.gg/CznDhsRWnJ" rel="noopener">Discord de YYC MeshCore</a></li>
+<li><a href="https://meshmonitoring.com/" rel="noopener">MeshMonitoring</a></li>
 </ul>
-<p class="mc-community-card__action"><a href="alberta/#community-yyc-meshcore-discord">Voir les détails de la fiche</a></p>
+<p class="mc-community-card__action"><a href="alberta/#community-yyc-meshcore-discord">Plus de détails</a></p>
 </article>
 <article class="mc-community-card" id="directory-stoonmesh" data-community-card data-community-status="active" data-community-override="false" data-community-search="stoonmesh central saskatchewan centre de la saskatchewan sk saskatchewan" data-community-points="[{&quot;label&quot;:&quot;Saskatoon region&quot;,&quot;lat&quot;:52.1708,&quot;lon&quot;:-106.6997}]">
 <div class="mc-community-card__header">
@@ -273,13 +195,10 @@ Filtrez la liste par communauté ou province, ou cherchez votre ville pour trouv
 <span class="mc-community-status" data-status="active">Active</span>
 </div>
 <p class="mc-community-area">Centre de la Saskatchewan</p>
-<p><strong>Province ou territoire :</strong> <a href="saskatchewan/">Saskatchewan</a></p>
-<p><strong>Réglages :</strong> Réglages par défaut du Canada</p>
-<p><strong>Fiche révisée :</strong> 2026-09-24</p>
 <ul class="mc-community-contacts">
-<li><strong>Discord :</strong> <a href="https://discord.gg/StFvPY7BZe" rel="noopener">Discord de StoonMesh</a> <span class="mc-community-external">(externe)</span></li>
+<li><a href="https://discord.gg/StFvPY7BZe" rel="noopener">Discord de StoonMesh</a></li>
 </ul>
-<p class="mc-community-card__action"><a href="saskatchewan/#community-stoonmesh">Voir les détails de la fiche</a></p>
+<p class="mc-community-card__action"><a href="saskatchewan/#community-stoonmesh">Plus de détails</a></p>
 </article>
 <article class="mc-community-card" id="directory-yqrmesh" data-community-card data-community-status="active" data-community-override="false" data-community-search="yqrmesh regina and southern saskatchewan regina et sud de la saskatchewan sk saskatchewan regina southern saskatchewan yqr" data-community-points="[{&quot;label&quot;:&quot;Regina region&quot;,&quot;lat&quot;:50.4319,&quot;lon&quot;:-104.6658}]">
 <div class="mc-community-card__header">
@@ -287,12 +206,9 @@ Filtrez la liste par communauté ou province, ou cherchez votre ville pour trouv
 <span class="mc-community-status" data-status="active">Active</span>
 </div>
 <p class="mc-community-area">Regina et sud de la Saskatchewan</p>
-<p><strong>Province ou territoire :</strong> <a href="saskatchewan/">Saskatchewan</a></p>
-<p><strong>Réglages :</strong> Réglages par défaut du Canada</p>
-<p><strong>Fiche révisée :</strong> 2026-08-29</p>
 <ul class="mc-community-contacts">
 </ul>
-<p class="mc-community-card__action"><a href="saskatchewan/#community-yqrmesh">Voir les détails de la fiche</a></p>
+<p class="mc-community-card__action"><a href="saskatchewan/#community-yqrmesh">Plus de détails</a></p>
 </article>
 <article class="mc-community-card" id="directory-winnipeg-meshcore" data-community-card data-community-status="forming" data-community-override="false" data-community-search="winnipeg meshcore winnipeg, manitoba winnipeg (manitoba) mb manitoba winnipeg wpg ywg" data-community-points="[{&quot;label&quot;:&quot;Winnipeg&quot;,&quot;lat&quot;:49.896517,&quot;lon&quot;:-97.130584}]">
 <div class="mc-community-card__header">
@@ -300,14 +216,11 @@ Filtrez la liste par communauté ou province, ou cherchez votre ville pour trouv
 <span class="mc-community-status" data-status="forming">En formation</span>
 </div>
 <p class="mc-community-area">Winnipeg (Manitoba)</p>
-<p><strong>Province ou territoire :</strong> <a href="manitoba/">Manitoba</a></p>
-<p><strong>Réglages :</strong> Réglages par défaut du Canada</p>
-<p><strong>Fiche révisée :</strong> 2026-09-24</p>
 <ul class="mc-community-contacts">
-<li><strong>Site Web :</strong> <a href="https://winnipegmeshcore.neocities.org/" rel="noopener">Site Web de Winnipeg MeshCore</a> <span class="mc-community-external">(externe)</span></li>
-<li><strong>Matrix :</strong> <a href="https://matrix.to/#/#winnipeg-meshcore:matrix.org" rel="noopener">Salon de Winnipeg MeshCore</a> <span class="mc-community-external">(externe)</span></li>
+<li><a href="https://winnipegmeshcore.neocities.org/" rel="noopener">Site Web de Winnipeg MeshCore</a></li>
+<li><a href="https://matrix.to/#/#winnipeg-meshcore:matrix.org" rel="noopener">Salon de Winnipeg MeshCore</a></li>
 </ul>
-<p class="mc-community-card__action"><a href="manitoba/#community-winnipeg-meshcore">Voir les détails de la fiche</a></p>
+<p class="mc-community-card__action"><a href="manitoba/#community-winnipeg-meshcore">Plus de détails</a></p>
 </article>
 <article class="mc-community-card" id="directory-greater-ottawa-mesh-enthusiasts" data-community-card data-community-status="active" data-community-override="false" data-community-search="greater ottawa mesh enthusiasts eastern ontario and western quebec est de l’ontario et ouest du quebec on ontario ottawa eastern ontario western quebec" data-community-points="[{&quot;label&quot;:&quot;Ottawa&quot;,&quot;lat&quot;:45.4215,&quot;lon&quot;:-75.6972},{&quot;label&quot;:&quot;Outaouais / Gatineau&quot;,&quot;lat&quot;:45.48,&quot;lon&quot;:-75.65}]">
 <div class="mc-community-card__header">
@@ -315,14 +228,11 @@ Filtrez la liste par communauté ou province, ou cherchez votre ville pour trouv
 <span class="mc-community-status" data-status="active">Active</span>
 </div>
 <p class="mc-community-area">Est de l’Ontario et ouest du Québec</p>
-<p><strong>Province ou territoire :</strong> <a href="ontario/">Ontario</a></p>
-<p><strong>Réglages :</strong> Réglages par défaut du Canada</p>
-<p><strong>Fiche révisée :</strong> 2026-08-29</p>
 <ul class="mc-community-contacts">
-<li><strong>Discord :</strong> <a href="https://discord.gg/WSyNd8SfNr" rel="noopener">Discord de Greater Ottawa Mesh Enthusiasts</a> <span class="mc-community-external">(externe)</span></li>
-<li><strong>Site Web :</strong> <a href="https://ottawamesh.ca/" rel="noopener">Site Web d’Ottawa Mesh</a> <span class="mc-community-external">(externe)</span></li>
+<li><a href="https://discord.gg/WSyNd8SfNr" rel="noopener">Discord de Greater Ottawa Mesh Enthusiasts</a></li>
+<li><a href="https://ottawamesh.ca/" rel="noopener">Site Web d’Ottawa Mesh</a></li>
 </ul>
-<p class="mc-community-card__action"><a href="ontario/#community-greater-ottawa-mesh-enthusiasts">Voir les détails de la fiche</a></p>
+<p class="mc-community-card__action"><a href="ontario/#community-greater-ottawa-mesh-enthusiasts">Plus de détails</a></p>
 </article>
 <article class="mc-community-card" id="directory-gta-lora-meshes" data-community-card data-community-status="active" data-community-override="false" data-community-search="gta+-lora-meshes southern ontario sud de l’ontario on ontario gta" data-community-points="[{&quot;label&quot;:&quot;Toronto&quot;,&quot;lat&quot;:43.6532,&quot;lon&quot;:-79.3832}]">
 <div class="mc-community-card__header">
@@ -330,13 +240,10 @@ Filtrez la liste par communauté ou province, ou cherchez votre ville pour trouv
 <span class="mc-community-status" data-status="active">Active</span>
 </div>
 <p class="mc-community-area">Sud de l’Ontario</p>
-<p><strong>Province ou territoire :</strong> <a href="ontario/">Ontario</a></p>
-<p><strong>Réglages :</strong> Réglages par défaut du Canada</p>
-<p><strong>Fiche révisée :</strong> 2026-08-29</p>
 <ul class="mc-community-contacts">
-<li><strong>Discord :</strong> <a href="https://discord.gg/wSHbeb86r4" rel="noopener">Discord de GTA+-Lora-Meshes</a> <span class="mc-community-external">(externe)</span></li>
+<li><a href="https://discord.gg/wSHbeb86r4" rel="noopener">Discord de GTA+-Lora-Meshes</a></li>
 </ul>
-<p class="mc-community-card__action"><a href="ontario/#community-gta-lora-meshes">Voir les détails de la fiche</a></p>
+<p class="mc-community-card__action"><a href="ontario/#community-gta-lora-meshes">Plus de détails</a></p>
 </article>
 <article class="mc-community-card" id="directory-quinte-mesh-network" data-community-card data-community-status="active" data-community-override="false" data-community-search="quinte mesh network quinte region, including belleville, trenton, prince edward county, and nearby areas region de quinte, y compris belleville, trenton, le comte de prince edward et les environs on ontario belleville trenton prince edward county quinte region" data-community-points="[{&quot;label&quot;:&quot;Hastings / Belleville&quot;,&quot;lat&quot;:44.1628,&quot;lon&quot;:-77.3832},{&quot;label&quot;:&quot;Prince Edward County&quot;,&quot;lat&quot;:44.0007,&quot;lon&quot;:-77.25}]">
 <div class="mc-community-card__header">
@@ -344,14 +251,11 @@ Filtrez la liste par communauté ou province, ou cherchez votre ville pour trouv
 <span class="mc-community-status" data-status="active">Active</span>
 </div>
 <p class="mc-community-area">Région de Quinte, y compris Belleville, Trenton, le comté de Prince Edward et les environs</p>
-<p><strong>Province ou territoire :</strong> <a href="ontario/">Ontario</a></p>
-<p><strong>Réglages :</strong> Réglages par défaut du Canada</p>
-<p><strong>Fiche révisée :</strong> 2026-08-29</p>
 <ul class="mc-community-contacts">
-<li><strong>Discord :</strong> <a href="https://discord.gg/V5esJEP67X" rel="noopener">Discord de Quinte Mesh Network</a> <span class="mc-community-external">(externe)</span></li>
-<li><strong>Site Web :</strong> <a href="https://quintemesh.ca/" rel="noopener">Site Web de Quinte Mesh Network</a> <span class="mc-community-external">(externe)</span></li>
+<li><a href="https://discord.gg/V5esJEP67X" rel="noopener">Discord de Quinte Mesh Network</a></li>
+<li><a href="https://quintemesh.ca/" rel="noopener">Site Web de Quinte Mesh Network</a></li>
 </ul>
-<p class="mc-community-card__action"><a href="ontario/#community-quinte-mesh-network">Voir les détails de la fiche</a></p>
+<p class="mc-community-card__action"><a href="ontario/#community-quinte-mesh-network">Plus de détails</a></p>
 </article>
 <article class="mc-community-card" id="directory-charlevoix-yml" data-community-card data-community-status="active" data-community-override="false" data-community-search="reseau mesh de charlevoix (yml) charlevoix, including la malbaie charlevoix, y compris la malbaie qc quebec la malbaie charlevoix yml" data-community-points="[{&quot;label&quot;:&quot;La Malbaie&quot;,&quot;lat&quot;:47.652419,&quot;lon&quot;:-70.14951}]">
 <div class="mc-community-card__header">
@@ -359,13 +263,10 @@ Filtrez la liste par communauté ou province, ou cherchez votre ville pour trouv
 <span class="mc-community-status" data-status="active">Active</span>
 </div>
 <p class="mc-community-area">Charlevoix, y compris La Malbaie</p>
-<p><strong>Province ou territoire :</strong> <a href="quebec/">Québec</a></p>
-<p><strong>Réglages :</strong> Réglages par défaut du Canada</p>
-<p><strong>Fiche révisée :</strong> 2026-08-29</p>
 <ul class="mc-community-contacts">
-<li><strong>Site Web :</strong> <a href="https://chxmesh.ca/" rel="noopener">Réseau MESH de Charlevoix</a> <span class="mc-community-external">(externe)</span></li>
+<li><a href="https://chxmesh.ca/" rel="noopener">Réseau MESH de Charlevoix</a></li>
 </ul>
-<p class="mc-community-card__action"><a href="quebec/#community-charlevoix-yml">Voir les détails de la fiche</a></p>
+<p class="mc-community-card__action"><a href="quebec/#community-charlevoix-yml">Plus de détails</a></p>
 </article>
 <article class="mc-community-card" id="directory-mesh-quebec" data-community-card data-community-status="active" data-community-override="false" data-community-search="mesh quebec quebec qc" data-community-points="[{&quot;label&quot;:&quot;Montréal&quot;,&quot;lat&quot;:45.5017,&quot;lon&quot;:-73.5673},{&quot;label&quot;:&quot;Capitale-Nationale&quot;,&quot;lat&quot;:46.8139,&quot;lon&quot;:-71.208},{&quot;label&quot;:&quot;Saguenay–Lac-Saint-Jean&quot;,&quot;lat&quot;:48.428,&quot;lon&quot;:-71.068}]">
 <div class="mc-community-card__header">
@@ -373,13 +274,10 @@ Filtrez la liste par communauté ou province, ou cherchez votre ville pour trouv
 <span class="mc-community-status" data-status="active">Active</span>
 </div>
 <p class="mc-community-area">Québec</p>
-<p><strong>Province ou territoire :</strong> <a href="quebec/">Québec</a></p>
-<p><strong>Réglages :</strong> Réglages par défaut du Canada</p>
-<p><strong>Fiche révisée :</strong> 2026-08-29</p>
 <ul class="mc-community-contacts">
-<li><strong>Telegram :</strong> <a href="https://t.me/meshtQuebec" rel="noopener">Mesh Quebec Telegram</a> <span class="mc-community-external">(externe)</span></li>
+<li><a href="https://t.me/meshtQuebec" rel="noopener">Mesh Quebec Telegram</a></li>
 </ul>
-<p class="mc-community-card__action"><a href="quebec/#community-mesh-quebec">Voir les détails de la fiche</a></p>
+<p class="mc-community-card__action"><a href="quebec/#community-mesh-quebec">Plus de détails</a></p>
 </article>
 <article class="mc-community-card" id="directory-montreal-mesh" data-community-card data-community-status="active" data-community-override="false" data-community-search="montreal mesh greater montreal grand montreal qc quebec montreal" data-community-points="[{&quot;label&quot;:&quot;Montréal&quot;,&quot;lat&quot;:45.5017,&quot;lon&quot;:-73.5673}]">
 <div class="mc-community-card__header">
@@ -387,13 +285,10 @@ Filtrez la liste par communauté ou province, ou cherchez votre ville pour trouv
 <span class="mc-community-status" data-status="active">Active</span>
 </div>
 <p class="mc-community-area">Grand Montréal</p>
-<p><strong>Province ou territoire :</strong> <a href="quebec/">Québec</a></p>
-<p><strong>Réglages :</strong> Réglages par défaut du Canada</p>
-<p><strong>Fiche révisée :</strong> 2026-08-29</p>
 <ul class="mc-community-contacts">
-<li><strong>Site Web :</strong> <a href="https://www.montrealmesh.ca" rel="noopener">Site Web de Montreal Mesh</a> <span class="mc-community-external">(externe)</span></li>
+<li><a href="https://www.montrealmesh.ca" rel="noopener">Site Web de Montreal Mesh</a></li>
 </ul>
-<p class="mc-community-card__action"><a href="quebec/#community-montreal-mesh">Voir les détails de la fiche</a></p>
+<p class="mc-community-card__action"><a href="quebec/#community-montreal-mesh">Plus de détails</a></p>
 </article>
 <article class="mc-community-card" id="directory-reseau-mesh-capitale-yqb" data-community-card data-community-status="active" data-community-override="false" data-community-search="reseau mesh de la capitale yqb quebec city ville de quebec qc quebec yqb capitale" data-community-points="[{&quot;label&quot;:&quot;Capitale-Nationale&quot;,&quot;lat&quot;:46.8139,&quot;lon&quot;:-71.208}]">
 <div class="mc-community-card__header">
@@ -401,13 +296,10 @@ Filtrez la liste par communauté ou province, ou cherchez votre ville pour trouv
 <span class="mc-community-status" data-status="active">Active</span>
 </div>
 <p class="mc-community-area">Ville de Québec</p>
-<p><strong>Province ou territoire :</strong> <a href="quebec/">Québec</a></p>
-<p><strong>Réglages :</strong> Réglages par défaut du Canada</p>
-<p><strong>Fiche révisée :</strong> 2026-08-29</p>
 <ul class="mc-community-contacts">
-<li><strong>Discord :</strong> <a href="https://discord.gg/UhGjTF2MfA" rel="noopener">Discord du Réseau Mesh de la Capitale YQB</a> <span class="mc-community-external">(externe)</span></li>
+<li><a href="https://discord.gg/UhGjTF2MfA" rel="noopener">Discord du Réseau Mesh de la Capitale YQB</a></li>
 </ul>
-<p class="mc-community-card__action"><a href="quebec/#community-reseau-mesh-capitale-yqb">Voir les détails de la fiche</a></p>
+<p class="mc-community-card__action"><a href="quebec/#community-reseau-mesh-capitale-yqb">Plus de détails</a></p>
 </article>
 <article class="mc-community-card" id="directory-reseau-mesh-saguenay-lac-saint-jean-ytf" data-community-card data-community-status="active" data-community-override="false" data-community-search="reseau mesh du saguenay lac st-jean ytf saguenay–lac-saint-jean (ytf) qc quebec saguenay lac-saint-jean ytf saguenay lac st-jean" data-community-points="[{&quot;label&quot;:&quot;Saguenay–Lac-Saint-Jean&quot;,&quot;lat&quot;:48.428,&quot;lon&quot;:-71.068}]">
 <div class="mc-community-card__header">
@@ -415,14 +307,11 @@ Filtrez la liste par communauté ou province, ou cherchez votre ville pour trouv
 <span class="mc-community-status" data-status="active">Active</span>
 </div>
 <p class="mc-community-area">Saguenay–Lac-Saint-Jean (YTF)</p>
-<p><strong>Province ou territoire :</strong> <a href="quebec/">Québec</a></p>
-<p><strong>Réglages :</strong> Réglages par défaut du Canada</p>
-<p><strong>Fiche révisée :</strong> 2026-08-29</p>
 <ul class="mc-community-contacts">
-<li><strong>Facebook :</strong> <a href="https://www.facebook.com/share/g/1GjkHAyZAM/" rel="noopener">Facebook du Réseau Mesh du Saguenay–Lac-Saint-Jean YTF</a> <span class="mc-community-external">(externe)</span></li>
-<li><strong>MeshMapper :</strong> <a href="https://ytf.meshmapper.net/" rel="noopener">Carte MeshMapper du Réseau Mesh du Saguenay–Lac-Saint-Jean YTF</a> <span class="mc-community-external">(externe)</span></li>
+<li><a href="https://www.facebook.com/share/g/1GjkHAyZAM/" rel="noopener">Facebook du Réseau Mesh du Saguenay–Lac-Saint-Jean YTF</a></li>
+<li><a href="https://ytf.meshmapper.net/" rel="noopener">Carte MeshMapper du Réseau Mesh du Saguenay–Lac-Saint-Jean YTF</a></li>
 </ul>
-<p class="mc-community-card__action"><a href="quebec/#community-reseau-mesh-saguenay-lac-saint-jean-ytf">Voir les détails de la fiche</a></p>
+<p class="mc-community-card__action"><a href="quebec/#community-reseau-mesh-saguenay-lac-saint-jean-ytf">Plus de détails</a></p>
 </article>
 <article class="mc-community-card" id="directory-reseau-libre" data-community-card data-community-status="active" data-community-override="false" data-community-search="reseau libre montreal qc quebec" data-community-points="[{&quot;label&quot;:&quot;Montréal&quot;,&quot;lat&quot;:45.5017,&quot;lon&quot;:-73.5673}]">
 <div class="mc-community-card__header">
@@ -430,13 +319,10 @@ Filtrez la liste par communauté ou province, ou cherchez votre ville pour trouv
 <span class="mc-community-status" data-status="active">Active</span>
 </div>
 <p class="mc-community-area">Montréal</p>
-<p><strong>Province ou territoire :</strong> <a href="quebec/">Québec</a></p>
-<p><strong>Réglages :</strong> Réglages par défaut du Canada</p>
-<p><strong>Fiche révisée :</strong> 2026-08-29</p>
 <ul class="mc-community-contacts">
-<li><strong>Site Web :</strong> <a href="https://lora.reseaulibre.ca/" rel="noopener">Site Web de Réseau Libre</a> <span class="mc-community-external">(externe)</span></li>
+<li><a href="https://lora.reseaulibre.ca/" rel="noopener">Site Web de Réseau Libre</a></li>
 </ul>
-<p class="mc-community-card__action"><a href="quebec/#community-reseau-libre">Voir les détails de la fiche</a></p>
+<p class="mc-community-card__action"><a href="quebec/#community-reseau-libre">Plus de détails</a></p>
 </article>
 <article class="mc-community-card" id="directory-southern-new-brunswick" data-community-card data-community-status="forming" data-community-override="false" data-community-search="southern new brunswick fredericton, saint john, moncton, and nearby areas sud du nouveau-brunswick, y compris fredericton, saint john, moncton et les environs nb new brunswick nouveau-brunswick fredericton saint john moncton" data-community-points="[{&quot;label&quot;:&quot;York / Fredericton&quot;,&quot;lat&quot;:45.8689,&quot;lon&quot;:-66.5372},{&quot;label&quot;:&quot;Saint John&quot;,&quot;lat&quot;:45.3161,&quot;lon&quot;:-65.8903},{&quot;label&quot;:&quot;Westmorland / Moncton&quot;,&quot;lat&quot;:46.1122,&quot;lon&quot;:-64.6786}]">
 <div class="mc-community-card__header">
@@ -444,13 +330,10 @@ Filtrez la liste par communauté ou province, ou cherchez votre ville pour trouv
 <span class="mc-community-status" data-status="forming">En formation</span>
 </div>
 <p class="mc-community-area">Sud du Nouveau-Brunswick, y compris Fredericton, Saint John, Moncton et les environs</p>
-<p><strong>Province ou territoire :</strong> <a href="new-brunswick/">Nouveau-Brunswick</a></p>
-<p><strong>Réglages :</strong> Réglages par défaut du Canada</p>
-<p><strong>Fiche révisée :</strong> 2026-08-29</p>
 <ul class="mc-community-contacts">
-<li><strong>Facebook :</strong> <a href="https://www.facebook.com/groups/613466831163684" rel="noopener">MESHCORE Saint John, N.B.</a> <span class="mc-community-external">(externe)</span></li>
+<li><a href="https://www.facebook.com/groups/613466831163684" rel="noopener">MESHCORE Saint John, N.B.</a></li>
 </ul>
-<p class="mc-community-card__action"><a href="new-brunswick/#community-southern-new-brunswick">Voir les détails de la fiche</a></p>
+<p class="mc-community-card__action"><a href="new-brunswick/#community-southern-new-brunswick">Plus de détails</a></p>
 </article>
 <article class="mc-community-card" id="directory-lunenburg-county-mesh" data-community-card data-community-status="active" data-community-override="false" data-community-search="lunenburg county mesh lunenburg county comte de lunenburg ns nova scotia nouvelle-ecosse" data-community-points="[{&quot;label&quot;:&quot;Lunenburg&quot;,&quot;lat&quot;:44.5070278,&quot;lon&quot;:-64.4344556}]">
 <div class="mc-community-card__header">
@@ -458,13 +341,10 @@ Filtrez la liste par communauté ou province, ou cherchez votre ville pour trouv
 <span class="mc-community-status" data-status="active">Active</span>
 </div>
 <p class="mc-community-area">Comté de Lunenburg</p>
-<p><strong>Province ou territoire :</strong> <a href="nova-scotia/">Nouvelle-Écosse</a></p>
-<p><strong>Réglages :</strong> Réglages par défaut du Canada</p>
-<p><strong>Fiche révisée :</strong> 2026-08-29</p>
 <ul class="mc-community-contacts">
-<li><strong>Site Web :</strong> <a href="http://www.lunenburgcountymesh.ca" rel="noopener">Site Web de Lunenburg County Mesh</a> <span class="mc-community-external">(externe)</span></li>
+<li><a href="http://www.lunenburgcountymesh.ca" rel="noopener">Site Web de Lunenburg County Mesh</a></li>
 </ul>
-<p class="mc-community-card__action"><a href="nova-scotia/#community-lunenburg-county-mesh">Voir les détails de la fiche</a></p>
+<p class="mc-community-card__action"><a href="nova-scotia/#community-lunenburg-county-mesh">Plus de détails</a></p>
 </article>
 </div>
 
@@ -490,8 +370,8 @@ Mettez à jour les répéteurs dont le micrologiciel est antérieur à **1.14** 
 ne peuvent pas relayer les parcours multioctets.
 
 !!! warning "Vérifiez d’abord les réglages locaux"
-    Les appareils à proximité doivent utiliser les mêmes réglages. Une fiche marquée
-    **Réglages locaux différents** l’emporte sur les réglages par défaut du Canada
+    Les appareils à proximité doivent utiliser les mêmes réglages. Une fiche qui indique des
+    **Réglages radio** l’emporte sur les réglages par défaut du Canada
     après confirmation auprès de la communauté indiquée.
 
 ## Parcourir par province ou territoire

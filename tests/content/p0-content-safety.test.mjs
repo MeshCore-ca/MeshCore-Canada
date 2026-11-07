@@ -125,11 +125,10 @@ test("Saskatchewan directory and generated listing agree on the national baselin
   const index = read("docs/provinces/index.md");
   const sk = read("docs/provinces/saskatchewan.md");
 
-  assert.match(
-    index,
-    /id="directory-stoonmesh"[\s\S]*?<strong>Settings:<\/strong> Uses the Canada defaults/
-  );
-  assert.match(index, /<strong>1<\/strong> with different local settings/);
+  const card = (id) => index.slice(index.indexOf(`id="directory-${id}"`), index.indexOf("</article>", index.indexOf(`id="directory-${id}"`)));
+  // Directory cards only mention radio settings when a community differs from the Canada defaults.
+  assert.doesNotMatch(card("stoonmesh"), /Radio settings/);
+  assert.match(card("bc-mesh"), /<strong>Radio settings:<\/strong> Different local settings/);
   assert.match(sk, /<h3>StoonMesh<\/h3>[\s\S]*?<dd>Uses the Canada defaults<\/dd>/);
   assert.match(sk, /<h3>YQRMesh<\/h3>[\s\S]*?<dd>Uses the Canada defaults<\/dd>/);
   assert.doesNotMatch(sk, /1-byte|Local setting differs/);

@@ -514,7 +514,7 @@ def front_matter(*, title: str, description: str, task: str, metadata: dict[str,
                 "status_notice: false",
                 "page_scripts:",
                 "  - assets/javascripts/place-search.js?v=20261102-9",
-                "  - assets/javascripts/communities.js?v=20260925-2",
+                "  - assets/javascripts/communities.js?v=20261107-1",
             ]
         )
     lines.extend(["---", ""])
@@ -586,6 +586,20 @@ def render_contacts(community: dict[str, Any], *, indent: str = "") -> list[str]
             f"{indent}<li><strong>{contact_type_label(contact['type'])}:</strong> {value}</li>"
         )
     return lines
+
+
+def card_contacts(community: dict[str, Any], limit: int = 2) -> list[dict[str, Any]]:
+    """The first Discord link, then other links, up to `limit`, for the compact directory card."""
+    linked = [contact for contact in community["contacts"] if contact["url"]]
+    ordered = [c for c in linked if c["type"] == "discord"][:1] + [c for c in linked if c["type"] != "discord"]
+    return ordered[:limit]
+
+
+def render_card_links(contacts: list[dict[str, Any]], label=lambda text: text) -> list[str]:
+    return [
+        f'<li><a href="{html.escape(contact["url"], quote=True)}" rel="noopener">{html.escape(label(contact["label"]))}</a></li>'
+        for contact in contacts
+    ]
 
 
 def contact_check_label(contacts: list[dict[str, Any]]) -> str:
@@ -681,20 +695,16 @@ def render_directory_card(community: dict[str, Any], page: dict[str, Any]) -> st
     ]
     if community.get("summary"):
         lines.append(f'<p class="mc-community-summary">{html.escape(community["summary"])}</p>')
+    if community["settings"]["overrides"]:
+        lines.append(f"<p><strong>Radio settings:</strong> {render_settings(community, compact=True)}</p>")
     lines.extend(
         [
-        (
-            f'<p><strong>Province:</strong> <a href="{page["slug"]}/">'
-            f'{html.escape(page["title"].title())}</a></p>'
-        ),
-        f"<p><strong>Settings:</strong> {render_settings(community, compact=True)}</p>",
-        f"<p><strong>Listing reviewed:</strong> {verification_label(community)}</p>",
         '<ul class="mc-community-contacts">',
-        *render_contacts(community),
+        *render_card_links(card_contacts(community)),
         "</ul>",
         (
             f'<p class="mc-community-card__action"><a href="{page["slug"]}/#community-{community["id"]}">'
-            "View listing details</a></p>"
+            "More details</a></p>"
         ),
         "</article>",
         ]
@@ -727,16 +737,7 @@ def render_index(data: dict[str, Any]) -> str:
         "Type a community or province to filter the list, or look up your city to find the closest communities.",
         "<noscript><p>City lookup needs JavaScript. All community listings are available below.</p></noscript>",
         "",
-        '!!! note "Community information can change"',
-        "    This information could be out of date!",
-        "",
-        '<div class="mc-directory-summary" aria-label="Directory summary">',
-        f"<span><strong>{len(communities)}</strong> listings</span>",
-        f"<span><strong>{active}</strong> listed active</span>",
-        f"<span><strong>{forming}</strong> listed forming</span>",
-        f"<span><strong>{overrides}</strong> with different local settings</span>",
-        "</div>",
-        "",
+
         '<form class="mc-directory-tools" data-community-directory>',
         '  <div class="mc-directory-tools__search">',
         '    <label for="community-search">Place, province, community, or alias</label>',
@@ -745,18 +746,6 @@ def render_index(data: dict[str, Any]) -> str:
             'autocomplete="address-level2" maxlength="160" placeholder="Try Cambridge, ON or YQL">'
         ),
         "  </div>",
-        '  <div class="mc-directory-tools__filter">',
-        '    <label for="community-status">Status</label>',
-        '    <select id="community-status">',
-        '      <option value="">All statuses</option>',
-        '      <option value="active">Active</option>',
-        '      <option value="forming">Forming</option>',
-        "    </select>",
-        "  </div>",
-        '  <label class="mc-directory-tools__check">',
-        '    <input id="community-override" type="checkbox">',
-        "    Has a local settings override",
-        "  </label>",
         '  <div class="mc-directory-actions"><button class="md-button md-button--primary" type="submit" data-community-locate>Find nearby</button>',
         '  <button class="md-button" type="button" data-community-clear>Clear</button></div>',
         '  <output class="mc-directory-tools__count" data-community-count aria-live="polite">',
@@ -770,7 +759,7 @@ def render_index(data: dict[str, Any]) -> str:
         "",
         '<div class="mc-community-empty" data-community-empty hidden>',
         "  <h2>No matching community</h2>",
-        "  <p>Choose Find nearby to look up your city, or clear the filters.</p>",
+        "  <p>Choose Find nearby to look up your city, or clear the search.</p>",
         '  <button class="md-button" type="button" data-community-clear>Clear search</button>',
         '  <p><a href="../submit-idea/">Add a missing community</a></p>',
         "</div>",
@@ -812,7 +801,7 @@ def render_index(data: dict[str, Any]) -> str:
             "on multi-byte paths; those older versions cannot forward them.",
             "",
             "!!! warning \"Check local settings first\"",
-            "    Nearby devices need matching settings. A card marked **Different local settings**",
+            "    Nearby devices need matching settings. A card that lists **Radio settings**",
             "    takes precedence over the Canada defaults after you confirm it with the",
             "    listed community.",
             "",
@@ -1270,18 +1259,16 @@ def render_directory_card_fr(
         )
     lines.extend(
         [
-            (
-                f'<p><strong>Province ou territoire :</strong> <a href="{page["slug"]}/">'
-                f'{html.escape(page_translation["title"])}</a></p>'
+            *(
+                [f"<p><strong>Réglages radio :</strong> {render_settings_fr(community, compact=True)}</p>"]
+                if community["settings"]["overrides"] else []
             ),
-            f"<p><strong>Réglages :</strong> {render_settings_fr(community, compact=True)}</p>",
-            f"<p><strong>Fiche révisée :</strong> {verification_label_fr(community)}</p>",
             '<ul class="mc-community-contacts">',
-            *render_contacts_fr(community),
+            *render_card_links(card_contacts(community), contact_label_fr),
             "</ul>",
             (
                 f'<p class="mc-community-card__action"><a href="{page["slug"]}/#community-{community["id"]}">'
-                "Voir les détails de la fiche</a></p>"
+                "Plus de détails</a></p>"
             ),
             "</article>",
         ]
@@ -1319,19 +1306,7 @@ def render_index_fr(data: dict[str, Any], french: dict[str, Any]) -> str:
         "Filtrez la liste par communauté ou province, ou cherchez votre ville pour trouver les communautés les plus proches.",
         "<noscript><p>La recherche de villes nécessite JavaScript. Toutes les communautés sont indiquées ci-dessous.</p></noscript>",
         "",
-        '!!! note "Les renseignements sur les communautés peuvent changer"',
-        "    Ces renseignements pourraient être périmés !",
-        "",
-        '<div class="mc-directory-summary" aria-label="Résumé du répertoire">',
-        f"<span><strong>{len(communities)}</strong> {'fiche' if len(communities) == 1 else 'fiches'}</span>",
-        f"<span><strong>{active}</strong> {'fiche active' if active == 1 else 'fiches actives'}</span>",
-        f"<span><strong>{forming}</strong> {'fiche en formation' if forming == 1 else 'fiches en formation'}</span>",
-        (
-            f"<span><strong>{overrides}</strong> "
-            f"{'fiche avec des réglages locaux différents' if overrides == 1 else 'fiches avec des réglages locaux différents'}</span>"
-        ),
-        "</div>",
-        "",
+
         '<form class="mc-directory-tools" data-community-directory data-community-locale="fr">',
         '  <div class="mc-directory-tools__search">',
         '    <label for="community-search">Lieu, province, communauté ou alias</label>',
@@ -1340,18 +1315,6 @@ def render_index_fr(data: dict[str, Any], french: dict[str, Any]) -> str:
             'autocomplete="address-level2" maxlength="160" placeholder="Essayez Cambridge, ON ou YQL">'
         ),
         "  </div>",
-        '  <div class="mc-directory-tools__filter">',
-        '    <label for="community-status">État</label>',
-        '    <select id="community-status">',
-        '      <option value="">Tous les états</option>',
-        '      <option value="active">Active</option>',
-        '      <option value="forming">En formation</option>',
-        "    </select>",
-        "  </div>",
-        '  <label class="mc-directory-tools__check">',
-        '    <input id="community-override" type="checkbox">',
-        "    Possède des réglages locaux différents",
-        "  </label>",
         '  <div class="mc-directory-actions"><button class="md-button md-button--primary" type="submit" data-community-locate>Trouver à proximité</button>',
         '  <button class="md-button" type="button" data-community-clear>Effacer</button></div>',
         '  <output class="mc-directory-tools__count" data-community-count aria-live="polite">',
@@ -1365,7 +1328,7 @@ def render_index_fr(data: dict[str, Any], french: dict[str, Any]) -> str:
         "",
         '<div class="mc-community-empty" data-community-empty hidden>',
         "  <h2>Aucune communauté correspondante</h2>",
-        "  <p>Choisissez Trouver à proximité pour chercher votre ville, ou effacez les filtres.</p>",
+        "  <p>Choisissez Trouver à proximité pour chercher votre ville, ou effacez la recherche.</p>",
         '  <button class="md-button" type="button" data-community-clear>Effacer la recherche</button>',
         '  <p><a href="../submit-idea/">Ajouter une communauté manquante</a></p>',
         "</div>",
@@ -1415,8 +1378,8 @@ def render_index_fr(data: dict[str, Any], french: dict[str, Any]) -> str:
             "ne peuvent pas relayer les parcours multioctets.",
             "",
             '!!! warning "Vérifiez d’abord les réglages locaux"',
-            "    Les appareils à proximité doivent utiliser les mêmes réglages. Une fiche marquée",
-            "    **Réglages locaux différents** l’emporte sur les réglages par défaut du Canada",
+            "    Les appareils à proximité doivent utiliser les mêmes réglages. Une fiche qui indique des",
+            "    **Réglages radio** l’emporte sur les réglages par défaut du Canada",
             "    après confirmation auprès de la communauté indiquée.",
             "",
             "## Parcourir par province ou territoire",

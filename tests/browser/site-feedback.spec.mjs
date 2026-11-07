@@ -30,7 +30,7 @@ for (const locale of ["", "fr/"]) {
     });
     await page.goto(siteRoute(`/${locale}provinces/`));
     await expect(page.locator(".mc-page-status")).toHaveCount(0);
-    await expect(page.locator(".admonition.note")).toContainText(locale ? "Ces renseignements pourraient être périmés" : "This information could be out of date!");
+    await expect(page.locator(".mc-directory-summary, #community-status, #community-override")).toHaveCount(0);
     await page.locator("#community-search").fill("Cambridge");
     expect(lookups).toHaveLength(0);
     await page.locator("#community-search").press("Enter");

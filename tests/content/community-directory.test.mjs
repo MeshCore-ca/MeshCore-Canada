@@ -262,8 +262,11 @@ test("overview counts, empty states, and page metadata are generated", () => {
   const forming = data.communities.filter(
     (community) => community.status === "forming",
   ).length;
-  assert.match(index, new RegExp(`<strong>${active}</strong> listed active`));
-  assert.match(index, new RegExp(`<strong>${forming}</strong> listed forming`));
+  assert.ok(active > 0 && forming >= 0);
+  // The directory is for visitors: a search box and Find nearby, no stats bar or maintainer filters.
+  for (const page of [index, indexFr]) {
+    assert.doesNotMatch(page, /mc-directory-summary|id="community-status"|id="community-override"/);
+  }
   assert.match(indexFr, new RegExp(`${data.communities.length} communautés affichées`));
   assert.match(directoryScript, /document\.documentElement\.lang/);
   assert.match(directoryScript, /communauté affichée/);
@@ -406,7 +409,7 @@ test("issues 94 and 95 keep corrected contacts and Winnipeg status in both langu
     }
     for (const page of [index, manitoba]) {
       assert.ok(page.includes('href="https://winnipegmeshcore.neocities.org/"'));
-      assert.match(page, /<strong>Matrix\s*:<\/strong>/);
+      if (page === manitoba) assert.match(page, /<strong>Matrix\s*:<\/strong>/);
       assert.ok(page.includes('href="https://matrix.to/#/#winnipeg-meshcore:matrix.org"'));
     }
     assert.ok(manitoba.includes('id="community-winnipeg-meshcore"'));

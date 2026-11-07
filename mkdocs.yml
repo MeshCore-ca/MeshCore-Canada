@@ -117,11 +117,8 @@ plugins:
             Get help: Obtenir de l'aide
             Communities: Communautés
             Find a community: Trouver une communauté
-            Western Canada: Ouest canadien
             British Columbia: Colombie-Britannique
-            Central Canada: Centre du Canada
             Quebec: Québec
-            Atlantic Canada: Canada atlantique
             New Brunswick: Nouveau-Brunswick
             Nova Scotia: Nouvelle-Écosse
             Prince Edward Island: Île-du-Prince-Édouard
@@ -227,19 +224,16 @@ nav:
       - Get help: start/get-help.md
   - Communities:
       - Find a community: provinces/index.md
-      - Western Canada:
-          - British Columbia: provinces/british-columbia.md
-          - Alberta: provinces/alberta.md
-          - Saskatchewan: provinces/saskatchewan.md
-          - Manitoba: provinces/manitoba.md
-      - Central Canada:
-          - Ontario: provinces/ontario.md
-          - Quebec: provinces/quebec.md
-      - Atlantic Canada:
-          - New Brunswick: provinces/new-brunswick.md
-          - Nova Scotia: provinces/nova-scotia.md
-          - Prince Edward Island: provinces/prince-edward-island.md
-          - Newfoundland and Labrador: provinces/newfoundland-and-labrador.md
+      - British Columbia: provinces/british-columbia.md
+      - Alberta: provinces/alberta.md
+      - Saskatchewan: provinces/saskatchewan.md
+      - Manitoba: provinces/manitoba.md
+      - Ontario: provinces/ontario.md
+      - Quebec: provinces/quebec.md
+      - New Brunswick: provinces/new-brunswick.md
+      - Nova Scotia: provinces/nova-scotia.md
+      - Prince Edward Island: provinces/prince-edward-island.md
+      - Newfoundland and Labrador: provinces/newfoundland-and-labrador.md
       - Territories: provinces/territories.md
   - Devices & Builds:
       - Choose hardware: hardware/index.md
