@@ -129,7 +129,7 @@ plugins:
             Antennas: Antennes
             Companions: Compagnons
             Repeaters: Répéteurs
-            Station G3: Station G3
+            Station G3 (advanced): Station G3 (avancé)
             Build a 300 mW solar repeater: Monter un répéteur solaire de 300 mW
             Build a 1 W solar repeater: Monter un répéteur solaire de 1 W
             Mounting a repeater: Installer un répéteur
@@ -236,13 +236,13 @@ nav:
       - Choose hardware: hardware/index.md
       - Companions: hardware/recommended-companions.md
       - Repeaters: hardware/recommended-repeaters.md
-      - Station G3: hardware/station-g3.md
       - Antennas: hardware/recommended-antenna.md
       - Build a 300 mW solar repeater: hardware/repeater-solar-300mw-diy-build.md
       - Build a 1 W solar repeater: hardware/repeater-solar-1w-diy-build.md
       - Wire connector types: hardware/wire-connector-types.md
       - Mounting a repeater: hardware/repeater-mounting-options.md
       - Update a repeater over the air: meshcore/update-repeater-ota.md
+      - Station G3 (advanced): hardware/station-g3.md
   - Network Tools:
       - Choose a network tool: tools/index.md
       - Find your zone: config/map.md

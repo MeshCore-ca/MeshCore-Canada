@@ -24,6 +24,10 @@ page_styles:
 
 By **MrAlders0n (Ottawa)** · **October 19, 2026**
 
+!!! note "Advanced"
+    An advanced, high-power radio for experienced operators. New to repeaters?
+    Start with [Choose a repeater](recommended-repeaters.md).
+
 The Station G3 is a high-power LoRa base station with an external transmit amplifier (PA) and receive amplifier (LNA). Jumpers on the motherboard set how both behave. This page covers the G3-specific setup we use: the PA and LNA under firmware control, and about 30 dBm (1 W) out. Then finish it as a repeater or an observer.
 
 **Board:** BQ Voyage / UnitEng Station G3 with the ESP32-S3 MCU board<br>

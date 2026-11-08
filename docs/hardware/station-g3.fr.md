@@ -24,6 +24,10 @@ page_styles:
 
 Par **MrAlders0n (Ottawa)** · **19 octobre 2026**
 
+!!! note "Avancé"
+    Une radio haute puissance pour les personnes expérimentées. Vous débutez avec
+    les répéteurs? Commencez par [Choisir un répéteur](recommended-repeaters.md).
+
 La Station G3 est une station de base LoRa haute puissance dotée d’un amplificateur d’émission (PA) et d’un amplificateur de réception (LNA) externes. Des cavaliers sur la carte mère règlent leur fonctionnement. Cette page décrit la configuration propre à la G3 que nous utilisons : PA et LNA contrôlés par le micrologiciel, et environ 30 dBm (1 W) en sortie. Terminez ensuite la configuration comme répéteur ou comme observateur.
 
 **Carte :** Station G3 de BQ Voyage / UnitEng avec la carte MCU ESP32-S3<br>
