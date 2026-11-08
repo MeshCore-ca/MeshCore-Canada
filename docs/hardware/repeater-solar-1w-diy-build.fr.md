@@ -26,7 +26,7 @@ page_styles:
 
 # Construire un répéteur solaire de 1 W — Ikoka Stick
 
-Par **MrAlders0n (Ottawa)** · Guide d’origine : **1er janvier 2026**
+Par **MrAlders0n (Ottawa)** · [Guide d’origine](https://github.com/MeshCore-ca/MeshCore-Canada/blob/76a4262a354a111d19ddf8cc4abb25b1267fd9db/docs/hardware/repeater-solar-1w-diy-build.md) : **1er janvier 2026**
 
 Construisez un répéteur MeshCore solaire avec une GOME Ikoka Stick, une boîte de jonction et un panneau solaire collé à l’époxy.
 
@@ -177,7 +177,7 @@ Gardez le panneau solaire, la batterie et l’USB débranchés pendant les déco
 
 17. Branchez le câble SMA vers SMA à l’**entrée** du filtre. Serrez-le à la main pour le moment.
 
-18. **Waveshare Solar Power Manager, modèle standard :** le montage d’origine relie les pastilles du bouton BOOT avec un fil pour rétablir la sortie après une coupure de courant, sans appuyer sur le bouton. Avec toutes les alimentations débranchées, soudez un petit fil entre les pastilles au dos de la carte, comme sur la photo. Cette modification concerne le modèle standard; ne supposez pas que les versions B, C ou D utilisent le même circuit. Testez le redémarrage après une coupure avant de fermer le boîtier.
+18. **Waveshare Solar Power Manager, modèle standard :** au dos de la carte, soudez un fil entre les pastilles du bouton BOOT pour le court-circuiter en permanence. Sans cette modification, la carte ne rétablit pas sa sortie après une coupure de courant : votre répéteur resterait hors ligne jusqu’à ce que quelqu’un appuie sur le bouton.
 
       [![Fil soudé entre les pastilles du bouton BOOT du gestionnaire Waveshare](images/repeater-solar-1w-diy-build-4.jpg){ .mc-build-photo width="300" height="400" loading=lazy }](images/repeater-solar-1w-diy-build-4.jpg)
 
@@ -209,7 +209,7 @@ Gardez le panneau solaire, la batterie et l’USB débranchés pendant les déco
 
 ### Terminer les connexions
 
-27. Branchez le câble SMA venant de l’entrée du filtre au connecteur SMA de l’Ikoka Stick. Serrez les deux extrémités avec une clé adaptée, sans tordre le câble ni trop serrer. Un connecteur desserré entraîne une perte de signal. Branchez l’antenne extérieure avant de mettre l’ensemble sous tension.
+27. Branchez le câble SMA venant de l’entrée du filtre au connecteur SMA de l’Ikoka Stick. Serrez fermement les deux extrémités avec une clé ou une pince. Un connecteur desserré entraîne une perte de signal.
 
 28. Reliez la sortie USB-A du Waveshare à l’entrée USB-C de l’Ikoka Stick avec le câble USB.
 
@@ -276,27 +276,17 @@ Les options d’adresse et d’INA219 viennent du guide d’origine : elles sél
 
 [![Schéma de câblage du répéteur solaire Ikoka avec INA3221](images/repeater-solar-1w-diy-build-9.svg){ .mc-build-photo .mc-build-diagram width="600" height="543" loading=lazy }](images/repeater-solar-1w-diy-build-9.svg)
 
-<span id="le-tester-sur-letabli"></span>
+## Vérifier sur l’établi { #verifier-les-mesures }
 
-## Vérifier avant la mise sous tension { #verifier-les-mesures }
+Vérifiez la polarité et la continuité au multimètre avant de brancher la pile.
+Ensuite, [programmez et configurez le répéteur](../config/index.md), vérifiez
+qu’il redémarre seul après avoir débranché la pile, et qu’un compagnon à
+proximité reçoit son annonce. Le [manuel Waveshare](https://files.waveshare.com/upload/6/6c/Solar_Power_Manager_user_manual_en.pdf) indique les limites
+du gestionnaire d’alimentation.
 
-- Vérifiez la polarité et la continuité, puis inspectez les soudures pour repérer les courts-circuits.
-- Utilisez un bloc 1S protégé, composé de cellules assorties, et respectez leur plage de températures de charge.
-- Vérifiez les connexions de l’antenne, du filtre et des câbles RF.
-- Mesurez la sortie USB du gestionnaire d’alimentation avant de brancher la radio.
-- Testez le retour de l’alimentation après une coupure. Si vous avez installé l’INA3221, comparez ses mesures à celles du multimètre.
-- [Programmez et configurez le répéteur](../config/index.md), puis vérifiez qu’un compagnon proche reçoit son annonce avant de l’installer.
+## Récupération s’il ne démarre pas { #recuperation-et-retour-en-arriere }
 
-## Dépannage et récupération { #recuperation-et-retour-en-arriere }
+Débranchez l’alimentation et revérifiez le câblage et le pont du bouton BOOT.
+N’utilisez plus une pile chaude, gonflée ou endommagée.
 
-Si le répéteur ne démarre pas, débranchez l’alimentation et revérifiez le câblage ainsi que la modification du bouton BOOT. N’utilisez plus une batterie chaude, gonflée, endommagée ou qui fuit. Si une mise à jour du micrologiciel échoue, reprenez la programmation de la même carte avec le même rôle, par USB, à l’aide de l’[outil de configuration du répéteur](../config/index.md), après avoir vérifié l’alimentation et les connexions RF. Ne l’effacez pas de nouveau.
-
-<span id="entretien"></span>
-
-Après l’installation, inspectez régulièrement le montage, le collage du panneau, les joints, l’évent, les câbles et la batterie, ainsi qu’après de fortes intempéries.
-
-## Source
-
-Restauration du [guide de MrAlders0n publié avant la refonte](https://github.com/MeshCore-ca/MeshCore-Canada/blob/76a4262a354a111d19ddf8cc4abb25b1267fd9db/docs/hardware/repeater-solar-1w-diy-build.md). Les pièces, l’ordre d’assemblage, les photos, les tableaux de câblage et les téléchargements d’origine sont conservés. L’exemple de télémétrie facultative précise aussi la résistance shunt de la carte Adafruit.
-
-Consultez le [manuel Waveshare](https://files.waveshare.com/upload/6/6c/Solar_Power_Manager_user_manual_en.pdf) pour les limites et les bornes du gestionnaire d’alimentation standard.
+**Ensuite :** [Installer un répéteur](repeater-mounting-options.md)

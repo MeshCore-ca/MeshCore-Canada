@@ -27,7 +27,7 @@ page_styles:
 
 # Building a 1 W solar repeater — Ikoka Stick
 
-By **MrAlders0n (Ottawa)** · Original guide: **January 1, 2026**
+By **MrAlders0n (Ottawa)** · [Original guide](https://github.com/MeshCore-ca/MeshCore-Canada/blob/76a4262a354a111d19ddf8cc4abb25b1267fd9db/docs/hardware/repeater-solar-1w-diy-build.md): **January 1, 2026**
 
 Build a solar-powered MeshCore repeater using a GOME Ikoka Stick, a junction box enclosure, and an epoxied solar panel.
 
@@ -176,7 +176,7 @@ Keep the solar panel, battery, and USB disconnected while cutting, soldering, or
 
 17. Connect the SMA-to-SMA cable to the filter's **input** port. Finger-tighten for now.
 
-18. **Waveshare Solar Power Manager prep (standard model):** The original build uses a wire bridge across the BOOT button pads so that output resumes after a power loss without a button press. With all power disconnected, solder a short wire across the pads on the back of the board, as shown below. This modification is specific to the standard model; do not assume the B, C, or D versions use the same circuit. Test power-loss recovery before sealing the enclosure.
+18. **Waveshare Solar Power Manager prep (standard model):** On the back of the board, solder a wire across the BOOT button pads to short it permanently. Without this modification, the board won't resume power output after a power loss, so your repeater would stay offline until you physically press the button.
 
       [![Boot button shorted on Waveshare Solar Power Manager](images/repeater-solar-1w-diy-build-4.jpg){ .mc-build-photo width="300" height="400" loading=lazy }](images/repeater-solar-1w-diy-build-4.jpg)
 
@@ -208,7 +208,7 @@ Keep the solar panel, battery, and USB disconnected while cutting, soldering, or
 
 ### Final Connections
 
-27. Connect the SMA cable from the filter's input to the Ikoka Stick's SMA connector. Snug both ends with a suitable wrench without twisting the cable or overtightening. A loose RF connection will cause signal loss. Attach the external antenna before applying power.
+27. Connect the SMA cable from the filter's input to the Ikoka Stick's SMA connector. Tighten both ends firmly with a wrench or pliers. A loose RF connection will cause signal loss.
 
 28. Run the USB-A to USB-C cable from the Waveshare Solar Power Manager's USB output to the Ikoka Stick's USB-C input.
 
@@ -275,27 +275,16 @@ The address and INA219 flags are from the original guide: they select `0x40` and
 
 [![Wiring diagram](images/repeater-solar-1w-diy-build-9.svg){ .mc-build-photo .mc-build-diagram width="600" height="543" loading=lazy }](images/repeater-solar-1w-diy-build-9.svg)
 
-<span id="test-it-on-the-bench"></span>
+## Test it on the bench { #check-the-readings }
 
-## Check before powering on { #check-the-readings }
+Check polarity and continuity with a multimeter before you connect the battery.
+Then [flash and configure the repeater](../config/index.md), check that it comes
+back on by itself after you unplug the battery, and that a nearby companion hears
+its advert. The [Waveshare manual](https://files.waveshare.com/upload/6/6c/Solar_Power_Manager_user_manual_en.pdf) has the power manager's limits.
 
-- Check polarity and continuity, then inspect solder joints for shorts.
-- Use a protected, matched 1S battery pack and stay within the cells' charging-temperature limits.
-- Confirm the antenna, filter, and RF cables are connected.
-- Check that the power manager supplies the expected USB voltage before connecting the radio.
-- Test that power returns after an interruption. If fitted, compare INA3221 readings with a multimeter.
-- [Flash and configure the repeater](../config/index.md), then check that a nearby companion receives its advert before installing it.
+## Recovery if it doesn't start { #recovery-and-undo }
 
-## Troubleshooting and recovery { #recovery-and-undo }
+Disconnect power and recheck the wiring and the BOOT-button bridge. Stop using
+any battery that's hot, swollen or damaged.
 
-If the unit does not start, disconnect power and recheck the wiring and BOOT-button modification. Stop using any battery that is hot, swollen, leaking, or damaged. If a firmware change fails, check the power and RF connections, then flash the same board and role again over USB with the [repeater setup tool](../config/index.md). Don't erase the board again.
-
-<span id="maintenance"></span>
-
-After installation, check the mounting, panel bond, seals, vent, cables, and battery condition regularly and after severe weather.
-
-## Source
-
-Restored from [MrAlders0n's pre-overhaul guide](https://github.com/MeshCore-ca/MeshCore-Canada/blob/76a4262a354a111d19ddf8cc4abb25b1267fd9db/docs/hardware/repeater-solar-1w-diy-build.md). The original parts, assembly sequence, photos, wiring tables, and downloads are retained. The optional telemetry example also includes the Adafruit shunt value.
-
-For the standard power manager's limits and connector markings, see the [Waveshare manual](https://files.waveshare.com/upload/6/6c/Solar_Power_Manager_user_manual_en.pdf).
+**Next:** [Mounting a repeater](repeater-mounting-options.md)
