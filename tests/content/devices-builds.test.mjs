@@ -122,7 +122,7 @@ test("the 1 W build is listed in navigation while legacy workflows stay outside 
 
   assert.match(
     config,
-    /Build a 1 W repeater: hardware\/repeater-solar-1w-diy-build\.md/,
+    /Build a 1 W solar repeater: hardware\/repeater-solar-1w-diy-build\.md/,
   );
   assert.match(config, /Wire connector types: hardware\/wire-connector-types\.md/);
   assert.doesNotMatch(config, /generate-repeater-id\.md/);

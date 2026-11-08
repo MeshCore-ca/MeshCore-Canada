@@ -40,11 +40,6 @@ Choose what the device will do, then confirm the exact board and firmware target
     <p>Match the radio band and connector before ordering. SMA and RP-SMA can look similar and are not interchangeable.</p>
     <a class="md-button" href="recommended-antenna/">Choose an antenna</a>
   </section>
-  <section class="mc-decision-card">
-    <h3>Room server</h3>
-    <p>Use this to host a persistent room. Choose a supported board, continuous power, and a secure administration plan.</p>
-    <a class="md-button" href="../start/room-server/">Set up a room server</a>
-  </section>
 </div>
 
 ## Community build guides
@@ -69,20 +64,9 @@ buying parts or starting work.
 ## Before you buy
 
 <ul class="mc-checklist">
-  <li>The exact model appears for the intended role in the current official MeshCore flasher.</li>
+  <li>The exact model is listed for your role in the <a href="https://meshcore.io/flasher">MeshCore flasher</a>.</li>
   <li>The radio is a Canadian 902–928 MHz model.</li>
-  <li>The antenna, pigtail, and feed-line connectors match exactly. SMA and RP-SMA are not interchangeable.</li>
-  <li>The manufacturer supports the battery, charger, enclosure, and temperature range for the planned use.</li>
-  <li>You have a known-good data USB cable and a practical way to recover the device physically.</li>
-  <li>Current manufacturer documentation supports every specification that matters to the purchase.</li>
+  <li>The antenna and cable connectors match exactly. SMA and RP-SMA look alike but don't fit each other.</li>
 </ul>
 
-## Continue setup
-
-After choosing a supported device, follow the matching setup guide:
-
-- [Flash a companion](../start/companion.md)
-- [Set up a repeater](../config/index.md)
-- [Flash a room server](../start/room-server.md)
-
-Found an outdated product or compatibility detail? [Share the correction](../submit-idea.md) and include the manufacturer source and date you checked it.
+Found an outdated product? [Share the correction](../submit-idea.md).

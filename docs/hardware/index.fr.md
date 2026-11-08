@@ -42,11 +42,6 @@ la carte exacte et la cible du micrologiciel dans le
     <p>Faites correspondre la bande radio et le connecteur avant de commander. Les connecteurs SMA et RP-SMA peuvent se ressembler, mais ne sont pas interchangeables.</p>
     <a class="md-button" href="recommended-antenna/">Choisir une antenne</a>
   </section>
-  <section class="mc-decision-card">
-    <h3>Serveur de salon</h3>
-    <p>Utilisez-le pour héberger un salon persistant. Choisissez une carte prise en charge, une alimentation continue et un plan d’administration sécurisé.</p>
-    <a class="md-button" href="../start/room-server/">Configurer un serveur de salon</a>
-  </section>
 </div>
 
 ## Guides de construction de la communauté
@@ -72,22 +67,9 @@ ou de commencer les travaux.
 ## Avant d’acheter
 
 <ul class="mc-checklist">
-  <li>Le modèle exact apparaît pour le rôle voulu dans la version actuelle du programme officiel de mise à jour MeshCore.</li>
+  <li>Le modèle exact figure pour votre rôle dans le <a href="https://meshcore.io/flasher">programme de mise à jour MeshCore</a>.</li>
   <li>La radio est un modèle canadien de 902–928 MHz.</li>
-  <li>Les connecteurs de l’antenne, de la queue de cochon et de la ligne d’alimentation RF correspondent exactement. Les connecteurs SMA et RP-SMA ne sont pas interchangeables.</li>
-  <li>Le fabricant prend en charge la pile, le chargeur, le boîtier et la plage de températures pour l’utilisation prévue.</li>
-  <li>Vous avez un câble USB de données fiable et un moyen pratique de récupérer physiquement l’appareil.</li>
-  <li>La documentation actuelle du fabricant confirme toutes les caractéristiques importantes pour l’achat.</li>
+  <li>Les connecteurs de l’antenne et du câble correspondent exactement. Les connecteurs SMA et RP-SMA se ressemblent, mais ne s’emboîtent pas.</li>
 </ul>
 
-## Poursuivre la configuration
-
-Après avoir choisi un appareil pris en charge, suivez le guide correspondant :
-
-- [Programmer un compagnon](../start/companion.md)
-- [Configurer un répéteur](../config/index.md)
-- [Programmer un serveur de salon](../start/room-server.md)
-
-Vous avez trouvé un produit ou un renseignement de compatibilité périmé?
-[Signalez la correction](../submit-idea.md) en indiquant la source du fabricant
-et la date de votre vérification.
+Vous avez trouvé un produit périmé? [Signalez la correction](../submit-idea.md).
