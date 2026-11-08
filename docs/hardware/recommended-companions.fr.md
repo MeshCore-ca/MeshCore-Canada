@@ -20,59 +20,33 @@ page_styles:
 
 # Choisir un appareil compagnon
 
-Les appareils compagnons utilisent un micrologiciel de compagnon dédié et servent de points d’accès utilisateur sur le réseau MeshCore. La plupart se jumellent à votre téléphone intelligent par Bluetooth Low Energy (BLE) pour donner accès au réseau maillé.
+Un appareil compagnon est la radio jumelée à l’application MeshCore sur votre
+téléphone. Voici ceux qu’utilisent les communautés canadiennes. Avant
+d’acheter, vérifiez que le
+[programme de mise à jour MeshCore](https://meshcore.io/flasher) propose le
+modèle exact, et qu’il s’agit de la version 915 MHz.
 
-Il existe aussi des compagnons autonomes avec écran et commandes intégrés. Ils fonctionnent sans téléphone, mais restent des points d’accès.
-
-<div class="mc-guide-status" data-status="draft" markdown>
-
-**Vérifiez avant d’acheter.** Ces appareils ont été essayés et éprouvés par la communauté d’Ottawa et d’autres réseaux, mais les révisions de produits et la prise en charge du micrologiciel changent. Confirmez le modèle exact, la bande radio canadienne, la cible de micrologiciel du compagnon, le connecteur et les accessoires inclus dans le [programme officiel de mise à jour MeshCore](https://flasher.meshcore.io/) et dans l’information à jour du fabricant.
-
-</div>
-
-!!! warning "Remplacez seulement une antenne amovible"
-    Les compagnons à antenne amovible peuvent profiter d’une des antennes testées ci-dessous. N’ouvrez pas et ne modifiez pas un appareil scellé à antenne interne, comme le T1000-E ou le WisMesh Tag.
-
-    Voir : [Antennes recommandées](recommended-antenna.md)
-
-## Compagnons Bluetooth Low Energy (BLE)
-
-Ces appareils exigent un téléphone intelligent et l’application MeshCore. Ils se connectent à votre téléphone par BLE, et vous utilisez l’application pour interagir avec le réseau maillé. Dans cette configuration, le compagnon sert uniquement de radio et relie votre téléphone au réseau.
-
-### Préassemblés
-
-La façon la plus simple de commencer est d’acheter un compagnon, d’y installer MeshCore et de rejoindre le réseau. L’application MeshCore se connecte à l’appareil par BLE et sert à envoyer et à recevoir des messages sur le réseau maillé.
-
-!!! warning "Note importante sur le ThinkNode M1"
-    Assurez-vous de commander une **antenne RP-SMA** avec l’appareil.
-
-    **N’achetez pas une antenne SMA par erreur. Il vous faut précisément une RP-SMA.**
-
-    ThinkNode utilise un connecteur RP-SMA sur le ThinkNode M1.
-
-!!! warning "Ensembles AliExpress"
-    AliExpress affiche habituellement l’article le moins cher (par exemple, seulement le module GPS) à l’ouverture d’un lien. Assurez-vous de choisir le bon ensemble avant de l’ajouter à votre panier.
-
-Les compagnons préassemblés suivants sont populaires et largement offerts :
+## Prêts à l’emploi
 
 <div class="mc-table-wrap" markdown>
 
 | Produit | Notes | Lien |
 |---|---|---|
-| **ThinkNode M1** | Appareil compact basé sur le nRF52840, avec écran de 1,54 po et GPS. Conçu comme compagnon prêt à l’emploi pour une messagerie et un suivi fiables. **Note :** connecteur RP-SMA. Voir l’avertissement SMA c. RP-SMA ci-dessus. | [Elecrow](https://www.elecrow.com/thinknode-m1-meshtastic-lora-signal-transceiver-powered-by-nrf52840-with-154-screen-support-gps.html) |
+| **ThinkNode M1** | Appareil compact basé sur le nRF52840, avec écran de 1,54 po et GPS. Conçu comme compagnon prêt à l’emploi pour une messagerie et un suivi fiables. **Commandez une antenne RP-SMA** avec l’appareil : une SMA ne s’y branche pas. | [Elecrow](https://www.elecrow.com/thinknode-m1-meshtastic-lora-signal-transceiver-powered-by-nrf52840-with-154-screen-support-gps.html) |
 | **LilyGO T-Echo** | Appareil compact avec écran et GPS intégrés. Choisissez la version 915 MHz pour le Canada, puis installez le micrologiciel compagnon MeshCore actuel. | [Boutique LilyGO](https://lilygo.cc/products/t-echo-lilygo) |
-| **SenseCAP T1000-E** | Traceur mince en format carte de Seeed Studio. Portatif et certifié IP65. **Note :** portée plus limitée en raison des antennes internes. | [Seeed Studio](https://www.seeedstudio.com/SenseCAP-Card-Tracker-T1000-E-for-Meshtastic-p-5913.html) |
-| **RAK WisMesh Tag** | Appareil robuste avec GPS, antennes intégrées, pile de 1000 mAh et boîtier IP66. Il est livré avec Meshtastic; installez le micrologiciel compagnon MeshCore actuel avant de l’utiliser. **Note :** portée plus limitée en raison des antennes internes. | [RAKwireless](https://store.rakwireless.com/products/wismesh-tag-meshtastic-gps-lora-tracker-ip66) |
+| **SenseCAP T1000-E** | Traceur mince en format carte de Seeed Studio. Portatif et certifié IP65. **Antenne interne :** portée plus courte; ne l’ouvrez pas pour changer l’antenne. | [Seeed Studio](https://www.seeedstudio.com/SenseCAP-Card-Tracker-T1000-E-for-Meshtastic-p-5913.html) |
+| **RAK WisMesh Tag** | Appareil robuste avec GPS, antennes intégrées, pile de 1000 mAh et boîtier IP66. Il est livré avec Meshtastic; installez le micrologiciel compagnon MeshCore actuel avant de l’utiliser. **Antenne interne :** portée plus courte. | [RAKwireless](https://store.rakwireless.com/products/wismesh-tag-meshtastic-gps-lora-tracker-ip66) |
 
 </div>
 
-### À construire soi-même
+Les liens AliExpress s’ouvrent souvent sur l’option la moins chère; vérifiez que
+vous avez choisi le bon ensemble. Vous voulez une meilleure antenne pour un
+modèle à antenne amovible? Consultez [Antennes](recommended-antenna.md).
 
-Pour les bricoleurs qui aiment se procurer les pièces et assembler leur propre appareil, voici un exemple de montage adapté à Ottawa. Consultez les [antennes recommandées](recommended-antenna.md) pour d’autres options d’antenne.
+## À construire soi-même
 
-Il s’agit d’un rôle de **compagnon** et il exige un téléphone intelligent. L’application MeshCore se connecte à l’appareil par BLE et sert à envoyer et à recevoir des messages sur le réseau maillé.
-
-#### Exemple de montage maison
+Un exemple de montage pour les personnes qui aiment assembler leur propre
+appareil. Il se jumelle à votre téléphone comme ceux ci-dessus.
 
 <div class="mc-table-wrap" markdown>
 
@@ -85,20 +59,24 @@ Il s’agit d’un rôle de **compagnon** et il exige un téléphone intelligent
 
 </div>
 
-*Total de cet exemple d’achat :* **95,68 $ CAD**, dont un lot de quatre piles et deux câbles. Ce n’est pas le coût par appareil.
+*Total de cet exemple d’achat :* **95,68 $ CAD**, dont un lot de quatre piles et
+deux câbles; ce n’est donc pas le coût par appareil. *Les prix datent du
+2 septembre 2026; consultez les pages liées pour les prix actuels,
+l’expédition et les droits de douane.*
 
-*Les prix datent du 2 septembre 2026. Consultez les pages liées pour vérifier les prix, l’expédition, les droits de douane et la disponibilité.*
+Le montage ne comprend pas de boîtier. Les
+[modèles d’Alley Cat](https://www.printables.com/@AlleyCat/models) sont de bons
+choix à imprimer en 3D; choisissez-en un qui accueille la pile de 3000 mAh et le
+connecteur à angle droit.
 
-!!! warning "Boîtier pour l’exemple de montage"
-    Cet exemple de montage ne comprend pas de boîtier. Pour des boîtiers à imprimer en 3D, consultez les **[modèles d’Alley Cat](https://www.printables.com/@AlleyCat/models)**. Ils conviennent très bien aux compagnons faits maison. Assurez-vous que le boîtier choisi peut recevoir la pile de 3000 mAh et le connecteur IPEX à SMA à angle droit.
-
-Si vous êtes dans la région d’Ottawa, vous pouvez aussi acheter ce montage entièrement assemblé auprès de [Space Hedgehog](https://space-hedgehog.com/).
+Ce montage est aussi vendu assemblé par [Space Hedgehog](https://space-hedgehog.com/).
 
 ## Appareils autonomes
 
-Il existe des appareils autonomes comme le **T-Deck**, mais nous recommandons de commencer par un compagnon jumelé à un téléphone. Les appareils autonomes sont généralement plus chers, leur interface est moins fluide que l’application mobile, et ils présentent encore des particularités et des limites de micrologiciel qui peuvent compliquer la tâche des débutants.
-
-### Appareils autonomes offerts
+Les appareils autonomes ont leur propre écran et clavier et fonctionnent sans
+téléphone. Nous recommandons plutôt de commencer par un compagnon jumelé à un
+téléphone : les appareils autonomes coûtent plus cher et leur micrologiciel
+manque encore de finition.
 
 <div class="mc-table-wrap" markdown>
 
@@ -109,20 +87,4 @@ Il existe des appareils autonomes comme le **T-Deck**, mais nous recommandons de
 
 </div>
 
-## Avant d’acheter
-
-<ul class="mc-checklist">
-  <li>La révision exacte du produit apparaît comme compagnon dans la version actuelle du programme officiel de mise à jour MeshCore.</li>
-  <li>La radio est la variante canadienne de 902–928 MHz.</li>
-  <li>Les exigences concernant le téléphone et l’application correspondent à l’utilisation prévue.</li>
-  <li>Le connecteur, la polarité, la protection et les dimensions de la pile ainsi que sa méthode de recharge sont documentés.</li>
-  <li>L’antenne et chaque adaptateur correspondent au connecteur de l’appareil.</li>
-  <li>Le boîtier laisse le port de récupération USB accessible.</li>
-  <li>Vous avez vérifié la disponibilité, l’expédition, les droits de douane et les conditions de retour actuels.</li>
-</ul>
-
-## Poursuivre la configuration
-
-Lorsque la carte exacte est confirmée,
-[programmez et configurez le compagnon](../start/companion.md).
-Après la programmation, redémarrez-le et effectuez un essai de message local.
+**Ensuite :** [Configurer un compagnon](../start/companion.md).

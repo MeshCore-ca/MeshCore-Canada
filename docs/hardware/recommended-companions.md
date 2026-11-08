@@ -20,59 +20,32 @@ page_styles:
 
 # Choose a companion device
 
-Companion nodes run dedicated companion firmware and operate as user endpoints on the MeshCore network. Most companion nodes pair with your smartphone over Bluetooth Low Energy (BLE) to provide access to the mesh.
+A companion is the radio that pairs with the MeshCore app on your phone. These
+are the ones Canadian communities use. Before buying, check that the
+[MeshCore flasher](https://meshcore.io/flasher) lists the exact model, and that
+it's the 915 MHz version.
 
-There are also standalone companion nodes with built-in screens and input devices. These operate without a smartphone but still function as endpoints.
-
-<div class="mc-guide-status" data-status="draft" markdown>
-
-**Check before buying.** These devices have been tried and tested by the Ottawa community and other meshes, but product revisions and firmware support change. Confirm the exact model, Canadian radio band, companion firmware target, connector, and included accessories in the [official MeshCore flasher](https://flasher.meshcore.io/) and in current manufacturer information.
-
-</div>
-
-!!! warning "Only replace removable antennas"
-    Companions with removable antennas may benefit from one of the tested upgrades below. Do not open or modify a sealed, internal-antenna device such as the T1000-E or WisMesh Tag.
-
-    See: [Recommended antennas](recommended-antenna.md)
-
-## Bluetooth Low Energy (BLE) companions
-
-These devices require a smartphone and the MeshCore app. They connect to your phone over BLE, and you use the app to interact with the mesh. In this setup, the companion acts only as the radio, linking your phone to the mesh network.
-
-### Pre-built
-
-The easiest way to get started is to buy a companion node, flash it with MeshCore, and join the mesh. The MeshCore app connects to the node over BLE and is used to send and receive messages on the mesh.
-
-!!! warning "Important ThinkNode M1 note"
-    Make sure to order an **RP-SMA antenna** with the device.
-
-    **Do not accidentally buy SMA. You specifically need RP-SMA.**
-
-    ThinkNode uses RP-SMA on the ThinkNode M1.
-
-!!! warning "AliExpress bundles"
-    AliExpress usually shows the cheapest item (for example, only the GPS module) when opening a link. Make sure you select the right bundle when adding to your cart.
-
-The following pre-built companion nodes are popular and widely available:
+## Ready to use
 
 <div class="mc-table-wrap" markdown>
 
 | Product | Notes | Link |
 |---|---|---|
-| **ThinkNode M1** | Compact device powered by the nRF52840 with a 1.54" screen and GPS support. Designed as a ready-to-use companion node for reliable messaging and tracking. **Note:** Has an RP-SMA connector. See the SMA vs. RP-SMA warning above. | [Elecrow](https://www.elecrow.com/thinknode-m1-meshtastic-lora-signal-transceiver-powered-by-nrf52840-with-154-screen-support-gps.html) |
+| **ThinkNode M1** | Compact device powered by the nRF52840 with a 1.54" screen and GPS support. Designed as a ready-to-use companion node for reliable messaging and tracking. **Order an RP-SMA antenna** with it: SMA won't fit. | [Elecrow](https://www.elecrow.com/thinknode-m1-meshtastic-lora-signal-transceiver-powered-by-nrf52840-with-154-screen-support-gps.html) |
 | **LilyGO T-Echo** | Compact device with onboard display and GPS. Choose the 915 MHz version for Canada, then flash the current MeshCore companion firmware. | [LilyGO Store](https://lilygo.cc/products/t-echo-lilygo) |
-| **SenseCAP T1000-E** | Slim card-style tracker device from Seeed Studio. Portable and IP65-rated. **Note:** Range is more limited due to internal antennas. | [Seeed Studio](https://www.seeedstudio.com/SenseCAP-Card-Tracker-T1000-E-for-Meshtastic-p-5913.html) |
-| **RAK WisMesh Tag** | Rugged device with GPS, integrated antennas, 1000 mAh battery, and IP66 enclosure. It ships with Meshtastic, so flash the current MeshCore companion firmware before use. **Note:** Range is more limited due to internal antennas. | [RAKwireless](https://store.rakwireless.com/products/wismesh-tag-meshtastic-gps-lora-tracker-ip66) |
+| **SenseCAP T1000-E** | Slim card-style tracker device from Seeed Studio. Portable and IP65-rated. **Internal antenna:** shorter range, and don't open it to swap the antenna. | [Seeed Studio](https://www.seeedstudio.com/SenseCAP-Card-Tracker-T1000-E-for-Meshtastic-p-5913.html) |
+| **RAK WisMesh Tag** | Rugged device with GPS, integrated antennas, 1000 mAh battery, and IP66 enclosure. It ships with Meshtastic, so flash the current MeshCore companion firmware before use. **Internal antenna:** shorter range. | [RAKwireless](https://store.rakwireless.com/products/wismesh-tag-meshtastic-gps-lora-tracker-ip66) |
 
 </div>
 
-### Build your own
+AliExpress links often open on the cheapest option, so check you've picked the
+right bundle. Want a better antenna for a model with a removable one? See
+[Antennas](recommended-antenna.md).
 
-For hobbyists who like to source parts and assemble their own node, here is an Ottawa-friendly example build. See [Recommended antennas](recommended-antenna.md) for other antenna options.
+## Build your own
 
-This is a **companion node** role and requires a smartphone. The MeshCore app connects to the node over BLE and is used to send and receive messages on the mesh.
-
-#### Example DIY build
+An example build for people who like to assemble their own. It pairs with your
+phone like the ones above.
 
 <div class="mc-table-wrap" markdown>
 
@@ -85,20 +58,21 @@ This is a **companion node** role and requires a smartphone. The MeshCore app co
 
 </div>
 
-*Example shopping total:* **$95.68 CAD**, including a four-battery pack and two pigtails. This is not the per-device cost.
+*Example shopping total:* **$95.68 CAD**, including a four-battery pack and two
+pigtails, so it's not the per-device cost. *Prices are dated September 2, 2026;
+check the linked pages for current prices, shipping and duties.*
 
-*Prices are dated September 2, 2026. Check the linked pages for current prices, shipping, duties, and availability.*
+The kit doesn't include a case. [Alley Cat's models](https://www.printables.com/@AlleyCat/models)
+are good 3D-printable options; pick one that fits the 3000 mAh battery and the
+right-angle connector.
 
-!!! warning "Case for the example DIY build"
-    This DIY build example does not include a case. For 3D-printable cases, check out **[Alley Cat's models](https://www.printables.com/@AlleyCat/models)**. They are excellent for custom companion node builds. Make sure the case you choose will fit the 3000 mAh battery and the right-angle IPEX to SMA connector.
+This build is also sold assembled by [Space Hedgehog](https://space-hedgehog.com/).
 
-If you are in the Ottawa area, you can also purchase this build fully assembled locally from [Space Hedgehog](https://space-hedgehog.com/).
+## Standalone devices
 
-## Standalone nodes
-
-There are standalone devices such as the **T-Deck**, but we recommend starting with a phone-paired companion node instead. Standalone units tend to be more expensive, the UI is not as smooth as the mobile app, and they still have quirks and firmware limitations that can make them challenging for beginners.
-
-### Available standalone devices
+Standalone devices have their own screen and keyboard and work without a phone.
+We recommend starting with a phone-paired companion instead: standalone units
+cost more, and their firmware still has rough edges.
 
 <div class="mc-table-wrap" markdown>
 
@@ -109,18 +83,4 @@ There are standalone devices such as the **T-Deck**, but we recommend starting w
 
 </div>
 
-## Before buying
-
-<ul class="mc-checklist">
-  <li>The exact product revision appears in the current official MeshCore flasher as a companion.</li>
-  <li>The radio is the Canadian 902–928 MHz variant.</li>
-  <li>The phone/app requirement matches how you intend to use it.</li>
-  <li>The battery connector, polarity, protection, dimensions, and charging method are documented.</li>
-  <li>The antenna and every adapter match the device connector.</li>
-  <li>The enclosure leaves the USB recovery path accessible.</li>
-  <li>You checked current stock, shipping, duty, and return terms.</li>
-</ul>
-
-## Continue setup
-
-Once the exact board is confirmed, [flash and configure the companion](../start/companion.md). After flashing, reboot it and complete a local message test.
+**Next:** [Set up a companion](../start/companion.md).
