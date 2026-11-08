@@ -1,6 +1,6 @@
 ---
-title: Plan a repeater mount
-description: Compare community mounting examples while prioritizing permission, structural safety, weather, cable routing, and inspection.
+title: Mounting a repeater
+description: Pole, gutter and vent-pipe mounts the community uses for solar repeaters, with photos and printable parts.
 audience:
   - repeater-builder
   - site-owner
@@ -21,101 +21,66 @@ page_styles:
   - assets/styles/devices-builds.css?v=20261019-1
 ---
 
-# Plan a repeater mount
+# Mounting a repeater
 
-Use these community examples to discuss a site. They are not engineered plans for a particular building, mast, climate, or property.
+Mount the antenna as high as you can, with a clear line of sight, on a mount that
+can handle the wind and weather. **Height is might:** the higher the repeater,
+the better it connects to the mesh.
 
-<div class="mc-guide-status" data-status="draft" markdown>
+Stay clear of power lines, and don't work on a roof or ladder alone.
 
-**Draft installation reference.** The examples have not been reviewed for your structure, wind, ice, snow, lightning exposure, grounding, electrical clearance, roof access, or local requirements.
+## Pole mount
 
-</div>
+The most common method: a standard pole and clamp.
 
-!!! danger "Antenna height never overrides safety"
-    Do not work near overhead electrical lines or on an unsafe roof, ladder, mast, chimney, gutter, or vent. If the attachment, load, grounding, weather exposure, or access plan is uncertain, stop and use a qualified local installer.
+- Simple to set up with widely available hardware.
+- Attaches to an existing mast, tower or sturdy pole.
+- Best for permanent installations that need height and stability.
 
-## Before you choose a mount
+**Clamps:** [adjustable pole mount (Amazon)](https://a.co/d/5U5cT4m) ·
+[pole clamp option 1 (AliExpress)](https://www.aliexpress.com/item/1005004943447000.html) ·
+[pole clamp option 2 (AliExpress)](https://www.aliexpress.com/item/1005004943650198.html) ·
+[RAK enclosure mounting guide](https://docs.rakwireless.com/product-categories/wisblock/rakbox-uo180x130x60/installation-guide/#mounting-guide)
 
-<ul class="mc-checklist">
-  <li>The property owner and any required authority approve the location and cable route.</li>
-  <li>A qualified person has addressed structure, wind, ice, snow, corrosion, electrical clearance, lightning/grounding context, and safe access.</li>
-  <li>The repeater passed its bench test and can still be reached by USB.</li>
-  <li>The antenna, enclosure, feed line, connectors, strain relief, and drip paths are planned as one system.</li>
-  <li>An inspection and removal plan is recorded before installation.</li>
-</ul>
+**Poles:** [Princess Auto 4 ft army tent pole](https://www.princessauto.com/en/4-ft-army-tent-pole/product/PA0009280777)
+(they link together for more height; anchor them properly) ·
+[3/4 × 36-inch steel tube (Home Depot)](https://www.homedepot.ca/product/paulin-3-4-x-36-inch-round-steel-tube/1000126774)
 
-## What this installation changes
+**Alfa antenna pole mount:** Stéphane P made this 3D-printed mount for the Alfa
+5.8 dBi antenna. [Download the STL](https://drive.google.com/file/d/1wIU9kLxolzM9vPUB35ETY1sCPLGvtfFu/view?usp=share_link)
 
-A fixed mount adds load and penetrations or clamps to a property, exposes equipment and cables to weather, and can make physical recovery harder. Record who owns the site, who may access it, and how the installation will be inspected and removed.
+[![3D-printed pole mount holding an Alfa antenna](images/PoleMount.jpg){ .mc-build-photo width="300" loading=lazy }](images/PoleMount.jpg)
 
-## Community examples
+**Pole mount on a chimney:**
 
-### Pole and clamp
+[![Repeater pole mounted on a chimney](images/ChimneyMount.jpg){ .mc-build-photo width="300" loading=lazy }](images/ChimneyMount.jpg)
 
-A pole or purpose-built mast can provide a defined cable route and mounting point. Every pole section, clamp, anchor, structure, and load still needs site-specific review.
+## Gutter mount
 
-Community purchasing and design leads:
+Community member **Aussiemandias** designed a 3D-printable gutter mount for quick,
+discreet installs.
 
-- [Adjustable pole mount](https://a.co/d/5U5cT4m)
-- [Pole clamp option 1](https://www.aliexpress.com/item/1005004943447000.html)
-- [RAKwireless enclosure mounting guide](https://docs.rakwireless.com/product-categories/wisblock/rakbox-uo180x130x60/installation-guide/#mounting-guide)
-- [Pole clamp option 2](https://www.aliexpress.com/item/1005004943650198.html)
-- [Princess Auto 4 ft army tent pole](https://www.princessauto.com/en/4-ft-army-tent-pole/product/PA0009280777)
-- [3/4 × 36-inch steel tube](https://www.homedepot.ca/product/paulin-3-4-x-36-inch-round-steel-tube/1000126774)
+- Good for homes where a pole isn't practical.
+- Clips onto the gutter, with no drilling into walls.
+- Keeps the antenna up on a stable base.
 
-Stéphane P shared a printable Alfa antenna mount: [download the STL](https://drive.google.com/file/d/1wIU9kLxolzM9vPUB35ETY1sCPLGvtfFu/view?usp=share_link).
+[Download the STL](https://drive.proton.me/urls/A0P57SRHT0#voPRasptRVbW)
 
-![A 3D-printed Alfa antenna mount attached to a pole](images/PoleMount.jpg){ .mc-build-photo loading=lazy }
+[![RAK Unify enclosure on a 3D-printed gutter mount](images/RAKUnify_GutterMounted.jpeg){ .mc-build-photo width="300" loading=lazy }](images/RAKUnify_GutterMounted.jpeg)
 
-![A community example of a repeater pole attached near a chimney](images/ChimneyMount.jpg){ .mc-build-photo loading=lazy }
+## Vent pipe extension mount
 
-A chimney installation requires specific review of the chimney, structure, heat, clearances, fasteners, weather, and safe access. The photograph is not an instruction to copy the attachment.
+- A standard 3-foot ABS pipe from Home Depot, 3" in diameter.
+- ABS cement on the side joined to the extension. On the side attached to the
+  house, two self-tapping screws on each side as a safety measure, so it can be
+  removed later.
 
-### Gutter-mounted community example
+[![Repeater mounted on an ABS vent pipe extension](images/VentPipeExtension.jpg){ .mc-build-photo width="300" loading=lazy }](images/VentPipeExtension.jpg)
 
-Aussiemandias shared a printable gutter mount: [download the STL](https://drive.proton.me/urls/A0P57SRHT0#voPRasptRVbW).
+## Notes
 
-![A RAK Unify enclosure installed with a community-designed gutter mount](images/RAKUnify_GutterMounted.jpeg){ .mc-build-photo loading=lazy }
+- Whatever the mount, use weather-rated hardware that can handle your local wind.
+- Check mounts now and then for wear, corrosion or loosening.
+- These options are for the [300 mW solar repeater build](repeater-solar-300mw-diy-build.md).
 
-A gutter is not automatically structural. Inspect the gutter, fascia, fasteners, drainage, ice/snow loads, wind, cable route, and access before considering this approach.
-
-### Vent-pipe extension community example
-
-Do not use a vent-pipe extension until a qualified person confirms the existing
-vent, building materials, code requirements, and added load.
-
-![A community example of a repeater mounted on an ABS vent-pipe extension](images/VentPipeExtension.jpg){ .mc-build-photo loading=lazy }
-
-## Installation checklist
-
-<ul class="mc-checklist">
-  <li>Permission, safe access, electrical clearance, and site-specific review are documented.</li>
-  <li>Mount, fasteners, structure, and cable route match the reviewed plan.</li>
-  <li>Outdoor hardware and dissimilar metals are addressed for local conditions.</li>
-  <li>Cables have strain relief, bend protection, a drip path, and sealed entries.</li>
-  <li>The enclosure can vent as designed and does not collect water.</li>
-  <li>The antenna is attached before the radio can transmit.</li>
-  <li>Removal and physical USB recovery remain practical.</li>
-</ul>
-
-## Check the finished installation
-
-From a safe position, inspect the complete installation for movement, cable strain, loose hardware, blocked drainage, and water paths. Then confirm the repeater reconnects, retains its settings, sends an advert received locally, and passes the planned message-routing check.
-
-## Recovery and removal
-
-If anything moves, leaks, loosens, corrodes, changes electrically, or fails its radio check, stop using the site. Disconnect power when safe, remove or secure the equipment through the approved access plan, and return it to the bench. Do not troubleshoot energized equipment at height.
-
-## Maintenance record
-
-<div class="mc-maintenance-record" markdown>
-
-Set an inspection schedule for the site. Inspect again after severe weather, nearby work, water entry, or changed radio behaviour.
-
-Record each inspection date, inspector, photographs, hardware/cable condition, enclosure condition, radio verification, corrective work, and next due date.
-
-</div>
-
-## Before installing
-
-Return to the [repeater choice](recommended-repeaters.md) or [set up the repeater](../config/index.md) and bench-test it before installing it.
+**Next:** [Update a repeater over the air](../meshcore/update-repeater-ota.md)

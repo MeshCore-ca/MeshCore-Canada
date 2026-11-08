@@ -1,6 +1,6 @@
 ---
-title: Planifier le montage d’un répéteur
-description: Comparez des exemples de montage en privilégiant l’autorisation, la sécurité de la structure, les intempéries, les câbles et l’inspection.
+title: Installer un répéteur
+description: Les supports sur poteau, gouttière et tuyau d’évent que la communauté utilise pour les répéteurs solaires, avec photos et pièces à imprimer.
 audience:
   - repeater-builder
   - site-owner
@@ -21,136 +21,66 @@ page_styles:
   - assets/styles/devices-builds.css?v=20261019-1
 ---
 
-# Planifier le montage d’un répéteur
+# Installer un répéteur
 
-Utilisez ces exemples de la communauté pour discuter d’un site. Il ne s’agit
-pas de plans d’ingénierie conçus pour un bâtiment, un mât, un climat ou une
-propriété en particulier.
+Installez l’antenne le plus haut possible, avec une vue dégagée, sur un support
+qui résiste au vent et aux intempéries. **Plus c’est haut, mieux c’est :** plus
+le répéteur est élevé, meilleure est sa connexion au réseau.
 
-<div class="mc-guide-status" data-status="draft" markdown>
+Restez loin des lignes électriques et ne travaillez jamais seul sur un toit ou
+une échelle.
 
-**Référence d’installation à l’état d’ébauche.** Ces exemples n’ont pas été
-examinés en fonction de votre structure, du vent, de la glace, de la neige, de
-l’exposition à la foudre, de la mise à la terre, des dégagements électriques,
-de l’accès au toit ni des exigences locales.
+## Montage sur poteau
 
-</div>
+La méthode la plus courante : un poteau standard et un collier.
 
-!!! danger "La hauteur de l’antenne ne passe jamais avant la sécurité"
-    Ne travaillez pas près de lignes électriques aériennes ni sur un toit, une échelle, un mât, une cheminée, une gouttière ou un évent qui n’est pas sécuritaire. Si la fixation, la charge, la mise à la terre, l’exposition aux intempéries ou le plan d’accès est incertain, arrêtez et faites appel à une personne qualifiée de votre région.
+- Simple à installer avec du matériel facile à trouver.
+- Se fixe à un mât, une tour ou un poteau solide existant.
+- Idéal pour une installation permanente qui demande de la hauteur et de la stabilité.
 
-## Avant de choisir un montage
+**Colliers :** [support de poteau réglable (Amazon)](https://a.co/d/5U5cT4m) ·
+[collier, option 1 (AliExpress)](https://www.aliexpress.com/item/1005004943447000.html) ·
+[collier, option 2 (AliExpress)](https://www.aliexpress.com/item/1005004943650198.html) ·
+[guide de montage du boîtier RAK](https://docs.rakwireless.com/product-categories/wisblock/rakbox-uo180x130x60/installation-guide/#mounting-guide)
 
-<ul class="mc-checklist">
-  <li>Le propriétaire et toute autorité concernée approuvent l’emplacement et le passage des câbles.</li>
-  <li>Une personne qualifiée a examiné la structure, le vent, la glace, la neige, la corrosion, les dégagements électriques, le contexte de foudre et de mise à la terre ainsi que l’accès sécuritaire.</li>
-  <li>Le répéteur a réussi son essai sur l’établi et reste accessible par USB.</li>
-  <li>L’antenne, le boîtier, la ligne d’alimentation RF, les connecteurs, le serre-câble et les chemins d’écoulement sont planifiés comme un seul système.</li>
-  <li>Un plan d’inspection et de retrait est consigné avant l’installation.</li>
-</ul>
+**Poteaux :** [poteau de tente militaire de 4 pi (Princess Auto)](https://www.princessauto.com/en/4-ft-army-tent-pole/product/PA0009280777)
+(ils s’emboîtent pour gagner de la hauteur; ancrez-les bien) ·
+[tube d’acier de 3/4 × 36 po (Home Depot)](https://www.homedepot.ca/product/paulin-3-4-x-36-inch-round-steel-tube/1000126774)
 
-## Ce que cette installation change
+**Support sur poteau pour antenne Alfa :** Stéphane P a conçu ce support imprimé
+en 3D pour l’antenne Alfa de 5,8 dBi. [Télécharger le STL](https://drive.google.com/file/d/1wIU9kLxolzM9vPUB35ETY1sCPLGvtfFu/view?usp=share_link)
 
-Un montage fixe ajoute une charge et des ouvertures ou des pinces à une
-propriété, expose le matériel et les câbles aux intempéries et peut rendre la
-récupération physique plus difficile. Consignez le nom du propriétaire du site,
-les personnes qui peuvent y accéder et la façon dont l’installation sera
-inspectée et retirée.
+[![Support imprimé en 3D tenant une antenne Alfa sur un poteau](images/PoleMount.jpg){ .mc-build-photo width="300" loading=lazy }](images/PoleMount.jpg)
 
-## Exemples de la communauté
+**Poteau fixé à une cheminée :**
 
-### Poteau et pince
+[![Répéteur sur un poteau fixé à une cheminée](images/ChimneyMount.jpg){ .mc-build-photo width="300" loading=lazy }](images/ChimneyMount.jpg)
 
-Un poteau ou un mât conçu à cette fin peut offrir un passage de câble et un
-point de montage bien définis. Chaque section de poteau, pince, ancrage,
-structure et charge doit quand même être examinée pour le site précis.
+## Montage sur gouttière
 
-Pistes d’achat et de conception proposées par la communauté :
+**Aussiemandias**, membre de la communauté, a conçu un support de gouttière à
+imprimer en 3D pour une installation rapide et discrète.
 
-- [Support de poteau réglable](https://a.co/d/5U5cT4m)
-- [Option de pince pour poteau 1](https://www.aliexpress.com/item/1005004943447000.html)
-- [Guide de montage d’un boîtier RAKwireless](https://docs.rakwireless.com/product-categories/wisblock/rakbox-uo180x130x60/installation-guide/#mounting-guide)
-- [Option de pince pour poteau 2](https://www.aliexpress.com/item/1005004943650198.html)
-- [Poteau de tente militaire de 4 pi de Princess Auto](https://www.princessauto.com/en/4-ft-army-tent-pole/product/PA0009280777)
-- [Tube d’acier rond de 3/4 × 36 po](https://www.homedepot.ca/product/paulin-3-4-x-36-inch-round-steel-tube/1000126774)
+- Pratique pour les maisons où un poteau n’est pas possible.
+- Se fixe à la gouttière, sans percer les murs.
+- Garde l’antenne en hauteur sur une base stable.
 
-Stéphane P a partagé un support d’antenne Alfa imprimable :
-[télécharger le fichier STL](https://drive.google.com/file/d/1wIU9kLxolzM9vPUB35ETY1sCPLGvtfFu/view?usp=share_link).
+[Télécharger le STL](https://drive.proton.me/urls/A0P57SRHT0#voPRasptRVbW)
 
-![Support d’antenne Alfa imprimé en 3D et fixé à un poteau](images/PoleMount.jpg){ .mc-build-photo loading=lazy }
+[![Boîtier RAK Unify sur un support de gouttière imprimé en 3D](images/RAKUnify_GutterMounted.jpeg){ .mc-build-photo width="300" loading=lazy }](images/RAKUnify_GutterMounted.jpeg)
 
-![Exemple de la communauté montrant un poteau de répéteur fixé près d’une cheminée](images/ChimneyMount.jpg){ .mc-build-photo loading=lazy }
+## Montage sur rallonge de tuyau d’évent
 
-Une installation sur une cheminée exige un examen précis de la cheminée, de la
-structure, de la chaleur, des dégagements, des attaches, des intempéries et de
-l’accès sécuritaire. La photographie n’est pas une instruction pour reproduire
-la fixation.
+- Un tuyau ABS standard de 3 pi de Home Depot, de 3 po de diamètre.
+- De la colle ABS du côté joint à la rallonge. Du côté fixé à la maison, deux vis
+  autotaraudeuses de chaque côté par sécurité, pour pouvoir l’enlever plus tard.
 
-### Exemple de montage sur une gouttière
+[![Répéteur installé sur une rallonge de tuyau d’évent en ABS](images/VentPipeExtension.jpg){ .mc-build-photo width="300" loading=lazy }](images/VentPipeExtension.jpg)
 
-Aussiemandias a partagé un support de gouttière imprimable :
-[télécharger le fichier STL](https://drive.proton.me/urls/A0P57SRHT0#voPRasptRVbW).
+## Notes
 
-![Boîtier RAK Unify installé avec un support de gouttière conçu par la communauté](images/RAKUnify_GutterMounted.jpeg){ .mc-build-photo loading=lazy }
+- Peu importe le support, utilisez du matériel résistant aux intempéries et adapté au vent de votre région.
+- Inspectez les supports de temps à autre pour repérer l’usure, la corrosion ou le desserrage.
+- Ces options sont prévues pour le [répéteur solaire de 300 mW](repeater-solar-300mw-diy-build.md).
 
-Une gouttière n’est pas nécessairement un élément structural. Inspectez la
-gouttière, la planche de rive, les attaches, le drainage, les charges de glace
-et de neige, le vent, le passage des câbles et l’accès avant d’envisager cette
-approche.
-
-### Exemple de rallonge de tuyau d’évent
-
-N’utilisez pas une rallonge de tuyau d’évent avant qu’une personne qualifiée
-ait confirmé l’évent existant, les matériaux du bâtiment, les exigences du code
-et la charge ajoutée.
-
-![Exemple de la communauté montrant un répéteur monté sur une rallonge de tuyau d’évent en ABS](images/VentPipeExtension.jpg){ .mc-build-photo loading=lazy }
-
-## Liste de vérification de l’installation
-
-<ul class="mc-checklist">
-  <li>L’autorisation, l’accès sécuritaire, les dégagements électriques et l’examen propre au site sont documentés.</li>
-  <li>Le montage, les attaches, la structure et le passage des câbles correspondent au plan examiné.</li>
-  <li>La quincaillerie extérieure et les métaux différents ont été pris en compte selon les conditions locales.</li>
-  <li>Les câbles ont un serre-câble, une protection contre les plis, un chemin d’écoulement et des entrées étanches.</li>
-  <li>Le boîtier peut s’aérer comme prévu et n’accumule pas d’eau.</li>
-  <li>L’antenne est branchée avant que la radio puisse transmettre.</li>
-  <li>Le retrait et la récupération physique par USB demeurent pratiques.</li>
-</ul>
-
-## Vérifier l’installation terminée
-
-Depuis une position sécuritaire, inspectez toute l’installation pour repérer
-les mouvements, les tensions sur les câbles, la quincaillerie desserrée, le
-drainage obstrué et les chemins d’eau. Confirmez ensuite que le répéteur se
-reconnecte, conserve ses réglages, envoie une annonce reçue localement et
-réussit l’essai d’acheminement de messages prévu.
-
-## Récupération et retrait
-
-Si un élément bouge, fuit, se desserre, se corrode, change électriquement ou
-échoue à la vérification radio, cessez d’utiliser le site. Coupez l’alimentation
-lorsque c’est sécuritaire, retirez ou fixez le matériel conformément au plan
-d’accès approuvé, puis retournez-le sur l’établi. Ne dépannez pas du matériel
-sous tension en hauteur.
-
-## Dossier d’entretien
-
-<div class="mc-maintenance-record" markdown>
-
-Fixez un calendrier d’inspection adapté au site. Inspectez aussi l’installation
-après une tempête, des travaux à proximité, une infiltration d’eau ou un changement
-du comportement radio.
-
-Pour chaque inspection, consignez la date, le nom de la personne qui l’a
-effectuée, les photographies, l’état de la quincaillerie et des câbles, l’état
-du boîtier, la vérification radio, les travaux correctifs et la date de la
-prochaine inspection.
-
-</div>
-
-## Avant l’installation
-
-Revenez au [choix du répéteur](recommended-repeaters.md) ou
-[configurez le répéteur](../config/index.md) et testez-le sur l’établi
-avant de l’installer.
+**Ensuite :** [Mettre un répéteur à jour à distance](../meshcore/update-repeater-ota.md)

@@ -118,7 +118,9 @@ test("mounting Markdown remains repaired", () => {
 
   assert.doesNotMatch(mounting, /^\*\* \[/m);
   assert.doesNotMatch(mounting, /!\[\]\(/);
-  assert.match(mounting, /Installation checklist/);
+  assert.match(mounting, /Height is might/);
+  assert.match(mounting, /Stéphane P/);
+  assert.match(mounting, /Aussiemandias/);
 });
 
 test("Saskatchewan directory and generated listing agree on the national baseline", () => {
