@@ -91,29 +91,15 @@ test("recommendation pages state compatibility and current-purchase limits", () 
   }
 });
 
-test("the 300 mW draft retains its staged safety checks and records", () => {
-  for (const path of [
-    "docs/hardware/repeater-solar-300mw-diy-build.md",
-  ]) {
+test("the 300 mW build keeps the original parts list and numbered steps", () => {
+  for (const path of ["docs/hardware/repeater-solar-300mw-diy-build.md", "docs/hardware/repeater-solar-300mw-diy-build.fr.md"]) {
     const source = read(path);
-    for (const phrase of [
-      "Before you start",
-      "What this build changes",
-      "Bill of materials",
-      "Tools",
-      "Assembly stages",
-      "Check the readings",
-      "Test it on the bench",
-      "Recovery and undo",
-      "Maintenance",
-      "Source",
-    ]) {
-      assert.match(source, new RegExp(phrase, "i"), `${path} missing ${phrase}`);
-    }
-    assert.match(source, /class="mc-stage-list"/);
-    assert.match(source, /class="mc-checklist"/);
-    assert.match(source, /No numeric .*peer-reviewed/i);
-    assert.match(source, /physical USB|USB recovery/i);
+    assert.match(source, /MrAlders0n/, path);
+    assert.match(source, /\| \*\*(Enclosure|Boîtier)\*\* \| WisMesh Unify Enclosure 910422/, path);
+    assert.match(source, /^22\. /m, `${path} keeps all 22 steps`);
+    assert.match(source, /!!! danger/, `${path} warns to attach antennas before power`);
+    assert.match(source, /\]\(\.\.\/config\/index\.md\)/, `${path} flashes with the setup tool`);
+    assert.match(source, /polarit/i, path);
   }
 });
 
