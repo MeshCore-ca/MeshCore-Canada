@@ -7,6 +7,7 @@ audience:
 task: update-repeater-ota
 scope: experimental
 status: experimental
+status_notice: false
 owner: docs-firmware
 last_reviewed: 2026-07-22
 review_by: 2026-10-17
@@ -20,110 +21,99 @@ requires:
 page_styles:
   - assets/styles/devices-builds.css?v=20261019-1
 ---
+
 # Update a repeater or room server over the air
 
-Use USB when you can. An over-the-air update is a higher-risk fallback for
-supported nRF52 devices, and a failed update may still need USB recovery.
-Confirm the exact board, bootloader, installed version, and firmware file
-before continuing.
+## Before you start
 
-!!! danger "Bootloader prerequisite"
-    Proceed only after confirming that the exact board has the OTAFIX bootloader described in the [repeater setup tool](../config/index.md), which walks through the bootloader update for nRF52 boards. A failed OTA update can require physical USB recovery.
+!!! danger "Bootloader first"
+    Only do this if the repeater has the **OTAFIX bootloader**. The
+    [repeater setup tool](../config/index.md) walks through the bootloader update
+    for nRF52 boards.
 
-!!! warning "Android is the method tested by the community"
-    The community has observed failed OTA attempts from iOS and currently recommends Android for this workflow. This is a local risk-control recommendation, not a claim that upstream iOS support does not exist.
+!!! danger "Android only: iOS not recommended"
+    These steps are for **Android**. iOS technically works, but we've had several
+    failed OTA updates from iOS. Until that changes, don't use an iOS device for
+    OTA updates.
 
-## Prerequisites: decide whether to stop
+This only applies to nRF-based boards (for example the RAK4630, Heltec T114 and
+XIAO nRF52). **We strongly recommend updating over USB instead.**
 
-Use USB instead if any answer below is **no**:
+!!! warning "OTA risks"
+    An OTA update can fail even when the app says it worked, and then the
+    repeater needs a USB re-flash. We had one fail in winter and had to wait until
+    spring to reach the repeater. Proceed at your own risk.
 
-- [ ] The device is an OTA-supported nRF52 board such as a RAK4631, Heltec T114, or XIAO nRF52840.
-- [ ] The board identity, installed bootloader, current firmware, and intended firmware file are known.
-- [ ] The private key, settings, region configuration, and access details are backed up securely.
-- [ ] Stable power and a reliable radio-management path are available for the full update.
-- [ ] Someone can reach the device with a USB cable if OTA fails.
-- [ ] The downloaded ZIP names the exact board and role.
+Save the repeater's private key first, in case a failed update forces a USB
+re-flash: log in as admin, open **Command Line** and send `get prv.key`. Keep the
+reply in a password manager and never share it.
 
-!!! danger "No physical recovery means no OTA"
-    Do not start an OTA update on a roof, tower, winter site, or other inaccessible installation when a failed update cannot be recovered promptly by USB.
+These steps summarise the [official instructions on the MeshCore blog](https://blog.meshcore.io/2026/04/02/nrf-ota-update).
 
-## What the update changes
+## 1. Download the firmware .zip
 
-OTA places the device into firmware-update mode and replaces its firmware over Bluetooth. A failed transfer can leave the device needing physical USB recovery, while a wrong artifact can target the wrong board or role.
+1. Open the [MeshCore flasher](https://meshcore.io/flasher) and find your device.
+2. Select the **Repeater** or **Room Server** role, then the latest version.
+3. Click **Download** at the bottom right and choose the `.zip` file.
 
-## Recovery plan before starting
+You can also download the `.zip` for your board (for example, the T114 repeater)
+from the [MeshCore GitHub releases](https://github.com/meshcore-dev/MeshCore/releases).
 
-Keep the correct USB firmware and a data cable ready. Record the current version and settings. If the device remains in DFU mode after a failed attempt, scan again for a generic DFU name and retry the same verified ZIP. If it does not recover over the air, stop and reflash the exact board/role by USB using the backup.
+## 2. Log in and start OTA
 
-## 1. Download the Exact Firmware ZIP
+1. In the MeshCore app, log in to the device with the admin password.
+2. Open the **Command Line** tab and send:
 
-1. Open the [MeshCore Web Flasher](https://meshcore.io/flasher).
-2. Select the exact device and **Repeater** or **Room Server** role.
-3. Choose the specific version approved for this update; do not rely on a generic “latest” label.
-4. Use the download control to save the `.zip` artifact.
-
-Alternatively, use the [official MeshCore releases](https://github.com/meshcore-dev/MeshCore/releases) and verify the artifact is for the exact board and role.
-
-## 2. Put the Device in OTA Mode
-
-1. In the MeshCore mobile app, log in with the admin password.
-2. Open **Command Line** and run:
-
-    ```text
+    ```
     start ota
     ```
 
-3. Continue only after a reply similar to `OK - mac: FF:AA:BB ...` confirms OTA mode. If there is no confirmation, stop and keep the device on its current firmware.
+3. You should see a reply like:
 
-You may also issue `start ota` from a standalone management device that supports the repeater command line.
+    ```
+    OK - mac: FF:AA:BB ...
+    ```
 
-## 3. Transfer the Update
+**Tip:** a standalone device such as a T-Deck running Ripple can also send
+`start ota`.
 
-Install Nordic's **nRF Device Firmware Update** app from the official app store for the phone.
+## 3. Connect with your phone
 
-For the Android method tested by the community, use:
+Install Nordic's **nRF Device Firmware Update** app from Google Play if you don't
+have it.
 
-- **Packet receipts notification:** on
-- **Number of packets:** `8`
-- **Request high MTU:** off
-- **Disable resume:** on
-- **Prepare object delay:** `0 ms`
-- **Force scanning:** on
+### DFU app settings
 
-Then:
+Tap the **Settings** icon and set:
 
-1. Select the verified `.zip` file.
-2. Select the expected device from the scan list.
-3. Start the update and keep the phone, device, and power stable until the app reports completion.
+- **Packet receipts notification:** ON
+- **Number of packets:** 8
+- **Request high MTU:** OFF
+- **Disable resume:** ON
+- **Prepare object delay:** 0 ms
+- **Force scanning:** ON
 
-If the app reports failure but a generic name such as `AdaDFU` or `RAK4631_DFU` appears, select that device and retry the same verified ZIP once. Do not switch to another board's file.
+### Start the update
 
-## Check the transfer
+1. Select the `.zip` file you downloaded.
+2. Select your device from the scan list.
+3. Press **Start** and wait for the update to finish.
 
-The DFU app reports completion, the device restarts, remote administration reconnects, and the device reports the intended firmware version. Anything less is a failed or incomplete update.
+## 4. Check it updated
 
-## 4. Test the update
+1. Log out and log back in, with the app or a standalone device.
+2. Check the clock with `clock`. If it's wrong, send `clock sync`.
+3. Send `ver` to confirm the firmware version changed.
 
-1. Log out and reconnect after the device restarts.
-2. Run `ver` and confirm the exact intended firmware version.
-3. Run `clock`; if needed, run `clock sync` from a supported remote management device.
-4. Confirm the radio, path-hash, region, advert, access, and role settings still match the saved configuration.
-5. Send an advert and complete a local message-routing test.
+## Recovery if it fails
 
-The update is not complete until the device reconnects, reports the intended version, retains its configuration, and passes the local test.
+If the update stalls or fails, send this from your phone or a standalone device,
+then try again:
 
-For upstream context, see the [official MeshCore OTA instructions](https://blog.meshcore.io/2026/04/02/nrf-ota-update).
+```
+reboot
+```
 
-
-## Recovery after a failed update
-
-If the same verified ZIP cannot complete against the expected DFU device, stop remote attempts and recover the exact board/role by USB. Restore the backed-up identity and settings where supported, then repeat the complete verification. Never try a different board artifact as a recovery guess.
-
-## After the update
-
-Record the old and new versions, artifact filename/source, device identity, result, settings check, radio test, and recovery status in the repeater maintenance record.
-
-## What has been tested
-
-The Android recommendation and DFU settings come from community testing. They
-are not a complete test matrix for every board, firmware version, phone, or app.
+**RAK4631 with the updated bootloader:** the app will likely say the flash
+failed. Scan again: the device shows up with a generic name (such as AdaDFU or
+RAK4631_DFU). Select it and upload the update again.
