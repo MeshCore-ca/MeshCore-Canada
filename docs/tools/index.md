@@ -65,10 +65,5 @@ Choose the tool that matches your task.
 
 </div>
 
-## Before setting up an observer
-
-Observers publish heard packet data. Read [what is collected and who can access
-it](../analyzer/data-collection-access.md) before setting one up.
-
 Need help? See [observer troubleshooting](../analyzer/troubleshooting.md) or
 [ask the community](../start/get-help.md).

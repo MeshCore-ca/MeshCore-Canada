@@ -67,12 +67,6 @@ Choisissez un outil selon votre tâche.
 
 </div>
 
-## Avant de configurer un observateur
-
-Les observateurs publient les données des paquets qu’ils captent. Avant d’en
-configurer un, lisez [quelles données sont recueillies et qui peut y
-accéder](../analyzer/data-collection-access.md).
-
 Besoin d’aide? Consultez la page de
 [dépannage des observateurs](../analyzer/troubleshooting.md) ou
 [demandez à la communauté](../start/get-help.md).

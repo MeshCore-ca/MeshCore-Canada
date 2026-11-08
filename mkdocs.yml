@@ -136,16 +136,15 @@ plugins:
             Wire connector types: Types de connecteurs de fils
             Update a repeater over the air: Mettre un répéteur à jour à distance
             Network Tools: Outils réseau
-            Choose a network tool: Choisir un outil réseau
             Set up a repeater: Configurer un répéteur
             Find your zone: Trouver votre zone
             How repeaters work: Comprendre les répéteurs
             Set up an observer: Configurer un observateur
+            Network tools: Outils réseau
+            Observers: Observateurs
             Check an observer: Vérifier un observateur
-            Troubleshoot network data: Dépanner les données du réseau
-            Observer methods: Méthodes d'observation
-            Observer data and privacy: Données d'observation et confidentialité
-            References: Références
+            Troubleshooting: Dépannage
+            Data and privacy: Données et confidentialité
             Broker reference: Référence des serveurs MQTT
             Location codes: Codes d'emplacement
             Learn: Comprendre MeshCore
@@ -244,18 +243,17 @@ nav:
       - Update a repeater over the air: meshcore/update-repeater-ota.md
       - Station G3 (advanced): hardware/station-g3.md
   - Network Tools:
-      - Choose a network tool: tools/index.md
+      - Network tools: tools/index.md
       - Find your zone: config/map.md
       - How repeaters work: config/guide.md
-      - Check an observer: analyzer/verify.md
-      - Troubleshoot network data: analyzer/troubleshooting.md
-      - Observer methods:
-          - Observer data and privacy: analyzer/data-collection-access.md
+      - Observers:
+          - Check an observer: analyzer/verify.md
+          - Troubleshooting: analyzer/troubleshooting.md
+          - Data and privacy: analyzer/data-collection-access.md
           - RemoteTerm: analyzer/remoteterm.md
           - MCtoMQTT: analyzer/builds/mctomqtt.md
           - Home Assistant: analyzer/builds/meshcore-ha.md
           - PyMC: analyzer/builds/pymc.md
-      - References:
           - Broker reference: analyzer/broker-reference.md
           - Location codes: analyzer/iata-codes.md
   - Learn:
