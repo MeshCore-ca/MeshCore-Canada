@@ -58,6 +58,14 @@ class ContentValidationTests(unittest.TestCase):
         self.assertEqual(["index.md: warning: verified page is due for review since 2026-10-19"], problems)
         self.assertTrue(all(MODULE.is_warning(problem) for problem in problems))
 
+    def test_an_error_that_quotes_the_warning_text_still_fails(self) -> None:
+        page = VALID.replace("scope: canada-baseline", "scope: \"warning: verified page is due for review\"")
+        self.write("index.md", page)
+        problems = MODULE.validate_tree(self.docs, self.today)
+        self.assertEqual(1, len(problems))
+        self.assertIn("unsupported scope", problems[0])
+        self.assertFalse(MODULE.is_warning(problems[0]))
+
     def test_cache_busted_local_asset_passes(self) -> None:
         self.write("assets/app.js", "console.log('fixture');\n")
         page = VALID.replace(

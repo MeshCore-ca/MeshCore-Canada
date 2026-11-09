@@ -82,8 +82,12 @@ def read_page(path: Path) -> tuple[dict[str, Any], str, list[str]]:
 OVERDUE = "warning: verified page is due for review"
 
 
+class ReviewWarning(str):
+    """A problem that is reported but doesn't fail validation. Only the overdue-review check creates one."""
+
+
 def is_warning(problem: str) -> bool:
-    return OVERDUE in problem
+    return isinstance(problem, ReviewWarning)
 
 
 def validate_page(path: Path, docs_root: Path, today: dt.date) -> tuple[dict[str, Any], list[str]]:
@@ -150,7 +154,7 @@ def validate_page(path: Path, docs_root: Path, today: dt.date) -> tuple[dict[str
     if last_reviewed and review_by and last_reviewed > review_by:
         errors.append("review_by cannot be earlier than last_reviewed")
     if status == "verified" and review_by and review_by < today:
-        errors.append(f"{OVERDUE} since {review_by.isoformat()}")
+        errors.append(ReviewWarning(f"{OVERDUE} since {review_by.isoformat()}"))
 
     headings = H1.findall(body)
     if len(headings) != 1:
@@ -230,7 +234,9 @@ def validate_tree(
         metadata, errors = validate_page(path, docs_root, today)
         relative = path.relative_to(docs_root).as_posix()
         locale = locale_for_page(path)
-        problems.extend(f"{relative}: {error}" for error in errors)
+        problems.extend(
+            (ReviewWarning if is_warning(error) else str)(f"{relative}: {error}") for error in errors
+        )
         if isinstance(metadata.get("title"), str):
             titles[(locale, metadata["title"].strip().casefold())].append(path)
         if isinstance(metadata.get("description"), str):
