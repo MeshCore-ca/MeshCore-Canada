@@ -160,12 +160,11 @@ test("broker reference lists every administrator and public contact in both lang
 
 test("verification distinguishes connectivity from an observed packet", () => {
   const source = read("docs/analyzer/verify.md");
-  assert.match(source, /Connected does not mean packets have reached CoreScope/i);
-  assert.match(source, /Follow a packet through four stages/);
-  for (const stage of ["Radio:", "Observer:", "Observer view:", "Packet view:"]) {
-    assert.match(source, new RegExp(stage));
-  }
+  assert.match(source, /Connected\s+doesn't mean packets have reached CoreScope/i);
+  assert.match(source, /\?tab=Observers/);
+  assert.match(source, /## Healthy observer checklist/);
   assert.match(source, /first thing that failed/i);
+  assert.match(source, /`mqtt\.packets`[\s\S]*Payload Mode[\s\S]*letsmesh/);
 });
 
 test("troubleshooting starts with symptoms and defines a safe support note", () => {

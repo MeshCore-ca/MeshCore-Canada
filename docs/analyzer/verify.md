@@ -6,6 +6,7 @@ audience:
 task: verify-observer
 scope: canada-baseline
 status: draft
+status_notice: false
 owner: meshcore-canada
 last_reviewed: 2026-07-22
 review_by: 2026-10-19
@@ -18,72 +19,70 @@ page_styles:
 
 # Check your observer
 
-Connected does not mean packets have reached CoreScope. Your observer is working when
-a real radio packet reaches CoreScope.
+After setting up your observer (a [repeater observer](../config/index.md?type=observer),
+[MCtoMQTT](builds/mctomqtt.md), [PyMC](builds/pymc.md),
+[Home Assistant](builds/meshcore-ha.md) or [RemoteTerm](remoteterm.md)), use
+these links to confirm it's online and reporting.
 
-## Follow a packet through four stages
+<div class="grid cards" markdown>
 
-<ol class="mc-steps">
-  <li>
-    <strong>Radio:</strong> confirm the device is on the local mesh settings and can hear nearby activity.
-    <br>A packet counter, log, or connected application should change when a nearby node transmits.
-  </li>
-  <li>
-    <strong>Observer:</strong> check the method's service, integration, or device status.
-    <br>It should report an encrypted connection to the primary server without repeating authentication errors.
-  </li>
-  <li>
-    <strong>Observer view:</strong> open <a href="https://live.meshcore.ca/?tab=Observers">Live observer list</a>.
-    <br>The observer name and three-letter location code should appear with a recent timestamp.
-  </li>
-  <li>
-    <strong>Packet view:</strong> create nearby MeshCore activity, then open <a href="https://live.meshcore.ca/">Live packets</a>.
-    <br>A recent packet attributed to the observer should appear within a few minutes.
-  </li>
-</ol>
+-   :material-eye:{ .lg .middle } **Observers**
 
-Do not generate unnecessary traffic on a busy mesh. A normal advert or existing nearby activity is enough.
+    ---
 
-## Check the details
+    See every connected observer and its status.
+
+    [:octicons-arrow-right-24: View observers](https://live.meshcore.ca/?tab=Observers)
+
+-   :material-swap-horizontal:{ .lg .middle } **Packets**
+
+    ---
+
+    Watch live packet traffic coming in from observers.
+
+    [:octicons-arrow-right-24: View packets](https://live.meshcore.ca/)
+
+-   :material-map-marker:{ .lg .middle } **Map**
+
+    ---
+
+    See observers and nodes on the map.
+
+    [:octicons-arrow-right-24: View the map](https://live.meshcore.ca/?tab=Map)
+
+-   :material-wrench:{ .lg .middle } **Troubleshooting**
+
+    ---
+
+    Not showing up? Fixes for every observer type.
+
+    [:octicons-arrow-right-24: Troubleshooting](troubleshooting.md)
+
+</div>
+
+Your observer should appear within a few minutes of coming online. Connected
+doesn't mean packets have reached CoreScope: it's working once a recent packet
+from your observer shows up.
+
+## Healthy observer checklist
 
 | Check | What you should see |
 |---|---|
-| Name | A clear service name such as `YOW-Repeater-01`, without a home address |
-| Location | The uppercase code from the [Find your zone](../config/map.md) page, or a community-agreed code where no zone is published |
-| Primary path | Connected to `mqtt1.meshcore.ca` with TLS certificate verification |
-| Backup path | Connected to `mqtt2.meshcore.ca` where the method supports two entries |
-| Packet mode | Packet publishing is enabled, not status-only |
-| Packet time | A recent packet appears after the radio hears nearby traffic |
-| Radio | Local settings are used; the Canada defaults apply only when no local override exists |
+| Observer name | A clear name such as `YOW-Repeater-01` |
+| Region | The uppercase code from [Find your zone](../config/map.md), not `CAN`, `XXX` or `HOME` |
+| Brokers | Primary and backup configured, where the method supports both |
+| Packets | Recent packet times in CoreScope after nearby mesh activity |
+| Radio | The **Canada** preset with 3-byte paths, unless your community's page differs |
 
-## Keep a maintenance note
+## First checks
 
-Keep a short private maintenance note:
+If it doesn't appear, start with the first thing that failed:
 
-```text
-Observer:
-Method and version:
-Location code:
-Checked at (include time zone):
-Radio heard a packet: yes / no
-Primary connected: yes / no
-Backup connected: yes / no / not supported
-Observer visible: yes / no
-Packet visible: yes / no
-```
-
-Do not include credentials, private keys, Wi-Fi names, or Wi-Fi passwords.
-
-## Start with the first thing that failed
-
-Use the matching guide for the first thing that failed:
-
-| What failed first | Where to start |
+| What you see | First check |
 |---|---|
-| Radio does not hear activity | [Observer appears but no packets](troubleshooting.md#observer-appears-but-no-packets-arrive) |
-| Observer cannot connect | [Observer never appears](troubleshooting.md#observer-never-appears) |
-| Observer is visible but packet view stays empty | [Observer appears but no packets](troubleshooting.md#observer-appears-but-no-packets-arrive) |
-| Backup alone fails | [Only the backup connection fails](troubleshooting.md#only-the-backup-connection-fails) |
-| Place or name is wrong | [Observer appears in the wrong place](troubleshooting.md#observer-appears-in-the-wrong-place) |
+| No observer entry | MQTT is connected and the region code is a real code from [Find your zone](../config/map.md) |
+| Observer appears, but no packets | Packet publishing is on: repeater observer `mqtt.packets`, Home Assistant **Payload Mode** = `packet`, or PyMC `format: letsmesh` |
+| Backup broker doesn't connect | The token audience matches the broker host (`mqtt2.meshcore.ca` for broker 2) |
+| Observer appears under the wrong city | Every broker entry uses the same region code; don't use `CAN` for Canada |
 
-For safe commands and a redacted support note, use [Troubleshooting](troubleshooting.md).
+For method-specific commands and Home Assistant settings, see [Troubleshooting](troubleshooting.md).

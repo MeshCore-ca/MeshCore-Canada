@@ -6,6 +6,7 @@ audience:
 task: verify-observer
 scope: canada-baseline
 status: draft
+status_notice: false
 owner: meshcore-canada
 last_reviewed: 2026-07-22
 review_by: 2026-10-19
@@ -18,77 +19,70 @@ page_styles:
 
 # Vérifier votre observateur
 
-Une connexion ne confirme pas que les paquets arrivent à CoreScope. Votre
-observateur fonctionne lorsqu’un véritable paquet radio se rend jusqu’à
-CoreScope.
+Après avoir configuré votre observateur (un [répéteur observateur](../config/index.md?type=observer),
+[MCtoMQTT](builds/mctomqtt.md), [PyMC](builds/pymc.md),
+[Home Assistant](builds/meshcore-ha.md) ou [RemoteTerm](remoteterm.md)),
+utilisez ces liens pour confirmer qu’il est en ligne et qu’il transmet.
 
-## Suivre un paquet en quatre étapes
+<div class="grid cards" markdown>
 
-<ol class="mc-steps">
-  <li>
-    <strong>Radio :</strong> confirmez que l’appareil utilise les paramètres du réseau local et qu’il capte l’activité à proximité.
-    <br>Un compteur de paquets, un journal ou une application connectée devrait changer lorsqu’un nœud à proximité transmet.
-  </li>
-  <li>
-    <strong>Observateur :</strong> vérifiez l’état du service, de l’intégration ou de l’appareil utilisé par votre méthode.
-    <br>Il devrait indiquer une connexion chiffrée à l’adresse principale, sans erreurs d’authentification répétées.
-  </li>
-  <li>
-    <strong>Vue des observateurs :</strong> ouvrez <a href="https://live.meshcore.ca/?tab=Observers">Observateurs en direct</a>.
-    <br>Le nom de l’observateur et son code d’emplacement à trois lettres devraient apparaître avec une heure récente.
-  </li>
-  <li>
-    <strong>Vue des paquets :</strong> produisez de l’activité MeshCore à proximité, puis ouvrez <a href="https://live.meshcore.ca/">Paquets en direct</a>.
-    <br>Un paquet récent attribué à l’observateur devrait apparaître en quelques minutes.
-  </li>
-</ol>
+-   :material-eye:{ .lg .middle } **Observateurs**
 
-Ne produisez pas de trafic inutile sur un réseau maillé occupé. Une annonce
-normale ou l’activité déjà présente à proximité suffit.
+    ---
 
-## Vérifier les détails
+    Voyez tous les observateurs connectés et leur état.
+
+    [:octicons-arrow-right-24: Voir les observateurs](https://live.meshcore.ca/?tab=Observers)
+
+-   :material-swap-horizontal:{ .lg .middle } **Paquets**
+
+    ---
+
+    Suivez en direct les paquets transmis par les observateurs.
+
+    [:octicons-arrow-right-24: Voir les paquets](https://live.meshcore.ca/)
+
+-   :material-map-marker:{ .lg .middle } **Carte**
+
+    ---
+
+    Voyez les observateurs et les nœuds sur la carte.
+
+    [:octicons-arrow-right-24: Voir la carte](https://live.meshcore.ca/?tab=Map)
+
+-   :material-wrench:{ .lg .middle } **Dépannage**
+
+    ---
+
+    Il n’apparaît pas? Des solutions pour chaque type d’observateur.
+
+    [:octicons-arrow-right-24: Dépannage](troubleshooting.md)
+
+</div>
+
+Votre observateur devrait apparaître quelques minutes après sa mise en ligne.
+Être connecté ne veut pas dire que les paquets ont atteint CoreScope : il
+fonctionne dès qu’un paquet récent de votre observateur apparaît.
+
+## Liste de vérification
 
 | Vérification | Ce que vous devriez voir |
 |---|---|
-| Nom | Un nom de service clair comme `YOW-Repeater-01`, sans adresse résidentielle |
-| Emplacement | Le code en majuscules sur la page [Trouver votre zone](../config/map.md), ou un code convenu avec la communauté si aucune zone n’est publiée |
-| Parcours principal | Connexion à `mqtt1.meshcore.ca` avec validation du certificat TLS |
-| Parcours de secours | Connexion à `mqtt2.meshcore.ca` si la méthode accepte deux entrées |
-| Mode de paquets | Publication des paquets activée, et non seulement celle de l’état |
-| Heure du paquet | Un paquet récent apparaît après que la radio a capté de l’activité à proximité |
-| Radio | Les paramètres locaux sont utilisés; les paramètres par défaut du Canada s’appliquent seulement en l’absence d’une configuration locale |
+| Nom de l’observateur | Un nom clair comme `YOW-Repeater-01` |
+| Région | Le code en majuscules indiqué par [Trouver votre zone](../config/map.md), pas `CAN`, `XXX` ni `HOME` |
+| Serveurs | Serveur principal et de secours configurés, si la méthode prend les deux en charge |
+| Paquets | Des paquets récents dans CoreScope après de l’activité à proximité |
+| Radio | Le préréglage **Canada** avec des parcours de 3 octets, sauf si la page de votre communauté indique autre chose |
 
-## Conserver une note d’entretien
+## Premières vérifications
 
-Conservez une courte note d’entretien privée. Gardez les libellés du modèle
-ci-dessous pour faciliter le soutien :
+S’il n’apparaît pas, commencez par la première chose qui a échoué :
 
-```text
-Observer:
-Method and version:
-Location code:
-Checked at (include time zone):
-Radio heard a packet: yes / no
-Primary connected: yes / no
-Backup connected: yes / no / not supported
-Observer visible: yes / no
-Packet visible: yes / no
-```
-
-N’y inscrivez pas d’identifiants, de clés privées, de noms de réseaux Wi-Fi ou
-de mots de passe Wi-Fi.
-
-## Commencer par le premier échec
-
-Consultez le guide qui correspond au premier élément qui a échoué :
-
-| Premier échec | Point de départ |
+| Ce que vous voyez | Première vérification |
 |---|---|
-| La radio ne capte aucune activité | [L’observateur apparaît, mais aucun paquet n’arrive](troubleshooting.md#observer-appears-but-no-packets-arrive) |
-| L’observateur ne peut pas se connecter | [L’observateur n’apparaît jamais](troubleshooting.md#observer-never-appears) |
-| L’observateur est visible, mais la vue des paquets reste vide | [L’observateur apparaît, mais aucun paquet n’arrive](troubleshooting.md#observer-appears-but-no-packets-arrive) |
-| Seule la connexion de secours échoue | [Seule la connexion de secours échoue](troubleshooting.md#only-the-backup-connection-fails) |
-| Le lieu ou le nom est incorrect | [L’observateur apparaît au mauvais endroit](troubleshooting.md#observer-appears-in-the-wrong-place) |
+| Aucune entrée d’observateur | MQTT est connecté et le code de région est un vrai code de [Trouver votre zone](../config/map.md) |
+| L’observateur apparaît, mais aucun paquet | La publication des paquets est activée : `mqtt.packets` sur le répéteur observateur, **Payload Mode** = `packet` dans Home Assistant, ou `format: letsmesh` dans PyMC |
+| Le serveur de secours ne se connecte pas | L’audience du jeton correspond à l’hôte du serveur (`mqtt2.meshcore.ca` pour le serveur 2) |
+| L’observateur apparaît dans la mauvaise ville | Chaque entrée de serveur utilise le même code de région; n’utilisez pas `CAN` pour le Canada |
 
-Pour obtenir des commandes sûres et un modèle de demande d’aide caviardée,
-consultez le [dépannage](troubleshooting.md).
+Pour les commandes propres à chaque méthode et les réglages de Home Assistant, consultez le [dépannage](troubleshooting.md).
