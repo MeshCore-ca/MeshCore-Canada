@@ -21,17 +21,7 @@ page_styles:
 
 MCtoMQTT reads packets from a USB-connected MeshCore radio and publishes them from an always-on Linux or macOS host.
 
-## Is this method right for you?
-
-<div class="mc-method-fit">
-  <div><strong>Use MCtoMQTT if</strong>A Linux or macOS computer stays beside a packet-log radio connected over USB.</div>
-  <div><strong>Use something else if</strong>RemoteTerm, Home Assistant, or PyMC already manages the radio.</div>
-  <div><strong>Keep online</strong>The radio, USB connection, host service, and internet connection.</div>
-</div>
-
-The helper can also configure `meshcore-packet-capture` for a companion connected by BLE, serial, or TCP.
-
-## Before you start
+## You need { #before-you-start }
 
 | Requirement | Check |
 |---|---|
@@ -158,18 +148,9 @@ Set the companion radio to the local mesh settings first.
 
 There is no documented `meshcoretomqtt` Windows installer for the packet-log serial-host path.
 
-## What you should see
+## Check it { #verify-in-corescope }
 
-The service stays active, connects to the primary server, and counts new packets when the radio hears nearby traffic.
-
-## Verify in CoreScope
-
-1. Confirm the service remains active.
-2. Find the observer in [Live observer list](https://live.meshcore.ca/?tab=Observers).
-3. Wait for normal nearby activity.
-4. Confirm a recent packet in [Live packets](https://live.meshcore.ca/).
-
-Finish with [Check your observer](../verify.md). A running service or broker connection is not proof that packets reached CoreScope.
+Your observer should show up within a few minutes in the [Live observer list](https://live.meshcore.ca/?tab=Observers), with recent packets in [Live packets](https://live.meshcore.ca/). A connected status is not proof that packets arrived, so finish with [Check your observer](../verify.md). Not showing? See [Troubleshooting](../troubleshooting.md).
 
 ## Recovery
 
@@ -193,6 +174,3 @@ For companion capture, restore the printed `.env.local.bak.<timestamp>` over `.e
 
 The helper does not uninstall software added by an upstream install flag. Use that upstream project's reviewed uninstall process.
 
-## If verification fails
-
-Use [Troubleshooting](../troubleshooting.md). Share only a short redacted service status and the list of changed paths.

@@ -22,14 +22,6 @@ page_styles:
 Utilisez l’intégration MeshCore déjà configurée dans Home Assistant pour envoyer
 la télémétrie des paquets à MeshCore Canada.
 
-## Cette méthode vous convient-elle?
-
-<div class="mc-method-fit">
-  <div><strong>Utilisez Home Assistant si</strong>Une intégration MeshCore fonctionnelle et une radio connectée y sont déjà configurées.</div>
-  <div><strong>Choisissez autre chose si</strong>Vous installeriez Home Assistant uniquement pour observer.</div>
-  <div><strong>À garder en ligne</strong>Home Assistant, la connexion radio et l’accès Internet.</div>
-</div>
-
 ## Vérifier votre écran
 
 Les intégrations MeshCore actuelles utilisent ces champs :
@@ -43,18 +35,13 @@ Si votre écran est différent, consultez
 Mettez l’intégration à jour si elle n’accepte pas le bon code d’emplacement; ne
 choisissez pas un code voisin pour contourner le problème.
 
-## Avant de commencer
+## Ce qu’il vous faut
 
-- [ ] Home Assistant et l’intégration MeshCore fonctionnent correctement.
-- [ ] La radio est connectée par une liaison USB, BLE ou TCP compatible.
-- [ ] La radio utilise les paramètres du réseau maillé local.
-- [ ] Vous avez choisi un véritable [code d’emplacement](../iata-codes.md).
-- [ ] Vous avez lu [Données des observateurs et vie privée](../data-collection-access.md).
-
-## Ce qui sera modifié
-
-Vous ajouterez deux entrées de courtier MQTT et activerez les paquets dans
-**Payload Mode**. N’entrez ni mot de passe Wi-Fi ni mot de passe MQTT statique.
+- Home Assistant et l’intégration MeshCore fonctionnent correctement.
+- La radio est connectée par une liaison USB, BLE ou TCP compatible.
+- La radio utilise les paramètres du réseau maillé local.
+- Vous avez choisi un véritable [code d’emplacement](../iata-codes.md).
+- Vous avez lu [Données des observateurs et vie privée](../data-collection-access.md).
 
 ## Configuration
 
@@ -91,21 +78,9 @@ Ajoutez l’entrée de secours avec les mêmes paramètres, en ne modifiant que 
 Laissez les champs facultatifs du responsable vides, sauf s’ils sont
 nécessaires. Enregistrez les deux entrées.
 
-## Ce que vous devriez voir
+## Vérifier { #check-in-corescope }
 
-Les deux entrées indiquent qu’elles sont connectées, et l’activité radio à
-proximité fait changer le nombre de paquets. Si les courtiers se connectent,
-mais qu’aucun paquet n’apparaît, le mode de paquets est peut-être désactivé ou
-la radio ne capte aucune activité.
-
-## Vérifier dans CoreScope
-
-1. Trouvez l’observateur dans [Observateurs en direct](https://live.meshcore.ca/?tab=Observers).
-2. Attendez de l’activité MeshCore normale à proximité.
-3. Confirmez la présence d’un paquet récent dans [Paquets en direct](https://live.meshcore.ca/).
-
-Terminez avec [Vérifier votre observateur](../verify.md). Le badge de connexion
-de Home Assistant ne confirme pas que les paquets se sont rendus à CoreScope.
+Votre observateur devrait apparaître en quelques minutes dans la [liste des observateurs](https://live.meshcore.ca/?tab=Observers), avec des paquets récents dans les [Live packets](https://live.meshcore.ca/). Être connecté ne prouve pas que les paquets sont arrivés : terminez avec [Vérifier votre observateur](../verify.md). Il n’apparaît pas? Consultez le [dépannage](../troubleshooting.md).
 
 ## Récupération
 
@@ -114,8 +89,3 @@ que vous avez ajoutées. Ne modifiez pas les autres intégrations de Home
 Assistant ni la connexion radio. Confirmez que l’intégration MeshCore d’origine
 fonctionne toujours.
 
-## Si la vérification échoue
-
-Consultez le [dépannage](../troubleshooting.md). Indiquez les versions de Home
-Assistant et de l’intégration MeshCore, la première étape qui a échoué et une
-erreur caviardée. Examinez toute archive de diagnostics avant de la partager.

@@ -20,27 +20,13 @@ page_styles:
 
 [RemoteTerm for MeshCore](https://github.com/jkingsman/Remote-Terminal-for-MeshCore) can forward packet data from a radio it already manages. It does not decrypt private messages.
 
-## Is this method right for you?
+## You need { #before-you-start }
 
-<div class="mc-method-fit">
-  <div><strong>Use RemoteTerm if</strong>It already connects to the radio over serial, TCP, or BLE.</div>
-  <div><strong>Use something else if</strong>You would install RemoteTerm only for observing.</div>
-  <div><strong>Keep online</strong>The RemoteTerm host, radio connection, and internet access.</div>
-</div>
-
-RemoteTerm changes quickly. If the labels do not match, check the upstream instructions for your installed version before saving.
-
-## Before you start
-
-- [ ] RemoteTerm is installed from its reviewed upstream source.
-- [ ] The radio connection is stable.
-- [ ] The radio is on the local mesh settings.
-- [ ] You chose a real [location code](iata-codes.md).
-- [ ] You read [Observer data, access, and privacy](data-collection-access.md).
-
-## What this changes
-
-You will add a primary and backup Community MQTT entry. They send packet data over encrypted WebSocket connections and do not change the radio firmware.
+- RemoteTerm is installed from its reviewed upstream source.
+- The radio connection is stable.
+- The radio is on the local mesh settings.
+- You chose a real [location code](iata-codes.md).
+- You read [Observer data, access, and privacy](data-collection-access.md).
 
 ## Set up
 
@@ -77,22 +63,11 @@ Use the same location code in both entries.
 !!! note "Windows MQTT fanout"
     If RemoteTerm's current upstream instructions require Uvicorn `--loop none` for Windows MQTT fanout, use that documented launch option. Confirm against the installed RemoteTerm version.
 
-## What you should see
+## Check it { #verify-in-corescope }
 
-Both entries stay enabled without repeated TLS or token errors, and RemoteTerm's packet count changes when it hears nearby activity.
-
-## Verify in CoreScope
-
-1. Open [Live observer list](https://live.meshcore.ca/?tab=Observers) and find the RemoteTerm observer.
-2. Create or wait for normal nearby activity.
-3. Open [Live packets](https://live.meshcore.ca/) and confirm a recent packet appears.
-
-Finish with [Check your observer](verify.md). A connected entry without a recent packet is not proof that the whole path works.
+Your observer should show up within a few minutes in the [Live observer list](https://live.meshcore.ca/?tab=Observers), with recent packets in [Live packets](https://live.meshcore.ca/). A connected status is not proof that packets arrived, so finish with [Check your observer](verify.md). Not showing? See [Troubleshooting](troubleshooting.md).
 
 ## Recovery
 
 Disable or remove only the two Community MQTT entries you added. Do not remove unrelated RemoteTerm automation. Confirm RemoteTerm still manages the radio normally.
 
-## If verification fails
-
-Use [Troubleshooting](troubleshooting.md). If only the backup fails, check that its host and token audience are both `mqtt2.meshcore.ca`.

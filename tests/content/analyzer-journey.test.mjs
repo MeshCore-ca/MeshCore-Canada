@@ -84,16 +84,11 @@ test("intro explains the path before MQTT details and recommends every method", 
   assert.match(source, /broker connection.*not.*finish|Setup is not finished.*connected/is);
 });
 
-test("all observer method guides follow one lifecycle and end in live verification", () => {
+test("all observer method guides say what you need, how to set up, and how to check it live", () => {
   const headings = [
-    "## Is this method right for you?",
-    "## Before you start",
-    "## What this changes",
+    "## You need",
     "## Set up",
-    "## What you should see",
-    "## Verify in CoreScope",
-    "## Recovery",
-    "## If verification fails",
+    "## Check it",
   ];
 
   for (const path of methodPages) {

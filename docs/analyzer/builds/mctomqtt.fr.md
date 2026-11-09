@@ -22,18 +22,7 @@ page_styles:
 MCtoMQTT lit les paquets d’une radio MeshCore connectée par USB et les envoie
 depuis un ordinateur Linux ou macOS toujours allumé.
 
-## Cette méthode vous convient-elle?
-
-<div class="mc-method-fit">
-  <div><strong>Utilisez MCtoMQTT si</strong>Un ordinateur Linux ou macOS reste près d’une radio de journalisation des paquets connectée par USB.</div>
-  <div><strong>Choisissez autre chose si</strong>RemoteTerm, Home Assistant ou PyMC gère déjà la radio.</div>
-  <div><strong>À garder en ligne</strong>La radio, la connexion USB, le service de l’hôte et la connexion Internet.</div>
-</div>
-
-L’outil d’assistance peut aussi configurer `meshcore-packet-capture` pour un
-compagnon relié par BLE, liaison série ou TCP.
-
-## Avant de commencer { #before-you-start }
+## Ce qu’il vous faut { #before-you-start }
 
 | Exigence | Vérification |
 |---|---|
@@ -182,21 +171,9 @@ local.
 Il n’existe pas de programme d’installation Windows documenté pour
 `meshcoretomqtt` dans le cas d’un hôte série de journalisation des paquets.
 
-## Ce que vous devriez voir
+## Vérifier { #check-in-corescope }
 
-Le service demeure actif, se connecte à l’adresse principale et compte de
-nouveaux paquets lorsque la radio capte du trafic à proximité.
-
-## Vérifier dans CoreScope { #check-in-corescope }
-
-1. Confirmez que le service demeure actif.
-2. Trouvez l’observateur dans [Observateurs en direct](https://live.meshcore.ca/?tab=Observers).
-3. Attendez de l’activité normale à proximité.
-4. Confirmez la présence d’un paquet récent dans [Paquets en direct](https://live.meshcore.ca/).
-
-Terminez avec [Vérifier votre observateur](../verify.md). Un service en fonction
-ou une connexion au courtier ne confirme pas que les paquets se sont rendus à
-CoreScope.
+Votre observateur devrait apparaître en quelques minutes dans la [liste des observateurs](https://live.meshcore.ca/?tab=Observers), avec des paquets récents dans les [Live packets](https://live.meshcore.ca/). Être connecté ne prouve pas que les paquets sont arrivés : terminez avec [Vérifier votre observateur](../verify.md). Il n’apparaît pas? Consultez le [dépannage](../troubleshooting.md).
 
 ## Récupération { #recovery }
 
@@ -224,7 +201,3 @@ permissions, puis redémarrez le processus de capture.
 L’outil ne désinstalle pas les logiciels ajoutés par une option d’installation
 externe. Utilisez la procédure de désinstallation vérifiée du projet d’origine.
 
-## Si la vérification échoue
-
-Consultez le [dépannage](../troubleshooting.md). Partagez uniquement un court
-état de service caviardé et la liste des chemins modifiés.
