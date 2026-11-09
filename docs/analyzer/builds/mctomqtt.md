@@ -28,7 +28,7 @@ MCtoMQTT reads packets from a USB-connected MeshCore radio and publishes them fr
 | Radio | Packet logging works over USB and the local mesh settings are correct |
 | Host | Linux or macOS for `meshcoretomqtt`; Windows is supported only for companion capture |
 | Access | You can read the current config and restart the service |
-| Location | A real three-letter [location code](../iata-codes.md) |
+| Location | A real three-letter [location code](../../config/map.md) |
 | Tools | `curl`, a text viewer, and `systemctl` on Linux |
 
 !!! warning "Review before running"

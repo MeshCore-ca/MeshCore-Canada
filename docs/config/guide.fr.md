@@ -259,7 +259,7 @@ l’étiquette qu’on y met.
 
 - **MeshMapper les utilise déjà**, par exemple `ytr.meshmapper.net`.
 - **MeshCore les utilise déjà ailleurs**, par exemple pour le
-  [code d’emplacement que chaque observateur transmet](../analyzer/iata-codes.md).
+  [code d’emplacement que chaque observateur transmet](map.md).
   D’autres noms seulement pour les régions ne feraient qu’ajouter de la
   confusion.
 - **Aucun accent ni majuscule où se tromper.** `montréal`, `Montreal` et

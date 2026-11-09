@@ -238,7 +238,7 @@ you could put on it.
 
 - **MeshMapper already uses them**, for example `ytr.meshmapper.net`.
 - **MeshCore already uses them elsewhere**, such as the
-  [location code every observer reports](../analyzer/iata-codes.md). A second
+  [location code every observer reports](map.md). A second
   set of names just for regions would only add confusion.
 - **There are no accents or capital letters to get wrong.** `montréal`,
   `Montreal` and `montreal` would be three different labels.

@@ -58,7 +58,7 @@ nouvel outil.
 Quelle que soit la méthode choisie, il vous faut :
 
 - une radio déjà configurée pour le réseau maillé local;
-- un véritable [code d’emplacement](iata-codes.md) à trois lettres;
+- un véritable [code d’emplacement](../config/map.md) à trois lettres;
 - les adresses principale et de secours de MeshCore Canada;
 - des connexions chiffrées avec validation des certificats;
 - la publication des paquets, et non seulement de l’état;

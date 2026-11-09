@@ -40,7 +40,7 @@ choisissez pas un code voisin pour contourner le problème.
 - Home Assistant et l’intégration MeshCore fonctionnent correctement.
 - La radio est connectée par une liaison USB, BLE ou TCP compatible.
 - La radio utilise les paramètres du réseau maillé local.
-- Vous avez choisi un véritable [code d’emplacement](../iata-codes.md).
+- Vous avez choisi un véritable [code d’emplacement](../../config/map.md).
 - Vous avez lu [Données des observateurs et vie privée](../data-collection-access.md).
 
 ## Configuration

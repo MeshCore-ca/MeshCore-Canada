@@ -25,7 +25,7 @@ page_styles:
 - RemoteTerm is installed from its reviewed upstream source.
 - The radio connection is stable.
 - The radio is on the local mesh settings.
-- You chose a real [location code](iata-codes.md).
+- You chose a real [location code](../config/map.md).
 - You read [Observer data, access, and privacy](data-collection-access.md).
 
 ## Set up

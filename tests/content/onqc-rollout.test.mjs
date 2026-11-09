@@ -81,7 +81,7 @@ test("standard settings come from the setup tool, not the zone finder, and start
 
 test("current country-scope guidance uses can in both languages without rewriting migration examples", () => {
   for (const french of [false, true]) {
-    for (const page of ["start/companion", "analyzer/iata-codes"]) {
+    for (const page of ["start/companion", "analyzer/broker-reference"]) {
       const path = `docs/${page}${french ? ".fr" : ""}.md`;
       const source = readFileSync(path, "utf8");
       assert.match(source, /`can`/, path);

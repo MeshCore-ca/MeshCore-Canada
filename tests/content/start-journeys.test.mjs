@@ -125,6 +125,7 @@ test("retired visitor pages use canonical redirects instead of searchable bridge
     ["start/repeater.md", "config/index.md"],
     ["start/observer.md", "analyzer/intro.md"],
     ["start/verify.md", "start/get-help.md"],
+    ["analyzer/iata-codes.md", "config/map.md"],
     ["meshcore/firmware-rak-custom-display.md", "start/companion.md"],
     ["meshcore/firmware-heltec-v3-wifi.md", "start/companion.md"],
     ["meshcore/flash-companion.md", "start/companion.md"],

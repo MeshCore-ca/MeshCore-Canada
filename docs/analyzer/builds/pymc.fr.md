@@ -35,7 +35,7 @@ suivez la documentation de la version de PyMC installée.
 - PyMC fonctionne correctement avant le changement.
 - Vous connaissez les véritables chemins du service et de sa configuration.
 - La radio utilise les paramètres du réseau maillé local.
-- Vous avez choisi un véritable [code d’emplacement](../iata-codes.md).
+- Vous avez choisi un véritable [code d’emplacement](../../config/map.md).
 - Vous pouvez restaurer une copie de sauvegarde appartenant à `root`.
 
 Notez l’état actuel du service :

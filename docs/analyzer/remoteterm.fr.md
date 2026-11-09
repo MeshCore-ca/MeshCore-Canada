@@ -27,7 +27,7 @@ déchiffre pas les messages privés.
 - RemoteTerm est installé à partir de sa source vérifiée.
 - La connexion à la radio est stable.
 - La radio utilise les paramètres du réseau maillé local.
-- Vous avez choisi un véritable [code d’emplacement](iata-codes.md).
+- Vous avez choisi un véritable [code d’emplacement](../config/map.md).
 - Vous avez lu [Données des observateurs et vie privée](data-collection-access.md).
 
 ## Configuration

@@ -146,7 +146,6 @@ plugins:
             Troubleshooting: Dépannage
             Data and privacy: Données et confidentialité
             Broker reference: Référence des serveurs MQTT
-            Location codes: Codes d'emplacement
             Learn: Comprendre MeshCore
             What MeshCore is: Comprendre MeshCore
             How to use MeshCore: Utiliser MeshCore
@@ -190,6 +189,7 @@ plugins:
         start/repeater.md: config/index.md
         start/observer.md: analyzer/intro.md
         start/verify.md: start/get-help.md
+        analyzer/iata-codes.md: config/map.md
         meshcore/flash-repeater.md: config/index.md
         analyzer/builds/mqtt-firmware.md: config/index.md
         proposals/onqc-scopes.md: config/guide.md
@@ -255,7 +255,6 @@ nav:
           - Home Assistant: analyzer/builds/meshcore-ha.md
           - PyMC: analyzer/builds/pymc.md
           - Broker reference: analyzer/broker-reference.md
-          - Location codes: analyzer/iata-codes.md
   - Learn:
       - What MeshCore is: meshcore/general-overview.md
       - How to use MeshCore: meshcore/general-howto.md

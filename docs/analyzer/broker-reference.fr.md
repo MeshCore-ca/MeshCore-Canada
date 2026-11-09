@@ -20,8 +20,6 @@ page_styles:
 # Paramètres de connexion des observateurs
 
 Consultez cette page après avoir [choisi une méthode d’observation](intro.md).
-Utilisez ensuite le guide de cette méthode; ne copiez pas ces valeurs sans leur
-contexte.
 
 ## Paramètres du courtier
 
@@ -69,7 +67,7 @@ meshcore/{IATA}/{PUBLIC_KEY}/packets
 meshcore/{IATA}/{PUBLIC_KEY}/status
 ```
 
-`{IATA}` est le véritable code d’emplacement à trois lettres de l’observateur.
+`{IATA}` est le code de l’observateur indiqué par [Trouver votre zone](../config/map.md), en majuscules (par exemple `YOW`), et le même dans chaque entrée de serveur. N’utilisez jamais `CAN` (c’est un aéroport de Guangzhou; la portée radio `can` est un réglage distinct), `XXX` ni `HOME`.
 `{PUBLIC_KEY}` est fourni par la radio ou l’intégration. Ne le remplacez jamais
 par une clé privée.
 
@@ -91,14 +89,5 @@ par une clé privée.
 | PyMC | `format: letsmesh` |
 | Home Assistant | **Payload Mode** = `packet` |
 | RemoteTerm | Activez le sujet de paquets Community MQTT |
-
-## Ce que chaque vérification confirme
-
-| État | Ce qu’il confirme |
-|---|---|
-| DNS ou port accessible | L’hôte peut joindre le serveur |
-| Connexion au courtier | Le transport et l’authentification fonctionnent |
-| Observateur visible | Son état s’est rendu au service en direct |
-| Paquet récent visible | Le parcours complet de la radio jusqu’à l’affichage fonctionne |
 
 Seul un paquet récent permet de terminer [la vérification de l’observateur](verify.md).

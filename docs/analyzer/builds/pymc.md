@@ -30,7 +30,7 @@ This procedure is for a Linux systemd service named `pymc-repeater` with config 
 - PyMC is healthy before the change.
 - You know the actual service and config paths.
 - The radio uses the local mesh settings.
-- You chose a real [location code](../iata-codes.md).
+- You chose a real [location code](../../config/map.md).
 - You can restore a root-owned backup.
 
 Record the current service state:

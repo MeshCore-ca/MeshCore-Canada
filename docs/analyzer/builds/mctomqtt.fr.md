@@ -29,7 +29,7 @@ depuis un ordinateur Linux ou macOS toujours allumé.
 | Radio | La journalisation des paquets fonctionne par USB et les paramètres du réseau local sont exacts |
 | Hôte | Linux ou macOS pour `meshcoretomqtt`; Windows est pris en charge uniquement pour la capture d’un compagnon |
 | Accès | Vous pouvez lire la configuration actuelle et redémarrer le service |
-| Emplacement | Un véritable [code d’emplacement](../iata-codes.md) à trois lettres |
+| Emplacement | Un véritable [code d’emplacement](../../config/map.md) à trois lettres |
 | Outils | `curl`, un afficheur de texte et `systemctl` sous Linux |
 
 !!! warning "Examinez le script avant de l’exécuter"

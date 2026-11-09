@@ -105,7 +105,7 @@ Ne désactivez pas la validation TLS pour réussir la connexion.
 ## L’observateur apparaît au mauvais endroit { #observer-appears-in-the-wrong-place }
 
 Vérifiez chaque champ d’emplacement configuré. Utilisez le même véritable
-[code d’emplacement](iata-codes.md) à trois lettres dans les deux entrées du
+[code d’emplacement](../config/map.md) à trois lettres dans les deux entrées du
 courtier et dans la méthode d’observation.
 
 N’utilisez pas :

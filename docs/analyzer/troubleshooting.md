@@ -96,7 +96,7 @@ Do not disable TLS verification to make the connection succeed.
 
 ## Observer appears in the wrong place
 
-Check every configured location field. Use the same real three-letter [location code](iata-codes.md) in both broker entries and in the observer method.
+Check every configured location field. Use the same real three-letter [location code](../config/map.md) in both broker entries and in the observer method.
 
 Do not use:
 

@@ -53,7 +53,7 @@ If none fit, ask in the [MeshCore Canada forum](https://forum.meshcore.ca/) befo
 Whichever setup you choose, you need:
 
 - a radio already set for the local mesh;
-- a real three-letter [location code](iata-codes.md);
+- a real three-letter [location code](../config/map.md);
 - the MeshCore Canada primary and backup addresses;
 - encrypted connections with certificate checks;
 - packet publishing, not status-only publishing; and

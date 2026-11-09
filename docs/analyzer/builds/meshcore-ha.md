@@ -36,7 +36,7 @@ If your screen looks different, see [Home Assistant screen does not match the gu
 - Home Assistant and the MeshCore integration are healthy.
 - The radio is connected over a supported USB, BLE, or TCP path.
 - The radio uses the local mesh settings.
-- You chose a real [location code](../iata-codes.md).
+- You chose a real [location code](../../config/map.md).
 - You read [Observer data, access, and privacy](../data-collection-access.md).
 
 ## Set up

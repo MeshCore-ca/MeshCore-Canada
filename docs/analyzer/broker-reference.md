@@ -19,8 +19,7 @@ page_styles:
 
 # Observer connection reference
 
-Use this after you [choose an observer setup](intro.md). Follow that guide rather
-than copying these values without context.
+Use this after you [choose an observer setup](intro.md).
 
 ## Broker settings
 
@@ -68,7 +67,7 @@ meshcore/{IATA}/{PUBLIC_KEY}/packets
 meshcore/{IATA}/{PUBLIC_KEY}/status
 ```
 
-`{IATA}` is the observer's real three-letter location code. `{PUBLIC_KEY}` is supplied by the radio or integration. Never substitute a private key.
+`{IATA}` is the observer's code from [Find your zone](../config/map.md), in uppercase (for example `YOW`), and the same in every broker entry. Never use `CAN` (it's an airport in Guangzhou; the on-air scope `can` is a separate setting), `XXX` or `HOME`. `{PUBLIC_KEY}` is supplied by the radio or integration. Never substitute a private key.
 
 ## Authentication and transport
 
@@ -87,14 +86,5 @@ meshcore/{IATA}/{PUBLIC_KEY}/status
 | PyMC | `format: letsmesh` |
 | Home Assistant | **Payload Mode** = `packet` |
 | RemoteTerm | Enable the Community MQTT packet topic |
-
-## What each check tells you
-
-| State | What it proves |
-|---|---|
-| DNS or port reachable | The host can reach the server |
-| Broker connected | Transport and authentication succeeded |
-| Observer visible | Status reached the live service |
-| Recent packet visible | The radio-to-viewer path works end to end |
 
 Only a recent packet completes [the observer check](verify.md).
