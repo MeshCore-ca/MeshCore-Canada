@@ -45,7 +45,7 @@ be sent to the MeshCore Canada brokers.
 | Radio traffic | Nodes send MeshCore packets on the frequencies and settings of their local mesh. |
 | Observer capture | Observers listen to all the traffic they can hear on their settings. |
 | MQTT publish | Observers publish packet data to MeshCore Canada's brokers. |
-| Storage and display | Data is stored on MeshCore Canada infrastructure and may be shown by Beacon, CoreScope and other public sites run by MeshCore Canada or approved operators. |
+| Storage and display | Data is stored on MeshCore Canada infrastructure and may be shown by Beacon and other public sites run by MeshCore Canada or approved operators. |
 
 No retention period has been published yet: don't assume data is deleted after a
 set time.
@@ -54,15 +54,15 @@ set time.
 
 Direct MQTT subscriptions aren't open to everyone. They're limited to local mesh
 administrators, approved tools and people approved by the MeshCore Canada
-administrators. Even so, the data is public through Beacon, CoreScope and the
+administrators. Even so, the data is public through Beacon and the
 other sites below.
 
 ## Read-only MQTT accounts { #read-only-mqtt-accounts }
 
 | Service | Operator | Purpose |
 |---|---|---|
-| Beacon (`dev.meshcore.ca`) | MeshCore Canada operators | Public packet viewer and repeater ID checks |
-| CoreScope (`live.meshcore.ca`) | MeshCore Canada operators | Public observer, packet, node and map tools |
+| Beacon (`live.meshcore.ca`) | MeshCore Canada operators | Public observer, packet, node and map tools |
+| Beacon API (`dev.meshcore.ca`) | MeshCore Canada operators | Network totals and repeater ID checks on this site |
 | [Canadaverse](https://canadaverse.org/) | [n30nex@gmail.com](mailto:n30nex@gmail.com) | GTA Regional Tools & CartoLive map |
 | [Quinte Mesh](https://quintemesh.ca/) | hansimgamr | Quinte-region community network services |
 

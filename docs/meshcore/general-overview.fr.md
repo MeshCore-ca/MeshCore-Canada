@@ -34,7 +34,7 @@ MeshCore est un **réseau maillé longue portée qui repose sur des répéteurs*
 - Un **compagnon** envoie et reçoit des messages.
 - Un **répéteur** relaie le trafic et étend la couverture.
 - Un **serveur de salon** maintient un salon partagé accessible.
-- Un **observateur** transmet à CoreScope les données réseau qu’il reçoit.
+- Un **observateur** transmet à Beacon les données réseau qu’il reçoit.
 
 ## Réglages au Canada
 

@@ -106,7 +106,7 @@ ne sont pas des limites approuvées dans MeshMapper.
 
 ## Services externes
 
-CoreScope, les services MQTT, les outils de reprogrammation et les sites
+Beacon, les services MQTT, les outils de reprogrammation et les sites
 communautaires ont leurs propres responsables et politiques de confidentialité.
 
 ## Mesure d’audience

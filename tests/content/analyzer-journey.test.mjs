@@ -118,8 +118,7 @@ test("privacy pages state ownership, access, the account inventory, and the unkn
     assert.match(source, new RegExp(phrase, "i"));
   }
   for (const service of [
-    "Beacon (`dev.meshcore.ca`)",
-    "CoreScope (`live.meshcore.ca`)",
+    "Beacon (`live.meshcore.ca`)",
     "[Canadaverse](https://canadaverse.org/)",
     "[n30nex@gmail.com](mailto:n30nex@gmail.com)",
     "[Quinte Mesh](https://quintemesh.ca/)",
@@ -155,7 +154,7 @@ test("broker reference lists every administrator and public contact in both lang
 
 test("verification distinguishes connectivity from an observed packet", () => {
   const source = read("docs/analyzer/verify.md");
-  assert.match(source, /Connected\s+doesn't mean packets have reached CoreScope/i);
+  assert.match(source, /Connected\s+doesn't mean packets have reached Beacon/i);
   assert.match(source, /\?tab=Observers/);
   assert.match(source, /## Healthy observer checklist/);
   assert.match(source, /first thing that failed/i);

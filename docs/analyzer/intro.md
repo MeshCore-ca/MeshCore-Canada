@@ -1,6 +1,6 @@
 ---
 title: Set up a network observer
-description: Choose the observer setup that matches what you already run, then check it in CoreScope.
+description: Choose the observer setup that matches what you already run, then check it in Beacon.
 audience:
   - observer-operators
 task: choose-observer-method
@@ -18,7 +18,7 @@ page_styles:
 
 # Set up a network observer
 
-An observer forwards nearby MeshCore packet data to CoreScope. It does not decrypt private messages or need to repeat traffic.
+An observer forwards nearby MeshCore packet data to Beacon. It does not decrypt private messages or need to repeat traffic.
 
 ## How the pieces fit
 
@@ -26,13 +26,13 @@ An observer forwards nearby MeshCore packet data to CoreScope. It does not decry
   <li><strong>Radio</strong><span>hears nearby MeshCore packets</span></li>
   <li><strong>Observer</strong><span>forwards the packet data</span></li>
   <li><strong>MeshCore Canada</strong><span>receives it through two shared servers</span></li>
-  <li><strong>Live tools</strong><span>CoreScope shows observers and packets</span></li>
+  <li><strong>Live tools</strong><span>Beacon shows observers and packets</span></li>
 </ol>
 
 The shared servers use MQTT, but you do not need to learn MQTT before choosing a setup.
 
 !!! warning "Observers share what they hear"
-    Observer details and heard packet data can appear in CoreScope. Do not transmit sensitive information. Read [Observer data and privacy](data-collection-access.md) before turning one on.
+    Observer details and heard packet data can appear in Beacon. Do not transmit sensitive information. Read [Observer data and privacy](data-collection-access.md) before turning one on.
 
 ## Choose your setup
 

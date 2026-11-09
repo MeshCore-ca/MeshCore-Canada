@@ -44,7 +44,7 @@ utiliser chaque paramètre ou appareil.
     Certains guides parlent d’un code IATA parce qu’ils utilisent des codes
     d’aéroport de trois lettres.
 
-**CoreScope**
+**Beacon**
 :   Les outils publics de MeshCore Canada qui permettent de consulter les
     observateurs, les paquets, les nœuds et les données cartographiques.
 

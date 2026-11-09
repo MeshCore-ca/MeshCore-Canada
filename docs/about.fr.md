@@ -35,7 +35,7 @@ plus sur le micrologiciel, les applications et le protocole, consultez la
 - des outils pour les répéteurs et les observateurs;
 - le [code source du site Web](https://github.com/MeshCore-ca/MeshCore-Canada){ target="_blank" rel="noopener" }.
 
-Nous exploitons aussi des services MQTT et CoreScope partagés pour les
+Nous exploitons aussi des services MQTT et Beacon partagés pour les
 utilisateurs canadiens. Ces services sont maintenus par
 [Mr. Alderson](https://github.com/MrAlders0n), [Ded](https://github.com/446564),
 [n30nex](https://github.com/n30nex) et

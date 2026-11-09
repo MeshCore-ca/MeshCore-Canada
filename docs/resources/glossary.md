@@ -50,7 +50,7 @@ the linked guides explain how to use each setting or device.
 :   A personal MeshCore device used to send and receive messages. It often
     connects to an app and does not relay mesh traffic.
 
-**CoreScope**
+**Beacon**
 :   MeshCore Canada's public tools for viewing observers, packets, nodes, and
     map data.
 

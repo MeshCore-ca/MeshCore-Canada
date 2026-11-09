@@ -1,6 +1,6 @@
 ---
 title: Vérifier votre observateur
-description: Vérifiez que la radio capte le trafic, que l’observateur le transmet et que CoreScope le reçoit.
+description: Vérifiez que la radio capte le trafic, que l’observateur le transmet et que Beacon le reçoit.
 audience:
   - observer-operators
 task: verify-observer
@@ -61,7 +61,7 @@ utilisez ces liens pour confirmer qu’il est en ligne et qu’il transmet.
 </div>
 
 Votre observateur devrait apparaître quelques minutes après sa mise en ligne.
-Être connecté ne veut pas dire que les paquets ont atteint CoreScope : il
+Être connecté ne veut pas dire que les paquets ont atteint Beacon : il
 fonctionne dès qu’un paquet récent de votre observateur apparaît.
 
 ## Liste de vérification
@@ -71,7 +71,7 @@ fonctionne dès qu’un paquet récent de votre observateur apparaît.
 | Nom de l’observateur | Un nom clair comme `YOW-Repeater-01` |
 | Région | Le code en majuscules indiqué par [Trouver votre zone](../config/map.md), pas `CAN`, `XXX` ni `HOME` |
 | Serveurs | Serveur principal et de secours configurés, si la méthode prend les deux en charge |
-| Paquets | Des paquets récents dans CoreScope après de l’activité à proximité |
+| Paquets | Des paquets récents dans Beacon après de l’activité à proximité |
 | Radio | Le préréglage **Canada** avec des parcours de 3 octets, sauf si la page de votre communauté indique autre chose |
 
 ## Premières vérifications

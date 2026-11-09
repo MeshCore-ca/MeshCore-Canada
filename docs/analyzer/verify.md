@@ -1,6 +1,6 @@
 ---
 title: Check your observer
-description: Check that the radio hears traffic, the observer sends it, and CoreScope receives it.
+description: Check that the radio hears traffic, the observer sends it, and Beacon receives it.
 audience:
   - observer-operators
 task: verify-observer
@@ -61,7 +61,7 @@ these links to confirm it's online and reporting.
 </div>
 
 Your observer should appear within a few minutes of coming online. Connected
-doesn't mean packets have reached CoreScope: it's working once a recent packet
+doesn't mean packets have reached Beacon: it's working once a recent packet
 from your observer shows up.
 
 ## Healthy observer checklist
@@ -71,7 +71,7 @@ from your observer shows up.
 | Observer name | A clear name such as `YOW-Repeater-01` |
 | Region | The uppercase code from [Find your zone](../config/map.md), not `CAN`, `XXX` or `HOME` |
 | Brokers | Primary and backup configured, where the method supports both |
-| Packets | Recent packet times in CoreScope after nearby mesh activity |
+| Packets | Recent packet times in Beacon after nearby mesh activity |
 | Radio | The **Canada** preset with 3-byte paths, unless your community's page differs |
 
 ## First checks

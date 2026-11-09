@@ -1,6 +1,6 @@
 ---
 title: Observe with Home Assistant
-description: Send packets from an existing Home Assistant MeshCore integration to CoreScope.
+description: Send packets from an existing Home Assistant MeshCore integration to Beacon.
 audience:
   - observer-operators
   - home-assistant-users

@@ -47,7 +47,7 @@ Choisissez l’appareil que vous configurez :
 
 -   :material-chart-timeline-variant:{ .lg .middle } **Observateur**
 
-    Transmet ce qu’il capte aux cartes du réseau CoreScope. Fixe et alimenté en continu.
+    Transmet ce qu’il capte aux cartes du réseau Beacon. Fixe et alimenté en continu.
 
     [:octicons-arrow-right-24: Configurer un observateur](../analyzer/intro.md)
 

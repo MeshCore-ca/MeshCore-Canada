@@ -96,7 +96,7 @@ provides a **Clear draft** action.
 
 ## External services
 
-CoreScope, MQTT services, flashers, and community sites have their own
+Beacon, MQTT services, flashers, and community sites have their own
 operators and privacy policies.
 
 ## Analytics

@@ -20,42 +20,36 @@ destructive: false
 
 # Links and services
 
-These links open services outside this documentation site.
-
-The live viewer at `live.meshcore.ca` now uses Beacon. Older guides and screenshots
-may refer to CoreScope; use the current viewer links below.
+These open sites outside meshcore.ca.
 
 ## MeshCore Canada
 
-| Service | Use | Link |
-|---|---|---|
-| Forum | Search discussions or ask for help. | [Open the forum (external)](https://forum.meshcore.ca/){ target="_blank" rel="noopener" } |
-| Live network viewer | View public observers, packets, nodes, and map data. | [Open the live viewer (external)](https://live.meshcore.ca/){ target="_blank" rel="noopener" } |
-| GitHub | View the source, issues, and site changes. | [Open the repository (external)](https://github.com/MeshCore-ca/MeshCore-Canada){ target="_blank" rel="noopener" } |
+| Service | Use |
+|---|---|
+| [Discord](https://discord.gg/GBCP4xdgNv){ target="_blank" rel="noopener" } | Chat with the community. |
+| [Forum](https://forum.meshcore.ca/){ target="_blank" rel="noopener" } | Search discussions or ask for help. |
+| [Beacon](https://live.meshcore.ca/){ target="_blank" rel="noopener" } | The live network: observers, packets, nodes and the map. |
+| [GitHub](https://github.com/MeshCore-ca/MeshCore-Canada){ target="_blank" rel="noopener" } | This site's source, issues and changes. |
 
 ## Official MeshCore
 
-| Service | Use | Link |
-|---|---|---|
-| MeshCore website | Read about the official project. | [Open MeshCore.io (external)](https://meshcore.io/){ target="_blank" rel="noopener" } |
-| Documentation | Read official device, app, and protocol guides. | [Open the documentation (external)](https://docs.meshcore.io/){ target="_blank" rel="noopener" } |
-| Source code | View official firmware source and releases. | [Open the source (external)](https://github.com/meshcore-dev/MeshCore){ target="_blank" rel="noopener" } |
-| Flasher | Flash a supported device in a compatible browser. | [Open the flasher (external)](https://flasher.meshcore.io/){ target="_blank" rel="noopener" } |
-| USB configuration | Configure a supported repeater or room server. | [Open USB configuration (external)](https://config.meshcore.io/){ target="_blank" rel="noopener" } |
-| Web app | Use MeshCore with a supported companion. | [Open the web app (external)](https://app.meshcore.nz/){ target="_blank" rel="noopener" } |
+| Service | Use |
+|---|---|
+| [MeshCore website](https://meshcore.io/){ target="_blank" rel="noopener" } | The official project and blog. |
+| [Documentation](https://docs.meshcore.io/){ target="_blank" rel="noopener" } | Official device, app and protocol guides. |
+| [Source code](https://github.com/meshcore-dev/MeshCore){ target="_blank" rel="noopener" } | Official firmware source and releases. |
+| [Flasher](https://meshcore.io/flasher){ target="_blank" rel="noopener" } | Flash a supported device from Chrome or Edge. |
+| [USB configuration](https://config.meshcore.io/){ target="_blank" rel="noopener" } | Configure a repeater or room server over USB. |
+| [Web app](https://app.meshcore.nz/){ target="_blank" rel="noopener" } | Use MeshCore with a companion from your browser. |
 
-## Radio and regulatory references
+## Radio and regulatory references { #radio-and-regulatory-references }
 
-| Organization | Use | Link |
-|---|---|---|
-| Innovation, Science and Economic Development Canada (ISED) | Find current Canadian spectrum and equipment information. | [Open ISED (external)](https://ised-isde.canada.ca/site/spectrum-management-telecommunications/en){ target="_blank" rel="noopener" } |
-| Radio Amateurs of Canada | Find Canadian amateur-radio information. | [Open RAC (external)](https://www.rac.ca/){ target="_blank" rel="noopener" } |
+| Organization | Use |
+|---|---|
+| [Innovation, Science and Economic Development Canada (ISED)](https://ised-isde.canada.ca/site/spectrum-management-telecommunications/en){ target="_blank" rel="noopener" } | Current Canadian spectrum and equipment rules. |
+| [Radio Amateurs of Canada](https://www.rac.ca/){ target="_blank" rel="noopener" } | Canadian amateur radio information. |
 
-<div class="mc-callout" data-kind="warning" markdown>
+This site isn't legal advice: check current ISED rules before changing frequency,
+power, antenna gain or duty cycle.
 
-This site is not legal advice. Check current ISED rules and licence conditions
-before changing frequency, power, antenna gain, or duty cycle.
-
-</div>
-
-Found a broken or misleading link? [Tell us](../submit-idea.md).
+Found a broken link? [Tell us](../submit-idea.md).

@@ -1,6 +1,6 @@
 ---
 title: Observe with RemoteTerm
-description: Send packets from a radio already managed by RemoteTerm to CoreScope.
+description: Send packets from a radio already managed by RemoteTerm to Beacon.
 audience:
   - observer-operators
 task: configure-remoteterm-observer

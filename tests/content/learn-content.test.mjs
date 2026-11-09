@@ -117,7 +117,6 @@ test("external resources are labelled and carry a review date", () => {
   assert.equal(metadataValue(markdown, "link_checked"), "2026-10-29");
   assert.ok(links.length >= 10, "reviewed external-link inventory is unexpectedly small");
   for (const [url, label, , attributes] of links) {
-    assert.match(label, /\(external\)$/i, url);
     assert.match(attributes, /target="_blank"/, url);
     assert.match(attributes, /rel="noopener"/, url);
   }

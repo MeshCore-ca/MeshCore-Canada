@@ -46,7 +46,7 @@ Pick the device you're setting up:
 
 -   :material-chart-timeline-variant:{ .lg .middle } **Observer**
 
-    Sends what it hears to the CoreScope network maps. Fixed and always powered.
+    Sends what it hears to the Beacon network maps. Fixed and always powered.
 
     [:octicons-arrow-right-24: Set up an observer](../analyzer/intro.md)
 

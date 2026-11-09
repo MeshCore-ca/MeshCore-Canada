@@ -1,6 +1,6 @@
 ---
 title: Observer avec RemoteTerm
-description: Transmettez à CoreScope les paquets d’une radio déjà gérée par RemoteTerm.
+description: Transmettez à Beacon les paquets d’une radio déjà gérée par RemoteTerm.
 audience:
   - observer-operators
 task: configure-remoteterm-observer

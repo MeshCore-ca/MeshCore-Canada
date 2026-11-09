@@ -34,7 +34,7 @@ MeshCore is a **repeater-driven long-range mesh network** built on LoRa radios. 
 - A **companion** sends and receives messages.
 - A **repeater** forwards traffic and extends coverage.
 - A **room server** keeps a shared room available.
-- An **observer** sends heard network data to CoreScope.
+- An **observer** sends heard network data to Beacon.
 
 ## Settings in Canada
 

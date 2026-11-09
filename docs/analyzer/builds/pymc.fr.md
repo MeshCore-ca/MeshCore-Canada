@@ -1,6 +1,6 @@
 ---
 title: Observer avec PyMC
-description: Transmettez à CoreScope les paquets d’un service de répéteur PyMC déjà actif.
+description: Transmettez à Beacon les paquets d’un service de répéteur PyMC déjà actif.
 audience:
   - observer-operators
   - service-operators

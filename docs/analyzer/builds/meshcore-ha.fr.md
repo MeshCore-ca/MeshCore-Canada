@@ -1,6 +1,6 @@
 ---
 title: Observer avec Home Assistant
-description: Transmettez à CoreScope les paquets d’une intégration MeshCore déjà configurée dans Home Assistant.
+description: Transmettez à Beacon les paquets d’une intégration MeshCore déjà configurée dans Home Assistant.
 audience:
   - observer-operators
   - home-assistant-users

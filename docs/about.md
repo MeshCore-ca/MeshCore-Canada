@@ -34,7 +34,7 @@ firmware, app, and protocol information, use the
 - repeater and observer tools; and
 - the [open-source website](https://github.com/MeshCore-ca/MeshCore-Canada){ target="_blank" rel="noopener" }.
 
-We also operate shared MQTT and CoreScope services for Canadian users. Those
+We also operate shared MQTT and Beacon services for Canadian users. Those
 services are maintained by [Mr. Alderson](https://github.com/MrAlders0n),
 [Ded](https://github.com/446564), [n30nex](https://github.com/n30nex), and
 [Kranic](https://forum.meshcore.ca/u/djkranic).

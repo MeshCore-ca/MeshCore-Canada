@@ -1,6 +1,6 @@
 ---
 title: Observe with PyMC
-description: Send packets from an existing PyMC repeater service to CoreScope.
+description: Send packets from an existing PyMC repeater service to Beacon.
 audience:
   - observer-operators
   - service-operators

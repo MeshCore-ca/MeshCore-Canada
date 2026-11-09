@@ -47,7 +47,7 @@ paquets est activée, ce paquet peut être envoyé aux serveurs de MeshCore Cana
 | Trafic radio | Les nœuds envoient des paquets MeshCore sur les fréquences et réglages de leur réseau local. |
 | Captation par l’observateur | Les observateurs écoutent tout le trafic qu’ils peuvent capter avec leurs réglages. |
 | Publication MQTT | Les observateurs publient les données des paquets sur les serveurs de MeshCore Canada. |
-| Stockage et affichage | Les données sont conservées sur l’infrastructure de MeshCore Canada et peuvent être affichées par Beacon, CoreScope et d’autres sites publics exploités par MeshCore Canada ou des exploitants approuvés. |
+| Stockage et affichage | Les données sont conservées sur l’infrastructure de MeshCore Canada et peuvent être affichées par Beacon et d’autres sites publics exploités par MeshCore Canada ou des exploitants approuvés. |
 
 Aucune durée de conservation n’a encore été publiée : ne présumez pas que les
 données sont supprimées après un certain temps.
@@ -57,14 +57,14 @@ données sont supprimées après un certain temps.
 Les abonnements MQTT directs ne sont pas offerts à tous. Ils sont réservés aux
 administrateurs des réseaux locaux, aux outils approuvés et aux personnes
 approuvées par les administrateurs de MeshCore Canada. Les données restent tout
-de même publiques par Beacon, CoreScope et les autres sites ci-dessous.
+de même publiques par Beacon et les autres sites ci-dessous.
 
 ## Comptes MQTT en lecture seule { #read-only-mqtt-accounts }
 
 | Service | Exploitant | Utilisation |
 |---|---|---|
-| Beacon (`dev.meshcore.ca`) | Exploitants de MeshCore Canada | Visualisation publique des paquets et vérification des identifiants de répéteur |
-| CoreScope (`live.meshcore.ca`) | Exploitants de MeshCore Canada | Outils publics pour les observateurs, les paquets, les nœuds et la carte |
+| Beacon (`live.meshcore.ca`) | Exploitants de MeshCore Canada | Outils publics pour les observateurs, les paquets, les nœuds et la carte |
+| API Beacon (`dev.meshcore.ca`) | Exploitants de MeshCore Canada | Totaux du réseau et vérification des identifiants de répéteur sur ce site |
 | [Canadaverse](https://canadaverse.org/) | [n30nex@gmail.com](mailto:n30nex@gmail.com) | Outils régionaux du Grand Toronto et carte CartoLive |
 | [Quinte Mesh](https://quintemesh.ca/) | hansimgamr | Services du réseau communautaire de la région de Quinte |
 

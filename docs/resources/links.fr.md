@@ -20,44 +20,37 @@ destructive: false
 
 # Liens et services
 
-Ces liens ouvrent des services à l’extérieur de ce site de documentation.
-
-La visionneuse à `live.meshcore.ca` utilise maintenant Beacon. Certains guides et
-captures d’écran mentionnent encore CoreScope; utilisez les liens actuels ci-dessous.
+Ces liens ouvrent des sites à l’extérieur de meshcore.ca.
 
 ## MeshCore Canada
 
-| Service | Utilité | Lien |
-|---|---|---|
-| Forum | Rechercher une discussion ou demander de l’aide. | [Ouvrir le forum (site externe)](https://forum.meshcore.ca/){ target="_blank" rel="noopener" } |
-| Visionneuse du réseau en direct | Consulter les observateurs, les paquets, les nœuds et les données cartographiques publics. | [Ouvrir la visionneuse (site externe)](https://live.meshcore.ca/){ target="_blank" rel="noopener" } |
-| GitHub | Consulter le code source, les billets et les changements apportés au site. | [Ouvrir le dépôt (site externe)](https://github.com/MeshCore-ca/MeshCore-Canada){ target="_blank" rel="noopener" } |
+| Service | Utilité |
+|---|---|
+| [Discord](https://discord.gg/GBCP4xdgNv){ target="_blank" rel="noopener" } | Discuter avec la communauté. |
+| [Forum](https://forum.meshcore.ca/){ target="_blank" rel="noopener" } | Chercher dans les discussions ou demander de l’aide. |
+| [Beacon](https://live.meshcore.ca/){ target="_blank" rel="noopener" } | Le réseau en direct : observateurs, paquets, nœuds et carte. |
+| [GitHub](https://github.com/MeshCore-ca/MeshCore-Canada){ target="_blank" rel="noopener" } | Le code source, les billets et les modifications de ce site. |
 
 ## Projet MeshCore officiel
 
-| Service | Utilité | Lien |
-|---|---|---|
-| Site Web de MeshCore | Découvrir le projet officiel. | [Ouvrir MeshCore.io (site externe)](https://meshcore.io/){ target="_blank" rel="noopener" } |
-| Documentation | Lire les guides officiels sur les appareils, les applications et le protocole. | [Ouvrir la documentation (site externe)](https://docs.meshcore.io/){ target="_blank" rel="noopener" } |
-| Code source | Consulter le code source et les versions officielles du micrologiciel. | [Ouvrir le code source (site externe)](https://github.com/meshcore-dev/MeshCore){ target="_blank" rel="noopener" } |
-| Outil de reprogrammation | Installer un micrologiciel sur un appareil pris en charge dans un navigateur compatible. | [Ouvrir l’outil de reprogrammation (site externe)](https://flasher.meshcore.io/){ target="_blank" rel="noopener" } |
-| Configuration USB | Configurer un répéteur ou un serveur de salon pris en charge. | [Ouvrir l’outil de configuration USB (site externe)](https://config.meshcore.io/){ target="_blank" rel="noopener" } |
-| Application Web | Utiliser MeshCore avec un appareil compagnon pris en charge. | [Ouvrir l’application Web (site externe)](https://app.meshcore.nz/){ target="_blank" rel="noopener" } |
+| Service | Utilité |
+|---|---|
+| [Site de MeshCore](https://meshcore.io/){ target="_blank" rel="noopener" } | Le projet officiel et son blogue. |
+| [Documentation](https://docs.meshcore.io/){ target="_blank" rel="noopener" } | Guides officiels sur les appareils, l’application et le protocole. |
+| [Code source](https://github.com/meshcore-dev/MeshCore){ target="_blank" rel="noopener" } | Code source officiel du micrologiciel et versions. |
+| [Programme de mise à jour](https://meshcore.io/flasher){ target="_blank" rel="noopener" } | Programmer un appareil compatible depuis Chrome ou Edge. |
+| [Configuration USB](https://config.meshcore.io/){ target="_blank" rel="noopener" } | Configurer un répéteur ou un serveur de salon par USB. |
+| [Application Web](https://app.meshcore.nz/){ target="_blank" rel="noopener" } | Utiliser MeshCore avec un compagnon depuis votre navigateur. |
 
 ## Radio et réglementation { #radio-and-regulatory-references }
 
-| Organisme | Utilité | Lien |
-|---|---|---|
-| Innovation, Sciences et Développement économique Canada (ISDE) | Consulter l’information canadienne actuelle sur le spectre et le matériel. | [Ouvrir le site d’ISDE (site externe)](https://ised-isde.canada.ca/site/gestion-spectre-telecommunications/fr){ target="_blank" rel="noopener" } |
-| Radio Amateurs du Canada | Consulter de l’information canadienne sur la radio amateur. | [Ouvrir le site de RAC (site externe)](https://www.rac.ca/){ target="_blank" rel="noopener" } |
+| Organisme | Utilité |
+|---|---|
+| [Innovation, Sciences et Développement économique Canada (ISDE)](https://ised-isde.canada.ca/site/gestion-spectre-telecommunications/fr){ target="_blank" rel="noopener" } | Règles canadiennes actuelles sur le spectre et le matériel. |
+| [Radio Amateurs du Canada](https://www.rac.ca/){ target="_blank" rel="noopener" } | Information canadienne sur la radio amateur. |
 
-<div class="mc-callout" data-kind="warning" markdown>
+Ce site ne fournit pas d’avis juridique : consultez les règles actuelles d’ISDE
+avant de modifier la fréquence, la puissance, le gain de l’antenne ou le cycle
+d’utilisation.
 
-Ce site ne fournit aucun avis juridique. Consultez les règles actuelles d’ISDE
-et les conditions de votre licence avant de modifier la fréquence, la
-puissance, le gain de l’antenne ou le cycle d’utilisation.
-
-</div>
-
-Vous avez trouvé un lien brisé ou trompeur?
-[Signalez-le-nous](../submit-idea.md).
+Vous avez trouvé un lien brisé? [Signalez-le-nous](../submit-idea.md).

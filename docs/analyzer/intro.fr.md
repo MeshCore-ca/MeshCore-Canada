@@ -1,6 +1,6 @@
 ---
 title: Configurer un observateur de réseau
-description: Choisissez la méthode d’observation qui convient à votre installation actuelle, puis vérifiez-la dans CoreScope.
+description: Choisissez la méthode d’observation qui convient à votre installation actuelle, puis vérifiez-la dans Beacon.
 audience:
   - observer-operators
 task: choose-observer-method
@@ -18,7 +18,7 @@ page_styles:
 
 # Configurer un observateur de réseau
 
-Un observateur transmet à CoreScope les données des paquets MeshCore captés à
+Un observateur transmet à Beacon les données des paquets MeshCore captés à
 proximité. Il ne déchiffre pas les messages privés et n’a pas besoin de relayer
 le trafic.
 
@@ -28,14 +28,14 @@ le trafic.
   <li><strong>Radio</strong><span>capte les paquets MeshCore à proximité</span></li>
   <li><strong>Observateur</strong><span>transmet les données des paquets</span></li>
   <li><strong>MeshCore Canada</strong><span>les reçoit par deux serveurs partagés</span></li>
-  <li><strong>Outils en direct</strong><span>CoreScope affiche les observateurs et les paquets</span></li>
+  <li><strong>Outils en direct</strong><span>Beacon affiche les observateurs et les paquets</span></li>
 </ol>
 
 Les serveurs partagés utilisent MQTT, mais vous n’avez pas besoin
 d’apprendre MQTT avant de choisir une méthode.
 
 !!! warning "Les observateurs partagent ce qu’ils captent"
-    Les renseignements sur l’observateur et les données des paquets captés peuvent apparaître dans CoreScope. Ne transmettez pas de renseignements sensibles. Lisez [Données des observateurs et vie privée](data-collection-access.md) avant d’en activer un.
+    Les renseignements sur l’observateur et les données des paquets captés peuvent apparaître dans Beacon. Ne transmettez pas de renseignements sensibles. Lisez [Données des observateurs et vie privée](data-collection-access.md) avant d’en activer un.
 
 ## Choisir votre méthode
 
