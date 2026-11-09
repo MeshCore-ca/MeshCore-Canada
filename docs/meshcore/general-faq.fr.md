@@ -20,129 +20,103 @@ estimated_time: 2-10 minutes
 destructive: false
 ---
 
-# Questions et réponses sur MeshCore
+# FAQ MeshCore
 
-Utilisez la commande **Rechercher** de votre navigateur ou choisissez un sujet.
-Les réglages varient parfois selon l’endroit; les réponses renvoient donc à leur
-source actuelle.
+## Généralités
 
-- [Réglages et portée](#settings-and-range)
-- [Matériel](#hardware)
-- [Rejoindre ou démarrer un réseau maillé](#joining-or-starting-a-mesh)
-- [Observateurs et dépannage](#observers-and-troubleshooting)
+??? question "Quels réglages radio MeshCore utilise-t-il au Canada?"
+    Choisissez le préréglage **Canada** dans l’application. Il règle les valeurs
+    radio canadiennes et des parcours de **3 octets**; le préréglage distinct
+    **USA** utilise les mêmes valeurs radio, mais ne modifie pas le réglage des
+    parcours ([annonce du préréglage](https://github.com/meshcore-dev/MeshCore/issues/3302#issuecomment-5598886579)). Les valeurs figurent dans le tableau
+    des [réglages par défaut du Canada](../index.md#canada-baseline).
 
-## Réglages et portée { #settings-and-range }
+    Consultez toujours votre page du [répertoire des communautés](../provinces/index.md)
+    au cas où un réseau voisin utiliserait d’autres réglages.
 
-### Quels réglages radio dois-je utiliser au Canada?
+??? question "Qu’est-ce que le mode de hachage des parcours à 3 octets?"
+    Les messages MeshCore transportent de courts identifiants de répéteurs le long
+    de leur parcours. MeshCore Canada recommande des identifiants de **3 octets** :
+    les grands réseaux de répéteurs obtiennent beaucoup plus d’identifiants
+    uniques qu’avec l’ancien réglage de 1 octet. Dans la ligne de commande MeshCore :
 
-Utilisez le profil radio du [répertoire des communautés](../provinces/index.md). Si aucun n’est publié, choisissez
-**Canada** dans l’application pour les paramètres canadiens et des parcours de
-**3 octets**. Consultez les [détails et les consignes pour les anciennes applications](../provinces/index.md#canada-baseline).
+    ```text
+    set path.hash.mode 2
+    ```
 
-Le préréglage distinct **USA** utilise les mêmes valeurs radio, mais ne modifie pas
-la taille du hachage. [Annonce du changement](https://github.com/meshcore-dev/MeshCore/issues/3302#issuecomment-5598886579).
+    Les répéteurs dont le micrologiciel est antérieur à 1.14 ne peuvent pas relayer
+    les parcours de 2 ou 3 octets. Plus de détails dans la [FAQ officielle](https://github.com/meshcore-dev/MeshCore/blob/main/docs/faq.md#39-q-what-is-multibyte-support-what-do-1-byte-2-byte-3-byte-adverts-and-messages-mean) (en anglais).
 
-L’[outil de configuration](../config/index.md) trouve la région de votre
-répéteur d’après sa localité et vous donne chaque commande à coller. Il règle
-toujours des parcours de 3 octets. Si vous programmez le répéteur, il règle
-aussi les réglages radio canadiens, ou ceux de votre groupe local. Si vous
-envoyez les commandes depuis votre téléphone, il ne change pas les réglages radio.
+??? question "Ai-je besoin d’un certificat de radioamateur?"
+    MeshCore Canada ne peut pas donner d’avis juridique. La plupart des
+    communautés MeshCore canadiennes supposent une utilisation LoRa exempte de
+    licence dans la bonne bande ISM, mais vous êtes responsable des fréquences,
+    de la puissance, des antennes et du cycle d’utilisation légaux là où vous êtes.
 
-### Qu’est-ce que le mode de hachage des parcours?
+    Si vous exploitez une station de radioamateur ou de l’équipement non standard,
+    consultez les [règles actuelles d’ISDE](../resources/links.md#radio-and-regulatory-references)
+    avant d’émettre.
 
-Les parcours contiennent des identifiants courts de répéteur, de 1, 2 ou 3 octets.
-Sur un répéteur, `path.hash.mode` règle la taille utilisée pour ses propres
-annonces, pas celle des parcours qu’il peut relayer. Le réglage d’un compagnon
-détermine la taille des identifiants dans les parcours de ses messages sortants.
+??? question "À quelle portée m’attendre?"
+    La portée dépend beaucoup de l’antenne, de la hauteur, du relief, des
+    obstacles, du bruit et de la ligne de vue. Un appareil portatif à l’intérieur
+    peut ne couvrir qu’un quartier; un répéteur extérieur bien placé, avec une vue
+    dégagée, peut couvrir beaucoup plus.
 
-MeshCore Canada recommande des parcours de 3 octets. Les répéteurs avec le
-micrologiciel 1.14 ou plus récent relaient les trois tailles; les plus anciens
-rejettent les paquets avec des parcours de 2 ou 3 octets. Suivez les réglages de
-votre communauté pendant la mise à jour des anciens répéteurs.
-Consultez la [FAQ officielle sur les parcours multioctets](https://github.com/meshcore-dev/MeshCore/blob/main/docs/faq.md#39-q-what-is-multibyte-support-what-do-1-byte-2-byte-3-byte-adverts-and-messages-mean).
+    Pour dépanner, comparez avec un nœud fiable à proximité avant de soupçonner
+    le micrologiciel.
 
-[Comprendre les répéteurs](../config/guide.md#settings) explique chaque réglage du répéteur.
+## Matériel
 
-### Dois-je détenir un certificat d’opérateur radioamateur?
+??? question "Quels appareils fonctionnent avec MeshCore?"
+    Utilisez les appareils proposés dans le [programme de mise à jour MeshCore](https://meshcore.io/flasher)
+    ou dans un guide de MeshCore Canada pour le rôle voulu. Consultez
+    [Choisir du matériel](../hardware/index.md).
 
-MeshCore Canada ne peut pas déterminer quelle autorisation s’applique à votre
-station. Vous êtes responsable de respecter les règles concernant la fréquence,
-la puissance, l’antenne et l’utilisation à votre emplacement.
+    Pour un observateur, une carte LoRa Wi-Fi compatible peut servir de
+    [répéteur observateur](../config/index.md?type=observer).
 
-Commencez par les [liens canadiens sur la réglementation](../resources/links.md#radio-and-regulatory-references).
-En cas de doute, consultez une personne qualifiée de votre région avant de
-transmettre.
+??? question "Puis-je utiliser mon appareil Meshtastic avec MeshCore?"
+    Parfois, mais il doit être programmé avec le micrologiciel MeshCore et pris en
+    charge par la version de MeshCore choisie. Un appareil sous Meshtastic ne
+    rejoindra pas un réseau MeshCore.
 
-### À quelle portée puis-je m’attendre?
+    Sauvegardez ce qui compte avant de le reprogrammer et considérez la première
+    programmation MeshCore comme une nouvelle configuration.
 
-La portée dépend de la qualité et de l’emplacement de l’antenne, de la hauteur,
-du terrain, des bâtiments, de l’interférence et de la visibilité directe.
-Faites un essai avec un nœud fiable situé à proximité avant de conclure que
-l’appareil ou le micrologiciel est défectueux.
+??? question "Quelle carte acheter en premier?"
+    Pour un premier compagnon, choisissez-en un qui figure dans le programme de
+    mise à jour MeshCore et qui est utilisé par la communauté près de chez vous :
+    consultez [Compagnons](../hardware/recommended-companions.md). Pour un
+    répéteur ou un observateur fixe, une alimentation stable, une bonne antenne et
+    l’accès à distance comptent plus qu’un écran.
 
-## Matériel { #hardware }
+## Réseau
 
-### Quels appareils fonctionnent avec MeshCore?
+??? question "Comment rejoindre un réseau existant?"
+    1. Trouvez votre page dans le [répertoire des communautés](../provinces/index.md).
+    2. Choisissez le préréglage **Canada**, sauf indication contraire de la page locale.
+    3. Vérifiez que les parcours sont réglés sur **3 octets**.
+    4. Redémarrez l’appareil après avoir modifié les réglages radio.
+    5. Envoyez une annonce et vérifiez si les personnes à proximité vous voient.
 
-Choisissez un appareil offert dans le programme officiel de mise à jour
-MeshCore ou dans un guide de MeshCore Canada pour le rôle voulu. La prise en
-charge dépend de la carte et de la cible du micrologiciel.
+??? question "Comment lancer un nouveau réseau dans ma région?"
+    Utilisez les réglages par défaut du Canada, sauf raison locale de faire
+    autrement. Commencez par des compagnons, puis configurez des répéteurs avec
+    l’[outil de configuration](../config/index.md), qui donne chaque commande à coller.
 
-[Comparez les rôles des appareils](../start/index.md), puis ouvrez le
-guide du matériel depuis le guide de configuration correspondant.
+    Quand vous êtes prêts, [ajoutez votre communauté](../contributing.md) au
+    répertoire avec sa région, son état, ses coordonnées et tout réglage différent.
 
-### Puis-je réutiliser un appareil qui exécute actuellement Meshtastic?
+??? question "Pourquoi mon observateur n’affiche-t-il aucun paquet?"
+    Une connexion au serveur prouve seulement que l’observateur a atteint MQTT.
+    Il peut tout de même ne rien capter si le préréglage radio ou le réglage des
+    parcours est incorrect, si la publication des paquets est désactivée ou s’il
+    n’y a aucun nœud actif à proximité.
 
-Certaines cartes prises en charge peuvent être reprogrammées avec le
-micrologiciel MeshCore. Un appareil qui exécute encore le micrologiciel
-Meshtastic ne peut pas rejoindre un réseau MeshCore.
+    Consultez [Vérifier votre observateur](../analyzer/verify.md) et le
+    [dépannage](../analyzer/troubleshooting.md) pour cerner le problème.
 
-Confirmez le modèle exact de la carte dans le programme officiel de mise à jour
-avant de le modifier, puis sauvegardez tout ce que vous devez conserver.
-
-### Quelle carte devrais-je acheter en premier?
-
-Choisissez d’abord le rôle. Pour un compagnon, privilégiez un appareil pris en
-charge que des membres de votre communauté connaissent déjà. Pour un service
-fixe, la fiabilité de l’alimentation, l’emplacement de l’antenne et la facilité
-d’entretien comptent davantage que les fonctions de l’écran.
-
-## Rejoindre ou démarrer un réseau maillé { #joining-or-starting-a-mesh }
-
-### Comment rejoindre un réseau maillé à proximité?
-
-1. [Trouvez la communauté locale](../provinces/index.md).
-2. Suivez ses réglages publiés ou utilisez les réglages canadiens par défaut
-   lorsqu’aucun remplacement local n’est indiqué.
-3. Suivez le guide correspondant au [rôle de votre appareil](../start/index.md).
-4. Envoyez une annonce et demandez à une personne à proximité de confirmer sa réception.
-
-### Comment démarrer un réseau maillé lorsqu’aucun n’est répertorié?
-
-Commencez avec des compagnons pour permettre aux gens de faire des essais
-locaux. Ajoutez une infrastructure fixe seulement après avoir vérifié
-l’emplacement, l’alimentation, la coordination locale et le
-[fonctionnement des portées et des régions](../config/guide.md#scopes-and-regions).
-
-Lorsque le groupe est prêt, [ajoutez la communauté](../contributing.md) afin que
-d’autres personnes puissent trouver son état, ses coordonnées et tout réglage
-local révisé.
-
-## Observateurs et dépannage { #observers-and-troubleshooting }
-
-### Pourquoi mon observateur n’affiche-t-il aucun paquet?
-
-Une connexion au service de données ne prouve pas que la radio reçoit le trafic
-à proximité. Vérifiez les réglages radio choisis, la publication des paquets,
-l’activité de l’appareil et le résultat final de la vérification.
-
-Utilisez [Vérifier votre observateur](../analyzer/verify.md), puis suivez le
-[guide de dépannage de l’observateur](../analyzer/troubleshooting.md) selon le
-symptôme constaté.
-
-### Où puis-je poser une autre question?
-
-La page [Obtenir de l’aide](../start/get-help.md) indique la façon la plus
-rapide d’obtenir du soutien. Retirez les mots de passe, les clés privées, les
-emplacements privés précis et toute autre donnée sensible avant de partager
-des captures d’écran ou des journaux.
+??? question "Où poser une autre question?"
+    Consultez [Obtenir de l’aide](../start/get-help.md) : Discord et le forum
+    sont les plus rapides.

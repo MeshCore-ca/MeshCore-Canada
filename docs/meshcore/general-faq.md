@@ -20,118 +20,96 @@ estimated_time: 2-10 minutes
 destructive: false
 ---
 
-# MeshCore questions and answers
+# MeshCore FAQ
 
-Search this page with your browser's **Find** command, or choose a topic below.
-Settings can differ by place, so this page links to the current source instead
-of repeating values that may change.
+## General
 
-- [Settings and range](#settings-and-range)
-- [Hardware](#hardware)
-- [Joining or starting a mesh](#joining-or-starting-a-mesh)
-- [Observers and troubleshooting](#observers-and-troubleshooting)
+??? question "What radio settings does MeshCore use in Canada?"
+    Choose the **Canada** preset in the app. It sets the Canadian radio values
+    and **3-byte** paths; the separate **USA** preset uses the same radio values
+    but leaves the path setting alone ([preset update](https://github.com/meshcore-dev/MeshCore/issues/3302#issuecomment-5598886579)). The values are in
+    the [Canada defaults](../index.md#canada-baseline) table.
 
-## Settings and range
+    Always check your [community directory](../provinces/index.md) page in case a
+    nearby mesh uses different settings.
 
-### Which radio settings should I use in Canada?
+??? question "What is 3-byte path hash mode?"
+    MeshCore messages carry short repeater IDs along their path. MeshCore Canada
+    recommends **3-byte** IDs: bigger repeater networks get far more unique IDs
+    than with the old 1-byte setting. In the MeshCore command line:
 
-Use the radio profile in the [community directory](../provinces/index.md). If none is published, choose **Canada** in the app
-for the Canadian radio settings and **3-byte** paths. See the
-[preset details and older-app guidance](../provinces/index.md#canada-baseline).
+    ```text
+    set path.hash.mode 2
+    ```
 
-The separate **USA** preset uses the same radio values but leaves the path-hash
-setting unchanged. [Upstream preset update](https://github.com/meshcore-dev/MeshCore/issues/3302#issuecomment-5598886579).
+    Repeaters older than firmware 1.14 can't forward 2- or 3-byte paths. More in
+    the [upstream FAQ](https://github.com/meshcore-dev/MeshCore/blob/main/docs/faq.md#39-q-what-is-multibyte-support-what-do-1-byte-2-byte-3-byte-adverts-and-messages-mean).
 
-The [setup tool](../config/index.md) finds your repeater's region from its town
-and gives you every command to paste. It always sets 3-byte paths. When you flash
-the repeater, it also sets the Canada radio settings, or your local group's. When
-you send the commands from your phone, it leaves the radio settings as they are.
+??? question "Do I need a ham radio licence?"
+    MeshCore Canada can't give legal advice. Most Canadian MeshCore communities
+    assume licence-exempt LoRa use in the right ISM band, but you're responsible
+    for legal frequencies, power, antennas and duty cycle where you are.
 
-### What is path hash mode?
+    If you operate as an amateur station or use non-standard equipment, check the
+    [current ISED rules](../resources/links.md#radio-and-regulatory-references)
+    before transmitting.
 
-Paths record short repeater identifiers of 1, 2, or 3 bytes. On a repeater,
-`path.hash.mode` controls its own adverts; it does not restrict the path-hash
-sizes it can forward. A companion’s setting controls the path size of its outgoing messages.
+??? question "What range should I expect?"
+    Range depends heavily on the antenna, height, terrain, obstructions, noise
+    and line of sight. A handheld indoors may only cover a neighbourhood; a
+    well-placed outdoor repeater with a clear view can cover much more.
 
-MeshCore Canada recommends 3-byte paths. Repeaters on firmware 1.14 or newer can
-forward all three sizes; older repeaters drop packets using 2- or 3-byte paths.
-Follow your community’s settings while older repeaters are being upgraded.
-See the [upstream multibyte FAQ](https://github.com/meshcore-dev/MeshCore/blob/main/docs/faq.md#39-q-what-is-multibyte-support-what-do-1-byte-2-byte-3-byte-adverts-and-messages-mean).
-
-[How repeaters work](../config/guide.md#settings) explains each repeater setting.
-
-### Do I need an amateur radio licence?
-
-MeshCore Canada cannot decide which authorization applies to your station.
-You are responsible for legal frequency, power, antenna, and operating choices
-in your location.
-
-Start with the [Canadian regulatory links](../resources/links.md#radio-and-regulatory-references).
-If you are unsure, ask a qualified local operator before transmitting.
-
-### What range should I expect?
-
-Range depends on antenna quality and placement, height, terrain, buildings,
-interference, and line of sight. Test against a nearby known-good node before
-assuming the device or firmware is faulty.
+    When troubleshooting, compare against a nearby known-good node before
+    assuming the firmware is at fault.
 
 ## Hardware
 
-### Which devices work with MeshCore?
+??? question "What devices work with MeshCore?"
+    Use devices listed in the [MeshCore flasher](https://meshcore.io/flasher) or
+    in a MeshCore Canada guide for the role you need. See
+    [Choose hardware](../hardware/index.md).
 
-Use a device listed by the official MeshCore Flasher or by a MeshCore Canada
-guide for the role you need. Support depends on the board and firmware target.
+    For an observer, a supported Wi-Fi LoRa board can run as a
+    [repeater observer](../config/index.md?type=observer).
 
-[Compare device roles](../start/index.md), then open the hardware guide
-from the matching setup guide.
+??? question "Can I use my Meshtastic device with MeshCore?"
+    Sometimes, but it has to be flashed with MeshCore firmware and supported by
+    the MeshCore build you choose. A device running Meshtastic won't join a
+    MeshCore mesh.
 
-### Can I reuse a device that currently runs Meshtastic?
+    Back up anything you care about before reflashing, and treat the first
+    MeshCore flash as a new setup.
 
-Some supported boards can be reflashed with MeshCore firmware. A device still
-running Meshtastic firmware will not join a MeshCore network.
+??? question "Which board should I buy first?"
+    For a first companion, pick one that's listed in the MeshCore flasher and has
+    community support near you: see [Companions](../hardware/recommended-companions.md).
+    For a fixed repeater or observer, stable power, a good antenna and remote
+    access matter more than a screen.
 
-Confirm the exact board in the official flasher before changing it, and back up
-anything you need to keep.
+## Network
 
-### Which board should I buy first?
+??? question "How do I join an existing mesh?"
+    1. Find your local page in the [community directory](../provinces/index.md).
+    2. Choose the **Canada** preset unless the local page says otherwise.
+    3. Check that paths are set to **3-byte**.
+    4. Reboot the device after changing radio settings.
+    5. Send an advert and check whether nearby users can see you.
 
-Choose the role first. For a companion, prefer a supported device with nearby
-community experience. For a fixed service, reliable power, antenna placement,
-and maintainability matter more than screen features.
+??? question "How do I start a new mesh in my area?"
+    Use the Canada defaults unless you have a local reason to differ. Start with
+    companions, then set up repeaters with the [setup tool](../config/index.md),
+    which gives you every command to paste.
 
-## Joining or starting a mesh
+    When you're ready, [add your community](../contributing.md) to the
+    directory with its region, status, contacts and any different settings.
 
-### How do I join a nearby mesh?
+??? question "Why does my observer show no packets?"
+    A broker connection only proves the observer reached MQTT. It may still hear
+    nothing if the radio preset or path setting is wrong, packet publishing is
+    off, or no nearby nodes are active.
 
-1. [Find the local community](../provinces/index.md).
-2. Follow its published settings or use the Canadian baseline when no override
-   is listed.
-3. Follow the setup guide for your [device role](../start/index.md).
-4. Send an advert and ask a nearby user to confirm it.
+    Use [Check your observer](../analyzer/verify.md) and
+    [Troubleshooting](../analyzer/troubleshooting.md) to narrow it down.
 
-### How do I start a mesh where none is listed?
-
-Begin with companions so people can test locally. Add fixed infrastructure only
-after checking placement, power, local coordination, and
-[how scopes and regions work](../config/guide.md#scopes-and-regions).
-
-When the group is ready, [add the community](../contributing.md) so others can
-find its status, contact information, and any reviewed local settings.
-
-## Observers and troubleshooting
-
-### Why does my observer show no packets?
-
-A connection to the data service does not prove the radio is hearing nearby
-traffic. Check the selected radio settings, packet publishing, device activity,
-and the final verification result.
-
-Use [Check your observer](../analyzer/verify.md), then follow
-[observer troubleshooting](../analyzer/troubleshooting.md) for the symptom you
-see.
-
-### Where can I ask another question?
-
-Use [Get help](../start/get-help.md) for the shortest support route. Remove
-passwords, private keys, precise private locations, and other sensitive values
-before sharing screenshots or logs.
+??? question "Where can I ask another question?"
+    See [Get help](../start/get-help.md): Discord and the forum are the quickest.

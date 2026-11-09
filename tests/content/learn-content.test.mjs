@@ -62,21 +62,17 @@ test("MeshCore overview explains all four roles and routes users forward", () =>
   assert.doesNotMatch(markdown, /legacy|Ottawa/i);
 });
 
-test("FAQ is deep-linkable and refers changing settings to canonical sources", () => {
+test("FAQ groups short expandable answers and links to the canonical sources", () => {
   const markdown = read(pages[2]);
 
-  for (const heading of [
-    "Settings and range",
-    "Hardware",
-    "Joining or starting a mesh",
-    "Observers and troubleshooting",
-  ]) {
+  for (const heading of ["General", "Hardware", "Network"]) {
     assert.match(markdown, new RegExp(`^## ${heading}$`, "m"), heading);
   }
-  assert.ok((markdown.match(/^### /gm) || []).length >= 9, "FAQ questions need headings");
+  assert.ok((markdown.match(/^\?\?\? question "/gm) || []).length >= 10, "FAQ answers are expandable questions");
   assert.match(markdown, /\[setup tool\]\(\.\.\/config\/index\.md\)/);
   assert.match(markdown, /\[community directory\]\(\.\.\/provinces\/index\.md\)/);
-  assert.doesNotMatch(markdown, /910\.525|set radio|set path\.hash\.mode/);
+  assert.match(markdown, /\[Canada defaults\]\(\.\.\/index\.md#canada-baseline\)/);
+  assert.doesNotMatch(markdown, /USA\/Canada \(Recommended\)|mqtt-firmware/);
 });
 
 test("app task index keeps accessible images and explicit results", () => {
