@@ -9,8 +9,8 @@ task: understand-project
 scope: canada-baseline
 status: verified
 owner: site-maintainers
-last_reviewed: 2026-08-08
-review_by: 2026-11-08
+last_reviewed: 2026-11-09
+review_by: 2027-05-09
 evidence: Project scope, contribution routes, and live service credits reviewed on 2026-08-08
 difficulty: beginner
 estimated_time: 3 minutes

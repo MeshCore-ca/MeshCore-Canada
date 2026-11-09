@@ -17,8 +17,8 @@ destructive: false
 
 # Tâches courantes dans l’application MeshCore
 
-Choisissez une tâche. Les captures montrent une version de l’application mobile
-MeshCore; les libellés et leur emplacement peuvent différer.
+Des guides étape par étape pour les tâches les plus courantes dans l’application
+mobile MeshCore.
 
 - [Envoyer votre premier message](#send-your-first-message)
 - [Partager votre lien de contact](#share-your-contact-link)
@@ -26,174 +26,146 @@ MeshCore; les libellés et leur emplacement peuvent différer.
 - [Tracer un parcours](#trace-a-path)
 - [Vérifier les répétitions reçues](#check-heard-repeats)
 
-<div class="mc-preflight" markdown>
-
-**Avant de commencer**
-
-- Connectez l’application à votre compagnon.
-- Confirmez que le compagnon peut envoyer et recevoir des messages localement.
-- Ne publiez aucune clé privée, aucun mot de passe ni aucun emplacement privé
-  précis dans une capture d’écran partagée.
-
-</div>
-
 ## Envoyer votre premier message { #send-your-first-message }
 
-1. Connectez l’application à votre compagnon et confirmez les réglages radio locaux.
-2. Ouvrez le canal de votre communauté ou choisissez un contact importé.
-3. Envoyez une courte salutation et demandez une réponse.
+1. Ouvrez l’application et connectez-vous à votre compagnon.
+2. Ouvrez le canal **Public**, ou celui de votre communauté.
+3. Envoyez un bref bonjour et demandez une réponse.
 
-Une réponse confirme la communication dans les deux sens. L’indicateur d’envoi
-ne suffit pas à confirmer la réception. Sans réponse, vérifiez avec une personne
-à proximité avant d’envoyer d’autres essais.
+**Heard X repeats** sous votre message signifie qu’un répéteur l’a capté. Une
+réponse confirme que la messagerie fonctionne dans les deux sens.
 
 ## Partager votre lien de contact { #share-your-contact-link }
 
-Utilisez cette procédure lorsqu’une autre personne veut vous ajouter comme
-contact.
+1. Ouvrez l’application MeshCore et connectez-vous à votre nœud.
+2. Touchez l’icône **Signal**.
 
-1. Ouvrez l’application MeshCore et connectez-la à votre compagnon.
+    ![Icône Signal dans l’application MeshCore](images/MeshCore_GetContactID1.png){ loading=lazy width="300" }
 
-2. Ouvrez l’écran **Signal**.
+3. Touchez **Advert → To Clipboard**.
 
-    ![Commande Signal dans l’application MeshCore](images/MeshCore_GetContactID1.png){ loading=lazy width="300" }
+    ![Menu Advert avec l’option To Clipboard](images/MeshCore_GetContactID2.png){ loading=lazy width="300" }
 
-3. Sélectionnez **Advert**, puis **To Clipboard**.
-
-    ![Menu Advert avec l’action To Clipboard](images/MeshCore_GetContactID2.png){ loading=lazy width="300" }
-
-4. Collez le lien de contact dans la conversation où vous souhaitez le partager.
-
-<div class="mc-result" data-state="success" markdown>
-
-Le presse-papiers contient maintenant un lien de contact qu’une autre personne
-utilisant MeshCore peut importer.
-
-</div>
+4. Collez votre lien de contact là où vous voulez le partager.
 
 ## Importer un lien de contact { #import-a-contact-link }
 
-Utilisez cette procédure après qu’une autre personne vous a envoyé son lien de
-contact MeshCore.
+1. Ouvrez l’application et connectez-vous à votre nœud.
+2. Touchez les **trois points**.
 
-1. Copiez uniquement le lien de contact, puis connectez l’application à votre compagnon.
+    ![Menu à trois points dans l’application MeshCore](images/MeshCore_AddContactMan1.png){ loading=lazy width="300" }
 
-2. Ouvrez le menu **à trois points**.
+3. Touchez **Add Contact**.
 
-    ![Menu à trois points de l’application MeshCore](images/MeshCore_AddContactMan1.png){ loading=lazy width="300" }
+    ![Option Add Contact](images/MeshCore_AddContactMan2.png){ loading=lazy width="300" }
 
-3. Sélectionnez **Add Contact**.
+4. Touchez **Import from Clipboard Link**.
 
-    ![Action « Add Contact » de l’application MeshCore](images/MeshCore_AddContactMan2.png){ loading=lazy width="300" }
+    ![Option Import from Clipboard Link](images/MeshCore_AddContactMan3.png){ loading=lazy width="300" }
 
-4. Sélectionnez **Import from Clipboard Link**.
-
-    ![Action « Import from Clipboard Link » de l’application MeshCore](images/MeshCore_AddContactMan3.png){ loading=lazy width="300" }
-
-5. Attendez le message de réussite et l’avis de nouveau contact.
+5. Après quelques secondes, vous verrez **« Success - contact has been imported »**.
 
     ![Message confirmant l’importation du contact](images/MeshCore_AddContactMan5.png){ loading=lazy width="300" }
 
-<div class="mc-result" data-state="success" markdown>
-
-Le contact nommé apparaît maintenant dans votre liste de contacts.
-
-</div>
-
-Si l’importation échoue, copiez de nouveau le lien d’origine sans ajouter de
-mots ni de signes de ponctuation. Si le problème persiste, demandez un nouveau
-lien à la personne qui vous l’a envoyé.
+6. Une deuxième fenêtre apparaît : **« New Contact Discovered &lt;NOM&gt; »**.
+7. Le contact est ajouté.
 
 ## Tracer un parcours { #trace-a-path }
 
-Un traçage manuel vérifie la suite de répéteurs que vous choisissez. Il ne
-garantit pas que les messages suivants emprunteront le même parcours.
+### Un seul saut
 
-### Ouvrir l’outil de traçage
+1. Ouvrez l’application et connectez-vous.
+2. Touchez les **trois points**.
 
-1. Connectez l’application à votre compagnon.
-2. Ouvrez le menu **à trois points**.
+    ![Menu à trois points dans l’application MeshCore](images/MeshCore_TraceRoute1.png){ loading=lazy width="300" }
 
-    ![Menu à trois points de l’application MeshCore](images/MeshCore_TraceRoute1.png){ loading=lazy width="300" }
+3. Touchez **Tools**.
 
-3. Sélectionnez **Tools**.
+    ![Option Tools dans l’application MeshCore](images/MeshCore_TraceRoute2.png){ loading=lazy width="300" }
 
-    ![Action « Tools » de l’application MeshCore](images/MeshCore_TraceRoute2.png){ loading=lazy width="300" }
+4. Touchez **Trace Path - Manual**.
 
-4. Sélectionnez **Trace Path - Manual**.
+    ![Option Trace Path - Manual](images/MeshCore_TraceRoute3.png){ loading=lazy width="300" }
 
-    ![Action de traçage manuel du parcours](images/MeshCore_TraceRoute3.png){ loading=lazy width="300" }
+5. Touchez le **bouton plus**.
 
-5. Sélectionnez le bouton **plus** pour ajouter un répéteur.
+    ![Bouton plus de l’outil de traçage manuel](images/MeshCore_TraceRoute4.png){ loading=lazy width="300" }
 
-    ![Bouton d’ajout d’un répéteur dans l’outil de traçage manuel](images/MeshCore_TraceRoute4.png){ loading=lazy width="300" }
+6. Sélectionnez un répéteur et confirmez.
 
-### Tracer un parcours par un seul répéteur
+    ![Un répéteur sélectionné pour un traçage](images/MeshCore_TraceRoute1Hop1.png){ loading=lazy width="300" }
 
-1. Ajoutez un répéteur et assurez-vous que son identifiant est exact.
+7. Vous verrez un identifiant de répéteur : c’est un **traçage à un saut**.
 
-    ![Un répéteur sélectionné pour le traçage](images/MeshCore_TraceRoute1Hop1.png){ loading=lazy width="300" }
+    ![Parcours à un saut prêt à tracer](images/MeshCore_TraceRoute1Hop2.png){ loading=lazy width="300" }
 
-    ![Parcours à un saut prêt à être tracé](images/MeshCore_TraceRoute1Hop2.png){ loading=lazy width="300" }
+8. Touchez **Trace Path**.
 
-2. Sélectionnez **Trace Path**.
+### Deux sauts ou plus
 
-### Tracer un parcours par plusieurs répéteurs
+1. Suivez les étapes 1 à 5 ci-dessus.
+2. Sélectionnez les répéteurs **dans l’ordre** :
+    - choisissez le **parcours aller** et confirmez;
+    - rouvrez le menu d’ajout et choisissez le **parcours retour**;
+    - ou tapez vous-même les identifiants, par exemple `d3, f3, d3`.
 
-1. Ajoutez les répéteurs dans l’ordre aller requis par le parcours.
-2. Ajoutez la suite de retour indiquée dans le plan de parcours local.
+    ![Plusieurs répéteurs sélectionnés pour un traçage](images/MeshCore_TraceRoute2Hop1.png){ loading=lazy width="300" }
 
-    ![Plusieurs répéteurs sélectionnés pour le traçage](images/MeshCore_TraceRoute2Hop1.png){ loading=lazy width="300" }
+3. Confirmez les parcours aller et retour, puis touchez **Trace**.
 
-3. Vérifiez la suite complète, puis sélectionnez **Trace**.
+    ![Parcours à plusieurs sauts prêt à tracer](images/MeshCore_TraceRoute2Hop2.png){ loading=lazy width="300" }
 
-    ![Parcours à plusieurs sauts prêt à être tracé](images/MeshCore_TraceRoute2Hop2.png){ loading=lazy width="300" }
-
-4. Lisez le résultat.
+4. Consultez les résultats.
 
     ![Résultat d’un traçage à plusieurs sauts](images/MeshCore_TraceRoute2Hop3.png){ loading=lazy width="300" }
 
-Si vous ne connaissez pas les suites aller et retour, demandez à la communauté
-locale plutôt que de deviner les identifiants des répéteurs.
-
 ## Vérifier les répétitions reçues { #check-heard-repeats }
 
-Une répétition reçue signifie que votre compagnon a reçu une copie répétée d’un
-paquet qu’il a envoyé. L’absence d’une répétition n’indique pas à elle seule où
-le paquet s’est arrêté : le répéteur peut ne pas avoir reçu le paquet, ou votre
-compagnon peut ne pas avoir reçu la copie répétée.
+Quand vous envoyez un message, il se rend à un répéteur proche, qui le répète.
+Si votre compagnon capte cette répétition, elle compte comme une **répétition
+reçue**. Votre compagnon peut en manquer, par exemple :
 
-1. Envoyez un message dans le canal voulu.
-2. Lorsque **Heard _n_ repeats** apparaît sous le message, maintenez le doigt
-   sur celui-ci.
+- votre message atteint le répéteur, mais la répétition ne vous revient pas;
+- vous utilisez un compagnon de 1 W et le répéteur est de 0,3 W : vous
+  l’atteignez, mais vous êtes peut-être trop loin pour capter sa répétition.
+
+1. Envoyez un message dans le canal Public.
+2. Quand **Heard X repeats** apparaît sous votre message, maintenez le doigt sur le message.
 
     ![Message affichant le nombre de répétitions reçues](images/MeshCore_HeardRepeats_Step1.png){ loading=lazy width="300" }
 
-3. Sélectionnez **Heard Repeats**.
+3. Touchez **Heard Repeats**.
 
-    ![Action « Heard Repeats » de l’application MeshCore](images/MeshCore_HeardRepeats_Step2.png){ loading=lazy width="300" }
+    ![Option Heard Repeats](images/MeshCore_HeardRepeats_Step2.png){ loading=lazy width="300" }
 
-4. Examinez les répéteurs que votre compagnon a reçus pour ce paquet.
+4. Vous verrez chaque répéteur que votre compagnon a entendu répéter ce message.
 
-    ![Liste des répéteurs reçus par le compagnon](images/MeshCore_HeardRepeats_Step3.png){ loading=lazy width="300" }
+    ![Liste des répéteurs captés par le compagnon](images/MeshCore_HeardRepeats_Step3.png){ loading=lazy width="300" }
 
-5. Sélectionnez un répéteur pour examiner le parcours indiqué.
+5. Touchez un répéteur pour voir le parcours de sa répétition jusqu’à vous.
+
+**Notes :**
+
+- Un répéteur proche peut apparaître comme un **saut direct**.
+- Vous pouvez aussi voir un **répéteur éloigné**. Cela arrive quand il capte
+  votre message peu après un autre répéteur et que votre compagnon entend les
+  deux répétitions.
+- Votre compagnon doit capter un répéteur *directement* pour qu’il apparaisse
+  dans la liste.
 
 ### Exemple : répétition directe
 
-![Schéma d’une répétition directe reçue](images/MeshCore_HeardRepeats_Direct.png){ loading=lazy width="300" }
+![Schéma d’une répétition reçue directement](images/MeshCore_HeardRepeats_Direct.png){ loading=lazy width="300" }
 
-![Affichage d’une répétition directe reçue dans l’application](images/MeshCore_HeardRepeats_Step4_1Repeat.png){ loading=lazy width="300" }
+![Vue de l’application pour une répétition directe](images/MeshCore_HeardRepeats_Step4_1Repeat.png){ loading=lazy width="300" }
 
 ### Exemple : répétition à plusieurs sauts
 
-![Schéma d’une répétition reçue à plusieurs sauts](images/MeshCore_HeardRepeats_MultiHop.png){ loading=lazy width="300" }
+Un répéteur capte votre message et le répète, puis votre compagnon capte la
+répétition de ce même message par un deuxième répéteur :
 
-![Affichage d’une répétition reçue à plusieurs sauts dans l’application](images/MeshCore_HeardRepeats_Step4_2Repeat.png){ loading=lazy width="300" }
+![Schéma d’une répétition à plusieurs sauts](images/MeshCore_HeardRepeats_MultiHop.png){ loading=lazy width="300" }
 
-## Besoin d’aide?
+![Vue de l’application pour une répétition à plusieurs sauts](images/MeshCore_HeardRepeats_Step4_2Repeat.png){ loading=lazy width="300" }
 
-Si un résultat manque ou n’est pas clair, comparez-le avec un nœud fiable situé
-à proximité, puis consultez [Obtenir de l’aide](../start/get-help.md). Indiquez
-la tâche et l’étape où vous vous êtes arrêté, mais retirez les données sensibles
-avant de partager une capture d’écran.
+Besoin d’aide? [Obtenez de l’aide](../start/get-help.md).

@@ -18,7 +18,7 @@ page_styles:
 ---
 # What is MeshCore?
 
-MeshCore is a LoRa mesh network. A device's firmware gives it a specific job.
+MeshCore is a **repeater-driven long-range mesh network** built on LoRa radios. The firmware you flash gives each device its job.
 
 !!! warning "MeshCore project split, use the official links"
     Due to recent events in the MeshCore development team, the project has split. To stay on the official track, please only use:
@@ -36,8 +36,6 @@ MeshCore is a LoRa mesh network. A device's firmware gives it a specific job.
 - A **room server** keeps a shared room available.
 - An **observer** sends heard network data to CoreScope.
 
-[Compare device roles](../start/index.md).
-
 ## Settings in Canada
 
 Check the [community directory](../provinces/index.md) before configuring a
@@ -50,7 +48,7 @@ MeshCore Canada covers Canadian communities, settings, and tools. For official
 firmware, apps, and protocol information, use:
 
 - [MeshCore documentation](https://docs.meshcore.io/){ target="_blank" rel="noopener" }
-- [MeshCore Flasher](https://flasher.meshcore.io/){ target="_blank" rel="noopener" }
+- [MeshCore Flasher](https://meshcore.io/flasher){ target="_blank" rel="noopener" }
 - [MeshCore source code](https://github.com/meshcore-dev/MeshCore){ target="_blank" rel="noopener" }
 
 [Choose a role and start setup](../start/index.md){ .md-button .md-button--primary }

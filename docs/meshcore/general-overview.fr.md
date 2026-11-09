@@ -18,7 +18,7 @@ page_styles:
 ---
 # Qu’est-ce que MeshCore?
 
-MeshCore est un réseau maillé LoRa. Le micrologiciel d’un appareil lui attribue un rôle précis.
+MeshCore est un **réseau maillé longue portée qui repose sur des répéteurs**, construit sur des radios LoRa. Le micrologiciel installé donne son rôle à chaque appareil.
 
 !!! warning "Scission du projet MeshCore : utilisez les liens officiels"
     À la suite d’événements récents au sein de l’équipe de développement de MeshCore, le projet s’est scindé. Pour rester sur la voie officielle, utilisez uniquement :
@@ -36,8 +36,6 @@ MeshCore est un réseau maillé LoRa. Le micrologiciel d’un appareil lui attri
 - Un **serveur de salon** maintient un salon partagé accessible.
 - Un **observateur** transmet à CoreScope les données réseau qu’il reçoit.
 
-[Comparer les rôles des appareils](../start/index.md).
-
 ## Réglages au Canada
 
 Consultez le [répertoire des communautés](../provinces/index.md) avant de configurer un
@@ -51,7 +49,7 @@ Canada. Pour obtenir les renseignements officiels sur le micrologiciel, les
 applications et le protocole, consultez :
 
 - la [documentation de MeshCore](https://docs.meshcore.io/){ target="_blank" rel="noopener" }
-- le [programme de mise à jour MeshCore](https://flasher.meshcore.io/){ target="_blank" rel="noopener" }
+- le [programme de mise à jour MeshCore](https://meshcore.io/flasher){ target="_blank" rel="noopener" }
 - le [code source de MeshCore](https://github.com/meshcore-dev/MeshCore){ target="_blank" rel="noopener" }
 
 [Choisir un rôle et commencer la configuration](../start/index.md){ .md-button .md-button--primary }
