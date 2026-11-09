@@ -7,6 +7,7 @@ audience:
 task: understand-observer-data
 scope: canada-baseline
 status: draft
+status_notice: false
 owner: meshcore-canada
 last_reviewed: 2026-09-03
 review_by: 2026-12-01
@@ -19,62 +20,46 @@ page_styles:
 
 # Données des observateurs et vie privée
 
-Considérez comme publiques toutes les données captées par un observateur. Un
-observateur ne déchiffre pas les messages privés, mais il peut transmettre les
-détails des paquets et des renseignements sur son état. N’inscrivez pas de noms,
-d’emplacements, d’identifiants ou d’autres renseignements sensibles dans les
-messages MeshCore.
+!!! warning "Considérez le trafic radio MeshCore comme public"
+    Le trafic MeshCore est destiné à un usage partagé, et les réseaux peuvent
+    utiliser des préréglages ou des fréquences différents. Considérez tous les
+    canaux qui utilisent une clé partagée, et les canaux privés aussi, comme non
+    sécurisés : tout nœud qui utilise les mêmes réglages peut être capté par les
+    observateurs de ce réseau. Le trafic relayé par MQTT doit être considéré comme
+    public. N’envoyez pas de noms, d’emplacements, de notes ou d’autres
+    renseignements personnels que vous ne voudriez pas voir conservés et affichés
+    publiquement. Partez du principe que même un canal privé pourrait être
+    recueilli et déchiffré par quelqu’un qui en a les moyens et le savoir-faire.
 
-<div class="mc-method-fit">
-  <div><strong>Observateur</strong>Transmet les données de paquets et l’état provenant des paramètres radio qu’il utilise.</div>
-  <div><strong>CoreScope</strong>Peut afficher publiquement les observateurs, les paquets et les données cartographiques.</div>
-  <div><strong>Courtier</strong>Les abonnements directs sont restreints, mais les données affichées dans CoreScope demeurent publiques.</div>
-</div>
+## Ce que nous recueillons
 
-## Résumé de la politique
+Les serveurs MQTT de MeshCore Canada reçoivent des données de paquets des
+observateurs qui captent les paquets MeshCore et relaient la télémétrie.
 
-| Question | Réponse |
+Les observateurs écoutent tout le trafic MeshCore qu’ils peuvent capter avec
+leurs réglages. Si un observateur capte un paquet et que la publication des
+paquets est activée, ce paquet peut être envoyé aux serveurs de MeshCore Canada.
+
+## Où vont les données
+
+| Étape | Ce qui se passe |
 |---|---|
-| Qui gère le service? | Les administrateurs de l’infrastructure de MeshCore Canada |
-| Où puis-je poser mes questions? | [Forum de MeshCore Canada](https://forum.meshcore.ca/) |
-| Combien de temps les données sont-elles conservées? | Aucune période de conservation publique n’a encore été annoncée |
+| Trafic radio | Les nœuds envoient des paquets MeshCore sur les fréquences et réglages de leur réseau local. |
+| Captation par l’observateur | Les observateurs écoutent tout le trafic qu’ils peuvent capter avec leurs réglages. |
+| Publication MQTT | Les observateurs publient les données des paquets sur les serveurs de MeshCore Canada. |
+| Stockage et affichage | Les données sont conservées sur l’infrastructure de MeshCore Canada et peuvent être affichées par Beacon, CoreScope et d’autres sites publics exploités par MeshCore Canada ou des exploitants approuvés. |
 
-Ne présumez pas que les données seront supprimées après une période précise.
-Communiquez avec l’équipe d’infrastructure si vous devez connaître l’échéancier
-de conservation ou de suppression.
+Aucune durée de conservation n’a encore été publiée : ne présumez pas que les
+données sont supprimées après un certain temps.
 
-## Parcours des données
+## Qui peut s’abonner
 
-<ol class="mc-analyzer-flow">
-  <li><strong>Paquet radio</strong><span>transmis sur le réseau maillé configuré</span></li>
-  <li><strong>Observateur</strong><span>capte et transmet la télémétrie</span></li>
-  <li><strong>Infrastructure</strong><span>la reçoit et peut la conserver</span></li>
-  <li><strong>CoreScope</strong><span>peut l’afficher publiquement</span></li>
-</ol>
-
-Changer le préréglage radio modifie ce que l’observateur peut capter. Le choix
-d’un canal public ou privé ne rend pas privée la télémétrie qui accompagne les
-paquets.
-
-## Collecte, accès et conservation
-
-| Donnée | Pourquoi elle est utilisée | Où elle peut apparaître | Qui peut y accéder | Conservation |
-|---|---|---|---|---|
-| État de l’observateur | Indiquer si un observateur est en ligne | CoreScope | Visiteurs; exploitants de l’infrastructure | Non précisée publiquement |
-| Télémétrie des paquets captés | Montrer l’activité du réseau et aider à diagnostiquer la couverture | Vues de paquets et cartes de CoreScope | Visiteurs; abonnés autorisés; exploitants de l’infrastructure | Non précisée publiquement |
-| Code d’emplacement | Regrouper un observateur près d’un lieu connu | Listes d’observateurs, sujets et cartes | Visiteurs et utilisateurs du courtier | Suit la conservation de l’observateur ou des paquets |
-| Coordonnées facultatives du responsable | Aider à identifier un service | Données d’état selon l’intégration | Peuvent être transmises à l’infrastructure et à CoreScope | Non précisée publiquement |
-| Identifiants du courtier | Authentifier l’observateur | Devraient rester dans l’intégration locale | Exploitant local et service d’authentification | Ne jamais les inclure dans des diagnostics publics |
-
-MeshCore Canada n’offre pas d’abonnement direct général au courtier. L’accès
-direct est limité à CoreScope, aux administrateurs des réseaux maillés locaux
-et aux personnes autorisées par les administrateurs de l’infrastructure.
+Les abonnements MQTT directs ne sont pas offerts à tous. Ils sont réservés aux
+administrateurs des réseaux locaux, aux outils approuvés et aux personnes
+approuvées par les administrateurs de MeshCore Canada. Les données restent tout
+de même publiques par Beacon, CoreScope et les autres sites ci-dessous.
 
 ## Comptes MQTT en lecture seule { #read-only-mqtt-accounts }
-
-Cet inventaire public répertorie les services qui disposent d’un accès en lecture
-seule aux courtiers MQTT de MeshCore Canada. Il indique le service et
-l’exploitant, mais jamais les mots de passe ni les jetons.
 
 | Service | Exploitant | Utilisation |
 |---|---|---|
@@ -84,25 +69,25 @@ l’exploitant, mais jamais les mots de passe ni les jetons.
 | [Quinte Mesh](https://quintemesh.ca/) | hansimgamr | Services du réseau communautaire de la région de Quinte |
 
 Les administrateurs de l’infrastructure doivent mettre ce tableau à jour chaque
-fois qu’ils créent ou retirent un compte en lecture seule. [Signalez une entrée
-manquante ou périmée](https://github.com/MeshCore-ca/MeshCore-Canada/issues/new/choose).
+fois qu’ils créent ou retirent un compte en lecture seule. [Signalez une entrée manquante ou périmée](https://github.com/MeshCore-ca/MeshCore-Canada/issues/new/choose).
 
-## Où les données apparaissent
+## Administrateurs de l’infrastructure
 
-[CoreScope](https://live.meshcore.ca/) affiche des renseignements sur les
-observateurs, les paquets et la carte. D’autres services autorisés de MeshCore
-Canada peuvent utiliser le même flux.
+Les administrateurs de l’infrastructure de MeshCore Canada gèrent les serveurs
+MQTT et l’infrastructure connexe. Adressez-leur vos questions sur la vie privée,
+l’accès MQTT ou le projet.
 
-Les contrôles d’accès au courtier ne rendent pas les renseignements privés une
-fois que CoreScope les affiche.
+| Administrateur | Contact |
+|---|---|
+| Mr. Alderson | [github.com/MrAlders0n](https://github.com/MrAlders0n) |
+| Ded | [github.com/446564](https://github.com/446564) |
+| n30nex | [github.com/n30nex](https://github.com/n30nex) |
+| Kranic | [forum.meshcore.ca/u/djkranic](https://forum.meshcore.ca/u/djkranic) |
 
-## Avant d’exploiter un observateur
+Discussion générale et aide : [forum.meshcore.ca](https://forum.meshcore.ca/).
 
-- [ ] Informez les personnes qui utilisent le réseau local qu’un observateur est actif.
-- [ ] Utilisez un nom général pour l’observateur, et non une adresse résidentielle ou le nom d’une personne.
-- [ ] Laissez les champs facultatifs de courriel du responsable vides, sauf s’ils sont nécessaires à l’exploitation.
-- [ ] Ne collez jamais de mots de passe Wi-Fi, de jetons MQTT, de clés privées ou de journaux non caviardés dans une demande d’aide.
-- [ ] Lisez les étapes de vérification et de récupération propres à la méthode avant d’apporter des changements.
+## Si vous exploitez un observateur
 
-Retournez à [Choisir une méthode d’observation](intro.md), ou voyez
-[quoi retirer avant de demander de l’aide](troubleshooting.md#what-to-share-when-asking-for-help).
+- Utilisez un nom d’observateur général, pas votre adresse ni votre nom.
+- Ne collez jamais de mot de passe Wi-Fi, de jeton MQTT, de clé privée ni de
+  journal non caviardé dans un message d’aide.

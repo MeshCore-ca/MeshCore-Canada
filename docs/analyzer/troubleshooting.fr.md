@@ -56,7 +56,7 @@ Ces commandes consultent seulement l’état des services :
 Avant de partager les résultats, suivez les consignes de la section
 [Quoi transmettre lorsque vous demandez de l’aide](#what-to-share-when-asking-for-help).
 
-Pour un micrologiciel autonome, exécutez seulement ces commandes de lecture
+Pour un répéteur observateur, exécutez seulement ces commandes de lecture
 dans l’interface en ligne de commande de l’appareil :
 
 ```text

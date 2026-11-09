@@ -113,12 +113,13 @@ test("privacy pages state ownership, access, the account inventory, and the unkn
   const source = read("docs/analyzer/data-collection-access.md");
   const french = read("docs/analyzer/data-collection-access.fr.md");
   for (const phrase of [
-    "Policy summary",
+    "Treat MeshCore radio traffic as public",
+    "What we collect",
+    "Where data goes",
     "MeshCore Canada infrastructure administrators",
-    "Collection, access, and retention",
     "Read-only MQTT accounts",
-    "public retention period has not yet been published",
-    "Never include in public diagnostics",
+    "No retention period has been published",
+    "Mr. Alderson",
   ]) {
     assert.match(source, new RegExp(phrase, "i"));
   }

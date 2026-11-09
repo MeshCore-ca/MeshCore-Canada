@@ -55,7 +55,7 @@ These commands only read service status:
 Before sharing any output, follow [What to share when asking for
 help](#what-to-share-when-asking-for-help).
 
-For standalone firmware, run only these read commands in the device CLI:
+For a repeater observer, run only these read commands in the device CLI:
 
 ```text
 get name
