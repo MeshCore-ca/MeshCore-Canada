@@ -29,6 +29,14 @@ does, how scopes and regions decide where messages go, and what each command in
 the tool's list means. You don't need to read it first: the tool asks one
 question at a time and explains every command as you go.
 
+**On this page:** [What a repeater is](#what-a-repeater-is) ·
+[Repeater observers](#repeater-observers) ·
+[Scopes and regions](#scopes-and-regions) ·
+[What each setting does](#settings) ·
+[City or edge repeater](#city-or-edge) ·
+[Companion scopes](#companions) ·
+[Starter regions](#starter-regions)
+
 ## What a repeater is {#what-a-repeater-is}
 
 A repeater passes messages on so they reach further.

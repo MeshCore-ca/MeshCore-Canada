@@ -30,6 +30,14 @@ messages, et ce que fait chaque commande de la liste de l’outil. Pas besoin de
 la lire d’abord : l’outil pose une question à la fois et explique chaque
 commande au fur et à mesure.
 
+**Sur cette page :** [Ce qu’est un répéteur](#what-a-repeater-is) ·
+[Répéteurs observateurs](#repeater-observers) ·
+[Portées et régions](#scopes-and-regions) ·
+[Ce que fait chaque réglage](#settings) ·
+[Ville ou bordure](#city-or-edge) ·
+[Portées des compagnons](#companions) ·
+[Régions initiales](#starter-regions)
+
 ## Ce qu’est un répéteur { #what-a-repeater-is }
 
 Un répéteur relaie les messages pour qu’ils aillent plus loin.
