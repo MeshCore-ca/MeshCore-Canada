@@ -52,6 +52,12 @@ class ContentValidationTests(unittest.TestCase):
         self.write("index.md", VALID)
         self.assertEqual([], MODULE.validate_tree(self.docs, self.today))
 
+    def test_overdue_review_is_only_a_warning(self) -> None:
+        self.write("index.md", VALID)
+        problems = MODULE.validate_tree(self.docs, dt.date(2026, 10, 20))
+        self.assertEqual(["index.md: warning: verified page is due for review since 2026-10-19"], problems)
+        self.assertTrue(all(MODULE.is_warning(problem) for problem in problems))
+
     def test_cache_busted_local_asset_passes(self) -> None:
         self.write("assets/app.js", "console.log('fixture');\n")
         page = VALID.replace(

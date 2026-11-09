@@ -77,6 +77,15 @@ def read_page(path: Path) -> tuple[dict[str, Any], str, list[str]]:
     return metadata, "\n".join(lines[closing + 1 :]), errors
 
 
+# An overdue review is reported as a warning, not a failure, so a date passing
+# never breaks the site build on its own.
+OVERDUE = "warning: verified page is due for review"
+
+
+def is_warning(problem: str) -> bool:
+    return OVERDUE in problem
+
+
 def validate_page(path: Path, docs_root: Path, today: dt.date) -> tuple[dict[str, Any], list[str]]:
     metadata, body, errors = read_page(path)
     for key in REQUIRED:
@@ -141,7 +150,7 @@ def validate_page(path: Path, docs_root: Path, today: dt.date) -> tuple[dict[str
     if last_reviewed and review_by and last_reviewed > review_by:
         errors.append("review_by cannot be earlier than last_reviewed")
     if status == "verified" and review_by and review_by < today:
-        errors.append(f"verified page review expired on {review_by.isoformat()}")
+        errors.append(f"{OVERDUE} since {review_by.isoformat()}")
 
     headings = H1.findall(body)
     if len(headings) != 1:
@@ -263,7 +272,10 @@ def main() -> int:
     args = parser.parse_args()
 
     docs_root = args.docs.resolve()
-    problems = validate_tree(docs_root, args.today, require_french_parity=True)
+    found = validate_tree(docs_root, args.today, require_french_parity=True)
+    for warning in (problem for problem in found if is_warning(problem)):
+        print(f"::warning::{warning}")
+    problems = [problem for problem in found if not is_warning(problem)]
     if problems:
         print(f"Content validation failed with {len(problems)} problem(s):", file=sys.stderr)
         for problem in problems:
