@@ -87,7 +87,7 @@ Elle n’y met jamais de ville, d’adresse civique ni de coordonnées, et le
 changement de langue ne transmet rien. Les liens peuvent apparaître dans
 l’historique du navigateur et les journaux du serveur.
 
-Les listes de configuration, les brouillons d’idées et le dernier code de
+Les brouillons d’idées et le dernier code de
 région Beacon choisi dans l’outil de vérification sont enregistrés uniquement
 dans votre navigateur lorsque vous utilisez ces fonctions. Les clés publiques
 des répéteurs, les mots de passe, les clés privées, les jetons antipourriel et

@@ -24,7 +24,8 @@ MeshCore au Canada. Nous maintenons des guides de configuration, un répertoire
 des communautés, les données des régions canadiennes et des liens vers les
 outils partagés.
 
-MeshCore Canada est indépendant du projet MeshCore officiel. Pour en savoir
+MeshCore Canada est un projet communautaire bénévole, sans affiliation avec le
+projet MeshCore officiel. Pour en savoir
 plus sur le micrologiciel, les applications et le protocole, consultez la
 [documentation officielle de MeshCore](https://docs.meshcore.io/){ target="_blank" rel="noopener" }.
 
@@ -43,6 +44,7 @@ utilisateurs canadiens. Ces services sont maintenus par
 
 ## Participer
 
+- Discutez avec nous sur [Discord](https://discord.gg/GBCP4xdgNv) ou sur le [forum](https://forum.meshcore.ca/).
 - [Trouvez une communauté canadienne](provinces/index.md) pour connaître ses
   paramètres et ses coordonnées.
 - [Obtenez de l’aide](start/get-help.md) si une configuration ou une

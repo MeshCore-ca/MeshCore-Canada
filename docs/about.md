@@ -23,7 +23,8 @@ MeshCore Canada is a community-run project for people using MeshCore in Canada.
 We maintain setup guides, community listings, Canadian region data, and links
 to shared tools.
 
-MeshCore Canada is independent from the official MeshCore project. For
+MeshCore Canada is a volunteer community project and isn't affiliated with the
+official MeshCore project. For
 firmware, app, and protocol information, use the
 [official MeshCore documentation](https://docs.meshcore.io/){ target="_blank" rel="noopener" }.
 
@@ -41,6 +42,7 @@ services are maintained by [Mr. Alderson](https://github.com/MrAlders0n),
 
 ## Get involved
 
+- Chat with us on [Discord](https://discord.gg/GBCP4xdgNv) or the [forum](https://forum.meshcore.ca/).
 - [Find a Canadian community](provinces/index.md) for local settings and contacts.
 - [Get help](start/get-help.md) when setup or a network check fails.
 - [Share an idea](submit-idea.md) or report a problem.

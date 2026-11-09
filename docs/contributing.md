@@ -62,6 +62,3 @@ experience.
     Submissions are public. Remove passwords, access tokens, private keys,
     private addresses, exact private coordinates, and sensitive command output.
 
-## Need help choosing?
-
-Not sure where to start? [Share an idea](submit-idea.md).

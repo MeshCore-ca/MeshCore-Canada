@@ -65,6 +65,3 @@ aucune expérience avec Git ou GitHub.
     d’accès, les clés privées, les adresses privées, les coordonnées privées
     précises et les sorties de commande sensibles.
 
-## Vous ne savez pas quoi choisir?
-
-[Partagez une idée](submit-idea.md) et nous vous aiderons à l’orienter.

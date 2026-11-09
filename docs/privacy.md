@@ -83,7 +83,7 @@ appear in browser history and server access logs.
 The retired region editor can download drafts saved in this browser. Downloading
 does not upload or delete them; old drafts are not approved MeshMapper boundaries.
 
-Setup checklists, idea drafts, and the last Beacon region code selected in the
+Idea drafts and the last Beacon region code selected in the
 repeater-ID checker are saved in your browser only when you use those features.
 Repeater public keys, passwords, private keys, anti-spam tokens, and location
 searches are not saved there.
