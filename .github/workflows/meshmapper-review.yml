@@ -50,8 +50,10 @@ jobs:
       - name: Find the last map a person approved
         run: |
           set -euo pipefail
+          # Drain the history so git log cannot get SIGPIPE under pipefail.
           reviewed="$(git log --format='%H %ae' -- docs/assets/regions/iata-boundaries.geojson |
-            awk '$2 != "41898282+github-actions[bot]@users.noreply.github.com" { print $1; exit }')"
+            awk '!found && $2 != "41898282+github-actions[bot]@users.noreply.github.com" { print $1; found = 1 }')"
+          test -n "$reviewed" || { echo "No human-reviewed map commit found." >&2; exit 1; }
           echo "Last approved map: $reviewed"
           git show "$reviewed:docs/assets/regions/iata-boundaries.geojson" > .tmp/meshmapper-review/reviewed-map.geojson
       # Simple changes (no new or removed zones, valid geometry, only boundaries,
