@@ -33,7 +33,7 @@ for (const locale of ["", "fr/"]) {
     // Deepest first; nothing is kept back for the new list to rely on.
     await expect.poll(removals).toEqual(["region remove yow", "region remove legacy-private", "region remove obsolete"]);
     expect(requests.some(request => request.includes("legacy-private"))).toBeFalsy();
-    expect(page.url()).not.toContain("legacy-private");
+    await expect(page).not.toHaveURL(/legacy-private/);
     await page.locator("[data-setup-reply]").fill("bad reply");
     await expect.poll(removals).toEqual([]);
     await expect(page.locator("[data-setup-reply-status]")).toHaveText(plain("region.unreadable", lang));

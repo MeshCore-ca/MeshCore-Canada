@@ -62,7 +62,7 @@ test.describe("critical routes", () => {
     test(`${route} has one visible page heading`, async ({ page }, testInfo) => {
       const response = await page.goto(siteRoute(route), { waitUntil: "domcontentloaded" });
       expect(response?.ok(), `${route} should return a successful response`).toBeTruthy();
-      expect(page.url()).toBe(resolveSiteRoute(testInfo.project.use.baseURL, route));
+      await expect(page).toHaveURL(resolveSiteRoute(testInfo.project.use.baseURL, route));
       await expect(page.locator("h1:visible")).toHaveCount(1);
       await expect(page.locator("h1:visible")).not.toHaveText("");
     });

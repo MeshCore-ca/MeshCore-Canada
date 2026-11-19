@@ -953,7 +953,7 @@ test("changing the town clears neighbours and the suggested name", async ({ page
   await expect(marker(page)).toBeVisible();
   expect(searchParam(page, "lat")).toBe("44.2298");
   expect(searchParam(page, "lon")).toBe("-76.481");
-  expect(page.url()).not.toMatch(/lat=44\.17(?:&|$)|lon=-77\.39(?:&|$)/);
+  await expect(page).not.toHaveURL(/lat=44\.17(?:&|$)|lon=-77\.39(?:&|$)/);
   await next(page);
   await expectStep(page, "commands");
   const lines = await commandLines(page);
@@ -1078,7 +1078,7 @@ test("start over asks first and sits away from the next button", async ({ page }
   await page.locator("[data-setup-restart-no]").click();
   await expect(page.locator("[data-setup-restart]")).toBeFocused();
   await expectStep(page, "check");
-  expect(page.url()).toBe(answers);
+  await expect(page).toHaveURL(answers);
   await page.locator("[data-setup-restart]").click();
   await page.locator("[data-setup-restart-yes]").click();
   await expectStep(page, "type");
@@ -1218,7 +1218,7 @@ test("language switch on the commands screen after flashing keeps the place and 
   const english = await commandLines(page);
   await page.locator('[data-setup-command="name"] [data-done]').click();
   // The flashed and bootloader ticks never go in the address, even while switching.
-  expect(page.url()).not.toMatch(/flashed|bootloader|firmware|step=/);
+  await expect(page).not.toHaveURL(/flashed|bootloader|firmware|step=/);
   await page.locator(".md-select > button").first().click();
   await page.locator('.md-select__link[hreflang="fr"]').click();
   await expect(page.locator("html")).toHaveAttribute("lang", "fr");
@@ -1230,7 +1230,7 @@ test("language switch on the commands screen after flashing keeps the place and 
   expect(french).toContain("region def ytr|* on|* onqc|* can|* na");
   expect(french).toContain(`password <${T("ph.password", "fr")}>`);
   await expect(page.locator('[data-setup-command="name"] [data-done]')).toHaveAttribute("aria-pressed", "true");
-  expect(page.url()).not.toMatch(/flashed|bootloader|firmware|step=/);
+  await expect(page).not.toHaveURL(/flashed|bootloader|firmware|step=/);
   // A plain reload is a fresh start of this tab's page: the flash ticks have to be given again.
   await page.reload();
   await expectStep(page, "bootloader");
@@ -1247,7 +1247,7 @@ test("language switch on the phone route keeps the chosen firmware", async ({ pa
   await expectStep(page, "version");
   await expect(page.locator('[data-setup-choice="1.14"]')).toHaveAttribute("aria-pressed", "true");
   await expect(nextButton(page)).toBeEnabled();
-  expect(page.url()).not.toMatch(/firmware/);
+  await expect(page).not.toHaveURL(/firmware/);
   await nextUntil(page, "commands");
   const french = await commandLines(page);
   expect(french).toContain("region put ytr");
@@ -1558,7 +1558,7 @@ for (const lang of LANGS) {
     await expect(page.locator('[data-setup-neighbour="ylk"] input')).toBeChecked();
     await expect(page.locator('[data-setup-found="ylk"] input')).toBeChecked();
     await expect(page.locator("[data-setup-live]")).toHaveText(T("neighbours.added", lang, { region: "Barrie", tag: "ylk" }));
-    expect(page.url()).toContain("neighbours=ylk");
+    await expect(page).toHaveURL(/neighbours=ylk/);
     await expect(nextButton(page)).toBeEnabled();
     await fitsTheScreen(page, `${lang} neighbours with a search result`);
     // Unticking it in the list leaves its row where it is, unticked, and the result follows.
@@ -1724,7 +1724,7 @@ test("the scopes offered come from the published file: a new entry shows up, in 
     await expect(page.locator('[data-setup-external="bcwa"] .setup-check__why')).toHaveText(lang === "fr"
       ? "Pour les répéteurs qui relient Washington et la Colombie-Britannique." : "Applied to repeaters that connect Washington and British Columbia.");
     await page.locator('[data-setup-external="bcwa"] input').check();
-    expect(page.url()).toContain("external=bcwa");
+    await expect(page).toHaveURL(/external=bcwa/);
     await next(page);
     await nextUntil(page, "commands");
     expect(await commandLines(page)).toContain("region def yka|* bc|* can|* na|* bcwa");
@@ -1736,14 +1736,14 @@ test("a share link made before the scopes came from a file still works: the old 
   await openLink(page, `/config/?type=repeater&board=esp32&status=running&reflash=0&role=city&name=Test_R1&${BELLEVILLE}&external=ontario-new-york`, { to: "role" });
   await expect(page.locator('[data-setup-external="onny"] input')).toBeChecked();
   await expect.poll(() => page.url()).toContain("external=onny");
-  expect(page.url()).not.toContain("ontario-new-york");
+  await expect(page).not.toHaveURL(/ontario-new-york/);
   await next(page);
   await nextUntil(page, "commands");
   expect(await commandLines(page)).toContain("region def ytr|* on|* onqc|* can|* na|* onny");
   await openLink(page, `/fr/config/?type=repeater&board=esp32&status=running&reflash=0&role=edge&name=Test_R1&town=Montr%C3%A9al&lat=45.5&lon=-73.57&tag=yul&province=qc&neighbours=yow&external=quebec-new-york`, { to: "neighbours" });
   await expect(page.locator('[data-setup-external="qcny"] input')).toBeChecked();
   await expect(page.locator('[data-setup-external="qcvt"] input')).not.toBeChecked();
-  expect(page.url()).toContain("external=qcny");
+  await expect(page).toHaveURL(/external=qcny/);
 });
 
 test("a US network in an old share link is dropped without a word, and so is a scope from another province", async ({ page }) => {
@@ -1754,7 +1754,7 @@ test("a US network in an old share link is dropped without a word, and so is a s
     await expect(page.locator("[data-setup-external] input:checked")).toHaveCount(0);
     await expect(page.locator("[data-setup-step]")).not.toContainText(US_NETWORKS);
     await expect(page.locator("[role='alert'], .setup-note")).toHaveCount(0);
-    expect(page.url()).not.toMatch(/external=|ohio|oregon|qcny/);
+    await expect(page).not.toHaveURL(/external=|ohio|oregon|qcny/);
     await page.locator('[data-setup-neighbour="none"] input').check();
     await next(page);
     await nextUntil(page, "commands");
@@ -1794,7 +1794,7 @@ for (const lang of LANGS) {
       await customBox(page).fill(bad);
       await expect(customMessage(page)).toHaveText(T("custom.invalid", lang));
       await expect(nextButton(page)).toBeDisabled();
-      expect(page.url()).not.toContain("custom=");
+      await expect(page).not.toHaveURL(/custom=/);
     }
     await customBox(page).fill("two words");
     // The box itself, with its message showing, has no serious accessibility problem (the site's own page furniture is checked elsewhere).
@@ -1804,7 +1804,7 @@ for (const lang of LANGS) {
     await customBox(page).fill("  QcX2 ");
     await expect(customMessage(page)).toHaveText("");
     await expect(nextButton(page)).toBeEnabled();
-    expect(page.url()).toContain("custom=qcx2");
+    await expect(page).toHaveURL(/custom=qcx2/);
     await next(page);
     await nextUntil(page, "commands");
     expect(await commandLines(page)).toContain("region def ytr|* on|* onqc|* can|* na|* qcx2");
@@ -1820,7 +1820,7 @@ for (const lang of LANGS) {
     await toggle(page).uncheck();
     await expect(customBox(page)).toBeHidden();
     await expect(nextButton(page)).toBeEnabled();
-    expect(page.url()).not.toContain("custom=");
+    await expect(page).not.toHaveURL(/custom=/);
     await next(page);
     await nextUntil(page, "commands");
     expect(await commandLines(page)).toContain("region def ytr|* on|* onqc|* can|* na");
@@ -1852,7 +1852,7 @@ test("an agreed scope follows a role change and goes when the region changes", a
   await expect(customBox(page)).toHaveValue("qcx2");
   // City to edge: the scope stays, and the edge screen shows it already ticked.
   await choose(page, "edge");
-  expect(page.url()).toContain("custom=qcx2");
+  await expect(page).toHaveURL(/custom=qcx2/);
   await next(page);
   await expectStep(page, "neighbours");
   await expect(toggle(page)).toBeChecked();
@@ -1875,13 +1875,13 @@ test("an agreed scope follows a role change and goes when the region changes", a
   await choose(page, "city");
   await expect(toggle(page)).toBeChecked();
   await customBox(page).fill("qcx2");
-  expect(page.url()).toContain("custom=qcx2");
+  await expect(page).toHaveURL(/custom=qcx2/);
   // A different region starts the cross-border choices again.
   await page.locator("[data-setup-back]").click();
   await expectStep(page, "town");
   await searchTown(page, "Kingston");
   await expect(page.locator("[data-setup-region]")).toContainText("ygk");
-  expect(page.url()).not.toContain("custom=");
+  await expect(page).not.toHaveURL(/custom=/);
   await next(page);
   await expectStep(page, "role");
   await choose(page, "city");
