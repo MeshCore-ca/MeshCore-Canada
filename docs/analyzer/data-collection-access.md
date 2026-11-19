@@ -82,6 +82,11 @@ infrastructure. Ask them about privacy, MQTT access or the project.
 
 General discussion and support: [forum.meshcore.ca](https://forum.meshcore.ca/).
 
+!!! support "Support MeshCore Canada infrastructure"
+    Your support helps cover the MQTT servers, Beacon and the time needed to keep
+    up with the growing Canadian mesh. If they have helped you, [support them on Ko-fi](https://ko-fi.com/mralders0n){ target="_blank" rel="noopener" }.
+    See [Ways to contribute](../contributing.md) for other ways to help.
+
 ## If you run an observer
 
 - Use a broad observer name, not your home address or your own name.

@@ -86,3 +86,8 @@ If it doesn't appear, start with the first thing that failed:
 | Observer appears under the wrong city | Every broker entry uses the same region code; don't use `CAN` for Canada |
 
 For method-specific commands and Home Assistant settings, see [Troubleshooting](troubleshooting.md).
+
+!!! support "Support MeshCore Canada infrastructure"
+    Your support helps cover the MQTT servers, Beacon and the time needed to keep
+    up with the growing Canadian mesh. If they have helped you, [support them on Ko-fi](https://ko-fi.com/mralders0n){ target="_blank" rel="noopener" }.
+    See [Ways to contribute](../contributing.md) for other ways to help.

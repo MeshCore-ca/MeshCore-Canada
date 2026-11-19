@@ -42,6 +42,12 @@ utilisateurs canadiens. Ces services sont maintenus par
 [n30nex](https://github.com/n30nex) et
 [Kranic](https://forum.meshcore.ca/u/djkranic).
 
+!!! support "Soutenir l’infrastructure de MeshCore Canada"
+    Votre soutien aide à couvrir les serveurs MQTT, Beacon et le temps nécessaire
+    pour suivre la croissance du réseau canadien. S’ils vous ont été utiles,
+    [soutenez-les sur Ko-fi](https://ko-fi.com/mralders0n){ target="_blank" rel="noopener" }.
+    Consultez [Façons de contribuer](contributing.md) pour d’autres façons d’aider.
+
 ## Participer
 
 - Discutez avec nous sur [Discord](https://discord.gg/GBCP4xdgNv) ou sur le [forum](https://forum.meshcore.ca/).

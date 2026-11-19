@@ -73,3 +73,8 @@ Setup is not finished when a screen says “connected.” You are done when:
 2. a packet heard by your radio appears in [Live packets](https://live.meshcore.ca/).
 
 Finish with [Check your observer](verify.md). If something fails, go to [Troubleshooting](troubleshooting.md).
+
+!!! support "Support MeshCore Canada infrastructure"
+    Your support helps cover the MQTT servers, Beacon and the time needed to keep
+    up with the growing Canadian mesh. If they have helped you, [support them on Ko-fi](https://ko-fi.com/mralders0n){ target="_blank" rel="noopener" }.
+    See [Ways to contribute](../contributing.md) for other ways to help.

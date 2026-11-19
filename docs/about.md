@@ -40,6 +40,11 @@ services are maintained by [Mr. Alderson](https://github.com/MrAlders0n),
 [Ded](https://github.com/446564), [n30nex](https://github.com/n30nex), and
 [Kranic](https://forum.meshcore.ca/u/djkranic).
 
+!!! support "Support MeshCore Canada infrastructure"
+    Your support helps cover the MQTT servers, Beacon and the time needed to keep
+    up with the growing Canadian mesh. If they have helped you, [support them on Ko-fi](https://ko-fi.com/mralders0n){ target="_blank" rel="noopener" }.
+    See [Ways to contribute](contributing.md) for other ways to help.
+
 ## Get involved
 
 - Chat with us on [Discord](https://discord.gg/GBCP4xdgNv) or the [forum](https://forum.meshcore.ca/).

@@ -86,3 +86,9 @@ S’il n’apparaît pas, commencez par la première chose qui a échoué :
 | L’observateur apparaît dans la mauvaise ville | Chaque entrée de serveur utilise le même code de région; n’utilisez pas `CAN` pour le Canada |
 
 Pour les commandes propres à chaque méthode et les réglages de Home Assistant, consultez le [dépannage](troubleshooting.md).
+
+!!! support "Soutenir l’infrastructure de MeshCore Canada"
+    Votre soutien aide à couvrir les serveurs MQTT, Beacon et le temps nécessaire
+    pour suivre la croissance du réseau canadien. S’ils vous ont été utiles,
+    [soutenez-les sur Ko-fi](https://ko-fi.com/mralders0n){ target="_blank" rel="noopener" }.
+    Consultez [Façons de contribuer](../contributing.md) pour d’autres façons d’aider.
