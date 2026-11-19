@@ -377,3 +377,16 @@ a[target="_blank"]::after {
   -webkit-mask-image: var(--mc-support-icon);
   mask-image: var(--mc-support-icon);
 }
+.md-typeset .admonition.support { border-width: 0.1rem; border-left-width: 0.3rem; font-size: 0.8rem; }
+.md-typeset .support > .admonition-title { font-size: 0.85rem; }
+.md-typeset .md-button.mc-kofi-button {
+  display: inline-flex; align-items: center; gap: 0.5em;
+  margin: 0.25rem 0 0.5rem; padding: 0 1.25em;
+  border-color: #72a4f2; background-color: #72a4f2; color: #0b1a33;
+  font-weight: 700;
+}
+.md-typeset .md-button.mc-kofi-button:hover,
+.md-typeset .md-button.mc-kofi-button:focus-visible {
+  border-color: #4f8be8; background-color: #4f8be8; color: #0b1a33;
+}
+.md-typeset .mc-kofi-button .twemoji svg { width: 1.3em; height: 1.3em; fill: currentColor; }
