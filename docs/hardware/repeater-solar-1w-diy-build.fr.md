@@ -84,7 +84,7 @@ Les prix proviennent du guide d’origine daté du **1er janvier 2026**. Ce ne s
 
 L’antenne n’est pas incluse, car le choix dépend de l’installation. Le guide d’origine recommande un gain de 6–8 dBi ou plus pour ce type de liaison. Plusieurs personnes à Ottawa ont observé une baisse de qualité du signal avec l’Ikoka Stick et l’antenne Alfa de 5,8 dBi. Il s’agit d’une observation sur ces installations, pas d’une incompatibilité établie.
 
-Consultez les [antennes omnidirectionnelles GOME pour répéteurs](recommended-antenna.md#antennes-omnidirectionnelles-pour-repeteurs) pour les options présentées dans le guide.
+Consultez les [antennes omnidirectionnelles GOME pour répéteurs](recommended-antenna.md#antennes-pour-repeteurs) pour les options présentées dans le guide.
 
 <span id="outils-et-telechargements"></span>
 

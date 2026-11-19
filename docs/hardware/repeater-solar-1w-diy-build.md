@@ -85,7 +85,7 @@ Prices are from the original guide dated **January 1, 2026**, not current quotes
 
 An antenna is not included in this parts list as selection will vary by deployment. It is highly recommended to use a higher dBi antenna such as a 6-8 dBi or higher with 1W builds. We have found that the Ikoka Stick does not pair well with the Alfa 5.8 dBi antenna for some reason, with several folks in Ottawa observing noticeably worse signal quality when using them together. This is not a definitive statement, just a pattern observed across multiple deployments.
 
-For recommended antenna options, see the [GOME Repeater Omni Antennas](recommended-antenna.md#repeater-omni-antennas) page.
+For recommended antenna options, see the [GOME Repeater Omni Antennas](recommended-antenna.md#repeater-antennas) page.
 
 <span id="tools-and-downloads"></span>
 
