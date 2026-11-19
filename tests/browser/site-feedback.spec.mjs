@@ -71,7 +71,8 @@ for (const locale of ["", "fr/"]) {
     const hero = page.locator(".mc-home-hero");
     await expect(hero).toBeVisible();
     await expect.poll(() => hero.locator("img").evaluate(image => image.naturalWidth)).toBeGreaterThan(0);
-    expect((await hero.boundingBox()).height).toBeLessThan(300);
+    // The banner leaves most of the first screen for the page itself.
+    expect((await hero.boundingBox()).height).toBeLessThan(page.viewportSize().height / 2);
     await expect(page.locator(".mc-baseline-table")).toContainText(locale ? "3 octets" : "3-byte");
     await page.goto(siteRoute(`/${locale}hardware/`));
     await expect(page.locator(".mc-guide-status")).toHaveCount(0);

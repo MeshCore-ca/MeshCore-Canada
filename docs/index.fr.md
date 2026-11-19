@@ -16,7 +16,7 @@ difficulty: beginner
 estimated_time: 1-2 minutes
 destructive: false
 page_styles:
-  - assets/styles/home.css?v=20261105-1
+  - assets/styles/home.css?v=20261118-1
 hide:
   - toc
 ---
