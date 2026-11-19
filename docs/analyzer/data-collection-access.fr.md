@@ -87,10 +87,12 @@ l’accès MQTT ou le projet.
 Discussion générale et aide : [forum.meshcore.ca](https://forum.meshcore.ca/).
 
 !!! support "Soutenir l’infrastructure de MeshCore Canada"
-    Votre soutien aide à couvrir les serveurs MQTT, Beacon et le temps nécessaire
-    pour suivre la croissance du réseau canadien. S’ils vous ont été utiles,
-    [soutenez-les sur Ko-fi](https://ko-fi.com/mralders0n){ target="_blank" rel="noopener" }.
-    Consultez [Façons de contribuer](../contributing.md) pour d’autres façons d’aider.
+    Les serveurs MQTT et Beacon sont payés par des bénévoles. Un don aide à
+    les garder en ligne pendant que le réseau canadien grandit.
+
+    [:simple-kofi: Soutenez-nous sur Ko-fi](https://ko-fi.com/mralders0n){ .md-button .mc-kofi-button target="_blank" rel="noopener" }
+
+    Pour d’autres façons d’aider, consultez [Façons de contribuer](../contributing.md).
 
 ## Si vous exploitez un observateur
 

@@ -83,9 +83,12 @@ infrastructure. Ask them about privacy, MQTT access or the project.
 General discussion and support: [forum.meshcore.ca](https://forum.meshcore.ca/).
 
 !!! support "Support MeshCore Canada infrastructure"
-    Your support helps cover the MQTT servers, Beacon and the time needed to keep
-    up with the growing Canadian mesh. If they have helped you, [support them on Ko-fi](https://ko-fi.com/mralders0n){ target="_blank" rel="noopener" }.
-    See [Ways to contribute](../contributing.md) for other ways to help.
+    Volunteers pay for the MQTT servers and Beacon. A donation helps keep them
+    running as the Canadian mesh grows.
+
+    [:simple-kofi: Support us on Ko-fi](https://ko-fi.com/mralders0n){ .md-button .mc-kofi-button target="_blank" rel="noopener" }
+
+    For other ways to help, see [Ways to contribute](../contributing.md).
 
 ## If you run an observer
 
