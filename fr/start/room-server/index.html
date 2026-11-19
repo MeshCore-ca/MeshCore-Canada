@@ -6,17 +6,17 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Préparez, configurez et vérifiez un serveur de salon MeshCore persistant pour une communauté canadienne.">
+        <meta name="description" content="Programmez, configurez et testez un serveur de salon MeshCore au Canada, sur une seule page.">
       
       
       
         <link rel="canonical" href="https://meshcore.ca/fr/start/room-server/">
       
       
-        <link rel="prev" href="../repeater/">
+        <link rel="prev" href="../../config/">
       
       
-        <link rel="next" href="../observer/">
+        <link rel="next" href="../../analyzer/intro/">
       
       
         
@@ -31,7 +31,7 @@
     
     
       
-        <title>Commencer avec un serveur de salon - MeshCore Canada</title>
+        <title>Configurer un serveur de salon - MeshCore Canada</title>
       
     
     
@@ -57,7 +57,7 @@
     
       <link rel="stylesheet" href="../../../assets/styles/shell.css?v=20261105-1">
     
-      <link rel="stylesheet" href="../../../assets/styles/components.css?v=20260926-1">
+      <link rel="stylesheet" href="../../../assets/styles/components.css?v=20261118-1">
     
       <link rel="stylesheet" href="../../../assets/styles/network-status.css?v=20260905-1">
     
@@ -72,8 +72,8 @@
   
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="MeshCore Canada">
-    <meta property="og:title" content="Commencer avec un serveur de salon">
-    <meta property="og:description" content="Préparez, configurez et vérifiez un serveur de salon MeshCore persistant pour une communauté canadienne.">
+    <meta property="og:title" content="Configurer un serveur de salon">
+    <meta property="og:description" content="Programmez, configurez et testez un serveur de salon MeshCore au Canada, sur une seule page.">
     <meta property="og:url" content="https://meshcore.ca/fr/start/room-server/">
     <meta property="og:image" content="https://meshcore.ca/assets/MeshCore-Canada-Logo.png">
     <meta name="twitter:card" content="summary">
@@ -81,8 +81,8 @@
       {
         "@context": "https://schema.org",
         "@type": "WebPage",
-        "name": "Commencer avec un serveur de salon",
-        "description": "Pr\u00e9parez, configurez et v\u00e9rifiez un serveur de salon MeshCore persistant pour une communaut\u00e9 canadienne.",
+        "name": "Configurer un serveur de salon",
+        "description": "Programmez, configurez et testez un serveur de salon MeshCore au Canada, sur une seule page.",
         "url": "https://meshcore.ca/fr/start/room-server/",
         "isPartOf": {
           "@type": "WebSite",
@@ -116,7 +116,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#commencer-avec-un-serveur-de-salon" class="md-skip">
+        <a href="#configurer-un-serveur-de-salon" class="md-skip">
           Aller au contenu
         </a>
       
@@ -162,7 +162,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Commencer avec un serveur de salon
+              Configurer un serveur de salon
             
           </span>
         </div>
@@ -657,41 +657,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../choose-a-goal/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Choisir un type d'appareil
-  
-
-    
-  </span>
-  
-  
-    
-  
-  
-    <span class="md-status md-status--verified"></span>
-  
-
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../companion/" class="md-nav__link">
         
   
@@ -699,7 +664,7 @@
   <span class="md-ellipsis">
     
   
-    Appareil compagnon
+    Configurer un compagnon
   
 
     
@@ -727,14 +692,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../repeater/" class="md-nav__link">
+      <a href="../../config/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Répéteur
+    Configurer un répéteur
   
 
     
@@ -778,7 +743,7 @@
   <span class="md-ellipsis">
     
   
-    Serveur de salon
+    Configurer un serveur de salon
   
 
     
@@ -803,7 +768,7 @@
   <span class="md-ellipsis">
     
   
-    Serveur de salon
+    Configurer un serveur de salon
   
 
     
@@ -844,13 +809,69 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Avant de commencer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#appareil-deja-utilise-sauvegardez-le-dabord" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Appareil déjà utilisé? Sauvegardez-le d’abord
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
-  <a href="#ce-qui-sera-modifie" class="md-nav__link">
+  <a href="#1-programmer-le-micrologiciel" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Ce qui sera modifié
+        1. Programmer le micrologiciel
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Programmer le micrologiciel">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#verifier-que-ca-a-fonctionne" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Vérifier que ça a fonctionné
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recuperation-si-la-programmation-echoue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Récupération si la programmation échoue
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-le-nommer-et-regler-les-mots-de-passe-et-la-radio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Le nommer et régler les mots de passe et la radio
       
     </span>
   </a>
@@ -858,32 +879,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#installer-le-micrologiciel-du-serveur-de-salon" class="md-nav__link">
+  <a href="#tester-lappareil" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Installer le micrologiciel du serveur de salon
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#choisir-les-bons-parametres-radio" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Choisir les bons paramètres radio
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#tester-le-serveur" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Tester le serveur
+        Tester l’appareil
       
     </span>
   </a>
@@ -917,14 +916,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../observer/" class="md-nav__link">
+      <a href="../../analyzer/intro/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Observateur
+    Configurer un observateur
   
 
     
@@ -934,97 +933,7 @@
     
   
   
-    <span class="md-status md-status--verified"></span>
-  
-
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    
-    
-    
-    
-      
-      
-        
-          
-          
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_1_8" >
-        
-          
-          <label class="md-nav__link" for="__nav_1_8" id="__nav_1_8_label" tabindex="">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Terminer et obtenir de l'aide
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_1_8_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_1_8">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Terminer et obtenir de l'aide
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../verify/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Vérifier votre configuration
-  
-
-    
-  </span>
-  
-  
-    
-  
-  
-    <span class="md-status md-status--verified"></span>
+    <span class="md-status md-status--draft"></span>
   
 
   
@@ -1065,14 +974,6 @@
   
 
       </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
     </li>
   
 
@@ -1171,58 +1072,6 @@
   
 
               
-            
-              
-                
-  
-  
-  
-  
-    
-    
-    
-    
-      
-      
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
-        
-          
-          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Ouest canadien
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_2_2">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Ouest canadien
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
             
               
                 
@@ -1364,66 +1213,6 @@
 
               
             
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    
-    
-    
-    
-      
-      
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
-        
-          
-          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Centre du Canada
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_2_3">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Centre du Canada
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
               
                 
   
@@ -1493,66 +1282,6 @@
   
 
               
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    
-    
-    
-    
-      
-      
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4" >
-        
-          
-          <label class="md-nav__link" for="__nav_2_4" id="__nav_2_4_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Canada atlantique
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_4_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_2_4">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Canada atlantique
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
             
               
                 
@@ -1689,14 +1418,6 @@
   
 
       </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
     </li>
   
 
@@ -1845,7 +1566,7 @@
   <span class="md-ellipsis">
     
   
-    Appareils compagnons
+    Compagnons
   
 
     
@@ -1908,41 +1629,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../../hardware/station-g3/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Configurer une Station G3
-  
-
-    
-  </span>
-  
-  
-    
-  
-  
-    <span class="md-status md-status--draft"></span>
-  
-
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="../../hardware/recommended-antenna/" class="md-nav__link">
         
   
@@ -1977,58 +1663,6 @@
   
   
   
-    
-    
-    
-    
-      
-      
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_6" >
-        
-          
-          <label class="md-nav__link" for="__nav_3_6" id="__nav_3_6_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Répéteur solaire
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_6_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3_6">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Répéteur solaire
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
     <li class="md-nav__item">
       <a href="../../hardware/repeater-solar-300mw-diy-build/" class="md-nav__link">
         
@@ -2037,7 +1671,7 @@
   <span class="md-ellipsis">
     
   
-    Monter un répéteur de 300 mW
+    Monter un répéteur solaire de 300 mW
   
 
     
@@ -2072,7 +1706,7 @@
   <span class="md-ellipsis">
     
   
-    Monter un répéteur de 1 W
+    Monter un répéteur solaire de 1 W
   
 
     
@@ -2128,66 +1762,6 @@
 
               
             
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    
-    
-    
-    
-      
-      
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_7" >
-        
-          
-          <label class="md-nav__link" for="__nav_3_7" id="__nav_3_7_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Installer un répéteur
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_7_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3_7">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Installer un répéteur
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
               
                 
   
@@ -2202,137 +1776,7 @@
   <span class="md-ellipsis">
     
   
-    Options de montage
-  
-
-    
-  </span>
-  
-  
-    
-  
-  
-    <span class="md-status md-status--draft"></span>
-  
-
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    
-    
-    
-    
-      
-      
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_8" >
-        
-          
-          <label class="md-nav__link" for="__nav_3_8" id="__nav_3_8_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Micrologiciel
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_8_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3_8">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Micrologiciel
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../meshcore/flash-companion/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Installer le micrologiciel d'un compagnon
-  
-
-    
-  </span>
-  
-  
-    
-  
-  
-    <span class="md-status md-status--draft"></span>
-  
-
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../meshcore/flash-room-server/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Installer le micrologiciel d'un serveur de salon
+    Installer un répéteur
   
 
     
@@ -2388,9 +1832,36 @@
 
               
             
-          </ul>
-        </nav>
-      
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../hardware/station-g3/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Station G3 (avancé)
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
     </li>
   
 
@@ -2469,42 +1940,7 @@
   <span class="md-ellipsis">
     
   
-    Choisir un outil réseau
-  
-
-    
-  </span>
-  
-  
-    
-  
-  
-    <span class="md-status md-status--verified"></span>
-  
-
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../config/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Configurer un répéteur
+    Outils réseau
   
 
     
@@ -2601,34 +2037,51 @@
   
   
   
-    <li class="md-nav__item">
-      <a href="../../analyzer/intro/" class="md-nav__link">
+    
+    
+    
+    
+      
+      
         
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_4" id="__nav_4_4_label" tabindex="0">
+            
   
   
   <span class="md-ellipsis">
     
   
-    Configurer un observateur
+    Observateurs
   
 
     
   </span>
   
   
-    
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_4">
+            <span class="md-nav__icon md-icon"></span>
+            
   
-  
-    <span class="md-status md-status--draft"></span>
+    Observateurs
   
 
-  
-
-      </a>
-    </li>
-  
-
-              
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
             
               
                 
@@ -2679,7 +2132,7 @@
   <span class="md-ellipsis">
     
   
-    Dépanner les données du réseau
+    Dépannage
   
 
     
@@ -2706,58 +2159,6 @@
   
   
   
-    
-    
-    
-    
-      
-      
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_8" >
-        
-          
-          <label class="md-nav__link" for="__nav_4_8" id="__nav_4_8_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Méthodes d'observation
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_8_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_8">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Méthodes d'observation
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
-  
-  
     <li class="md-nav__item">
       <a href="../../analyzer/data-collection-access/" class="md-nav__link">
         
@@ -2766,7 +2167,7 @@
   <span class="md-ellipsis">
     
   
-    Données d'observation et confidentialité
+    Données et confidentialité
   
 
     
@@ -2927,66 +2328,6 @@
 
               
             
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    
-    
-    
-    
-      
-      
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_9" >
-        
-          
-          <label class="md-nav__link" for="__nav_4_9" id="__nav_4_9_label" tabindex="0">
-            
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Références
-  
-
-    
-  </span>
-  
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_9_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_4_9">
-            <span class="md-nav__icon md-icon"></span>
-            
-  
-    Références
-  
-
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
               
                 
   
@@ -3002,41 +2343,6 @@
     
   
     Référence des serveurs MQTT
-  
-
-    
-  </span>
-  
-  
-    
-  
-  
-    <span class="md-status md-status--draft"></span>
-  
-
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../analyzer/iata-codes/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Codes d'emplacement
   
 
     
@@ -3540,13 +2846,69 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Avant de commencer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#appareil-deja-utilise-sauvegardez-le-dabord" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Appareil déjà utilisé? Sauvegardez-le d’abord
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
-  <a href="#ce-qui-sera-modifie" class="md-nav__link">
+  <a href="#1-programmer-le-micrologiciel" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Ce qui sera modifié
+        1. Programmer le micrologiciel
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Programmer le micrologiciel">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#verifier-que-ca-a-fonctionne" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Vérifier que ça a fonctionné
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recuperation-si-la-programmation-echoue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Récupération si la programmation échoue
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-le-nommer-et-regler-les-mots-de-passe-et-la-radio" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Le nommer et régler les mots de passe et la radio
       
     </span>
   </a>
@@ -3554,32 +2916,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#installer-le-micrologiciel-du-serveur-de-salon" class="md-nav__link">
+  <a href="#tester-lappareil" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Installer le micrologiciel du serveur de salon
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#choisir-les-bons-parametres-radio" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Choisir les bons paramètres radio
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#tester-le-serveur" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Tester le serveur
+        Tester l’appareil
       
     </span>
   </a>
@@ -3672,7 +3012,7 @@
 
 
   
-  <h1 id="commencer-avec-un-serveur-de-salon">Commencer avec un serveur de salon<a class="headerlink" href="#commencer-avec-un-serveur-de-salon" title="Permanent link">&para;</a></h1>
+  <h1 id="configurer-un-serveur-de-salon">Configurer un serveur de salon<a class="headerlink" href="#configurer-un-serveur-de-salon" title="Permanent link">&para;</a></h1>
   
   
   
@@ -3683,65 +3023,90 @@
   
 
   
-<p>Un serveur de salon garde un salon partagé accessible. Il ne remplace pas un
-répéteur : utilisez un répéteur pour acheminer le trafic et améliorer la
-couverture.</p>
-<p><a class="md-button md-button--primary" href="../../meshcore/flash-room-server/">Installer et configurer un serveur de salon</a></p>
+<p>Un serveur de salon héberge un salon de discussion partagé sur le réseau. Les
+gens s’y connectent avec un mot de passe invité et peuvent rattraper les
+messages manqués. Ce n’est pas un répéteur : installez un
+<a href="../../config/">répéteur</a> distinct pour la couverture.</p>
 <h2 id="avant-de-commencer">Avant de commencer<a class="headerlink" href="#avant-de-commencer" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Confirmez que l’outil de reprogrammation offre le micrologiciel
-  <strong>Room Server</strong> pour votre appareil.</li>
-<li>Décidez qui entretiendra le salon et conservera un accès physique en cas de
-  panne.</li>
-<li>Notez l’identité et les paramètres dont vous aurez besoin avant toute étape
-  d’effacement.</li>
-<li>Préparez des identifiants différents pour les invités et l’administrateur.</li>
+<li><strong>Un appareil compatible</strong> pour lequel le
+  <a href="https://meshcore.io/flasher">programme de mise à jour MeshCore</a> offre le
+  micrologiciel <strong>Room Server</strong>.</li>
+<li><strong>Un câble USB de données.</strong> Les câbles de recharge seulement ne fonctionnent pas.</li>
+<li><strong>Chrome ou Edge sur un ordinateur.</strong> Le programme exige
+  <a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Serial_API#browser_compatibility">Web Serial</a>.</li>
+<li><strong>Une personne responsable.</strong> Décidez qui garde le mot de passe
+  administrateur et peut brancher l’appareil par USB au besoin.</li>
 </ul>
-<h2 id="ce-qui-sera-modifie">Ce qui sera modifié<a class="headerlink" href="#ce-qui-sera-modifie" title="Permanent link">&para;</a></h2>
-<p>Le guide lié remplace le micrologiciel et configure l’identité du serveur de
-salon, les identifiants d’accès et les paramètres radio.</p>
-<h2 id="installer-le-micrologiciel-du-serveur-de-salon">Installer le micrologiciel du serveur de salon<a class="headerlink" href="#installer-le-micrologiciel-du-serveur-de-salon" title="Permanent link">&para;</a></h2>
-<p>Suivez le guide <a href="../../meshcore/flash-room-server/">Reprogrammer et configurer un serveur de
-salon</a>. Il explique comment choisir
-l’appareil, installer le micrologiciel, configurer les accès et récupérer
-l’appareil en cas de problème.</p>
-<h2 id="choisir-les-bons-parametres-radio">Choisir les bons paramètres radio<a class="headerlink" href="#choisir-les-bons-parametres-radio" title="Permanent link">&para;</a></h2>
-<p>Utilisez le préréglage <strong>Canada</strong> et le hachage des chemins
-sur <strong>3 octets</strong>, sauf si votre communauté indique d’autres paramètres.</p>
-<p>Si Canada n’apparaît pas, suivez les <a href="../../provinces/#canada-baseline">consignes pour l’ancien préréglage</a>.</p>
-<div class="admonition warning">
-<p class="admonition-title">Utilisez les mêmes paramètres que votre communauté</p>
-<p>Consultez le <a href="../../provinces/">répertoire des communautés</a>. Si votre
-communauté publie d’autres paramètres, utilisez-les.</p>
+<h3 id="appareil-deja-utilise-sauvegardez-le-dabord">Appareil déjà utilisé? Sauvegardez-le d’abord<a class="headerlink" href="#appareil-deja-utilise-sauvegardez-le-dabord" title="Permanent link">&para;</a></h3>
+<div class="admonition danger">
+<p class="admonition-title">Erase Flash supprime les données du serveur de salon</p>
+<p>Cela comprend son identité (clé privée), les messages du salon, les accès
+invité et administrateur, son nom et ses réglages radio.</p>
 </div>
-<p>Gardez les identifiants de l’administrateur confidentiels. Partagez uniquement
-les renseignements d’accès destinés aux personnes invitées dans le salon.</p>
-<h2 id="tester-le-serveur">Tester le serveur<a class="headerlink" href="#tester-le-serveur" title="Permanent link">&para;</a></h2>
-<p>Le serveur de salon est prêt lorsque :</p>
 <ol>
-<li>un appareil compagnon à proximité découvre son annonce;</li>
-<li>le compagnon peut entrer avec les identifiants des invités;</li>
-<li>l’administrateur peut toujours le récupérer et l’entretenir.</li>
+<li>Notez son nom, ses réglages radio et ses réglages d’accès.</li>
+<li>Sauvegardez sa clé privée avec un outil compatible. Gardez-la secrète.</li>
+<li>Conservez les mots de passe dans un gestionnaire de mots de passe, jamais
+   dans une capture d’écran, un billet ou une discussion.</li>
 </ol>
-<p>Utilisez la <a href="../verify/#room-server">liste de vérification du serveur de salon</a>.</p>
+<p>Si vous ne pouvez pas sauvegarder quelque chose d’important,
+<strong>arrêtez-vous avant Erase Flash</strong> et <a href="../get-help/">demandez de l’aide</a>.</p>
+<h2 id="1-programmer-le-micrologiciel">1. Programmer le micrologiciel<a class="headerlink" href="#1-programmer-le-micrologiciel" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Branchez l’appareil à votre ordinateur par USB.</li>
+<li>Ouvrez le <a href="https://meshcore.io/flasher">programme de mise à jour MeshCore</a> et
+   sélectionnez votre carte exacte.</li>
+<li>Sélectionnez <strong>Room Server</strong> et la version du micrologiciel pour cette carte.</li>
+<li>Suivez les étapes de connexion du programme. Utilisez <strong>Enter DFU Mode</strong>
+   seulement si votre carte le demande.</li>
+<li>Appareil neuf ou réinitialisation voulue? Sauvegardez d’abord, puis cliquez
+   sur <strong>Erase Flash</strong> seulement si les instructions de votre carte l’exigent.
+   Pour une mise à jour, laissez l’effacement désactivé.</li>
+<li>Cliquez sur <strong>Flash</strong> et attendez le message de fin avant de débrancher.</li>
+</ol>
+<h3 id="verifier-que-ca-a-fonctionne">Vérifier que ça a fonctionné<a class="headerlink" href="#verifier-que-ca-a-fonctionne" title="Permanent link">&para;</a></h3>
+<p>L’appareil redémarre comme serveur de salon, et <strong>Configure via USB</strong> dans le
+programme peut s’y connecter.</p>
+<h3 id="recuperation-si-la-programmation-echoue">Récupération si la programmation échoue<a class="headerlink" href="#recuperation-si-la-programmation-echoue" title="Permanent link">&para;</a></h3>
+<p>N’effacez pas l’appareil à répétition. Laissez-le branché, actualisez le
+programme, remettez la carte en mode DFU, sélectionnez la même carte et le
+micrologiciel <strong>Room Server</strong>, puis réessayez <strong>Flash</strong>. Si la carte n’apparaît
+plus, <a href="../get-help/">demandez de l’aide</a> avant d’essayer autre chose.</p>
+<h2 id="2-le-nommer-et-regler-les-mots-de-passe-et-la-radio">2. Le nommer et régler les mots de passe et la radio<a class="headerlink" href="#2-le-nommer-et-regler-les-mots-de-passe-et-la-radio" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Dans le programme, cliquez sur <strong>Configure via USB</strong> et connectez-vous à l’appareil.</li>
+<li>Donnez-lui un nom qui ne révèle pas un emplacement privé.</li>
+<li>Choisissez un <strong>mot de passe invité</strong> (partagé avec les personnes qui
+   rejoignent le salon) et un <strong>mot de passe administrateur</strong> différent (gardé
+   privé). Conservez-les dans un gestionnaire de mots de passe.</li>
+<li>Consultez le <a href="../../provinces/">répertoire des communautés</a> pour les
+   réglages de votre région. Si aucun n’est indiqué, choisissez <strong>Canada</strong>
+   (<code>910.525 MHz / 62.5 kHz / SF7 / CR5</code>) et des parcours de <strong>3 octets</strong>
+   (<code>set path.hash.mode 2</code>).</li>
+<li>Enregistrez et redémarrez.</li>
+</ol>
+<p>Utilisez <strong>Canada</strong>, sauf si votre communauté indique d’autres paramètres. Si
+Canada n’est pas offert, suivez les
+<a href="../../provinces/#canada-baseline">consignes pour l’ancien préréglage</a>.</p>
+<h2 id="tester-lappareil">Tester l’appareil<a class="headerlink" href="#tester-lappareil" title="Permanent link">&para;</a></h2>
+<p>Faites-le sur l’établi avant de l’installer dans un endroit difficile d’accès.</p>
+<ol>
+<li>Envoyez une annonce depuis le serveur de salon.</li>
+<li>Vérifiez qu’un compagnon à proximité le trouve.</li>
+<li>Connectez-vous depuis le compagnon avec le mot de passe invité.</li>
+<li>Redémarrez-le et vérifiez que son nom, ses mots de passe et ses réglages
+   radio sont conservés.</li>
+</ol>
+<p>En cas d’échec, gardez-le branché par USB, programmez-le de nouveau et refaites
+l’essai.</p>
 <h2 id="et-ensuite">Et ensuite?<a class="headerlink" href="#et-ensuite" title="Permanent link">&para;</a></h2>
-<p>Notez qui entretient le salon et comment obtenir de l’aide. Demandez à un
-membre de la communauté à proximité de faire un essai avec un deuxième
-compagnon. Revérifiez la découverte et l’accès des invités après tout
-changement de micrologiciel, d’identifiants ou de paramètres radio. En cas
-d’échec, <a href="../get-help/">obtenez de l’aide</a>.</p>
-<section class="mc-start-progress" data-mc-progress-page="room-server" aria-labelledby="room-server-progress-title">
-  <h2 id="room-server-progress-title">Liste de vérification</h2>
-  <p>Cette liste est enregistrée uniquement dans ce navigateur.</p>
-  <ol>
-    <li><label><input id="room-server-progress-hardware" type="checkbox" data-mc-progress> Confirmer que le matériel est compatible</label></li>
-    <li><label><input id="room-server-progress-prepare" type="checkbox" data-mc-progress> Sauvegarder les données et préparer l’appareil</label></li>
-    <li><label><input id="room-server-progress-flash" type="checkbox" data-mc-progress> Suivre le guide d’installation du micrologiciel</label></li>
-    <li><label><input id="room-server-progress-configure" type="checkbox" data-mc-progress> Appliquer les paramètres d’accès et les paramètres locaux</label></li>
-    <li><label><input id="room-server-progress-verify-local" type="checkbox" data-mc-progress> Vérifier le serveur de salon à proximité</label></li>
-    <li><label><input id="room-server-progress-verify-community" type="checkbox" data-mc-progress> Tester la découverte et l’accès des invités</label></li>
-  </ol>
-</section>
+<ul>
+<li>Annoncez le salon à votre <a href="../../provinces/">communauté locale</a> et
+  expliquez comment obtenir le mot de passe invité.</li>
+<li>Demandez à une personne à proximité de l’essayer depuis son propre compagnon.</li>
+<li>Un problème? <a href="../get-help/">Obtenez de l’aide</a>.</li>
+</ul>
 
 
 
@@ -3809,7 +3174,7 @@ d’échec, <a href="../get-help/">obtenez de l’aide</a>.</p>
     
     
     
-    <a href="https://discord.gg/BESFVMt7yk" target="_blank" rel="noopener" title="MeshCore Canada Discord" class="md-social__link">
+    <a href="https://discord.gg/GBCP4xdgNv" target="_blank" rel="noopener" title="MeshCore Canada Discord" class="md-social__link">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M492.5 69.8c-.2-.3-.4-.6-.8-.7-38.1-17.5-78.4-30-119.7-37.1-.4-.1-.8 0-1.1.1s-.6.4-.8.8c-5.5 9.9-10.5 20.2-14.9 30.6-44.6-6.8-89.9-6.8-134.4 0-4.5-10.5-9.5-20.7-15.1-30.6-.2-.3-.5-.6-.8-.8s-.7-.2-1.1-.2C162.5 39 122.2 51.5 84.1 69c-.3.1-.6.4-.8.7C7.1 183.5-13.8 294.6-3.6 404.2c0 .3.1.5.2.8s.3.4.5.6c44.4 32.9 94 58 146.8 74.2.4.1.8.1 1.1 0s.7-.4.9-.7c11.3-15.4 21.4-31.8 30-48.8.1-.2.2-.5.2-.8s0-.5-.1-.8-.2-.5-.4-.6-.4-.3-.7-.4c-15.8-6.1-31.2-13.4-45.9-21.9-.3-.2-.5-.4-.7-.6s-.3-.6-.3-.9 0-.6.2-.9.3-.5.6-.7c3.1-2.3 6.2-4.7 9.1-7.1.3-.2.6-.4.9-.4s.7 0 1 .1c96.2 43.9 200.4 43.9 295.5 0 .3-.1.7-.2 1-.2s.7.2.9.4c2.9 2.4 6 4.9 9.1 7.2.2.2.4.4.6.7s.2.6.2.9-.1.6-.3.9-.4.5-.6.6c-14.7 8.6-30 15.9-45.9 21.8-.2.1-.5.2-.7.4s-.3.4-.4.7-.1.5-.1.8.1.5.2.8c8.8 17 18.8 33.3 30 48.8.2.3.6.6.9.7s.8.1 1.1 0c52.9-16.2 102.6-41.3 147.1-74.2.2-.2.4-.4.5-.6s.2-.5.2-.8c12.3-126.8-20.5-236.9-86.9-334.5zm-302 267.7c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.4 59.2-52.8 59.2m195.4 0c-29 0-52.8-26.6-52.8-59.2s23.4-59.2 52.8-59.2c29.7 0 53.3 26.8 52.8 59.2 0 32.7-23.2 59.2-52.8 59.2"/></svg>
     </a>
   
@@ -3862,7 +3227,7 @@ d’échec, <a href="../get-help/">obtenez de l’aide</a>.</p>
       
         <script src="../../../assets/javascripts/i18n-runtime.js?v=20260829-1"></script>
       
-        <script src="../../../assets/javascripts/bootstrap.js?v=20261105-1"></script>
+        <script src="../../../assets/javascripts/bootstrap.js?v=20261106-1"></script>
       
         <script src="../../../assets/javascripts/network-status.js?v=20260905-1"></script>
       

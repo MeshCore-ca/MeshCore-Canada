@@ -12,8 +12,6 @@
   function initializeDirectory(root) {
     if (!root || root.dataset.communityReady === "true") return;
     var search = root.querySelector("#community-search");
-    var status = root.querySelector("#community-status");
-    var override = root.querySelector("#community-override");
     var count = root.querySelector("[data-community-count]");
     var lookup = root.querySelector("[data-community-lookup]");
     var choices = root.querySelector("[data-community-choices]");
@@ -25,7 +23,7 @@
     var cards = Array.from(page.querySelectorAll("[data-community-card]"));
     var empty = page.querySelector("[data-community-empty]");
     var isFrench = document.documentElement.lang.toLowerCase().startsWith("fr");
-    if (!search || !status || !override || !count || !lookup || !choices || !submit || !results || !empty || !cards.length) return;
+    if (!search || !count || !lookup || !choices || !submit || !results || !empty || !cards.length) return;
     root.dataset.communityReady = "true";
     var selectedPlace = null;
     var expanded = false;
@@ -76,8 +74,7 @@
       var visible = 0;
       ordered.forEach(function (entry) {
         var card = entry.card;
-        var matches = (!regionIds || regionIds.includes(card.id.replace(/^directory-/, ""))) && (selectedPlace || !query || normalize(card.dataset.communitySearch).includes(query)) &&
-          (!status.value || card.dataset.communityStatus === status.value) && (!override.checked || card.dataset.communityOverride === "true");
+        var matches = (!regionIds || regionIds.includes(card.id.replace(/^directory-/, ""))) && (selectedPlace || !query || normalize(card.dataset.communitySearch).includes(query));
         if (matches) matching += 1;
         card.hidden = !matches || (selectedPlace && !expanded && matching > 5);
         if (!card.hidden) visible += 1;
@@ -181,14 +178,12 @@
 
     search.addEventListener("input", function () { cancelLookup(); selectedPlace = null; expanded = false; credit.hidden = true; regionIds = null; regionTag = ""; regionNotice.hidden = true; applyFilters(); });
     root.addEventListener("submit", locate);
-    status.addEventListener("change", function () { applyFilters(); });
-    override.addEventListener("change", function () { applyFilters(); });
     showAll.addEventListener("click", function () { expanded = true; applyFilters(); });
     page.querySelectorAll("[data-community-clear]").forEach(function (button) {
       button.addEventListener("click", function () {
         cancelLookup(); selectedPlace = null; expanded = false; credit.hidden = true;
         regionIds = null; regionTag = ""; regionNotice.hidden = true;
-        search.value = ""; status.value = ""; override.checked = false;
+        search.value = "";
         applyFilters(); search.focus();
       });
     });
