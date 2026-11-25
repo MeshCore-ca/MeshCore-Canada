@@ -8,7 +8,9 @@
     {% else %}
       Review preview — not the production site or a rollout announcement.
     {% endif %}
-    <a href="https://github.com/MeshCore-ca/MeshCore-Canada/pull/108">PR #108</a>
+    <a href="https://github.com/MeshCore-ca/MeshCore-Canada/pulls">{{
+      "Demandes de fusion ouvertes" if config.theme.language == "fr" else "Open pull requests"
+    }}</a>
     </span>
   {% else %}{{ super() }}{% endif %}
 {% endblock %}
