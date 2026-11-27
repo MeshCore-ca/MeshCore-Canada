@@ -171,8 +171,10 @@ test("share links round-trip answers and never carry pasted replies", () => {
 
 // Beyond the brief: the board list, route edge cases, purity and hostile links.
 
-test("the board answer is the kind of board: nrf52 or esp32, and nothing else", () => {
-  assert.deepEqual(flow.KINDS, ["nrf52", "esp32"]);
+test("the board answer is the kind of board: nrf52, esp32 or esp32-psram, and nothing else", () => {
+  assert.deepEqual(flow.KINDS, ["nrf52", "esp32", "esp32-psram"]);
+  assert.equal(flow.toQuery({ board: "esp32-psram" }), "board=esp32-psram");
+  assert.deepEqual(flow.fromQuery("board=ESP32-PSRAM"), { board: "esp32-psram" });
   assert.equal(flow.BOARDS, undefined, "the per-board list is gone");
   assert.equal(flow.toQuery({ board: "nrf52" }), "board=nrf52");
   assert.equal(flow.toQuery({ board: "esp32" }), "board=esp32");
@@ -183,13 +185,16 @@ test("the board answer is the kind of board: nrf52 or esp32, and nothing else", 
 
 test("a link made before the kind question maps each old board id to its kind", () => {
   const nrf52 = ["rak4631", "heltec-t114", "xiao-nrf52840", "t-echo", "heltec-mesh-solar", "sensecap-solar-p1", "other-nrf52"];
-  const esp32 = ["heltec-v3", "heltec-v4", "heltec-wireless-tracker", "t-beam", "t-beam-supreme", "rak3112", "xiao-esp32s3", "other-esp32"];
+  const esp32 = ["heltec-v3", "heltec-wireless-tracker", "t-beam", "rak3112", "xiao-esp32s3", "other-esp32"];
+  // The two old ids the polling firmware is built for become the PSRAM kind.
+  for (const id of ["heltec-v4", "t-beam-supreme"]) assert.deepEqual(flow.fromQuery(`type=repeater&board=${id}&status=new`), { type: "repeater", board: "esp32-psram", status: "new" }, id);
   for (const id of nrf52) assert.deepEqual(flow.fromQuery(`type=repeater&board=${id}&status=new`), { type: "repeater", board: "nrf52", status: "new" }, id);
   for (const id of esp32) assert.deepEqual(flow.fromQuery(`type=repeater&board=${id}&status=new`), { type: "repeater", board: "esp32", status: "new" }, id);
   // The old link steers the same steps as the kind does, and writes the kind back out.
   assert.ok(flow.stepIds(flow.fromQuery("type=repeater&board=rak4631&status=new")).includes("bootloader"));
   assert.ok(!flow.stepIds(flow.fromQuery("type=repeater&board=heltec-v3&status=new")).includes("bootloader"));
-  assert.equal(flow.toQuery(flow.fromQuery("type=observer&board=heltec-v4")), "type=observer&board=esp32");
+  assert.equal(flow.toQuery(flow.fromQuery("type=observer&board=heltec-v4")), "type=observer&board=esp32-psram");
+  assert.equal(flow.toQuery(flow.fromQuery("type=observer&board=heltec-v3")), "type=observer&board=esp32");
   assert.equal(flow.isComplete("board", flow.fromQuery("type=observer&board=rak4631")), false, "an old nRF52 observer link is still blocked");
   assert.equal(flow.isComplete("board", flow.fromQuery("type=observer&board=heltec-v4")), true);
   // Anything else, including names that exist on every object, is dropped.
@@ -629,4 +634,70 @@ test("a custom scope travels in the share link as custom=<tag>, and a bad one is
   for (const bad of ["custom=", "custom=bad%20name", "custom=" + "x".repeat(30), "custom=qu%C3%A9bec", "custom=%3Cb%3E", "custom=a,b", "custom=*"]) {
     assert.deepEqual(flow.fromQuery(bad), {}, bad);
   }
+});
+
+// Observer polling: asked only of a repeater observer on an ESP32 board with PSRAM.
+
+test("the polling question is asked only of a repeater observer on an ESP32 board with PSRAM, right after the board", () => {
+  const steps = (a) => flow.stepIds(a);
+  assert.deepEqual(steps({ type: "observer", repeat: "both", board: "esp32-psram", status: "new" }),
+    ["type","repeat","board","poll","status","flash","town","role","name","location","commands","check"]);
+  assert.ok(steps({ type: "observer", repeat: "listen", board: "esp32-psram" }).includes("poll"), "a listen-only observer can poll too");
+  assert.ok(!steps({ type: "observer", repeat: "both", board: "esp32" }).includes("poll"), "no PSRAM, no question");
+  assert.ok(!steps({ type: "observer", repeat: "both" }).includes("poll"), "not before the board is known");
+  assert.ok(!steps({ type: "repeater", board: "esp32-psram", status: "new" }).includes("poll"), "a plain repeater doesn't poll");
+  assert.ok(!steps({ type: "repeater", board: "nrf52", status: "new" }).includes("poll"));
+  assert.equal(flow.isComplete("poll", {}), false);
+  assert.equal(flow.isComplete("poll", { poll: "yes" }), true);
+  assert.equal(flow.isComplete("poll", { poll: "no" }), true);
+  assert.equal(flow.isComplete("poll", { poll: "maybe" }), false);
+});
+
+test("both ESP32 kinds can be a repeater observer, and a PSRAM repeater is flashed like any ESP32", () => {
+  assert.equal(flow.isComplete("board", { type: "observer", board: "esp32-psram" }), true);
+  assert.equal(flow.isComplete("board", { type: "repeater", board: "esp32-psram" }), true);
+  assert.equal(flow.hasWifi({ board: "esp32" }), true);
+  assert.equal(flow.hasWifi({ board: "esp32-psram" }), true);
+  assert.equal(flow.hasWifi({ board: "nrf52" }), false);
+  assert.equal(flow.hasWifi({}), false);
+  assert.deepEqual(flow.stepIds({ type: "repeater", board: "esp32-psram", status: "new" }),
+    ["type","board","status","flash","town","role","name","location","commands","check"]);
+  assert.equal(flow.resetDependents({ type: "observer", board: "esp32-psram" }, "type").board, "esp32-psram");
+});
+
+test("polling is on only when it was asked for and can work", () => {
+  assert.equal(flow.polling({ type: "observer", board: "esp32-psram", poll: "yes" }), true);
+  assert.equal(flow.polling({ type: "observer", board: "esp32-psram", poll: "no" }), false);
+  assert.equal(flow.polling({ type: "observer", board: "esp32-psram" }), false);
+  // A hand-edited link can carry poll=yes for anything.
+  assert.equal(flow.polling({ type: "observer", board: "esp32", poll: "yes" }), false);
+  assert.equal(flow.polling({ type: "repeater", board: "esp32-psram", poll: "yes" }), false);
+  assert.equal(flow.polling({ type: "observer", board: "nrf52", poll: "yes" }), false);
+  assert.match(flow.POLL_VERSION, /^v\d+(\.\d+)+-poll$/);
+});
+
+test("a running observer that turns polling on is always flashed, and isn't asked what it runs", () => {
+  const running = { type: "observer", repeat: "both", board: "esp32-psram", status: "running" };
+  const yes = { ...running, poll: "yes" };
+  assert.equal(flow.route(yes), "flash");
+  assert.equal(flow.route({ ...yes, observerFirmware: "yes" }), "flash", "a left-over answer can't send it to the phone");
+  assert.equal(flow.firmwareFor(yes), "1.16");
+  assert.deepEqual(flow.stepIds(yes), ["type","repeat","board","poll","status","flash","town","role","name","location","commands","check"]);
+  // Without polling nothing changes: it is asked, and can stay on its firmware.
+  const no = { ...running, poll: "no", observerFirmware: "yes" };
+  assert.equal(flow.route(no), "phone");
+  assert.deepEqual(flow.stepIds(no), ["type","repeat","board","poll","status","observerFirmware","version","town","role","name","location","commands","check"]);
+});
+
+test("the polling answer travels in share links and is cleared when the type or the board changes", () => {
+  const a = { type: "observer", repeat: "both", board: "esp32-psram", poll: "yes", status: "new" };
+  assert.equal(flow.toQuery(a), "type=observer&repeat=both&board=esp32-psram&poll=yes&status=new");
+  assert.deepEqual(flow.fromQuery(flow.toQuery(a)), a);
+  assert.deepEqual(flow.fromQuery("poll=maybe"), {});
+  assert.equal(flow.resetDependents({ ...a, board: "esp32" }, "board").poll, undefined);
+  assert.equal(flow.resetDependents({ ...a, type: "repeater" }, "type").poll, undefined);
+  // Changing the polling answer clears the flash tick and what a running observer said it runs.
+  const changed = flow.resetDependents({ ...a, status: "running", poll: "no", flashed: true, observerFirmware: "yes", firmware: "1.15" }, "poll");
+  for (const key of ["flashed", "observerFirmware", "firmware"]) assert.equal(changed[key], undefined, key);
+  assert.equal(changed.status, "running");
 });

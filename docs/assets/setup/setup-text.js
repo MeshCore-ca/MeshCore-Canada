@@ -40,6 +40,7 @@
     "step.type": "What it is",
     "step.repeat": "Repeat or listen",
     "step.board": "Board",
+    "step.poll": "Polling",
     "step.status": "New or running",
     "step.reflash": "Update",
     "step.observerFirmware": "Observer firmware",
@@ -73,19 +74,33 @@
 
     // What kind of board?
     "board.question": "What kind of board is it?",
-    "board.help": "nRF52 boards use little power, so they suit solar. ESP32 boards have Wi-Fi. A repeater observer needs Wi-Fi to send its reports, so it needs an ESP32 board.",
+    "board.help": "nRF52 boards use little power, so they suit solar. ESP32 boards have Wi-Fi. A repeater observer needs Wi-Fi to send its reports, so it needs an ESP32 board. Some ESP32 boards also have PSRAM (extra memory), which observer polling needs.",
     "board.nrf52": "nRF52",
     "board.nrf52.detail": "Low power, good for solar.",
     "board.nrf52.examples": "For example RAK4631 (WisBlock), Heltec T114, LilyGO T-Echo, Seeed XIAO nRF52840.",
     "board.esp32": "ESP32",
     "board.esp32.detail": "Has Wi-Fi, which a repeater observer needs.",
-    "board.esp32.examples": "For example Heltec V3 or V4, LilyGO T-Beam, RAK 3112, Seeed XIAO ESP32-S3.",
+    "board.esp32.examples": "For example Heltec V3, LilyGO T-Beam, RAK 3112, Seeed XIAO ESP32-S3.",
+    "board.esp32-psram": "ESP32 with PSRAM",
+    "board.esp32-psram.detail": "Has Wi-Fi and extra memory (PSRAM), which observer polling needs.",
+    "board.esp32-psram.examples": "Station G2, Station G3, Heltec V4 or LilyGO T-Beam S3 Supreme. For any other ESP32 board, pick ESP32.",
     "board.hint": "Not sure? If the board has Wi-Fi, it's an ESP32. Otherwise it's an nRF52.",
     "board.no-wifi.detail": "No Wi-Fi: can't observe",
     "board.observer-nrf52": "A repeater observer needs Wi-Fi, so nRF52 boards can't be used.",
     "board.as-repeater": "Set it up as a plain repeater instead",
     "board.nrf52-next": "nRF52 board: before it's flashed, you'll update its bootloader. It only takes a couple of minutes.",
     "board.other-observer": "Check that the observer flasher (observer.gessaman.com) lists your board before you go on. If it doesn't, set it up as a plain repeater instead.",
+
+    // Enable observer polling? (a repeater observer on an ESP32 board with PSRAM)
+    "poll.question": "Do you want to enable observer polling?",
+    "poll.intro": "Experimental. Your observer asks the repeaters it hears directly for their battery, temperature and status, and sends the answers to Beacon (live.meshcore.ca). Checking a far-away repeater then takes one short radio exchange, instead of a request passed across the whole mesh.",
+    "poll.learn": "How observer polling works",
+    "poll.help": "Polling only talks to repeaters this observer hears directly, so it adds no traffic to the rest of the mesh. It logs in with a guest password, which can read stats and change nothing. Admin passwords are never accepted. It needs a test build of the observer firmware.",
+    "poll.yes": "Yes, enable polling",
+    "poll.yes.detail": "Flash the polling test firmware and add the polling commands.",
+    "poll.no": "No",
+    "poll.no.detail": "Use the regular observer firmware. You can turn polling on later.",
+    "poll.beta": "This is test firmware, so expect bugs. Don't put it on an observer you can't easily get to.",
 
     // New, or already running?
     "status.question": "Is this a new board, or already running as a repeater?",
@@ -134,6 +149,9 @@
     "flash.observer.step1": "Open the {link} in Chrome or Edge. Other browsers can't talk to USB.",
     "flash.observer.step1.link": "observer flasher",
     "flash.observer.step2": "Under MQTT Observer Firmware, choose your board (its name is printed on the board or its box), role Repeater, and the newest version.",
+    "flash.observer.step2.poll": "Under MQTT Observer Firmware, choose your board (its name is printed on the board or its box), role Repeater, and version `{version}`. It isn't the newest in the list.",
+    "flash.erase.poll": "Tick Erase device the first time you flash the polling firmware. It wipes every setting on the board. If the board already runs the polling firmware, leave it unticked.",
+    "flash.poll-key": "Erase device also wipes this board's identity, even though you were told never to erase a running board: the first time, the polling firmware can't be installed without it. Save its private key before you flash: send `get prv.key` from the MeshCore app's Command Line, or over USB in the flasher's Console. Keep the reply in your password manager and never paste it anywhere shared. Right after flashing, while it's still plugged in, send `set prv.key <saved key>` in the flasher's Console, then `reboot`. Put the key you saved in place of `<saved key>`.",
     "flash.erase.esp32-new": "Tick Erase device, since it's a new board.",
     "flash.erase.esp32-running": "Leave Erase device unticked.",
     "flash.erase.nrf52-new": "Click Erase Flash, since it's a new board.",
@@ -305,6 +323,7 @@
     "group.scopes.help": "A scope is a label on a message saying how far it should travel. This repeater's region list is the labels it agrees to pass on.",
     "group.scopes.link": "Scopes and regions explained",
     "group.observer": "Repeater observer",
+    "group.polling": "Observer polling (experimental)",
     "group.finish": "Finish",
     "region.paste-label": "Paste the reply to `region` here",
     "region.phone-cut": "From the app, a long reply can be cut short. If the list looks cut off, or the repeater has many regions, run `region` over USB instead, in the flasher's Console.",
@@ -314,6 +333,8 @@
     "region.errors": "If `region remove` answers `Err - not empty`, another name is still indented under it: remove that one first, then try again. `Err - not found` means it's already gone, which is fine.",
     "note.radio-phone": "The radio settings aren't in this list: changing them from your phone would cut off the connection you're using. If the repeater isn't on the Canada settings (or your local group's), change them over USB with the flasher.",
     "note.mqtt-slots": "The two server lines replace MQTT slots 1 and 2, its first two saved server connections. If this board already reports to another network in those slots, use the observer flasher's Configure via USB to put MeshCore Canada in free slots (3 to 6) instead.",
+    "note.polling": "The polling lines only work on the polling test firmware. Each repeater you add has to be one this observer hears directly. {link}.",
+    "note.polling.link": "How observer polling works",
     "note.province": "Check the province: {region} is usually in a different one. Use the province where the repeater really is.",
     "note.network": "Confirm these labels with the operators across the border before you use them: {network}.",
 
@@ -321,6 +342,7 @@
     "ph.password": "your new admin password",
     "ph.ssid": "your Wi-Fi name",
     "ph.wifi-pwd": "your Wi-Fi password",
+    "ph.poll-key": "repeater public key",
 
     // What each command does
     "why.radio": "Use the Canada radio settings: 910.525 MHz, 62.5 kHz, spreading factor 7, coding rate 5. Every device nearby has to match.",
@@ -360,6 +382,9 @@
     "why.advert-now": "Announce itself now, so nearby devices see it straight away.",
     "why.ssid": "Your 2.4 GHz Wi-Fi network. Type its name exactly, without quotes.",
     "why.wifi-pwd": "Your Wi-Fi password. Never paste this anywhere shared.",
+    "why.poll-url": "Send its readings to Beacon, at live.meshcore.ca.",
+    "why.poll-add": "Ask this repeater for its battery, temperature and status. Put its public key (64 characters) in place of the words between < and >. Send the line again for each repeater, up to 8. The observer has to hear the repeater directly.",
+    "why.poll-on": "Turn polling on.",
     "why.reboot": "Restart so every setting takes effect.",
 
     // Check it worked
@@ -372,6 +397,8 @@
     "check.region.city": "Should list only {tags}, each followed by F, which means it passes those messages on. The * line at the top should also have F, as on every city repeater.",
     "check.region.edge": "Should list only {tags}, each followed by F, which means it passes those messages on. The * line at the top should have no F: that's what makes it an edge repeater.",
     "check.mqtt": "Should show slots 1 and 2, its first two server connections, as connected. If not, check the Wi-Fi name and password.",
+    "check.poll": "Should show polling on, mode telemetry, an MQTT slot and the repeaters you added. Mode unknown means Beacon hasn't answered yet: check the Wi-Fi.",
+    "check.poll-status": "Shows one line per repeater with its last result. `not_direct` means the observer hasn't heard that repeater directly in the last day. `login failed` means the repeater's guest password has to be set on the observer.",
     "check.clock": "Shows its clock, in UTC. After a restart its clock is often wrong, and phones may ignore its announcements until it's set. If it's wrong, set it from your phone: in the MeshCore app, open Contacts, tap the repeater, log in as admin, then tap Command Line and send `clock sync`. It doesn't work from the Console.",
     "check.clock.phone": "Sets its clock from your phone. After a restart its clock is often wrong, and phones may ignore its announcements until it's set.",
     "check.advert": "Sends an announcement. A phone running MeshCore nearby should see it appear.",
@@ -410,6 +437,7 @@
     "step.type": "Type d’appareil",
     "step.repeat": "Relayer ou écouter",
     "step.board": "Carte",
+    "step.poll": "Interrogation",
     "step.status": "Neuve ou en service",
     "step.reflash": "Mise à jour",
     "step.observerFirmware": "Micrologiciel d’observateur",
@@ -443,13 +471,16 @@
 
     // What kind of board?
     "board.question": "Quel type de carte est-ce?",
-    "board.help": "Les cartes nRF52 consomment peu, ce qui convient à l’énergie solaire. Les cartes ESP32 ont le Wi-Fi. Un répéteur observateur a besoin du Wi-Fi pour envoyer ses rapports, donc d’une carte ESP32.",
+    "board.help": "Les cartes nRF52 consomment peu, ce qui convient à l’énergie solaire. Les cartes ESP32 ont le Wi-Fi. Un répéteur observateur a besoin du Wi-Fi pour envoyer ses rapports, donc d’une carte ESP32. Certaines cartes ESP32 ont aussi de la PSRAM (mémoire supplémentaire), dont l’interrogation par l’observateur a besoin.",
     "board.nrf52": "nRF52",
     "board.nrf52.detail": "Faible consommation, idéale pour l’énergie solaire.",
     "board.nrf52.examples": "Par exemple RAK4631 (WisBlock), Heltec T114, LilyGO T-Echo, Seeed XIAO nRF52840.",
     "board.esp32": "ESP32",
     "board.esp32.detail": "Dispose du Wi-Fi, dont un répéteur observateur a besoin.",
-    "board.esp32.examples": "Par exemple Heltec V3 ou V4, LilyGO T-Beam, RAK 3112, Seeed XIAO ESP32-S3.",
+    "board.esp32.examples": "Par exemple Heltec V3, LilyGO T-Beam, RAK 3112, Seeed XIAO ESP32-S3.",
+    "board.esp32-psram": "ESP32 avec PSRAM",
+    "board.esp32-psram.detail": "Dispose du Wi-Fi et de mémoire supplémentaire (PSRAM), dont l’interrogation par l’observateur a besoin.",
+    "board.esp32-psram.examples": "Station G2, Station G3, Heltec V4 ou LilyGO T-Beam S3 Supreme. Pour toute autre carte ESP32, choisissez ESP32.",
     "board.hint": "Un doute? Si la carte a le Wi-Fi, c’est une ESP32. Sinon, c’est une nRF52.",
     "board.no-wifi.detail": "Pas de Wi-Fi : ne peut pas observer",
     "board.observer-nrf52": "Un répéteur observateur a besoin du Wi-Fi, donc les cartes nRF52 ne conviennent pas.",
@@ -474,6 +505,17 @@
     "reflash.yes.detail": "Programmer le dernier micrologiciel par USB, puis coller les commandes dans l’outil de programmation.",
     "reflash.no": "Non, garder son micrologiciel",
     "reflash.no.detail": "Envoyer les commandes depuis votre téléphone, dans l’application MeshCore.",
+
+    // Enable observer polling? (a repeater observer on an ESP32 board with PSRAM)
+    "poll.question": "Voulez-vous activer l’interrogation par l’observateur?",
+    "poll.intro": "Expérimental. Votre observateur demande aux répéteurs qu’il entend directement leur niveau de batterie, leur température et leur état, puis envoie les réponses à Beacon (live.meshcore.ca). Vérifier un répéteur éloigné ne demande alors qu’un court échange radio, au lieu d’une requête relayée à travers tout le réseau maillé.",
+    "poll.learn": "Comment fonctionne l’interrogation par l’observateur",
+    "poll.help": "L’interrogation ne s’adresse qu’aux répéteurs que cet observateur entend directement, donc elle n’ajoute aucun trafic au reste du réseau maillé. Elle se connecte avec un mot de passe invité, qui permet de lire les statistiques sans rien modifier. Les mots de passe administrateur ne sont jamais acceptés. Il lui faut une version d’essai du micrologiciel d’observateur.",
+    "poll.yes": "Oui, activer l’interrogation",
+    "poll.yes.detail": "Programmer le micrologiciel d’essai et ajouter les commandes d’interrogation.",
+    "poll.no": "Non",
+    "poll.no.detail": "Utiliser le micrologiciel d’observateur habituel. Vous pourrez activer l’interrogation plus tard.",
+    "poll.beta": "C’est un micrologiciel d’essai : attendez-vous à des bogues. Ne l’installez pas sur un observateur difficile d’accès.",
 
     // Already on the observer firmware? (a running repeater observer)
     "observerFirmware.question": "A-t-il déjà le micrologiciel d’observateur?",
@@ -506,6 +548,9 @@
     "flash.observer.step2": "Sous MQTT Observer Firmware, choisissez votre carte (son nom est imprimé sur la carte ou sur sa boîte), le rôle Repeater et la version la plus récente.",
     "flash.erase.esp32-new": "Cochez Erase device, puisque c’est une carte neuve.",
     "flash.erase.esp32-running": "Laissez Erase device décoché.",
+    "flash.observer.step2.poll": "Sous MQTT Observer Firmware, choisissez votre carte (son nom est imprimé sur la carte ou sur sa boîte), le rôle Repeater et la version `{version}`. Ce n’est pas la plus récente de la liste.",
+    "flash.erase.poll": "Cochez Erase device la première fois que vous programmez le micrologiciel d’interrogation. Tous les réglages de la carte sont effacés. Si la carte a déjà ce micrologiciel, laissez la case décochée.",
+    "flash.poll-key": "Erase device efface aussi l’identité de cette carte, même si on vous a dit de ne jamais effacer une carte déjà en service : la première fois, le micrologiciel d’interrogation ne peut pas être installé autrement. Sauvegardez sa clé privée avant de programmer : envoyez `get prv.key` depuis la Command Line de l’application MeshCore, ou par USB dans la Console de l’outil de programmation. Gardez la réponse dans votre gestionnaire de mots de passe et ne la collez jamais dans un endroit partagé. Juste après la programmation, tant qu’il est encore branché, envoyez `set prv.key <clé sauvegardée>` dans la Console de l’outil de programmation, puis `reboot`. Remplacez `<clé sauvegardée>` par la clé que vous avez sauvegardée.",
     "flash.erase.nrf52-new": "Cliquez sur Erase Flash, puisque c’est une carte neuve.",
     "flash.erase.nrf52-running": "Ne cliquez pas sur Erase Flash.",
     "flash.repeater.step3": "{erase} Cliquez ensuite sur Flash! et attendez qu’il indique que c’est terminé.",
@@ -675,6 +720,7 @@
     "group.scopes.help": "Une portée est une étiquette sur un message qui indique jusqu’où il doit aller. La liste des régions de ce répéteur, ce sont les étiquettes qu’il accepte de relayer.",
     "group.scopes.link": "Les portées et les régions expliquées",
     "group.observer": "Répéteur observateur",
+    "group.polling": "Interrogation par l’observateur (expérimental)",
     "group.finish": "Pour terminer",
     "region.paste-label": "Collez ici la réponse à `region`",
     "region.phone-cut": "Depuis l’application, une longue réponse peut être tronquée. Si la liste semble coupée, ou si le répéteur a beaucoup de régions, lancez plutôt `region` par USB, dans la Console de l’outil de programmation.",
@@ -684,6 +730,8 @@
     "region.errors": "Si `region remove` répond `Err - not empty`, un autre nom est encore en retrait sous celui-ci : retirez-le d’abord, puis réessayez. `Err - not found` veut dire qu’il est déjà retiré; ce n’est pas grave.",
     "note.radio-phone": "Les réglages radio ne sont pas dans cette liste : les changer depuis votre téléphone couperait la connexion que vous utilisez. Si le répéteur n’utilise pas les réglages canadiens (ou ceux de votre groupe local), changez-les par USB avec l’outil de programmation.",
     "note.mqtt-slots": "Les deux lignes de serveur remplacent les emplacements MQTT 1 et 2, ses deux premières connexions de serveur enregistrées. Si cette carte envoie déjà ses rapports à un autre réseau dans ces emplacements, utilisez plutôt Configure via USB dans l’outil de programmation des observateurs pour mettre MeshCore Canada dans des emplacements libres (3 à 6).",
+    "note.polling": "Les lignes d’interrogation ne fonctionnent qu’avec le micrologiciel d’essai. Chaque répéteur ajouté doit être entendu directement par cet observateur. {link}.",
+    "note.polling.link": "Comment fonctionne l’interrogation par l’observateur",
     "note.province": "Vérifiez la province : la région {region} se trouve habituellement dans une autre. Indiquez la province où le répéteur se trouve réellement.",
     "note.network": "Confirmez ces étiquettes avec les opérateurs de l’autre côté de la frontière avant de les utiliser : {network}.",
 
@@ -691,6 +739,7 @@
     "ph.password": "votre nouveau mot de passe administrateur",
     "ph.ssid": "nom de votre Wi-Fi",
     "ph.wifi-pwd": "mot de passe de votre Wi-Fi",
+    "ph.poll-key": "clé publique du répéteur",
 
     // What each command does
     "why.radio": "Utilise les réglages radio canadiens : 910,525 MHz, 62,5 kHz, facteur d’étalement 7, taux de codage 5. Tous les appareils des environs doivent avoir les mêmes.",
@@ -730,6 +779,9 @@
     "why.advert-now": "S’annonce tout de suite, pour que les appareils à proximité le voient sans attendre.",
     "why.ssid": "Votre réseau Wi-Fi 2,4 GHz. Tapez son nom exactement, sans guillemets.",
     "why.wifi-pwd": "Le mot de passe de votre Wi-Fi. Ne le collez jamais dans un endroit partagé.",
+    "why.poll-url": "Envoie ses relevés à Beacon, à live.meshcore.ca.",
+    "why.poll-add": "Demande à ce répéteur son niveau de batterie, sa température et son état. Remplacez les mots entre < et > par sa clé publique (64 caractères). Envoyez la ligne de nouveau pour chaque répéteur, jusqu’à 8. L’observateur doit entendre le répéteur directement.",
+    "why.poll-on": "Active l’interrogation.",
     "why.reboot": "Redémarre pour que tous les réglages prennent effet.",
 
     // Check it worked
@@ -742,6 +794,8 @@
     "check.region.city": "Doit afficher seulement {tags}, chacun suivi de F, ce qui veut dire qu’il relaie ces messages. La ligne * en haut doit aussi avoir F, comme sur tout répéteur de ville.",
     "check.region.edge": "Doit afficher seulement {tags}, chacun suivi de F, ce qui veut dire qu’il relaie ces messages. La ligne * en haut ne doit pas avoir de F : c’est ce qui en fait un répéteur de bordure.",
     "check.mqtt": "Doit indiquer que les emplacements 1 et 2, ses deux premières connexions de serveur, sont connectés. Sinon, vérifiez le nom et le mot de passe du Wi-Fi.",
+    "check.poll": "Doit indiquer que l’interrogation est activée, le mode telemetry, un emplacement MQTT et les répéteurs ajoutés. Le mode unknown signifie que Beacon n’a pas encore répondu : vérifiez le Wi-Fi.",
+    "check.poll-status": "Affiche une ligne par répéteur, avec son dernier résultat. `not_direct` signifie que l’observateur n’a pas entendu ce répéteur directement depuis un jour. `login failed` signifie qu’il faut régler le mot de passe invité du répéteur sur l’observateur.",
     "check.clock": "Affiche son horloge, en UTC. Après un redémarrage, son horloge est souvent fausse, et les téléphones peuvent ignorer ses annonces tant qu’elle n’est pas réglée. Si elle est fausse, réglez-la depuis votre téléphone : dans l’application MeshCore, ouvrez Contacts, touchez le répéteur, connectez-vous comme administrateur, puis touchez Command Line et envoyez `clock sync`. Cette commande ne fonctionne pas depuis la Console.",
     "check.clock.phone": "Règle son horloge d’après votre téléphone. Après un redémarrage, son horloge est souvent fausse, et les téléphones peuvent ignorer ses annonces tant qu’elle n’est pas réglée.",
     "check.advert": "Envoie une annonce. Un téléphone avec MeshCore à proximité devrait la voir apparaître.",

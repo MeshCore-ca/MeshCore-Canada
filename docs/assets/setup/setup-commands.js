@@ -26,6 +26,9 @@
     return lib("MeshCoreSetupText").t(key, lang, vars);
   }
 
+  // Where a polling observer sends its readings: the Beacon site, with https:// and no path.
+  var POLL_URL = "https://live.meshcore.ca";
+
   function item(id, command, why, manual) {
     return { id: id, command: command, why: why, manual: manual === true };
   }
@@ -69,6 +72,7 @@
       route: route,
       firmware: lib("MeshCoreSetupFlow").firmwareFor(a),
       observer: a.type === "observer",
+      polling: lib("MeshCoreSetupFlow").polling(a),
       scoped: scoped,
       edge: edge,
       running: a.status === "running",
@@ -265,8 +269,18 @@
     ];
   }
 
+  // Observer polling: where to report, which repeaters to ask, then the switch. The repeater's
+  // public key is typed by hand, once per repeater.
+  function pollingItems(lang) {
+    return [
+      item("poll-url", "set poll.url " + POLL_URL, say("why.poll-url", lang)),
+      item("poll-add", "poll add <" + say("ph.poll-key", lang) + ">", say("why.poll-add", lang), true),
+      item("poll-on", "set poll on", say("why.poll-on", lang))
+    ];
+  }
+
   // Groups in order: basics, canada, scopes (not for listen-only), observer
-  // (repeater observers only), finish. Expects the answers up to the map location step.
+  // (repeater observers only), polling (when it was asked for), finish. Expects the answers up to the map location step.
   function rollup(answers, data, lang) {
     say("group.basics", lang); // an unknown language fails here, before any work
     var s = situation(answers, data);
@@ -276,6 +290,7 @@
     ];
     if (s.scoped) groups.push({ id: "scopes", items: scopes(s, data, lang) });
     if (s.observer) groups.push({ id: "observer", items: observerItems(s, lang) });
+    if (s.polling) groups.push({ id: "polling", items: pollingItems(lang) });
     groups.push({ id: "finish", items: [item("reboot", "reboot", say("why.reboot", lang))] });
     return groups;
   }
@@ -328,6 +343,10 @@
       out.push({ id: "region", command: "region", expect: say(s.edge ? "check.region.edge" : "check.region.city", lang, { tags: list(tags, lang) }) });
     }
     if (s.observer) out.push({ id: "mqtt", command: "get mqtt.status", expect: say("check.mqtt", lang) });
+    if (s.polling) {
+      out.push({ id: "poll", command: "get poll", expect: say("check.poll", lang) });
+      out.push({ id: "poll-status", command: "get poll.status", expect: say("check.poll-status", lang) });
+    }
     // After every restart the clock needs setting again, or companions can refuse the new advert. Over USB the
     // Console has no phone to take the time from, so there it only shows the clock and says where to sync it.
     out.push(s.route === "phone"

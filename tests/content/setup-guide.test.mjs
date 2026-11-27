@@ -247,20 +247,22 @@ test("the board step asks what kind of board it is, with examples and a way to c
     en: {
       question: "What kind of board is it?",
       nrf52: ["nRF52", "Low power, good for solar.", "For example RAK4631 (WisBlock), Heltec T114, LilyGO T-Echo, Seeed XIAO nRF52840."],
-      esp32: ["ESP32", "Has Wi-Fi, which a repeater observer needs.", "For example Heltec V3 or V4, LilyGO T-Beam, RAK 3112, Seeed XIAO ESP32-S3."],
+      esp32: ["ESP32", "Has Wi-Fi, which a repeater observer needs.", "For example Heltec V3, LilyGO T-Beam, RAK 3112, Seeed XIAO ESP32-S3."],
+      "esp32-psram": ["ESP32 with PSRAM", "Has Wi-Fi and extra memory (PSRAM), which observer polling needs.", "Station G2, Station G3, Heltec V4 or LilyGO T-Beam S3 Supreme. For any other ESP32 board, pick ESP32."],
       hint: "Not sure? If the board has Wi-Fi, it's an ESP32. Otherwise it's an nRF52.",
     },
     fr: {
       question: "Quel type de carte est-ce?",
       nrf52: ["nRF52", "Faible consommation, idéale pour l’énergie solaire.", "Par exemple RAK4631 (WisBlock), Heltec T114, LilyGO T-Echo, Seeed XIAO nRF52840."],
-      esp32: ["ESP32", "Dispose du Wi-Fi, dont un répéteur observateur a besoin.", "Par exemple Heltec V3 ou V4, LilyGO T-Beam, RAK 3112, Seeed XIAO ESP32-S3."],
+      esp32: ["ESP32", "Dispose du Wi-Fi, dont un répéteur observateur a besoin.", "Par exemple Heltec V3, LilyGO T-Beam, RAK 3112, Seeed XIAO ESP32-S3."],
+      "esp32-psram": ["ESP32 avec PSRAM", "Dispose du Wi-Fi et de mémoire supplémentaire (PSRAM), dont l’interrogation par l’observateur a besoin.", "Station G2, Station G3, Heltec V4 ou LilyGO T-Beam S3 Supreme. Pour toute autre carte ESP32, choisissez ESP32."],
       hint: "Un doute? Si la carte a le Wi-Fi, c’est une ESP32. Sinon, c’est une nRF52.",
     },
   };
   for (const lang of ["en", "fr"]) {
     const expected = words[lang];
     assert.equal(text.t("board.question", lang), expected.question, lang);
-    for (const kind of ["nrf52", "esp32"]) {
+    for (const kind of ["nrf52", "esp32", "esp32-psram"]) {
       const [name, detail, examples] = expected[kind];
       assert.equal(text.t(`board.${kind}`, lang), name, `${lang} ${kind}`);
       assert.equal(text.t(`board.${kind}.detail`, lang), detail, `${lang} ${kind}`);
@@ -297,9 +299,9 @@ test("the board step asks what kind of board it is, with examples and a way to c
   assert.ok(board.indexOf('t("board.hint")') < board.indexOf('"board.other-observer"'), "the hint comes before the observer flasher note");
   assert.ok(board.indexOf('t("board.hint")') < board.indexOf('"board.nrf52-next"'), "the hint comes before the bootloader note");
   // An observer who picked ESP32 is not warned about nRF52 any more.
-  assert.match(board, /observer && a\.board !== "esp32"/);
-  // Pages that sent people to the old "My board isn't listed" choice now name the ESP32 choice.
-  for (const [path, words] of [["docs/hardware/station-g3.md", "choose **ESP32** when it asks what kind of board it is"], ["docs/hardware/station-g3.fr.md", "choisissez **ESP32** quand il demande le type de carte"]]) {
+  assert.match(board, /observer && !Flow\.hasWifi\(a\)/);
+  // Pages that sent people to the old "My board isn't listed" choice now name the ESP32 choice that fits the Station G3.
+  for (const [path, words] of [["docs/hardware/station-g3.md", "choose **ESP32 with PSRAM** when it asks what kind of board it is"], ["docs/hardware/station-g3.fr.md", "choisissez **ESP32 avec PSRAM** quand il demande le type de carte"]]) {
     assert.ok(read(path).includes(words), path);
     assert.doesNotMatch(read(path), /My board isn't listed|Ma carte n’est pas dans la liste/, path);
   }

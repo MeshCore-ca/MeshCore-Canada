@@ -23,7 +23,7 @@ page_styles:
 page_scripts:
   - assets/regions/modules/iata-scopes.js?v=20261105-1
   - assets/javascripts/place-search.js?v=20261105-1
-  - assets/setup/setup-flow.js?v=20261105-1
+  - assets/setup/setup-flow.js?v=20261126-1
   - assets/setup/setup-place.js?v=20261105-1
   - assets/setup/zone-map.js?v=20261105-3
 hide:

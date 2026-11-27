@@ -81,6 +81,11 @@ It works in one of two ways:
 - **Listen only:** it reports what it hears to live.meshcore.ca but never passes
   anything on.
 
+On an ESP32 board with PSRAM (extra memory), such as a Station G2, Station G3,
+Heltec V4 or T-Beam S3 Supreme, it can also ask nearby repeaters for their
+battery and status. That's [observer polling](../analyzer/polling.md), which is
+experimental.
+
 Either way it reports what it hears. Listen only is handy indoors or next to
 another repeater, where repeating would only add noise. You can switch later
 with `set repeat on` or `set repeat off`.
@@ -515,6 +520,21 @@ These lines are only for a repeater observer.
 
 `set wifi.pwd <your Wi-Fi password>`
 :   Your Wi-Fi password. Never paste this anywhere shared.
+
+### Observer polling
+
+These lines are only for a repeater observer with polling turned on. Polling is
+experimental and needs its own test firmware:
+[Observer polling](../analyzer/polling.md) explains it.
+
+`set poll.url https://live.meshcore.ca`
+:   Send its readings to Beacon, at live.meshcore.ca.
+
+`poll add <repeater public key>`
+:   Ask this repeater for its battery, temperature and status. Put its public key (64 characters) in place of the words between < and >. Send the line again for each repeater, up to 8. The observer has to hear the repeater directly.
+
+`set poll on`
+:   Turn polling on.
 
 ### Finish
 

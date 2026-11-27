@@ -85,6 +85,12 @@ Il fonctionne de l’une de ces deux façons :
 - **Écouter seulement :** il rapporte ce qu’il entend à live.meshcore.ca, mais
   ne relaie jamais rien.
 
+Sur une carte ESP32 avec PSRAM (mémoire supplémentaire), comme une Station G2,
+une Station G3, une Heltec V4 ou une T-Beam S3 Supreme, il peut aussi demander
+aux répéteurs voisins leur batterie et leur état. C’est
+l’[interrogation par l’observateur](../analyzer/polling.md), qui est
+expérimentale.
+
 Dans les deux cas, il rapporte ce qu’il entend. L’écoute seule est utile à
 l’intérieur ou près d’un autre répéteur, là où relayer ne ferait qu’ajouter du
 bruit. Vous pourrez changer plus tard avec `set repeat on` ou `set repeat off`.
@@ -555,6 +561,21 @@ Ces lignes concernent seulement un répéteur observateur.
 
 `set wifi.pwd <mot de passe de votre Wi-Fi>`
 :   Le mot de passe de votre Wi-Fi. Ne le collez jamais dans un endroit partagé.
+
+### Interrogation par l’observateur
+
+Ces lignes ne concernent qu’un répéteur observateur dont l’interrogation est
+activée. L’interrogation est expérimentale et exige son propre micrologiciel
+d’essai : [Interrogation par l’observateur](../analyzer/polling.md) l’explique.
+
+`set poll.url https://live.meshcore.ca`
+:   Envoie ses relevés à Beacon, à live.meshcore.ca.
+
+`poll add <clé publique du répéteur>`
+:   Demande à ce répéteur son niveau de batterie, sa température et son état. Remplacez les mots entre < et > par sa clé publique (64 caractères). Envoyez la ligne de nouveau pour chaque répéteur, jusqu’à 8. L’observateur doit entendre le répéteur directement.
+
+`set poll on`
+:   Active l’interrogation.
 
 ### Pour terminer
 

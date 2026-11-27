@@ -143,6 +143,7 @@ plugins:
             Network tools: Outils réseau
             Observers: Observateurs
             Check an observer: Vérifier un observateur
+            Observer polling: Interrogation par l'observateur
             Troubleshooting: Dépannage
             Data and privacy: Données et confidentialité
             Broker reference: Référence des serveurs MQTT
@@ -249,6 +250,7 @@ nav:
       - Observers:
           - Check an observer: analyzer/verify.md
           - Troubleshooting: analyzer/troubleshooting.md
+          - Observer polling: analyzer/polling.md
           - Data and privacy: analyzer/data-collection-access.md
           - RemoteTerm: analyzer/remoteterm.md
           - MCtoMQTT: analyzer/builds/mctomqtt.md

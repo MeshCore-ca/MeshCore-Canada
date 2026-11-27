@@ -78,15 +78,15 @@ for (const lang of LANGS) {
     await expect(step(page)).toContainText(T("check.name", lang, { name: "Belleville_R1" }));
   });
 
-  test(`${lang} the board step asks what kind of board it is: two choices, each with examples`, async ({ page }) => {
+  test(`${lang} the board step asks what kind of board it is: three choices, each with examples`, async ({ page }) => {
     await page.goto(siteRoute(ROUTES[lang]));
     await answer(page, "type", "repeater");
     await expectStep(page, "board");
     await expect(page.getByRole("heading", { level: 2, name: T("board.question", lang) })).toBeVisible();
-    // Exactly two cards, nRF52 then ESP32, with no list of boards.
-    await expect(page.locator("[data-setup-step] [data-setup-choice]")).toHaveText([T("board.nrf52", lang), T("board.esp32", lang)]);
-    await expect(page.locator("[data-setup-card]")).toHaveCount(2);
-    for (const kind of ["nrf52", "esp32"]) {
+    // Exactly three cards, nRF52, ESP32, then ESP32 with PSRAM, with no list of boards.
+    await expect(page.locator("[data-setup-step] [data-setup-choice]")).toHaveText([T("board.nrf52", lang), T("board.esp32", lang), T("board.esp32-psram", lang)]);
+    await expect(page.locator("[data-setup-card]")).toHaveCount(3);
+    for (const kind of ["nrf52", "esp32", "esp32-psram"]) {
       const card = page.locator(`[data-setup-card="${kind}"]`);
       await expect(card.getByText(T(`board.${kind}.detail`, lang), { exact: true })).toBeVisible();
       await expect(card.getByText(T(`board.${kind}.examples`, lang), { exact: true })).toBeVisible();
@@ -117,9 +117,11 @@ for (const lang of LANGS) {
     await answer(page, "type", "observer");
     await answer(page, "repeat", "both");
     await expectStep(page, "board");
-    await expect(page.locator("[data-setup-step] [data-setup-choice]")).toHaveCount(2);
+    // The two kinds an observer can use come first.
+    await expect(page.locator("[data-setup-step] [data-setup-choice]")).toHaveText([T("board.esp32", lang), T("board.esp32-psram", lang), T("board.nrf52", lang)]);
     await expect(page.locator('[data-setup-choice="nrf52"]')).toBeDisabled();
     await expect(page.locator('[data-setup-choice="esp32"]')).toBeEnabled();
+    await expect(page.locator('[data-setup-choice="esp32-psram"]')).toBeEnabled();
     // The reason is on the card and read out with the kind's name, next to the examples that tell it apart.
     await expect(page.locator('[data-setup-card="nrf52"]')).toContainText(T("board.no-wifi.detail", lang));
     await expect(page.locator('[data-setup-card="nrf52"]')).toContainText(T("board.nrf52.examples", lang));
@@ -167,7 +169,7 @@ for (const lang of LANGS) {
 // Links made when the step listed every board carry a board id such as board=rak4631.
 test("a link made before the kind question still opens: each old board id becomes its kind", async ({ page }) => {
   const cases = [["rak4631", "nrf52"], ["heltec-t114", "nrf52"], ["xiao-nrf52840", "nrf52"], ["other-nrf52", "nrf52"],
-    ["heltec-v3", "esp32"], ["heltec-v4", "esp32"], ["t-beam", "esp32"], ["xiao-esp32s3", "esp32"], ["other-esp32", "esp32"]];
+    ["heltec-v3", "esp32"], ["heltec-v4", "esp32-psram"], ["t-beam", "esp32"], ["xiao-esp32s3", "esp32"], ["other-esp32", "esp32"]];
   for (const [old, kind] of cases) {
     await page.goto(siteRoute(`/config/?type=repeater&board=${old}&status=new`));
     // The kind decides the steps: an nRF52 repeater updates its bootloader first.
@@ -2346,3 +2348,122 @@ for (const lang of LANGS) {
     await expectToolAxe(page, `${lang} disabled`);
   });
 }
+
+// Observer polling (experimental): offered only to a repeater observer on an ESP32 board with PSRAM.
+for (const lang of LANGS) {
+  test(`${lang} a new observer on an ESP32 with PSRAM is asked about polling, flashes the polling build and gets the polling lines`, async ({ page }) => {
+    await mockGeocoder(page);
+    await page.goto(siteRoute(ROUTES[lang]));
+    await answer(page, "type", "observer");
+    await answer(page, "repeat", "both");
+    await answer(page, "board", "esp32-psram");
+    // The question explains itself on the screen and links to the page that covers the rest.
+    await expectStep(page, "poll");
+    await expect(page.getByRole("heading", { level: 2, name: T("poll.question", lang) })).toBeVisible();
+    await expect(progress(page)).toHaveText(T("nav.progress", lang, { n: 4, total: 12, label: T("step.poll", lang) }));
+    await expect(page.locator("[data-setup-poll-intro]")).toHaveText(T("poll.intro", lang));
+    await expect(page.locator("[data-setup-poll-learn]")).toContainText(T("poll.learn", lang));
+    await expect(page.locator("[data-setup-poll-learn]")).toHaveAttribute("href", /analyzer\/polling\/$/);
+    await expect(page.locator("[data-setup-step] [data-setup-choice]")).toHaveText([T("poll.yes", lang), T("poll.no", lang)]);
+    await expect(nextButton(page)).toBeDisabled();
+    // The ? adds what polling can and can't do, with the same link.
+    await page.locator("[data-setup-step] [data-setup-help]").click();
+    await expect(page.locator("[data-setup-help-text]")).toContainText(T("poll.help", lang));
+    await expect(page.locator("[data-setup-help-text] a")).toHaveAttribute("href", /analyzer\/polling\/$/);
+    // Yes warns that it's test firmware, and the answer goes in the address.
+    await expect(page.locator('[data-setup-note="poll-beta"]')).toHaveCount(0);
+    await choose(page, "yes");
+    await expect(page.locator('[data-setup-note="poll-beta"]')).toHaveText(T("poll.beta", lang));
+    await expect.poll(() => new URL(page.url()).searchParams.get("poll")).toBe("yes");
+    await next(page);
+    await answer(page, "status", "new");
+    // The flash step names the polling build and says to erase.
+    await expectStep(page, "flash");
+    await expect(step(page)).toContainText(plain("flash.observer.step2.poll", lang, { version: "v1.18.0.1-poll" }));
+    await expect(step(page).locator("code", { hasText: "v1.18.0.1-poll" })).toBeVisible();
+    await expect(step(page)).toContainText(T("flash.erase.poll", lang));
+    await expect(step(page)).not.toContainText(T("flash.observer.step2", lang));
+    // A new board has no identity to save.
+    await expect(page.locator('[data-setup-note="poll-key"]')).toHaveCount(0);
+    await page.locator("[data-setup-confirm]").check();
+    await next(page);
+    await town(page, "Belleville", "ytr");
+    await answer(page, "role", "city");
+    await nextUntil(page, "commands");
+    const lines = await commandLines(page);
+    const at = lines.indexOf("set poll.url https://live.meshcore.ca");
+    expect(lines.slice(at)).toEqual(["set poll.url https://live.meshcore.ca", `poll add <${T("ph.poll-key", lang)}>`, "set poll on", "reboot"]);
+    expect(lines.indexOf(`set wifi.pwd <${T("ph.wifi-pwd", lang)}>`)).toBe(at - 1);
+    // The group has its own heading and a note that links to the page.
+    await expect(page.locator("#setup-group-polling")).toHaveText(T("group.polling", lang));
+    await expect(page.locator('[data-setup-note="polling"]')).toContainText(firstSentence(T("note.polling", lang)));
+    await expect(page.locator('[data-setup-note="polling"] a')).toHaveAttribute("href", /analyzer\/polling\/$/);
+    await expect(step(page)).toContainText(T("why.poll-add", lang));
+    await nextUntil(page, "check");
+    await expect(page.locator('[data-setup-check="poll"] .setup-command__code')).toHaveText("get poll");
+    await expect(page.locator('[data-setup-check="poll-status"] .setup-command__code')).toHaveText("get poll.status");
+    await expect(page.locator('[data-setup-check="poll"]')).toContainText(T("check.poll", lang));
+  });
+
+  test(`${lang} a running observer that turns polling on is flashed with Erase device and told to save its key first`, async ({ page }) => {
+    await page.goto(siteRoute(`${ROUTES[lang]}?type=observer&repeat=both&board=esp32-psram&poll=yes`));
+    await answer(page, "status", "running");
+    // It isn't asked which firmware it runs: the polling build is flashed either way.
+    await expectStep(page, "flash");
+    await expect(step(page)).toContainText(T("flash.erase.poll", lang));
+    await expect(step(page)).not.toContainText(T("flash.erase.esp32-running", lang));
+    await expect(page.locator('[data-setup-note="poll-key"]')).toContainText(firstSentence(plain("flash.poll-key", lang)));
+    await expect(page.locator('[data-setup-note="poll-key"] code').first()).toHaveText("get prv.key");
+    // Saying no to polling brings back the firmware question and the phone route.
+    await page.locator("[data-setup-back]").click();
+    await page.locator("[data-setup-back]").click();
+    await expectStep(page, "poll");
+    await choose(page, "no");
+    await next(page);
+    await next(page);
+    await expectStep(page, "observerFirmware");
+  });
+}
+
+test("polling isn't offered without PSRAM or to a plain repeater, and a link can't force it", async ({ page }) => {
+  await page.goto(siteRoute("/config/"));
+  await answer(page, "type", "observer");
+  await answer(page, "repeat", "both");
+  await answer(page, "board", "esp32");
+  await expectStep(page, "status");
+  await page.goto(siteRoute("/config/"));
+  await answer(page, "type", "repeater");
+  await answer(page, "board", "esp32-psram");
+  await expectStep(page, "status");
+  // A hand-edited link with poll=yes on a board without PSRAM gets the regular flash step and no polling lines.
+  await page.goto(siteRoute(`/config/?type=observer&repeat=both&board=esp32&poll=yes&status=new&role=city&name=Belleville_Obs1&${BELLEVILLE}`));
+  await expectStep(page, "flash");
+  await expect(step(page)).toContainText(T("flash.observer.step2", "en"));
+  await expect(step(page)).not.toContainText("v1.18.0.1-poll");
+  await page.locator("[data-setup-confirm]").check();
+  await nextUntil(page, "commands");
+  expect((await commandLines(page)).filter((line) => /poll/.test(line))).toEqual([]);
+});
+
+test("changing the board away from PSRAM drops the polling answer", async ({ page }) => {
+  await page.goto(siteRoute("/config/?type=observer&repeat=both&board=esp32-psram&poll=yes"));
+  await expectStep(page, "status");
+  await page.locator("[data-setup-back]").click();
+  await expectStep(page, "poll");
+  await page.locator("[data-setup-back]").click();
+  await choose(page, "esp32");
+  await expect.poll(() => new URL(page.url()).searchParams.get("poll")).toBe(null);
+  await next(page);
+  await expectStep(page, "status");
+});
+
+test("the observer polling page shows the diagram and the three lines, in both languages", async ({ page }) => {
+  for (const [path, heading] of [["/analyzer/polling/", "Observer polling"], ["/fr/analyzer/polling/", "Interrogation par l’observateur"]]) {
+    await page.goto(siteRoute(path));
+    await expect(page.getByRole("heading", { level: 1, name: heading })).toBeVisible();
+    const diagram = page.locator('img[src*="observer-polling.png"]');
+    await expect(diagram).toBeVisible();
+    expect(await diagram.evaluate((img) => img.complete && img.naturalWidth > 0)).toBe(true);
+    await expect(page.locator("pre").filter({ hasText: "set poll.url https://live.meshcore.ca" })).toContainText("set poll on");
+  }
+});

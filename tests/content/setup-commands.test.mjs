@@ -662,3 +662,50 @@ test("the agreed-scope words match in the explanation, the box and the too-many 
   assert.match(text.t("custom.invalid", "en"), /letters without accents/);
   assert.match(text.t("custom.invalid", "fr"), /lettres sans accents/);
 });
+
+// Observer polling: three more lines after the observer's own, and two more checks.
+
+const poller = { ...belleville, type: "observer", repeat: "both", board: "esp32-psram", poll: "yes", name: "Belleville_Obs1" };
+
+test("an observer with polling on gets the polling lines after its Wi-Fi lines, pointed at live.meshcore.ca", () => {
+  const groups = cmds.rollup(poller, data, "en");
+  assert.deepEqual(groups.map((g) => g.id), ["basics", "canada", "scopes", "observer", "polling", "finish"]);
+  assert.deepEqual(groups.find((g) => g.id === "polling").items.map((i) => i.command),
+    ["set poll.url https://live.meshcore.ca", "poll add <repeater public key>", "set poll on"]);
+  assert.deepEqual(cmds.rollup(poller, data, "fr").find((g) => g.id === "polling").items.map((i) => i.command),
+    ["set poll.url https://live.meshcore.ca", "poll add <clé publique du répéteur>", "set poll on"]);
+  // Only the repeater's key is typed by hand.
+  assert.deepEqual(groups.find((g) => g.id === "polling").items.map((i) => i.manual), [false, true, false]);
+  const out = flat(groups);
+  assert.ok(out.indexOf("set wifi.pwd <your Wi-Fi password>") < out.indexOf("set poll.url https://live.meshcore.ca"));
+  assert.equal(out[out.length - 1], "reboot");
+  // The MeshCore Canada servers stay in slots 1 and 2: the device finds the slot Beacon names by itself.
+  assert.ok(out.includes("set mqtt1.preset meshcore-ca-1") && out.includes("set mqtt2.preset meshcore-ca-2"));
+  assert.ok(!out.some((line) => /poll\.(slot|consent)/.test(line)), "poll.slot and poll.consent are left alone");
+});
+
+test("a listen-only observer can poll, and gets no scopes with it", () => {
+  const out = flat(cmds.rollup({ ...poller, repeat: "listen", role: undefined }, data, "en"));
+  assert.ok(out.includes("set poll on") && out.includes("set repeat off"));
+  assert.ok(!out.some((line) => line.startsWith("region")));
+});
+
+test("no polling lines without a yes, without PSRAM, or for a plain repeater", () => {
+  const none = [{ ...poller, poll: "no" }, { ...poller, poll: undefined }, { ...poller, board: "esp32" }, { ...belleville, board: "esp32-psram", poll: "yes" }];
+  for (const answers of none) {
+    assert.ok(!flat(cmds.rollup(answers, data, "en")).some((line) => /poll/.test(line)), JSON.stringify(answers));
+    assert.ok(!cmds.checks(answers, data, "en").some((check) => /poll/.test(check.command)), JSON.stringify(answers));
+  }
+});
+
+test("the checks for a polling observer end with what polling shows", () => {
+  assert.deepEqual(cmds.checks(poller, data, "en").map((c) => c.command), ["ver", "get name", "region", "get mqtt.status", "get poll", "get poll.status", "clock", "advert"]);
+  for (const lang of ["en", "fr"]) for (const check of cmds.checks(poller, data, lang)) assert.ok(check.expect.length > 10, `${lang} ${check.id}`);
+});
+
+test("every polling line explains itself in both languages; only the key line holds a placeholder", () => {
+  for (const lang of ["en", "fr"]) for (const item of cmds.rollup(poller, data, lang).find((g) => g.id === "polling").items) {
+    assert.ok(item.why.length > 10, item.id);
+    assert.equal(/</.test(item.command), item.manual, item.id);
+  }
+});

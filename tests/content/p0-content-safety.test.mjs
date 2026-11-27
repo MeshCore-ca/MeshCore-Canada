@@ -84,8 +84,27 @@ test("the setup tool erases only new boards and warns to back up a running one f
   assert.match(ui, /status === "running"\) body\.appendChild\(note\("warn", para\(rich\("status\.backup", null, LINKS\.flasher\)\)\)\)/);
   assert.match(ui, /t\("flash\.erase\." \+ [^;]*"-" \+ \(a\.status === "running" \? "running" : "new"\)\)/);
   const flow = read("docs/assets/setup/setup-flow.js");
-  const askedStatus = flow.indexOf('steps.push("board", "status")');
+  const askedStatus = flow.indexOf('steps.push("status")');
   assert.ok(askedStatus >= 0 && askedStatus < flow.indexOf('steps.push("flash")'), "the status question comes before the flash step");
+});
+
+// The one exception: the polling test firmware changed the partition table, so its first flash needs Erase device.
+test("observer polling is the only route that erases a running board, and it says to save the key first and put it back", () => {
+  const erase = { en: /^Tick Erase device the first time you flash the polling firmware\. It wipes every setting/, fr: /^Cochez Erase device la première fois que vous programmez le micrologiciel d’interrogation\. Tous les réglages/ };
+  const alreadyOn = { en: /already runs the polling firmware, leave it unticked/, fr: /a déjà ce micrologiciel, laissez la case décochée/ };
+  const save = { en: /Save its private key before you flash: send `get prv\.key`/, fr: /Sauvegardez sa clé privée avant de programmer : envoyez `get prv\.key`/ };
+  const keep = { en: /password manager and never paste it anywhere shared/, fr: /gestionnaire de mots de passe et ne la collez jamais dans un endroit partagé/ };
+  const putBack = { en: /send `set prv\.key <saved key>` in the flasher's Console, then `reboot`/, fr: /envoyez `set prv\.key <clé sauvegardée>` dans la Console de l’outil de programmation, puis `reboot`/ };
+  for (const lang of ["en", "fr"]) {
+    assert.match(setupText.t("flash.erase.poll", lang), erase[lang], lang);
+    assert.match(setupText.t("flash.erase.poll", lang), alreadyOn[lang], lang);
+    const key = setupText.t("flash.poll-key", lang);
+    for (const rule of [save, keep, putBack]) assert.match(key, rule[lang], lang);
+    assert.match(setupText.t("poll.beta", lang), lang === "en" ? /test firmware/ : /micrologiciel d’essai/, lang);
+  }
+  const ui = read("docs/assets/setup/setup-ui.js");
+  assert.match(ui, /if \(polling\) erase = t\("flash\.erase\.poll"\);/, "only polling swaps the erase line");
+  assert.match(ui, /if \(polling && a\.status === "running"\) body\.appendChild\(note\("warn", para\(rich\("flash\.poll-key"\)\)/, "a running board gets the key warning on the flash step");
 });
 
 test("unsafe and incomplete legacy pages are removed from the content tree", () => {
