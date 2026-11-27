@@ -47,8 +47,8 @@ pose la question à votre place. Il suffit d’un court échange radio.
 4. Environ une fois par heure, cet observateur demande au répéteur sa batterie,
    sa température et son état, puis envoie les réponses à Beacon.
 
-Si vous avez un observateur qui interroge, il peut donc interroger ses voisins
-directs pour d’autres personnes. Si vous avez un répéteur, vous n’avez pas
+Si vous avez un observateur qui interroge, il peut donc interroger un voisin à
+zéro saut pour quelqu’un d’autre. Si vous avez un répéteur, vous n’avez pas
 besoin de votre propre observateur : il suffit qu’il y en ait un à proximité.
 
 - **Mots de passe invité seulement.** Un mot de passe invité permet de lire les

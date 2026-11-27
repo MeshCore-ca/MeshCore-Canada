@@ -45,8 +45,8 @@ takes one short radio exchange.
 4. About once an hour, that observer asks the repeater for its battery,
    temperature and status, and uploads the answers to Beacon.
 
-So if you run a polling observer, it may poll its direct neighbours for other
-people. If you run a repeater, you don't need a polling observer of your own:
+So if you run a polling observer, it may poll a zero-hop neighbour for someone
+else. If you run a repeater, you don't need a polling observer of your own:
 one nearby is enough.
 
 - **Guest passwords only.** A guest password can read stats and change nothing.
