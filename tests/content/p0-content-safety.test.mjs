@@ -100,7 +100,7 @@ test("a running board is erased only to become an observer or to get the polling
     assert.match(setupText.t("flash.erase.poll", lang), alreadyOn[lang], lang);
     const key = setupText.t("flash.poll-key", lang);
     for (const rule of [save, keep, putBack]) assert.match(key, rule[lang], lang);
-    assert.match(setupText.t("poll.yes.detail", lang), lang === "en" ? /^Test firmware\. Expect bugs\./ : /^Micrologiciel d’essai\. Attendez-vous à des bogues\./, lang);
+    assert.match(setupText.t("poll.yes.detail", lang), lang === "en" ? /^Test firmware\./ : /^Micrologiciel d’essai\./, lang);
   }
   // Leaving the regular repeater firmware for the observer firmware needs Erase device too, and says to save the key.
   const switching = { en: /^Tick Erase device\. Moving from the regular repeater firmware to the observer firmware needs it\..*save its private key first/, fr: /^Cochez Erase device\. Le passage du micrologiciel de répéteur habituel au micrologiciel d’observateur l’exige\..*sauvegardez d’abord sa clé privée/ };

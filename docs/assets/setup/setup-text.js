@@ -93,11 +93,11 @@
 
     // Enable observer polling? (a repeater observer on an ESP32 board with PSRAM)
     "poll.question": "Do you want to enable observer polling?",
-    "poll.intro": "Experimental. Your observer registers with MeshCore Canada Beacon. People with a Beacon account can ask to have their repeater polled. Beacon picks the polling observer that hears that repeater directly (zero hops) with the strongest signal, and gives it the job. So about once an hour, your observer may ask a zero-hop neighbour for its stats, and upload the answer to Beacon.",
+    "poll.intro": "Your observer registers with MeshCore Canada Beacon. People with a Beacon account can ask to have their repeater polled. Beacon picks the polling observer that hears that repeater directly (zero hops) with the strongest signal, and gives it the job. So about once an hour, your observer may ask a zero-hop neighbour for its stats, and upload the answer to Beacon.",
     "poll.learn": "How observer polling works",
     "poll.help": "Polling only talks to repeaters this observer hears directly, so it adds no traffic to the rest of the mesh. It logs in with a guest password, which can read stats and change nothing. Admin passwords are never accepted. It needs a test build of the observer firmware.",
     "poll.yes": "Yes, enable polling and user requests via MeshCore Canada Beacon (recommended)",
-    "poll.yes.detail": "Test firmware. Expect bugs. Keep the board easy to reach.",
+    "poll.yes.detail": "Test firmware. Keep the board easy to reach.",
     "poll.no": "No",
     "poll.no.detail": "Regular observer firmware. Choose this only if you don't want your observer to take part.",
 
@@ -507,11 +507,11 @@
 
     // Enable observer polling? (a repeater observer on an ESP32 board with PSRAM)
     "poll.question": "Voulez-vous activer l’interrogation par l’observateur?",
-    "poll.intro": "Expérimental. Votre observateur s’inscrit auprès de Beacon de MeshCore Canada. Les personnes qui ont un compte Beacon peuvent demander qu’on interroge leur répéteur. Beacon choisit, parmi les observateurs dont l’interrogation est activée, celui qui entend ce répéteur directement (zéro saut) avec le meilleur signal, et lui confie la tâche. Environ une fois par heure, votre observateur pourrait donc demander ses statistiques à un voisin à zéro saut, puis envoyer la réponse à Beacon.",
+    "poll.intro": "Votre observateur s’inscrit auprès de Beacon de MeshCore Canada. Les personnes qui ont un compte Beacon peuvent demander qu’on interroge leur répéteur. Beacon choisit, parmi les observateurs dont l’interrogation est activée, celui qui entend ce répéteur directement (zéro saut) avec le meilleur signal, et lui confie la tâche. Environ une fois par heure, votre observateur pourrait donc demander ses statistiques à un voisin à zéro saut, puis envoyer la réponse à Beacon.",
     "poll.learn": "Comment fonctionne l’interrogation par l’observateur",
     "poll.help": "L’interrogation ne s’adresse qu’aux répéteurs que cet observateur entend directement, donc elle n’ajoute aucun trafic au reste du réseau maillé. Elle se connecte avec un mot de passe invité, qui permet de lire les statistiques sans rien modifier. Les mots de passe administrateur ne sont jamais acceptés. Il lui faut une version d’essai du micrologiciel d’observateur.",
     "poll.yes": "Oui, activer l’interrogation et les demandes des utilisateurs par Beacon de MeshCore Canada (recommandé)",
-    "poll.yes.detail": "Micrologiciel d’essai. Attendez-vous à des bogues. Gardez la carte facile d’accès.",
+    "poll.yes.detail": "Micrologiciel d’essai. Gardez la carte facile d’accès.",
     "poll.no": "Non",
     "poll.no.detail": "Micrologiciel d’observateur habituel. Choisissez ceci seulement si vous ne voulez pas que votre observateur participe.",
 
