@@ -2152,6 +2152,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#observer-polling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Observer polling
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#finish" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2431,6 +2442,41 @@
     
   
     Troubleshooting
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../analyzer/polling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Observer polling
   
 
     
@@ -3363,6 +3409,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#observer-polling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Observer polling
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#finish" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3661,6 +3718,10 @@ to a server).</p>
 <li><strong>Listen only:</strong> it reports what it hears to live.meshcore.ca but never passes
   anything on.</li>
 </ul>
+<p>On an ESP32 board with PSRAM (extra memory), such as a Station G2, Station G3,
+Heltec V4 or T-Beam S3 Supreme, it can also ask nearby repeaters for their
+battery and status. That's <a href="../../analyzer/polling/">observer polling</a>, which is
+experimental.</p>
 <p>Either way it reports what it hears. Listen only is handy indoors or next to
 another repeater, where repeating would only add noise. You can switch later
 with <code>set repeat on</code> or <code>set repeat off</code>.</p>
@@ -4083,6 +4144,18 @@ observer flasher's Configure via USB to put MeshCore Canada in free slots
 <dd>Your 2.4 GHz Wi-Fi network. Type its name exactly, without quotes.</dd>
 <dt><code>set wifi.pwd &lt;your Wi-Fi password&gt;</code></dt>
 <dd>Your Wi-Fi password. Never paste this anywhere shared.</dd>
+</dl>
+<h3 id="observer-polling">Observer polling<a class="headerlink" href="#observer-polling" title="Permanent link">&para;</a></h3>
+<p>These lines are only for a repeater observer with polling turned on. Polling is
+experimental and needs its own test firmware:
+<a href="../../analyzer/polling/">Observer polling</a> explains it.</p>
+<dl>
+<dt><code>set poll.url https://live.meshcore.ca</code></dt>
+<dd>Send its readings to Beacon, at live.meshcore.ca.</dd>
+<dt><code>set poll.requests on</code></dt>
+<dd>Let Beacon give it the repeaters that Beacon users ask to have polled.</dd>
+<dt><code>set poll on</code></dt>
+<dd>Turn polling on.</dd>
 </dl>
 <h3 id="finish">Finish<a class="headerlink" href="#finish" title="Permanent link">&para;</a></h3>
 <dl>

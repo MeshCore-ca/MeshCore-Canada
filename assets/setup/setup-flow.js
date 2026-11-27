@@ -6,16 +6,22 @@
 
   // The board step asks only what kind of board it is, because the kind is all the steps
   // depend on: an nRF52 repeater updates its bootloader first, and a repeater observer
-  // needs Wi-Fi, so it is ESP32 only. The flasher itself asks for the exact board.
-  var KINDS = ["nrf52", "esp32"];
+  // needs Wi-Fi, so it is ESP32 only. Observer polling only runs on ESP32 boards with
+  // PSRAM, so those are their own kind. The flasher itself asks for the exact board.
+  var KINDS = ["nrf52", "esp32", "esp32-psram"];
+
+  // The observer flasher's version for observer polling, a test build while polling is experimental.
+  var POLL_VERSION = "v1.18.0.1-poll";
 
   // Share links made while the step listed every board carry a board id; each one maps
   // to its kind, so those links keep working. Links written now carry the kind.
   var OLD_BOARDS = {
     "rak4631": "nrf52", "heltec-t114": "nrf52", "xiao-nrf52840": "nrf52", "t-echo": "nrf52",
     "heltec-mesh-solar": "nrf52", "sensecap-solar-p1": "nrf52", "other-nrf52": "nrf52",
-    "heltec-v3": "esp32", "heltec-v4": "esp32", "heltec-wireless-tracker": "esp32", "t-beam": "esp32",
-    "t-beam-supreme": "esp32", "rak3112": "esp32", "xiao-esp32s3": "esp32", "other-esp32": "esp32"
+    "heltec-v3": "esp32", "heltec-wireless-tracker": "esp32", "t-beam": "esp32",
+    "rak3112": "esp32", "xiao-esp32s3": "esp32", "other-esp32": "esp32",
+    // The two the polling firmware is built for.
+    "heltec-v4": "esp32-psram", "t-beam-supreme": "esp32-psram"
   };
 
   // The firmware versions the commands are written for. A flashed board gets the newest.
@@ -40,9 +46,27 @@
   var MAX_NAME = 31;                     // bytes in UTF-8
   var MAX_LIST = 32;                     // a device holds at most 32 regions
 
-  // The board answer is the kind itself: "nrf52", "esp32", or null while unanswered.
+  // The board answer is the kind itself: "nrf52", "esp32", "esp32-psram", or null while unanswered.
   function chip(answers) {
     return oneOf(KINDS, answers.board) ? answers.board : null;
+  }
+
+  // Both ESP32 kinds have Wi-Fi, which a repeater observer needs.
+  function hasWifi(answers) {
+    var kind = chip(answers || {});
+    return kind === "esp32" || kind === "esp32-psram";
+  }
+
+  // Observer polling is only offered to a repeater observer on an ESP32 board with PSRAM.
+  function pollOffered(answers) {
+    var a = answers || {};
+    return a.type === "observer" && chip(a) === "esp32-psram";
+  }
+
+  // Whether these answers turn observer polling on. A "yes" that no longer applies
+  // (a hand-edited share link can carry one for any board) counts as no.
+  function polling(answers) {
+    return pollOffered(answers) && answers.poll === "yes";
   }
 
   function isText(value, pattern) { return typeof value === "string" && pattern.test(value); }
@@ -89,6 +113,8 @@
   function route(answers) {
     var a = answers || {};
     if (a.status !== "running") return "flash";
+    // Polling needs its own test firmware, so the board is always flashed.
+    if (polling(a)) return "flash";
     if (a.type === "repeater" && a.reflash === false) return "phone";
     if (a.type === "observer" && a.observerFirmware === "yes") return "phone";
     return "flash";
@@ -106,9 +132,12 @@
     var flashing = route(a) === "flash";
     var steps = ["type"];
     if (a.type === "observer") steps.push("repeat");
-    steps.push("board", "status");
+    steps.push("board");
+    if (pollOffered(a)) steps.push("poll");
+    steps.push("status");
     if (a.status === "running" && a.type === "repeater") steps.push("reflash");
-    if (a.status === "running" && a.type === "observer") steps.push("observerFirmware");
+    // With polling the board is flashed whatever it runs now, so there is nothing to ask.
+    if (a.status === "running" && a.type === "observer" && !polling(a)) steps.push("observerFirmware");
     if (flashing && a.type === "repeater" && chip(a) === "nrf52") steps.push("bootloader");
     if (flashing) steps.push("flash");
     // Only a board that is left as it is can run older firmware; a flashed one gets the newest.
@@ -133,8 +162,9 @@
       case "board": {
         var kind = chip(a);
         if (!kind || !oneOf(TYPES, a.type)) return false;
-        return a.type !== "observer" || kind === "esp32";
+        return a.type !== "observer" || hasWifi(a);
       }
+      case "poll": return oneOf(YES_NO, a.poll);
       case "status": return oneOf(STATUS, a.status);
       case "reflash": return typeof a.reflash === "boolean";
       case "observerFirmware": return oneOf(YES_NO, a.observerFirmware);
@@ -226,8 +256,10 @@
   // What each answer feeds. Changing the key clears the answers listed against it.
   // "name" is cleared only while it is still the suggested name, not one the person typed.
   var DEPENDENTS = {
-    type: ["repeat", "reflash", "observerFirmware", "bootloader", "flashed", "firmware", "regionReply", "name"],
-    board: ["bootloader", "flashed", "firmware", "regionReply"],
+    type: ["repeat", "poll", "reflash", "observerFirmware", "bootloader", "flashed", "firmware", "regionReply", "name"],
+    board: ["poll", "bootloader", "flashed", "firmware", "regionReply"],
+    // Polling changes which firmware is flashed, and whether a running observer is asked what it runs.
+    poll: ["observerFirmware", "flashed", "firmware"],
     status: ["reflash", "observerFirmware", "bootloader", "flashed", "firmware", "regionReply", "name"],
     reflash: ["bootloader", "flashed", "firmware"],
     observerFirmware: ["flashed", "firmware"],
@@ -363,6 +395,7 @@
     enumField("type", TYPES),
     enumField("repeat", REPEAT),
     boardField,
+    enumField("poll", YES_NO),
     enumField("status", STATUS),
     flagField("reflash"),
     enumField("observerFirmware", YES_NO),
@@ -481,6 +514,10 @@
   globalThis.MeshCoreSetupFlow = {
     KINDS: KINDS,
     VERSIONS: VERSIONS,
+    POLL_VERSION: POLL_VERSION,
+    hasWifi: hasWifi,
+    pollOffered: pollOffered,
+    polling: polling,
     stepIds: stepIds,
     isComplete: isComplete,
     route: route,

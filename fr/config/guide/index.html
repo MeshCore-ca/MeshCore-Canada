@@ -2152,6 +2152,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#interrogation-par-lobservateur" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Interrogation par l’observateur
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#pour-terminer" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2431,6 +2442,41 @@
     
   
     Dépannage
+  
+
+    
+  </span>
+  
+  
+    
+  
+  
+    <span class="md-status md-status--draft"></span>
+  
+
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../analyzer/polling/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Interrogation par l'observateur
   
 
     
@@ -3363,6 +3409,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#interrogation-par-lobservateur" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Interrogation par l’observateur
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#pour-terminer" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3665,6 +3722,11 @@ d’envoyer des rapports à un serveur).</p>
 <li><strong>Écouter seulement :</strong> il rapporte ce qu’il entend à live.meshcore.ca, mais
   ne relaie jamais rien.</li>
 </ul>
+<p>Sur une carte ESP32 avec PSRAM (mémoire supplémentaire), comme une Station G2,
+une Station G3, une Heltec V4 ou une T-Beam S3 Supreme, il peut aussi demander
+aux répéteurs voisins leur batterie et leur état. C’est
+l’<a href="../../analyzer/polling/">interrogation par l’observateur</a>, qui est
+expérimentale.</p>
 <p>Dans les deux cas, il rapporte ce qu’il entend. L’écoute seule est utile à
 l’intérieur ou près d’un autre répéteur, là où relayer ne ferait qu’ajouter du
 bruit. Vous pourrez changer plus tard avec <code>set repeat on</code> ou <code>set repeat off</code>.</p>
@@ -4123,6 +4185,18 @@ emplacements libres (3 à 6).</p>
 <dd>Votre réseau Wi-Fi 2,4 GHz. Tapez son nom exactement, sans guillemets.</dd>
 <dt><code>set wifi.pwd &lt;mot de passe de votre Wi-Fi&gt;</code></dt>
 <dd>Le mot de passe de votre Wi-Fi. Ne le collez jamais dans un endroit partagé.</dd>
+</dl>
+<h3 id="interrogation-par-lobservateur">Interrogation par l’observateur<a class="headerlink" href="#interrogation-par-lobservateur" title="Permanent link">&para;</a></h3>
+<p>Ces lignes ne concernent qu’un répéteur observateur dont l’interrogation est
+activée. L’interrogation est expérimentale et exige son propre micrologiciel
+d’essai : <a href="../../analyzer/polling/">Interrogation par l’observateur</a> l’explique.</p>
+<dl>
+<dt><code>set poll.url https://live.meshcore.ca</code></dt>
+<dd>Envoie ses relevés à Beacon, à live.meshcore.ca.</dd>
+<dt><code>set poll.requests on</code></dt>
+<dd>Laisse Beacon lui confier les répéteurs que des utilisateurs de Beacon demandent d’interroger.</dd>
+<dt><code>set poll on</code></dt>
+<dd>Active l’interrogation.</dd>
 </dl>
 <h3 id="pour-terminer">Pour terminer<a class="headerlink" href="#pour-terminer" title="Permanent link">&para;</a></h3>
 <dl>

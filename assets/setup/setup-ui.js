@@ -33,7 +33,8 @@
     observerFlasher: "https://observer.gessaman.com/",
     otafix: "https://github.com/oltaco/Adafruit_nRF52_Bootloader_OTAFIX/releases",
     meshmapper: "https://meshmapper.net/",
-    live: "https://live.meshcore.ca/?tab=Observers"
+    live: "https://live.meshcore.ca/?tab=Observers",
+    polling: "../analyzer/polling/"
   };
 
   var Flow, Place, Commands, Search, Text;
@@ -161,7 +162,7 @@
   // Steps whose screen shows region data, so it is drawn again when the data arrives.
   var DATA_STEPS = ["town", "radio", "role", "neighbours", "commands", "check"];
   // Answers whose change also clears an "Older than 1.14" pick at the version step.
-  var CLEARS_OLDER = ["type", "board", "status", "reflash", "observerFirmware"];
+  var CLEARS_OLDER = ["type", "board", "poll", "status", "reflash", "observerFirmware"];
 
   // ------------------------------------------------- answers and the address bar
 
@@ -621,8 +622,8 @@
       body: function (body) {
         var a = state.answers;
         var observer = a.type === "observer";
-        // A repeater observer needs Wi-Fi, so only ESP32 is open to it; that card comes first.
-        body.appendChild(choiceGroup((observer ? ["esp32", "nrf52"] : ["nrf52", "esp32"]).map(function (kind) {
+        // A repeater observer needs Wi-Fi, so only the ESP32 kinds are open to it; those cards come first.
+        body.appendChild(choiceGroup((observer ? ["esp32", "esp32-psram", "nrf52"] : ["nrf52", "esp32", "esp32-psram"]).map(function (kind) {
           var blocked = observer && kind === "nrf52";
           // A greyed-out card says why, then still shows the examples that tell the kinds apart.
           return choice(kind, t("board." + kind), [t(blocked ? "board.no-wifi.detail" : "board." + kind + ".detail"), t("board." + kind + ".examples")],
@@ -632,13 +633,26 @@
         })));
         body.appendChild(para(t("board.hint"), { class: "setup-hint" }));
         // Then the note that fits the pick. An observer is warned about nRF52 until it picks ESP32.
-        if (observer && a.board !== "esp32") {
+        if (observer && !Flow.hasWifi(a)) {
           body.appendChild(note("warn", [para(t("board.observer-nrf52")),
             el("button", { type: "button", class: "setup-button setup-button--secondary setup-button--small", "data-setup-as-repeater": "",
               on: { click: function () { choose("type", "repeater"); renderStep({ heading: true }); } } }, t("board.as-repeater"))]));
         }
-        if (a.board === "esp32" && observer) body.appendChild(note("info", t("board.other-observer")));
+        if (observer && Flow.hasWifi(a)) body.appendChild(note("info", t("board.other-observer")));
         if (a.board === "nrf52" && !observer) body.appendChild(note("ok", t("board.nrf52-next")));
+      }
+    },
+
+    // Only asked of a repeater observer on an ESP32 board with PSRAM. The short explanation is on
+    // the screen itself, with a link to the page that covers the rest.
+    poll: {
+      help: function () { return { key: "poll.help", extra: [link(t("poll.learn"), LINKS.polling)] }; },
+      body: function (body) {
+        body.appendChild(para(t("poll.intro"), { "data-setup-poll-intro": "" }));
+        body.appendChild(para(link(t("poll.learn"), LINKS.polling, { "data-setup-poll-learn": "" })));
+        body.appendChild(choiceGroup([["yes", "yes"], ["no", "no"]].map(function (option) {
+          return answerChoice("poll", option[0], option[1], t("poll." + option[0]), t("poll." + option[0] + ".detail"));
+        })));
       }
     },
 
@@ -666,12 +680,18 @@
       body: function (body) {
         var a = state.answers;
         var kind = a.type === "observer" ? "observer" : "repeater";
+        // Polling runs on its own test build, which has to be flashed with Erase device the first time.
+        var polling = Flow.polling(a);
         var erase = t("flash.erase." + (a.board === "nrf52" ? "nrf52" : "esp32") + "-" + (a.status === "running" ? "running" : "new"));
+        if (polling) erase = t("flash.erase.poll");
+        var pick = polling ? ["flash.observer.step2.poll", { version: Flow.POLL_VERSION }] : "flash." + kind + ".step2";
         var open = ["flash." + kind + ".step1", null, kind === "observer" ? LINKS.observerFlasher : LINKS.flasher];
         // nRF52 boards go through DFU mode and a port choice, and Erase Flash is its own button.
         body.appendChild(steps(a.board === "nrf52"
           ? [open, "flash." + kind + ".step2", "flash.nrf52.dfu", "flash.nrf52.port", "flash.erase.nrf52-" + (a.status === "running" ? "running" : "new"), "flash.nrf52.flash", "flash.step4"]
-          : [open, "flash." + kind + ".step2", ["flash." + kind + ".step3", { erase: erase }], "flash.step4"]));
+          : [open, pick, ["flash." + kind + ".step3", { erase: erase }], "flash.step4"]));
+        // Erasing a running board wipes its identity, so its key is saved first and put back after.
+        if (polling && a.status === "running") body.appendChild(note("warn", para(rich("flash.poll-key")), { "data-setup-note": "poll-key" }));
         body.appendChild(para(t("flash.failed"), { class: "setup-hint" }));
         body.appendChild(confirmBox("flashed", "flash.confirm"));
       }
@@ -1591,6 +1611,7 @@
     body.appendChild(groups);
     Commands.rollup(a, state.data, lang).forEach(function (group) {
       if (group.id === "observer") groups.appendChild(note("info", t("note.mqtt-slots"), { "data-setup-note": "mqtt-slots" }));
+      if (group.id === "polling") groups.appendChild(note("info", para(rich("note.polling", null, LINKS.polling)), { "data-setup-note": "polling" }));
       groups.appendChild(commandGroup(group));
     });
     updateDoneCount(body);
