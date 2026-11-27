@@ -571,8 +571,8 @@ d’essai : [Interrogation par l’observateur](../analyzer/polling.md) l’expl
 `set poll.url https://live.meshcore.ca`
 :   Envoie ses relevés à Beacon, à live.meshcore.ca.
 
-`poll add <clé publique du répéteur>`
-:   Demande à ce répéteur son niveau de batterie, sa température et son état. Remplacez les mots entre < et > par sa clé publique (64 caractères). Envoyez la ligne de nouveau pour chaque répéteur, jusqu’à 8. L’observateur doit entendre le répéteur directement.
+`set poll.requests on`
+:   Laisse Beacon lui confier les répéteurs que des utilisateurs de Beacon demandent d’interroger.
 
 `set poll on`
 :   Active l’interrogation.

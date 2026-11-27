@@ -247,15 +247,15 @@ test("the board step asks what kind of board it is, with examples and a way to c
     en: {
       question: "What kind of board is it?",
       nrf52: ["nRF52", "Low power, good for solar.", "For example RAK4631 (WisBlock), Heltec T114, LilyGO T-Echo, Seeed XIAO nRF52840."],
-      esp32: ["ESP32", "Has Wi-Fi, which a repeater observer needs.", "For example Heltec V3, LilyGO T-Beam, RAK 3112, Seeed XIAO ESP32-S3."],
-      "esp32-psram": ["ESP32 with PSRAM", "Has Wi-Fi and extra memory (PSRAM), which observer polling needs.", "Station G2, Station G3, Heltec V4 or LilyGO T-Beam S3 Supreme. For any other ESP32 board, pick ESP32."],
+      esp32: ["ESP32 no PSRAM", "Has Wi-Fi, which a repeater observer needs.", "For example Heltec V3, LilyGO T-Beam, RAK 3112, Seeed XIAO ESP32-S3."],
+      "esp32-psram": ["ESP32 with PSRAM", "Has Wi-Fi and extra memory (PSRAM), which observer polling needs.", "Station G2, Station G3, Heltec V4 or LilyGO T-Beam S3 Supreme. For any other ESP32 board, pick ESP32 no PSRAM."],
       hint: "Not sure? If the board has Wi-Fi, it's an ESP32. Otherwise it's an nRF52.",
     },
     fr: {
       question: "Quel type de carte est-ce?",
       nrf52: ["nRF52", "Faible consommation, idéale pour l’énergie solaire.", "Par exemple RAK4631 (WisBlock), Heltec T114, LilyGO T-Echo, Seeed XIAO nRF52840."],
-      esp32: ["ESP32", "Dispose du Wi-Fi, dont un répéteur observateur a besoin.", "Par exemple Heltec V3, LilyGO T-Beam, RAK 3112, Seeed XIAO ESP32-S3."],
-      "esp32-psram": ["ESP32 avec PSRAM", "Dispose du Wi-Fi et de mémoire supplémentaire (PSRAM), dont l’interrogation par l’observateur a besoin.", "Station G2, Station G3, Heltec V4 ou LilyGO T-Beam S3 Supreme. Pour toute autre carte ESP32, choisissez ESP32."],
+      esp32: ["ESP32 sans PSRAM", "Dispose du Wi-Fi, dont un répéteur observateur a besoin.", "Par exemple Heltec V3, LilyGO T-Beam, RAK 3112, Seeed XIAO ESP32-S3."],
+      "esp32-psram": ["ESP32 avec PSRAM", "Dispose du Wi-Fi et de mémoire supplémentaire (PSRAM), dont l’interrogation par l’observateur a besoin.", "Station G2, Station G3, Heltec V4 ou LilyGO T-Beam S3 Supreme. Pour toute autre carte ESP32, choisissez ESP32 sans PSRAM."],
       hint: "Un doute? Si la carte a le Wi-Fi, c’est une ESP32. Sinon, c’est une nRF52.",
     },
   };

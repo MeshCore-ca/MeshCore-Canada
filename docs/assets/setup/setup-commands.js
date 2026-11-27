@@ -269,12 +269,11 @@
     ];
   }
 
-  // Observer polling: where to report, which repeaters to ask, then the switch. The repeater's
-  // public key is typed by hand, once per repeater.
+  // Observer polling: where to report, taking the repeaters Beacon's users ask for, then the switch.
   function pollingItems(lang) {
     return [
       item("poll-url", "set poll.url " + POLL_URL, say("why.poll-url", lang)),
-      item("poll-add", "poll add <" + say("ph.poll-key", lang) + ">", say("why.poll-add", lang), true),
+      item("poll-requests", "set poll.requests on", say("why.poll-requests", lang)),
       item("poll-on", "set poll on", say("why.poll-on", lang))
     ];
   }

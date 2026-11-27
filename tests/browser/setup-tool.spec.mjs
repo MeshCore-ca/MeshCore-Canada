@@ -2370,10 +2370,10 @@ for (const lang of LANGS) {
     await page.locator("[data-setup-step] [data-setup-help]").click();
     await expect(page.locator("[data-setup-help-text]")).toContainText(T("poll.help", lang));
     await expect(page.locator("[data-setup-help-text] a")).toHaveAttribute("href", /analyzer\/polling\/$/);
-    // Yes warns that it's test firmware, and the answer goes in the address.
-    await expect(page.locator('[data-setup-note="poll-beta"]')).toHaveCount(0);
+    // Yes says on its card that it's test firmware, and the answer goes in the address.
+    await expect(page.locator('[data-setup-card="yes"]')).toContainText(T("poll.yes.detail", lang));
+    await expect(page.locator('[data-setup-card="no"]')).toContainText(T("poll.no.detail", lang));
     await choose(page, "yes");
-    await expect(page.locator('[data-setup-note="poll-beta"]')).toHaveText(T("poll.beta", lang));
     await expect.poll(() => new URL(page.url()).searchParams.get("poll")).toBe("yes");
     await next(page);
     await answer(page, "status", "new");
@@ -2392,13 +2392,13 @@ for (const lang of LANGS) {
     await nextUntil(page, "commands");
     const lines = await commandLines(page);
     const at = lines.indexOf("set poll.url https://live.meshcore.ca");
-    expect(lines.slice(at)).toEqual(["set poll.url https://live.meshcore.ca", `poll add <${T("ph.poll-key", lang)}>`, "set poll on", "reboot"]);
+    expect(lines.slice(at)).toEqual(["set poll.url https://live.meshcore.ca", "set poll.requests on", "set poll on", "reboot"]);
     expect(lines.indexOf(`set wifi.pwd <${T("ph.wifi-pwd", lang)}>`)).toBe(at - 1);
     // The group has its own heading and a note that links to the page.
     await expect(page.locator("#setup-group-polling")).toHaveText(T("group.polling", lang));
     await expect(page.locator('[data-setup-note="polling"]')).toContainText(firstSentence(T("note.polling", lang)));
     await expect(page.locator('[data-setup-note="polling"] a')).toHaveAttribute("href", /analyzer\/polling\/$/);
-    await expect(step(page)).toContainText(T("why.poll-add", lang));
+    await expect(step(page)).toContainText(T("why.poll-requests", lang));
     await nextUntil(page, "check");
     await expect(page.locator('[data-setup-check="poll"] .setup-command__code')).toHaveText("get poll");
     await expect(page.locator('[data-setup-check="poll-status"] .setup-command__code')).toHaveText("get poll.status");

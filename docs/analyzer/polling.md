@@ -33,8 +33,21 @@ request is passed along by every repeater in between, and so is the answer.
 That keeps a lot of the mesh busy, and it often fails.
 
 With polling, an observer that hears the repeater directly asks it for you. It
-takes one short radio exchange. Beacon picks the observer with the best signal
-for each repeater.
+takes one short radio exchange.
+
+## How it works
+
+1. An observer with polling on registers with MeshCore Canada Beacon.
+2. Someone with a Beacon account asks to have their repeater polled, and gives
+   its guest password.
+3. Beacon looks at the polling observers that hear that repeater directly (zero
+   hops), picks the one with the strongest signal, and gives it the job.
+4. About once an hour, that observer asks the repeater for its battery,
+   temperature and status, and uploads the answers to Beacon.
+
+So if you run a polling observer, it may poll its direct neighbours for other
+people. If you run a repeater, you don't need a polling observer of your own:
+one nearby is enough.
 
 - **Guest passwords only.** A guest password can read stats and change nothing.
   Admin passwords are never accepted.
@@ -50,8 +63,6 @@ for each repeater.
   PSRAM, so it can't poll.
 - Wi-Fi where the observer sits.
 - Chrome or Edge on a computer, and a USB data cable.
-- The public key (64 characters) of each repeater you want polled. The observer
-  has to hear each one directly.
 
 ## Before you start
 
@@ -85,14 +96,26 @@ To do it by hand:
 
     ```text
     set poll.url https://live.meshcore.ca
-    poll add <repeater public key>
+    set poll.requests on
     set poll on
     ```
 
-    Send the `poll add` line once per repeater, up to 8.
+    `set poll.requests on` lets Beacon give your observer the repeaters that
+    Beacon users ask to have polled.
 
 Leave `poll.slot` and `poll.consent` alone. The observer finds the right MQTT
-slot by itself, and Beacon sets how often it polls.
+slot by itself.
+
+Beacon sets the minimum time between polls; `set poll.interval` (default 60
+minutes) can only make it slower. It takes 30 to 1440 minutes.
+
+To always poll a repeater of your own, whatever Beacon asks for, add it by its
+public key (64 characters). The observer has to hear it directly, and it holds
+up to 8:
+
+```text
+poll add <repeater public key>
+```
 
 By default the observer tries a blank guest password, then `hello`. If a
 repeater uses another guest password, set it:
@@ -101,13 +124,11 @@ repeater uses another guest password, set it:
 poll pw <repeater public key> set <guest password>
 ```
 
-To also poll repeaters that Beacon users ask for, send `set poll.requests on`.
-
 ## Check it works
 
 | Command | What you should see |
 |---|---|
-| `get poll` | Polling on, mode `telemetry`, an MQTT slot and your repeaters |
+| `get poll` | Polling on, mode `telemetry`, an MQTT slot and the repeaters it polls |
 | `get poll.status` | One line per repeater with its last result |
 | `get poll.status 1` | Details for the first repeater: battery, temperature, next poll |
 | `poll now <repeater public key>` | One poll right away (at most one a minute) |

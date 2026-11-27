@@ -34,8 +34,22 @@ entre vous et lui, et la réponse aussi. Ça occupe une bonne partie du réseau
 maillé, et ça échoue souvent.
 
 Avec l’interrogation, un observateur qui entend le répéteur directement lui
-pose la question à votre place. Il suffit d’un court échange radio. Beacon
-choisit, pour chaque répéteur, l’observateur qui a le meilleur signal.
+pose la question à votre place. Il suffit d’un court échange radio.
+
+## Comment ça fonctionne
+
+1. Un observateur dont l’interrogation est activée s’inscrit auprès de Beacon de
+   MeshCore Canada.
+2. Une personne qui a un compte Beacon demande qu’on interroge son répéteur, et
+   donne son mot de passe invité.
+3. Beacon regarde quels observateurs entendent ce répéteur directement (zéro
+   saut), choisit celui qui a le meilleur signal et lui confie la tâche.
+4. Environ une fois par heure, cet observateur demande au répéteur sa batterie,
+   sa température et son état, puis envoie les réponses à Beacon.
+
+Si vous avez un observateur qui interroge, il peut donc interroger ses voisins
+directs pour d’autres personnes. Si vous avez un répéteur, vous n’avez pas
+besoin de votre propre observateur : il suffit qu’il y en ait un à proximité.
 
 - **Mots de passe invité seulement.** Un mot de passe invité permet de lire les
   statistiques sans rien modifier. Les mots de passe administrateur ne sont
@@ -55,8 +69,6 @@ choisit, pour chaque répéteur, l’observateur qui a le meilleur signal.
   pas interroger.
 - Le Wi-Fi à l’endroit où se trouve l’observateur.
 - Chrome ou Edge sur un ordinateur, et un câble de données USB.
-- La clé publique (64 caractères) de chaque répéteur à interroger.
-  L’observateur doit entendre chacun directement.
 
 ## Avant de commencer
 
@@ -95,14 +107,27 @@ Pour le faire à la main :
 
     ```text
     set poll.url https://live.meshcore.ca
-    poll add <clé publique du répéteur>
+    set poll.requests on
     set poll on
     ```
 
-    Envoyez la ligne `poll add` une fois par répéteur, jusqu’à 8.
+    `set poll.requests on` laisse Beacon confier à votre observateur les
+    répéteurs que des utilisateurs de Beacon demandent d’interroger.
 
 Ne touchez pas à `poll.slot` ni à `poll.consent`. L’observateur trouve lui-même
-le bon emplacement MQTT, et Beacon règle la fréquence des interrogations.
+le bon emplacement MQTT.
+
+Beacon fixe le temps minimal entre deux interrogations; `set poll.interval`
+(60 minutes par défaut) ne peut que les espacer davantage. La valeur va de 30 à
+1440 minutes.
+
+Pour toujours interroger un de vos répéteurs, peu importe ce que Beacon
+demande, ajoutez-le par sa clé publique (64 caractères). L’observateur doit
+l’entendre directement, et il en garde jusqu’à 8 :
+
+```text
+poll add <clé publique du répéteur>
+```
 
 Par défaut, l’observateur essaie un mot de passe invité vide, puis `hello`. Si
 un répéteur utilise un autre mot de passe invité, indiquez-le :
@@ -111,14 +136,11 @@ un répéteur utilise un autre mot de passe invité, indiquez-le :
 poll pw <clé publique du répéteur> set <mot de passe invité>
 ```
 
-Pour interroger aussi les répéteurs que demandent les utilisateurs de Beacon,
-envoyez `set poll.requests on`.
-
 ## Vérifier que ça fonctionne
 
 | Commande | Ce que vous devriez voir |
 |---|---|
-| `get poll` | L’interrogation activée, le mode `telemetry`, un emplacement MQTT et vos répéteurs |
+| `get poll` | L’interrogation activée, le mode `telemetry`, un emplacement MQTT et les répéteurs interrogés |
 | `get poll.status` | Une ligne par répéteur, avec son dernier résultat |
 | `get poll.status 1` | Les détails du premier répéteur : batterie, température, prochaine interrogation |
 | `poll now <clé publique du répéteur>` | Une interrogation immédiate (au plus une par minute) |

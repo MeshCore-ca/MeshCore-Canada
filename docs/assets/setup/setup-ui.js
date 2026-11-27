@@ -653,7 +653,6 @@
         body.appendChild(choiceGroup([["yes", "yes"], ["no", "no"]].map(function (option) {
           return answerChoice("poll", option[0], option[1], t("poll." + option[0]), t("poll." + option[0] + ".detail"));
         })));
-        if (state.answers.poll === "yes") body.appendChild(note("warn", t("poll.beta"), { "data-setup-note": "poll-beta" }));
       }
     },
 

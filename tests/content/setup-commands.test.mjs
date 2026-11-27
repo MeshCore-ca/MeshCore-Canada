@@ -671,11 +671,12 @@ test("an observer with polling on gets the polling lines after its Wi-Fi lines, 
   const groups = cmds.rollup(poller, data, "en");
   assert.deepEqual(groups.map((g) => g.id), ["basics", "canada", "scopes", "observer", "polling", "finish"]);
   assert.deepEqual(groups.find((g) => g.id === "polling").items.map((i) => i.command),
-    ["set poll.url https://live.meshcore.ca", "poll add <repeater public key>", "set poll on"]);
+    ["set poll.url https://live.meshcore.ca", "set poll.requests on", "set poll on"]);
   assert.deepEqual(cmds.rollup(poller, data, "fr").find((g) => g.id === "polling").items.map((i) => i.command),
-    ["set poll.url https://live.meshcore.ca", "poll add <clé publique du répéteur>", "set poll on"]);
-  // Only the repeater's key is typed by hand.
-  assert.deepEqual(groups.find((g) => g.id === "polling").items.map((i) => i.manual), [false, true, false]);
+    ["set poll.url https://live.meshcore.ca", "set poll.requests on", "set poll on"]);
+  // Beacon hands out the repeaters, so nothing is typed by hand and no repeater's key is asked for.
+  assert.deepEqual(groups.find((g) => g.id === "polling").items.map((i) => i.manual), [false, false, false]);
+  assert.ok(!flat(groups).some((line) => line.startsWith("poll add")));
   const out = flat(groups);
   assert.ok(out.indexOf("set wifi.pwd <your Wi-Fi password>") < out.indexOf("set poll.url https://live.meshcore.ca"));
   assert.equal(out[out.length - 1], "reboot");
@@ -703,7 +704,7 @@ test("the checks for a polling observer end with what polling shows", () => {
   for (const lang of ["en", "fr"]) for (const check of cmds.checks(poller, data, lang)) assert.ok(check.expect.length > 10, `${lang} ${check.id}`);
 });
 
-test("every polling line explains itself in both languages; only the key line holds a placeholder", () => {
+test("every polling line explains itself in both languages; none holds a placeholder", () => {
   for (const lang of ["en", "fr"]) for (const item of cmds.rollup(poller, data, lang).find((g) => g.id === "polling").items) {
     assert.ok(item.why.length > 10, item.id);
     assert.equal(/</.test(item.command), item.manual, item.id);

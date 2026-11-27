@@ -530,8 +530,8 @@ experimental and needs its own test firmware:
 `set poll.url https://live.meshcore.ca`
 :   Send its readings to Beacon, at live.meshcore.ca.
 
-`poll add <repeater public key>`
-:   Ask this repeater for its battery, temperature and status. Put its public key (64 characters) in place of the words between < and >. Send the line again for each repeater, up to 8. The observer has to hear the repeater directly.
+`set poll.requests on`
+:   Let Beacon give it the repeaters that Beacon users ask to have polled.
 
 `set poll on`
 :   Turn polling on.

@@ -100,7 +100,7 @@ test("observer polling is the only route that erases a running board, and it say
     assert.match(setupText.t("flash.erase.poll", lang), alreadyOn[lang], lang);
     const key = setupText.t("flash.poll-key", lang);
     for (const rule of [save, keep, putBack]) assert.match(key, rule[lang], lang);
-    assert.match(setupText.t("poll.beta", lang), lang === "en" ? /test firmware/ : /micrologiciel d’essai/, lang);
+    assert.match(setupText.t("poll.yes.detail", lang), lang === "en" ? /^Test firmware\. Expect bugs\./ : /^Micrologiciel d’essai\. Attendez-vous à des bogues\./, lang);
   }
   const ui = read("docs/assets/setup/setup-ui.js");
   assert.match(ui, /if \(polling\) erase = t\("flash\.erase\.poll"\);/, "only polling swaps the erase line");
