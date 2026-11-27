@@ -3719,8 +3719,8 @@ to a server).</p>
   anything on.</li>
 </ul>
 <p>On an ESP32 board with PSRAM (extra memory), such as a Station G2, Station G3,
-Heltec V4 or T-Beam S3 Supreme, it can also ask nearby repeaters for their
-battery and status. That's <a href="../../analyzer/polling/">observer polling</a>, which is
+Heltec V4 or T-Beam S3 Supreme, it can also poll a nearby repeater for its
+battery and status when a Beacon user asks for it. That's <a href="../../analyzer/polling/">observer polling</a>, which is
 experimental.</p>
 <p>Either way it reports what it hears. Listen only is handy indoors or next to
 another repeater, where repeating would only add noise. You can switch later
@@ -4054,10 +4054,11 @@ flash it, back it up:</p>
    USB, open the Console in the <a href="https://flasher.meshcore.io/">MeshCore flasher</a>
    and send the same command. Keep the reply in your password manager and never
    paste it anywhere shared.</li>
-<li>Never erase it in the flasher.</li>
+<li>Never erase it in the flasher. The one exception is moving it from the
+   regular repeater firmware to the observer firmware, which needs Erase device.</li>
 </ol>
-<p>If flashing wipes it anyway, for example when you switch to the observer
-firmware, put the key back. Right after flashing, while it's still plugged in,
+<p>Erase device wipes its settings and its identity, so after you switch to the
+observer firmware, put the key back. Right after flashing, while it's still plugged in,
 send <code>set prv.key &lt;saved key&gt;</code> in the flasher's Console, then <code>reboot</code>. Put the
 key you saved in place of <code>&lt;saved key&gt;</code>. You can also do it later from the app's
 Command Line if you can log in as admin; if you can't, plug it in by USB and use

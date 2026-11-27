@@ -93,13 +93,13 @@
 
     // Enable observer polling? (a repeater observer on an ESP32 board with PSRAM)
     "poll.question": "Do you want to enable observer polling?",
-    "poll.intro": "Experimental. Your observer registers with MeshCore Canada Beacon. People with a Beacon account can ask to have their repeater polled. Beacon picks the polling observer that hears that repeater directly (zero hops) with the strongest signal, and gives it the job. So about once an hour, your observer may ask a zero-hop neighbour for its stats, and upload the answer to Beacon.",
+    "poll.intro": "Your observer registers with MeshCore Canada Beacon. People with a Beacon account can ask to have their repeater polled. Beacon picks the polling observer that hears that repeater directly (zero hops) with the strongest signal, and gives it the job. So about once an hour, your observer may ask a zero-hop neighbour for its stats, and upload the answer to Beacon.",
     "poll.learn": "How observer polling works",
     "poll.help": "Polling only talks to repeaters this observer hears directly, so it adds no traffic to the rest of the mesh. It logs in with a guest password, which can read stats and change nothing. Admin passwords are never accepted. It needs a test build of the observer firmware.",
-    "poll.yes": "Yes, enable polling and user requests via MeshCore Canada Beacon",
-    "poll.yes.detail": "Test firmware. Expect bugs. Keep the board easy to reach.",
+    "poll.yes": "Yes, enable polling and user requests via MeshCore Canada Beacon (recommended)",
+    "poll.yes.detail": "Test firmware. Keep the board easy to reach.",
     "poll.no": "No",
-    "poll.no.detail": "Regular observer firmware.",
+    "poll.no.detail": "Regular observer firmware. Choose this only if you don't want your observer to take part.",
 
     // New, or already running?
     "status.question": "Is this a new board, or already running as a repeater?",
@@ -126,7 +126,7 @@
     "observerFirmware.yes.detail": "Send the commands from your phone, in the MeshCore app.",
     "observerFirmware.no": "No, or not sure",
     "observerFirmware.no.detail": "Flash the observer firmware first, over USB.",
-    "observerFirmware.switch": "Switching to the observer firmware can wipe its identity. Save its private key first: in the MeshCore app, log in to the repeater as admin, tap Command Line and send `get prv.key`. Over USB, send the same command in the flasher's Console. Keep the reply in your password manager and never paste it anywhere shared. If its identity does get wiped, put the key back. Right after flashing, while it's still plugged in, send `set prv.key <saved key>` in the flasher's Console, then `reboot`. Put the key you saved in place of `<saved key>`. You can also do it later from the app's Command Line if you can log in as admin; if you can't, plug it in by USB and use the flasher's Console.",
+    "observerFirmware.switch": "Switching to the observer firmware needs Erase device, which wipes its settings and its identity. Save its private key first: in the MeshCore app, log in to the repeater as admin, tap Command Line and send `get prv.key`. Over USB, send the same command in the flasher's Console. Keep the reply in your password manager and never paste it anywhere shared. After flashing, put the key back. Right after flashing, while it's still plugged in, send `set prv.key <saved key>` in the flasher's Console, then `reboot`. Put the key you saved in place of `<saved key>`. You can also do it later from the app's Command Line if you can log in as admin; if you can't, plug it in by USB and use the flasher's Console.",
 
     // Update the bootloader (nRF52)
     "bootloader.question": "First, update the bootloader",
@@ -149,6 +149,7 @@
     "flash.observer.step1.link": "observer flasher",
     "flash.observer.step2": "Under MQTT Observer Firmware, choose your board (its name is printed on the board or its box), role Repeater, and the newest version.",
     "flash.observer.step2.poll": "Under MQTT Observer Firmware, choose your board (its name is printed on the board or its box), role Repeater, and version `{version}`. It isn't the newest in the list.",
+    "flash.erase.observer-switch": "Tick Erase device. Moving from the regular repeater firmware to the observer firmware needs it. It wipes every setting on the board and its identity, so save its private key first.",
     "flash.erase.poll": "Tick Erase device the first time you flash the polling firmware. It wipes every setting on the board. If the board already runs the polling firmware, leave it unticked.",
     "flash.poll-key": "Erase device also wipes this board's identity, even though you were told never to erase a running board: the first time, the polling firmware can't be installed without it. Save its private key before you flash: send `get prv.key` from the MeshCore app's Command Line, or over USB in the flasher's Console. Keep the reply in your password manager and never paste it anywhere shared. Right after flashing, while it's still plugged in, send `set prv.key <saved key>` in the flasher's Console, then `reboot`. Put the key you saved in place of `<saved key>`.",
     "flash.erase.esp32-new": "Tick Erase device, since it's a new board.",
@@ -322,7 +323,7 @@
     "group.scopes.help": "A scope is a label on a message saying how far it should travel. This repeater's region list is the labels it agrees to pass on.",
     "group.scopes.link": "Scopes and regions explained",
     "group.observer": "Repeater observer",
-    "group.polling": "Observer polling (experimental)",
+    "group.polling": "Observer polling",
     "group.finish": "Finish",
     "region.paste-label": "Paste the reply to `region` here",
     "region.phone-cut": "From the app, a long reply can be cut short. If the list looks cut off, or the repeater has many regions, run `region` over USB instead, in the flasher's Console.",
@@ -506,13 +507,13 @@
 
     // Enable observer polling? (a repeater observer on an ESP32 board with PSRAM)
     "poll.question": "Voulez-vous activer l’interrogation par l’observateur?",
-    "poll.intro": "Expérimental. Votre observateur s’inscrit auprès de Beacon de MeshCore Canada. Les personnes qui ont un compte Beacon peuvent demander qu’on interroge leur répéteur. Beacon choisit, parmi les observateurs dont l’interrogation est activée, celui qui entend ce répéteur directement (zéro saut) avec le meilleur signal, et lui confie la tâche. Environ une fois par heure, votre observateur pourrait donc demander ses statistiques à un voisin à zéro saut, puis envoyer la réponse à Beacon.",
+    "poll.intro": "Votre observateur s’inscrit auprès de Beacon de MeshCore Canada. Les personnes qui ont un compte Beacon peuvent demander qu’on interroge leur répéteur. Beacon choisit, parmi les observateurs dont l’interrogation est activée, celui qui entend ce répéteur directement (zéro saut) avec le meilleur signal, et lui confie la tâche. Environ une fois par heure, votre observateur pourrait donc demander ses statistiques à un voisin à zéro saut, puis envoyer la réponse à Beacon.",
     "poll.learn": "Comment fonctionne l’interrogation par l’observateur",
     "poll.help": "L’interrogation ne s’adresse qu’aux répéteurs que cet observateur entend directement, donc elle n’ajoute aucun trafic au reste du réseau maillé. Elle se connecte avec un mot de passe invité, qui permet de lire les statistiques sans rien modifier. Les mots de passe administrateur ne sont jamais acceptés. Il lui faut une version d’essai du micrologiciel d’observateur.",
-    "poll.yes": "Oui, activer l’interrogation et les demandes des utilisateurs par Beacon de MeshCore Canada",
-    "poll.yes.detail": "Micrologiciel d’essai. Attendez-vous à des bogues. Gardez la carte facile d’accès.",
+    "poll.yes": "Oui, activer l’interrogation et les demandes des utilisateurs par Beacon de MeshCore Canada (recommandé)",
+    "poll.yes.detail": "Micrologiciel d’essai. Gardez la carte facile d’accès.",
     "poll.no": "Non",
-    "poll.no.detail": "Micrologiciel d’observateur habituel.",
+    "poll.no.detail": "Micrologiciel d’observateur habituel. Choisissez ceci seulement si vous ne voulez pas que votre observateur participe.",
 
     // Already on the observer firmware? (a running repeater observer)
     "observerFirmware.question": "A-t-il déjà le micrologiciel d’observateur?",
@@ -521,7 +522,7 @@
     "observerFirmware.yes.detail": "Envoyer les commandes depuis votre téléphone, dans l’application MeshCore.",
     "observerFirmware.no": "Non, ou je ne sais pas",
     "observerFirmware.no.detail": "Programmer d’abord le micrologiciel d’observateur, par USB.",
-    "observerFirmware.switch": "Passer au micrologiciel d’observateur peut effacer son identité. Sauvegardez d’abord sa clé privée : dans l’application MeshCore, connectez-vous au répéteur comme administrateur, touchez Command Line et envoyez `get prv.key`. Par USB, envoyez la même commande dans la Console de l’outil de programmation. Gardez la réponse dans votre gestionnaire de mots de passe et ne la collez jamais dans un endroit partagé. Si l’identité est effacée, remettez la clé. Juste après la programmation, tant qu’il est encore branché, envoyez `set prv.key <clé sauvegardée>` dans la Console de l’outil de programmation, puis `reboot`. Remplacez `<clé sauvegardée>` par la clé que vous avez sauvegardée. Vous pouvez aussi le faire plus tard dans la Command Line de l’application si vous pouvez vous connecter comme administrateur ; sinon, branchez-le par USB et utilisez la Console de l’outil de programmation.",
+    "observerFirmware.switch": "Passer au micrologiciel d’observateur exige Erase device, ce qui efface ses réglages et son identité. Sauvegardez d’abord sa clé privée : dans l’application MeshCore, connectez-vous au répéteur comme administrateur, touchez Command Line et envoyez `get prv.key`. Par USB, envoyez la même commande dans la Console de l’outil de programmation. Gardez la réponse dans votre gestionnaire de mots de passe et ne la collez jamais dans un endroit partagé. Après la programmation, remettez la clé. Juste après la programmation, tant qu’il est encore branché, envoyez `set prv.key <clé sauvegardée>` dans la Console de l’outil de programmation, puis `reboot`. Remplacez `<clé sauvegardée>` par la clé que vous avez sauvegardée. Vous pouvez aussi le faire plus tard dans la Command Line de l’application si vous pouvez vous connecter comme administrateur ; sinon, branchez-le par USB et utilisez la Console de l’outil de programmation.",
 
     // Update the bootloader (nRF52)
     "bootloader.question": "D’abord, mettez à jour le chargeur d’amorçage",
@@ -546,6 +547,7 @@
     "flash.erase.esp32-new": "Cochez Erase device, puisque c’est une carte neuve.",
     "flash.erase.esp32-running": "Laissez Erase device décoché.",
     "flash.observer.step2.poll": "Sous MQTT Observer Firmware, choisissez votre carte (son nom est imprimé sur la carte ou sur sa boîte), le rôle Repeater et la version `{version}`. Ce n’est pas la plus récente de la liste.",
+    "flash.erase.observer-switch": "Cochez Erase device. Le passage du micrologiciel de répéteur habituel au micrologiciel d’observateur l’exige. Tous les réglages de la carte et son identité sont effacés : sauvegardez d’abord sa clé privée.",
     "flash.erase.poll": "Cochez Erase device la première fois que vous programmez le micrologiciel d’interrogation. Tous les réglages de la carte sont effacés. Si la carte a déjà ce micrologiciel, laissez la case décochée.",
     "flash.poll-key": "Erase device efface aussi l’identité de cette carte, même si on vous a dit de ne jamais effacer une carte déjà en service : la première fois, le micrologiciel d’interrogation ne peut pas être installé autrement. Sauvegardez sa clé privée avant de programmer : envoyez `get prv.key` depuis la Command Line de l’application MeshCore, ou par USB dans la Console de l’outil de programmation. Gardez la réponse dans votre gestionnaire de mots de passe et ne la collez jamais dans un endroit partagé. Juste après la programmation, tant qu’il est encore branché, envoyez `set prv.key <clé sauvegardée>` dans la Console de l’outil de programmation, puis `reboot`. Remplacez `<clé sauvegardée>` par la clé que vous avez sauvegardée.",
     "flash.erase.nrf52-new": "Cliquez sur Erase Flash, puisque c’est une carte neuve.",
@@ -717,7 +719,7 @@
     "group.scopes.help": "Une portée est une étiquette sur un message qui indique jusqu’où il doit aller. La liste des régions de ce répéteur, ce sont les étiquettes qu’il accepte de relayer.",
     "group.scopes.link": "Les portées et les régions expliquées",
     "group.observer": "Répéteur observateur",
-    "group.polling": "Interrogation par l’observateur (expérimental)",
+    "group.polling": "Interrogation par l’observateur",
     "group.finish": "Pour terminer",
     "region.paste-label": "Collez ici la réponse à `region`",
     "region.phone-cut": "Depuis l’application, une longue réponse peut être tronquée. Si la liste semble coupée, ou si le répéteur a beaucoup de régions, lancez plutôt `region` par USB, dans la Console de l’outil de programmation.",

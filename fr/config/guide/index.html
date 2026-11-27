@@ -3723,8 +3723,9 @@ d’envoyer des rapports à un serveur).</p>
   ne relaie jamais rien.</li>
 </ul>
 <p>Sur une carte ESP32 avec PSRAM (mémoire supplémentaire), comme une Station G2,
-une Station G3, une Heltec V4 ou une T-Beam S3 Supreme, il peut aussi demander
-aux répéteurs voisins leur batterie et leur état. C’est
+une Station G3, une Heltec V4 ou une T-Beam S3 Supreme, il peut aussi
+interroger un répéteur voisin sur sa batterie et son état quand un utilisateur
+de Beacon le demande. C’est
 l’<a href="../../analyzer/polling/">interrogation par l’observateur</a>, qui est
 expérimentale.</p>
 <p>Dans les deux cas, il rapporte ce qu’il entend. L’écoute seule est utile à
@@ -4089,10 +4090,12 @@ perdue. Avant de le programmer, sauvegardez-le :</p>
    Console dans l’<a href="https://flasher.meshcore.io/">outil de programmation MeshCore</a>
    et envoyez la même commande. Gardez la réponse dans votre gestionnaire de
    mots de passe et ne la collez jamais dans un endroit partagé.</li>
-<li>Ne l’effacez jamais dans l’outil de programmation.</li>
+<li>Ne l’effacez jamais dans l’outil de programmation. La seule exception : le
+   passage du micrologiciel de répéteur habituel au micrologiciel
+   d’observateur, qui exige Erase device.</li>
 </ol>
-<p>Si la programmation l’efface quand même, par exemple quand vous passez au
-micrologiciel d’observateur, remettez la clé. Juste après la programmation, tant
+<p>Erase device efface ses réglages et son identité : après le passage au
+micrologiciel d’observateur, remettez donc la clé. Juste après la programmation, tant
 qu’il est encore branché, envoyez <code>set prv.key &lt;clé sauvegardée&gt;</code> dans la
 Console de l’outil de programmation, puis <code>reboot</code>. Remplacez
 <code>&lt;clé sauvegardée&gt;</code> par la clé que vous avez sauvegardée. Vous pouvez aussi le

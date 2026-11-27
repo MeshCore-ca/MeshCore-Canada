@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Un observateur demande aux répéteurs voisins leur batterie, leur température et leur état, puis envoie les réponses à Beacon. Expérimental.">
+        <meta name="description" content="Un observateur interroge un répéteur voisin sur sa batterie et son état quand un utilisateur de Beacon le demande, puis envoie les réponses à Beacon. Expérimental.">
       
       
       
@@ -73,7 +73,7 @@
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="MeshCore Canada">
     <meta property="og:title" content="Interrogation par l’observateur">
-    <meta property="og:description" content="Un observateur demande aux répéteurs voisins leur batterie, leur température et leur état, puis envoie les réponses à Beacon. Expérimental.">
+    <meta property="og:description" content="Un observateur interroge un répéteur voisin sur sa batterie et son état quand un utilisateur de Beacon le demande, puis envoie les réponses à Beacon. Expérimental.">
     <meta property="og:url" content="https://meshcore.ca/fr/analyzer/polling/">
     <meta property="og:image" content="https://meshcore.ca/assets/MeshCore-Canada-Logo.png">
     <meta name="twitter:card" content="summary">
@@ -82,7 +82,7 @@
         "@context": "https://schema.org",
         "@type": "WebPage",
         "name": "Interrogation par l\u2019observateur",
-        "description": "Un observateur demande aux r\u00e9p\u00e9teurs voisins leur batterie, leur temp\u00e9rature et leur \u00e9tat, puis envoie les r\u00e9ponses \u00e0 Beacon. Exp\u00e9rimental.",
+        "description": "Un observateur interroge un r\u00e9p\u00e9teur voisin sur sa batterie et son \u00e9tat quand un utilisateur de Beacon le demande, puis envoie les r\u00e9ponses \u00e0 Beacon. Exp\u00e9rimental.",
         "url": "https://meshcore.ca/fr/analyzer/polling/",
         "isPartOf": {
           "@type": "WebSite",
@@ -3071,9 +3071,13 @@
 <p>L’interrogation utilise un micrologiciel d’essai. Attendez-vous à des
 bogues, et ne l’installez pas sur un observateur difficile d’accès.</p>
 </div>
-<p>Quand l’interrogation est activée, un observateur demande aux répéteurs tout
-près de lui leur niveau de batterie, leur température et leur état, puis envoie
-les réponses à Beacon (live.meshcore.ca) par Internet.</p>
+<p>Quand l’interrogation est activée, un observateur s’inscrit auprès de Beacon de
+MeshCore Canada (live.meshcore.ca). Il n’interroge un répéteur que si une
+personne qui a un compte Beacon demande que ce répéteur soit interrogé. Beacon
+décide quel observateur s’en charge : celui dont l’interrogation est activée et
+qui entend le répéteur directement (zéro saut) avec le meilleur signal. Cet
+observateur demande au répéteur sa batterie, sa température et son état environ
+une fois par heure, puis envoie les réponses à Beacon par Internet.</p>
 <p><img alt="Deux cartes. Aujourd’hui, une question sur la batterie d’un répéteur éloigné est relayée par six répéteurs, et la réponse aussi. Avec Beacon, l’observateur le plus proche du répéteur l’interroge par un seul court lien radio, et tout le reste passe par Internet." src="../../../assets/images/observer-polling.png" /></p>
 <h2 id="pourquoi-cest-utile">Pourquoi c’est utile<a class="headerlink" href="#pourquoi-cest-utile" title="Permanent link">&para;</a></h2>
 <p>Aujourd’hui, pour vérifier la batterie d’un répéteur éloigné, vous vous
@@ -3086,8 +3090,10 @@ pose la question à votre place. Il suffit d’un court échange radio.</p>
 <ol>
 <li>Un observateur dont l’interrogation est activée s’inscrit auprès de Beacon de
    MeshCore Canada.</li>
-<li>Une personne qui a un compte Beacon demande qu’on interroge son répéteur, et
-   donne son mot de passe invité.</li>
+<li>Une personne qui a un compte Beacon enregistré demande qu’on interroge son
+   répéteur, et tape son mot de passe invité dans Beacon au moment de la
+   demande. Le mot de passe est conservé chiffré et n’est envoyé qu’à
+   l’observateur chargé de la tâche.</li>
 <li>Beacon regarde quels observateurs entendent ce répéteur directement (zéro
    saut), choisit celui qui a le meilleur signal et lui confie la tâche.</li>
 <li>Environ une fois par heure, cet observateur demande au répéteur sa batterie,
