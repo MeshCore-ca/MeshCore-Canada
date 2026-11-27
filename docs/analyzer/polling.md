@@ -1,6 +1,6 @@
 ---
 title: Observer polling
-description: Let an observer ask the repeaters next to it for battery, temperature and status, and send the answers to Beacon. Experimental.
+description: An observer polls a nearby repeater for battery and status when a Beacon user asks for it, and sends the answers to Beacon. Experimental.
 audience:
   - observer-operators
 task: enable-observer-polling
@@ -20,9 +20,13 @@ destructive: true
     Polling runs on test firmware. Expect bugs, and don't put it on an observer
     you can't easily get to.
 
-With polling on, an observer asks the repeaters right next to it for their
-battery, temperature and status, and sends the answers to Beacon
-(live.meshcore.ca) over the internet.
+With polling on, an observer registers with MeshCore Canada Beacon
+(live.meshcore.ca). It only polls a repeater when someone with a Beacon account
+asks for that repeater to be polled. Beacon decides which observer does it: the
+polling observer that hears the repeater directly (zero hops) with the
+strongest signal. That observer asks the repeater for its battery, temperature
+and status about once an hour, and sends the answers to Beacon over the
+internet.
 
 ![Two maps. Today, a question about a far-away repeater's battery is passed along by six repeaters and so is the answer. With Beacon, the observer nearest the repeater asks it over one short radio link and everything else travels over the internet.](../assets/images/observer-polling.png)
 

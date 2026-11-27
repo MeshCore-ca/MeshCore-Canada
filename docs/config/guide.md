@@ -82,8 +82,8 @@ It works in one of two ways:
   anything on.
 
 On an ESP32 board with PSRAM (extra memory), such as a Station G2, Station G3,
-Heltec V4 or T-Beam S3 Supreme, it can also ask nearby repeaters for their
-battery and status. That's [observer polling](../analyzer/polling.md), which is
+Heltec V4 or T-Beam S3 Supreme, it can also poll a nearby repeater for its
+battery and status when a Beacon user asks for it. That's [observer polling](../analyzer/polling.md), which is
 experimental.
 
 Either way it reports what it hears. Listen only is handy indoors or next to

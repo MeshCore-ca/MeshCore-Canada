@@ -1,6 +1,6 @@
 ---
 title: Interrogation par l’observateur
-description: Un observateur demande aux répéteurs voisins leur batterie, leur température et leur état, puis envoie les réponses à Beacon. Expérimental.
+description: Un observateur interroge un répéteur voisin sur sa batterie et son état quand un utilisateur de Beacon le demande, puis envoie les réponses à Beacon. Expérimental.
 audience:
   - observer-operators
 task: enable-observer-polling
@@ -20,9 +20,13 @@ destructive: true
     L’interrogation utilise un micrologiciel d’essai. Attendez-vous à des
     bogues, et ne l’installez pas sur un observateur difficile d’accès.
 
-Quand l’interrogation est activée, un observateur demande aux répéteurs tout
-près de lui leur niveau de batterie, leur température et leur état, puis envoie
-les réponses à Beacon (live.meshcore.ca) par Internet.
+Quand l’interrogation est activée, un observateur s’inscrit auprès de Beacon de
+MeshCore Canada (live.meshcore.ca). Il n’interroge un répéteur que si une
+personne qui a un compte Beacon demande que ce répéteur soit interrogé. Beacon
+décide quel observateur s’en charge : celui dont l’interrogation est activée et
+qui entend le répéteur directement (zéro saut) avec le meilleur signal. Cet
+observateur demande au répéteur sa batterie, sa température et son état environ
+une fois par heure, puis envoie les réponses à Beacon par Internet.
 
 ![Deux cartes. Aujourd’hui, une question sur la batterie d’un répéteur éloigné est relayée par six répéteurs, et la réponse aussi. Avec Beacon, l’observateur le plus proche du répéteur l’interroge par un seul court lien radio, et tout le reste passe par Internet.](../assets/images/observer-polling.png)
 

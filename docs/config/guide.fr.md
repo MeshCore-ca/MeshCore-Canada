@@ -86,8 +86,9 @@ Il fonctionne de l’une de ces deux façons :
   ne relaie jamais rien.
 
 Sur une carte ESP32 avec PSRAM (mémoire supplémentaire), comme une Station G2,
-une Station G3, une Heltec V4 ou une T-Beam S3 Supreme, il peut aussi demander
-aux répéteurs voisins leur batterie et leur état. C’est
+une Station G3, une Heltec V4 ou une T-Beam S3 Supreme, il peut aussi
+interroger un répéteur voisin sur sa batterie et son état quand un utilisateur
+de Beacon le demande. C’est
 l’[interrogation par l’observateur](../analyzer/polling.md), qui est
 expérimentale.
 
