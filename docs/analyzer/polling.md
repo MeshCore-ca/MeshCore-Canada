@@ -38,8 +38,10 @@ takes one short radio exchange.
 ## How it works
 
 1. An observer with polling on registers with MeshCore Canada Beacon.
-2. Someone with a Beacon account asks to have their repeater polled, and gives
-   its guest password.
+2. Someone with a registered Beacon account asks to have their repeater polled,
+   and types its guest password into Beacon as part of the request. The
+   password is stored encrypted and only sent to the observer that gets the
+   job.
 3. Beacon looks at the polling observers that hear that repeater directly (zero
    hops), picks the one with the strongest signal, and gives it the job.
 4. About once an hour, that observer asks the repeater for its battery,

@@ -89,7 +89,7 @@ test("the setup tool erases only new boards and warns to back up a running one f
 });
 
 // The one exception: the polling test firmware changed the partition table, so its first flash needs Erase device.
-test("observer polling is the only route that erases a running board, and it says to save the key first and put it back", () => {
+test("a running board is erased only to become an observer or to get the polling firmware, and is told to save its key first", () => {
   const erase = { en: /^Tick Erase device the first time you flash the polling firmware\. It wipes every setting/, fr: /^Cochez Erase device la première fois que vous programmez le micrologiciel d’interrogation\. Tous les réglages/ };
   const alreadyOn = { en: /already runs the polling firmware, leave it unticked/, fr: /a déjà ce micrologiciel, laissez la case décochée/ };
   const save = { en: /Save its private key before you flash: send `get prv\.key`/, fr: /Sauvegardez sa clé privée avant de programmer : envoyez `get prv\.key`/ };
@@ -102,7 +102,14 @@ test("observer polling is the only route that erases a running board, and it say
     for (const rule of [save, keep, putBack]) assert.match(key, rule[lang], lang);
     assert.match(setupText.t("poll.yes.detail", lang), lang === "en" ? /^Test firmware\. Expect bugs\./ : /^Micrologiciel d’essai\. Attendez-vous à des bogues\./, lang);
   }
+  // Leaving the regular repeater firmware for the observer firmware needs Erase device too, and says to save the key.
+  const switching = { en: /^Tick Erase device\. Moving from the regular repeater firmware to the observer firmware needs it\..*save its private key first/, fr: /^Cochez Erase device\. Le passage du micrologiciel de répéteur habituel au micrologiciel d’observateur l’exige\..*sauvegardez d’abord sa clé privée/ };
+  for (const lang of ["en", "fr"]) {
+    assert.match(setupText.t("flash.erase.observer-switch", lang), switching[lang], lang);
+    assert.match(setupText.t("observerFirmware.switch", lang), lang === "en" ? /needs Erase device, which wipes its settings and its identity/ : /exige Erase device, ce qui efface ses réglages et son identité/, lang);
+  }
   const ui = read("docs/assets/setup/setup-ui.js");
+  assert.match(ui, /if \(kind === "observer" && a\.status === "running"\) erase = t\("flash\.erase\.observer-switch"\);/, "a running board that becomes an observer is erased");
   assert.match(ui, /if \(polling\) erase = t\("flash\.erase\.poll"\);/, "only polling swaps the erase line");
   assert.match(ui, /if \(polling && a\.status === "running"\) body\.appendChild\(note\("warn", para\(rich\("flash\.poll-key"\)\)/, "a running board gets the key warning on the flash step");
 });

@@ -442,10 +442,12 @@ perdue. Avant de le programmer, sauvegardez-le :
    Console dans l’[outil de programmation MeshCore](https://flasher.meshcore.io/)
    et envoyez la même commande. Gardez la réponse dans votre gestionnaire de
    mots de passe et ne la collez jamais dans un endroit partagé.
-3. Ne l’effacez jamais dans l’outil de programmation.
+3. Ne l’effacez jamais dans l’outil de programmation. La seule exception : le
+   passage du micrologiciel de répéteur habituel au micrologiciel
+   d’observateur, qui exige Erase device.
 
-Si la programmation l’efface quand même, par exemple quand vous passez au
-micrologiciel d’observateur, remettez la clé. Juste après la programmation, tant
+Erase device efface ses réglages et son identité : après le passage au
+micrologiciel d’observateur, remettez donc la clé. Juste après la programmation, tant
 qu’il est encore branché, envoyez `set prv.key <clé sauvegardée>` dans la
 Console de l’outil de programmation, puis `reboot`. Remplacez
 `<clé sauvegardée>` par la clé que vous avez sauvegardée. Vous pouvez aussi le

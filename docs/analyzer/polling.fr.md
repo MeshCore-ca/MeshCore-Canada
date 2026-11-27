@@ -40,8 +40,10 @@ pose la question à votre place. Il suffit d’un court échange radio.
 
 1. Un observateur dont l’interrogation est activée s’inscrit auprès de Beacon de
    MeshCore Canada.
-2. Une personne qui a un compte Beacon demande qu’on interroge son répéteur, et
-   donne son mot de passe invité.
+2. Une personne qui a un compte Beacon enregistré demande qu’on interroge son
+   répéteur, et tape son mot de passe invité dans Beacon au moment de la
+   demande. Le mot de passe est conservé chiffré et n’est envoyé qu’à
+   l’observateur chargé de la tâche.
 3. Beacon regarde quels observateurs entendent ce répéteur directement (zéro
    saut), choisit celui qui a le meilleur signal et lui confie la tâche.
 4. Environ une fois par heure, cet observateur demande au répéteur sa batterie,

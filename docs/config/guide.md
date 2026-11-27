@@ -407,10 +407,11 @@ flash it, back it up:
    USB, open the Console in the [MeshCore flasher](https://flasher.meshcore.io/)
    and send the same command. Keep the reply in your password manager and never
    paste it anywhere shared.
-3. Never erase it in the flasher.
+3. Never erase it in the flasher. The one exception is moving it from the
+   regular repeater firmware to the observer firmware, which needs Erase device.
 
-If flashing wipes it anyway, for example when you switch to the observer
-firmware, put the key back. Right after flashing, while it's still plugged in,
+Erase device wipes its settings and its identity, so after you switch to the
+observer firmware, put the key back. Right after flashing, while it's still plugged in,
 send `set prv.key <saved key>` in the flasher's Console, then `reboot`. Put the
 key you saved in place of `<saved key>`. You can also do it later from the app's
 Command Line if you can log in as admin; if you can't, plug it in by USB and use

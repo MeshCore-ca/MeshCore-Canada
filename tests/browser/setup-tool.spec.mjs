@@ -2467,3 +2467,16 @@ test("the observer polling page shows the diagram and the three lines, in both l
     await expect(page.locator("pre").filter({ hasText: "set poll.url https://live.meshcore.ca" })).toContainText("set poll on");
   }
 });
+
+for (const lang of LANGS) {
+  test(`${lang} a running board moving to the observer firmware is told to tick Erase device; a running repeater being updated is not`, async ({ page }) => {
+    await page.goto(siteRoute(`${ROUTES[lang]}?type=observer&repeat=both&board=esp32&status=running&observerFirmware=no`));
+    await expectStep(page, "flash");
+    await expect(step(page)).toContainText(T("flash.erase.observer-switch", lang));
+    await expect(step(page)).not.toContainText(T("flash.erase.esp32-running", lang));
+    await page.goto(siteRoute(`${ROUTES[lang]}?type=repeater&board=esp32&status=running&reflash=1`));
+    await expectStep(page, "flash");
+    await expect(step(page)).toContainText(T("flash.erase.esp32-running", lang));
+    await expect(step(page)).not.toContainText(T("flash.erase.observer-switch", lang));
+  });
+}

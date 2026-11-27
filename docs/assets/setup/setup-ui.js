@@ -683,6 +683,8 @@
         // Polling runs on its own test build, which has to be flashed with Erase device the first time.
         var polling = Flow.polling(a);
         var erase = t("flash.erase." + (a.board === "nrf52" ? "nrf52" : "esp32") + "-" + (a.status === "running" ? "running" : "new"));
+        // A running board that becomes an observer leaves the regular repeater firmware, which needs Erase device.
+        if (kind === "observer" && a.status === "running") erase = t("flash.erase.observer-switch");
         if (polling) erase = t("flash.erase.poll");
         var pick = polling ? ["flash.observer.step2.poll", { version: Flow.POLL_VERSION }] : "flash." + kind + ".step2";
         var open = ["flash." + kind + ".step1", null, kind === "observer" ? LINKS.observerFlasher : LINKS.flasher];
